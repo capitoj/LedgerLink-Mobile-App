@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+        <TextView
+                android:id="@+id/lblNCHeader"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="Enter all cycle information then select next."
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:layout_marginBottom="20dp"/>
+    </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp">
+
+                <!-- I fully qualify the names coz R.id is universal -->
+
+                <TextView
+                        android:id="@+id/lblNCSharePrice"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:textStyle="bold"
+                        android:text="Star (Share) value"
+                        android:textSize="16sp" />
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:textSize = "14sp"
+                        android:text="Amount that it costs to buy one share"
+                        android:id="@+id/lblNCShareValueDesc"/>
+          <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:weightSum="10" >
+                <EditText
+                        android:id="@+id/txtNCSharePrice"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="6"
+                        android:inputType="number"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:text=""/>
+                <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="4"
+                        android:textSize = "18sp"
+                        android:text="UGX"
+                        android:id="@+id/lblNCCurrency"/>
+          </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp">
+
+                <TextView
+                        android:id="@+id/lblNCMaxShares"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="Maximum number of stars (shares) a member may purchase per meeting"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"/>
+
+                <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="10" >
+
+                <EditText
+                        android:id="@+id/txtNCMaxShares"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:layout_weight="6"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+                    <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:paddingLeft="5dp"
+                            android:layout_weight="4"
+                            android:textSize = "18sp"
+                            android:text="Stars"
+                            android:id="@+id/lblNCSpace1"/>
+            </LinearLayout>
+                </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp"
+                    >
+
+                <TextView
+                        android:id="@+id/lblNCStartDate"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="left"
+                        android:text="Date your cycle will begin"
+                        android:textSize="16sp"/>
+
+                <TextView
+                        android:id="@+id/txtNCStartDate"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:text="01-Jul-2013"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:clickable="true"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp">
+
+                <TextView
+                        android:id="@+id/lblNCEndDate"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="left"
+                        android:text="Date your cycle will end"
+                        android:textSize="16sp"
+                        />
+
+                <TextView
+                        android:id="@+id/txtNCEndDate"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:textStyle="bold"
+                        android:text="30-Jun-2013"
+                        android:textSize="18sp"
+                        android:clickable="true"/>
+            </LinearLayout>
+
+</LinearLayout>
+    </ScrollView>

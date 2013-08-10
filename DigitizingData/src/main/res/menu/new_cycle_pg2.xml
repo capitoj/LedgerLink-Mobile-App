@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/mnuNCPg2Sort"
+            android:title="Sort By"
+            android:showAsAction="ifRoom|withText"
+            android:orderInCategory="3"
+            android:actionLayout = "@layout/sort_members_action"  />
+
+    <item android:id="@+id/mnuNCPg2Add"
+          android:title="Add"
+          android:orderInCategory="1"
+          android:showAsAction="ifRoom|withText" />
+
+    <item android:id="@+id/mnuNCPg2Done"
+        android:title="Done"
+        android:orderInCategory="2"
+        android:showAsAction="ifRoom|withText" />
+
+</menu>

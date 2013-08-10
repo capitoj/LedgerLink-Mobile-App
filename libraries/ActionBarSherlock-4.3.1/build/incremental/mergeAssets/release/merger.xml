@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="D:\MUHAHALA\ANDROID_PROJECTS\DigitizingDataProject\libraries\ActionBarSherlock-4.3.1\assets" />
+    </dataSet>
+    <dataSet config="release" >
+        <source path="D:\MUHAHALA\ANDROID_PROJECTS\DigitizingDataProject\libraries\ActionBarSherlock-4.3.1\src\release\assets" />
+    </dataSet>
+
+</merger>

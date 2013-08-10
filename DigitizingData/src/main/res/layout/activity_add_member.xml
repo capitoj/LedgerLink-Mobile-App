@@ -1,0 +1,214 @@
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+        <!-- I fully qualify the names coz R.id is universal -->
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp">
+
+            <TextView
+                    android:id="@+id/lblAMMemberNo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:text="Member No:"
+                    android:textSize="16sp" />
+            <EditText
+                    android:id="@+id/txtAMMemberNo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text=""/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp">
+
+            <TextView
+                    android:id="@+id/lblAMSurname"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:text="Surname"
+                    android:textSize="16sp" />
+            <EditText
+                    android:id="@+id/txtAMSurname"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text=""/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp">
+
+            <TextView
+                    android:id="@+id/lblAMOtherNames"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:text="Other Names"
+                    android:textSize="16sp" />
+            <EditText
+                    android:id="@+id/txtAMOtherNames"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text=""/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                >
+
+            <TextView
+                    android:id="@+id/lblAMGender"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:text="Gender"
+                    android:textSize="16sp" />
+            <EditText
+                    android:id="@+id/txtAMGender"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text=""/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                >
+
+            <TextView
+                    android:id="@+id/lblAMAge"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:text="Age"
+                    android:textSize="16sp" />
+            <EditText
+                    android:id="@+id/txtAMAge"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text=""/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                >
+
+            <TextView
+                    android:id="@+id/lblAMOccupation"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:text="Occupation"
+                    android:textSize="16sp" />
+            <EditText
+                    android:id="@+id/txtAMOccupation"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text=""/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                >
+
+            <TextView
+                    android:id="@+id/lblAMPhone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:text="Phone Number"
+                    android:textSize="16sp" />
+            <EditText
+                    android:id="@+id/txtAMPhoneNo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text=""/>
+        </LinearLayout>
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                >
+
+            <TextView
+                    android:id="@+id/lblAMCyclesCompleted"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textStyle="bold"
+                    android:text="Number of cycles completed"
+                    android:textSize="16sp" />
+            <EditText
+                    android:id="@+id/txtAMCycles"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:text=""/>
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

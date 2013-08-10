@@ -1,0 +1,5 @@
+## generic files to ignore
+.gradle/*
+.idea/*
+DigitizingData/build/*
+ibraries/ActionBarSherlock-4.3.1/build/*

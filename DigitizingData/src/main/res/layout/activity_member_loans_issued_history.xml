@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:text="Moses Oscar Muhahala"
+            android:id="@+id/lblMLIssuedHFullNames"
+            android:layout_gravity="center"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="01-JUL-2013"
+            android:id="@+id/lblMLIssuedHMeetingDate"
+            android:layout_gravity="center"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:textSize="20sp"
+            android:text="Loan Number"
+            android:id="@+id/lblMLIssuedHLoanNo"
+            android:layout_gravity="center"/>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10" >
+        <EditText
+                android:id="@+id/txtMLIssuedHLoanNo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_weight="6"
+                android:inputType="number"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textAlignment="textEnd"
+                android:text=""/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:textSize = "16sp"
+                android:text=" "
+                android:id="@+id/lblMLIssuedHLoanNoSp"/>
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textSize="20sp"
+            android:text="Amount"
+            android:id="@+id/lblMLIssuedHAmount"
+            android:layout_gravity="left"/>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10" >
+        <EditText
+                android:id="@+id/txtMLIssuedHAmount"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_weight="6"
+                android:inputType="number"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textAlignment="textEnd"
+                android:text=""/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:textSize = "16sp"
+                android:text="UGX"
+                android:id="@+id/lblMLIssuedHCurrency"/>
+    </LinearLayout>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:background="#3b5998"
+            android:text="HISTORY"
+            android:id="@+id/lblMLIssuedHSection1"
+            android:layout_gravity="left"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:text="Total Balance:"
+            android:id="@+id/lblMLIssuedHOutstandingLoans"
+            android:layout_gravity="left"/>
+<!--
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:text="Past Loans"
+            android:id="@+id/lblMLIssuedHPastLoans"
+            android:layout_gravity="left"/>
+
+            -->
+
+    <ListView android:id="@android:id/list"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:choiceMode="singleChoice"
+            />
+
+    <TextView android:id="@android:id/empty"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="No History"
+            />
+
+</LinearLayout>
+    </ScrollView>

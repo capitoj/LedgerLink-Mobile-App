@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:text="Moses Oscar Muhahala"
+                android:id="@+id/lblMLRepayHFullNames"
+                android:layout_gravity="center"/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="01-JUL-2013"
+                android:id="@+id/lblMLRepayHMeetingDate"
+                android:layout_gravity="center"/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:textSize="20sp"
+                android:text="Loan Number"
+                android:id="@+id/lblMLRepayHLoanNo"
+                android:layout_gravity="center"/>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="10" >
+            <TextView
+                    android:id="@+id/txtMLRepayHLoanNo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="6"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingLeft="10dp"
+                    android:textAlignment="textEnd"
+                    android:text=""/>
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:textSize = "16sp"
+                    android:text=" "
+                    android:id="@+id/lblMLRepayHLoanNoSp"/>
+        </LinearLayout>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:textSize="20sp"
+                android:text="Amount"
+                android:id="@+id/lblMLRepayHAmount"
+                android:layout_gravity="left"/>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="10" >
+            <EditText
+                    android:id="@+id/txtMLRepayHAmount"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="6"
+                    android:inputType="number"
+                    android:textSize="18sp"
+                    android:textAlignment="viewEnd"
+                    android:text=""/>
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:textSize = "16sp"
+                    android:text="UGX"
+                    android:id="@+id/lblMLRepayHCurrency"/>
+        </LinearLayout>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:textSize="20sp"
+                android:text="Comments"
+                android:id="@+id/lblMLRepayHComment"
+                android:layout_gravity="left"/>
+        <EditText
+                android:id="@+id/txtMLRepayHComment"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:inputType="textCapCharacters"
+                android:textSize="18sp"
+                android:textAlignment="viewEnd"
+                android:text=""/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:background="#3b5998"
+                android:text="HISTORY"
+                android:id="@+id/lblMLRepayHSection1"
+                android:layout_gravity="left"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="Total Balance:"
+                android:id="@+id/lblMLRepayHOutstandingLoans"
+                android:layout_gravity="left"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="Repayments"
+                android:id="@+id/lblMLRepayHPastLoans"
+                android:layout_gravity="left"/>
+
+        <ListView android:id="@android:id/list"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:choiceMode="singleChoice"
+                />
+
+        <TextView android:id="@android:id/empty"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="No History"
+                />
+
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,214 @@
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <!-- I fully qualify the names coz R.id is universal -->
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp">
+
+        <TextView
+                android:id="@+id/lblMDVMemberNo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textStyle="normal"
+                android:text="Member No:"
+                android:textSize="16sp" />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize = "16sp"
+                android:textStyle="bold"
+                android:text="27"
+                android:id="@+id/txtMDVMemberNo"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp">
+
+        <TextView
+                android:id="@+id/lblMDVSurname"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textStyle="normal"
+                android:text="Surname"
+                android:textSize="16sp" />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize = "16sp"
+                android:textStyle="bold"
+                android:text="Muhahala"
+                android:id="@+id/txtMDVSurname"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp">
+
+        <TextView
+                android:id="@+id/lblMDVOtherNames"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textStyle="normal"
+                android:text="Other Names"
+                android:textSize="16sp" />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize = "16sp"
+                android:textStyle="bold"
+                android:text="Moses Oscar"
+                android:id="@+id/txtMDVOtherNames"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            >
+
+        <TextView
+                android:id="@+id/lblMDVGender"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textStyle="normal"
+                android:text="Gender"
+                android:textSize="16sp" />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize = "16sp"
+                android:textStyle="bold"
+                android:text="Male"
+                android:id="@+id/txtMDVGender"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            >
+
+        <TextView
+                android:id="@+id/lblMDVAge"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textStyle="normal"
+                android:text="Age"
+                android:textSize="16sp" />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize = "16sp"
+                android:textStyle="bold"
+                android:text="27"
+                android:id="@+id/txtMDVAge"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            >
+
+        <TextView
+                android:id="@+id/lblMDVOccupation"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textStyle="normal"
+                android:text="Occupation"
+                android:textSize="16sp" />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize = "16sp"
+                android:textStyle="bold"
+                android:text="Application Analyst"
+                android:id="@+id/txtMDVOccupation"/>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            >
+
+        <TextView
+                android:id="@+id/lblMDVPhone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textStyle="normal"
+                android:text="Phone Number"
+                android:textSize="16sp" />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize = "16sp"
+                android:textStyle="bold"
+                android:text="0779881904"
+                android:id="@+id/txtMDVPhone"/>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            >
+
+        <TextView
+                android:id="@+id/lblMDVCyclesCompleted"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textStyle="normal"
+                android:text="Number of cycles completed"
+                android:textSize="16sp" />
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize = "16sp"
+                android:textStyle="bold"
+                android:text="3"
+                android:id="@+id/txtMDVCyclesCompleted"/>
+    </LinearLayout>
+</LinearLayout>
+    </ScrollView>

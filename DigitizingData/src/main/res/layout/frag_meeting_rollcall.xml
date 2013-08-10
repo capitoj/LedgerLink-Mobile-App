@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:orientation="vertical">
+    <RelativeLayout android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:id="@+id/frmMRCF_top_control_bar">
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="24sp"
+                android:text="01-JUL-2013"
+                android:id="@+id/lblMRCFMeetingDate"
+                android:layout_gravity="center"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lblMRCFMeetingDate"
+                android:layout_marginTop="5dp"
+                android:paddingLeft="5dp"
+                android:textSize="18sp"
+                android:text="Tap box to tick member as present. Leave boxes empty for absent members. Press and hold name to add comment."
+                android:id="@+id/lblMRCFInstructions"
+                android:layout_gravity="center"/>
+    </RelativeLayout>
+
+    <ListView android:id="@+id/lvwMRCFMembers"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:choiceMode="singleChoice"
+              android:layout_below="@id/frmMRCF_top_control_bar" >
+
+    </ListView>
+
+    <TextView android:id="@+id/lvwMRCFEmpty"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:paddingLeft="5dp"
+              android:textSize="18sp"
+              android:text="@string/empty_members_list"
+              android:layout_below="@id/frmMRCF_top_control_bar"
+            />
+
+</RelativeLayout>
