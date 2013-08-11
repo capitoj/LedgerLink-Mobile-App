@@ -39,11 +39,11 @@ public class MainActivity extends SherlockActivity {
         //Load the Main Menu
         mainMenuItems = new ArrayList<MenuItem>();
         mainMenuItems.add(new MenuItem("beginMeeting", "Begin Meeting"));
-        mainMenuItems.add(new MenuItem("sendData", "Review & Send Data"));
-        mainMenuItems.add(new MenuItem("viewSentData", "View Sent Data"));
-        mainMenuItems.add(new MenuItem("updateCycle", "Review & Edit Cycle Data"));
+        mainMenuItems.add(new MenuItem("sendData", "Check & Send Data"));
+        mainMenuItems.add(new MenuItem("viewSentData", "Sent Data"));
+        mainMenuItems.add(new MenuItem("updateCycle", "Review & Edit Cycle"));
         mainMenuItems.add(new MenuItem("endCycle", "End Cycle"));
-        mainMenuItems.add(new MenuItem("beginCycle", "Begin a New Cycle"));
+        mainMenuItems.add(new MenuItem("beginCycle", "Begin New Cycle"));
         mainMenuItems.add(new MenuItem("reviewMembers", "Review & Edit Members"));
         //mainMenuItems.add(new MenuItem("help", "Help"));
 

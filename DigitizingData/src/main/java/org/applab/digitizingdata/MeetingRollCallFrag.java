@@ -46,7 +46,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         actionBar = getSherlockActivity().getSupportActionBar();
-        actionBar.setTitle("Roll Call");
+        actionBar.setTitle("Meeting");
         TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMRCFMeetingDate);
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         //TODO: I need to find a way of getting the Meeting Id from meetingRepo.getCurrentMeeting();

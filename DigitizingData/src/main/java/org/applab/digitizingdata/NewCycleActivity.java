@@ -62,7 +62,7 @@ public class NewCycleActivity extends SherlockActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         if(isUpdateCycleAction) {
-            actionBar.setTitle("Update Cycle");
+            actionBar.setTitle("Edit Cycle");
         }
         else {
             actionBar.setTitle("New Cycle");
@@ -294,7 +294,9 @@ public class NewCycleActivity extends SherlockActivity {
                     //displayMessageBox("Update Cycle", "The Cycle has been updated Successfully.", Utils.MSGBOX_ICON_TICK);
                 }
 
+                //Pass on the flag indicating whether this is an Update operation
                 Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+                i.putExtra("_isUpdateCycleAction", isUpdateCycleAction);
                 startActivity(i);
                 /*
                 if(null != alertDialog && alertDialog.isShowing()) {

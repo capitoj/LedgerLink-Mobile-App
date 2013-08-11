@@ -51,7 +51,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         actionBar = getSherlockActivity().getSupportActionBar();
-        actionBar.setTitle("New Loans");
+        actionBar.setTitle("Meeting");
         TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         lblMeetingDate.setText(meetingDate);

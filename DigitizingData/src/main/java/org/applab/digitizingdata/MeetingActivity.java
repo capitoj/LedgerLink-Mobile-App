@@ -35,6 +35,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         //ActionBar
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Meeting");
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         actionBar.addTab(actionBar.newTab().setTag("summary").setText("Summary").setTabListener(this));

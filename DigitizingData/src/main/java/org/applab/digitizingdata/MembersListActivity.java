@@ -35,7 +35,7 @@ public class MembersListActivity extends SherlockListActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Members");
+        actionBar.setTitle("Edit Members");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 

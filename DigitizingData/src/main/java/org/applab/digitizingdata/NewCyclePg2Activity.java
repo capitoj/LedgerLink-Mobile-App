@@ -31,16 +31,25 @@ import java.util.ArrayList;
 public class NewCyclePg2Activity extends SherlockListActivity {
     ActionBar actionBar;
     ArrayList<Member> members = null;
+    boolean isUpdateCycleAction = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_cycle_pg2);
 
+        if(getIntent().hasExtra("_isUpdateCycleAction")) {
+            isUpdateCycleAction = getIntent().getBooleanExtra("_isUpdateCycleAction",false);
+        }
+
         actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        if(isUpdateCycleAction) {
+            actionBar.setTitle("Edit Cycle");
+        }
+        else {
+            actionBar.setTitle("New Cycle");
+        }
 
         //Populate the Members
         populateMembersList();

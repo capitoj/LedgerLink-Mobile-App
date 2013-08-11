@@ -11,9 +11,9 @@
             android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:textSize="18sp"
-            android:text="Ready to enter data for a meeting? Set the date and then select 'save'. To return to the main menu without starting a new meeting, select 'cancel.'"
+            android:text="Ready to enter data for a meeting? Set the date and then select 'save'. To return to the main menu without starting a new meeting, select 'cancel'. If necessary, tap date to select a date in the past. You may not select a date in the future."
             android:id="@+id/lblMDHeader"
-            android:layout_gravity="center"/>
+            android:layout_gravity="left"/>
 
     <TextView
             android:layout_width="wrap_content"

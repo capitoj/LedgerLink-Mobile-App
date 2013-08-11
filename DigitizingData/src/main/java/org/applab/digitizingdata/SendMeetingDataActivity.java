@@ -3,19 +3,20 @@ package org.applab.digitizingdata;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.AdapterView;
 
+import org.applab.digitizingdata.R;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
-import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.helpers.MembersArrayAdapter;
 import org.applab.digitizingdata.helpers.SendMeetingDataArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ public class SendMeetingDataActivity extends SherlockListActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Send Meeting Data");
+        actionBar.setTitle("Send Data");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -72,5 +73,33 @@ public class SendMeetingDataActivity extends SherlockListActivity {
                 startActivity(i);
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                Intent upIntent = new Intent(this, MainActivity.class);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    // This activity is not part of the application's task, so
+                    // create a new task
+                    // with a synthesized back stack.
+                    TaskStackBuilder
+                            .from(this)
+                            .addNextIntent(new Intent(this, MainActivity.class))
+                            .addNextIntent(upIntent).startActivities();
+                    finish();
+                }
+                else {
+                    // This activity is part of the application's task, so simply
+                    // navigate up to the hierarchical parent activity.
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
+                return true;
+        }
+
+        return true;
+
     }
 }

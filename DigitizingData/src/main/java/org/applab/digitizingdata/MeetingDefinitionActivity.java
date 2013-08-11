@@ -58,6 +58,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("Meeting");
         repo = new MeetingRepo(MeetingDefinitionActivity.this);
 
         previousMeeting = repo.getCurrentMeeting();
