@@ -36,6 +36,15 @@ public class Utils {
     public static boolean _membersAccessedFromNewCycle = false;
     public static boolean _membersAccessedFromEditCycle = false;
 
+    //TODO: will create an enum of CURRENT_VIEW_MODE
+    public enum MeetingDataViewMode {
+        VIEW_MODE_CAPTURE,
+        VIEW_MODE_REVIEW,
+        VIEW_MODE_READ_ONLY
+    };
+
+    public static MeetingDataViewMode  _meetingDataViewMode = MeetingDataViewMode.VIEW_MODE_CAPTURE;
+
     public static String getMonthNameAbbrev(int month) {
         switch (month) {
             case 1:

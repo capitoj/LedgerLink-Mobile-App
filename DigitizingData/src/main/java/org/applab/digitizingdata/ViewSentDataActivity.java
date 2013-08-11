@@ -70,7 +70,10 @@ public class ViewSentDataActivity extends SherlockListActivity {
                 i.putExtra("_meetingDate", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd-MMM-yyyy"));
                 i.putExtra("_meetingId",selectedMeeting.getMeetingId());
                 i.putExtra("_enableSendData", false);
-                i.putExtra("_isReadOnly", false);
+
+                //Indicate that current data view mode is READ_ONLY
+                Utils._meetingDataViewMode = Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY;
+                i.putExtra("_isReadOnly", true);
                 startActivity(i);
             }
         });

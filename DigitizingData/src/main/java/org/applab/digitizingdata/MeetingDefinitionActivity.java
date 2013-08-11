@@ -212,6 +212,9 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 }
             }
 
+            //Indicate that current data view mode is CAPTURE
+            Utils._meetingDataViewMode = Utils.MeetingDataViewMode.VIEW_MODE_CAPTURE;
+
             i = new Intent(getApplicationContext(), MeetingActivity.class);
             i.putExtra("_meetingDate",Utils.formatDate(currentMeeting.getMeetingDate(), "dd-MMM-yyyy"));
             i.putExtra("_meetingId",currentMeeting.getMeetingId());

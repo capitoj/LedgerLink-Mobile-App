@@ -85,9 +85,17 @@ public class NewCyclePg2Activity extends SherlockListActivity {
                 }
                 return true;
             case R.id.mnuNCPg2Done:
-                Toast toast = Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.LEFT,0,0);
-                toast.show();
+
+                if(isUpdateCycleAction) {
+                    Toast toast = Toast.makeText(getBaseContext(), "You have successfully edited cycle", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.LEFT,0,0);
+                    toast.show();
+                }
+                else {
+                    Toast toast = Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.LEFT,0,0);
+                    toast.show();
+                }
 
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);

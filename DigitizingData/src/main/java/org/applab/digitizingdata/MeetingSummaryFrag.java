@@ -44,7 +44,19 @@ public class MeetingSummaryFrag extends SherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         actionBar = getSherlockActivity().getSupportActionBar();
-        actionBar.setTitle("Meeting");
+        String title = "Meeting";
+        switch(Utils._meetingDataViewMode) {
+            case VIEW_MODE_REVIEW:
+                title = "Send Data";
+                break;
+            case VIEW_MODE_READ_ONLY:
+                title = "Sent Data";
+                break;
+            default:
+                title="Meeting";
+                break;
+        }
+        actionBar.setTitle(title);
         TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSFMeetingDate);
         String meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         lblMeetingDate.setText(meetingDate);

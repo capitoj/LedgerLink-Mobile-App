@@ -9,6 +9,8 @@ import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 
 import org.applab.digitizingdata.R;
+import org.applab.digitizingdata.helpers.Utils;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -35,7 +37,20 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         //ActionBar
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("Meeting");
+
+        String title = "Meeting";
+        switch(Utils._meetingDataViewMode) {
+            case VIEW_MODE_REVIEW:
+                title = "Send Data";
+                break;
+            case VIEW_MODE_READ_ONLY:
+                title = "Sent Data";
+                break;
+            default:
+                title="Meeting";
+                break;
+        }
+        actionBar.setTitle(title);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         actionBar.addTab(actionBar.newTab().setTag("summary").setText("Summary").setTabListener(this));
@@ -67,7 +82,8 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(enableSendData) {
+        //If(enableData)
+        if(Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
             final MenuInflater inflater = getSupportMenuInflater();
             inflater.inflate(R.menu.meeting, menu);
             return true;

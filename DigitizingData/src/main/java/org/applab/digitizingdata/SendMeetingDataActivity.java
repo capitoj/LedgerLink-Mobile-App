@@ -70,6 +70,9 @@ public class SendMeetingDataActivity extends SherlockListActivity {
                 i.putExtra("_meetingDate", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd-MMM-yyyy"));
                 i.putExtra("_meetingId",selectedMeeting.getMeetingId());
                 i.putExtra("_enableSendData", true);
+
+                //Indicate that current data view mode is REVIEW
+                Utils._meetingDataViewMode = Utils.MeetingDataViewMode.VIEW_MODE_REVIEW;
                 startActivity(i);
             }
         });

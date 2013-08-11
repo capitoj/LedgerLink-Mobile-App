@@ -19,6 +19,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.MembersRollCallArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
+import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
@@ -52,7 +53,20 @@ public class MeetingSavingsFrag extends SherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         actionBar = getSherlockActivity().getSupportActionBar();
-        actionBar.setTitle("Meeting");
+        String title = "Meeting";
+        switch(Utils._meetingDataViewMode) {
+            case VIEW_MODE_REVIEW:
+                title = "Send Data";
+                break;
+            case VIEW_MODE_READ_ONLY:
+                title = "Sent Data";
+                break;
+            default:
+                title="Meeting";
+                break;
+        }
+        actionBar.setTitle(title);
+
         TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         lblMeetingDate.setText(meetingDate);

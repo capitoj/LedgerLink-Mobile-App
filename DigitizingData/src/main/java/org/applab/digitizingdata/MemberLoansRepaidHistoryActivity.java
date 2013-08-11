@@ -78,6 +78,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         loansRepaidRepo = new MeetingLoanRepaymentRepo(MemberLoansRepaidHistoryActivity.this);
 
         //Get Loan Number of currently running loan
+        TextView lblLoanNo = (TextView)findViewById(R.id.lblMLRepayHLoanNo);
         TextView txtLoanNumber = (TextView)findViewById(R.id.txtMLRepayHLoanNo);
         TextView txtLoanAmountFld = (TextView)findViewById(R.id.txtMLRepayHAmount);
         TextView txtComment = (TextView)findViewById(R.id.txtMLRepayHComment);
@@ -98,7 +99,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             txtLoanNumber.setText(null);
 
             //Show that Member has No Loan
-            TextView lblLoanNo = (TextView)findViewById(R.id.lblMLRepayHLoanNo);
             lblLoanNo.setText("Member does not have an outstanding loan.");
 
             //Remove the widgets for capturing Loans
@@ -117,7 +117,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             //Remove Comment
             TextView lblComment = (TextView)findViewById(R.id.lblMLRepayHComment);
             parent.removeView(lblComment);
-
             parent.removeView(txtComment);
 
         }
@@ -135,8 +134,16 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         populateLoanRepaymentHistory();
 
         //TODO: Check this
-        TextView txtLRAmount = (TextView)findViewById(R.id.txtMLRepayHAmount);
-        txtLRAmount.requestFocus();
+        if(null != recentLoan) {
+            TextView txtLRAmount = (TextView)findViewById(R.id.txtMLRepayHAmount);
+            txtLRAmount.requestFocus();
+        }
+        else {
+            if(null != lblLoanNo) {
+                lblLoanNo.setFocusable(true);
+                lblLoanNo.requestFocus();
+            }
+        }
 
     }
     @Override
@@ -175,8 +182,8 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 return true;
             case R.id.mnuMLRepayHSave:
                 if(recentLoan == null) {
-                    Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member has no Outstanding Loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    return false;
+                    Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    return true;
                 }
                 if(saveMemberLoanRepayment()) {
                     i = new Intent(MemberLoansRepaidHistoryActivity.this, MeetingActivity.class);

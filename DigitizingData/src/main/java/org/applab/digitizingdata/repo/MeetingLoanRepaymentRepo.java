@@ -279,7 +279,7 @@ public class MeetingLoanRepaymentRepo {
     public MemberLoanRepaymentRecord getLoansRepaymentByMemberInMeeting(int meetingId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
-        MemberLoanRepaymentRecord repaymentRecord;
+        MemberLoanRepaymentRecord repaymentRecord = null;
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();

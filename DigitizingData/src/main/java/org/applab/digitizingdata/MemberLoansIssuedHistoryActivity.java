@@ -46,7 +46,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         setContentView(R.layout.activity_member_loans_issued_history);
 
         actionBar = getSupportActionBar();
-        actionBar.setTitle("Loans");
+        actionBar.setTitle("New Loans");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
