@@ -19,6 +19,8 @@ import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 
+import java.util.Calendar;
+
 /**
  * Created by Moses on 6/26/13.
  */
@@ -127,7 +129,20 @@ public class MemberDetailsViewActivity extends SherlockActivity {
                 txtPhone.setText(member.getPhoneNumber());
             }
             TextView txtAge = (TextView)findViewById(R.id.txtMDVAge);
-            txtAge.setText(String.format("%d", 25));
+
+            //TODO: I need to retrieve the Age from the DateOfBirth
+            Calendar calToday = Calendar.getInstance();
+            Calendar calDb = Calendar.getInstance();
+            calDb.setTime(member.getDateOfBirth());
+            int computedAge = calToday.get(Calendar.YEAR) - calDb.get(Calendar.YEAR);
+            txtAge.setText(String.format("%d", computedAge));
+
+            //TODO: When we allow members to take leave, we may be better allowing this field to be editable
+            TextView txtCyclesCompleted = (TextView)findViewById(R.id.txtMDVCyclesCompleted);
+            Calendar calDbCycles = Calendar.getInstance();
+            calDbCycles.setTime(member.getDateOfAdmission());
+            int cycles = calToday.get(Calendar.YEAR) - calDbCycles.get(Calendar.YEAR);
+            txtCyclesCompleted.setText(String.format("%d", cycles));
 
         }
         finally {
@@ -151,7 +166,9 @@ public class MemberDetailsViewActivity extends SherlockActivity {
         TextView txtPhone = (TextView)findViewById(R.id.txtMDVPhone);
         txtPhone.setText(null);
         TextView txtAge = (TextView)findViewById(R.id.txtMDVAge);
-        txtAge.setText(String.format("%d", -1));
+        txtAge.setText(null);
+        TextView txtCyclesCompleted = (TextView)findViewById(R.id.txtMDVCyclesCompleted);
+        txtCyclesCompleted.setText(null);
 
         txtMemberNo.requestFocus();
     }

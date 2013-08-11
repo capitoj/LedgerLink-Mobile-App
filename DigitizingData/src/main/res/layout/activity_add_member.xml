@@ -99,6 +99,7 @@
                     android:textStyle="bold"
                     android:text="Gender *"
                     android:textSize="16sp" />
+            <!--
             <EditText
                     android:id="@+id/txtAMGender"
                     android:layout_width="fill_parent"
@@ -107,6 +108,7 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:text=""/>
+                    -->
             <Spinner android:id="@+id/cboAMGender"
                     android:layout_height="wrap_content"
                     android:layout_width="fill_parent"

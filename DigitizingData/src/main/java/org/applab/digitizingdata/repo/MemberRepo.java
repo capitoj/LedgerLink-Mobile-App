@@ -48,6 +48,10 @@ public class MemberRepo {
             }
             values.put(MemberSchema.COL_M_DATE_OF_BIRTH, Utils.formatDateToSqlite(member.getDateOfBirth()));
             values.put(MemberSchema.COL_M_PHONE_NO, member.getPhoneNumber());
+            if(member.getDateOfAdmission() == null) {
+                member.setDateOfAdmission(new Date());
+            }
+            values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
 
             // Inserting Row
             long retVal = db.insert(MemberSchema.getTableName(), null, values);
@@ -101,7 +105,19 @@ public class MemberRepo {
                     member.setGender(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_GENDER)));
                     member.setOccupation(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_OCCUPATION)));
                     member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
-                    member.setDateOfBirth(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))));
+
+                    if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
+                        member.setDateOfBirth(new Date());
+                    }
+                    else {
+                        member.setDateOfBirth(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))));
+                    }
+                    if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))) {
+                        member.setDateOfAdmission(new Date());
+                    }
+                    else {
+                        member.setDateOfAdmission(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))));
+                    }
 
                     members.add(member);
 
@@ -154,8 +170,19 @@ public class MemberRepo {
             member.setGender(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_GENDER)));
             member.setOccupation(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_OCCUPATION)));
             member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
-            member.setDateOfBirth(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))));
 
+            if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
+                member.setDateOfBirth(new Date());
+            }
+            else {
+                member.setDateOfBirth(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))));
+            }
+            if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))) {
+                member.setDateOfAdmission(new Date());
+            }
+            else {
+                member.setDateOfAdmission(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))));
+            }
             // return the entity
             return member;
         }
@@ -201,8 +228,19 @@ public class MemberRepo {
             member.setGender(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_GENDER)));
             member.setOccupation(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_OCCUPATION)));
             member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
-            member.setDateOfBirth(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))));
 
+            if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
+                member.setDateOfBirth(new Date());
+            }
+            else {
+                member.setDateOfBirth(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))));
+            }
+            if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))) {
+                member.setDateOfAdmission(new Date());
+            }
+            else {
+                member.setDateOfAdmission(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))));
+            }
             // return the entity
             return member;
         }
@@ -240,6 +278,11 @@ public class MemberRepo {
             }
             values.put(MemberSchema.COL_M_DATE_OF_BIRTH, Utils.formatDateToSqlite(member.getDateOfBirth()));
             values.put(MemberSchema.COL_M_PHONE_NO, member.getPhoneNumber());
+            if(member.getDateOfAdmission() == null) {
+                member.setDateOfAdmission(new Date());
+            }
+            values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
+
 
             // updating row
             int retVal = db.update(MemberSchema.getTableName(), values, MemberSchema.COL_M_MEMBER_ID + " = ?",

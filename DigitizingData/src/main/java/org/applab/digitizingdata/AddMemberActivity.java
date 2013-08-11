@@ -78,8 +78,6 @@ public class AddMemberActivity extends SherlockActivity {
             selectedMember = repo.getMemberById(selectedMemberId);
             populateDataFields(selectedMember);
         }
-
-
     }
 
     @Override
@@ -154,8 +152,11 @@ public class AddMemberActivity extends SherlockActivity {
                     // Setting OK Button
                     dlg.setButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            //Clear the fields for new data
-                            //Or go back
+                            if(successAlertDialogShown) {
+                                Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                                startActivity(i);
+                                successAlertDialogShown = false;
+                            }
                         }
                     });
                     dlg.show();
@@ -232,11 +233,13 @@ public class AddMemberActivity extends SherlockActivity {
             }
 
             //Validate: Gender
-            TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
-            String gender = txtGender.getText().toString().trim();
+            //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
+            Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
+            //String gender = txtGender.getText().toString().trim();
+            String gender = cboGender.getSelectedItem().toString().trim();
             if(gender.length() < 1) {
                 Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtGender.requestFocus();
+                cboGender.requestFocus();
                 return false;
             }
             else {
@@ -255,6 +258,11 @@ public class AddMemberActivity extends SherlockActivity {
                 int theAge = Integer.parseInt(age);
                 if (theAge <= 0) {
                     Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Age must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtAge.requestFocus();
+                    return false;
+                }
+                else if(theAge > 120) {
+                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Age is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtAge.requestFocus();
                     return false;
                 }
@@ -306,8 +314,18 @@ public class AddMemberActivity extends SherlockActivity {
                     txtCycles.requestFocus();
                     return false;
                 }
+                else if(theCycles > 100) {
+                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtCycles.requestFocus();
+                    return false;
+                }
                 else {
                     member.setCyclesCompleted(theCycles);
+
+                    //Get the Date of Admission
+                    Calendar c = Calendar.getInstance();
+                    c.add(Calendar.YEAR, -theCycles);
+                    member.setDateOfAdmission(c.getTime());
                 }
             }
 
@@ -346,9 +364,11 @@ public class AddMemberActivity extends SherlockActivity {
             if (member.getOtherNames() != null) {
                 txtOtherNames.setText(member.getOtherNames());
             }
-            TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
-            if (member.getGender() != null) {
-                txtGender.setText(member.getGender());
+            Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
+            if(member.getGender() != null) {
+                if(member.getGender().startsWith("F") || member.getGender().startsWith("f")){
+                    cboGender.setSelection(1);
+                }
             }
 
             TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
@@ -363,6 +383,18 @@ public class AddMemberActivity extends SherlockActivity {
             //txtAge.setText(String.format("%d", 0));
 
             //TODO: I need to retrieve the Age from the DateOfBirth
+            Calendar calToday = Calendar.getInstance();
+            Calendar calDb = Calendar.getInstance();
+            calDb.setTime(member.getDateOfBirth());
+            int computedAge = calToday.get(Calendar.YEAR) - calDb.get(Calendar.YEAR);
+            txtAge.setText(String.format("%d", computedAge));
+
+            //TODO: When we allow members to take leave, we may be better allowing this field to be editable
+            TextView txtCyclesCompleted = (TextView)findViewById(R.id.txtAMCycles);
+            Calendar calDbCycles = Calendar.getInstance();
+            calDbCycles.setTime(member.getDateOfAdmission());
+            int cycles = calToday.get(Calendar.YEAR) - calDbCycles.get(Calendar.YEAR);
+            txtCyclesCompleted.setText(String.format("%d", cycles));
 
         }
         finally {
@@ -379,14 +411,16 @@ public class AddMemberActivity extends SherlockActivity {
         txtSurname.setText(null);
         TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
         txtOtherNames.setText(null);
-        TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
-        txtGender.setText(null);
+        //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
+        //txtGender.setText(null);
         TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
         txtOccupation.setText(null);
         TextView txtPhone = (TextView)findViewById(R.id.txtAMPhoneNo);
         txtPhone.setText(null);
         TextView txtAge = (TextView)findViewById(R.id.txtAMAge);
-        txtAge.setText(String.format("%d", 0));
+        txtAge.setText(null);
+        TextView txtCycles = (TextView)findViewById(R.id.txtAMCycles);
+        txtCycles.setText(null);
 
         txtMemberNo.requestFocus();
     }
