@@ -73,7 +73,9 @@ public class LoginActivity extends Activity {
         if(vslaInfo != null) {
             vslaName = vslaInfo.getVslaName();
         }
-        txtVslaName.setText(vslaName);
+
+        //TODO: Do not display the name for now: Will handle this after Activation stuff is done
+        //txtVslaName.setText(vslaName);
 
 
         // ---Button view---

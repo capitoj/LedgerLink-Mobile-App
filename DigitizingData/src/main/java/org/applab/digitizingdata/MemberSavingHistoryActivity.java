@@ -17,6 +17,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.AttendanceArrayAdapter;
 import org.applab.digitizingdata.helpers.AttendanceRecord;
 import org.applab.digitizingdata.helpers.MemberSavingRecord;
@@ -79,13 +80,19 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             txtTotalSavings.setText(String.format("Total Savings: %,.0fUGX", totalSavings));
         }
 
+        //Fill-out the Savings Amount in case it exists
+        if(targetMeeting != null ) {
+            double saving = savingRepo.getMemberSaving(targetMeeting.getMeetingId(), memberId);
+            if(saving > 0) {
+                TextView txtSavingAmount = (TextView)findViewById(R.id.txtMSHAmount);
+                txtSavingAmount.setText(String.format("%.0f",saving));
+            }
+        }
+
         populateSavingHistory();
 
         TextView txtMSHAmount = (TextView)findViewById(R.id.txtMSHAmount);
-        txtMSHAmount.setText("");
         txtMSHAmount.requestFocus();
-
-
     }
 
     private void populateSavingHistory() {

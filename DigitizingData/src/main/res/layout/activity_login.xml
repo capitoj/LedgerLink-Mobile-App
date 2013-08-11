@@ -43,16 +43,28 @@
                 android:layout_marginTop="64dip"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:text="VSLA Name" />
+                android:text="" />
 
+        <TextView
+                android:id="@+id/lbl_pass_key"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_below="@id/lbl_vsla_name"
+                android:paddingTop="2dp"
+                android:paddingLeft="5dp"
+                android:layout_marginTop="10dip"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:text="Pass Key" />
         <EditText
                 android:id="@+id/edt_passkey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lbl_vsla_name"
-                android:layout_marginTop="20dip"
-                android:paddingTop="10dip"
-                android:paddingBottom="10dip"
+                android:layout_below="@id/lbl_pass_key"
+                android:layout_marginTop="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:paddingLeft="5dip"
                 android:textSize="18sp"
                 android:background="#FFFFFF"
