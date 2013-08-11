@@ -79,12 +79,20 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
         //Get Loan Number of currently running loan
         TextView txtLoanNumber = (TextView)findViewById(R.id.txtMLRepayHLoanNo);
+        TextView txtLoanAmountFld = (TextView)findViewById(R.id.txtMLRepayHAmount);
+        TextView txtComment = (TextView)findViewById(R.id.txtMLRepayHComment);
+
         recentLoan = loanIssuedRepo.getMostRecentLoanIssuedToMember(memberId);
         if(null != recentLoan) {
             txtLoanNumber.setText(String.format("%d",recentLoan.getLoanNo()));
 
             //If there is an existing Repayment for this meeting, show the amount
-            
+            MemberLoanRepaymentRecord loanRepayment = loansRepaidRepo.getLoansRepaymentByMemberInMeeting(meetingId,memberId);
+            if(null != loanRepayment) {
+                txtLoanAmountFld.setText(String.format("%.0f",loanRepayment.getAmount()));
+                txtComment.setText(loanRepayment.getComments());
+                txtLoanNumber.setText(String.format("%d", loanRepayment.getLoanNo()));
+            }
         }
         else {
             txtLoanNumber.setText(null);
@@ -110,7 +118,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             TextView lblComment = (TextView)findViewById(R.id.lblMLRepayHComment);
             parent.removeView(lblComment);
 
-            TextView txtComment = (TextView)findViewById(R.id.txtMLRepayHComment);
             parent.removeView(txtComment);
 
         }

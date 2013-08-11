@@ -276,4 +276,54 @@ public class MeetingLoanRepaymentRepo {
         }
     }
 
+    public MemberLoanRepaymentRecord getLoansRepaymentByMemberInMeeting(int meetingId, int memberId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        MemberLoanRepaymentRecord repaymentRecord;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  L.%s AS RepaymentId, M.%s AS MeetingDate, L.%s AS Amount, " +
+                    "L.%s AS LoanId, L.%s AS RolloverAmount, L.%s AS Comments, LI.%s AS LoanNo" +
+                    " FROM %s AS L INNER JOIN %s AS M ON L.%s=M.%s INNER JOIN %s AS LI ON L.%s=LI.%s " +
+                    " WHERE L.%s=%d AND L.%s=%d ORDER BY L.%s DESC LIMIT 1",
+                    LoanRepaymentSchema.COL_LR_REPAYMENT_ID,MeetingSchema.COL_MT_MEETING_DATE, LoanRepaymentSchema.COL_LR_AMOUNT,
+                    LoanRepaymentSchema.COL_LR_LOAN_ID, LoanRepaymentSchema.COL_LR_ROLLOVER_AMOUNT, LoanRepaymentSchema.COL_LR_COMMENTS,
+                    LoanIssueSchema.COL_LI_LOAN_NO, LoanRepaymentSchema.getTableName(), MeetingSchema.getTableName(), LoanRepaymentSchema.COL_LR_MEETING_ID,MeetingSchema.COL_MT_MEETING_ID,
+                    LoanIssueSchema.getTableName(), LoanRepaymentSchema.COL_LR_LOAN_ID, LoanIssueSchema.COL_LI_LOAN_ID, LoanRepaymentSchema.COL_LR_MEMBER_ID,memberId,
+                    LoanRepaymentSchema.COL_LR_MEETING_ID, meetingId, LoanRepaymentSchema.COL_LR_REPAYMENT_ID
+            );
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+                    repaymentRecord = new MemberLoanRepaymentRecord();
+                    Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("MeetingDate")));
+                    repaymentRecord.setMeetingDate(meetingDate);
+                    repaymentRecord.setLoanId(cursor.getInt(cursor.getColumnIndex("LoanId")));
+                    repaymentRecord.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
+                    repaymentRecord.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
+                    repaymentRecord.setRolloverAmount(cursor.getDouble(cursor.getColumnIndex("RolloverAmount")));
+                    repaymentRecord.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+                    repaymentRecord.setRepaymentId(cursor.getInt(cursor.getColumnIndex("RepaymentId")));
+
+            }
+            return repaymentRecord;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingLoanRepaymentRepo.getLoansRepaymentsByMemberInMeeting", ex.getMessage());
+            return null;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
 }
