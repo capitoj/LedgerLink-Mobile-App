@@ -13,5 +13,6 @@
     <string name="title_activity_send_meeting_data">Send Meeting Data</string>
     <string name="title_activity_member_attendance_history">Attendance History</string>
     <string name="title_activity_activation">Activation</string>
+    <string name="add_member_gender_prompt">Select Sex</string>
 
 </resources>

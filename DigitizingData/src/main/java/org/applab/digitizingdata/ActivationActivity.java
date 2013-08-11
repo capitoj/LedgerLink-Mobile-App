@@ -63,7 +63,6 @@ public class ActivationActivity extends Activity {
                 }
                 );
                 ad.show();
-
             }
         });
     }

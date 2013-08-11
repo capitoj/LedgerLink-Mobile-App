@@ -21,7 +21,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:textStyle="bold"
-                    android:text="Member No:"
+                    android:text="Member No *:"
                     android:textSize="16sp" />
             <EditText
                     android:id="@+id/txtAMMemberNo"
@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:textStyle="bold"
-                    android:text="Surname"
+                    android:text="Surname *"
                     android:textSize="16sp" />
             <EditText
                     android:id="@+id/txtAMSurname"
@@ -71,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:textStyle="bold"
-                    android:text="Other Names"
+                    android:text="Other Names *"
                     android:textSize="16sp" />
             <EditText
                     android:id="@+id/txtAMOtherNames"
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:textStyle="bold"
-                    android:text="Gender"
+                    android:text="Gender *"
                     android:textSize="16sp" />
             <EditText
                     android:id="@+id/txtAMGender"
@@ -107,6 +107,12 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:text=""/>
+            <Spinner android:id="@+id/cboAMGender"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:spinnerMode="dropdown"
+                    android:prompt="@string/add_member_gender_prompt"
+                    />
         </LinearLayout>
 
         <LinearLayout
@@ -133,6 +139,7 @@
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:text=""/>
+
         </LinearLayout>
 
         <LinearLayout

@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.applab.digitizingdata.R;
+
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -42,10 +44,14 @@ public class EndCycleActivity extends SherlockActivity {
     private boolean successAlertDialogShown = false;
 
     private VslaCycle selectedCycle;
+    private ActionBar actionBar;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_end_cycle);
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         txtShareOutDate = (TextView)findViewById(R.id.txtECShareOutDate);
         txtInstructions = (TextView)findViewById(R.id.lblECInstruction);

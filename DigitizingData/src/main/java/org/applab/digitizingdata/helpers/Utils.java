@@ -144,13 +144,13 @@ public class Utils {
 
         // Setting Icon to Dialog
         if (icon.equalsIgnoreCase(MSGBOX_ICON_EXCLAMATION)) {
-            alertDialog.setIcon(R.drawable.exclamation);
+            //alertDialog.setIcon(R.drawable.exclamation);
         }
         else if (icon.equalsIgnoreCase(MSGBOX_ICON_TICK)) {
-            alertDialog.setIcon(R.drawable.tick);
+            //alertDialog.setIcon(R.drawable.tick);
         }
         else if (icon.equalsIgnoreCase(MSGBOX_ICON_QUESTION)) {
-            alertDialog.setIcon(R.drawable.question);
+            //alertDialog.setIcon(R.drawable.question);
         }
 
         return alertDialog;
@@ -177,14 +177,15 @@ public class Utils {
 
         // Setting Icon to Dialog
         if (icon.equalsIgnoreCase(MSGBOX_ICON_EXCLAMATION)) {
-            alertDialog.setIcon(R.drawable.exclamation);
+            //alertDialog.setIcon(R.drawable.exclamation);
         }
         else if (icon.equalsIgnoreCase(MSGBOX_ICON_TICK)) {
-            alertDialog.setIcon(R.drawable.tick);
+            //alertDialog.setIcon(R.drawable.tick);
         }
         else if (icon.equalsIgnoreCase(MSGBOX_ICON_QUESTION)) {
-            alertDialog.setIcon(R.drawable.question);
+            //alertDialog.setIcon(R.drawable.question);
         }
+
         alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 

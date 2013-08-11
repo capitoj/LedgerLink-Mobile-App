@@ -32,6 +32,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
         setContentView(R.layout.activity_member_details_view);
 
         actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Check for Extras in case this call was to edit a pledge
         Bundle b = getIntent().getExtras();

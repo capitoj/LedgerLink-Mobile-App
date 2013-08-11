@@ -73,6 +73,8 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 //I want the Event Handler to handle both startDate and endDate
                 viewClicked = (TextView)view;
                 DatePickerDialog datePickerDialog = new DatePickerDialog( MeetingDefinitionActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                //TODO: Enable this feature in API 11 and above
+                //datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.show();
             }
         });

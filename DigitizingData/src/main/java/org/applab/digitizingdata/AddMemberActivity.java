@@ -5,6 +5,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +21,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
@@ -58,12 +63,23 @@ public class AddMemberActivity extends SherlockActivity {
             actionBar.setTitle("New Member");
         }
 
+        //Setup the Spinner Items
+        Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
+        String[] genderList = new String[]{"Male", "Female"};
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item,genderList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cboGender.setAdapter(adapter);
+
+        cboGender.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+
         clearDataFields();
         if(isEditAction){
             repo = new MemberRepo(getApplicationContext());
             selectedMember = repo.getMemberById(selectedMemberId);
             populateDataFields(selectedMember);
         }
+
+
     }
 
     @Override
@@ -76,6 +92,18 @@ public class AddMemberActivity extends SherlockActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case android.R.id.home:
+                Intent upIntent = new Intent(this, MainActivity.class);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    TaskStackBuilder
+                            .from(this)
+                            .addNextIntent(new Intent(this, MainActivity.class))
+                            .addNextIntent(upIntent).startActivities();
+                    finish();
+                } else {
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
+                return true;
             case R.id.mnuAMNext:
                 //Toast.makeText(getBaseContext(), "You have successfully added a new member", Toast.LENGTH_LONG).show();
                 return saveMemberData();
@@ -261,6 +289,28 @@ public class AddMemberActivity extends SherlockActivity {
             else {
                 member.setPhoneNumber(phoneNo);
             }
+
+            // Validate: Cycles Completed
+            TextView txtCycles = (TextView)findViewById(R.id.txtAMCycles);
+            String cycles = txtCycles.getText().toString().trim();
+            int theCycles = 0;
+            if (cycles.length() < 1) {
+//                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Number of Completed Cycles is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+//                txtCycles.requestFocus();
+//                return false;
+            }
+            else {
+                theCycles = Integer.parseInt(cycles);
+                if (theCycles <= 0) {
+                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The number of cycles must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtCycles.requestFocus();
+                    return false;
+                }
+                else {
+                    member.setCyclesCompleted(theCycles);
+                }
+            }
+
 
             //Final Verifications
             if(!repo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId())) {
