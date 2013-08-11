@@ -32,6 +32,10 @@ public class Utils {
     public static final String MSGBOX_ICON_QUESTION = "QUESTION";
     public static final String MSGBOX_ICON_TICK = "TICK";
 
+    //Global Management of Tasks
+    public static boolean _membersAccessedFromNewCycle = false;
+    public static boolean _membersAccessedFromEditCycle = false;
+
     public static String getMonthNameAbbrev(int month) {
         switch (month) {
             case 1:

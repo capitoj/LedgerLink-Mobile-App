@@ -79,6 +79,7 @@ public class NewCycleActivity extends SherlockActivity {
                 viewClicked = (TextView)view;
                 settingStartDate = true;
                 DatePickerDialog datePickerDialog = new DatePickerDialog( NewCycleActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                datePickerDialog.setTitle("Set cycle start date");
                 datePickerDialog.show();
             }
         });
@@ -90,6 +91,7 @@ public class NewCycleActivity extends SherlockActivity {
                 viewClicked = (TextView)view;
                 settingStartDate = false;
                 DatePickerDialog datePickerDialog = new DatePickerDialog( NewCycleActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                datePickerDialog.setTitle("Set cycle end date");
                 datePickerDialog.show();
             }
         });
@@ -167,6 +169,7 @@ public class NewCycleActivity extends SherlockActivity {
         //TODO work on this to display the proper date depending on what is clicked
         super.onPrepareDialog(id, dialog);
         ((DatePickerDialog) dialog).updateDate(mYear, mMonth, mDay);
+        dialog.setTitle("Set cycle date");
 
     }
 

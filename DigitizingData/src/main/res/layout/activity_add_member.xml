@@ -16,6 +16,14 @@
                 android:layout_marginTop="10dp">
 
             <TextView
+                    android:id="@+id/lblAMInstruction"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="('*' = required)"
+                    android:textSize="14sp" />
+
+            <TextView
                     android:id="@+id/lblAMMemberNo"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -131,7 +139,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:textStyle="bold"
-                    android:text="Age"
+                    android:text="Age *"
                     android:textSize="16sp" />
             <EditText
                     android:id="@+id/txtAMAge"
@@ -158,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:textStyle="bold"
-                    android:text="Occupation"
+                    android:text="Occupation *"
                     android:textSize="16sp" />
             <EditText
                     android:id="@+id/txtAMOccupation"

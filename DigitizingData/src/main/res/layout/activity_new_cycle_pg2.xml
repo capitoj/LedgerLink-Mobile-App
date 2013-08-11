@@ -13,8 +13,8 @@
                   android:layout_width="wrap_content"
                   android:padding="5dp"
                   android:layout_height="wrap_content"
-                  android:gravity="center_horizontal"
-                  android:text="Update register by adding new members and removing those who are no longer a part of your savings group."
+                  android:gravity="left"
+                  android:text="Update register by adding new members and removing those who are no longer a part of your group."
                 />
     </RelativeLayout>
 

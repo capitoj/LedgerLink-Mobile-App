@@ -17,10 +17,9 @@
                 android:id="@+id/lblNCHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:gravity="left"
                 android:layout_marginTop="10dp"
                 android:text="Enter all cycle information then select next."
-                android:textAlignment="center"
                 android:textSize="16sp"
                 android:layout_marginBottom="20dp"/>
     </LinearLayout>

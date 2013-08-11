@@ -2,7 +2,7 @@
     <item
             android:id="@+id/mnuNCPg2Sort"
             android:title="Sort By"
-            android:showAsAction="ifRoom|withText"
+            android:showAsAction="never"
             android:orderInCategory="3"
             android:actionLayout = "@layout/sort_members_action"  />
 

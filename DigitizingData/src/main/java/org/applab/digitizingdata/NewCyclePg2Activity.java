@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,6 +22,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
+import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
@@ -83,12 +85,21 @@ public class NewCyclePg2Activity extends SherlockListActivity {
                 }
                 return true;
             case R.id.mnuNCPg2Done:
-                Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.LEFT,0,0);
+                toast.show();
+
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
                 return true;
             case R.id.mnuNCPg2Add:
                 //Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG).show();
+                if(isUpdateCycleAction) {
+                    Utils._membersAccessedFromEditCycle = true;
+                }
+                else {
+                    Utils._membersAccessedFromNewCycle = true;
+                }
                 i = new Intent(getApplicationContext(), AddMemberActivity.class);
                 startActivity(i);
                 return true;

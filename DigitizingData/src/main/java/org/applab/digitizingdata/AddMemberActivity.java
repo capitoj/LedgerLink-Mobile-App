@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.view.Gravity;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class AddMemberActivity extends SherlockActivity {
     private Member selectedMember;
     private int selectedMemberId;
     private boolean successAlertDialogShown = false;
+    private boolean selectedFinishButton = false;
     private String dlgTitle = "Add Member";
     MemberRepo repo;
     private boolean isEditAction;
@@ -106,6 +108,7 @@ public class AddMemberActivity extends SherlockActivity {
                 //Toast.makeText(getBaseContext(), "You have successfully added a new member", Toast.LENGTH_LONG).show();
                 return saveMemberData();
             case R.id.mnuAMFinished:
+                selectedFinishButton = true;
                 return saveMemberData();
         }
         return true;
@@ -133,21 +136,81 @@ public class AddMemberActivity extends SherlockActivity {
                 if (member.getMemberId() == 0) {
                     //Set this new entity as the selected one
                     selectedMember = member;
+
+                    if(selectedFinishButton) {
+                        Toast toast = Toast.makeText(this,"The new member was added successfully.",Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.LEFT,0,0);
+                        toast.show();
+                        if(Utils._membersAccessedFromNewCycle) {
+                            Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+                            i.putExtra("_isUpdateCycleAction", false);
+                            startActivity(i);
+                        }
+                        else if(Utils._membersAccessedFromEditCycle) {
+                            Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+                            i.putExtra("_isUpdateCycleAction", true);
+                            startActivity(i);
+                        }
+                        else {
+                            Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                            startActivity(i);
+                        }
+                        Utils._membersAccessedFromNewCycle = false;
+                        Utils._membersAccessedFromEditCycle = false;
+                    }
+                    else {
+                        Toast toast = Toast.makeText(this,"The new member was added successfully. Add another member.",Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.LEFT,0,0);
+                        toast.show();
+                        //Clear the Fields and keep adding new records
+                        clearDataFields();
+                    }
+
+                    selectedFinishButton = false;
+
+                    /*
                     dlg = Utils.createAlertDialog(AddMemberActivity.this,"Add Member","The new member was added successfully.", Utils.MSGBOX_ICON_TICK);
                     // Setting OK Button
                     dlg.setButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             if(successAlertDialogShown) {
-                                Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
-                                startActivity(i);
+                                if(selectedFinishButton) {
+                                    if(Utils._membersAccessedFromNewCycle) {
+                                        Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+                                        i.putExtra("_isUpdateCycleAction", false);
+                                        startActivity(i);
+                                    }
+                                    else if(Utils._membersAccessedFromEditCycle) {
+                                        Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+                                        i.putExtra("_isUpdateCycleAction", true);
+                                        startActivity(i);
+                                    }
+                                    else {
+                                        Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                                        startActivity(i);
+                                    }
+                                    Utils._membersAccessedFromNewCycle = false;
+                                    Utils._membersAccessedFromEditCycle = false;
+                                }
+                                else {
+                                    //Clear the Fields and keep adding new records
+                                    clearDataFields();
+                                }
+
+                                selectedFinishButton = false;
                                 successAlertDialogShown = false;
                             }
                         }
                     });
                     dlg.show();
-
+                    */
                 }
                 else {
+                    Toast.makeText(this,"The member was updated successfully.",Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                    startActivity(i);
+
+                    /*
                     dlg = Utils.createAlertDialog(AddMemberActivity.this,"Edit Member","The member was updated successfully.", Utils.MSGBOX_ICON_TICK);
                     // Setting OK Button
                     dlg.setButton("OK", new DialogInterface.OnClickListener() {
@@ -160,12 +223,15 @@ public class AddMemberActivity extends SherlockActivity {
                         }
                     });
                     dlg.show();
+                    */
                 }
 
+                /*
                 if(dlg.isShowing()) {
                     //Flag that ready to goto Next
                     successAlertDialogShown = true;
                 }
+                */
 
                 successFlg = true;
                 //clearDataFields(); //Not needed now
