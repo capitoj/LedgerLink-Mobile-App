@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -169,6 +170,28 @@ public class MeetingSummaryFrag extends SherlockFragment {
             txtTotalSavings.setText("");
             txtTotalRepayments.setText("");
             txtTotalLoanIssues.setText("");
+        }
+
+        //If this is a Review then do not display the data
+        //Remove the controls
+        if(Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
+
+            if(null != lblMeetingDate) {
+                LinearLayout parent = (LinearLayout)lblMeetingDate.getParent();
+                if(null != parent) {
+                    parent.removeView(txtAttendedCount);
+                    parent.removeView(txtDataSent);
+                    parent.removeView(txtPreviousMeetingDate);
+                    parent.removeView(txtTotalCollections);
+                    parent.removeView(txtTotalSavings);
+                    parent.removeView(txtTotalRepayments);
+                    parent.removeView(txtTotalLoanIssues);
+
+                    //Also Remove the Section Marker
+                    TextView lblSectionLastMeeting = (TextView)getSherlockActivity().findViewById(R.id.lblMSFSection2);
+                    parent.removeView(lblSectionLastMeeting);
+                }
+            }
         }
     }
 }
