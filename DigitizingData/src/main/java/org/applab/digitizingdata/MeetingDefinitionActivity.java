@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -62,6 +63,15 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         repo = new MeetingRepo(MeetingDefinitionActivity.this);
 
         previousMeeting = repo.getCurrentMeeting();
+
+        //Reset the instruction text
+        StringBuilder sb = new StringBuilder("Ready to enter data for a meeting? ");
+        sb.append("Set the date and then select <b><i>save</i></b>. ");
+        sb.append("To return to the main menu without starting a new meeting, select <b><i>cancel</i></b>. ");
+        sb.append("If necessary, tap date to select a date in the past. You may not select a date in the future.");
+
+        TextView txtInstructions = (TextView)findViewById(R.id.lblMDHeader);
+        txtInstructions.setText(Html.fromHtml(sb.toString()));
 
         txtMeetingDate = (TextView)findViewById(R.id.txtMDMeetingDate);
         viewClicked = txtMeetingDate;

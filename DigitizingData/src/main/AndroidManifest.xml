@@ -82,6 +82,7 @@
         </activity>
         <activity
             android:name="org.applab.digitizingdata.AddMemberActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_add_member"
             android:parentActivityName="MainActivity" >
             <meta-data

@@ -397,8 +397,9 @@ public class AddMemberActivity extends SherlockActivity {
 
 
             //Final Verifications
+            //TODO: Trying to use Application context to ensure dialog box does not disappear
             if(!repo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId())) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtMemberNo.requestFocus();
                 return false;
             }

@@ -77,8 +77,15 @@ public class MeetingRollCallFrag extends SherlockFragment {
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                CheckBox chkAttendance = (CheckBox)view.findViewById(R.id.chkRMRCallAttendance);
+                chkAttendance.toggle();
 
-                Member selectedMember = members.get(position);
+    }
+});
+        lvwMembers.setOnItemLongClickListener (new AdapterView.OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
+                Member selectedMember = (Member)parent.getItemAtPosition(position);
+                //Member selectedMember = members.get(position);
                 Intent i = new Intent(view.getContext(), MemberAttendanceHistoryActivity.class);
 
                 // Pass on data
@@ -87,7 +94,8 @@ public class MeetingRollCallFrag extends SherlockFragment {
                 i.putExtra("_names", selectedMember.toString());
                 i.putExtra("_meetingId",meetingId);
                 startActivity(i);
-    }
-});
+                return true;
+            }
+        });
     }
 }
