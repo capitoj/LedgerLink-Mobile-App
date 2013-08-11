@@ -49,7 +49,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Attendance History");
+        actionBar.setTitle("Roll Call");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -93,6 +93,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         TextView txtComments = (TextView)findViewById(R.id.txtMAHComment);
 
         chkAttendance.setChecked(attendanceRepo.getMemberAttendance(meetingId, memberId));
+        txtComments.setText(attendanceRepo.getMemberAttendanceComment(meetingId,memberId));
 
         txtFullNames.setText(fullNames);
         txtMeetingDate.setText(meetingDate);
@@ -101,7 +102,6 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         populateAttendanceData();
 
         chkAttendance.requestFocus();
-        txtComments.setText("");
         txtComments.requestFocus();
 
     }

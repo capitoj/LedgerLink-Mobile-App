@@ -68,6 +68,7 @@
                     android:layout_below="@id/lblMAHComment"
                     android:textStyle="bold"
                     android:textSize="18sp"
+                    android:imeOptions="actionDone"
                     android:text="OK"
                     />
             <TextView

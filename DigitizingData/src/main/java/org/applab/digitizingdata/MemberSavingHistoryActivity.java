@@ -157,7 +157,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             case R.id.mnuMSHSave:
 
                 if(saveMemberSaving()) {
-                    Toast.makeText(MemberSavingHistoryActivity.this,"Member Saving captured successfully",Toast.LENGTH_LONG).show();
+                    Toast.makeText(MemberSavingHistoryActivity.this,"Savings entered successfully",Toast.LENGTH_LONG).show();
                     i = new Intent(MemberSavingHistoryActivity.this, MeetingActivity.class);
                     i.putExtra("_tabToSelect", "savings");
                     i.putExtra("_meetingDate",meetingDate);

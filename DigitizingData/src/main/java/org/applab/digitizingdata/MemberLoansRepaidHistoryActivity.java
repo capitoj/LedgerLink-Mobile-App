@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -81,9 +82,37 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         recentLoan = loanIssuedRepo.getMostRecentLoanIssuedToMember(memberId);
         if(null != recentLoan) {
             txtLoanNumber.setText(String.format("%d",recentLoan.getLoanNo()));
+
+            //If there is an existing Repayment for this meeting, show the amount
+            
         }
         else {
-            txtLoanNumber.setText(String.format("%s","--"));
+            txtLoanNumber.setText(null);
+
+            //Show that Member has No Loan
+            TextView lblLoanNo = (TextView)findViewById(R.id.lblMLRepayHLoanNo);
+            lblLoanNo.setText("Member does not have an outstanding loan.");
+
+            //Remove the widgets for capturing Loans
+            LinearLayout parent = (LinearLayout)lblLoanNo.getParent();
+
+            //Remove LoanNo
+            LinearLayout frmLoanNo = (LinearLayout)findViewById(R.id.frmMLRepayHLoanNo);
+            parent.removeView(frmLoanNo);
+
+            //Remove Amount
+            TextView lblAmount = (TextView)findViewById(R.id.lblMLRepayHAmount);
+            parent.removeView(lblAmount);
+            LinearLayout frmAmount = (LinearLayout)findViewById(R.id.frmMLRepayHAmount);
+            parent.removeView(frmAmount);
+
+            //Remove Comment
+            TextView lblComment = (TextView)findViewById(R.id.lblMLRepayHComment);
+            parent.removeView(lblComment);
+
+            TextView txtComment = (TextView)findViewById(R.id.txtMLRepayHComment);
+            parent.removeView(txtComment);
+
         }
 
         TextView txtOutstandingLoans = (TextView)findViewById(R.id.lblMLRepayHOutstandingLoans);
@@ -100,7 +129,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
         //TODO: Check this
         TextView txtLRAmount = (TextView)findViewById(R.id.txtMLRepayHAmount);
-        txtLRAmount.setText("");
         txtLRAmount.requestFocus();
 
     }

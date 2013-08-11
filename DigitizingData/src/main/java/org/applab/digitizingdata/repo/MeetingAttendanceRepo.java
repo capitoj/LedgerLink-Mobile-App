@@ -80,7 +80,9 @@ public class MeetingAttendanceRepo {
 
             int isPresent = 0;
             if (cursor != null && cursor.moveToFirst()) {
-                isPresent = cursor.getInt(cursor.getColumnIndex(AttendanceSchema.COL_A_IS_PRESENT));
+                if(!cursor.isNull(cursor.getColumnIndex(AttendanceSchema.COL_A_IS_PRESENT))) {
+                    isPresent = cursor.getInt(cursor.getColumnIndex(AttendanceSchema.COL_A_IS_PRESENT));
+                }
             }
             if(isPresent > 0) {
                 return true;
@@ -92,6 +94,42 @@ public class MeetingAttendanceRepo {
         catch (Exception ex) {
             Log.e("MeetingRollCallRepo.getMemberAttendance", ex.getMessage());
             return false;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public String getMemberAttendanceComment(int meetingId, int memberId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
+                    AttendanceSchema.COL_A_COMMENTS, AttendanceSchema.getTableName(),
+                    AttendanceSchema.COL_A_MEETING_ID, meetingId,
+                    AttendanceSchema.COL_A_MEMBER_ID, memberId, AttendanceSchema.COL_A_ATTENDANCE_ID);
+            cursor = db.rawQuery(query, null);
+
+            String comment = null;
+            if (cursor != null && cursor.moveToFirst()) {
+                comment = cursor.getString(cursor.getColumnIndex(AttendanceSchema.COL_A_COMMENTS));
+            }
+
+            return comment;
+
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRollCallRepo.getMemberAttendance", ex.getMessage());
+            return null;
         }
         finally {
 
