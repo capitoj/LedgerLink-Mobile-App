@@ -5,11 +5,13 @@
           android:title="Cancel"
           android:orderInCategory="1"
           android:showAsAction="ifRoom|withText"
+          android:icon="@drawable/navigation_cancel"
             />
 
     <item android:id="@+id/mnuMLRepayHSave"
           android:title="Save"
           android:orderInCategory="11"
           android:showAsAction="ifRoom|withText"
+          android:icon="@drawable/navigation_accept"
             />
 </menu>

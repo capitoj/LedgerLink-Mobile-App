@@ -5,10 +5,12 @@
           android:title="Send"
           android:orderInCategory="20"
           android:showAsAction="ifRoom|withText"
+          android:icon="@drawable/social_send_now"
             />
     <item android:id="@+id/mnuSMDCancel"
           android:title="cancel"
           android:orderInCategory="1"
           android:showAsAction="ifRoom|withText"
+          android:icon="@drawable/navigation_cancel"
             />
 </menu>

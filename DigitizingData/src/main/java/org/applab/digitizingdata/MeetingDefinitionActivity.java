@@ -66,7 +66,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
         //Reset the instruction text
         StringBuilder sb = new StringBuilder("Ready to enter data for a meeting? ");
-        sb.append("Set the date and then select <b><i>save</i></b>. ");
+        sb.append("Set the date and then select <b><i>next</i></b>. ");
         sb.append("To return to the main menu without starting a new meeting, select <b><i>cancel</i></b>. ");
         sb.append("If necessary, tap date to select a date in the past. You may not select a date in the future.");
 
