@@ -7,6 +7,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import org.applab.digitizingdata.R;
 import com.actionbarsherlock.app.ActionBar;
@@ -37,6 +38,10 @@ public class ViewSentDataActivity extends SherlockListActivity {
         actionBar.setTitle("Sent Data");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        //Set the appropriate Header Instructional Text
+        TextView txtHeader = (TextView)findViewById(R.id.txtSMD_header);
+        txtHeader.setText("Select the Meeting whose data you want to view.");
 
         //Populate the Meetings
         populateMeetingData();
