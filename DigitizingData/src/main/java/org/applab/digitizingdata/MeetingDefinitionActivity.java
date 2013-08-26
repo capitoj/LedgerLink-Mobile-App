@@ -27,9 +27,13 @@ import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by Moses on 7/4/13.
@@ -166,8 +170,9 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 }
                 return true;
             case R.id.mnuMDCancel:
-                i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
+                setupTestDateTime("Africa/Casablanca");
+                //i = new Intent(getApplicationContext(), MainActivity.class);
+                //startActivity(i);
                 return true;
             case R.id.mnuMDSave:
                 //If Save Operation was successful, get the currently saved meeting
@@ -330,4 +335,52 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             return false;
         }
     }
+
+    //TextView txtDate2 = (TextView)findViewById(R.id.txtMDMeetingDate1);
+    //txtDate2.setText(locale.toString() + ": " + dateFormat.format(currentDt.getTime()));
+    private void setupTestDateTime(String targetTimeZone) {
+        Locale locale = Locale.getDefault();
+        TimeZone localTimeZone = TimeZone.getTimeZone(targetTimeZone);
+        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL);
+        dateFormat.setTimeZone(localTimeZone);
+        Calendar currentDt = new GregorianCalendar(localTimeZone,locale);
+        TextView txtDate2 = (TextView)findViewById(R.id.txtMDMeetingDate1);
+        txtDate2.setText(locale.toString() + ": " + dateFormat.format(currentDt.getTime()));
+        //System.out.println(locale.toString() + ": " + dateFormat.format(currentDt.getTime()));
+    }
+
+    /*
+    import java.security.*;
+import java.security.*;
+public class Test {
+    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException {
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+        keyGen.initialize(512);
+        byte[] publicKey = keyGen.genKeyPair().getPublic().getEncoded();
+        StringBuffer retString = new StringBuffer();
+        retString.append("[");
+        for (int i = 0; i < publicKey.length; ++i) {
+            retString.append(publicKey[i]);
+            retString.append(", ");
+        }
+        retString = retString.delete(retString.length()-2,retString.length());
+        retString.append("]");
+        System.out.println(retString); //e.g. [48, 92, 48, .... , 0, 1]
+    }
+}
+
+import java.security.*;
+public class Test {
+    public static void main(String[] args) throws NoSuchAlgorithmException, NoSuchProviderException {
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+        keyGen.initialize(512);
+        byte[] publicKey = keyGen.genKeyPair().getPublic().getEncoded();
+        StringBuffer retString = new StringBuffer();
+        for (int i = 0; i < publicKey.length; ++i) {
+            retString.append(Integer.toHexString(0x0100 + (publicKey[i] & 0x00FF)).substring(1));
+        }
+        System.out.println(retString);
+    }
+}
+     */
 }
