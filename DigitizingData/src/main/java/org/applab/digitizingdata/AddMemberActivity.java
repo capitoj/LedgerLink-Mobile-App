@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,7 +48,6 @@ public class AddMemberActivity extends SherlockActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_member);
 
         if(getIntent().hasExtra("_isEditAction")){
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction",false);
@@ -54,16 +56,74 @@ public class AddMemberActivity extends SherlockActivity {
             this.selectedMemberId = getIntent().getIntExtra("_id",0);
         }
 
+        // BEGIN_INCLUDE (inflate_set_custom_view)
+        // Inflate a "Done/Cancel" custom action bar view.
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customActionBarView = null;
         actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        if(isEditAction){
+
+        if(isEditAction) {
+            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_cancel, null);
+            customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            selectedFinishButton = true;
+                            saveMemberData();
+                            finish();
+                        }
+                    });
+            customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
+
             actionBar.setTitle("Edit Member");
         }
-        else{
+        else {
+            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_next_cancel, null);
+            customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            selectedFinishButton = true;
+                            saveMemberData();
+                            finish();
+                        }
+                    });
+            customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            saveMemberData();
+                        }
+                    });
+            customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
+
+
             actionBar.setTitle("New Member");
         }
+
+        actionBar.setDisplayOptions(
+                ActionBar.DISPLAY_SHOW_CUSTOM,
+                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_SHOW_TITLE);
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+        // END_INCLUDE (inflate_set_custom_view)
+        setContentView(R.layout.activity_add_member);
 
         //Setup the Spinner Items
         Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
@@ -375,7 +435,7 @@ public class AddMemberActivity extends SherlockActivity {
             }
             else {
                 theCycles = Integer.parseInt(cycles);
-                if (theCycles <= 0) {
+                if (theCycles < 0) {
                     Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The number of cycles must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtCycles.requestFocus();
                     return false;

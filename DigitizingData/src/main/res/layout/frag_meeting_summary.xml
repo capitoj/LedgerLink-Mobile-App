@@ -30,76 +30,6 @@
             android:layout_gravity="center"/>
             -->
 
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="5dp"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="#FFFFFF"
-            android:background="#3b5998"
-            android:text="Current Cycle"
-            android:id="@+id/lblMSFSection1"
-            android:layout_gravity="left"/>
-
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:textSize="18sp"
-            android:text="From: 02-Jul-2013"
-            android:id="@+id/lblMSFCycleStartDate"
-            android:layout_gravity="left"/>
-
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:textSize="18sp"
-            android:text="To: 30-Jun-2014"
-            android:id="@+id/lblMSFCycleEndDate"
-            android:layout_gravity="left"/>
-
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:textSize="18sp"
-            android:text="Total Savings: 1,000,000 UGX"
-            android:id="@+id/lblMSFTotalSavings"
-            android:layout_gravity="left"/>
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:textSize="18sp"
-            android:text="Loans Issued: 1,500,000 UGX"
-            android:id="@+id/lblMSFIssuedLoans"
-            android:layout_gravity="left"/>
-
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:textSize="18sp"
-            android:text="Loans Outstanding: 1,500,000 UGX"
-            android:id="@+id/lblMSFOutstandingLoans"
-            android:layout_gravity="left"/>
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
-            android:textSize="18sp"
-            android:text="Cash In Bank: 500,000 UGX"
-            android:id="@+id/lblMSFCashInBank"
-            android:layout_gravity="left"/>
 
 
     <TextView
@@ -180,5 +110,126 @@
             android:text="Loans Repaid: 50,000 UGX"
             android:id="@+id/lblMSFLastLoansIssued"
             android:layout_gravity="left"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"
+            android:text="Fines: 0 UGX"
+            android:id="@+id/lblMSFLastFines"
+            android:layout_gravity="left"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="16sp"
+            android:text="Welfare: 0 UGX"
+            android:id="@+id/lblMSFLastWelfare"
+            android:layout_gravity="left"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="Costs Incurred: 0 UGX"
+            android:id="@+id/lblMSFCosts"
+            android:layout_gravity="left"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="Cash Kept In Box: 0 UGX"
+            android:id="@+id/lblMSFCashInBox"
+            android:layout_gravity="left"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="Cash Taken To Bank: 0 UGX"
+            android:id="@+id/lblMSFCashToBank"
+            android:layout_gravity="left"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:background="#3b5998"
+            android:text="Current Cycle"
+            android:id="@+id/lblMSFSection1"
+            android:layout_gravity="left"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="From: 02-Jul-2013"
+            android:id="@+id/lblMSFCycleStartDate"
+            android:layout_gravity="left"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="To: 30-Jun-2014"
+            android:id="@+id/lblMSFCycleEndDate"
+            android:layout_gravity="left"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="Total Savings: 1,000,000 UGX"
+            android:id="@+id/lblMSFTotalSavings"
+            android:layout_gravity="left"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="Loans Issued: 1,500,000 UGX"
+            android:id="@+id/lblMSFIssuedLoans"
+            android:layout_gravity="left"/>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="Loans Outstanding: 1,500,000 UGX"
+            android:id="@+id/lblMSFOutstandingLoans"
+            android:layout_gravity="left"/>
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="Total Cash In Bank: 500,000 UGX"
+            android:id="@+id/lblMSFCashInBank"
+            android:layout_gravity="left"/>
+
 </LinearLayout>
     </ScrollView>

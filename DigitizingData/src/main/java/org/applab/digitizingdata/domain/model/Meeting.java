@@ -14,7 +14,96 @@ public class Meeting {
     private boolean meetingDataSent;
     private Date dateSent;
     private boolean isCurrent;
+    private double openingBalanceBox;
+    private double openingBalanceBank;
+    private double savings;
+    private double loansRepaid;
+    private double fines;
+    private double loansIssued;
+    private double otherExpenses;
+    private double closingBalanceBank;
+    private double closingBalanceBox;
+    private boolean cashBookBalanced;
 
+    public double getOpeningBalanceBox() {
+        return openingBalanceBox;
+    }
+
+    public void setOpeningBalanceBox(double openingBalanceBox) {
+        this.openingBalanceBox = openingBalanceBox;
+    }
+
+    public double getOpeningBalanceBank() {
+        return openingBalanceBank;
+    }
+
+    public void setOpeningBalanceBank(double openingBalanceBank) {
+        this.openingBalanceBank = openingBalanceBank;
+    }
+
+    public double getSavings() {
+        return savings;
+    }
+
+    public void setSavings(double savings) {
+        this.savings = savings;
+    }
+
+    public double getLoansRepaid() {
+        return loansRepaid;
+    }
+
+    public void setLoansRepaid(double loansRepaid) {
+        this.loansRepaid = loansRepaid;
+    }
+
+    public double getFines() {
+        return fines;
+    }
+
+    public void setFines(double fines) {
+        this.fines = fines;
+    }
+
+    public double getLoansIssued() {
+        return loansIssued;
+    }
+
+    public void setLoansIssued(double loansIssued) {
+        this.loansIssued = loansIssued;
+    }
+
+    public double getOtherExpenses() {
+        return otherExpenses;
+    }
+
+    public void setOtherExpenses(double otherExpenses) {
+        this.otherExpenses = otherExpenses;
+    }
+
+    public double getClosingBalanceBank() {
+        return closingBalanceBank;
+    }
+
+    public void setClosingBalanceBank(double closingBalanceBank) {
+        this.closingBalanceBank = closingBalanceBank;
+    }
+
+    public double getClosingBalanceBox() {
+        return closingBalanceBox;
+    }
+
+    public void setClosingBalanceBox(double closingBalanceBox) {
+        this.closingBalanceBox = closingBalanceBox;
+    }
+
+    public boolean isCashBookBalanced() {
+        return cashBookBalanced;
+    }
+
+    public void setCashBookBalanced(boolean cashBookBalanced) {
+        this.cashBookBalanced = cashBookBalanced;
+    }
 
     public boolean isCurrent() {
         return this.isCurrent;

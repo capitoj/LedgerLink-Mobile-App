@@ -73,6 +73,7 @@ public class SendMeetingDataActivity extends SherlockListActivity {
 
                 //Indicate that current data view mode is REVIEW
                 Utils._meetingDataViewMode = Utils.MeetingDataViewMode.VIEW_MODE_REVIEW;
+                Utils._meetingActiveActionBarMenu = Utils.MeetingActiveActionBarMenu.MENU_REVIEW_SEND;
                 startActivity(i);
             }
         });

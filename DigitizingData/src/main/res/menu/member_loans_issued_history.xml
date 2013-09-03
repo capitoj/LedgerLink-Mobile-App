@@ -4,14 +4,14 @@
     <item android:id="@+id/mnuMLIssuedHCancel"
           android:title="Cancel"
           android:orderInCategory="1"
-          android:showAsAction="ifRoom|withText"
+          android:showAsAction="never"
           android:icon="@drawable/navigation_cancel"
             />
 
     <item android:id="@+id/mnuMLIssuedHSave"
           android:title="Save"
           android:orderInCategory="11"
-          android:showAsAction="ifRoom|withText"
+          android:showAsAction="never"
           android:icon="@drawable/navigation_accept"
             />
 </menu>

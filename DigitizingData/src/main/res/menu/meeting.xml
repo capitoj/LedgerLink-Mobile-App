@@ -3,13 +3,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/mnuSMDSend"
           android:title="Send"
+          android:menuCategory="system"
           android:orderInCategory="20"
           android:showAsAction="ifRoom|withText"
           android:icon="@drawable/social_send_now"
             />
     <item android:id="@+id/mnuSMDCancel"
           android:title="cancel"
-          android:orderInCategory="1"
+          android:menuCategory="system"
+          android:orderInCategory="11"
           android:showAsAction="ifRoom|withText"
           android:icon="@drawable/navigation_cancel"
             />

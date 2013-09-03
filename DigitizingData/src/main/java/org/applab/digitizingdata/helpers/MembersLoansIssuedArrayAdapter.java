@@ -26,6 +26,7 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
     int meetingId;
     Meeting targetMeeting = null;
     MeetingLoanIssuedRepo loansIssuedRepo = null;
+    MeetingSavingRepo savingRepo = null;
     MeetingRepo meetingRepo = null;
 
     public MembersLoansIssuedArrayAdapter(Context context, ArrayList<Member> values) {
@@ -35,6 +36,7 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
 
         loansIssuedRepo = new MeetingLoanIssuedRepo(getContext());
         meetingRepo = new MeetingRepo(getContext());
+        savingRepo = new MeetingSavingRepo(getContext());
     }
 
     public void setMeetingId(int meetingId){
@@ -62,6 +64,7 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
             final TextView txtLoanIssuedToday = (TextView)rowView.findViewById(R.id.txtRMLIssuedTodaysLoan);
             final TextView txtTotalIssued = (TextView)rowView.findViewById(R.id.txtRMLIssuedTotals);
             final TextView txtOutstanding = (TextView)rowView.findViewById(R.id.txtRMLIssuedOutstanding);
+            final TextView txtTotalSavings = (TextView)rowView.findViewById(R.id.txtRMLIssuedSavings);
 
             //Assign Values to the Widgets
             Member member = values.get(position);
@@ -87,6 +90,12 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
                 outstandingLoansByMember = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
             txtOutstanding.setText(String.format("Outstanding Bal: %,.0fUGX", outstandingLoansByMember));
+
+            double totalSavingsByMember = 0.0;
+            if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {
+                totalSavingsByMember = savingRepo.getMemberTotalSavingsInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+            }
+            txtTotalSavings.setText(String.format("Total Savings: %,.0fUGX", totalSavingsByMember));
 
 
             return rowView;

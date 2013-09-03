@@ -398,6 +398,26 @@ public class NewCycleActivity extends SherlockActivity {
                 cycle.setEndDate(dtEnd);
             }
 
+            // Validate: MaxShareAmount
+            TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
+            String interestRate = txtInterestRate.getText().toString().trim();
+            if (interestRate.length() < 1) {
+                displayMessageBox(dialogTitle, "The Interest Rate is required.", Utils.MSGBOX_ICON_EXCLAMATION);
+                txtInterestRate.requestFocus();
+                return false;
+            }
+            else {
+                double theInterestRate = Double.parseDouble(interestRate);
+                if (theInterestRate < 0.00) {
+                    displayMessageBox(dialogTitle, "The Interest Rate should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    txtInterestRate.requestFocus();
+                    return false;
+                }
+                else {
+                    cycle.setInterestRate(theInterestRate);
+                }
+            }
+
             //Set the Cycle as Active
             cycle.activate();
 
@@ -460,11 +480,13 @@ public class NewCycleActivity extends SherlockActivity {
             TextView txtMaxShareQty = (TextView)findViewById(R.id.txtNCMaxShares);
             TextView txtStartDate = (TextView)findViewById(R.id.txtNCStartDate);
             TextView txtEndDate = (TextView)findViewById(R.id.txtNCEndDate);
+            TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
 
             txtSharePrice.setText(Utils.formatRealNumber(cycle.getSharePrice()));
             txtMaxShareQty.setText(Utils.formatRealNumber(cycle.getMaxSharesQty()));
             txtStartDate.setText(Utils.formatDate(cycle.getStartDate(),"dd-MMM-yyyy"));
             txtEndDate.setText(Utils.formatDate(cycle.getEndDate(),"dd-MMM-yyyy"));
+            txtInterestRate.setText(Utils.formatRealNumber(cycle.getInterestRate()));
         }
         catch(Exception ex){
 
@@ -478,11 +500,13 @@ public class NewCycleActivity extends SherlockActivity {
             TextView txtMaxShareQty = (TextView)findViewById(R.id.txtNCMaxShares);
             TextView txtStartDate = (TextView)findViewById(R.id.txtNCStartDate);
             TextView txtEndDate = (TextView)findViewById(R.id.txtNCEndDate);
+            TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
 
             txtSharePrice.setText("");
             txtMaxShareQty.setText("");
             txtStartDate.setText("");
             txtEndDate.setText("");
+            txtInterestRate.setText("");
         }
         catch(Exception ex){
 

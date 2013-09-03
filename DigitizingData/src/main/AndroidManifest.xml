@@ -7,6 +7,8 @@
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="14" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- android:theme="@style/AppTheme" -->
     <application
         android:allowBackup="true"
@@ -120,6 +122,18 @@
         <activity
             android:name="org.applab.digitizingdata.ActivationActivity"
             android:label="@string/title_activity_activation" >
+        </activity>
+        <activity
+            android:name="org.applab.digitizingdata.MeetingCashBookFrag"
+            android:label="@string/title_activity_meeting_cash_book_frag" >
+        </activity>
+        <activity
+            android:name="org.applab.digitizingdata.MeetingSendDataFrag"
+            android:label="@string/title_activity_meeting_send_data_frag" >
+        </activity>
+        <activity
+            android:name="org.applab.digitizingdata.MeetingOpeningCashFrag"
+            android:label="@string/title_activity_meeting_opening_cash_frag" >
         </activity>
     </application>
 

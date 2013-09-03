@@ -108,7 +108,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
         lblTotalSavings.setText(String.format("Total Savings: %,.0fUGX", totalSavings));
         lblIssuedLoans.setText(String.format("Loans Issued: %,.0fUGX", issuedLoans));
         lblOutstandingLoans.setText(String.format("Loans Outstanding: %,.0fUGX", outstandingLoans));
-        lblCashInBank.setText(String.format("Cash In Bank: %s", "Not Available"));
+        lblCashInBank.setText(String.format("Total Cash In Bank: %s", "Not Available"));
 
 
         //TODO: Get Info about the Last Meeting: Should I get previous Meeting in Current Cycle?
@@ -131,6 +131,15 @@ public class MeetingSummaryFrag extends SherlockFragment {
         Meeting previousMeeting = null;
         if(null != meetingRepo) {
             previousMeeting = meetingRepo.getPreviousMeeting();
+        }
+
+        //Force view to be of current meeting if in Data Review mode
+        if (Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
+            previousMeeting = currentMeeting;
+
+            //Also Rename the Section Marker
+            TextView lblSectionLastMeeting = (TextView)getSherlockActivity().findViewById(R.id.lblMSFSection2);
+            lblSectionLastMeeting.setText("Current Meeting Summary");
         }
 
 
@@ -176,7 +185,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
         //Remove the controls
         if(Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
 
-            if(null != lblMeetingDate) {
+            /*if(null != lblMeetingDate) {
                 LinearLayout parent = (LinearLayout)lblMeetingDate.getParent();
                 if(null != parent) {
                     parent.removeView(txtAttendedCount);
@@ -191,7 +200,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
                     TextView lblSectionLastMeeting = (TextView)getSherlockActivity().findViewById(R.id.lblMSFSection2);
                     parent.removeView(lblSectionLastMeeting);
                 }
-            }
+            }*/
         }
     }
 }

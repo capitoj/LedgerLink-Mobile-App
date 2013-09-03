@@ -29,39 +29,6 @@
             android:text="01-JUL-2013"
             android:id="@+id/lblMLIssuedHMeetingDate"
             android:layout_gravity="center"/>
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="5dp"
-            android:textSize="20sp"
-            android:text="Loan Number"
-            android:id="@+id/lblMLIssuedHLoanNo"
-            android:layout_gravity="center"/>
-
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="10" >
-        <EditText
-                android:id="@+id/txtMLIssuedHLoanNo"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:layout_weight="6"
-                android:inputType="number"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:textAlignment="textEnd"
-                android:text=""/>
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:textSize = "16sp"
-                android:text=" "
-                android:id="@+id/lblMLIssuedHLoanNoSp"/>
-    </LinearLayout>
 
     <TextView
             android:layout_width="fill_parent"
@@ -96,6 +63,41 @@
                 android:text="UGX"
                 android:id="@+id/lblMLIssuedHCurrency"/>
     </LinearLayout>
+
+    <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:textSize="20sp"
+            android:text="Loan Number"
+            android:id="@+id/lblMLIssuedHLoanNo"
+            android:layout_gravity="center"/>
+
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10" >
+        <EditText
+                android:id="@+id/txtMLIssuedHLoanNo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_weight="6"
+                android:inputType="number"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textAlignment="textEnd"
+                android:text=""/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:textSize = "16sp"
+                android:text=" "
+                android:id="@+id/lblMLIssuedHLoanNoSp"/>
+    </LinearLayout>
+
 
     <TextView
             android:layout_width="fill_parent"

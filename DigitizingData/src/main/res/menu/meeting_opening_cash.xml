@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mnuMOCFSave"
+          android:title="Save"
+          android:orderInCategory="5"
+          android:showAsAction="always"
+          android:icon="@drawable/navigation_accept"
+            />
+</menu>

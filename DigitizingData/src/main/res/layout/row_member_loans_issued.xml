@@ -51,5 +51,17 @@
             android:textSize="16sp" >
     </TextView>
 
+    <TextView
+            android:id="@+id/txtRMLIssuedSavings"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtRMLIssuedOutstanding"
+            android:paddingLeft="5dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:text="Total Savings: 60,000UGX"
+            android:textSize="16sp" >
+    </TextView>
+
 
 </RelativeLayout>

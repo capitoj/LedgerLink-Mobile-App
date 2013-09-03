@@ -45,6 +45,17 @@ public class Utils {
 
     public static MeetingDataViewMode  _meetingDataViewMode = MeetingDataViewMode.VIEW_MODE_CAPTURE;
 
+    public enum MeetingActiveActionBarMenu {
+        MENU_NONE,
+        MENU_REVIEW_SEND,
+        MENU_CASH_BOOK_TAB,
+        MENU_START_CASH_TAB,
+        MENU_SEND_DATA_TAB
+    };
+
+    public static MeetingActiveActionBarMenu  _meetingActiveActionBarMenu = MeetingActiveActionBarMenu.MENU_NONE;
+
+
     public static String getMonthNameAbbrev(int month) {
         switch (month) {
             case 1:
