@@ -10,12 +10,17 @@ import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
+import org.applab.digitizingdata.domain.schema.SavingSchema;
 import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Moses on 7/4/13.
@@ -55,6 +60,69 @@ public class MeetingRepo {
         }
         catch (Exception ex) {
             Log.e("MemberRepo.addMember", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public boolean updateOpeningCash(int meetingId, double cashFromBox, double cashFromBank, double finesPaid) {
+        SQLiteDatabase db = null;
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cashFromBox);
+            values.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cashFromBank);
+            values.put(MeetingSchema.COL_MT_CASH_FINES, finesPaid);
+
+            long retVal = -1;
+            retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                    new String[] { String.valueOf(meetingId) });
+            if (retVal != -1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.updateOpeningCash", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public boolean updateCashBook(int meetingId, double cashWelfare, double cashExpenses, double cashSavedBox, double cashSavedBank) {
+        SQLiteDatabase db = null;
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(MeetingSchema.COL_MT_CASH_WELFARE, cashWelfare);
+            values.put(MeetingSchema.COL_MT_CASH_EXPENSES, cashExpenses);
+            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cashSavedBox);
+            values.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cashSavedBank);
+
+            long retVal = -1;
+            retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                    new String[] { String.valueOf(meetingId) });
+            if (retVal != -1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.updateCashBook", ex.getMessage());
             return false;
         }
         finally {
@@ -172,6 +240,86 @@ public class MeetingRepo {
         catch (Exception ex) {
             Log.e("MeetingRepo.getMeeting", ex.getMessage());
             return null;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public HashMap<String, Double> getMeetingOpeningCash(int meetingId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        HashMap<String, Double> openingCash = new HashMap<String, Double>();
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+
+            // Select All Query
+            String selectQuery = String.format("SELECT IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s FROM %s WHERE %s=%d",
+                    MeetingSchema.COL_MT_CASH_FROM_BOX, MeetingSchema.COL_MT_CASH_FROM_BOX,
+                    MeetingSchema.COL_MT_CASH_FROM_BANK, MeetingSchema.COL_MT_CASH_FROM_BANK,
+                    MeetingSchema.COL_MT_CASH_FINES, MeetingSchema.COL_MT_CASH_FINES,
+                    MeetingSchema.getTableName(),
+                    MeetingSchema.COL_MT_MEETING_ID, meetingId);
+            cursor = db.rawQuery(selectQuery, null);
+
+            // looping through all rows and adding to list
+            if (cursor != null && cursor.moveToFirst()) {
+                openingCash.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
+                openingCash.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
+                openingCash.put(MeetingSchema.COL_MT_CASH_FINES, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FINES)));
+                return openingCash;
+            }
+            else {
+                return null;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.getMeetingOpeningCash", ex.getMessage());
+            return null;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public double getMeetingTotalOpeningCash(int meetingId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+
+            // Select All Query
+            String selectQuery = String.format("SELECT (IFNULL(%s,0) + IFNULL(%s,0) + IFNULL(%s,0)) AS TotalOpeningCash FROM %s WHERE %s=%d",
+                    MeetingSchema.COL_MT_CASH_FROM_BOX, MeetingSchema.COL_MT_CASH_FROM_BANK, MeetingSchema.COL_MT_CASH_FINES,
+                    MeetingSchema.getTableName(),
+                    MeetingSchema.COL_MT_MEETING_ID, meetingId);
+            cursor = db.rawQuery(selectQuery, null);
+
+            // looping through all rows and adding to list
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getDouble(cursor.getColumnIndex("TotalOpeningCash"));
+            }
+            else {
+                return 0.0;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.getMeetingTotalOpeningCash", ex.getMessage());
+            return 0.0;
         }
         finally {
             if (cursor != null) {
@@ -359,7 +507,6 @@ public class MeetingRepo {
             }
         }
     }
-
 
     public Meeting getCurrentMeeting() {
         SQLiteDatabase db = null;

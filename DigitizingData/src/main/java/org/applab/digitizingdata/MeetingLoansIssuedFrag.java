@@ -16,12 +16,17 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.domain.schema.MeetingSchema;
 import org.applab.digitizingdata.helpers.MembersLoansIssuedArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
+import org.applab.digitizingdata.repo.MeetingRepo;
+import org.applab.digitizingdata.repo.MeetingSavingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Moses on 6/25/13.
@@ -45,7 +50,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        return (RelativeLayout)inflater.inflate(R.layout.frag_meeting_loans_issued, container, false);
+        return inflater.inflate(R.layout.frag_meeting_loans_issued, container, false);
     }
 
     @Override
@@ -72,8 +77,13 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
 
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
+        //Populate the Cash Available
+        populateCashBookFields();
+
         //Populate the Members
         populateMembersList();
+
+
     }
 
     //Populate Members List
@@ -113,5 +123,50 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
 
             }
         });
+
+        //Hack to ensure all Items in the List View are visible
+        Utils.setListViewHeightBasedOnChildren(lvwMembers);
+        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
+        lblMeetingDate.setFocusable(true);
+        lblMeetingDate.requestFocus();
+
+    }
+
+    private void populateCashBookFields() {
+        MeetingRepo meetingRepo = null;
+        MeetingSavingRepo savingRepo = null;
+        MeetingLoanRepaymentRepo repaymentRepo = null;
+
+        try {
+            meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
+            savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
+            repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
+
+
+            TextView lblTotalCash = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFTotalCash);
+            TextView lblOpeningCash = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFOpeningCash);
+            TextView lblTotalSavings = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFSavings);
+            TextView lblTotalLoansRepaid = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFLoansRepaid);
+
+            double openingCash = meetingRepo.getMeetingTotalOpeningCash(meetingId);
+            double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
+            double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
+
+            double totalCash = openingCash + totalSavings + totalLoansRepaid;
+
+            lblTotalCash.setText(String.format("Total Cash: %,.0fUGX", totalCash));
+            lblOpeningCash.setText(String.format("Starting Cash: %,.0fUGX", openingCash));
+            lblTotalSavings.setText(String.format("Savings: %,.0fUGX", totalSavings));
+            lblTotalLoansRepaid.setText(String.format("Loans Repaid: %,.0fUGX", totalLoansRepaid));
+
+        }
+        catch (Exception ex) {
+
+        }
+        finally {
+            meetingRepo = null;
+            savingRepo = null;
+            repaymentRepo = null;
+        }
     }
 }

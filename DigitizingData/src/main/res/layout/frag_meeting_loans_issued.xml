@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -21,6 +25,52 @@
                 android:text="01-JUL-2013"
                 android:id="@+id/lblMLIssuedFMeetingDate"
                 android:layout_gravity="center"/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/lblMLIssuedFMeetingDate"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="Total Cash: 0 UGX"
+                android:id="@+id/lblMLIssuedFTotalCash"
+                android:layout_gravity="center"/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_below="@id/lblMLIssuedFTotalCash"
+                android:paddingLeft="10dp"
+                android:textStyle="normal"
+                android:textSize="14sp"
+                android:text="Starting Cash: 0 UGX"
+                android:id="@+id/lblMLIssuedFOpeningCash"
+                android:layout_gravity="center"/>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/lblMLIssuedFOpeningCash"
+            android:paddingLeft="10dp"
+            android:textStyle="normal"
+            android:textSize="14sp"
+            android:text="Savings: 0 UGX"
+            android:id="@+id/lblMLIssuedFSavings"
+            android:layout_gravity="center"/>
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_below="@id/lblMLIssuedFSavings"
+                android:paddingLeft="10dp"
+                android:textStyle="normal"
+                android:textSize="14sp"
+                android:text="Loans Repaid: 0 UGX"
+                android:id="@+id/lblMLIssuedFLoansRepaid"
+                android:layout_gravity="center"/>
 
     </RelativeLayout>
 
@@ -42,3 +92,4 @@
             />
 
 </RelativeLayout>
+    </ScrollView>

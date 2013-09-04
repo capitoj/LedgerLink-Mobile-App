@@ -14,6 +14,13 @@ public class MeetingSchema {
     public static final String COL_MT_IS_DATA_SENT = "IsDataSent";
     public static final String COL_MT_DATE_SENT = "DateSent";
     public static final String COL_MT_IS_CURRENT = "IsCurrent";
+    public static final String COL_MT_CASH_FROM_BOX = "CashFromBox";
+    public static final String COL_MT_CASH_FROM_BANK = "CashFromBank";
+    public static final String COL_MT_CASH_FINES = "CashFines";
+    public static final String COL_MT_CASH_WELFARE = "CashWelfare";
+    public static final String COL_MT_CASH_EXPENSES = "CashExpenses";
+    public static final String COL_MT_CASH_SAVED_BOX = "CashSavedBox";
+    public static final String COL_MT_CASH_SAVED_BANK = "CashSavedBank";
 
     public static String getCreateTableScript() {
         StringBuffer sb = new StringBuffer();
@@ -28,7 +35,14 @@ public class MeetingSchema {
         sb.append(COL_MT_IS_END_OF_CYCLE + " INTEGER ,");
         sb.append(COL_MT_IS_DATA_SENT + " INTEGER ,");
         sb.append(COL_MT_DATE_SENT + " TEXT ,");
-        sb.append(COL_MT_IS_CURRENT + " INTEGER");
+        sb.append(COL_MT_IS_CURRENT + " INTEGER ,");
+        sb.append(COL_MT_CASH_FROM_BOX + " NUMERIC ,");
+        sb.append(COL_MT_CASH_FROM_BANK + " NUMERIC ,");
+        sb.append(COL_MT_CASH_FINES + " NUMERIC ,");
+        sb.append(COL_MT_CASH_WELFARE + " NUMERIC ,");
+        sb.append(COL_MT_CASH_EXPENSES + " NUMERIC ,");
+        sb.append(COL_MT_CASH_SAVED_BOX + " NUMERIC ,");
+        sb.append(COL_MT_CASH_SAVED_BANK + " NUMERIC");
         sb.append(")");
 
         return sb.toString();
@@ -51,7 +65,14 @@ public class MeetingSchema {
         sb.append(COL_MT_IS_END_OF_CYCLE + ",");
         sb.append(COL_MT_IS_DATA_SENT + ",");
         sb.append(COL_MT_DATE_SENT + ",");
-        sb.append(COL_MT_IS_CURRENT);
+        sb.append(COL_MT_IS_CURRENT + ",");
+        sb.append(COL_MT_CASH_FROM_BOX + ",");
+        sb.append(COL_MT_CASH_FROM_BANK + ",");
+        sb.append(COL_MT_CASH_FINES + ",");
+        sb.append(COL_MT_CASH_WELFARE + ",");
+        sb.append(COL_MT_CASH_EXPENSES + ",");
+        sb.append(COL_MT_CASH_SAVED_BOX + ",");
+        sb.append(COL_MT_CASH_SAVED_BANK);
 
         return sb.toString();
     }
