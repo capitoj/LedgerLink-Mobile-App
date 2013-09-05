@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
@@ -58,13 +59,15 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
                     @Override
                     public void onClick(View v) {
                         if(saveAttendanceComment()) {
+                            Toast.makeText(MemberAttendanceHistoryActivity.this, "Comment entered successfully", Toast.LENGTH_LONG).show();
                             Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                             i.putExtra("_tabToSelect", "rollCall");
                             i.putExtra("_meetingDate",meetingDate);
                             i.putExtra("_meetingId",meetingId);
                             startActivity(i);
+                            finish();
                         }
-                        finish();
+
                     }
                 });
         customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(

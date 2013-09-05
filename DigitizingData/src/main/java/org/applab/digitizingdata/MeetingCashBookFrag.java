@@ -18,6 +18,10 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
+import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
+import org.applab.digitizingdata.repo.MeetingRepo;
+import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 public class MeetingCashBookFrag extends SherlockFragment {
 
@@ -60,15 +64,12 @@ public class MeetingCashBookFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
+        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFMeetingDate);
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        lblMeetingDate.setText(meetingDate);
 
-//        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMRCFMeetingDate);
-//        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-//        //TODO: I need to find a way of getting the Meeting Id from meetingRepo.getCurrentMeeting();
-//        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-//        lblMeetingDate.setText(meetingDate);
-
-        //Populate the Members
-        //populateMembersList();
+        populateCashBookFields();
     }
 
     @Override
@@ -88,10 +89,59 @@ public class MeetingCashBookFrag extends SherlockFragment {
             case R.id.mnuSMDCancel:
                 return false;
             case R.id.mnuMCBFSave:
-                return false;
+                Toast.makeText(getSherlockActivity().getApplicationContext(), "The Cashbook balances have been saved successfully.", Toast.LENGTH_LONG).show();
+                return true;
             default:
                 return false;
         }
+    }
 
+    private void populateCashBookFields() {
+        MeetingRepo meetingRepo = null;
+        MeetingSavingRepo savingRepo = null;
+        MeetingLoanRepaymentRepo repaymentRepo = null;
+        MeetingLoanIssuedRepo loanIssuedRepo = null;
+
+        try {
+            meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
+            savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
+            repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
+            loanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
+
+
+            TextView lblTotalCash = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFTotalCashIn);
+            TextView lblOpeningCash = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFOpeningCash);
+            TextView lblTotalSavings = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFSavings);
+            TextView lblTotalLoansRepaid = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFLoansRepaid);
+            TextView lblTotalLoansIssued = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFLoansIssued);
+            TextView lblTotalCashOut = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFTotalCashOut);
+            TextView lblTotalCashBalance = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFBalBd);
+
+            double openingCash = meetingRepo.getMeetingTotalOpeningCash(meetingId);
+            double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
+            double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
+            double totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
+
+            double totalCashOut = totalLoansIssued;
+            double totalCashIn = openingCash + totalSavings + totalLoansRepaid;
+            double cashBalance = totalCashIn - totalCashOut;
+
+            lblTotalCash.setText(String.format("Total Collected: %,.0fUGX", totalCashIn));
+            lblOpeningCash.setText(String.format("Starting Cash: %,.0fUGX", openingCash));
+            lblTotalSavings.setText(String.format("Savings: %,.0fUGX", totalSavings));
+            lblTotalLoansRepaid.setText(String.format("Loans Repaid: %,.0fUGX", totalLoansRepaid));
+            lblTotalLoansIssued.setText(String.format("Loans Issued: %,.0fUGX", totalLoansIssued));
+            lblTotalCashOut.setText(String.format("Total Issued: %,.0fUGX", totalCashOut));
+            lblTotalCashBalance.setText(String.format("Cash Balance: %,.0fUGX", cashBalance));
+
+        }
+        catch (Exception ex) {
+
+        }
+        finally {
+            meetingRepo = null;
+            savingRepo = null;
+            repaymentRepo = null;
+        }
     }
 }

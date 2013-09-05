@@ -53,12 +53,12 @@ public class MeetingSendDataFrag extends SherlockFragment {
         TextView txtInstructions = (TextView)getSherlockActivity().findViewById(R.id.lblMSDFragInstructions);
 
         if(isNetworkConnected(getSherlockActivity().getApplicationContext())) {
-            txtStatus.setText("Internet Connection Is Available");
-            txtInstructions.setText("You can send the meeting data now by tapping the Send button.");
+            txtStatus.setText("Data Network Is Available");
+            txtInstructions.setText("You can send the meeting data now by tapping the Send button above.");
         }
         else {
-            txtStatus.setText("NO Internet Connection");
-            txtInstructions.setText("Move to a place with Connectivity to send the meeting data. You can send the data later by selecting Check & Send Data from the Main Menu.");
+            txtStatus.setText("No Data Network");
+            txtInstructions.setText("Move to a place with data network to send the meeting data. You can send the data later by selecting Check & Send Data from the main menu.");
         }
 
     }

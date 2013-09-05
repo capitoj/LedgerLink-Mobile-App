@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -62,17 +63,19 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     @Override
                     public void onClick(View v) {
                         if(recentLoan == null) {
-                            Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-
+                            //Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                            finish();
                         }
-                        if(saveMemberLoanRepayment()) {
+                        else if(saveMemberLoanRepayment()) {
+                            Toast.makeText(MemberLoansRepaidHistoryActivity.this, "Loan Repayment entered successfully", Toast.LENGTH_LONG).show();
                             Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                             i.putExtra("_tabToSelect","loansRepaid");
                             i.putExtra("_meetingDate",meetingDate);
                             i.putExtra("_meetingId", meetingId);
                             startActivity(i);
+                            finish();
                         }
-                        finish();
+
                     }
                 });
         customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
@@ -269,6 +272,10 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         double theAmount = 0.0;
 
         try{
+            if(recentLoan == null) {
+                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                return false;
+            }
 
             TextView txtLoanAmount = (TextView)findViewById(R.id.txtMLRepayHAmount);
             TextView txtComments = (TextView)findViewById(R.id.txtMLRepayHComment);
@@ -281,7 +288,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             }
             else {
                 theAmount = Double.parseDouble(amount);
-                if (theAmount <= 0.00) {
+                if (theAmount < 0.00) {
                     Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The Loan Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtLoanAmount.requestFocus();
                     return false;

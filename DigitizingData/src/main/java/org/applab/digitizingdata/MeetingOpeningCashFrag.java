@@ -58,6 +58,10 @@ public class MeetingOpeningCashFrag extends SherlockFragment {
         actionBar.setTitle(title);
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
+        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMOCFMeetingDate);
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        lblMeetingDate.setText(meetingDate);
+
         populateOpeningCash();
     }
 

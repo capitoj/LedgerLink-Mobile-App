@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -56,13 +57,15 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                     @Override
                     public void onClick(View v) {
                         if(saveMemberLoan()){
+                            Toast.makeText(MemberLoansIssuedHistoryActivity.this, "New Loan issued successfully", Toast.LENGTH_LONG).show();
                             Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                             i.putExtra("_tabToSelect","loansIssued");
                             i.putExtra("_meetingDate",meetingDate);
                             i.putExtra("_meetingId", meetingId);
                             startActivity(i);
+                            finish();
                         }
-                        finish();
+
                     }
                 });
         customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
@@ -208,21 +211,6 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             TextView txtLoanNo = (TextView)findViewById(R.id.txtMLIssuedHLoanNo);
             TextView txtLoanAmount = (TextView)findViewById(R.id.txtMLIssuedHAmount);
 
-            String loanNo = txtLoanNo.getText().toString().trim();
-            if (loanNo.length() < 1) {
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue", "The Loan Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtLoanNo.requestFocus();
-                return false;
-            }
-            else {
-                theLoanNo = Integer.parseInt(loanNo);
-                if (theLoanNo <= 0.00) {
-                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue","The Loan Number is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtLoanNo.requestFocus();
-                    return false;
-                }
-            }
-
             String amount = txtLoanAmount.getText().toString().trim();
             if (amount.length() < 1) {
                 Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue", "The Loan Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
@@ -234,6 +222,21 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 if (theAmount <= 0.00) {
                     Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue","The Loan Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtLoanAmount.requestFocus();
+                    return false;
+                }
+            }
+
+            String loanNo = txtLoanNo.getText().toString().trim();
+            if (loanNo.length() < 1) {
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue", "The Loan Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtLoanNo.requestFocus();
+                return false;
+            }
+            else {
+                theLoanNo = Integer.parseInt(loanNo);
+                if (theLoanNo <= 0.00) {
+                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue","The Loan Number is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtLoanNo.requestFocus();
                     return false;
                 }
             }

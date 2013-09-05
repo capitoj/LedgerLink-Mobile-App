@@ -6,6 +6,16 @@
                   android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="01-JUL-2013"
+                android:id="@+id/lblMOCFMeetingDate"
+                android:layout_gravity="center"/>
         <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -14,24 +24,12 @@
                 android:layout_marginTop="10dp">
 
             <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="5dp"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:textColor="#FFFFFF"
-                    android:background="#3b5998"
-                    android:text="Starting Cash"
-                    android:id="@+id/lblMOCSection1"
-                    android:layout_gravity="left"/>
-            <TextView
                     android:id="@+id/lblMOCBalBfBox"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="Cash From Box:"
+                    android:textStyle="normal"
+                    android:text="Balance In The Box:"
                     android:textSize="16sp" />
             <EditText
                     android:id="@+id/txtMOCBalBfBox"
@@ -55,7 +53,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="bold"
+                    android:textStyle="normal"
                     android:text="Cash Withdrawn From Bank:"
                     android:textSize="16sp" />
             <EditText
@@ -80,7 +78,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="bold"
+                    android:textStyle="normal"
                     android:text="Fines Paid:"
                     android:textSize="16sp" />
             <EditText
@@ -105,7 +103,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="bold"
+                    android:textStyle="normal"
                     android:text="Total Cash:"
                     android:textSize="18sp" />
             <TextView

@@ -165,7 +165,6 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             default:
                 return false;
         }
-
     }
 
     @Override

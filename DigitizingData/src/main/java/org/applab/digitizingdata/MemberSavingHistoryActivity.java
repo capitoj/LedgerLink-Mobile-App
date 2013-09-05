@@ -64,8 +64,9 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                             i.putExtra("_meetingDate",meetingDate);
                             i.putExtra("_meetingId",meetingId);
                             startActivity(i);
+                            finish();
                         }
-                        finish();
+
                     }
                 });
         customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
