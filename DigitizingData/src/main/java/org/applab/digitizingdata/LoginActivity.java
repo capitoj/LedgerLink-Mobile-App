@@ -69,13 +69,13 @@ public class LoginActivity extends Activity {
         }
 
         TextView txtVslaName = (TextView) findViewById(R.id.lbl_vsla_name);
-        String vslaName = "VSLA Name";
+        String vslaName = "Not-Activated";
         if(vslaInfo != null) {
             vslaName = vslaInfo.getVslaName();
         }
 
         //TODO: Do not display the name for now: Will handle this after Activation stuff is done
-        //txtVslaName.setText(vslaName);
+        txtVslaName.setText(vslaName);
 
 
         // ---Button view---

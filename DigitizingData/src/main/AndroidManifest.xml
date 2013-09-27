@@ -8,7 +8,15 @@
         android:minSdkVersion="10"
         android:targetSdkVersion="14" />
 
+    <!-- to allow for checking Connectivity Status -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- to allow Activation over the internet -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- to allow access to telephony -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <!-- android:theme="@style/AppTheme" -->
     <application
         android:allowBackup="true"

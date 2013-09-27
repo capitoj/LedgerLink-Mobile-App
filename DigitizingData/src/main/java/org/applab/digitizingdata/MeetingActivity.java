@@ -58,24 +58,24 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
         actionBar.addTab(actionBar.newTab().setTag("rollCall").setText("Register").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setTag("summary").setText("Summary").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setTag("openingCash").setText("Starting Cash").setTabListener(this));
+        //actionBar.addTab(actionBar.newTab().setTag("openingCash").setText("Starting Cash").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setTag("savings").setText("Savings").setTabListener(this));
         actionBar.addTab( actionBar.newTab().setTag("loansRepaid").setText("Loans Repaid").setTabListener(this));
         actionBar.addTab( actionBar.newTab().setTag("loansIssued").setText("New Loans").setTabListener(this));
-        actionBar.addTab( actionBar.newTab().setTag("cashBook").setText("Cash Book").setTabListener(this));
+        //actionBar.addTab( actionBar.newTab().setTag("cashBook").setText("Cash Book").setTabListener(this));
         actionBar.addTab( actionBar.newTab().setTag("sendData").setText("Send Data").setTabListener(this));
 
 
         if(getIntent().hasExtra("_tabToSelect")) {
             String tabTag = getIntent().getStringExtra("_tabToSelect");
             if(tabTag.equalsIgnoreCase("savings")) {
-                actionBar.selectTab(actionBar.getTabAt(3));
+                actionBar.selectTab(actionBar.getTabAt(2));
             }
             else if(tabTag.equalsIgnoreCase("loansRepaid")) {
-                actionBar.selectTab(actionBar.getTabAt(4));
+                actionBar.selectTab(actionBar.getTabAt(3));
             }
             else if(tabTag.equalsIgnoreCase("loansIssued")) {
-                actionBar.selectTab(actionBar.getTabAt(5));
+                actionBar.selectTab(actionBar.getTabAt(4));
             }
             else if(tabTag.equalsIgnoreCase("rollCall")) {
                 actionBar.selectTab(actionBar.getTabAt(0));

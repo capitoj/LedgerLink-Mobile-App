@@ -36,6 +36,9 @@ public class Utils {
     public static boolean _membersAccessedFromNewCycle = false;
     public static boolean _membersAccessedFromEditCycle = false;
 
+    //SERVER Connection
+    public static final String VSLA_SERVER_BASE_URL = "http://74.208.213.214:9905/DigitizingDataRestfulService.svc";
+
     //TODO: will create an enum of CURRENT_VIEW_MODE
     public enum MeetingDataViewMode {
         VIEW_MODE_CAPTURE,

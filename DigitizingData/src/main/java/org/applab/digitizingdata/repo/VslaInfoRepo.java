@@ -112,13 +112,13 @@ public class VslaInfoRepo {
         }
     }
 
-    public boolean saveVslaInfo(VslaInfo vslaInfo) {
+    public boolean saveVslaInfo(String vslaCode, String vslaName, String passKey) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int loanId = 0;
         try {
             //If Null return false
-            if(null == vslaInfo){
+            if(null == vslaName || null == vslaCode){
                 return false;
             }
 
@@ -130,9 +130,10 @@ public class VslaInfoRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            values.put(VslaInfoSchema.COL_VI_VSLA_CODE, vslaInfo.getVslaCode());
-            values.put(VslaInfoSchema.COL_VI_VSLA_NAME, vslaInfo.getVslaName());
-            values.put(VslaInfoSchema.COL_VI_PASS_KEY, vslaInfo.getPassKey());
+            values.put(VslaInfoSchema.COL_VI_VSLA_CODE, vslaCode);
+            values.put(VslaInfoSchema.COL_VI_VSLA_NAME, vslaName);
+            values.put(VslaInfoSchema.COL_VI_PASS_KEY, passKey);
+            values.put(VslaInfoSchema.COL_VI_IS_ACTIVATED, 1);
 
             // Inserting or UpdatingRow
             long retVal = -1;
