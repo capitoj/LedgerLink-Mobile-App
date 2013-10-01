@@ -38,6 +38,17 @@
             android:text="Loan Balance: 60,000UGX"
             android:textSize="16sp" >
     </TextView>
+    <TextView
+            android:id="@+id/txtRMLRepayDateDue"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtRMLRepayBalance"
+            android:paddingLeft="5dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:text="Date Due: 01-Jan-2013"
+            android:textSize="16sp" >
+    </TextView>
 
 
 </RelativeLayout>

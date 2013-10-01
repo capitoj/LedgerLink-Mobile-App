@@ -1,5 +1,8 @@
 package org.applab.digitizingdata.helpers;
 
+import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.Member;
+
 import java.util.Date;
 
 /**
@@ -13,6 +16,69 @@ public class MemberLoanRepaymentRecord {
     double amount;
     double rolloverAmount;
     String comments;
+    private Meeting meeting;
+    private Member member;
+    private double amountPaid;
+    private double balanceBefore;
+    private double balanceAfter;
+    private double interestAmount;
+    private Date nextDateDue;
+
+    public Date getNextDateDue() {
+        return nextDateDue;
+    }
+
+    public void setNextDateDue(Date nextDateDue) {
+        this.nextDateDue = nextDateDue;
+    }
+
+    public Meeting getMeeting() {
+        return meeting;
+    }
+
+    public void setMeeting(Meeting meeting) {
+        this.meeting = meeting;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public double getAmountPaid() {
+        return amountPaid;
+    }
+
+    public void setAmountPaid(double amountPaid) {
+        this.amountPaid = amountPaid;
+    }
+
+    public double getBalanceBefore() {
+        return balanceBefore;
+    }
+
+    public void setBalanceBefore(double balanceBefore) {
+        this.balanceBefore = balanceBefore;
+    }
+
+    public double getBalanceAfter() {
+        return balanceAfter;
+    }
+
+    public void setBalanceAfter(double balanceAfter) {
+        this.balanceAfter = balanceAfter;
+    }
+
+    public double getInterestAmount() {
+        return interestAmount;
+    }
+
+    public void setInterestAmount(double interestAmount) {
+        this.interestAmount = interestAmount;
+    }
 
     public int getRepaymentId() {
         return repaymentId;

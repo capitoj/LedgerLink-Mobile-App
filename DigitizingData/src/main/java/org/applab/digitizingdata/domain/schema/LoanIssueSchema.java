@@ -11,7 +11,9 @@ public class LoanIssueSchema {
     public static final String COL_LI_MEETING_ID = "MeetingId";
     public static final String COL_LI_MEMBER_ID = "MemberId";
     public static final String COL_LI_PRINCIPAL_AMOUNT = "PrincipalAmount";
+    public static final String COL_LI_INTEREST_AMOUNT = "InterestAmount";
     public static final String COL_LI_BALANCE = "Balance";
+    public static final String COL_LI_DATE_DUE = "DateDue";
     public static final String COL_LI_TOTAL_REPAID = "TotalRepaid";
     public static final String COL_LI_IS_CLEARED = "IsCleared";
     public static final String COL_LI_DATE_CLEARED = "DateCleared";
@@ -29,7 +31,9 @@ public class LoanIssueSchema {
         sb.append(COL_LI_MEETING_ID + " INTEGER ,");
         sb.append(COL_LI_MEMBER_ID + " INTEGER ,");
         sb.append(COL_LI_PRINCIPAL_AMOUNT + " NUMERIC ,");
+        sb.append(COL_LI_INTEREST_AMOUNT + " NUMERIC ,");
         sb.append(COL_LI_BALANCE + " NUMERIC ,");
+        sb.append(COL_LI_DATE_DUE + " TEXT ,");
         sb.append(COL_LI_TOTAL_REPAID + " NUMERIC ,");
         sb.append(COL_LI_IS_DEFAULTED + " INTEGER ,");
         sb.append(COL_LI_IS_CLEARED + " INTEGER ,");
@@ -55,7 +59,9 @@ public class LoanIssueSchema {
         sb.append(COL_LI_MEETING_ID + ",");
         sb.append(COL_LI_MEMBER_ID + ",");
         sb.append(COL_LI_PRINCIPAL_AMOUNT + ",");
+        sb.append(COL_LI_INTEREST_AMOUNT + ",");
         sb.append(COL_LI_BALANCE + ",");
+        sb.append(COL_LI_DATE_DUE + ",");
         sb.append(COL_LI_TOTAL_REPAID + ",");
         sb.append(COL_LI_IS_DEFAULTED + ",");
         sb.append(COL_LI_IS_CLEARED + ",");

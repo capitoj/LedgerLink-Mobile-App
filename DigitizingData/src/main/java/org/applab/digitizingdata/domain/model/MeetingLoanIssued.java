@@ -10,6 +10,8 @@ public class MeetingLoanIssued {
     private Meeting meeting;
     private Member member;
     private double principalAmount;
+    private double interestAmount;
+    private Date dateDue;
     private int loanNo;
     private double totalRepaid;
     private double loanBalance;
@@ -18,6 +20,22 @@ public class MeetingLoanIssued {
     private Date dateCleared;
     private String comments;
     private boolean isWrittenOff;
+
+    public double getInterestAmount() {
+        return interestAmount;
+    }
+
+    public void setInterestAmount(double interestAmount) {
+        this.interestAmount = interestAmount;
+    }
+
+    public Date getDateDue() {
+        return dateDue;
+    }
+
+    public void setDateDue(Date dateDue) {
+        this.dateDue = dateDue;
+    }
 
     public int getLoanId() {
         return loanId;

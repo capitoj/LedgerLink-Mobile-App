@@ -1,6 +1,8 @@
 package org.applab.digitizingdata;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -21,6 +23,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.helpers.AttendanceArrayAdapter;
 import org.applab.digitizingdata.helpers.AttendanceRecord;
 import org.applab.digitizingdata.helpers.MemberSavingRecord;
@@ -45,6 +48,8 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
     MeetingRepo meetingRepo = null;
     ArrayList<MemberSavingRecord> savings;
     int targetCycleId = 0;
+    boolean proceedWithSaving = false;
+    boolean alertDialogShowing = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,8 +102,6 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         // END_INCLUDE (inflate_set_custom_view)
 
         setContentView(R.layout.activity_member_saving_history);
-
-
 
         TextView lblMeetingDate = (TextView)findViewById(R.id.lblMSHMeetingDate);
         meetingDate = getIntent().getStringExtra("_meetingDate");
@@ -216,6 +219,10 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         return true;
     }
 
+    private void setProceedWithSavingFlg(boolean value) {
+        proceedWithSaving = value;
+    }
+
     public boolean saveMemberSaving(){
         boolean successFlg = false;
         double theAmount = 0.0;
@@ -230,18 +237,82 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             }
             else {
                 theAmount = Double.parseDouble(amount);
-                if (theAmount <= 0.00) {
+                if (theAmount < 0.0) {
                     Utils.createAlertDialogOk(MemberSavingHistoryActivity.this, "Savings","The Savings Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtSaving.requestFocus();
                     return false;
                 }
-                else {
-                    if(savingRepo == null) {
-                        savingRepo = new MeetingSavingRepo(MemberSavingHistoryActivity.this);
+            }
+
+            /*//Validate that the savings is within the range of Shares
+            if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {
+                //Check whether the Savings amount exceeds the total savings allowed per meeting
+                //OMM: Android does not support synchronous modal dialog boxes: They are all asynchronous
+                double maxSavingAmount = targetMeeting.getVslaCycle().getMaxSharesQty() * targetMeeting.getVslaCycle().getSharePrice();
+                if(theAmount > maxSavingAmount && maxSavingAmount != 0){
+                    AlertDialog.Builder ad = new AlertDialog.Builder(MemberSavingHistoryActivity.this);
+                    ad.setTitle("Savings");
+                    ad.setMessage(String.format("The savings amount of %,.0f %s is more than the maximum allowed amount of %,.0f %s per meeting. \nDo you want to accept it?",
+                            theAmount, "UGX",maxSavingAmount, "UGX"));
+                    ad.setNegativeButton(
+                            "No", new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int arg1) {
+                            proceedWithSaving = false;
+                        }
+                    });
+                    ad.setPositiveButton(
+                            "Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int arg1) {
+
+                            proceedWithSaving = true;
+                        }
+                    });
+                    ad.show();
+                }
+
+                //This will not work because android does not support synchronous modal dialogs
+                if(!proceedWithSaving) {
+                    return false;
+                }
+
+                //Check that Savings is a multiple of Share Price
+                double sharePrice = targetMeeting.getVslaCycle().getSharePrice();
+                if(sharePrice > 0) {
+                    if((theAmount / sharePrice) < 1 || ((int)theAmount % (int)sharePrice) != 0){
+                        AlertDialog.Builder ad = new AlertDialog.Builder(MemberSavingHistoryActivity.this);
+                        ad.setTitle("Savings");
+                        ad.setMessage(String.format("The savings amount of %,.0f %s is not a multiple of the share price. \nDo you want to accept it?",
+                                theAmount, "UGX"));
+                        ad.setNegativeButton(
+                                "No", new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int arg1) {
+                                proceedWithSaving = false;
+                            }
+                        });
+                        ad.setPositiveButton(
+                                "Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int arg1) {
+
+                                proceedWithSaving = true;
+                            }
+                        });
+                        //ad.show();
+                        ad.create().show();
                     }
-                    successFlg = savingRepo.saveMemberSaving(meetingId, memberId, theAmount);
                 }
             }
+
+            if(!proceedWithSaving) {
+                return false;
+            }
+            */
+
+            //Now save
+            if(savingRepo == null) {
+                savingRepo = new MeetingSavingRepo(MemberSavingHistoryActivity.this);
+            }
+            successFlg = savingRepo.saveMemberSaving(meetingId, memberId, theAmount);
+
             return successFlg;
         }
         catch(Exception ex) {
@@ -249,5 +320,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             return successFlg;
         }
     }
+
+
 
 }

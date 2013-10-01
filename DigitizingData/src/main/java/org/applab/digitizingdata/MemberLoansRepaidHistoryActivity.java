@@ -1,14 +1,20 @@
 package org.applab.digitizingdata;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +39,8 @@ import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Moses on 7/13/13.
@@ -49,6 +57,24 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     MeetingLoanRepaymentRepo loansRepaidRepo = null;
     ArrayList<MemberLoanRepaymentRecord> loanRepayments;
     MeetingLoanIssued recentLoan = null;
+
+    //Fields for Rollover calculation
+    double interestRate = 0.0;
+    EditText editTextInterestRate;
+    TextView txtRolloverAmount;
+    TextView txtLoanBalance;
+    double theCurLoanBalanceAmount = 0.0;
+    double theCurLoanRepayAmount = 0.0;
+
+    //Date stuff
+    TextView txtDateDue;
+    TextView viewClicked;
+    public static final int Date_dialog_id = 1;
+    // date and time
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+    String dateString;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -133,6 +159,11 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         TextView txtLoanNumber = (TextView)findViewById(R.id.txtMLRepayHLoanNo);
         TextView txtLoanAmountFld = (TextView)findViewById(R.id.txtMLRepayHAmount);
         TextView txtComment = (TextView)findViewById(R.id.txtMLRepayHComment);
+        TextView txtBalance = (TextView)findViewById(R.id.txtMLRepayHBalance);
+        TextView txtNewInterest = (TextView)findViewById(R.id.txtMLRepayHInterest);
+        TextView txtTotal = (TextView)findViewById(R.id.txtMLRepayHTotal);
+        TextView txtNewDateDue = (TextView)findViewById(R.id.txtMLRepayHDateDue);
+
 
         recentLoan = loanIssuedRepo.getMostRecentLoanIssuedToMember(memberId);
         if(null != recentLoan) {
@@ -144,6 +175,12 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 txtLoanAmountFld.setText(String.format("%.0f",loanRepayment.getAmount()));
                 txtComment.setText(loanRepayment.getComments());
                 txtLoanNumber.setText(String.format("%d", loanRepayment.getLoanNo()));
+
+                //Add the rest of the fields
+                txtNewDateDue.setText(Utils.formatDate(loanRepayment.getNextDateDue()));
+                txtBalance.setText(String.format("%.0f",loanRepayment.getBalanceAfter()));
+                txtNewInterest.setText(String.format("%.0f",loanRepayment.getInterestAmount()));
+                txtTotal.setText(String.format("%.0f",loanRepayment.getRolloverAmount()));
             }
         }
         else {
@@ -165,11 +202,64 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             LinearLayout frmAmount = (LinearLayout)findViewById(R.id.frmMLRepayHAmount);
             parent.removeView(frmAmount);
 
+            //Remove Balance
+            TextView lblBalance = (TextView)findViewById(R.id.lblMLRepayHBalance);
+            parent.removeView(lblBalance);
+            LinearLayout frmBalance = (LinearLayout)findViewById(R.id.frmMLRepayHBalance);
+            parent.removeView(frmBalance);
+
+            //Remove Interest
+            TextView lblInterest = (TextView)findViewById(R.id.lblMLRepayHInterest);
+            parent.removeView(lblInterest);
+            LinearLayout frmInterest = (LinearLayout)findViewById(R.id.frmMLRepayHInterest);
+            parent.removeView(frmInterest);
+
+            //Remove Interest
+            TextView lblTotal = (TextView)findViewById(R.id.lblMLRepayHTotal);
+            parent.removeView(lblTotal);
+            LinearLayout frmTotal = (LinearLayout)findViewById(R.id.frmMLRepayHTotal);
+            parent.removeView(frmTotal);
+
             //Remove Comment
             TextView lblComment = (TextView)findViewById(R.id.lblMLRepayHComment);
             parent.removeView(lblComment);
             parent.removeView(txtComment);
 
+            //Remove Date Due
+            TextView lblNewDateDue = (TextView)findViewById(R.id.lblMLRepayHDateDue);
+            parent.removeView(lblNewDateDue);
+            parent.removeView(txtNewDateDue);
+
+        }
+
+        //Handle the Date stuff only when the fields are visible
+        if(null != recentLoan) {
+            //Date stuff
+            txtDateDue = (TextView)findViewById(R.id.txtMLRepayHDateDue);
+            viewClicked = txtDateDue;
+            initializeDate();
+
+            //Set onClick Listeners to load the DateDialog for MeetingDate
+            txtDateDue.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //I want the Event Handler to handle both startDate and endDate
+                    viewClicked = (TextView)view;
+                    DatePickerDialog datePickerDialog = new DatePickerDialog( MemberLoansRepaidHistoryActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                    //TODO: Enable this feature in API 11 and above
+                    //datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+                    datePickerDialog.show();
+                }
+            });
+
+            //Setup the Default Date
+            final Calendar c = Calendar.getInstance();
+            c.add(Calendar.MONTH, 1);
+            mYear = c.get(Calendar.YEAR);
+            mMonth = c.get(Calendar.MONTH);
+            mDay = c.get(Calendar.DAY_OF_MONTH);
+            updateDisplay();
+            //end of date stuff
         }
 
         TextView txtOutstandingLoans = (TextView)findViewById(R.id.lblMLRepayHOutstandingLoans);
@@ -196,7 +286,96 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             }
         }
 
+        //Handle the Auto-calculation of Rollover Amount
+        if(null == recentLoan) {
+            return;
+        }
+        //Handle the Loan Interest Computation
+        editTextInterestRate = (EditText)findViewById(R.id.txtMLRepayHInterest);
+        txtRolloverAmount = (TextView)findViewById(R.id.txtMLRepayHTotal);
+        txtLoanBalance = (TextView)findViewById(R.id.txtMLRepayHBalance);
+
+        //First get the Interest Rate for the Current Cycle
+        if(targetMeeting != null && targetMeeting.getVslaCycle() != null) {
+            interestRate = targetMeeting.getVslaCycle().getInterestRate();
+        }
+
+        EditText txtRepaymentAmount = (EditText)findViewById(R.id.txtMLRepayHAmount);
+        txtRepaymentAmount.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Compute the Interest
+                double theRepayAmount = 0.0;
+                try {
+                    if(s.toString().length() <= 0) {
+                        return;
+                    }
+                    theRepayAmount = Double.parseDouble(s.toString());
+                }
+                catch(Exception ex) {
+                    return;
+                }
+
+                //Compute the Balance
+                theCurLoanBalanceAmount = recentLoan.getLoanBalance() - theRepayAmount;
+                txtLoanBalance.setText(String.format("%,.0f",theCurLoanBalanceAmount));
+
+                double interestAmount = (interestRate * 0.01 * theCurLoanBalanceAmount);
+                editTextInterestRate.setText(String.format("%.0f",interestAmount));
+
+                double rolloverAmount = theCurLoanBalanceAmount + interestAmount;
+                txtRolloverAmount.setText(String.format("%,.0f",rolloverAmount));
+
+                //Have this value redundantly stored for future use
+                theCurLoanRepayAmount = theRepayAmount;
+            }
+        });
+
+        //Now deal with Loan Interest Manual Changes
+        EditText txtNewInterestAmount = (EditText)findViewById(R.id.txtMLRepayHInterest);
+        txtNewInterestAmount.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Compute the Interest
+                double theInterestAmount = 0.0;
+                try {
+                    if(s.toString().length() <= 0) {
+                        return;
+                    }
+                    theInterestAmount = Double.parseDouble(s.toString());
+                }
+                catch(Exception ex) {
+                    return;
+                }
+
+                double rolloverAmount = theInterestAmount + theCurLoanBalanceAmount;
+                txtRolloverAmount.setText(String.format("%,.0f",rolloverAmount));
+            }
+        });
+
     }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         final MenuInflater inflater = getSupportMenuInflater();
@@ -279,6 +458,10 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
             TextView txtLoanAmount = (TextView)findViewById(R.id.txtMLRepayHAmount);
             TextView txtComments = (TextView)findViewById(R.id.txtMLRepayHComment);
+            TextView txtBalance = (TextView)findViewById(R.id.txtMLRepayHBalance);
+            TextView txtInterest = (TextView)findViewById(R.id.txtMLRepayHInterest);
+            TextView txtRollover = (TextView)findViewById(R.id.txtMLRepayHTotal);
+            TextView txtNextDateDue = (TextView)findViewById(R.id.txtMLRepayHDateDue);
 
             String amount = txtLoanAmount.getText().toString().trim();
             if (amount.length() < 1) {
@@ -295,7 +478,44 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 }
             }
 
+            double newBalance = recentLoan.getLoanBalance() - theAmount;
+            double theInterest = 0.0;
+
+            String interest = txtInterest.getText().toString().trim();
+            if (interest.length() < 1) {
+                theInterest = 0.0;
+            }
+            else {
+                theInterest = Double.parseDouble(interest);
+                if (theInterest < 0.00) {
+                    Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The Interest Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtInterest.requestFocus();
+                    return false;
+                }
+            }
+
+            double theRollover = newBalance + theInterest;
+
+            //Next Due Date
+            Calendar cal = Calendar.getInstance();
+            Date today = cal.getTime();
+            cal.add(Calendar.MONTH,1);
+            Date theDateDue = cal.getTime();
+
+            String dateDue = txtNextDateDue.getText().toString().trim();
+            Date dtDateDue = Utils.getDateFromString(dateDue,Utils.DATE_FIELD_FORMAT);
+            if (dtDateDue.before(today)) {
+                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Loan Issue","The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtNextDateDue.setFocusable(true);
+                txtDateDue.requestFocus();
+                return false;
+            }
+            else {
+                theDateDue = dtDateDue;
+            }
+
             String comments = txtComments.getText().toString().trim();
+
 
             //Now Save the data
             if(null == loansRepaidRepo){
@@ -315,14 +535,29 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 return false;
 
             }
-            boolean saveRepayment = loansRepaidRepo.saveMemberLoanRepayment(meetingId, memberId, recentLoanId, theAmount, balanceBefore, comments);
+
+            //Check Over-Payments
+            if(theAmount > balanceBefore) {
+                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The repayment amount is more than the remaining loan balance.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                return false;
+            }
+
+            //If Amount is Zero, then ensure that the date is due before doing a rollover
+            if(theAmount == 0) {
+                if(targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
+                    Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The repayment amount of zero (0 UGX) is not allowed when the loan is not yet due.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    return false;
+                }
+            }
+
+            boolean saveRepayment = loansRepaidRepo.saveMemberLoanRepayment(meetingId, memberId, recentLoanId, theAmount, balanceBefore, comments,newBalance,theInterest,theRollover);
             if(saveRepayment) {
                 //Also update the balances
                 if (loanIssuedRepo == null) {
                     loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansRepaidHistoryActivity.this);
                 }
 
-                return loanIssuedRepo.updateMemberLoanBalances(recentLoan.getLoanId(),recentLoan.getTotalRepaid() + theAmount, recentLoan.getLoanBalance() - theAmount);
+                return loanIssuedRepo.updateMemberLoanBalances(recentLoan.getLoanId(),recentLoan.getTotalRepaid() + theAmount, theRollover, theDateDue);
 
             }
             else {
@@ -333,6 +568,51 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         catch(Exception ex) {
             Log.e("MemberLoansRepaidHistory.saveMemberLoanRepayment", ex.getMessage());
             return false;
+        }
+    }
+
+    //DATE
+    //Event that is raised when the date has been set
+    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            mYear = year;
+            mMonth = monthOfYear;
+            mDay = dayOfMonth;
+            updateDisplay();
+        }
+    };
+
+    @Override
+    @Deprecated
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        // TODO Auto-generated method stub
+        super.onPrepareDialog(id, dialog);
+        ((DatePickerDialog) dialog).updateDate(mYear, mMonth, mDay);
+    }
+
+    //Displays the selected Date in the TextView
+    private void updateDisplay() {
+        if(viewClicked != null) {
+            dateString = (new StringBuilder()
+                    // Month is 0 based so add 1
+                    .append(mDay)
+                    .append("-")
+                    .append(Utils.getMonthNameAbbrev(mMonth + 1))
+                    .append("-")
+                    .append(mYear)).toString();
+            viewClicked.setText(dateString);
+        }
+        else {
+            //Not sure yet on what to do
+        }
+    }
+
+    private void initializeDate(){
+        if(viewClicked != null) {
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.MONTH,1);
+            dateString = Utils.formatDate(c.getTime());
+            viewClicked.setText(dateString);
         }
     }
 }

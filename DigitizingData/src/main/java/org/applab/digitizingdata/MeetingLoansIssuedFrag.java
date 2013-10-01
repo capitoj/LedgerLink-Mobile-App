@@ -78,7 +78,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
         //Populate the Cash Available
-        populateCashBookFields();
+        //populateCashBookFields();
 
         //Populate the Members
         populateMembersList();
@@ -125,13 +125,14 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         });
 
         //Hack to ensure all Items in the List View are visible
-        Utils.setListViewHeightBasedOnChildren(lvwMembers);
+        //Utils.setListViewHeightBasedOnChildren(lvwMembers);
         TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
         lblMeetingDate.setFocusable(true);
         lblMeetingDate.requestFocus();
 
     }
 
+    /*
     private void populateCashBookFields() {
         MeetingRepo meetingRepo = null;
         MeetingSavingRepo savingRepo = null;
@@ -169,4 +170,5 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
             repaymentRepo = null;
         }
     }
+    */
 }

@@ -10,10 +10,28 @@ public class MemberLoanIssueRecord {
     int loanNo;
     Date meetingDate;
     double principalAmount;
+    double interestAmount;
     double balance;
     double totalRepaid;
     boolean isCleared;
     Date dateCleared;
+    Date dateDue;
+
+    public double getInterestAmount() {
+        return interestAmount;
+    }
+
+    public void setInterestAmount(double interestAmount) {
+        this.interestAmount = interestAmount;
+    }
+
+    public Date getDateDue() {
+        return dateDue;
+    }
+
+    public void setDateDue(Date dateDue) {
+        this.dateDue = dateDue;
+    }
 
     public int getLoanId() {
         return loanId;

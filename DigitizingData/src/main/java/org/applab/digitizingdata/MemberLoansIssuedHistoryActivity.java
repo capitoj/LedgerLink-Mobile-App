@@ -1,35 +1,41 @@
 package org.applab.digitizingdata;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.helpers.LoansIssuedHistoryArrayAdapter;
 import org.applab.digitizingdata.helpers.MemberLoanIssueRecord;
-import org.applab.digitizingdata.helpers.MemberSavingRecord;
-import org.applab.digitizingdata.helpers.SavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
+import android.text.Editable;
+import android.text.TextWatcher;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Moses on 7/12/13.
@@ -44,6 +50,22 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     MeetingLoanIssuedRepo loanIssuedRepo = null;
     ArrayList<MemberLoanIssueRecord> loansIssued;
     int targetCycleId = 0;
+    double interestRate = 0.0;
+    EditText editTextInterestRate;
+    TextView txtTotalLoanAmount;
+    double theCurLoanAmount = 0.0;
+    int currentLoanId = 0;
+    boolean loanWasDeleted = false;
+
+    //Date stuff
+    TextView txtDateDue;
+    TextView viewClicked;
+    public static final int Date_dialog_id = 1;
+    // date and time
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+    String dateString;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +79,17 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                     @Override
                     public void onClick(View v) {
                         if(saveMemberLoan()){
-                            Toast.makeText(MemberLoansIssuedHistoryActivity.this, "New Loan issued successfully", Toast.LENGTH_LONG).show();
+                            if(currentLoanId > 0 ){
+                                if(loanWasDeleted) {
+                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, "The Loan has been cancelled.", Toast.LENGTH_LONG).show();
+                                }
+                                else {
+                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, "The Loan has been edited successfully", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            else {
+                                Toast.makeText(MemberLoansIssuedHistoryActivity.this, "New Loan issued successfully", Toast.LENGTH_LONG).show();
+                            }
                             Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                             i.putExtra("_tabToSelect","loansIssued");
                             i.putExtra("_meetingDate",meetingDate);
@@ -128,10 +160,135 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
         populateLoanIssueHistory();
 
-        TextView txtLIAmount = (TextView)findViewById(R.id.txtMLIssuedHAmount);
-        txtLIAmount.setText("");
-        txtLIAmount.requestFocus();
+        TextView txtLILoanNo = (TextView)findViewById(R.id.txtMLIssuedHLoanNo);
+        //txtLILoanNo.setText("");
+        txtLILoanNo.requestFocus();
 
+        //Date stuff
+        txtDateDue = (TextView)findViewById(R.id.txtMLIssuedHDateDue);
+        viewClicked = txtDateDue;
+        initializeDate();
+
+        //Set onClick Listeners to load the DateDialog for MeetingDate
+        txtDateDue.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //I want the Event Handler to handle both startDate and endDate
+                viewClicked = (TextView)view;
+                DatePickerDialog datePickerDialog = new DatePickerDialog( MemberLoansIssuedHistoryActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                //TODO: Enable this feature in API 11 and above
+                //datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+                datePickerDialog.show();
+            }
+        });
+
+        //Setup the Default Date
+        final Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, 1);
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+        updateDisplay();
+
+        //Handle the Loan Interest Computation
+        editTextInterestRate = (EditText)findViewById(R.id.txtMLIssuedHInterest);
+        txtTotalLoanAmount = (TextView)findViewById(R.id.txtMLIssuedHTotal);
+
+        //First get the Interest Rate for the Current Cycle
+        if(targetMeeting != null && targetMeeting.getVslaCycle() != null) {
+            interestRate = targetMeeting.getVslaCycle().getInterestRate();
+        }
+
+        EditText txtLILoanAmount = (EditText)findViewById(R.id.txtMLIssuedHAmount);
+        txtLILoanAmount.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Compute the Interest
+                double theAmount = 0.0;
+                try {
+                    if(s.toString().length() <= 0) {
+                        return;
+                    }
+                    theAmount = Double.parseDouble(s.toString());
+                }
+                catch(Exception ex) {
+                    return;
+                }
+
+                double interestAmount = (interestRate * 0.01 * theAmount);
+                editTextInterestRate.setText(String.format("%.0f",interestAmount));
+
+                double totalAmount = theAmount + interestAmount;
+                txtTotalLoanAmount.setText(String.format("%,.0f",totalAmount));
+
+                //Have this value redundantly stored for future use
+                theCurLoanAmount = theAmount;
+            }
+        });
+
+        //Now deal with Loan Interest Manual Changes
+        EditText txtLILoanInterestAmount = (EditText)findViewById(R.id.txtMLIssuedHInterest);
+        txtLILoanInterestAmount.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //Compute the Interest
+                double theInterestAmount = 0.0;
+                try {
+                    if(s.toString().length() <= 0) {
+                        return;
+                    }
+                    theInterestAmount = Double.parseDouble(s.toString());
+                }
+                catch(Exception ex) {
+                    return;
+                }
+
+                double totalAmount = theInterestAmount + theCurLoanAmount;
+                txtTotalLoanAmount.setText(String.format("%,.0f",totalAmount));
+            }
+        });
+
+        //Display Members current loan if any
+        TextView txtLoanNo = (TextView)findViewById(R.id.txtMLIssuedHLoanNo);
+        TextView txtLoanAmount = (TextView)findViewById(R.id.txtMLIssuedHAmount);
+        TextView txtInterestAmount = (TextView)findViewById(R.id.txtMLIssuedHInterest);
+        TextView txtTotalAmount = (TextView)findViewById(R.id.txtMLIssuedHTotal);
+        TextView txtDateDue = (TextView)findViewById(R.id.txtMLIssuedHDateDue);
+
+        if( null == loanIssuedRepo) {
+            loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
+        }
+        MeetingLoanIssued memberLoan = loanIssuedRepo.getLoanIssuedToMemberInMeeting(meetingId, memberId);
+        if(null != memberLoan) {
+            currentLoanId = memberLoan.getLoanId();
+            txtLoanNo.setText(String.format("%d",memberLoan.getLoanNo()));
+            txtLoanAmount.setText(String.format("%.0f",memberLoan.getPrincipalAmount()));
+            txtInterestAmount.setText(String.format("%.0f",memberLoan.getInterestAmount()));
+            txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(),"dd-MMM-yyyy"));
+
+            //May consider just recomputing the total amount afresh
+            txtTotalAmount.setText(String.format("%.0f",memberLoan.getLoanBalance()));
+        }
     }
 
     private void populateLoanIssueHistory() {
@@ -206,10 +363,14 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     public boolean saveMemberLoan(){
         int theLoanNo = 0;
         double theAmount = 0.0;
+        double theInterestAmount = 0.0;
+        Date theDateDue = null;
 
         try{
             TextView txtLoanNo = (TextView)findViewById(R.id.txtMLIssuedHLoanNo);
             TextView txtLoanAmount = (TextView)findViewById(R.id.txtMLIssuedHAmount);
+            TextView txtInterestAmount = (TextView)findViewById(R.id.txtMLIssuedHInterest);
+            TextView txtDateDue = (TextView)findViewById(R.id.txtMLIssuedHDateDue);
 
             String amount = txtLoanAmount.getText().toString().trim();
             if (amount.length() < 1) {
@@ -219,7 +380,8 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             }
             else {
                 theAmount = Double.parseDouble(amount);
-                if (theAmount <= 0.00) {
+                //Loan Amounts for new loans must be positive
+                if (theAmount < 0.00 && currentLoanId > 0) {
                     Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue","The Loan Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtLoanAmount.requestFocus();
                     return false;
@@ -241,19 +403,54 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 }
             }
 
+            //Interest Amount
+            String interestAmount = txtInterestAmount.getText().toString().trim();
+            if (interestAmount.length() < 1) {
+                //Not sure whether there would be more to do
+                theInterestAmount = 0.0;
+            }
+            else {
+                theInterestAmount = Double.parseDouble(interestAmount);
+                if (theInterestAmount < 0.00) {
+                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue","The Interest Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtLoanNo.requestFocus();
+                    return false;
+                }
+            }
+
+            //Date Due
+            Date today = Calendar.getInstance().getTime();
+            String dateDue = txtDateDue.getText().toString().trim();
+            Date dtDateDue = Utils.getDateFromString(dateDue,Utils.DATE_FIELD_FORMAT);
+            if (dtDateDue.before(today)) {
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue","The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtDateDue.requestFocus();
+                return false;
+            }
+            else {
+                theDateDue = dtDateDue;
+            }
+
             //Now Save the data
             if(null == loanIssuedRepo){
                 loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
             }
 
             //Further Validation of Uniqueness of the Loan Number
-            if (!loanIssuedRepo.validateLoanNumber(theLoanNo)) {
+            if (!loanIssuedRepo.validateLoanNumber(theLoanNo, meetingId, memberId)) {
                 Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue","The Loan Number is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanNo.requestFocus();
                 return false;
             }
 
-            return loanIssuedRepo.saveMemberLoanIssue(meetingId, memberId, theLoanNo, theAmount);
+            //Determine whether to delete this current loan i.e. in case it is being edited and the amount is set to zero
+            if(currentLoanId > 0 && theAmount <= 0) {
+                //Mark flag to indicate that the loan was deleted
+                loanWasDeleted = true;
+                return loanIssuedRepo.deleteLoan(currentLoanId);
+            }
+
+            return loanIssuedRepo.saveMemberLoanIssue(meetingId, memberId, theLoanNo, theAmount, theInterestAmount, theDateDue);
 
         }
         catch(Exception ex) {
@@ -261,4 +458,50 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             return false;
         }
     }
+
+    //DATE
+    //Event that is raised when the date has been set
+    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            mYear = year;
+            mMonth = monthOfYear;
+            mDay = dayOfMonth;
+            updateDisplay();
+        }
+    };
+
+    @Override
+    @Deprecated
+    protected void onPrepareDialog(int id, Dialog dialog) {
+        // TODO Auto-generated method stub
+        super.onPrepareDialog(id, dialog);
+        ((DatePickerDialog) dialog).updateDate(mYear, mMonth, mDay);
+    }
+
+    //Displays the selected Date in the TextView
+    private void updateDisplay() {
+        if(viewClicked != null) {
+            dateString = (new StringBuilder()
+                    // Month is 0 based so add 1
+                    .append(mDay)
+                    .append("-")
+                    .append(Utils.getMonthNameAbbrev(mMonth + 1))
+                    .append("-")
+                    .append(mYear)).toString();
+            viewClicked.setText(dateString);
+        }
+        else {
+            //Not sure yet on what to do
+        }
+    }
+
+    private void initializeDate(){
+        if(viewClicked != null) {
+            Calendar c = Calendar.getInstance();
+            c.add(Calendar.MONTH,1);
+            dateString = Utils.formatDate(c.getTime());
+            viewClicked.setText(dateString);
+        }
+    }
+
 }

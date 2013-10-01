@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
@@ -70,6 +71,7 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMLRepayFullNames);
             final TextView txtRepaidToday = (TextView)rowView.findViewById(R.id.txtRMLRepayTodaysRepay);
             final TextView txtBalance = (TextView)rowView.findViewById(R.id.txtRMLRepayBalance);
+            final TextView txtDateDue = (TextView)rowView.findViewById(R.id.txtRMLRepayDateDue);
 
             //Assign Values to the Widgets
             Member selectedMember = values.get(position);
@@ -92,6 +94,15 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
                 outstandingLoan = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(),selectedMember.getMemberId());
             }
             txtBalance.setText(String.format("Balance: %,.0fUGX",outstandingLoan));
+
+            //Date Due
+            txtDateDue.setText("Date Due: -");
+            if(null != targetMeeting) {
+                MeetingLoanIssued recentLoan = loansIssuedRepo.getMostRecentLoanIssuedToMember(selectedMember.getMemberId());
+                if(null != recentLoan) {
+                    txtDateDue.setText(String.format("Date Due: %s",Utils.formatDate(recentLoan.getDateDue())));
+                }
+            }
 
             return rowView;
         }
