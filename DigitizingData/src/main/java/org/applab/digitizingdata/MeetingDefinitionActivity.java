@@ -69,10 +69,12 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         previousMeeting = repo.getCurrentMeeting();
 
         //Reset the instruction text
-        StringBuilder sb = new StringBuilder("Ready to enter data for a meeting? ");
-        sb.append("Set the date and then select <b><i>next</i></b>. ");
-        sb.append("To return to the main menu without starting a new meeting, select <b><i>cancel</i></b>. ");
-        sb.append("If necessary, tap date to select a date in the past. You may not select a date in the future.");
+        //StringBuilder sb = new StringBuilder("Ready to enter data for a meeting? ");
+        //sb.append("Set the date and then select <b><i>next</i></b>. ");
+        //sb.append("To return to the main menu without starting a new meeting, select <b><i>cancel</i></b>. ");
+        //sb.append("If necessary, tap date to select a date in the past. You may not select a date in the future.");
+
+        StringBuilder sb = new StringBuilder("View the date below and tap it to change if it is not the correct meeting date. (You may not select a date in the future.) Tap the arrow above to begin the meeting.");
 
         TextView txtInstructions = (TextView)findViewById(R.id.lblMDHeader);
         txtInstructions.setText(Html.fromHtml(sb.toString()));

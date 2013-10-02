@@ -47,8 +47,8 @@ public class LoanRepaymentHistoryArrayAdapter extends ArrayAdapter<MemberLoanRep
             if(repaymentRecord != null) {
                 txtMeetingDate.setText(String.format("Date: %s",Utils.formatDate(repaymentRecord.getMeetingDate(),Utils.DATE_FIELD_FORMAT)));
                 txtLoanNo.setText(String.format("Loan No: %d", repaymentRecord.getLoanNo()));
-                txtAmount.setText(String.format("Amount: %,.0fUGX", repaymentRecord.getAmount()));
-                txtRollover.setText(String.format("Rollover: %,.0fUGX", repaymentRecord.getRolloverAmount()));
+                txtAmount.setText(String.format("Amount: %,.0f UGX", repaymentRecord.getAmount()));
+                txtRollover.setText(String.format("Rollover: %,.0f UGX", repaymentRecord.getRolloverAmount()));
                 txtComments.setText(String.format("Comments: %s", repaymentRecord.getComments()));
             }
 

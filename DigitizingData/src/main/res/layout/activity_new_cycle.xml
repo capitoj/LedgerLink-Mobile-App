@@ -132,7 +132,9 @@
                         android:gravity="left"
                         android:text="01-Jul-2013"
                         android:textStyle="bold"
-                        android:textSize="18sp"
+                        android:textColor="#0000FF"
+                        android:textSize="20sp"
+                        android:focusable="true"
                         android:clickable="true"/>
             </LinearLayout>
 
@@ -158,8 +160,10 @@
                         android:layout_height="wrap_content"
                         android:gravity="left"
                         android:textStyle="bold"
+                        android:textColor="#0000FF"
                         android:text="30-Jun-2013"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
+                        android:focusable="true"
                         android:clickable="true"/>
             </LinearLayout>
 

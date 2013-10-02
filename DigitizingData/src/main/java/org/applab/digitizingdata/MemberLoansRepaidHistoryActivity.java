@@ -58,6 +58,11 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     ArrayList<MemberLoanRepaymentRecord> loanRepayments;
     MeetingLoanIssued recentLoan = null;
 
+    //Flags for Edit Operation
+    boolean isEditOperation = false;
+    //This is the repayment that is being edited
+    MemberLoanRepaymentRecord repaymentBeingEdited = null;
+
     //Fields for Rollover calculation
     double interestRate = 0.0;
     EditText editTextInterestRate;
@@ -154,6 +159,13 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansRepaidHistoryActivity.this);
         loansRepaidRepo = new MeetingLoanRepaymentRepo(MemberLoansRepaidHistoryActivity.this);
 
+        //Determine whether this is an edit operation on an existing Loan Repayment
+        repaymentBeingEdited = loansRepaidRepo.getLoansRepaymentByMemberInMeeting(meetingId,memberId);
+        if(null != repaymentBeingEdited) {
+            //Flag that this is an edit operation
+            isEditOperation = true;
+        }
+
         //Get Loan Number of currently running loan
         TextView lblLoanNo = (TextView)findViewById(R.id.lblMLRepayHLoanNo);
         TextView txtLoanNumber = (TextView)findViewById(R.id.txtMLRepayHLoanNo);
@@ -169,18 +181,18 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         if(null != recentLoan) {
             txtLoanNumber.setText(String.format("%d",recentLoan.getLoanNo()));
 
-            //If there is an existing Repayment for this meeting, show the amount
-            MemberLoanRepaymentRecord loanRepayment = loansRepaidRepo.getLoansRepaymentByMemberInMeeting(meetingId,memberId);
-            if(null != loanRepayment) {
-                txtLoanAmountFld.setText(String.format("%.0f",loanRepayment.getAmount()));
-                txtComment.setText(loanRepayment.getComments());
-                txtLoanNumber.setText(String.format("%d", loanRepayment.getLoanNo()));
+            //Now in case this is an edit operation populate the fields with the Repayment being edited
+            if(null != repaymentBeingEdited && isEditOperation) {
+                //populate the fields
+                txtLoanAmountFld.setText(String.format("%.0f",repaymentBeingEdited.getAmount()));
+                txtComment.setText(repaymentBeingEdited.getComments());
+                //txtLoanNumber.setText(String.format("%d", repaymentBeingEdited.getLoanNo()));
 
                 //Add the rest of the fields
-                txtNewDateDue.setText(Utils.formatDate(loanRepayment.getNextDateDue()));
-                txtBalance.setText(String.format("%.0f",loanRepayment.getBalanceAfter()));
-                txtNewInterest.setText(String.format("%.0f",loanRepayment.getInterestAmount()));
-                txtTotal.setText(String.format("%.0f",loanRepayment.getRolloverAmount()));
+                txtNewDateDue.setText(Utils.formatDate(repaymentBeingEdited.getNextDateDue()));
+                txtBalance.setText(String.format("%.0f",repaymentBeingEdited.getBalanceAfter()));
+                txtNewInterest.setText(String.format("%.0f",repaymentBeingEdited.getInterestAmount()));
+                txtTotal.setText(String.format("%.0f",repaymentBeingEdited.getRolloverAmount()));
             }
         }
         else {
@@ -237,7 +249,11 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             //Date stuff
             txtDateDue = (TextView)findViewById(R.id.txtMLRepayHDateDue);
             viewClicked = txtDateDue;
-            initializeDate();
+
+            //If it is not an edit operation then initialize the date. Otherwise, retain the date pulled from db
+            if(!isEditOperation) {
+                initializeDate();
+            }
 
             //Set onClick Listeners to load the DateDialog for MeetingDate
             txtDateDue.setOnClickListener( new View.OnClickListener() {
@@ -252,13 +268,15 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 }
             });
 
-            //Setup the Default Date
-            final Calendar c = Calendar.getInstance();
-            c.add(Calendar.MONTH, 1);
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
-            updateDisplay();
+            //Setup the Default Date. Not sure whether I should block this off when editing a loan repayment
+            if(!isEditOperation) {
+                final Calendar c = Calendar.getInstance();
+                c.add(Calendar.MONTH, 1);
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+                updateDisplay();
+            }
             //end of date stuff
         }
 
@@ -269,7 +287,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
             outstandingLoans = loanIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetCycleId, memberId);
         }
-        txtOutstandingLoans.setText(String.format("Total Balance: %,.0fUGX", outstandingLoans));
+        txtOutstandingLoans.setText(String.format("Total Balance: %,.0f UGX", outstandingLoans));
 
         //Populate the History
         populateLoanRepaymentHistory();
@@ -286,7 +304,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             }
         }
 
-        //Handle the Auto-calculation of Rollover Amount
+        //Handle the Auto-calculation of Rollover Amount. If recentLoan is NULL means fields are hidden
         if(null == recentLoan) {
             return;
         }
@@ -327,7 +345,12 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 }
 
                 //Compute the Balance
-                theCurLoanBalanceAmount = recentLoan.getLoanBalance() - theRepayAmount;
+                if(isEditOperation && null != repaymentBeingEdited) {
+                    theCurLoanBalanceAmount = repaymentBeingEdited.getBalanceBefore() - theRepayAmount;
+                }
+                else {
+                    theCurLoanBalanceAmount = recentLoan.getLoanBalance() - theRepayAmount;
+                }
                 txtLoanBalance.setText(String.format("%,.0f",theCurLoanBalanceAmount));
 
                 double interestAmount = (interestRate * 0.01 * theCurLoanBalanceAmount);
@@ -478,7 +501,13 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 }
             }
 
-            double newBalance = recentLoan.getLoanBalance() - theAmount;
+            double newBalance = 0.0;
+            if(isEditOperation && null != repaymentBeingEdited) {
+                newBalance = repaymentBeingEdited.getBalanceBefore() - theAmount;
+            }
+            else {
+                newBalance = recentLoan.getLoanBalance() - theAmount;
+            }
             double theInterest = 0.0;
 
             String interest = txtInterest.getText().toString().trim();
@@ -499,23 +528,24 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             //Next Due Date
             Calendar cal = Calendar.getInstance();
             Date today = cal.getTime();
-            cal.add(Calendar.MONTH,1);
-            Date theDateDue = cal.getTime();
 
-            String dateDue = txtNextDateDue.getText().toString().trim();
-            Date dtDateDue = Utils.getDateFromString(dateDue,Utils.DATE_FIELD_FORMAT);
-            if (dtDateDue.before(today)) {
+            Calendar calNext = Calendar.getInstance();
+            calNext.add(Calendar.MONTH,1);
+            Date theDateDue = calNext.getTime();
+
+            String nextDateDue = txtNextDateDue.getText().toString().trim();
+            Date dtNextDateDue = Utils.getDateFromString(nextDateDue,Utils.DATE_FIELD_FORMAT);
+            if (today.after(dtNextDateDue)) {
                 Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Loan Issue","The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtNextDateDue.setFocusable(true);
                 txtDateDue.requestFocus();
                 return false;
             }
             else {
-                theDateDue = dtDateDue;
+                theDateDue = dtNextDateDue;
             }
 
             String comments = txtComments.getText().toString().trim();
-
 
             //Now Save the data
             if(null == loansRepaidRepo){
@@ -525,15 +555,25 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             //retrieve the LoanId and LoanNo of the most recent uncleared loan
             int recentLoanId = 0;
             double balanceBefore = 0.0;
+            Date dtLastDateDue = null;
             if(null != recentLoan) {
                 recentLoanId = recentLoan.getLoanId();
-                balanceBefore = recentLoan.getLoanBalance();
+
+                //If this is an edit then get the values from the repayment being edited
+                if(isEditOperation && null != repaymentBeingEdited) {
+                    balanceBefore = repaymentBeingEdited.getBalanceBefore();
+                    dtLastDateDue = repaymentBeingEdited.getLastDateDue();
+                }
+                else {
+                    balanceBefore = recentLoan.getLoanBalance();
+                    //Last Date Due for Transaction Tracking purposes. Get it from the recent Loan
+                    dtLastDateDue = recentLoan.getDateDue();
+                }
             }
             else {
                 //check again: Do not save repayment if there is no existing loan
                 Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member has no Outstanding Loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 return false;
-
             }
 
             //Check Over-Payments
@@ -550,13 +590,29 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 }
             }
 
-            boolean saveRepayment = loansRepaidRepo.saveMemberLoanRepayment(meetingId, memberId, recentLoanId, theAmount, balanceBefore, comments,newBalance,theInterest,theRollover);
+            //If it is an editing of existing loan repayment, first undo the changes of the former one
+            boolean undoSucceeded = false;
+            if(isEditOperation && repaymentBeingEdited != null) {
+                //Post a Reversal or just edit the figures
+                undoSucceeded = loanIssuedRepo.updateMemberLoanBalances(recentLoan.getLoanId(),recentLoan.getTotalRepaid() - repaymentBeingEdited.getAmount(), repaymentBeingEdited.getBalanceBefore(), repaymentBeingEdited.getLastDateDue());
+            }
+
+            //If it was an edit operation and undo changes failed, then exit
+            if(isEditOperation && !undoSucceeded ) {
+                return false;
+            }
+
+            //Otherwise, proceed
+            //saveMemberLoanRepayment(int meetingId, int memberId, int loanId, double amount, double balanceBefore, String comments, double balanceAfter,double interestAmount, double rolloverAmount, Date lastDateDue, Date nextDateDue)//
+            boolean saveRepayment = loansRepaidRepo.saveMemberLoanRepayment(meetingId, memberId, recentLoanId, theAmount, balanceBefore, comments,newBalance,theInterest,theRollover, dtLastDateDue, dtNextDateDue);
             if(saveRepayment) {
                 //Also update the balances
                 if (loanIssuedRepo == null) {
                     loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansRepaidHistoryActivity.this);
                 }
 
+                //TODO: Decide whether to update the Interest Paid also: and whether it will be Cummulative Interest or Just current Interest
+                                        //updateMemberLoanBalances(int loanId, double totalRepaid, double balance, Date newDateDue)
                 return loanIssuedRepo.updateMemberLoanBalances(recentLoan.getLoanId(),recentLoan.getTotalRepaid() + theAmount, theRollover, theDateDue);
 
             }

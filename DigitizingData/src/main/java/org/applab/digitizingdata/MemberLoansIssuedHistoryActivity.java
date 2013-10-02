@@ -156,7 +156,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
             outstandingLoans = loanIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetCycleId, memberId);
         }
-        txtOutstandingLoans.setText(String.format("Total Balance: %,.0fUGX", outstandingLoans));
+        txtOutstandingLoans.setText(String.format("Total Balance: %,.0f UGX", outstandingLoans));
 
         populateLoanIssueHistory();
 

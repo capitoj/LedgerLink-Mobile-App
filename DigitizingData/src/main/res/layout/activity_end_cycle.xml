@@ -36,10 +36,12 @@
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:text="02-JUL-2013"
             android:id="@+id/txtECShareOutDate"
             android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="20sp"
+            android:textColor="#0000FF"
             android:layout_below="@+id/lblECShareOutDate"
             android:layout_alignParentLeft="true"/>
 

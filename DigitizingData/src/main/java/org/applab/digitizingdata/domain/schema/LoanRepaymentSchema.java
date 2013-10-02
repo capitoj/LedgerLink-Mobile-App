@@ -16,6 +16,8 @@ public class LoanRepaymentSchema {
     public static final String COL_LR_INTEREST_AMOUNT = "InterestAmount";
     public static final String COL_LR_ROLLOVER_AMOUNT = "RollOverAmount";
     public static final String COL_LR_COMMENTS = "Comments";
+    public static final String COL_LR_LAST_DATE_DUE = "LastDateDue";
+    public static final String COL_LR_NEXT_DATE_DUE = "NextDateDue";
 
     public static String getCreateTableScript() {
         StringBuffer sb = new StringBuffer();
@@ -32,7 +34,9 @@ public class LoanRepaymentSchema {
         sb.append(COL_LR_BAL_AFTER + " NUMERIC ,");
         sb.append(COL_LR_INTEREST_AMOUNT + " NUMERIC ,");
         sb.append(COL_LR_ROLLOVER_AMOUNT + " NUMERIC ,");
-        sb.append(COL_LR_COMMENTS + " TEXT");
+        sb.append(COL_LR_COMMENTS + " TEXT ,");
+        sb.append(COL_LR_LAST_DATE_DUE + " TEXT ,");
+        sb.append(COL_LR_NEXT_DATE_DUE + " TEXT");
         sb.append(")");
 
         return sb.toString();
@@ -57,7 +61,9 @@ public class LoanRepaymentSchema {
         sb.append(COL_LR_BAL_AFTER + ",");
         sb.append(COL_LR_INTEREST_AMOUNT + ",");
         sb.append(COL_LR_ROLLOVER_AMOUNT + ",");
-        sb.append(COL_LR_COMMENTS);
+        sb.append(COL_LR_COMMENTS + ",");
+        sb.append(COL_LR_LAST_DATE_DUE + ",");
+        sb.append(COL_LR_NEXT_DATE_DUE );
 
         return sb.toString();
     }

@@ -9,7 +9,7 @@ import org.applab.digitizingdata.domain.schema.*;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "digitizedata";
-    public static final int DATABASE_VERSION = 14;
+    public static final int DATABASE_VERSION = 17;
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

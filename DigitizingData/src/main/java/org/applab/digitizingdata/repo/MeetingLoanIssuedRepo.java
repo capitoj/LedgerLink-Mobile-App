@@ -390,9 +390,6 @@ public class MeetingLoanIssuedRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            //Get the total Loan Amount
-            double totalLoan = amount + interest;
-
             values.put(LoanIssueSchema.COL_LI_MEETING_ID, meetingId);
             values.put(LoanIssueSchema.COL_LI_MEMBER_ID, memberId);
             values.put(LoanIssueSchema.COL_LI_LOAN_NO, loanNo);
@@ -408,6 +405,8 @@ public class MeetingLoanIssuedRepo {
             }
             values.put(LoanIssueSchema.COL_LI_DATE_DUE, Utils.formatDateToSqlite(dtDateDue));
 
+            //Get the total Loan Amount
+            double totalLoan = amount + interest;
             //Set Balance to be Principal Amount + Interest Amount
             values.put(LoanIssueSchema.COL_LI_BALANCE, totalLoan);
 
@@ -442,6 +441,8 @@ public class MeetingLoanIssuedRepo {
             }
         }
     }
+
+
 
     public ArrayList<MemberLoanIssueRecord> getLoansIssuedToMemberInCycle(int cycleId, int memberId) {
         SQLiteDatabase db = null;

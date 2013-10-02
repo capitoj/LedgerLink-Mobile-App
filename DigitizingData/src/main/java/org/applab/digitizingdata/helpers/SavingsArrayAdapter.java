@@ -42,7 +42,7 @@ public class SavingsArrayAdapter extends ArrayAdapter<MemberSavingRecord> {
             MemberSavingRecord savingRecord = values.get(position);
             if(savingRecord != null) {
                 txtMeetingDate.setText(Utils.formatDate(savingRecord.getMeetingDate(),Utils.DATE_FIELD_FORMAT));
-                txtAmount.setText(String.format("Saved: %,.0fUGX", savingRecord.getAmount()));
+                txtAmount.setText(String.format("Saved: %,.0f UGX", savingRecord.getAmount()));
             }
 
             return rowView;

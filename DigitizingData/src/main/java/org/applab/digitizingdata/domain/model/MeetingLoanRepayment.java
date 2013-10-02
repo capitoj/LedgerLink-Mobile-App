@@ -14,4 +14,6 @@ public class MeetingLoanRepayment {
     private double interestAmount;
     private double rollOverAmount;
     private String comments;
+    private String lastDateDue;
+    private String nextDateDue;
 }

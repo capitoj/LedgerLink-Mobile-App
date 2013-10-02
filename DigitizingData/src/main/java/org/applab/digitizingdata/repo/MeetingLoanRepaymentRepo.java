@@ -14,6 +14,7 @@ import org.applab.digitizingdata.helpers.MemberLoanRepaymentRecord;
 import org.applab.digitizingdata.helpers.Utils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -170,7 +171,7 @@ public class MeetingLoanRepaymentRepo {
 
     public boolean saveMemberLoanRepayment(int meetingId, int memberId, int loanId, double amount,
                                            double balanceBefore, String comments, double balanceAfter,
-                                           double interestAmount, double rolloverAmount) {
+                                           double interestAmount, double rolloverAmount, Date lastDateDue, Date nextDateDue) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int repaymentId = 0;
@@ -197,6 +198,23 @@ public class MeetingLoanRepaymentRepo {
             //Balance after will be the balance upon which the rollover was calculated
             values.put(LoanRepaymentSchema.COL_LR_BAL_AFTER, balanceAfter);
 
+            //The Last Date Due
+            Date dtLastDateDue = lastDateDue;
+            if(dtLastDateDue == null) {
+                Calendar cal = Calendar.getInstance();
+                dtLastDateDue = cal.getTime();
+            }
+            values.put(LoanRepaymentSchema.COL_LR_LAST_DATE_DUE, Utils.formatDateToSqlite(dtLastDateDue));
+
+            //The Next Date Due
+            Date dtNextDateDue = nextDateDue;
+            if(dtNextDateDue == null) {
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.MONTH,1);
+                dtNextDateDue = cal.getTime();
+            }
+            values.put(LoanRepaymentSchema.COL_LR_NEXT_DATE_DUE, Utils.formatDateToSqlite(dtNextDateDue));
+
             // Inserting or Updating Row
             long retVal = -1;
             if(performUpdate) {
@@ -209,6 +227,8 @@ public class MeetingLoanRepaymentRepo {
             }
 
             if (retVal != -1) {
+                //Now update the lastDateDue and nextDateDue
+                //boolean retValDates = updateMemberLoanRepaymentDates(meetingId, memberId, lastDateDue, nextDateDue);
                 return true;
             }
             else {
@@ -226,6 +246,68 @@ public class MeetingLoanRepaymentRepo {
         }
     }
 
+    public boolean updateMemberLoanRepaymentDates(int meetingId, int memberId, Date lastDateDue, Date nextDateDue) {
+        SQLiteDatabase db = null;
+        boolean performUpdate = false;
+        int repaymentId = 0;
+        try {
+            //Check if exists and do an Update:
+            repaymentId = getMemberRepaymentId(meetingId, memberId);
+            if(repaymentId > 0) {
+                performUpdate = true;
+            }
+            else {
+                return false;
+            }
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            //The Last Date Due
+            Date dtLastDateDue = lastDateDue;
+            if(dtLastDateDue == null) {
+                Calendar cal = Calendar.getInstance();
+                dtLastDateDue = cal.getTime();
+            }
+            values.put(LoanRepaymentSchema.COL_LR_LAST_DATE_DUE, Utils.formatDateToSqlite(dtLastDateDue));
+
+            //The Next Date Due
+            Date dtNextDateDue = nextDateDue;
+            if(dtNextDateDue == null) {
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.MONTH,1);
+                dtNextDateDue = cal.getTime();
+            }
+            values.put(LoanRepaymentSchema.COL_LR_NEXT_DATE_DUE, Utils.formatDateToSqlite(dtNextDateDue));
+
+            // Inserting or Updating Row
+            long retVal = -1;
+            if(performUpdate) {
+                // updating row
+                retVal = db.update(LoanRepaymentSchema.getTableName(), values, LoanRepaymentSchema.COL_LR_REPAYMENT_ID + " = ?",
+                        new String[] { String.valueOf(repaymentId) });
+            }
+
+            if (retVal != -1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MeetingLoanRepaymentRepo.updateMemberLoanRepaymentDates", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
+    //TODO: Update this query to display the added fields
     public ArrayList<MemberLoanRepaymentRecord> getLoansRepaymentsByMemberInCycle(int cycleId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -288,15 +370,15 @@ public class MeetingLoanRepaymentRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT  L.%s AS RepaymentId, M.%s AS MeetingDate, L.%s AS Amount, " +
-                    "L.%s AS LoanId, L.%s AS RolloverAmount, L.%s AS Comments, LI.%s AS LoanNo, " +
-                    "L.%s AS BalanceAfter, L.%s AS InterestAmount, LI.%s AS NextDateDue " +
-                    " FROM %s AS L INNER JOIN %s AS M ON L.%s=M.%s INNER JOIN %s AS LI ON L.%s=LI.%s " +
-                    " WHERE L.%s=%d AND L.%s=%d ORDER BY L.%s DESC LIMIT 1",
+            String query = String.format("SELECT  LR.%s AS RepaymentId, M.%s AS MeetingDate, LR.%s AS Amount, " +
+                    "LR.%s AS LoanId, LR.%s AS RolloverAmount, LR.%s AS Comments, LI.%s AS LoanNo, LR.%s AS BalanceBefore, " +
+                    "LR.%s AS BalanceAfter, LR.%s AS InterestAmount, LR.%s AS LastDateDue , LR.%s AS NextDateDue " +
+                    " FROM %s AS LR INNER JOIN %s AS M ON LR.%s=M.%s INNER JOIN %s AS LI ON LR.%s=LI.%s " +
+                    " WHERE LR.%s=%d AND LR.%s=%d ORDER BY LR.%s DESC LIMIT 1",
                     LoanRepaymentSchema.COL_LR_REPAYMENT_ID,MeetingSchema.COL_MT_MEETING_DATE, LoanRepaymentSchema.COL_LR_AMOUNT,
                     LoanRepaymentSchema.COL_LR_LOAN_ID, LoanRepaymentSchema.COL_LR_ROLLOVER_AMOUNT, LoanRepaymentSchema.COL_LR_COMMENTS,
-                    LoanIssueSchema.COL_LI_LOAN_NO, LoanRepaymentSchema.COL_LR_BAL_AFTER, LoanRepaymentSchema.COL_LR_INTEREST_AMOUNT,
-                    LoanIssueSchema.COL_LI_DATE_DUE,
+                    LoanIssueSchema.COL_LI_LOAN_NO, LoanRepaymentSchema.COL_LR_BAL_BEFORE, LoanRepaymentSchema.COL_LR_BAL_AFTER,
+                    LoanRepaymentSchema.COL_LR_INTEREST_AMOUNT, LoanRepaymentSchema.COL_LR_LAST_DATE_DUE, LoanRepaymentSchema.COL_LR_NEXT_DATE_DUE,
                     LoanRepaymentSchema.getTableName(), MeetingSchema.getTableName(), LoanRepaymentSchema.COL_LR_MEETING_ID,MeetingSchema.COL_MT_MEETING_ID,
                     LoanIssueSchema.getTableName(), LoanRepaymentSchema.COL_LR_LOAN_ID, LoanIssueSchema.COL_LI_LOAN_ID, LoanRepaymentSchema.COL_LR_MEMBER_ID,memberId,
                     LoanRepaymentSchema.COL_LR_MEETING_ID, meetingId, LoanRepaymentSchema.COL_LR_REPAYMENT_ID
@@ -314,10 +396,15 @@ public class MeetingLoanRepaymentRepo {
                 repaymentRecord.setRolloverAmount(cursor.getDouble(cursor.getColumnIndex("RolloverAmount")));
                 repaymentRecord.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
                 repaymentRecord.setRepaymentId(cursor.getInt(cursor.getColumnIndex("RepaymentId")));
+                if(!cursor.isNull(cursor.getColumnIndex("LastDateDue"))){
+                    Date lastDateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("LastDateDue")));
+                    repaymentRecord.setLastDateDue(lastDateDue);
+                }
                 if(!cursor.isNull(cursor.getColumnIndex("NextDateDue"))){
                     Date nextDateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("NextDateDue")));
                     repaymentRecord.setNextDateDue(nextDateDue);
                 }
+                repaymentRecord.setBalanceBefore(cursor.getDouble(cursor.getColumnIndex("BalanceBefore")));
                 repaymentRecord.setBalanceAfter(cursor.getDouble(cursor.getColumnIndex("BalanceAfter")));
                 repaymentRecord.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("InterestAmount")));
 

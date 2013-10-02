@@ -18,11 +18,19 @@ public class MemberLoanRepaymentRecord {
     String comments;
     private Meeting meeting;
     private Member member;
-    private double amountPaid;
     private double balanceBefore;
     private double balanceAfter;
     private double interestAmount;
+    private Date lastDateDue;
     private Date nextDateDue;
+
+    public Date getLastDateDue() {
+        return lastDateDue;
+    }
+
+    public void setLastDateDue(Date lastDateDue) {
+        this.lastDateDue = lastDateDue;
+    }
 
     public Date getNextDateDue() {
         return nextDateDue;
@@ -46,14 +54,6 @@ public class MemberLoanRepaymentRecord {
 
     public void setMember(Member member) {
         this.member = member;
-    }
-
-    public double getAmountPaid() {
-        return amountPaid;
-    }
-
-    public void setAmountPaid(double amountPaid) {
-        this.amountPaid = amountPaid;
     }
 
     public double getBalanceBefore() {

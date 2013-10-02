@@ -66,7 +66,7 @@ public class MembersSavingsArrayAdapter extends ArrayAdapter<Member> {
             txtFullNames.setText(member.toString());
             //Get members savings today i.e. in current meeting
             double todaysSavings = savingRepo.getMemberSaving(meetingId, values.get(position).getMemberId());
-            txtSavingsToday.setText(String.format("Today: %,.0fUGX", todaysSavings));
+            txtSavingsToday.setText(String.format("Saved Today: %,.0f UGX", todaysSavings));
 
             //Get the Total SavingSchema
             targetMeeting = meetingRepo.getMeetingById(meetingId);
@@ -75,7 +75,7 @@ public class MembersSavingsArrayAdapter extends ArrayAdapter<Member> {
                 totalSavings  = savingRepo.getMemberTotalSavingsInCycle(targetMeeting.getVslaCycle().getCycleId(),member.getMemberId());
             }
 
-            txtTotals.setText(String.format("Total: %,.0fUGX", totalSavings));
+            txtTotals.setText(String.format("Total: %,.0f UGX", totalSavings));
             return rowView;
         }
         catch (Exception ex) {

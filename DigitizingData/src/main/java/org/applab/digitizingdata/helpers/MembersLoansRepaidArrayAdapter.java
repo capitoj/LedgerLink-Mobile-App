@@ -85,7 +85,7 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             if(null != targetMeeting) {
                 repaymentInMeeting = loansRepaidRepo.getTotalRepaymentByMemberInMeeting(targetMeeting.getMeetingId(),selectedMember.getMemberId());
             }
-            txtRepaidToday.setText(String.format("Paid Today: %,.0fUGX",repaymentInMeeting));
+            txtRepaidToday.setText(String.format("Paid Today: %,.0f UGX",repaymentInMeeting));
 
             //Get the Outstanding Loans in Cycle
             //TODO: In case multiple loans will be allowed, then we shall need to pass the LoanId or LoanNo
@@ -93,7 +93,7 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {
                 outstandingLoan = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(),selectedMember.getMemberId());
             }
-            txtBalance.setText(String.format("Balance: %,.0fUGX",outstandingLoan));
+            txtBalance.setText(String.format("Loan Balance: %,.0f UGX",outstandingLoan));
 
             //Date Due
             txtDateDue.setText("Date Due: -");

@@ -14,6 +14,7 @@ import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
+import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
@@ -72,15 +73,16 @@ public class MeetingSummaryFrag extends SherlockFragment {
         TextView lblTotalSavings = (TextView)getSherlockActivity().findViewById(R.id.lblMSFTotalSavings);
         TextView lblIssuedLoans = (TextView)getSherlockActivity().findViewById(R.id.lblMSFIssuedLoans);
         TextView lblOutstandingLoans = (TextView)getSherlockActivity().findViewById(R.id.lblMSFOutstandingLoans);
-        TextView lblCashInBank = (TextView)getSherlockActivity().findViewById(R.id.lblMSFCashInBank);
+        //TextView lblCashInBank = (TextView)getSherlockActivity().findViewById(R.id.lblMSFCashInBank);
 
 
         MeetingSavingRepo savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
         MeetingLoanIssuedRepo loansIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
+        MeetingLoanRepaymentRepo loansRepaidRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
         double outstandingLoans = 0.0;
         double totalSavings = 0.0;
         double issuedLoans = 0.0;
-        double cashInBank = 0.0;
+        //double cashInBank = 0.0;
         String startDate = "";
         String endDate = "";
 
@@ -105,10 +107,10 @@ public class MeetingSummaryFrag extends SherlockFragment {
         }
         lblCycleStartDate.setText(String.format("From: %s" ,startDate));
         lblCycleEndDate.setText(String.format("To: %s" ,endDate));
-        lblTotalSavings.setText(String.format("Total Savings: %,.0fUGX", totalSavings));
-        lblIssuedLoans.setText(String.format("Loans Issued: %,.0fUGX", issuedLoans));
-        lblOutstandingLoans.setText(String.format("Loans Outstanding: %,.0fUGX", outstandingLoans));
-        lblCashInBank.setText(String.format("Total Cash In Bank: %s", "Not Available"));
+        lblTotalSavings.setText(String.format("Total Savings: %,.0f UGX", totalSavings));
+        lblIssuedLoans.setText(String.format("Loans Issued: %,.0f UGX", issuedLoans));
+        lblOutstandingLoans.setText(String.format("Loans Outstanding: %,.0f UGX", outstandingLoans));
+        //lblCashInBank.setText(String.format("Total Cash In Bank: %s", "Not Available"));
 
 
         //TODO: Get Info about the Last Meeting: Should I get previous Meeting in Current Cycle?
@@ -148,10 +150,10 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
             MeetingAttendanceRepo attendanceRepo = new MeetingAttendanceRepo(getSherlockActivity().getBaseContext());
             if(null != attendanceRepo) {
-                txtAttendedCount.setText(String.format("Present: %d", attendanceRepo.getAttendanceCountByMeetingId(previousMeeting.getMeetingId(),1)));
+                txtAttendedCount.setText(String.format("Members Present: %d", attendanceRepo.getAttendanceCountByMeetingId(previousMeeting.getMeetingId(),1)));
             }
 
-            txtDataSent.setText(String.format("Data Sent: %s", (previousMeeting.isMeetingDataSent())?"Yes": "No"));
+            txtDataSent.setText(String.format("Data: %s", (previousMeeting.isMeetingDataSent())?"Sent": "Not Sent"));
 
             //TODO: Get Values for the Financials
             if(null == savingRepo) {
@@ -160,16 +162,19 @@ public class MeetingSummaryFrag extends SherlockFragment {
             double totalMeetingSavings = 0.0;
             double totalMeetingCollections = 0.0;
             double totalLoansIssuedInMeeting = 0.0;
+            double totalLoansRepaidInMeeting = 0.0;
 
             totalMeetingSavings = savingRepo.getTotalSavingsInMeeting(previousMeeting.getMeetingId());
-            txtTotalSavings.setText(String.format("Savings: %,.0fUGX",totalMeetingSavings));
-            txtTotalRepayments.setText("Loans Repaid:");
+            txtTotalSavings.setText(String.format("Savings: %,.0f UGX",totalMeetingSavings));
+
+            totalLoansRepaidInMeeting = loansRepaidRepo.getTotalLoansRepaidInMeeting(previousMeeting.getMeetingId());
+            txtTotalRepayments.setText(String.format("Loans Repaid: %,.0f UGX", totalLoansRepaidInMeeting));
 
             totalLoansIssuedInMeeting = loansIssuedRepo.getTotalLoansIssuedInMeeting(previousMeeting.getMeetingId());
-            txtTotalLoanIssues.setText(String.format("Loans Issued: %,.0fUGX", totalLoansIssuedInMeeting));
+            txtTotalLoanIssues.setText(String.format("Loans Issued: %,.0f UGX", totalLoansIssuedInMeeting));
 
-            totalMeetingCollections = totalMeetingSavings;
-            txtTotalCollections.setText(String.format("Total Collections: %,.0fUGX", totalMeetingCollections));
+            totalMeetingCollections = totalMeetingSavings + totalLoansRepaidInMeeting;
+            txtTotalCollections.setText(String.format("Total Collections: %,.0f UGX", totalMeetingCollections));
         }
         else {
             txtAttendedCount.setText("");
@@ -179,6 +184,18 @@ public class MeetingSummaryFrag extends SherlockFragment {
             txtTotalSavings.setText("");
             txtTotalRepayments.setText("");
             txtTotalLoanIssues.setText("");
+
+            //Optional: I may remove this code. Remove the controls
+            LinearLayout parent = (LinearLayout)lblMeetingDate.getParent();
+            if(null != parent) {
+                parent.removeView(txtAttendedCount);
+                parent.removeView(txtDataSent);
+                //parent.removeView(txtPreviousMeetingDate);
+                parent.removeView(txtTotalCollections);
+                parent.removeView(txtTotalSavings);
+                parent.removeView(txtTotalRepayments);
+                parent.removeView(txtTotalLoanIssues);
+            }
         }
 
         //If this is a Review then do not display the data
