@@ -8,9 +8,12 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -26,6 +29,7 @@ import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
+import org.applab.digitizingdata.R;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -59,11 +63,66 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_meeting_definition);
+
+        // BEGIN_INCLUDE (inflate_set_custom_view)
+        // Inflate a "Done/Cancel" custom action bar view.
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_next_cancel, null);
+        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //If Save Operation was successful, get the currently saved meeting
+                        //TODO: I can avoid the trip to the database by making the new meeting variable be module-level
+                        boolean retSetupMeeting = false;
+                        if(saveMeetingDate()) {
+                            //Get the Current Meeting ID
+                            if(repo == null) {
+                                repo = new MeetingRepo(MeetingDefinitionActivity.this);
+                            }
+                            Meeting currentMeeting = repo.getCurrentMeeting();
+
+                            retSetupMeeting = setupCurrentMeeting(currentMeeting);
+
+                        }
+                        //Otherwise check whether the date entered was actually for an existing meeting whose data has not yet been sent
+                        else if(null != meetingOfSameDate) {
+                            reloadedExistingMeeting = true;
+                            retSetupMeeting = setupCurrentMeeting(meetingOfSameDate);
+
+                        }
+                        else{
+                            return;
+                        }
+
+                    }
+                });
+        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                        return;
+                    }
+                });
+
 
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Meeting");
+        actionBar.setDisplayOptions(
+                ActionBar.DISPLAY_SHOW_CUSTOM,
+                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_SHOW_TITLE);
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
+        // END_INCLUDE (inflate_set_custom_view)
+
+
+        setContentView(R.layout.activity_meeting_definition);
+
         repo = new MeetingRepo(MeetingDefinitionActivity.this);
 
         previousMeeting = repo.getCurrentMeeting();
