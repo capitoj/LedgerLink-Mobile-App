@@ -620,6 +620,62 @@ public class MeetingRepo {
         }
     }
 
+    public Meeting getMostRecentMeetingInCycle(int currentCycleId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        VslaCycleRepo cycleRepo = null;
+        Meeting meeting = null;
+
+        try {
+            cycleRepo = new VslaCycleRepo(context);
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String columnList = MeetingSchema.getColumnList();
+
+            // Select All Query
+            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC LIMIT 1", columnList, MeetingSchema.getTableName(),
+                    MeetingSchema.COL_MT_CYCLE_ID, currentCycleId, MeetingSchema.COL_MT_MEETING_ID);
+            cursor = db.rawQuery(selectQuery, null);
+
+            // looping through all rows and adding to list
+            if (cursor != null && cursor.moveToFirst()) {
+                meeting = new Meeting();
+                Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                meeting.setMeetingDate(meetingDate);
+                meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
+
+                //Check for Nulls while loading the VSLA Cycle
+                int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
+                meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
+                if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                    meeting.setMeetingDataSent(true);
+                    Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                    meeting.setDateSent(dateMeetingDataSent);
+                }
+                else {
+                    meeting.setMeetingDataSent(false);
+                }
+
+                return meeting;
+            }
+            else {
+                return null;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.getMostRecentMeeting", ex.getMessage());
+            return null;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     /**
      * This will deactivate all other meetings and activate the one passed to make it the current meeting.
      * @param meeting

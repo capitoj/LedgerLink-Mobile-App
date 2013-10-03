@@ -267,6 +267,18 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 return false;
             }
 
+            //Set the Cycle
+            VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
+            VslaCycle cycle = cycleRepo.getCurrentCycle();
+            if(null != cycle) {
+                meeting.setVslaCycle(cycle);
+            }
+            else {
+                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting", "The Current Cycle could not be determined", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                //txtMeetingDate.requestFocus();
+                return false;
+            }
+
             //Validate the Meeting Date
             TextView txtMeetingDate = (TextView)findViewById(R.id.txtMDMeetingDate);
             String meetingDate = txtMeetingDate.getText().toString().trim();
@@ -287,7 +299,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             if(null == repo) {
                 repo = new MeetingRepo(MeetingDefinitionActivity.this);
             }
-            Meeting mostRecent = repo.getMostRecentMeeting();
+            Meeting mostRecent = repo.getMostRecentMeetingInCycle(cycle.getCycleId());
 
             //First: Check whether a meeting with this date exists
             meetingOfSameDate = null;
@@ -296,18 +308,6 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 //Pull the Meeting and display it instead of saving a new meeting
                 //cancel the save operation
                return false;
-            }
-
-            //Set the Cycle
-            VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
-            VslaCycle cycle = cycleRepo.getCurrentCycle();
-            if(null != cycle) {
-                meeting.setVslaCycle(cycle);
-            }
-            else {
-                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting", "The Current Cycle could not be determined", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                //txtMeetingDate.requestFocus();
-                return false;
             }
 
             //Further Validations
@@ -321,7 +321,6 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             }
 
             //Ensure the current date is later than the date of the most recent meeting
-
             if(null != mostRecent) {
                 if(meeting.getMeetingDate().before(mostRecent.getMeetingDate())) {
                     Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting",

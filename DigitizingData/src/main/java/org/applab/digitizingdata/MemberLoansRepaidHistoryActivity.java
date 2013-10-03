@@ -270,7 +270,12 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
             //Setup the Default Date. Not sure whether I should block this off when editing a loan repayment
             if(!isEditOperation) {
+
+                //TODO: Set the default Date to be MeetingDate + 1Month, instead of using today's date
                 final Calendar c = Calendar.getInstance();
+                if(null != targetMeeting) {
+                    c.setTime(targetMeeting.getMeetingDate());
+                }
                 c.add(Calendar.MONTH, 1);
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
@@ -533,9 +538,10 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             calNext.add(Calendar.MONTH,1);
             Date theDateDue = calNext.getTime();
 
+            //Check the date against the Meeting Date, not calendar date
             String nextDateDue = txtNextDateDue.getText().toString().trim();
             Date dtNextDateDue = Utils.getDateFromString(nextDateDue,Utils.DATE_FIELD_FORMAT);
-            if (today.after(dtNextDateDue)) {
+            if (dtNextDateDue.before(targetMeeting.getMeetingDate())) {
                 Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Loan Issue","The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtNextDateDue.setFocusable(true);
                 txtDateDue.requestFocus();
@@ -666,6 +672,9 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     private void initializeDate(){
         if(viewClicked != null) {
             Calendar c = Calendar.getInstance();
+            if(null != targetMeeting) {
+                c.setTime(targetMeeting.getMeetingDate());
+            }
             c.add(Calendar.MONTH,1);
             dateString = Utils.formatDate(c.getTime());
             viewClicked.setText(dateString);

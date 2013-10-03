@@ -134,6 +134,11 @@ public class AddMemberActivity extends SherlockActivity {
 
         cboGender.setOnItemSelectedListener(new CustomGenderSpinnerListener());
 
+        //Make the spinner selectable
+        cboGender.setFocusable(true);
+        cboGender.setFocusableInTouchMode(true);
+        cboGender.setClickable(true);
+
         clearDataFields();
         if(isEditAction){
             repo = new MemberRepo(getApplicationContext());
@@ -195,6 +200,8 @@ public class AddMemberActivity extends SherlockActivity {
             if (retVal) {
                 if (member.getMemberId() == 0) {
                     //Set this new entity as the selected one
+                    //Due to this ensure empty fields are explicitly set to null or default value
+                    //Otherwise they will assume the value of the selectedMember variable because it is not null
                     selectedMember = member;
 
                     if(selectedFinishButton) {
@@ -419,6 +426,7 @@ public class AddMemberActivity extends SherlockActivity {
                 //Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Phone Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtPhoneNo.requestFocus();
                 //return false;
+                member.setPhoneNumber(null);
             }
             else {
                 member.setPhoneNumber(phoneNo);
@@ -428,10 +436,12 @@ public class AddMemberActivity extends SherlockActivity {
             TextView txtCycles = (TextView)findViewById(R.id.txtAMCycles);
             String cycles = txtCycles.getText().toString().trim();
             int theCycles = 0;
+            member.setCyclesCompleted(0);
             if (cycles.length() < 1) {
 //                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Number of Completed Cycles is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
 //                txtCycles.requestFocus();
 //                return false;
+
             }
             else {
                 theCycles = Integer.parseInt(cycles);

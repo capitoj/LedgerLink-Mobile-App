@@ -184,6 +184,9 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
         //Setup the Default Date
         final Calendar c = Calendar.getInstance();
+        if(null != targetMeeting) {
+            c.setTime(targetMeeting.getMeetingDate());
+        }
         c.add(Calendar.MONTH, 1);
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
@@ -418,11 +421,12 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 }
             }
 
-            //Date Due
+            //Date Due: Check it against the meeting date, not calendar date
+            //TODO: I will try using Date.CompareTo(date2)
             Date today = Calendar.getInstance().getTime();
             String dateDue = txtDateDue.getText().toString().trim();
             Date dtDateDue = Utils.getDateFromString(dateDue,Utils.DATE_FIELD_FORMAT);
-            if (dtDateDue.before(today)) {
+            if (dtDateDue.before(targetMeeting.getMeetingDate())) {
                 Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue","The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtDateDue.requestFocus();
                 return false;
@@ -498,6 +502,9 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     private void initializeDate(){
         if(viewClicked != null) {
             Calendar c = Calendar.getInstance();
+            if(null != targetMeeting) {
+                c.setTime(targetMeeting.getMeetingDate());
+            }
             c.add(Calendar.MONTH,1);
             dateString = Utils.formatDate(c.getTime());
             viewClicked.setText(dateString);

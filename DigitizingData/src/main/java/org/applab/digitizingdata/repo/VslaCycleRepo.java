@@ -1,6 +1,7 @@
 package org.applab.digitizingdata.repo;
 
 import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.domain.schema.MeetingSchema;
 import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
@@ -12,6 +13,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -254,6 +256,69 @@ public class VslaCycleRepo {
         }
     }
 
+    // Getting the Current Cycle
+    public VslaCycle getMostRecentCycle() {
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            // Select All Query
+            String selectQuery = String.format("SELECT %s FROM %s ORDER BY %s DESC LIMIT 1",
+                    VslaCycleSchema.getColumnList(), VslaCycleSchema.getTableName(), VslaCycleSchema.COL_VC_CYCLE_ID);
+            cursor = db.rawQuery(selectQuery, null);
+
+            // Determine whether there was data
+            if (cursor == null)
+            {
+                return null;
+            }
+
+            if (!cursor.moveToFirst()) {
+                return null;
+            }
+
+            VslaCycle cycle = new VslaCycle();
+            cycle.setCycleId(cursor.getInt(cursor.getColumnIndex(VslaCycleSchema.COL_VC_CYCLE_ID)));
+            cycle.setStartDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaCycleSchema.COL_VC_START_DATE))));
+            cycle.setEndDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaCycleSchema.COL_VC_END_DATE))));
+            cycle.setInterestRate(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_INTEREST_RATE)));
+            cycle.setSharePrice(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_SHARE_PRICE)));
+            cycle.setMaxSharesQty(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_SHARE_QTY)));
+            cycle.setMaxStartShare(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_START_SHARE)));
+            if(cursor.getInt(cursor.getColumnIndex(VslaCycleSchema.COL_VC_IS_ACTIVE)) == 1) {
+                cycle.activate();
+            }
+            else {
+                cycle.deactivate();
+            }
+
+            if(cursor.getInt(cursor.getColumnIndex(VslaCycleSchema.COL_VC_IS_ENDED)) == 1) {
+                Date dateEnded = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaCycleSchema.COL_VC_DATE_ENDED)));
+                double sharedAmount = cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_SHARED_AMOUNT));
+                cycle.end(dateEnded,sharedAmount);
+            }
+
+            // return data
+            return cycle;
+        }
+        catch (Exception ex) {
+            Log.e("VslaCycleRepo.getMostRecentCycle", ex.getMessage());
+            return null;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
 
     public boolean updateCycle(VslaCycle cycle) {
         SQLiteDatabase db = null;
@@ -277,6 +342,16 @@ public class VslaCycleRepo {
             values.put(VslaCycleSchema.COL_VC_MAX_START_SHARE, cycle.getMaxStartShare());
             values.put(VslaCycleSchema.COL_VC_SHARE_PRICE, cycle.getSharePrice());
             values.put(VslaCycleSchema.COL_VC_IS_ACTIVE, (cycle.isActive()) ? 1 : 0);
+            values.put(VslaCycleSchema.COL_VC_IS_ENDED, (cycle.isEnded()) ? 1 : 0);
+
+            //if dateEnded is Null use the current date
+            if(cycle.getDateEnded() == null) {
+                Calendar c = Calendar.getInstance();
+                values.put(VslaCycleSchema.COL_VC_DATE_ENDED, Utils.formatDateToSqlite(c.getTime()));
+            }
+            else {
+                values.put(VslaCycleSchema.COL_VC_DATE_ENDED, Utils.formatDateToSqlite(cycle.getDateEnded()));
+            }
 
             // updating row
             int retVal = db.update(VslaCycleSchema.getTableName(), values, VslaCycleSchema.COL_VC_CYCLE_ID + " = ?",

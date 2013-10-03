@@ -418,6 +418,31 @@ public class NewCycleActivity extends SherlockActivity {
                 }
             }
 
+            //Check that the Cycle Start Date does not overlap with the date the previous cycle ended
+            //First, get the most recent cycle
+            VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getApplicationContext());
+            VslaCycle mostRecentCycle = vslaCycleRepo.getMostRecentCycle();
+
+            if(null != mostRecentCycle) {
+                if(isUpdateCycleAction && mostRecentCycle.getCycleId() == cycle.getCycleId()){
+                    //Fine
+                }
+                else {
+                    //Check the Dates: use startDate vs DateEnded
+                    if(cycle.getStartDate() == null) {
+                        return false;
+                    }
+                    if(mostRecentCycle.getDateEnded() != null) {
+                        if(cycle.getStartDate().before(mostRecentCycle.getDateEnded())) {
+                            Utils.createAlertDialogOk(NewCycleActivity.this, dialogTitle,
+                                    String.format("The start date of this cycle should be after the share-out date of the previous cycle, which was: %s.", Utils.formatDate(mostRecentCycle.getDateEnded())),
+                                    Utils.MSGBOX_ICON_EXCLAMATION).show();
+                            return false;
+                        }
+                    }
+                }
+            }
+
             //Set the Cycle as Active
             cycle.activate();
 
