@@ -31,7 +31,7 @@
                 android:layout_centerHorizontal="true"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF"
-                android:text="Digitizing Data" />
+                android:text="Ledger Link" />
 
         <TextView
                 android:id="@+id/lblVAHeader"

@@ -218,7 +218,7 @@ public class EndCycleActivity extends SherlockActivity {
                 return false;
             }
             // Validate: EndDate
-            TextView txtShareOutDate = (TextView)findViewById(R.id.lblECShareOutDate);
+            TextView txtShareOutDate = (TextView)findViewById(R.id.txtECShareOutDate);
             String endDate = txtShareOutDate.getText().toString().trim();
             if(endDate == null || endDate.length()<1) {
                 Utils.createAlertDialog(EndCycleActivity.this,"End Cycle","The Share out Date is required.",Utils.MSGBOX_ICON_EXCLAMATION).show();
@@ -226,8 +226,25 @@ public class EndCycleActivity extends SherlockActivity {
                 return false;
             }
             Date dt = Utils.getDateFromString(endDate,Utils.DATE_FIELD_FORMAT);
-            //Will Capture Share Amount later
-            cycle.end(dt);
+
+            //Share Amount
+            double theShareOutAmount = 0.0;
+            TextView txtShareOutAmount = (TextView)findViewById(R.id.txtECShareOutAmount);
+            String shareOutAmount = txtShareOutAmount.getText().toString().trim();
+            if (shareOutAmount.length() < 1) {
+                Utils.createAlertDialog(EndCycleActivity.this,"End Cycle","The Share out Amount is required.",Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtShareOutAmount.requestFocus();
+                return false;
+            }
+            else {
+                theShareOutAmount = Double.parseDouble(shareOutAmount);
+                if (theShareOutAmount < 0.00) {
+                    Utils.createAlertDialog(EndCycleActivity.this,"End Cycle","The Share out Amount should be positive.",Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtShareOutAmount.requestFocus();
+                    return false;
+                }
+            }
+            cycle.end(dt,theShareOutAmount);
 
             return true;
         }
