@@ -24,6 +24,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.SendDataRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -255,6 +256,7 @@ public class ActivationActivity extends Activity {
                     //.key("msisdn").value(msisdn)
                 .endObject()
                 .toString();
+
 
             activateVlsaUsingPostAsync(jsonRequest);
         }

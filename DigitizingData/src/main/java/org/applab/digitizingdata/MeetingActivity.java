@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingRepo;
+import org.applab.digitizingdata.repo.SendDataRepo;
+import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -147,10 +150,16 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 return true;
             case R.id.mnuSMDSend:
                 Toast.makeText(getBaseContext(), "Meeting Data has been Sent", Toast.LENGTH_LONG).show();
+                MeetingRepo repo = new MeetingRepo(getApplicationContext());
+                String meetingJson = SendDataRepo.getMeetingJson(repo.getCurrentMeeting());
+                if(meetingJson == null) {
+                    //test
+                }
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
                 return true;
             case R.id.mnuMSDFSend:
+                //For the Send Data Fragment in case data is sent during the meeting
                 Toast.makeText(getBaseContext(), "Meeting Data has been Sent", Toast.LENGTH_LONG).show();
                 i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);

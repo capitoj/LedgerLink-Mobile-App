@@ -3,6 +3,7 @@ package org.applab.digitizingdata.helpers;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
@@ -39,6 +40,9 @@ public class Utils {
     //SERVER Connection
     public static final String VSLA_SERVER_BASE_URL = "http://74.208.213.214:9905/DigitizingDataRestfulService.svc";
 
+    //Used when sending Data
+    private static String phoneImei;
+
     //TODO: will create an enum of CURRENT_VIEW_MODE
     public enum MeetingDataViewMode {
         VIEW_MODE_CAPTURE,
@@ -58,6 +62,22 @@ public class Utils {
 
     public static MeetingActiveActionBarMenu  _meetingActiveActionBarMenu = MeetingActiveActionBarMenu.MENU_NONE;
 
+    public static String getPhoneImei() {
+        try {
+            if(phoneImei == null || phoneImei.length()<1){
+                TelephonyManager tm = (TelephonyManager)DatabaseHandler.databaseContext.getSystemService(Context.TELEPHONY_SERVICE);
+                phoneImei = tm.getDeviceId();
+            }
+            return phoneImei;
+        }
+        catch(Exception ex) {
+            return null;
+        }
+    }
+
+    public static void setPhoneImei(String thePhoneImei) {
+        phoneImei = thePhoneImei;
+    }
 
     public static String getMonthNameAbbrev(int month) {
         switch (month) {

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MemberRepo;
+import org.applab.digitizingdata.repo.SendDataRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.Calendar;
@@ -295,6 +298,17 @@ public class NewCycleActivity extends SherlockActivity {
                 }
                 else {
                     //displayMessageBox("Update Cycle", "The Cycle has been updated Successfully.", Utils.MSGBOX_ICON_TICK);
+                }
+
+                String testJson = SendDataRepo.getVslaCycleJson(repo.getCurrentCycle());
+                if(testJson.length() < 0) {
+                    return false;
+                }
+                MemberRepo memberRepo = new MemberRepo(getApplicationContext());
+
+                String membersJson = SendDataRepo.getMembersJson(memberRepo.getAllMembers());
+                if(membersJson.length() < 0) {
+                    return false;
                 }
 
                 //Pass on the flag indicating whether this is an Update operation

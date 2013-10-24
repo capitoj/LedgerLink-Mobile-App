@@ -1,5 +1,6 @@
 package org.applab.digitizingdata.domain.model;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -134,7 +135,16 @@ public class Member {
     }
 
     public int getCyclesCompleted() {
-        return cyclesCompleted;
+        try {
+            Calendar calToday = Calendar.getInstance();
+            Calendar calDbCycles = Calendar.getInstance();
+            calDbCycles.setTime(this.getDateOfAdmission());
+            cyclesCompleted = calToday.get(Calendar.YEAR) - calDbCycles.get(Calendar.YEAR);
+            return cyclesCompleted;
+        }
+        catch(Exception ex) {
+            return 0;
+        }
     }
 
     public void setCyclesCompleted(int cyclesCompleted) {

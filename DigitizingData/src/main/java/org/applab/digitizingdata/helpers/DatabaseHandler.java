@@ -10,9 +10,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "digitizedata";
     public static final int DATABASE_VERSION = 17;
+    public static Context databaseContext = null;
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        databaseContext = context;
     }
 
     public void onCreate(SQLiteDatabase db) {
