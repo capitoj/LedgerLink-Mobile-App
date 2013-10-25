@@ -6,12 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import org.applab.digitizingdata.domain.model.Meeting;
-import org.applab.digitizingdata.domain.model.MeetingAttendance;
 import org.applab.digitizingdata.domain.schema.AttendanceSchema;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
-import org.applab.digitizingdata.domain.schema.SavingSchema;
-import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
+import org.applab.digitizingdata.datatransformation.AttendanceDataTransferRecord;
 import org.applab.digitizingdata.helpers.AttendanceRecord;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
@@ -260,6 +257,53 @@ public class MeetingAttendanceRepo {
         }
         catch (Exception ex) {
             Log.e("MeetingRollCallRepo.getMemberAttendanceCountInCycle", ex.getMessage());
+            return null;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public ArrayList<AttendanceDataTransferRecord> getMeetingAttendanceForAllMembers(int meetingId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        ArrayList<AttendanceDataTransferRecord> attendances;
+
+        try {
+            attendances = new ArrayList<AttendanceDataTransferRecord>();
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  %s AS AttendanceId, %s AS MemberId, %s AS IsPresent, %s AS Comments " +
+                    " FROM %s WHERE %s=%d ORDER BY %s",
+                    AttendanceSchema.COL_A_ATTENDANCE_ID, AttendanceSchema.COL_A_MEMBER_ID, AttendanceSchema.COL_A_IS_PRESENT,
+                    AttendanceSchema.COL_A_COMMENTS, AttendanceSchema.getTableName(), AttendanceSchema.COL_A_MEETING_ID, meetingId,
+                    AttendanceSchema.COL_A_ATTENDANCE_ID);
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    AttendanceDataTransferRecord attendance = new AttendanceDataTransferRecord();
+                    attendance.setAttendanceId(cursor.getInt(cursor.getColumnIndex("AttendanceId")));
+                    attendance.setMemberId(cursor.getInt(cursor.getColumnIndex("MemberId")));
+                    attendance.setMeetingId(meetingId);
+                    attendance.setPresentFlg(cursor.getInt(cursor.getColumnIndex("IsPresent")));
+                    attendance.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+
+                    attendances.add(attendance);
+
+                } while (cursor.moveToNext());
+            }
+            return attendances;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingAttendanceRepo.getMeetingAttendanceForAllMembers", ex.getMessage());
             return null;
         }
         finally {

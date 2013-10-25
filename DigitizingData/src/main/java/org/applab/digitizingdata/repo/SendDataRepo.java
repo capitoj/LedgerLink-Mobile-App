@@ -3,10 +3,14 @@ package org.applab.digitizingdata.repo;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 
+import org.applab.digitizingdata.datatransformation.LoanDataTransferRecord;
+import org.applab.digitizingdata.datatransformation.RepaymentDataTransferRecord;
+import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.domain.model.VslaInfo;
+import org.applab.digitizingdata.datatransformation.AttendanceDataTransferRecord;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 import org.json.*;
@@ -20,6 +24,8 @@ public class SendDataRepo {
 
     private static String vslaCode = null;
     private static String phoneImei = null;
+    private static String networkOperator = null;
+    private static String networkType = null;
 
     private static String getVslaCode() {
         try {
@@ -50,6 +56,48 @@ public class SendDataRepo {
         }
     }
 
+    private static String getNetworkOperator() {
+        try {
+            if(networkOperator == null || networkOperator.length()<1){
+                TelephonyManager tm = (TelephonyManager)DatabaseHandler.databaseContext.getSystemService(Context.TELEPHONY_SERVICE);
+                if(tm.getSimState() == TelephonyManager.SIM_STATE_READY) {
+                    networkOperator = tm.getNetworkOperatorName();
+                    if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE){
+                        networkType = "EDGE";
+                    }
+                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_GPRS){
+                        networkType = "GPRS";
+                    }
+                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA){
+                        networkType = "HSDPA";
+                    }
+                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA){
+                        networkType = "HSPA";
+                    }
+                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPAP){
+                        networkType = "HSPAP";
+                    }
+                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA){
+                        networkType = "HSUPA";
+                    }
+                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS){
+                        networkType = "UMTS";
+                    }
+                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE){
+                        networkType = "LTE";
+                    }
+                    else {
+                        networkType = "UNKNOWN";
+                    }
+                }
+            }
+            return networkOperator;
+        }
+        catch(Exception ex) {
+            return null;
+        }
+    }
+
     public static String getVslaCycleJson(VslaCycle cycle) {
 
         if(cycle == null) {
@@ -63,8 +111,12 @@ public class SendDataRepo {
         try {
             jsonRequest = js
                     .object()
+                    .key("HeaderInfo").object()
                     .key("VslaCode").value(getVslaCode())
                     .key("PhoneImei").value(getPhoneImei())
+                    .key("NetworkOperator").value(getNetworkOperator())
+                    .key("NetworkType").value(networkType)
+                    .endObject()
                     .key("VslaCycle").object()
                         .key("CycleId").value(cycle.getCycleId())
                         .key("StartDate").value(Utils.formatDate(cycle.getStartDate(),"yyyy-MM-dd"))
@@ -100,8 +152,12 @@ public class SendDataRepo {
 
         try {
             js.object()
-                .key("VslaCode").value(getVslaCode())
-                .key("PhoneImei").value(getPhoneImei())
+                    .key("HeaderInfo").object()
+                    .key("VslaCode").value(getVslaCode())
+                    .key("PhoneImei").value(getPhoneImei())
+                    .key("NetworkOperator").value(getNetworkOperator())
+                    .key("NetworkType").value(networkType)
+                    .endObject()
                 .key("MemberCount").value(members.size())
                 .key("Members").array();
             for(Member member : members) {
@@ -147,7 +203,6 @@ public class SendDataRepo {
         String jsonRequest = null;
 
         try {
-            MeetingRepo meetingRepo = new MeetingRepo(DatabaseHandler.databaseContext);
             MeetingSavingRepo savingRepo = new MeetingSavingRepo(DatabaseHandler.databaseContext);
             MeetingAttendanceRepo attendanceRepo = new MeetingAttendanceRepo(DatabaseHandler.databaseContext);
             MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(DatabaseHandler.databaseContext);
@@ -159,12 +214,16 @@ public class SendDataRepo {
             double loansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meeting.getMeetingId());
 
             jsonRequest = js
-                .object()
+                    .object()
+                    .key("HeaderInfo").object()
                     .key("VslaCode").value(getVslaCode())
                     .key("PhoneImei").value(getPhoneImei())
+                    .key("NetworkOperator").value(getNetworkOperator())
+                    .key("NetworkType").value(networkType)
+                    .endObject()
                     .key("CycleId").value((meeting.getVslaCycle() != null) ? meeting.getVslaCycle().getCycleId(): 0)
                     .key("MeetingId").value(meeting.getMeetingId())
-                    .key("MeetingDate").value(Utils.formatDate(meeting.getMeetingDate(),"yyyy-MM-dd"))
+                    .key("MeetingDate").value(Utils.formatDate(meeting.getMeetingDate(), "yyyy-MM-dd"))
                     .key("OpeningBalanceBox").value(meeting.getOpeningBalanceBox())
                     .key("OpeningBalanceBank").value(meeting.getOpeningBalanceBank())
                     .key("Fines").value(meeting.getFines())
@@ -178,6 +237,197 @@ public class SendDataRepo {
                     .key("IsDataSent").value(meeting.isMeetingDataSent())
                 .endObject()
                 .toString();
+        }
+        catch(JSONException ex) {
+            return null;
+        }
+        catch(Exception ex) {
+            return null;
+        }
+        return jsonRequest;
+    }
+
+    public static String getMeetingAttendanceJson(int meetingId) {
+
+        if(meetingId == 0) {
+            return null;
+        }
+
+        //Build JSON input string
+        JSONStringer js = new JSONStringer();
+        String jsonRequest = null;
+
+        try {
+            MeetingAttendanceRepo attendanceRepo = new MeetingAttendanceRepo(DatabaseHandler.databaseContext);
+            ArrayList<AttendanceDataTransferRecord> attendances = attendanceRepo.getMeetingAttendanceForAllMembers(meetingId);
+            js.object()
+                    .key("HeaderInfo").object()
+                    .key("VslaCode").value(getVslaCode())
+                    .key("PhoneImei").value(getPhoneImei())
+                    .key("NetworkOperator").value(getNetworkOperator())
+                    .key("NetworkType").value(networkType)
+                    .endObject()
+                .key("MeetingId").value(meetingId)
+                .key("MembersCount").value(attendances.size())
+                .key("Attendances").array();
+                for(AttendanceDataTransferRecord record : attendances) {
+                    js.object()
+                        .key("AttendanceId").value(record.getAttendanceId())
+                        .key("MemberId").value(record.getMemberId())
+                        .key("IsPresentFlg").value(record.getPresentFlg())
+                        .key("Comments").value(record.getComments())
+                        .endObject();
+                }
+                js.endArray()
+                .endObject();
+                jsonRequest = js.toString();
+        }
+        catch(JSONException ex) {
+            return null;
+        }
+        catch(Exception ex) {
+            return null;
+        }
+        return jsonRequest;
+    }
+
+    public static String getMeetingSavingsJson(int meetingId) {
+
+        if(meetingId == 0) {
+            return null;
+        }
+
+        //Build JSON input string
+        JSONStringer js = new JSONStringer();
+        String jsonRequest = null;
+
+        try {
+            MeetingSavingRepo savingRepo = new MeetingSavingRepo(DatabaseHandler.databaseContext);
+            ArrayList<SavingsDataTransferRecord> savings= savingRepo.getMeetingSavingsForAllMembers(meetingId);
+            js.object()
+                    .key("HeaderInfo").object()
+                    .key("VslaCode").value(getVslaCode())
+                    .key("PhoneImei").value(getPhoneImei())
+                    .key("NetworkOperator").value(getNetworkOperator())
+                    .key("NetworkType").value(networkType)
+                    .endObject()
+                    .key("MeetingId").value(meetingId)
+                    .key("MembersCount").value(savings.size())
+                    .key("Savings").array();
+            for(SavingsDataTransferRecord record : savings) {
+                js.object()
+                        .key("SavingId").value(record.getSavingsId())
+                        .key("MemberId").value(record.getMemberId())
+                        .key("Amount").value(record.getAmount())
+                        .endObject();
+            }
+            js.endArray()
+                    .endObject();
+            jsonRequest = js.toString();
+        }
+        catch(JSONException ex) {
+            return null;
+        }
+        catch(Exception ex) {
+            return null;
+        }
+        return jsonRequest;
+    }
+
+    public static String getMeetingRepaymentsJson(int meetingId) {
+
+        if(meetingId == 0) {
+            return null;
+        }
+
+        //Build JSON input string
+        JSONStringer js = new JSONStringer();
+        String jsonRequest = null;
+
+        try {
+            MeetingLoanRepaymentRepo repayRepo = new MeetingLoanRepaymentRepo(DatabaseHandler.databaseContext);
+            ArrayList<RepaymentDataTransferRecord> repayments= repayRepo.getMeetingRepaymentsForAllMembers(meetingId);
+            js.object()
+                    .key("HeaderInfo").object()
+                    .key("VslaCode").value(getVslaCode())
+                    .key("PhoneImei").value(getPhoneImei())
+                    .key("NetworkOperator").value(getNetworkOperator())
+                    .key("NetworkType").value(networkType)
+                    .endObject()
+                    .key("MeetingId").value(meetingId)
+                    .key("MembersCount").value(repayments.size())
+                    .key("Repayments").array();
+            for(RepaymentDataTransferRecord record : repayments) {
+                js.object()
+                        .key("RepaymentId").value(record.getRepaymentId())
+                        .key("MemberId").value(record.getMemberId())
+                        .key("LoanId").value(record.getLoanId())
+                        .key("Amount").value(record.getAmount())
+                        .key("BalanceBefore").value(record.getBalanceBefore())
+                        .key("BalanceAfter").value(record.getBalanceAfter())
+                        .key("InterestAmount").value(record.getInterestAmount())
+                        .key("RolloverAmount").value(record.getRollOverAmount())
+                        .key("Comments").value(record.getComments())
+                        .key("LastDateDue").value(Utils.formatDate(record.getLastDateDue(), "yyyy-MM-dd"))
+                        .key("NextDateDue").value(Utils.formatDate(record.getNextDateDue(), "yyyy-MM-dd"))
+                        .endObject();
+            }
+            js.endArray()
+                    .endObject();
+            jsonRequest = js.toString();
+        }
+        catch(JSONException ex) {
+            return null;
+        }
+        catch(Exception ex) {
+            return null;
+        }
+        return jsonRequest;
+    }
+
+    public static String getMeetingLoanIssuesJson(int meetingId) {
+
+        if(meetingId == 0) {
+            return null;
+        }
+
+        //Build JSON input string
+        JSONStringer js = new JSONStringer();
+        String jsonRequest = null;
+
+        try {
+            MeetingLoanIssuedRepo loanRepo = new MeetingLoanIssuedRepo(DatabaseHandler.databaseContext);
+            ArrayList<LoanDataTransferRecord> loans = loanRepo.getMeetingLoansForAllMembers(meetingId);
+            js.object()
+                    .key("HeaderInfo").object()
+                    .key("VslaCode").value(getVslaCode())
+                    .key("PhoneImei").value(getPhoneImei())
+                    .key("NetworkOperator").value(getNetworkOperator())
+                    .key("NetworkType").value(networkType)
+                    .endObject()
+                    .key("MeetingId").value(meetingId)
+                    .key("MembersCount").value(loans.size())
+                    .key("Loans").array();
+            for(LoanDataTransferRecord record : loans) {
+                js.object()
+                    .key("MemberId").value(record.getMemberId())
+                    .key("LoanId").value(record.getLoanId())
+                    .key("LoanNo").value(record.getLoanNo())
+                    .key("PrincipalAmount").value(record.getPrincipalAmount())
+                    .key("InterestAmount").value(record.getInterestAmount())
+                    .key("TotalRepaid").value(record.getTotalRepaid())
+                    .key("LoanBalance").value(record.getLoanBalance())
+                    .key("DateDue").value(Utils.formatDate(record.getDateDue(),"yyyy-MM-dd"))
+                    .key("Comments").value(record.getComments())
+                    .key("DateCleared").value(Utils.formatDate(record.getDateCleared(), "yyyy-MM-dd"))
+                    .key("IsCleared").value(record.isCleared())
+                    .key("IsDefaulted").value(record.isDefaulted())
+                    .key("IsWrittenOff").value(record.isWrittenOff())
+                    .endObject();
+            }
+            js.endArray()
+                    .endObject();
+            jsonRequest = js.toString();
         }
         catch(JSONException ex) {
             return null;

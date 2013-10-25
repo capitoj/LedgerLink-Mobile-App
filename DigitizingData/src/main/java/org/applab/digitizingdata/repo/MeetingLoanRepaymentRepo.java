@@ -6,9 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.applab.digitizingdata.datatransformation.RepaymentDataTransferRecord;
+import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
 import org.applab.digitizingdata.domain.schema.LoanIssueSchema;
 import org.applab.digitizingdata.domain.schema.LoanRepaymentSchema;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
+import org.applab.digitizingdata.domain.schema.SavingSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.MemberLoanRepaymentRecord;
 import org.applab.digitizingdata.helpers.Utils;
@@ -427,4 +430,67 @@ public class MeetingLoanRepaymentRepo {
         }
     }
 
+    public ArrayList<RepaymentDataTransferRecord> getMeetingRepaymentsForAllMembers(int meetingId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        ArrayList<RepaymentDataTransferRecord> repayments;
+
+        try {
+            repayments = new ArrayList<RepaymentDataTransferRecord>();
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  %s AS RepaymentId, %s AS MemberId, %s AS LoanId, %s AS Amount, " +
+                    " %s AS BalanceBefore, %s AS BalanceAfter, %s AS InterestAmount, %s AS RollOverAmount, " +
+                    " %s AS LastDateDue, %s AS NextDateDue, %s AS Comments " +
+                    " FROM %s WHERE %s=%d ORDER BY %s",
+                    LoanRepaymentSchema.COL_LR_REPAYMENT_ID, LoanRepaymentSchema.COL_LR_MEMBER_ID, LoanRepaymentSchema.COL_LR_LOAN_ID,
+                    LoanRepaymentSchema.COL_LR_AMOUNT, LoanRepaymentSchema.COL_LR_BAL_BEFORE, LoanRepaymentSchema.COL_LR_BAL_AFTER,
+                    LoanRepaymentSchema.COL_LR_INTEREST_AMOUNT, LoanRepaymentSchema.COL_LR_ROLLOVER_AMOUNT,
+                    LoanRepaymentSchema.COL_LR_LAST_DATE_DUE, LoanRepaymentSchema.COL_LR_NEXT_DATE_DUE,LoanRepaymentSchema.COL_LR_COMMENTS,
+                    LoanRepaymentSchema.getTableName(), LoanRepaymentSchema.COL_LR_MEETING_ID, meetingId, LoanRepaymentSchema.COL_LR_REPAYMENT_ID);
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    RepaymentDataTransferRecord repaymentRecord = new RepaymentDataTransferRecord();
+                    repaymentRecord.setMeetingId(meetingId);
+                    repaymentRecord.setMemberId(cursor.getInt(cursor.getColumnIndex("MemberId")));
+                    repaymentRecord.setLoanId(cursor.getInt(cursor.getColumnIndex("LoanId")));
+                    repaymentRecord.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
+                    repaymentRecord.setRollOverAmount(cursor.getDouble(cursor.getColumnIndex("RollOverAmount")));
+                    repaymentRecord.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+                    repaymentRecord.setRepaymentId(cursor.getInt(cursor.getColumnIndex("RepaymentId")));
+                    if(!cursor.isNull(cursor.getColumnIndex("LastDateDue"))){
+                        Date lastDateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("LastDateDue")));
+                        repaymentRecord.setLastDateDue(lastDateDue);
+                    }
+                    if(!cursor.isNull(cursor.getColumnIndex("NextDateDue"))){
+                        Date nextDateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("NextDateDue")));
+                        repaymentRecord.setNextDateDue(nextDateDue);
+                    }
+                    repaymentRecord.setBalanceBefore(cursor.getDouble(cursor.getColumnIndex("BalanceBefore")));
+                    repaymentRecord.setBalanceAfter(cursor.getDouble(cursor.getColumnIndex("BalanceAfter")));
+                    repaymentRecord.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("InterestAmount")));
+
+                    repayments.add(repaymentRecord);
+
+                } while (cursor.moveToNext());
+            }
+            return repayments;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingSavingRepo.getMeetingRepaymentsForAllMembers", ex.getMessage());
+            return null;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 }

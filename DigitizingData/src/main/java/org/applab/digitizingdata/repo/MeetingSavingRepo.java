@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingSaving;
 import org.applab.digitizingdata.domain.schema.AttendanceSchema;
@@ -304,4 +305,48 @@ public class MeetingSavingRepo {
         }
     }
 
+    public ArrayList<SavingsDataTransferRecord> getMeetingSavingsForAllMembers(int meetingId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        ArrayList<SavingsDataTransferRecord> savings;
+
+        try {
+            savings = new ArrayList<SavingsDataTransferRecord>();
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  %s AS SavingId, %s AS MemberId, %s AS Amount " +
+                    " FROM %s WHERE %s=%d ORDER BY %s",
+                    SavingSchema.COL_S_SAVING_ID, SavingSchema.COL_S_MEMBER_ID, SavingSchema.COL_S_AMOUNT,
+                    SavingSchema.getTableName(), SavingSchema.COL_S_MEETING_ID, meetingId, SavingSchema.COL_S_SAVING_ID);
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    SavingsDataTransferRecord saving = new SavingsDataTransferRecord();
+                    saving.setSavingsId(cursor.getInt(cursor.getColumnIndex("SavingId")));
+                    saving.setMemberId(cursor.getInt(cursor.getColumnIndex("MemberId")));
+                    saving.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
+                    saving.setMeetingId(meetingId);
+
+                    savings.add(saving);
+
+                } while (cursor.moveToNext());
+            }
+            return savings;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingSavingRepo.getMeetingSavingsForAllMembers", ex.getMessage());
+            return null;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 }

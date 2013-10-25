@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.applab.digitizingdata.datatransformation.LoanDataTransferRecord;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.domain.model.Member;
@@ -510,6 +511,73 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
+    public ArrayList<LoanDataTransferRecord> getMeetingLoansForAllMembers(int meetingId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        ArrayList<LoanDataTransferRecord> loansIssued;
+
+        try {
+            loansIssued = new ArrayList<LoanDataTransferRecord>();
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  %s AS LoanId, %s AS PrincipalAmount, %s AS IsWrittenOff, %s AS IsDefaulted, " +
+                    "%s AS LoanNo, %s AS Balance, %s AS IsCleared, %s AS DateCleared, %s AS DateDue, %s AS InterestAmount, " +
+                    " %s AS MemberId, %s AS TotalRepaid, %s AS Comments " +
+                    " FROM %s WHERE %s=%d ORDER BY %s",
+                    LoanIssueSchema.COL_LI_LOAN_ID, LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, LoanIssueSchema.COL_LI_IS_WRITTEN_OFF,
+                    LoanIssueSchema.COL_LI_IS_DEFAULTED, LoanIssueSchema.COL_LI_LOAN_NO, LoanIssueSchema.COL_LI_BALANCE, LoanIssueSchema.COL_LI_IS_CLEARED,
+                    LoanIssueSchema.COL_LI_DATE_CLEARED, LoanIssueSchema.COL_LI_DATE_DUE, LoanIssueSchema.COL_LI_INTEREST_AMOUNT,
+                    LoanIssueSchema.COL_LI_MEMBER_ID, LoanIssueSchema.COL_LI_TOTAL_REPAID, LoanIssueSchema.COL_LI_COMMENTS,
+                    LoanIssueSchema.getTableName(), LoanIssueSchema.COL_LI_MEETING_ID, meetingId, LoanIssueSchema.COL_LI_LOAN_ID
+            );
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    LoanDataTransferRecord loanRecord = new LoanDataTransferRecord();
+                    loanRecord.setLoanId(cursor.getInt(cursor.getColumnIndex("LoanId")));
+                    loanRecord.setMeetingId(meetingId);
+                    loanRecord.setMemberId(cursor.getInt(cursor.getColumnIndex("MemberId")));
+                    loanRecord.setPrincipalAmount(cursor.getDouble(cursor.getColumnIndex("PrincipalAmount")));
+                    loanRecord.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
+                    loanRecord.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
+                    loanRecord.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1)? true: false);
+                    if(cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
+                        Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
+                        loanRecord.setDateCleared(dateCleared);
+                    }
+                    if(cursor.getString(cursor.getColumnIndex("DateDue")) != null) {
+                        Date dateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateDue")));
+                        loanRecord.setDateDue(dateDue);
+                    }
+                    loanRecord.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("InterestAmount")));
+                    loanRecord.setDefaulted((cursor.getInt(cursor.getColumnIndex("IsDefaulted")) == 1)? true: false);
+                    loanRecord.setWrittenOff((cursor.getInt(cursor.getColumnIndex("IsWrittenOff")) == 1)? true: false);
+                    loanRecord.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
+                    loanRecord.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+
+                    loansIssued.add(loanRecord);
+
+                } while (cursor.moveToNext());
+            }
+            return loansIssued;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingLoanIssuedRepo.getMeetingLoansForAllMembers", ex.getMessage());
+            return null;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     public MeetingLoanIssued getMostRecentLoanIssuedToMember(int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -707,5 +775,4 @@ public class MeetingLoanIssuedRepo {
             }
         }
     }
-
 }

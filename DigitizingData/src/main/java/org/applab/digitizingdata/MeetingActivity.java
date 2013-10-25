@@ -9,6 +9,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 
 import org.applab.digitizingdata.R;
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
@@ -151,9 +152,33 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             case R.id.mnuSMDSend:
                 Toast.makeText(getBaseContext(), "Meeting Data has been Sent", Toast.LENGTH_LONG).show();
                 MeetingRepo repo = new MeetingRepo(getApplicationContext());
-                String meetingJson = SendDataRepo.getMeetingJson(repo.getCurrentMeeting());
-                if(meetingJson == null) {
-                    //test
+                Meeting meeting = repo.getCurrentMeeting();
+
+                if(null != meeting) {
+                    String meetingJson = SendDataRepo.getMeetingJson(meeting);
+                    if(meetingJson == null) {
+                        //test
+                    }
+
+                    String meetingAttendanceJson = SendDataRepo.getMeetingAttendanceJson(meeting.getMeetingId());
+                    if(meetingAttendanceJson == null) {
+                        //test
+                    }
+
+                    String meetingSavingsJson = SendDataRepo.getMeetingSavingsJson(meeting.getMeetingId());
+                    if(meetingSavingsJson == null) {
+                        //test
+                    }
+
+                    String meetingRepaymentsJson = SendDataRepo.getMeetingRepaymentsJson(meeting.getMeetingId());
+                    if(meetingRepaymentsJson == null) {
+                        //test
+                    }
+
+                    String meetingLoansJson = SendDataRepo.getMeetingLoanIssuesJson(meeting.getMeetingId());
+                    if(meetingLoansJson == null) {
+                        //test
+                    }
                 }
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
