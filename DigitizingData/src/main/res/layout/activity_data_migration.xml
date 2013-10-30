@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        android:gravity="center"
+        android:id="@+id/LinearLayout1"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        tools:context=".DataMigrationActivity"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+        <LinearLayout
+                android:gravity="center"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="vertical">
+
+
+            <Button
+                    android:id="@+id/button_Insert"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Insert Data">
+
+            </Button>
+
+            <Button
+                    android:id="@+id/button_export"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Export Db To CSV">
+
+            </Button>
+
+            <Button
+                    android:id="@+id/button_import"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Import CSV to Db">
+            </Button>
+
+            <Button
+                    android:id="@+id/button_sendmail"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="Send Mail With Attachment ">
+
+            </Button>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

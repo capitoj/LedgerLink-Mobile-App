@@ -71,6 +71,7 @@
     <orderEntry type="library" name="android-support-v4" level="project" />
     <orderEntry type="library" name="ActionBarSherlock-4.3.1.aar" level="project" />
     <orderEntry type="module" module-name="ActionBarSherlock-4.3.1" />
+    <orderEntry type="library" name="opencsv-2.4" level="project" />
   </component>
 </module>
 

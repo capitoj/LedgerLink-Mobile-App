@@ -139,6 +139,9 @@
             android:name="org.applab.digitizingdata.MeetingOpeningCashFrag"
             android:label="@string/title_activity_meeting_opening_cash_frag" >
         </activity>
+        <activity
+                android:name="org.applab.digitizingdata.DataMigrationActivity"
+                android:label="Data Migration"/>
     </application>
 
 </manifest>

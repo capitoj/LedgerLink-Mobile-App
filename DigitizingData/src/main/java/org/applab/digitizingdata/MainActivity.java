@@ -45,6 +45,7 @@ public class MainActivity extends SherlockActivity {
         mainMenuItems.add(new MenuItem("endCycle", "End Cycle"));
         mainMenuItems.add(new MenuItem("beginCycle", "Begin New Cycle"));
         mainMenuItems.add(new MenuItem("reviewMembers", "Review & Edit Members"));
+        mainMenuItems.add(new MenuItem("dataMigration", "Data Migration"));
         //mainMenuItems.add(new MenuItem("help", "Help"));
 
 
@@ -90,6 +91,10 @@ public class MainActivity extends SherlockActivity {
                 }
                 else if(selectedMenuName.equalsIgnoreCase("reviewMembers")) {
                     Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                    startActivity(i);
+                }
+                else if(selectedMenuName.equalsIgnoreCase("dataMigration")) {
+                    Intent i = new Intent(getApplicationContext(), DataMigrationActivity.class);
                     startActivity(i);
                 }
                 else if(selectedMenuName.equalsIgnoreCase("help")) {
