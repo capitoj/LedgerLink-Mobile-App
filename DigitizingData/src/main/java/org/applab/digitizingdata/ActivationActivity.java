@@ -254,6 +254,8 @@ public class ActivationActivity extends Activity {
                     //.key("networkOperator").value(networkOperator)
                     .key("NetworkType").value(networkType)
                     //.key("msisdn").value(msisdn)
+                    .key("VslaCode").value(vslaCode)
+                    .key("PassKey").value(passKey)
                 .endObject()
                 .toString();
 

@@ -1,8 +1,21 @@
 package org.applab.digitizingdata.repo;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.applab.digitizingdata.LoginActivity;
 import org.applab.digitizingdata.datatransformation.LoanDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.RepaymentDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
@@ -15,6 +28,7 @@ import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 import org.json.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +40,12 @@ public class SendDataRepo {
     private static String phoneImei = null;
     private static String networkOperator = null;
     private static String networkType = null;
+
+    //Sending variables
+    HttpClient client;
+    int httpStatusCode = 0; //To know whether the Request was successful
+    boolean actionSucceeded = false;
+    //String targetVslaCode = null; //fake-fix
 
     private static String getVslaCode() {
         try {
@@ -111,20 +131,22 @@ public class SendDataRepo {
         try {
             jsonRequest = js
                     .object()
-                    .key("HeaderInfo").object()
-                    .key("VslaCode").value(getVslaCode())
-                    .key("PhoneImei").value(getPhoneImei())
-                    .key("NetworkOperator").value(getNetworkOperator())
-                    .key("NetworkType").value(networkType)
-                    .endObject()
-                    .key("VslaCycle").object()
-                        .key("CycleId").value(cycle.getCycleId())
-                        .key("StartDate").value(Utils.formatDate(cycle.getStartDate(),"yyyy-MM-dd"))
-                        .key("EndDate").value(Utils.formatDate(cycle.getEndDate(),"yyyy-MM-dd"))
-                        .key("SharePrice").value(cycle.getSharePrice())
-                        .key("MaxShareQty").value(cycle.getMaxSharesQty())
-                        .key("MaxStartShare").value(cycle.getMaxStartShare())
-                        .key("InterestRate").value(cycle.getInterestRate())
+                        .key("HeaderInfo")
+                        .object()
+                            .key("VslaCode").value(getVslaCode())
+                            .key("PhoneImei").value(getPhoneImei())
+                            .key("NetworkOperator").value(getNetworkOperator())
+                            .key("NetworkType").value(networkType)
+                        .endObject()
+                        .key("VslaCycle")
+                        .object()
+                            .key("CycleId").value(cycle.getCycleId())
+                            .key("StartDate").value(Utils.formatDate(cycle.getStartDate(),"yyyy-MM-dd"))
+                            .key("EndDate").value(Utils.formatDate(cycle.getEndDate(),"yyyy-MM-dd"))
+                            .key("SharePrice").value(cycle.getSharePrice())
+                            .key("MaxShareQty").value(cycle.getMaxSharesQty())
+                            .key("MaxStartShare").value(cycle.getMaxStartShare())
+                            .key("InterestRate").value(cycle.getInterestRate())
                         .endObject()
                     .endObject()
                     .toString();
@@ -436,5 +458,110 @@ public class SendDataRepo {
             return null;
         }
         return jsonRequest;
+    }
+
+    // The definition of our task class
+    private class SendDataPostTask extends AsyncTask<String, Integer, JSONObject> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //displayProgressBar("Downloading...");
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            JSONObject result = null;
+            String uri = params[0];
+            try {
+                //instantiates httpclient to make request
+                DefaultHttpClient httpClient = new DefaultHttpClient();
+
+                //url with the post data
+                HttpPost httpPost = new HttpPost(uri);
+
+                //passes the results to a string builder/entity
+                StringEntity se = new StringEntity(params[1]);
+
+                //sets the post request as the resulting string
+                httpPost.setEntity(se);
+                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                // Response handler
+                ResponseHandler<String> rh = new ResponseHandler<String>() {
+                    // invoked when client receives response
+                    public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
+
+                        // get response entity
+                        HttpEntity entity = response.getEntity();
+                        httpStatusCode = response.getStatusLine().getStatusCode();
+
+                        // read the response as byte array
+                        StringBuffer out = new StringBuffer();
+                        byte[] b = EntityUtils.toByteArray(entity);
+
+                        // write the response byte array to a string buffer
+                        out.append(new String(b, 0, b.length));
+                        return out.toString();
+                    }
+                };
+
+                String responseString = httpClient.execute(httpPost, rh);
+
+                // close the connection
+                httpClient.getConnectionManager().shutdown();
+
+                if(httpStatusCode == 200) //sucess
+                {
+                    result = new JSONObject(responseString);
+                }
+
+                return result;
+            }
+            catch(ClientProtocolException exClient) {
+                return null;
+            }
+            catch(IOException exIo) {
+                return null;
+            }
+            catch(JSONException exJson) {
+                return null;
+            }
+            catch(Exception ex) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            //updateProgressBar(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject result) {
+            String vslaName = null;
+            String passKey = null;
+            super.onPostExecute(result);
+
+            try {
+                if(result != null) {
+                    actionSucceeded = result.getBoolean("IsActivated");
+                    vslaName = result.getString("VslaName");
+                    passKey = result.getString("PassKey");
+                }
+                if(actionSucceeded && null != vslaName) {
+
+                }
+                else {
+                    //Utils.createAlertDialogOk(ActivationActivity.this, "Activation Failed", "There is no Secure Internet Connection to the Bank at this time. Please try again later.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                }
+            }
+            catch(JSONException exJson) {
+                //Utils.createAlertDialogOk(ActivationActivity.this, "Activation Failed", "There was a problem during the activation. Please try again later.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            }
+            catch(Exception ex) {
+                //Utils.createAlertDialogOk(ActivationActivity.this, "Activation Failed", "There was a problem during the activation. Please try again later.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            }
+        }
     }
 }
