@@ -16,6 +16,24 @@ public class VslaInfo {
     private boolean isActivated;
     private Date dateActivated;
     private boolean isOffline;
+    private boolean allowDataMigration;
+    private boolean isDataMigrated;
+
+    public boolean isAllowDataMigration() {
+        return allowDataMigration;
+    }
+
+    public void setAllowDataMigration(boolean allowDataMigration) {
+        this.allowDataMigration = allowDataMigration;
+    }
+
+    public boolean isDataMigrated() {
+        return isDataMigrated;
+    }
+
+    public void setDataMigrated(boolean dataMigrated) {
+        isDataMigrated = dataMigrated;
+    }
 
     public String getVslaName() {
         return vslaName;

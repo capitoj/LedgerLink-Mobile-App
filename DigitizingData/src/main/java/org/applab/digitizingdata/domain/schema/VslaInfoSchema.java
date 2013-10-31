@@ -16,6 +16,8 @@ public class VslaInfoSchema {
     public static final String COL_VI_IS_ACTIVATED = "IsActivated";
     public static final String COL_VI_DATE_ACTIVATED = "DateActivated";
     public static final String COL_VI_IS_OFFLINE = "IsOffline";
+    public static final String COL_VI_ALLOW_DATA_MIGRATION = "AllowDataMigration";
+    public static final String COL_VI_IS_DATA_MIGRATED = "IsDataMigrated";
 
     public static String getCreateTableScript() {
         StringBuffer sb = new StringBuffer();
@@ -32,7 +34,9 @@ public class VslaInfoSchema {
         sb.append(COL_VI_ACCOUNT_NO + " TEXT ,");
         sb.append(COL_VI_IS_ACTIVATED + " INTEGER ,");
         sb.append(COL_VI_DATE_ACTIVATED + " TEXT ,");
-        sb.append(COL_VI_IS_OFFLINE + " INTEGER");
+        sb.append(COL_VI_IS_OFFLINE + " INTEGER ,");
+        sb.append(COL_VI_ALLOW_DATA_MIGRATION + " INTEGER ,");
+        sb.append(COL_VI_IS_DATA_MIGRATED + " INTEGER");
         sb.append(")");
 
         return sb.toString();
@@ -57,7 +61,9 @@ public class VslaInfoSchema {
         sb.append(COL_VI_ACCOUNT_NO + ",");
         sb.append(COL_VI_IS_ACTIVATED + ",");
         sb.append(COL_VI_DATE_ACTIVATED + ",");
-        sb.append(COL_VI_IS_OFFLINE);
+        sb.append(COL_VI_IS_OFFLINE + ",");
+        sb.append(COL_VI_ALLOW_DATA_MIGRATION + ",");
+        sb.append(COL_VI_IS_DATA_MIGRATED);
 
         return sb.toString();
     }

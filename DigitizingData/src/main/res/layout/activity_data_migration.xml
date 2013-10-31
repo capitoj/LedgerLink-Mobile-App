@@ -21,36 +21,32 @@
                 android:layout_width="match_parent"
                 android:orientation="vertical">
 
-
-            <Button
-                    android:id="@+id/button_Insert"
-                    android:layout_height="wrap_content"
+            <TextView
+                    android:id="@+id/lblMigrationInstruction"
                     android:layout_width="wrap_content"
-                    android:text="Insert Data">
-
-            </Button>
-
-            <Button
-                    android:id="@+id/button_export"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="10dp"
+                    android:clickable="false"
+                    android:editable="false"
+                    android:text="Place the CSV file containing the VSLA Data on to the phone storage. Ensure it is named: vslaMigrationInfo.csv then tap the button below." />
+
+            <TextView
+                    android:id="@+id/lblMigrationResult"
                     android:layout_width="wrap_content"
-                    android:text="Export Db To CSV">
-
-            </Button>
-
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_centerHorizontal="true"
+                    android:clickable="false"
+                    android:editable="false"
+                    android:text=" " />
             <Button
                     android:id="@+id/button_import"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    android:text="Import CSV to Db">
-            </Button>
-
-            <Button
-                    android:id="@+id/button_sendmail"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:text="Send Mail With Attachment ">
-
+                    android:paddingTop = "5dp"
+                    android:paddingBottom="5dp"
+                    android:text="Import CSV to Database">
             </Button>
 
         </LinearLayout>

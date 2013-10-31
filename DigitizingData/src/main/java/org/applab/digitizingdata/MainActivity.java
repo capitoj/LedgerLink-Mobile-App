@@ -8,8 +8,10 @@ import android.widget.ListView;
 
 import com.actionbarsherlock.app.SherlockActivity;
 
+import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.MenuCustomArrayAdapter;
 import org.applab.digitizingdata.helpers.MenuItem;
+import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.ArrayList;
 
@@ -18,10 +20,18 @@ import java.util.ArrayList;
  */
 public class MainActivity extends SherlockActivity {
     ArrayList<MenuItem> mainMenuItems = null;
+    VslaInfo vslaInfo = null;
+    VslaInfoRepo vslaInfoRepo = null;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Retrieve VSLA Information
+        vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
+        if(vslaInfoRepo != null) {
+            vslaInfo = vslaInfoRepo.getVslaInfo();
+        }
 
         //Display the main menu
         displayMainMenu();
@@ -45,9 +55,19 @@ public class MainActivity extends SherlockActivity {
         mainMenuItems.add(new MenuItem("endCycle", "End Cycle"));
         mainMenuItems.add(new MenuItem("beginCycle", "Begin New Cycle"));
         mainMenuItems.add(new MenuItem("reviewMembers", "Review & Edit Members"));
-        mainMenuItems.add(new MenuItem("dataMigration", "Data Migration"));
-        //mainMenuItems.add(new MenuItem("help", "Help"));
 
+        //Display the Data Migration Menu if data has not yet been migrated
+        if(null != vslaInfo) {
+            if(vslaInfo.isDataMigrated()) {
+                //Hide the dataMigration Menu
+            }
+            else{
+                //Show the Data Migration Menu
+                mainMenuItems.add(new MenuItem("dataMigration", "Data Migration"));
+            }
+        }
+
+        //mainMenuItems.add(new MenuItem("help", "Help"));
 
         ListView lvwMainMenu = (ListView)findViewById(R.id.menuList);
         MenuCustomArrayAdapter adapter = new MenuCustomArrayAdapter(this, mainMenuItems);

@@ -443,7 +443,69 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
+    public boolean saveMemberLoanIssue(int meetingId, int memberId, int loanNo, double amount, double interest, double loanBalance, Date dateDue) {
+        SQLiteDatabase db = null;
+        boolean performUpdate = false;
+        int loanId = 0;
+        try {
+            //Check if exists and do an Update
+            loanId = getMemberLoanId(meetingId, memberId);
+            if(loanId > 0) {
+                performUpdate = true;
+            }
 
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(LoanIssueSchema.COL_LI_MEETING_ID, meetingId);
+            values.put(LoanIssueSchema.COL_LI_MEMBER_ID, memberId);
+            values.put(LoanIssueSchema.COL_LI_LOAN_NO, loanNo);
+            values.put(LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, amount);
+            values.put(LoanIssueSchema.COL_LI_INTEREST_AMOUNT, interest);
+
+            //The Date Due
+            Date dtDateDue = dateDue;
+            if(dateDue == null) {
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.MONTH,1);
+                dtDateDue = cal.getTime();
+            }
+            values.put(LoanIssueSchema.COL_LI_DATE_DUE, Utils.formatDateToSqlite(dtDateDue));
+
+            //Set Balance to be the value that was pushed in. Useful when Balance is explicitly determined
+            values.put(LoanIssueSchema.COL_LI_BALANCE, loanBalance);
+
+            //Ensure Total Repaid is Zero.
+            values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, 0);
+
+            // Inserting or UpdatingRow
+            long retVal = -1;
+            if(performUpdate) {
+                // updating row
+                retVal = db.update(LoanIssueSchema.getTableName(), values, LoanIssueSchema.COL_LI_LOAN_ID + " = ?",
+                        new String[] { String.valueOf(loanId) });
+            }
+            else {
+                retVal = db.insert(LoanIssueSchema.getTableName(), null, values);
+            }
+
+            if (retVal != -1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MemberLoanIssuedRepo.saveMemberLoanIssue", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
     public ArrayList<MemberLoanIssueRecord> getLoansIssuedToMemberInCycle(int cycleId, int memberId) {
         SQLiteDatabase db = null;

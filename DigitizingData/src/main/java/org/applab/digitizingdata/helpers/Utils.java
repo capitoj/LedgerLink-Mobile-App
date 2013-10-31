@@ -41,7 +41,7 @@ public class Utils {
     public static final String VSLA_SERVER_BASE_URL = "http://74.208.213.214:9905/DigitizingDataRestfulService.svc";
 
     //VSLA DATA MIGRATION
-    public static final String VSLA_DATA_MIGRATION_FILENAME = "VslaInfo.csv";
+    public static final String VSLA_DATA_MIGRATION_FILENAME = "vslaMigrationInfo.csv";
     public static final String MISSING_NAME_MARKER = "MISSING";
     public static final int DEFAULT_MEMBER_AGE = 18;
     public static final String DEFAULT_MEMBER_OCCUPATION = "Peasant Farmer";

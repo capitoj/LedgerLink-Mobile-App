@@ -2,6 +2,7 @@ package org.applab.digitizingdata;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,17 +12,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MeetingSavingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
+import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -37,10 +41,8 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
     private static final String TAG = "MainActivity";
     // DatabaseHandler dbHelper = null;
     File file = null;
-    private Button btnexport = null;
+    private TextView lblMigrationResult = null;
     private Button btnimport = null;
-    private Button btninsertdata = null;
-    private Button btnsendmail = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +51,8 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
         Log.v(TAG, "onCreate called");
 
-        btnexport = (Button) findViewById(R.id.button_export);
-        btnexport.setOnClickListener(this);
-        btninsertdata = (Button) findViewById(R.id.button_Insert);
-        btninsertdata.setOnClickListener(this);
-        btnsendmail = (Button) findViewById(R.id.button_sendmail);
-        btnsendmail.setOnClickListener(this);
+        lblMigrationResult = (TextView)findViewById(R.id.lblMigrationResult);
+        lblMigrationResult.setVisibility(View.GONE);
         btnimport = (Button) findViewById(R.id.button_import);
         btnimport.setOnClickListener(this);
 
@@ -65,10 +63,12 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
     public void onClick(View arg0) {
 
         Log.v(TAG, "onClick called");
-        if (arg0 == btnexport) {
-            // Do Nothing
-        }
-        else if (arg0 == btnimport) {
+       if (arg0 == btnimport) {
+           if(btnimport.getText().toString().equalsIgnoreCase("Finished")) {
+               Intent mainMenu = new Intent(getApplicationContext(), MainActivity.class);
+               startActivity(mainMenu);
+               return;
+           }
             File exportDir = new File(Environment.getExternalStorageDirectory(), "");
             if (!exportDir.exists()) {
                 exportDir.mkdirs();
@@ -116,6 +116,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                 String[] nextLine;
                 try {
                     int i=0;
+                    int dataRowNo = 0;
                     int migratedCount = 0;
                     int skippedCount = 0;
                     String skippedRows = "";
@@ -124,6 +125,10 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                         if(0 >= i++) {
                             continue;
                         }
+
+                        //increment the dataRow number
+                        dataRowNo++;
+
                         // nextLine[] is an array of values from the line
                         int memberId = 0; //will be found later
                         String memberNo = nextLine[0].trim();
@@ -139,8 +144,8 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                         String meetingsAbsent = nextLine[10].trim();
                         String loanIssueAmount = nextLine[11].trim();
                         String loanIssueDate = nextLine[12].trim();
-                        String loanBalance = nextLine[13].trim();
-                        String loanDueDate = nextLine[14].trim();
+                        String loanDueDate = nextLine[13].trim();
+                        String loanBalance = nextLine[14].trim();
 
                         //First Insert the Member Details
                         Member member = new Member();
@@ -239,7 +244,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
                             //Continue only if we have added the member
                             if(null == recentMember) {
-                                Toast.makeText(getApplicationContext(),String.format("Member on record %d could not be added.", i), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),String.format("Member on data record %d could not be migrated.", dataRowNo), Toast.LENGTH_SHORT).show();
                                 skippedCount++;
                                 continue;
                             }
@@ -265,38 +270,54 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                                     Date dateIssued = Utils.getDateFromString(loanIssueDate,"yyyy-MM-dd");
                                     Date dateDue = Utils.getDateFromString(loanDueDate,"yyyy-MM-dd");
                                     MeetingLoanIssuedRepo loansRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-                                    boolean loanIssued = loansRepo.saveMemberLoanIssue(recentMeeting.getMeetingId(),recentMember.getMemberId(),recentMember.getMemberNo(),thePrincipalAmount,0.0,dateDue);
+                                    boolean loanIssued = loansRepo.saveMemberLoanIssue(recentMeeting.getMeetingId(),recentMember.getMemberId(),recentMember.getMemberNo(),thePrincipalAmount,0.0, theLoanBalance,dateDue);
 
                                     //Even if it fails continue. Can be done manually later
                                 }
                             }
 
                             //Done with this member
-                            Toast.makeText(getApplicationContext(),String.format("Member of record %d was migrated successfully.", i), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),String.format("Member of data record %d was migrated successfully.", dataRowNo), Toast.LENGTH_SHORT).show();
 
                             //Increment the migrated count
                             migratedCount++;
                         }
                         catch(Exception exMember){
-                            Toast.makeText(getApplicationContext(),String.format("An error has occurred. Skipping member on record %d", i), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),String.format("An error has occurred. Skipping member on data record %d", dataRowNo), Toast.LENGTH_SHORT).show();
                             skippedCount++;
                             if(skippedCount > 1) {
-                                skippedRows.concat(String.format(", %d", i));
+                                skippedRows.concat(String.format(", %d", dataRowNo));
                             }
                             else {
-                                skippedRows.concat(String.format("%d", i));
+                                skippedRows.concat(String.format("%d", dataRowNo));
                             }
                             continue;
                         }
                     }
 
-                    //Final Results:
-                    String result = String.format("Records Found: %d | Migrated: %d | Failed: %d", i, migratedCount, skippedCount);
+                    //Final Results: Total Records in File include the HEADER row so reduce by 1
+                    String result = String.format("Records Found: %d | Migrated: %d | Failed: %d", dataRowNo, migratedCount, skippedCount);
+
+                    //in case some records were skipped
                     String skippedRecs = String.format("The Skipped Records were: %s", skippedRows);
 
                     //TODO: Replace this with Actual TextView
-                    Toast.makeText(getApplicationContext(),result, Toast.LENGTH_LONG).show();
-                    Toast.makeText(getApplicationContext(),skippedRecs, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),result, Toast.LENGTH_SHORT).show();
+                    lblMigrationResult.setVisibility(View.VISIBLE);
+                    //btnimport.setVisibility(View.GONE);
+                    lblMigrationResult.setText("Result:" + String.valueOf(result));
+
+                    if(skippedCount > 0) {
+                        Toast.makeText(getApplicationContext(),skippedRecs, Toast.LENGTH_SHORT).show();
+                    }
+
+                    // Flag that Data has already been Migrated
+                    VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
+                    if(vslaInfoRepo != null){
+                        vslaInfoRepo.updateDataMigrationStatusFlag(true);
+                    }
+
+                    btnimport.setText("Finished");
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -304,6 +325,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
             }
             catch (FileNotFoundException e) {
+                Toast.makeText(getApplicationContext(),String.format("The Data File: %s could not be located.", file), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }
