@@ -16,6 +16,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.digitizingdata.LoginActivity;
+import org.applab.digitizingdata.MainActivity;
 import org.applab.digitizingdata.datatransformation.LoanDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.RepaymentDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
@@ -30,6 +31,10 @@ import org.json.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Created by Moses on 10/24/13.
@@ -41,11 +46,41 @@ public class SendDataRepo {
     private static String networkOperator = null;
     private static String networkType = null;
 
+    //Sending Data Map Constants
+    public static final String CYCLE_INFO_ITEM_KEY = "cycleInfo";
+    public static final String MEMBERS_ITEM_KEY = "members";
+    public static final String MEETING_DETAILS_ITEM_KEY = "meetingDetails";
+    public static final String ATTENDANCE_ITEM_KEY = "attendance";
+    public static final String SAVINGS_ITEM_KEY = "savings";
+    public static final String LOANS_ITEM_KEY = "loans";
+    public static final String REPAYMENTS_ITEM_KEY = "repayments";
+
+
     //Sending variables
-    HttpClient client;
-    int httpStatusCode = 0; //To know whether the Request was successful
-    boolean actionSucceeded = false;
+    private static HttpClient client;
+    private static int httpStatusCode = 0; //To know whether the Request was successful
+    private static boolean actionSucceeded = false;
+    private static int targetMeetingId = 0;
     //String targetVslaCode = null; //fake-fix
+
+    //A Map to hold the order of data sending
+    private static Map<Integer, String> meetingDataItems;
+
+    //The Actual Data e.g. <"members","{...}">
+    private static HashMap<String, String> dataToBeSent;
+    private static int currentDataItemPosition = 0;
+    private static String serverUri = "";
+
+    static {
+        meetingDataItems = new HashMap<Integer, String>();
+        meetingDataItems.put(1, "cycleInfo");
+        meetingDataItems.put(2, "members");
+        meetingDataItems.put(3, "meetingDetails");
+        meetingDataItems.put(4, "attendance");
+        meetingDataItems.put(5, "savings");
+        meetingDataItems.put(6, "loans");
+        meetingDataItems.put(7, "repayments");
+    }
 
     private static String getVslaCode() {
         try {
@@ -118,6 +153,19 @@ public class SendDataRepo {
         }
     }
 
+    //Use the CycleId to retrieve information about the VSLACycle
+    public static String getVslaCycleJson(int cycleId) {
+        VslaCycleRepo cycleRepo = null;
+        try{
+            cycleRepo = new VslaCycleRepo(DatabaseHandler.databaseContext);
+            return getVslaCycleJson(cycleRepo.getCycle(cycleId));
+        }
+        catch(Exception ex) {
+            return null;
+        }
+    }
+
+    //Accept the VslaCycle object and build the JSON String based on it
     public static String getVslaCycleJson(VslaCycle cycle) {
 
         if(cycle == null) {
@@ -162,6 +210,20 @@ public class SendDataRepo {
         return jsonRequest;
     }
 
+    //Build a JSON String for all members
+    public static String getMembersJson() {
+        MemberRepo memberRepo = null;
+        try{
+            memberRepo = new MemberRepo(DatabaseHandler.databaseContext);
+            ArrayList<Member> members = memberRepo.getAllMembers();
+            return getMembersJson(members);
+        }
+        catch(Exception ex) {
+            return null;
+        }
+    }
+
+    //Build a JSON String for supplied list of members
     public static String getMembersJson(ArrayList<Member> members) {
 
         if(members == null) {
@@ -460,8 +522,27 @@ public class SendDataRepo {
         return jsonRequest;
     }
 
+    public static void sendDataUsingPostAsync(String request) {
+        String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL,"vslas","submitdata");
+        new SendDataPostAsyncTask().execute(uri,request);
+
+        //Do the other stuff in the Async Task
+    }
+
+    public static void sendDataUsingPostAsync(int meetingId, HashMap<String, String> dataFromPhone) {
+        //Store the MeetingId as it will be used later after the Async process
+        targetMeetingId = meetingId;
+
+        //First identify the initial data to be sent
+        dataToBeSent = dataFromPhone;
+        currentDataItemPosition = 1;
+        String request = dataToBeSent.get(meetingDataItems.get(currentDataItemPosition));
+        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL,"vslas","submitdata");
+        new SendDataPostAsyncTask().execute(serverUri, request);
+    }
+
     // The definition of our task class
-    private class SendDataPostTask extends AsyncTask<String, Integer, JSONObject> {
+    private static class SendDataPostAsyncTask extends AsyncTask<String, Integer, JSONObject> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -539,28 +620,43 @@ public class SendDataRepo {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            String vslaName = null;
-            String passKey = null;
             super.onPostExecute(result);
 
             try {
                 if(result != null) {
-                    actionSucceeded = result.getBoolean("IsActivated");
-                    vslaName = result.getString("VslaName");
-                    passKey = result.getString("PassKey");
+                    actionSucceeded = ((result.getInt("StatusCode") == 0) ? true : false);
                 }
-                if(actionSucceeded && null != vslaName) {
+                if(actionSucceeded) {
+                    //Record that the piece of info has been submitted
+                    //Pick and Post the next piece of item if there is any RECURSION
+                    currentDataItemPosition++;
+                    String nextRequest = dataToBeSent.get(meetingDataItems.get(currentDataItemPosition));
+                    if(nextRequest != null) {
+                        new SendDataPostAsyncTask().execute(serverUri, nextRequest);
+                    }
+                    else {
+                        //Finished
+                        //Have some code to run when process is finished
+                        Toast.makeText(DatabaseHandler.databaseContext, "Meeting Data was Sent Successfully",Toast.LENGTH_SHORT).show();
 
+                        //If the process has finished, then mark the meeting as sent
+                        Calendar cal = Calendar.getInstance();
+                        MeetingRepo meetingRepo = new MeetingRepo(DatabaseHandler.databaseContext);
+                        meetingRepo.updateDataSentFlag(targetMeetingId, true, cal.getTime());
+                    }
                 }
                 else {
-                    //Utils.createAlertDialogOk(ActivationActivity.this, "Activation Failed", "There is no Secure Internet Connection to the Bank at this time. Please try again later.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    //Process failed
+                    Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed during communication error. Try again later.",Toast.LENGTH_LONG).show();
                 }
             }
             catch(JSONException exJson) {
-                //Utils.createAlertDialogOk(ActivationActivity.this, "Activation Failed", "There was a problem during the activation. Please try again later.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                //Process failed
+                Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed due to a data format error. Try again later.",Toast.LENGTH_LONG).show();
             }
             catch(Exception ex) {
-                //Utils.createAlertDialogOk(ActivationActivity.this, "Activation Failed", "There was a problem during the activation. Please try again later.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                //Process failed
+                Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed. Try again later.",Toast.LENGTH_LONG).show();
             }
         }
     }

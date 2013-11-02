@@ -51,7 +51,7 @@ public class ViewSentDataActivity extends SherlockListActivity {
     private void populateMeetingData() {
         //Load the Main Menu
         MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
-        meetings = meetingRepo.getAllMeetings();
+        meetings = meetingRepo.getAllMeetingsByDataSentStatus(true);
 
         if(meetings == null) {
             meetings = new ArrayList<Meeting>();

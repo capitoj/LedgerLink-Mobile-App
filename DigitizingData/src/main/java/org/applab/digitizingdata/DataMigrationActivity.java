@@ -317,6 +317,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                         vslaInfoRepo.updateDataMigrationStatusFlag(true);
                     }
 
+                    //TODO: Only do this if there were no records skipped
                     btnimport.setText("Finished");
                 }
                 catch (IOException e) {

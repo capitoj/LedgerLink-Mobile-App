@@ -132,6 +132,41 @@ public class MeetingRepo {
         }
     }
 
+    public boolean updateDataSentFlag(int meetingId, boolean isDataSent, Date dateSent) {
+        SQLiteDatabase db = null;
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(MeetingSchema.COL_MT_IS_DATA_SENT, (isDataSent)?1:0);
+            if(isDataSent) {
+                if(dateSent == null) {
+                    dateSent = new Date();
+                }
+                values.put(MeetingSchema.COL_MT_DATE_SENT, Utils.formatDateToSqlite(dateSent));
+            }
+
+            long retVal = -1;
+            retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                    new String[] { String.valueOf(meetingId) });
+            if (retVal != -1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.updateDataSentFlag", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     public ArrayList<Meeting> getAllMeetings() {
         ArrayList<Meeting> meetings = null;
         SQLiteDatabase db = null;
@@ -207,6 +242,72 @@ public class MeetingRepo {
             // Select All Query
             String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC", columnList, MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_CYCLE_ID, targetCycleId, MeetingSchema.COL_MT_MEETING_ID);
+            cursor = db.rawQuery(selectQuery, null);
+
+            // looping through all rows and adding to list
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Meeting meeting = new Meeting();
+                    Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                    meeting.setMeetingDate(meetingDate);
+                    meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
+
+                    //Check for Nulls while loading the VSLA Cycle
+                    int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
+                    meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
+                    if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                        meeting.setMeetingDataSent(true);
+                        Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                        meeting.setDateSent(dateMeetingDataSent);
+                    }
+                    else {
+                        meeting.setMeetingDataSent(false);
+                    }
+
+                    meetings.add(meeting);
+
+                } while (cursor.moveToNext());
+            }
+
+            // return the list
+            return meetings;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.getMeeting", ex.getMessage());
+            return null;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public ArrayList<Meeting> getAllMeetingsByDataSentStatus(boolean isDataSent) {
+        ArrayList<Meeting> meetings = null;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        int dataSentFlag = 0;
+        VslaCycleRepo cycleRepo = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            meetings = new ArrayList<Meeting>();
+            String columnList = MeetingSchema.getColumnList();
+
+            if(isDataSent) {
+                dataSentFlag = 1;
+            }
+
+            cycleRepo = new VslaCycleRepo(context);
+
+            // Select All Query
+            String selectQuery = String.format("SELECT %s FROM %s WHERE COALESCE(%s,0)=%d ORDER BY %s DESC", columnList, MeetingSchema.getTableName(),
+                    MeetingSchema.COL_MT_IS_DATA_SENT, dataSentFlag, MeetingSchema.COL_MT_MEETING_ID);
             cursor = db.rawQuery(selectQuery, null);
 
             // looping through all rows and adding to list

@@ -14,11 +14,13 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.SendMeetingDataArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Moses on 7/23/13.
@@ -46,7 +48,12 @@ public class SendMeetingDataActivity extends SherlockListActivity {
     private void populateMeetingData() {
         //Load the Main Menu
         MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
-        meetings = meetingRepo.getAllMeetings();
+
+        //TODO: Testing purposes only. Should be removed
+        //If the process has finished, then mark the meeting as sent
+        Calendar cal = Calendar.getInstance();
+        meetingRepo.updateDataSentFlag(1, false, cal.getTime());
+        meetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
 
         if(meetings == null) {
             meetings = new ArrayList<Meeting>();
