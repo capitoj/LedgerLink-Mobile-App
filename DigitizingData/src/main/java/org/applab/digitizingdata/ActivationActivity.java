@@ -1,6 +1,7 @@
 package org.applab.digitizingdata;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.SendDataRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
@@ -31,6 +34,7 @@ import org.json.JSONObject;
 import org.json.JSONStringer;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 public class ActivationActivity extends Activity {
     VslaInfoRepo vslaInfoRepo = null;
@@ -38,6 +42,7 @@ public class ActivationActivity extends Activity {
     int httpStatusCode = 0; //To know whether the Request was successful
     boolean activationSuccessful = false;
     String targetVslaCode = null; //fake-fix
+    ProgressDialog progressDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,14 @@ public class ActivationActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+        super.onDestroy();
+    }
+
     private String activateVlsa(String vslaCode, String sourceImei)
     {
         String vslaName = null;
@@ -127,9 +140,8 @@ public class ActivationActivity extends Activity {
 
     private void activateVlsaUsingPostAsync(String request)
     {
-        String vslaName = null;
         String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL,"vslas","activate");
-        new PostTask().execute(uri,request);
+        new PostTask(this).execute(uri,request);
 
         //Do the other stuff in the Async Task
     }
@@ -269,10 +281,36 @@ public class ActivationActivity extends Activity {
 
     // The definition of our task class
     private class PostTask extends AsyncTask<String, Integer, JSONObject> {
+
+        //Use a Weak Reference
+        private final WeakReference<ActivationActivity> activationActivityWeakReference;
+        private String message = "Please wait...";
+
+        //Initialize the Weak reference in the constructor
+        public PostTask(ActivationActivity activationActivity) {
+            this.activationActivityWeakReference = new WeakReference<ActivationActivity>(activationActivity);
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //displayProgressBar("Downloading...");
+            try {
+                if (activationActivityWeakReference.get() != null && !activationActivityWeakReference.get().isFinishing()) {
+                    if(null == progressDialog) {
+                        progressDialog = new ProgressDialog(activationActivityWeakReference.get());
+                        progressDialog.setTitle("Phone Activation");
+                        progressDialog.setMessage("Activating the VSLA Phone for Ledger Link. Please wait...");
+                        progressDialog.setMax(10);
+                        progressDialog.setProgress(1);
+                        progressDialog.setCancelable(false);
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        progressDialog.show();
+                    }
+                }
+            }
+            catch(Exception ex) {
+                progressDialog.setMessage(ex.getMessage());
+            }
         }
 
         @Override
@@ -342,6 +380,7 @@ public class ActivationActivity extends Activity {
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             //updateProgressBar(values[0]);
+            progressDialog.setProgress(values[0]);
         }
 
         @Override
@@ -360,19 +399,35 @@ public class ActivationActivity extends Activity {
                     boolean retVal = vslaInfoRepo.saveVslaInfo(targetVslaCode,vslaName, passKey);
                     if(retVal) {
                         Toast.makeText(ActivationActivity.this, "Congratulations! Activation Completed Successfully.", Toast.LENGTH_LONG).show();
+                        dismissProgressDialog();
                         Intent i = new Intent(getBaseContext(), LoginActivity.class);
                         startActivity(i);
                     }
                 }
                 else {
-                    Utils.createAlertDialogOk(ActivationActivity.this, "Activation Failed", "There is no Secure Internet Connection to the Bank at this time. Please try again later.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    //Process failed
+                    Toast.makeText(getApplicationContext(), "Activation failed due to internet connection problems. Try again later.",Toast.LENGTH_LONG).show();
+                    dismissProgressDialog();
                 }
             }
             catch(JSONException exJson) {
-                Utils.createAlertDialogOk(ActivationActivity.this, "Activation Failed", "There was a problem during the activation. Please try again later.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                //Process failed
+                Toast.makeText(getApplicationContext(), "Activation failed due to invalid Data Format. Try again later.",Toast.LENGTH_LONG).show();
+                dismissProgressDialog();
             }
             catch(Exception ex) {
-                Utils.createAlertDialogOk(ActivationActivity.this, "Activation Failed", "There was a problem during the activation. Please try again later.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                //Process failed
+                Toast.makeText(getApplicationContext(), "Activation failed. Try again later.",Toast.LENGTH_LONG).show();
+                dismissProgressDialog();
+            }
+        }
+
+        //Dismisses the currently showing progress dialog
+        private void dismissProgressDialog() {
+            if(progressDialog != null) {
+                progressDialog.dismiss();
+                //set it to null
+                progressDialog = null;
             }
         }
     }

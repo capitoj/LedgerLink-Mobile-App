@@ -1,5 +1,6 @@
 package org.applab.digitizingdata.repo;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -61,25 +62,35 @@ public class SendDataRepo {
     private static int httpStatusCode = 0; //To know whether the Request was successful
     private static boolean actionSucceeded = false;
     private static int targetMeetingId = 0;
-    //String targetVslaCode = null; //fake-fix
+    private static ProgressDialog progressDialog = null;
 
     //A Map to hold the order of data sending
-    private static Map<Integer, String> meetingDataItems;
+    public static Map<Integer, String> meetingDataItems;
+    public static Map<Integer, String> progressDialogMessages;
 
     //The Actual Data e.g. <"members","{...}">
-    private static HashMap<String, String> dataToBeSent;
+    public static HashMap<String, String> dataToBeSent;
     private static int currentDataItemPosition = 0;
     private static String serverUri = "";
 
     static {
         meetingDataItems = new HashMap<Integer, String>();
-        meetingDataItems.put(1, "cycleInfo");
-        meetingDataItems.put(2, "members");
-        meetingDataItems.put(3, "meetingDetails");
-        meetingDataItems.put(4, "attendance");
-        meetingDataItems.put(5, "savings");
-        meetingDataItems.put(6, "loans");
-        meetingDataItems.put(7, "repayments");
+        meetingDataItems.put(1, CYCLE_INFO_ITEM_KEY);
+        meetingDataItems.put(2, MEMBERS_ITEM_KEY);
+        meetingDataItems.put(3, MEETING_DETAILS_ITEM_KEY);
+        meetingDataItems.put(4, ATTENDANCE_ITEM_KEY);
+        meetingDataItems.put(5, SAVINGS_ITEM_KEY);
+        meetingDataItems.put(6, LOANS_ITEM_KEY);
+        meetingDataItems.put(7, REPAYMENTS_ITEM_KEY);
+
+        progressDialogMessages = new HashMap<Integer, String>();
+        progressDialogMessages.put(1, "Sending Cycle Information...");
+        progressDialogMessages.put(2, "Sending Members Information...");
+        progressDialogMessages.put(3, "Sending Meeting Details...");
+        progressDialogMessages.put(4, "Sending Attendance Register...");
+        progressDialogMessages.put(5, "Sending Savings Register...");
+        progressDialogMessages.put(6, "Sending Loan Repayments Register...");
+        progressDialogMessages.put(7, "Sending New Loans Issued...");
     }
 
     private static String getVslaCode() {
@@ -542,11 +553,27 @@ public class SendDataRepo {
     }
 
     // The definition of our task class
-    private static class SendDataPostAsyncTask extends AsyncTask<String, Integer, JSONObject> {
+    public static class SendDataPostAsyncTask extends AsyncTask<String, String, JSONObject> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //displayProgressBar("Downloading...");
+            try {
+                progressDialog = new ProgressDialog(DatabaseHandler.databaseContext);
+                progressDialog.setTitle("Sending Data...");
+                String message = progressDialogMessages.get(currentDataItemPosition);
+                if(message == null) {
+                    message = "Please wait...";
+                }
+                progressDialog.setMessage(message);
+                progressDialog.setMax(10);
+                progressDialog.setProgress(1);
+                progressDialog.setCancelable(false);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.show();
+            }
+            catch(Exception ex) {
+                progressDialog.setMessage(ex.getMessage());
+            }
         }
 
         @Override
@@ -613,7 +640,7 @@ public class SendDataRepo {
         }
 
         @Override
-        protected void onProgressUpdate(Integer... values) {
+        protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
             //updateProgressBar(values[0]);
         }
@@ -658,6 +685,11 @@ public class SendDataRepo {
                 //Process failed
                 Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed. Try again later.",Toast.LENGTH_LONG).show();
             }
+
+            if(progressDialog != null) {
+                progressDialog.dismiss();
+            }
+
         }
     }
 }
