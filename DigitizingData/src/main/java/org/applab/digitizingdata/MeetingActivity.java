@@ -92,7 +92,11 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         actionBar.addTab( actionBar.newTab().setTag("loansRepaid").setText("Loans Repaid").setTabListener(this));
         actionBar.addTab( actionBar.newTab().setTag("loansIssued").setText("New Loans").setTabListener(this));
         //actionBar.addTab( actionBar.newTab().setTag("cashBook").setText("Cash Book").setTabListener(this));
-        actionBar.addTab( actionBar.newTab().setTag("sendData").setText("Send Data").setTabListener(this));
+
+        //Do not show the Send Data tab when in READ_ONLY Mode
+        if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+            actionBar.addTab( actionBar.newTab().setTag("sendData").setText("Send Data").setTabListener(this));
+        }
 
 
         if(getIntent().hasExtra("_tabToSelect")) {

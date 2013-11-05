@@ -99,18 +99,19 @@ public class MeetingSavingsFrag extends SherlockFragment {
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
+                //Do not invoke the event when in Read only Mode
+                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                    Member selectedMember = (Member) members.get(position);
+                    Intent i = new Intent(view.getContext(), MemberSavingHistoryActivity.class);
 
-                Member selectedMember = (Member) members.get(position);
-                Intent i = new Intent(view.getContext(), MemberSavingHistoryActivity.class);
+                    // Pass on data
+                    i.putExtra("_meetingDate",meetingDate);
+                    i.putExtra("_memberId", selectedMember.getMemberId());
+                    i.putExtra("_names", selectedMember.toString());
+                    i.putExtra("_meetingId",meetingId);
 
-                // Pass on data
-                i.putExtra("_meetingDate",meetingDate);
-                i.putExtra("_memberId", selectedMember.getMemberId());
-                i.putExtra("_names", selectedMember.toString());
-                i.putExtra("_meetingId",meetingId);
-
-                startActivity(i);
-
+                    startActivity(i);
+                }
             }
         });
     }

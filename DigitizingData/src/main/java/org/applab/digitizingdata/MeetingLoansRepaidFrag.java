@@ -99,16 +99,19 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                Member selectedMember = members.get(position);
-                Intent viewHistory = new Intent(view.getContext(), MemberLoansRepaidHistoryActivity.class);
+                //Do not invoke the event when in Read only Mode
+                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                    Member selectedMember = members.get(position);
+                    Intent viewHistory = new Intent(view.getContext(), MemberLoansRepaidHistoryActivity.class);
 
-                // Pass on data
-                viewHistory.putExtra("_memberId", selectedMember.getMemberId());
-                viewHistory.putExtra("_names", selectedMember.getFullNames());
-                viewHistory.putExtra("_meetingDate",meetingDate);
-                viewHistory.putExtra("_meetingId", meetingId);
+                    // Pass on data
+                    viewHistory.putExtra("_memberId", selectedMember.getMemberId());
+                    viewHistory.putExtra("_names", selectedMember.getFullNames());
+                    viewHistory.putExtra("_meetingDate",meetingDate);
+                    viewHistory.putExtra("_meetingId", meetingId);
 
-                startActivity(viewHistory);
+                    startActivity(viewHistory);
+                }
 
             }
         });

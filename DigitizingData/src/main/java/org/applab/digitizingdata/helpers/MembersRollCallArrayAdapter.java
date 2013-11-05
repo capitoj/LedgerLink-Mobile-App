@@ -84,6 +84,11 @@ public class MembersRollCallArrayAdapter extends ArrayAdapter<Member> {
 
             txtAttendance.setText(String.format("Attended %d. Missed %d",attended, missed));
 
+            //Do not invoke the event when in Read only Mode
+            if(Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                chkAttendance.setClickable(false);
+            }
+
             //Mark that the change is happening from Code
             isFromCode = true;
             mCheckedState[position] = attendanceRepo.getMemberAttendance(meetingId,values.get(position).getMemberId());
@@ -96,6 +101,7 @@ public class MembersRollCallArrayAdapter extends ArrayAdapter<Member> {
             chkAttendance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
                     if(!isFromCode) {
                         //when the user checked the checkbox store this value in the module-level variable
                         mCheckedState[position] = b;

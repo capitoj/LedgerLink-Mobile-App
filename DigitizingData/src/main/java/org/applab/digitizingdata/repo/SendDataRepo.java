@@ -56,22 +56,12 @@ public class SendDataRepo {
     public static final String LOANS_ITEM_KEY = "loans";
     public static final String REPAYMENTS_ITEM_KEY = "repayments";
 
-
-    //Sending variables
-    private static HttpClient client;
-    private static int httpStatusCode = 0; //To know whether the Request was successful
-    private static boolean actionSucceeded = false;
-    private static int targetMeetingId = 0;
-    private static ProgressDialog progressDialog = null;
-
     //A Map to hold the order of data sending
     public static Map<Integer, String> meetingDataItems;
     public static Map<Integer, String> progressDialogMessages;
 
     //The Actual Data e.g. <"members","{...}">
     public static HashMap<String, String> dataToBeSent;
-    private static int currentDataItemPosition = 0;
-    private static String serverUri = "";
 
     static {
         meetingDataItems = new HashMap<Integer, String>();
@@ -196,6 +186,7 @@ public class SendDataRepo {
                             .key("PhoneImei").value(getPhoneImei())
                             .key("NetworkOperator").value(getNetworkOperator())
                             .key("NetworkType").value(networkType)
+                            .key("DataItem").value(CYCLE_INFO_ITEM_KEY)
                         .endObject()
                         .key("VslaCycle")
                         .object()
@@ -252,6 +243,7 @@ public class SendDataRepo {
                     .key("PhoneImei").value(getPhoneImei())
                     .key("NetworkOperator").value(getNetworkOperator())
                     .key("NetworkType").value(networkType)
+                    .key("DataItem").value(MEMBERS_ITEM_KEY)
                     .endObject()
                 .key("MemberCount").value(members.size())
                 .key("Members").array();
@@ -309,13 +301,17 @@ public class SendDataRepo {
             double loansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meeting.getMeetingId());
 
             jsonRequest = js
-                    .object()
-                    .key("HeaderInfo").object()
+                .object()
+                    .key("HeaderInfo")
+                .object()
                     .key("VslaCode").value(getVslaCode())
                     .key("PhoneImei").value(getPhoneImei())
                     .key("NetworkOperator").value(getNetworkOperator())
                     .key("NetworkType").value(networkType)
-                    .endObject()
+                    .key("DataItem").value(MEETING_DETAILS_ITEM_KEY)
+                .endObject()
+                    .key("Meeting")
+                .object()
                     .key("CycleId").value((meeting.getVslaCycle() != null) ? meeting.getVslaCycle().getCycleId(): 0)
                     .key("MeetingId").value(meeting.getMeetingId())
                     .key("MeetingDate").value(Utils.formatDate(meeting.getMeetingDate(), "yyyy-MM-dd"))
@@ -330,6 +326,7 @@ public class SendDataRepo {
                     .key("ClosingBalanceBank").value(meeting.getClosingBalanceBank())
                     .key("IsCashBookBalanced").value(meeting.isCashBookBalanced())
                     .key("IsDataSent").value(meeting.isMeetingDataSent())
+                .endObject()
                 .endObject()
                 .toString();
         }
@@ -361,6 +358,7 @@ public class SendDataRepo {
                     .key("PhoneImei").value(getPhoneImei())
                     .key("NetworkOperator").value(getNetworkOperator())
                     .key("NetworkType").value(networkType)
+                    .key("DataItem").value(ATTENDANCE_ITEM_KEY)
                     .endObject()
                 .key("MeetingId").value(meetingId)
                 .key("MembersCount").value(attendances.size())
@@ -405,6 +403,7 @@ public class SendDataRepo {
                     .key("PhoneImei").value(getPhoneImei())
                     .key("NetworkOperator").value(getNetworkOperator())
                     .key("NetworkType").value(networkType)
+                    .key("DataItem").value(SAVINGS_ITEM_KEY)
                     .endObject()
                     .key("MeetingId").value(meetingId)
                     .key("MembersCount").value(savings.size())
@@ -448,6 +447,7 @@ public class SendDataRepo {
                     .key("PhoneImei").value(getPhoneImei())
                     .key("NetworkOperator").value(getNetworkOperator())
                     .key("NetworkType").value(networkType)
+                    .key("DataItem").value(REPAYMENTS_ITEM_KEY)
                     .endObject()
                     .key("MeetingId").value(meetingId)
                     .key("MembersCount").value(repayments.size())
@@ -499,6 +499,7 @@ public class SendDataRepo {
                     .key("PhoneImei").value(getPhoneImei())
                     .key("NetworkOperator").value(getNetworkOperator())
                     .key("NetworkType").value(networkType)
+                    .key("DataItem").value(LOANS_ITEM_KEY)
                     .endObject()
                     .key("MeetingId").value(meetingId)
                     .key("MembersCount").value(loans.size())
@@ -531,165 +532,5 @@ public class SendDataRepo {
             return null;
         }
         return jsonRequest;
-    }
-
-    public static void sendDataUsingPostAsync(String request) {
-        String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL,"vslas","submitdata");
-        new SendDataPostAsyncTask().execute(uri,request);
-
-        //Do the other stuff in the Async Task
-    }
-
-    public static void sendDataUsingPostAsync(int meetingId, HashMap<String, String> dataFromPhone) {
-        //Store the MeetingId as it will be used later after the Async process
-        targetMeetingId = meetingId;
-
-        //First identify the initial data to be sent
-        dataToBeSent = dataFromPhone;
-        currentDataItemPosition = 1;
-        String request = dataToBeSent.get(meetingDataItems.get(currentDataItemPosition));
-        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL,"vslas","submitdata");
-        new SendDataPostAsyncTask().execute(serverUri, request);
-    }
-
-    // The definition of our task class
-    public static class SendDataPostAsyncTask extends AsyncTask<String, String, JSONObject> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            try {
-                progressDialog = new ProgressDialog(DatabaseHandler.databaseContext);
-                progressDialog.setTitle("Sending Data...");
-                String message = progressDialogMessages.get(currentDataItemPosition);
-                if(message == null) {
-                    message = "Please wait...";
-                }
-                progressDialog.setMessage(message);
-                progressDialog.setMax(10);
-                progressDialog.setProgress(1);
-                progressDialog.setCancelable(false);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.show();
-            }
-            catch(Exception ex) {
-                progressDialog.setMessage(ex.getMessage());
-            }
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... params) {
-            JSONObject result = null;
-            String uri = params[0];
-            try {
-                //instantiates httpclient to make request
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-
-                //url with the post data
-                HttpPost httpPost = new HttpPost(uri);
-
-                //passes the results to a string builder/entity
-                StringEntity se = new StringEntity(params[1]);
-
-                //sets the post request as the resulting string
-                httpPost.setEntity(se);
-                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                // Response handler
-                ResponseHandler<String> rh = new ResponseHandler<String>() {
-                    // invoked when client receives response
-                    public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
-
-                        // get response entity
-                        HttpEntity entity = response.getEntity();
-                        httpStatusCode = response.getStatusLine().getStatusCode();
-
-                        // read the response as byte array
-                        StringBuffer out = new StringBuffer();
-                        byte[] b = EntityUtils.toByteArray(entity);
-
-                        // write the response byte array to a string buffer
-                        out.append(new String(b, 0, b.length));
-                        return out.toString();
-                    }
-                };
-
-                String responseString = httpClient.execute(httpPost, rh);
-
-                // close the connection
-                httpClient.getConnectionManager().shutdown();
-
-                if(httpStatusCode == 200) //sucess
-                {
-                    result = new JSONObject(responseString);
-                }
-
-                return result;
-            }
-            catch(ClientProtocolException exClient) {
-                return null;
-            }
-            catch(IOException exIo) {
-                return null;
-            }
-            catch(JSONException exJson) {
-                return null;
-            }
-            catch(Exception ex) {
-                return null;
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-            //updateProgressBar(values[0]);
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            super.onPostExecute(result);
-
-            try {
-                if(result != null) {
-                    actionSucceeded = ((result.getInt("StatusCode") == 0) ? true : false);
-                }
-                if(actionSucceeded) {
-                    //Record that the piece of info has been submitted
-                    //Pick and Post the next piece of item if there is any RECURSION
-                    currentDataItemPosition++;
-                    String nextRequest = dataToBeSent.get(meetingDataItems.get(currentDataItemPosition));
-                    if(nextRequest != null) {
-                        new SendDataPostAsyncTask().execute(serverUri, nextRequest);
-                    }
-                    else {
-                        //Finished
-                        //Have some code to run when process is finished
-                        Toast.makeText(DatabaseHandler.databaseContext, "Meeting Data was Sent Successfully",Toast.LENGTH_SHORT).show();
-
-                        //If the process has finished, then mark the meeting as sent
-                        Calendar cal = Calendar.getInstance();
-                        MeetingRepo meetingRepo = new MeetingRepo(DatabaseHandler.databaseContext);
-                        meetingRepo.updateDataSentFlag(targetMeetingId, true, cal.getTime());
-                    }
-                }
-                else {
-                    //Process failed
-                    Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed during communication error. Try again later.",Toast.LENGTH_LONG).show();
-                }
-            }
-            catch(JSONException exJson) {
-                //Process failed
-                Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed due to a data format error. Try again later.",Toast.LENGTH_LONG).show();
-            }
-            catch(Exception ex) {
-                //Process failed
-                Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed. Try again later.",Toast.LENGTH_LONG).show();
-            }
-
-            if(progressDialog != null) {
-                progressDialog.dismiss();
-            }
-
-        }
     }
 }

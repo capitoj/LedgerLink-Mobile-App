@@ -91,23 +91,31 @@ public class MeetingRollCallFrag extends SherlockFragment {
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                CheckBox chkAttendance = (CheckBox)view.findViewById(R.id.chkRMRCallAttendance);
-                chkAttendance.toggle();
+
+                //Do not invoke the event when in Read only Mode
+                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                    CheckBox chkAttendance = (CheckBox)view.findViewById(R.id.chkRMRCallAttendance);
+                    chkAttendance.toggle();
+                }
 
     }
 });
         lvwMembers.setOnItemLongClickListener (new AdapterView.OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
-                Member selectedMember = (Member)parent.getItemAtPosition(position);
-                //Member selectedMember = members.get(position);
-                Intent i = new Intent(view.getContext(), MemberAttendanceHistoryActivity.class);
 
-                // Pass on data
-                i.putExtra("_meetingDate",meetingDate);
-                i.putExtra("_memberId", selectedMember.getMemberId());
-                i.putExtra("_names", selectedMember.toString());
-                i.putExtra("_meetingId",meetingId);
-                startActivity(i);
+                //Do not invoke the event when in Read only Mode
+                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                    Member selectedMember = (Member)parent.getItemAtPosition(position);
+                    //Member selectedMember = members.get(position);
+                    Intent i = new Intent(view.getContext(), MemberAttendanceHistoryActivity.class);
+
+                    // Pass on data
+                    i.putExtra("_meetingDate",meetingDate);
+                    i.putExtra("_memberId", selectedMember.getMemberId());
+                    i.putExtra("_names", selectedMember.toString());
+                    i.putExtra("_meetingId",meetingId);
+                    startActivity(i);
+                }
                 return true;
             }
         });
