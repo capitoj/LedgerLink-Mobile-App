@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp">
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp">
+
+
+        <TextView android:id="@+id/txtNCP_header"
+                  android:layout_width="wrap_content"
+                  android:padding="5dp"
+                  android:layout_height="wrap_content"
+                  android:gravity="left"
+                  android:text="Savings Group Name"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:layout_marginLeft="10dp"
+                      android:layout_marginTop="10dp">
+        <TextView android:id="@+id/txtNCP_header"
+                  android:layout_width="wrap_content"
+                  android:padding="5dp"
+                  android:layout_height="wrap_content"
+                  android:gravity="left"
+                  android:text="Before the first meeting, enter the current cycle’s information such as the star (share) value, and the names, ages, and occupations for each member."
+                />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical"
+                      android:layout_marginLeft="10dp"
+                      android:layout_marginTop="10dp">
+        <TextView android:id="@+id/txtNCP_header2"
+                  android:layout_width="wrap_content"
+                  android:padding="5dp"
+                  android:layout_height="wrap_content"
+                  android:gravity="left"
+                  android:text="MIDDLE CYCLE START"
+                  android:textStyle="bold"
+                />
+        </LinearLayout>
+
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:layout_marginLeft="10dp"
+                  android:layout_marginTop="10dp">
+
+        <TextView android:id="@+id/txtGSW_info"
+                  android:layout_width="wrap_content"
+                  android:padding="5dp"
+                  android:layout_height="wrap_content"
+                  android:gravity="left"
+                  android:text="If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.
+Are you prepared to enter all member and cycle information now? If so you may get started by pressing next."
+
+                />
+    </LinearLayout>
+
+
+     </LinearLayout>
+</ScrollView>
