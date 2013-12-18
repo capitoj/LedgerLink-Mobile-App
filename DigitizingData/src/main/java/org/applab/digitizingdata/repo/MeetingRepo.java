@@ -51,6 +51,7 @@ public class MeetingRepo {
             }
             // Inserting Row
             long retVal = db.insert(MeetingSchema.getTableName(), null, values);
+
             if (retVal != -1) {
                 return true;
             }

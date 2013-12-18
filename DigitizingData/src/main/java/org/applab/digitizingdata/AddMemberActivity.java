@@ -46,6 +46,8 @@ public class AddMemberActivity extends SherlockActivity {
     MemberRepo repo;
     private boolean isEditAction;
 
+
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -55,6 +57,9 @@ public class AddMemberActivity extends SherlockActivity {
         if(getIntent().hasExtra("_id")){
             this.selectedMemberId = getIntent().getIntExtra("_id",0);
         }
+
+
+
 
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
@@ -123,7 +128,13 @@ public class AddMemberActivity extends SherlockActivity {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
         // END_INCLUDE (inflate_set_custom_view)
+        //if in getting started wizard.. use the getting started layout
+        //else use the default layout
+
+
         setContentView(R.layout.activity_add_member);
+
+
 
         //Setup the Spinner Items
         Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
@@ -196,6 +207,7 @@ public class AddMemberActivity extends SherlockActivity {
             }
             else {
                 retVal = repo.addMember(member);
+
             }
             if (retVal) {
                 if (member.getMemberId() == 0) {
@@ -466,6 +478,10 @@ public class AddMemberActivity extends SherlockActivity {
             }
 
 
+
+
+
+
             //Final Verifications
             //TODO: Trying to use Application context to ensure dialog box does not disappear
             if(!repo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId())) {
@@ -539,6 +555,7 @@ public class AddMemberActivity extends SherlockActivity {
         }
 
     }
+
 
     private void clearDataFields() {
         // Populate the Fields

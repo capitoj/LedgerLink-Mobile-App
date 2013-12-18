@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.domain.model.MiddleCycleMember;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.domain.schema.MemberSchema;
 import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
@@ -43,6 +44,7 @@ public class MemberRepo {
             values.put(MemberSchema.COL_M_OTHER_NAMES, member.getOtherNames());
             values.put(MemberSchema.COL_M_OCCUPATION, member.getOccupation());
             values.put(MemberSchema.COL_M_GENDER, member.getGender());
+
             if(member.getDateOfBirth() == null) {
                 member.setDateOfBirth(new Date());
             }
@@ -52,6 +54,7 @@ public class MemberRepo {
                 member.setDateOfAdmission(new Date());
             }
             values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
+
 
             // Inserting Row
             long retVal = db.insert(MemberSchema.getTableName(), null, values);
@@ -364,5 +367,39 @@ public class MemberRepo {
                 db.close();
             }
         }
+    }
+
+    public boolean addMiddleCycleMember(MiddleCycleMember member) {
+        //First add member
+        boolean  retValue = false;
+        retValue = addMember(member);
+
+        if(!retValue)
+        {
+            return retValue;
+        }
+
+
+        //Save the savings and outstanding loan
+
+
+        return retValue;
+
+    }
+
+    public boolean updateMiddleCycleMember(MiddleCycleMember member) {
+        boolean  retValue = false;
+        retValue = updateMember(member);
+
+        if(!retValue)
+        {
+            return retValue;
+        }
+
+
+        //Save the savings and outstanding loan
+
+
+        return retValue;
     }
 }

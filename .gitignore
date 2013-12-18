@@ -3,3 +3,8 @@
 .idea/*
 DigitizingData/build/*
 ibraries/ActionBarSherlock-4.3.1/build/*
+DigitizingDataProject.iml
+libraries
+.gitignore
+DigitizingData/DigitizingData.iml
+DigitizingData/DigitizingData.iml

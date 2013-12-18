@@ -21,6 +21,17 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Test purposes
+
+        if(true)
+        {
+            Intent i = new Intent(getBaseContext(), GettingStartedWizardPageOne.class);
+
+            startActivity(i);
+            return;
+        }
+
         setContentView(R.layout.activity_login);
 
         //Check whether the VSLA has been Activated

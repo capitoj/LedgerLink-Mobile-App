@@ -118,6 +118,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
             TextView lblTotalCashBalance = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFBalBd);
 
             double openingCash = meetingRepo.getMeetingTotalOpeningCash(meetingId);
+
             double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
             double totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);

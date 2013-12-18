@@ -19,6 +19,9 @@ public class VslaInfoSchema {
     public static final String COL_VI_ALLOW_DATA_MIGRATION = "AllowDataMigration";
     public static final String COL_VI_IS_DATA_MIGRATED = "IsDataMigrated";
 
+    public static final String COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE = "IsGettingStartedWizardComplete"; //field to show getting started wizard status
+    public static final String COL_VI_GETTING_STARTED_WIZARD_STAGE = "GettingStartedWizard"; //field to show getting started wizard status
+
     public static String getCreateTableScript() {
         StringBuffer sb = new StringBuffer();
 
@@ -36,7 +39,9 @@ public class VslaInfoSchema {
         sb.append(COL_VI_DATE_ACTIVATED + " TEXT ,");
         sb.append(COL_VI_IS_OFFLINE + " INTEGER ,");
         sb.append(COL_VI_ALLOW_DATA_MIGRATION + " INTEGER ,");
-        sb.append(COL_VI_IS_DATA_MIGRATED + " INTEGER");
+        sb.append(COL_VI_IS_DATA_MIGRATED + " INTEGER ,");
+        sb.append(COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE+ " INTEGER ,");
+        sb.append(COL_VI_GETTING_STARTED_WIZARD_STAGE+ " INTEGER");
         sb.append(")");
 
         return sb.toString();
@@ -63,7 +68,9 @@ public class VslaInfoSchema {
         sb.append(COL_VI_DATE_ACTIVATED + ",");
         sb.append(COL_VI_IS_OFFLINE + ",");
         sb.append(COL_VI_ALLOW_DATA_MIGRATION + ",");
-        sb.append(COL_VI_IS_DATA_MIGRATED);
+        sb.append(COL_VI_IS_DATA_MIGRATED + ",");
+        sb.append(COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE + ",");
+        sb.append(COL_VI_GETTING_STARTED_WIZARD_STAGE );
 
         return sb.toString();
     }

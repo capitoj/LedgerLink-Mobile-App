@@ -128,6 +128,23 @@
             android:label="@string/title_activity_activation" >
         </activity>
         <activity
+                android:name="org.applab.digitizingdata.GettingStartedWizardAddMemberActivity"
+                android:label="@string/title_activity_gettings_started_wizard_add_member" >
+        </activity>
+        <activity
+                android:name="org.applab.digitizingdata.GettingsStartedWizardNewCycleActivity"
+                android:label="@string/title_activity_gettings_started_wizard_add_cycle" >
+        </activity>
+
+        <activity
+                android:name="org.applab.digitizingdata.GettingStartedWizardPageOne"
+                android:label="@string/title_activity_gettings_started_wizard_page_1" >
+        </activity>
+        <activity
+                android:name="org.applab.digitizingdata.GettingStartedWizardPageTwo"
+                android:label="@string/title_activity_gettings_started_wizard_page_2" >
+        </activity>
+        <activity
             android:name="org.applab.digitizingdata.MeetingCashBookFrag"
             android:label="@string/title_activity_meeting_cash_book_frag" >
         </activity>

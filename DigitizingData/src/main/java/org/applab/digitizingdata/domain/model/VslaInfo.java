@@ -19,6 +19,15 @@ public class VslaInfo {
     private boolean allowDataMigration;
     private boolean isDataMigrated;
 
+    /*
+    Extra variables for gettings started wizard
+       isGettingStartedWizardComplete whether the wizard ran to completion
+        gettingStartedWizardStage the last stage in the wizard 0 - Welcome page, 1 - Pass Key prompt
+        2- Cycle info 3 - User Info
+     */
+    private boolean isGettingStartedWizardComplete;
+    private int gettingStartedWizardStage;
+
     public boolean isAllowDataMigration() {
         return allowDataMigration;
     }
@@ -113,5 +122,21 @@ public class VslaInfo {
 
     public void setOffline(boolean offline) {
         isOffline = offline;
+    }
+
+    public boolean isGettingStartedWizardComplete() {
+        return isGettingStartedWizardComplete;
+    }
+
+    public void setGettingStartedWizardComplete(boolean gettingStartedWizardComplete) {
+        isGettingStartedWizardComplete = gettingStartedWizardComplete;
+    }
+
+    public int getGettingStartedWizardStage() {
+        return gettingStartedWizardStage;
+    }
+
+    public void setGettingStartedWizardStage(int gettingStartedWizardStage) {
+        this.gettingStartedWizardStage = gettingStartedWizardStage;
     }
 }

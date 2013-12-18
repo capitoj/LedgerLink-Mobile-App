@@ -1,6 +1,8 @@
 package org.applab.digitizingdata.repo;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.domain.model.VslaMiddleStartCycle;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
 import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
@@ -445,4 +447,62 @@ public class VslaCycleRepo {
             return false;
         }
     }
+
+
+
+
+    public boolean updateMiddleStartCycle(VslaMiddleStartCycle cycle) {
+        /*
+        Method to update middle start cycle
+        For the getting started wizard
+        TO DO:
+        */
+
+        //Add the cycle...
+
+        return false;
+    }
+
+
+    public boolean addMiddleStartCycle(VslaMiddleStartCycle cycle) {
+        /*
+        Method to add middle start cycle
+        For the getting started wizard
+        TO DO:
+        */
+        boolean returnVal = addCycle(cycle);
+        if(! returnVal)
+        {
+            //return;
+            return returnVal;
+        }
+
+        //Create a dummy meeting to asisst with storing the interest collected and fines information
+        MeetingRepo repo = new MeetingRepo(context);
+        Meeting dummyMeeting = new Meeting();
+
+        //Load recently added cycle from db
+        VslaCycle mostRecentCycle = getMostRecentCycle();
+        dummyMeeting.setVslaCycle(mostRecentCycle);
+
+        //Set the meeting date as the start date of the cycle
+        dummyMeeting.setMeetingDate(mostRecentCycle.getStartDate());
+
+        //Add this meeting
+        returnVal = repo.addMeeting(dummyMeeting);
+        if(returnVal)
+        {
+            return returnVal;
+        }
+
+        //Load the most recent meeting now and set the fines
+        dummyMeeting = repo.getMostRecentMeeting();
+        dummyMeeting.setFines(cycle.getFinesCollected());
+        returnVal = repo.updateOpeningCash(dummyMeeting.getMeetingId(), 0, 0, dummyMeeting.getFines());
+
+
+        return returnVal;
+    }
+
+
 }

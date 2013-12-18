@@ -63,6 +63,8 @@ public class VslaInfoRepo {
             vslaInfo.setAllowDataMigration((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_ALLOW_DATA_MIGRATION)) == 1)? true : false);
             vslaInfo.setDataMigrated((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_DATA_MIGRATED)) == 1)? true : false);
 
+            vslaInfo.setGettingStartedWizardComplete((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE)) == 1)? true : false);
+            vslaInfo.setGettingStartedWizardStage(cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_GETTING_STARTED_WIZARD_STAGE)));
             // return data
             return vslaInfo;
         }
