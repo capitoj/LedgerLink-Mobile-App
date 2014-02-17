@@ -13,14 +13,13 @@
               android:layout_height="wrap_content"
               android:text="Review Members"
               android:textStyle="bold"
-              android:layout_below="@id/frmMList_top_control_bar"
             />
 
     <TextView android:id="@+id/lblRvwMembersHeading2"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may exit and come back later."
-              android:layout_below="@id/frmMList_top_control_bar"
+
             />
 
 
@@ -28,14 +27,12 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text=""
-              android:layout_below="@id/frmMList_top_control_bar"
             />
 
     <ListView android:id="@android:id/list"
               android:layout_width="fill_parent"
               android:layout_height="wrap_content"
-              android:choiceMode="singleChoice"
-              android:layout_below="@id/frmMList_top_control_bar" >
+              android:choiceMode="singleChoice" >
 
     </ListView>
 
@@ -43,7 +40,6 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="@string/empty_members_list"
-              android:layout_below="@id/frmMList_top_control_bar"
             />
 
     </LinearLayout>
