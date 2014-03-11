@@ -84,7 +84,7 @@ public class VslaCycleRepo {
             String columnList = VslaCycleSchema.getColumnList();
 
             // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s ORDER BY %s", columnList, VslaCycleSchema.getTableName(),
+            String selectQuery = String.format("SELECT %s FROM %s ORDER BY %s DESC", columnList, VslaCycleSchema.getTableName(),
                     VslaCycleSchema.COL_VC_CYCLE_ID);
 
             cursor = db.rawQuery(selectQuery, null);
@@ -134,6 +134,25 @@ public class VslaCycleRepo {
                 db.close();
             }
         }
+    }
+
+    //Return cycles that are still active
+    public ArrayList<VslaCycle> getActiveCycles() {
+        ArrayList<VslaCycle> activeCycles = null;
+
+        try {
+            activeCycles = new ArrayList<VslaCycle>();
+            for(VslaCycle cycle: getAllCycles()) {
+                if(cycle.isActive() && !cycle.isEnded()) {
+                    activeCycles.add(cycle);
+                }
+            }
+        }
+        catch(Exception ex) {
+            Log.e("VslaCycleRepo.getActiveCycles", ex.getMessage());
+        }
+
+        return activeCycles;
     }
 
     // Getting single Cycle

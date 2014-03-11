@@ -6,11 +6,15 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,14 +22,17 @@ import org.applab.digitizingdata.R;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.helpers.VslaCyclesArrayAdapter;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -45,6 +52,7 @@ public class EndCycleActivity extends SherlockActivity {
 
     private VslaCycle selectedCycle;
     private ActionBar actionBar;
+    private ArrayList<VslaCycle> vslaCycles;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,26 +75,62 @@ public class EndCycleActivity extends SherlockActivity {
 
         //Setup the Fields by getting the current Cycle
         VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
-        selectedCycle = repo.getCurrentCycle();
-        if(selectedCycle != null) {
-            //displayMessageBox("Testing", "Cycle to Update Found", MSGBOX_ICON_INFORMATION);
-            //Populate Fields
-            //populateDataFields(selectedCycle);
-            //Toast.makeText(getBaseContext(), "CURRENT CYCLE FOUND", Toast.LENGTH_LONG).show();
-            txtShareOutDate.setText(Utils.formatDate(selectedCycle.getEndDate(),"dd-MMM-yyyy"));
-            txtInstructions.setText(new StringBuilder()
-                    .append("The current cycle end date is " + Utils.formatDate(selectedCycle.getEndDate(), "dd-MMM-yyyy"))
-                    .append(". If your cycle has ended, enter the share out date.")
-                    .toString()
-            );
 
-            //Setup the Default Date
-            final Calendar c = Calendar.getInstance();
-            c.setTime(selectedCycle.getEndDate());
-            mYear = c.get(Calendar.YEAR);
-            mMonth = c.get(Calendar.MONTH);
-            mDay = c.get(Calendar.DAY_OF_MONTH);
-            updateDisplay(txtShareOutDate, mYear, mMonth+1,mDay);
+        //Deal with the radio buttons
+        RadioGroup grpCycleDates = (RadioGroup)findViewById(R.id.grpECExistingCycles);
+
+        //Retrieve all the active cycles
+        ArrayList<VslaCycle> activeCycles = repo.getActiveCycles();
+
+        //Create radio buttons dynamically
+        if(activeCycles != null) {
+            for(VslaCycle cycle: activeCycles) {
+                RadioButton radCycle = new RadioButton(this);
+                String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), "dd MMM yyyy"),
+                        Utils.formatDate(cycle.getEndDate(), "dd MMM yyyy"));
+                radCycle.setText(cycleDates);
+                radCycle.setId(cycle.getCycleId());
+                //radCycle.setTextColor();
+                radCycle.setTextSize(16);
+                radCycle.setTag(cycle); //Store the VslaCycle object in the Tag property of the radio button
+                radCycle.setTextColor(txtInstructions.getTextColors());
+                grpCycleDates.addView(radCycle);
+
+                if(activeCycles.size() == 1) {
+                    radCycle.setChecked(true);
+                }
+            }
+        }
+
+        if(activeCycles != null && activeCycles.size()>0) {
+            //Populate Fields
+            if(activeCycles.size() == 1) {
+                if(selectedCycle == null) {
+                    selectedCycle = activeCycles.get(0);
+                }
+                txtShareOutDate.setText(Utils.formatDate(selectedCycle.getEndDate(),"dd-MMM-yyyy"));
+
+                //Setup the Default Date: Not sure what this is for. LOL!
+                final Calendar c = Calendar.getInstance();
+                c.setTime(selectedCycle.getEndDate());
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+                updateDisplay(txtShareOutDate, mYear, mMonth+1,mDay);
+
+                txtInstructions.setText(new StringBuilder()
+                        .append("The current cycle end date is " + Utils.formatDate(selectedCycle.getEndDate(), "dd-MMM-yyyy"))
+                        .append(". If your cycle has ended, enter the share out date.")
+                        .toString()
+                );
+            }
+            else {
+                txtInstructions.setText(new StringBuilder()
+                        .append("There is more than one cycle currently running.\n")
+                        .append("Select the cycle to end and enter the share out date.")
+                        .toString()
+                );
+            }
         }
         else {
             txtInstructions.setText(new StringBuilder()
@@ -100,6 +144,16 @@ public class EndCycleActivity extends SherlockActivity {
             mDay = c.get(Calendar.DAY_OF_MONTH);
             updateDisplay(txtShareOutDate, mYear, mMonth+1,mDay);
         }
+
+        //Setup the Checked Listener
+        grpCycleDates.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radChecked = (RadioButton) findViewById(checkedId);
+                selectedCycle = (VslaCycle)radChecked.getTag();
+                //Toast.makeText(getApplicationContext(), "Selected VSLA Cycle is: " + Utils.formatDate(selectedCycle.getStartDate()),Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     //Event that is raised when the date has been set

@@ -140,7 +140,7 @@ public class LoginActivity extends Activity {
         //For now just consider the Vsla Cycle. May be later we shall include a few members
         VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
         if(null == cycleRepo.getMostRecentCycle()) {
-            showGettingStartedWizard = true;
+            //showGettingStartedWizard = true;
         }
 
         Intent mainMenu = null;

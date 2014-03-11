@@ -23,6 +23,17 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
 
+
+        <RadioGroup
+            android:id="@+id/grpECExistingCycles"
+            android:layout_below="@id/lblECInstruction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+    </RadioGroup>
+
     <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -30,7 +41,8 @@
             android:text="Share Out Date"
             android:id="@+id/lblECShareOutDate"
             android:textSize="18sp"
-            android:layout_below="@id/lblECInstruction"
+            android:textStyle="bold"
+            android:layout_below="@id/grpECExistingCycles"
             android:layout_alignParentLeft="true"/>
 
     <TextView
@@ -52,12 +64,14 @@
             android:text="Share Out Amount"
             android:id="@+id/lblECShareOutAmount"
             android:textSize="18sp"
+            android:textStyle="bold"
             android:layout_below="@id/txtECShareOutDate"
             android:layout_alignParentLeft="true"/>
 
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/frmECShareOutAmount"
             android:layout_below="@id/lblECShareOutAmount"
             android:weightSum="10" >
         <EditText
