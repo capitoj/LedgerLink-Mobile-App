@@ -472,13 +472,13 @@ public class NewCycleActivity extends SherlockActivity {
 
         // Setting Icon to Dialog
         if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_EXCLAMATION)) {
-            alertDialog.setIcon(R.drawable.exclamation);
+            alertDialog.setIcon(R.drawable.phone);
         }
         else if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_TICK)) {
-            alertDialog.setIcon(R.drawable.tick);
+            alertDialog.setIcon(R.drawable.phone);
         }
         else if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_QUESTION)) {
-            alertDialog.setIcon(R.drawable.question);
+            alertDialog.setIcon(R.drawable.phone);
         }
 
         // Setting OK Button

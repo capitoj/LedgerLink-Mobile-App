@@ -38,12 +38,13 @@ import org.json.JSONStringer;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-public class ActivationActivity extends SherlockActivity {
+public class ActivationActivity extends Activity {
     VslaInfoRepo vslaInfoRepo = null;
     HttpClient client;
     int httpStatusCode = 0; //To know whether the Request was successful
     boolean activationSuccessful = false;
     String targetVslaCode = null; //fake-fix
+    String securityPasskey = null;
     ProgressDialog progressDialog = null;
 
 
@@ -53,7 +54,6 @@ public class ActivationActivity extends SherlockActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activation);
 
-        getSupportActionBar().hide();
         vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
         // ---Button view---
         Button btnActivate = (Button)findViewById(R.id.btnVAActivate);
@@ -62,43 +62,6 @@ public class ActivationActivity extends SherlockActivity {
                 saveActivatedVslaInfo();
             }
         });
-
-        // ---Button view---
-//        Button btnCancel = (Button)findViewById(R.id.btnVACancel);
-//        btnCancel.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//
-//                if(null == vslaInfoRepo) {
-//                    vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
-//                }
-//
-//                //Set Offline
-//                AlertDialog.Builder ad = new AlertDialog.Builder(ActivationActivity.this);
-//                ad.setTitle("Work Offline");
-//                ad.setMessage("When working Offline, you will not be able to send meeting data to the bank or check the VSLA's bank account balance. However, you can still Activate later. \nContinue?");
-//                ad.setPositiveButton(
-//                        "Yes", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int arg1) {
-//
-//                        if (saveOfflineVslaInfo()) {
-//                            Intent i = new Intent(getBaseContext(), LoginActivity.class);
-//                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            startActivity(i);
-//                            finish();
-//                        }
-//                    }
-//                }
-//                );
-//                ad.setNegativeButton(
-//                        "No", new DialogInterface.OnClickListener(){
-//                    public void onClick(DialogInterface dialog, int arg1) {
-//
-//                    }
-//                }
-//                );
-//                ad.show();
-//            }
-//        });
     }
 
     @Override
@@ -113,42 +76,6 @@ public class ActivationActivity extends SherlockActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-    }
-
-    private String activateVlsa(String vslaCode, String sourceImei)
-    {
-        String vslaName = null;
-        String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL,vslaCode,sourceImei);
-        try {
-            HttpGet get = new HttpGet(uri);
-            HttpResponse response = client.execute(get);
-            int status = response.getStatusLine().getStatusCode();
-
-            if(status == 200) //sucess
-            {
-                HttpEntity e = response.getEntity();
-                String data = EntityUtils.toString(e);
-                JSONObject result = new JSONObject(data);
-                vslaName = result.getString("ActivateVslaForDigitizingDataResult");
-                return vslaName;
-            }
-            else
-            {
-                return vslaName;
-            }
-        }
-        catch(ClientProtocolException exClient) {
-            return null;
-        }
-        catch(IOException exIo) {
-            return null;
-        }
-        catch(JSONException exJson) {
-            return null;
-        }
-        catch(Exception ex) {
-            return null;
-        }
     }
 
     private void activateVlsaUsingPostAsync(String request)
@@ -231,6 +158,9 @@ public class ActivationActivity extends SherlockActivity {
 
             //set target vslacode
             targetVslaCode = vslaCode;
+
+            //Set target passkey: will be used later in AsyncPost
+            securityPasskey = passKey;
 
             //Get IMEI
             String imei = null;
@@ -417,6 +347,7 @@ public class ActivationActivity extends SherlockActivity {
             String vslaName = null;
             String passKey = null;
             super.onPostExecute(result);
+            boolean retrievedVslaNameSavedSuccessfully = false; //Indicates that activation succeeded and vslaName retrieved was saved
 
             try {
                 if(result != null) {
@@ -425,30 +356,48 @@ public class ActivationActivity extends SherlockActivity {
                     passKey = result.getString("PassKey");
                 }
                 if(activationSuccessful && null != vslaName) {
-                    boolean retVal = vslaInfoRepo.saveVslaInfo(targetVslaCode,vslaName, passKey);
-                    if(retVal) {
-                        Toast.makeText(ActivationActivity.this, "Congratulations! Activation Completed Successfully.", Toast.LENGTH_LONG).show();
+                    retrievedVslaNameSavedSuccessfully = vslaInfoRepo.saveVslaInfo(targetVslaCode,vslaName, passKey);
+                    if(retrievedVslaNameSavedSuccessfully) {
+                        Toast.makeText(ActivationActivity.this, "Congratulations! Registration Completed Successfully.", Toast.LENGTH_LONG).show();
                         dismissProgressDialog();
                         Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                        i.putExtra("_wasCalledFromActivation", true);
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
                         finish();
                     }
+                    else {
+                        Toast.makeText(ActivationActivity.this, "Registration failed while writing retrieved VSLA Name on the local database. Try again later.", Toast.LENGTH_LONG).show();
+                        dismissProgressDialog();
+                    }
                 }
                 else {
                     //Process failed
-                    Toast.makeText(getApplicationContext(), "Activation failed due to internet connection problems. Try again later.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Registration failed due to internet connection problems. Try again later.",Toast.LENGTH_LONG).show();
                     dismissProgressDialog();
+                }
+
+                //In case activation failed
+                if(!retrievedVslaNameSavedSuccessfully) {
+                    //Save the record offline
+                    vslaInfoRepo.saveOfflineVslaInfo(targetVslaCode,securityPasskey);
+
+                    //Then call the login activity
+                    Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                    i.putExtra("_wasCalledFromActivation", true);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                    finish();
                 }
             }
             catch(JSONException exJson) {
                 //Process failed
-                Toast.makeText(getApplicationContext(), "Activation failed due to invalid Data Format. Try again later.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Registration failed due to invalid Data Format. Try again later.",Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
             }
             catch(Exception ex) {
                 //Process failed
-                Toast.makeText(getApplicationContext(), "Activation failed. Try again later.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Registration failed. Try again later.",Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
             }
         }
