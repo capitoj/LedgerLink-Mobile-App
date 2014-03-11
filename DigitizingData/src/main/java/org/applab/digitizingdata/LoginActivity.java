@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.VslaCycleRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 public class LoginActivity extends Activity {
@@ -24,13 +25,13 @@ public class LoginActivity extends Activity {
 
         //Test purposes
 
-        if(true)
-        {
-            Intent i = new Intent(getBaseContext(), GettingStartedWizardPageOne.class);
-
-            startActivity(i);
-            return;
-        }
+//        if(true)
+//        {
+//            Intent i = new Intent(getBaseContext(), GettingStartedWizardPageOne.class);
+//
+//            startActivity(i);
+//            return;
+//        }
 
         setContentView(R.layout.activity_login);
 
@@ -49,8 +50,8 @@ public class LoginActivity extends Activity {
                     ad.setPositiveButton(
                             "Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int arg1) {
-                            Intent i = new Intent(getApplicationContext(), ActivationActivity.class);
-                            startActivity(i);
+
+                            startMainMenuActivity();
                         }
                     }
                     );
@@ -65,7 +66,9 @@ public class LoginActivity extends Activity {
                 else {
                     //If it is not Activated and is not in Offline Mode, force activation
                     Intent i = new Intent(LoginActivity.this, ActivationActivity.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
+                    finish();
                 }
             }
             else {
@@ -76,7 +79,9 @@ public class LoginActivity extends Activity {
             //if VSLAInfo is NULL, force Activation
             //If it is not Activated and is not in Offline Mode, force activation
             Intent i = new Intent(LoginActivity.this, ActivationActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
+            finish();
         }
 
         TextView txtVslaName = (TextView) findViewById(R.id.lbl_vsla_name);
@@ -97,8 +102,7 @@ public class LoginActivity extends Activity {
                 String passKey = txtPassKey.getText().toString().trim();
 
                 if(passKey.equalsIgnoreCase(vslaInfo.getPassKey())) {
-                    Intent mainMenu = new Intent(getBaseContext(), MainActivity.class);
-                    startActivity(mainMenu);
+                    startMainMenuActivity();
                 }
                 else {
                     Utils.createAlertDialogOk(LoginActivity.this,"Security","The Pass Key is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
@@ -114,6 +118,34 @@ public class LoginActivity extends Activity {
         getMenuInflater().inflate(R.menu.login, menu);
 
         return true;
+    }
+
+    private void startMainMenuActivity() {
+        boolean showGettingStartedWizard = false;
+        //Determine whether to start the Getting Started Wizard or the Main Menu
+        //For now just consider the Vsla Cycle. May be later we shall include a few members
+        VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
+        if(null != cycleRepo.getMostRecentCycle()) {
+            showGettingStartedWizard = true;
+        }
+
+        Intent mainMenu = null;
+        if(showGettingStartedWizard) {
+            mainMenu = new Intent(getBaseContext(), MainActivity.class);
+        }
+        else {
+            mainMenu = new Intent(getBaseContext(), GettingStartedWizardPageOne.class);
+        }
+        
+        mainMenu.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(mainMenu);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //End the application
+        finish();
     }
     
 }

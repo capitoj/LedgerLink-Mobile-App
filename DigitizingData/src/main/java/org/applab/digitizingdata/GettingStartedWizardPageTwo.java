@@ -55,19 +55,26 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
 
     public void ValidPassKey()
     {
-        TextView txtPassKey = (TextView)findViewById(R.id.txtGSW_passkey);
-        String passKey = txtPassKey.getText().toString().trim();
+        TextView txtPassKey = null;
+        try {
+            txtPassKey = (TextView)findViewById(R.id.txtGSW_passkey);
+            String passKey = txtPassKey.getText().toString().trim();
 
-        //Test purposes
-        vslaInfo.setPassKey("");
+            //Test purposes
+            vslaInfo.setPassKey("");
 
-        if(passKey.equalsIgnoreCase(vslaInfo.getPassKey())) {
-            Intent mainMenu = new Intent(getBaseContext(), GettingsStartedWizardNewCycleActivity.class);
+            if(passKey.equalsIgnoreCase(vslaInfo.getPassKey())) {
+                Intent mainMenu = new Intent(getBaseContext(), GettingsStartedWizardNewCycleActivity.class);
 
-            startActivity(mainMenu);
+                startActivity(mainMenu);
+            }
+            else {
+                Utils.createAlertDialogOk(this, "Security", "The Pass Key is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtPassKey.requestFocus();
+            }
         }
-        else {
-            Utils.createAlertDialogOk(this, "Security", "The Pass Key is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+        catch(Exception ex) {
+            Utils.createAlertDialogOk(this, "Security", "The Pass Key could not be validated.", Utils.MSGBOX_ICON_EXCLAMATION).show();
             txtPassKey.requestFocus();
         }
     }

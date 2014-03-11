@@ -15,6 +15,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockActivity;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -36,7 +38,7 @@ import org.json.JSONStringer;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-public class ActivationActivity extends Activity {
+public class ActivationActivity extends SherlockActivity {
     VslaInfoRepo vslaInfoRepo = null;
     HttpClient client;
     int httpStatusCode = 0; //To know whether the Request was successful
@@ -44,11 +46,14 @@ public class ActivationActivity extends Activity {
     String targetVslaCode = null; //fake-fix
     ProgressDialog progressDialog = null;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activation);
 
+        getSupportActionBar().hide();
         vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
         // ---Button view---
         Button btnActivate = (Button)findViewById(R.id.btnVAActivate);
@@ -59,39 +64,41 @@ public class ActivationActivity extends Activity {
         });
 
         // ---Button view---
-        Button btnCancel = (Button)findViewById(R.id.btnVACancel);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                if(null == vslaInfoRepo) {
-                    vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
-                }
-
-                //Set Offline
-                AlertDialog.Builder ad = new AlertDialog.Builder(ActivationActivity.this);
-                ad.setTitle("Work Offline");
-                ad.setMessage("When working Offline, you will not be able to send meeting data to the bank or check the VSLA's bank account balance. However, you can still Activate later. \nContinue?");
-                ad.setPositiveButton(
-                        "Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int arg1) {
-
-                        if (saveOfflineVslaInfo()) {
-                            Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                            startActivity(i);
-                        }
-                    }
-                }
-                );
-                ad.setNegativeButton(
-                        "No", new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dialog, int arg1) {
-
-                    }
-                }
-                );
-                ad.show();
-            }
-        });
+//        Button btnCancel = (Button)findViewById(R.id.btnVACancel);
+//        btnCancel.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//
+//                if(null == vslaInfoRepo) {
+//                    vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
+//                }
+//
+//                //Set Offline
+//                AlertDialog.Builder ad = new AlertDialog.Builder(ActivationActivity.this);
+//                ad.setTitle("Work Offline");
+//                ad.setMessage("When working Offline, you will not be able to send meeting data to the bank or check the VSLA's bank account balance. However, you can still Activate later. \nContinue?");
+//                ad.setPositiveButton(
+//                        "Yes", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int arg1) {
+//
+//                        if (saveOfflineVslaInfo()) {
+//                            Intent i = new Intent(getBaseContext(), LoginActivity.class);
+//                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            startActivity(i);
+//                            finish();
+//                        }
+//                    }
+//                }
+//                );
+//                ad.setNegativeButton(
+//                        "No", new DialogInterface.OnClickListener(){
+//                    public void onClick(DialogInterface dialog, int arg1) {
+//
+//                    }
+//                }
+//                );
+//                ad.show();
+//            }
+//        });
     }
 
     @Override
@@ -100,6 +107,12 @@ public class ActivationActivity extends Activity {
             progressDialog.dismiss();
         }
         super.onDestroy();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     private String activateVlsa(String vslaCode, String sourceImei)
@@ -157,18 +170,26 @@ public class ActivationActivity extends Activity {
         try{
             TextView txtVslaCode = (TextView) findViewById(R.id.txtVAVslaCode);
             TextView txtPassKey = (TextView) findViewById(R.id.txtVAPassKey);
+            TextView txtConfirmPassKey = (TextView) findViewById(R.id.txtVAConfirmPassKey);
 
             String vslaCode = txtVslaCode.getText().toString().trim();
             String passKey = txtPassKey.getText().toString().trim();
+            String confirmPassKey = txtConfirmPassKey.getText().toString().trim();
 
             if(vslaCode.length()<=0) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Activation","The VSLA Code is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The VSLA Code is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtVslaCode.requestFocus();
                 return false;
             }
 
             if(passKey.length()<=0) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Activation","The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtPassKey.requestFocus();
+                return false;
+            }
+
+            if(!passKey.equalsIgnoreCase(confirmPassKey)) {
+                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The Pass Keys do not match.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return false;
             }
@@ -184,18 +205,26 @@ public class ActivationActivity extends Activity {
         try{
             TextView txtVslaCode = (TextView) findViewById(R.id.txtVAVslaCode);
             TextView txtPassKey = (TextView) findViewById(R.id.txtVAPassKey);
+            TextView txtConfirmPassKey = (TextView) findViewById(R.id.txtVAConfirmPassKey);
 
             String vslaCode = txtVslaCode.getText().toString().trim();
             String passKey = txtPassKey.getText().toString().trim();
+            String confirmPassKey = txtConfirmPassKey.getText().toString().trim();
 
             if(vslaCode.length()<=0) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Activation","The VSLA Code is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The VSLA Code is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtVslaCode.requestFocus();
                 return;
             }
 
             if(passKey.length()<=0) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Activation","The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtPassKey.requestFocus();
+                return;
+            }
+
+            if(!passKey.equalsIgnoreCase(confirmPassKey)) {
+                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The Pass Keys do not match.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return;
             }
@@ -298,8 +327,8 @@ public class ActivationActivity extends Activity {
                 if (activationActivityWeakReference.get() != null && !activationActivityWeakReference.get().isFinishing()) {
                     if(null == progressDialog) {
                         progressDialog = new ProgressDialog(activationActivityWeakReference.get());
-                        progressDialog.setTitle("Phone Activation");
-                        progressDialog.setMessage("Activating the VSLA Phone for Ledger Link. Please wait...");
+                        progressDialog.setTitle("Registration");
+                        progressDialog.setMessage("Sending registration");
                         progressDialog.setMax(10);
                         progressDialog.setProgress(1);
                         progressDialog.setCancelable(false);
@@ -401,7 +430,9 @@ public class ActivationActivity extends Activity {
                         Toast.makeText(ActivationActivity.this, "Congratulations! Activation Completed Successfully.", Toast.LENGTH_LONG).show();
                         dismissProgressDialog();
                         Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
+                        finish();
                     }
                 }
                 else {

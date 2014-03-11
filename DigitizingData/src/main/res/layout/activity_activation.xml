@@ -3,13 +3,12 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#3b5998">
+        >
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#3b5998"
-                tools:context=".LoginActivity">
+                >
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:tools="http://schemas.android.com/tools"
@@ -20,8 +19,7 @@
                     android:paddingRight="@dimen/activity_horizontal_margin"
                     android:paddingTop="@dimen/activity_vertical_margin"
                     android:paddingBottom="@dimen/activity_vertical_margin"
-                    android:background="#3b5998"
-                    tools:context=".LoginActivity">
+                    >
 
         <TextView
                 android:id="@+id/lblVATitle"
@@ -30,7 +28,6 @@
                 android:textSize="32sp"
                 android:layout_centerHorizontal="true"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
                 android:text="Ledger Link" />
 
         <TextView
@@ -38,26 +35,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:layout_centerHorizontal="true"
+                android:gravity="left"
                 android:layout_below="@id/lblVATitle"
                 android:paddingTop="2dip"
                 android:layout_marginTop="10dp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:text="Activation" />
+                android:text="REGISTER" />
 
         <TextView
                 android:id="@+id/lblVAVslaCode"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:layout_centerHorizontal="true"
+                android:textSize="20sp"
+                android:gravity="left"
                 android:layout_below="@id/lblVAHeader"
                 android:paddingTop="2dp"
                 android:layout_marginTop="10dp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:text="VSLA Code" />
+                android:text="VSLA Number" />
 
         <EditText
                 android:id="@+id/txtVAVslaCode"
@@ -70,9 +65,8 @@
                 android:paddingLeft="5dip"
                 android:textStyle="bold"
                 android:textSize="20sp"
-                android:background="#FFFFFF"
-                android:inputType="textCapWords"
-                >
+                android:inputType="textCapCharacters"
+                android:hint="Enter VSLA Number">
             <requestFocus/>
         </EditText>
 
@@ -80,27 +74,51 @@
                 android:id="@+id/lblVAPassKey"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/txtVAVslaCode"
                 android:paddingTop="2dip"
                 android:layout_marginTop="10dp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:text="Pass Key" />
+                android:text="Create a Passkey" />
+        <TextView
+                android:id="@+id/lblVAPassKeyInfo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/lblVAPassKey"
+                android:paddingTop="2dip"
+                android:layout_marginTop="10dp"
+                android:text="@string/activity_activation_vsla_passkey_info" />
 
         <EditText
                 android:id="@+id/txtVAPassKey"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lblVAPassKey"
-                android:layout_marginTop="5dp"
+                android:layout_below="@id/lblVAPassKeyInfo"
+                android:layout_marginTop="10dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
-                android:textSize="18sp"
-                android:background="#FFFFFF"
-                android:inputType="textPassword|number"
+                android:textSize="24sp"
+                android:inputType="numberPassword"
+                android:hint="Enter Passkey"
+                >
+        </EditText>
+
+        <EditText
+                android:id="@+id/txtVAConfirmPassKey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtVAPassKey"
+                android:layout_marginTop="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:textSize="24sp"
+                android:inputType="numberPassword"
+                android:hint="Type Passkey Again"
                 >
         </EditText>
 
@@ -112,13 +130,13 @@
                 android:paddingTop="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/txtVAPassKey"
+                android:layout_below="@id/txtVAConfirmPassKey"
                 android:textColor="#FFFFFF"
                 android:background="#191970"
                 android:textStyle="bold"
                 android:textSize="24sp"
-                android:text="Activate"/>
-        <Button
+                android:text="Register"/>
+        <!-- <Button
                 android:id="@+id/btnVACancel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +149,8 @@
                 android:background="#191970"
                 android:textStyle="bold"
                 android:textSize="20sp"
-                android:text="Work Offline"/>
+                android:visibility="invisible"
+                android:text="Work Offline"/> -->
 
     </RelativeLayout>
 </RelativeLayout>

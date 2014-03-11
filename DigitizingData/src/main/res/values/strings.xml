@@ -12,7 +12,7 @@
     <string name="title_activity_members_list">Members</string>
     <string name="title_activity_send_meeting_data">Send Meeting Data</string>
     <string name="title_activity_member_attendance_history">Attendance History</string>
-    <string name="title_activity_activation">Activation</string>
+    <string name="title_activity_activation">Register</string>
     <string name="add_member_gender_prompt">Select Sex</string>
     <string name="title_activity_meeting_cash_book_frag">Cash Book</string>
     <string name="title_activity_meeting_send_data_frag">Send Data</string>
@@ -22,5 +22,6 @@
 
     <string name="title_activity_gettings_started_wizard_page_1">Welcome</string>
     <string name="title_activity_gettings_started_wizard_page_2">Pass Code</string>
+    <string name="activity_activation_vsla_passkey_info">Enter at least 5 digits that you will remember. A passkey is a secret number you will enter to open Ledger Link at every meeting.</string>
 
 </resources>
