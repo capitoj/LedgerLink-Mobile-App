@@ -10,12 +10,31 @@
               android:layout_height="match_parent">
 
     <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="5dp"
+        android:textSize="18sp"
+        android:text="You have more than one active cycle. Please choose the cycle for the new meeting."
+        android:id="@+id/lblMDMultipleCycles"
+        android:layout_gravity="left"/>
+
+    <RadioGroup
+        android:id="@+id/grpMDExistingCycles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
+
+    </RadioGroup>
+
+    <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:textSize="18sp"
-            android:text="View the date below and tap it to change if it is not the correct meeting date. (You may not select a date in the future.) Tap the arrow above to begin the meeting."
+            android:text="View the date below and tap to change if it is not the correct meeting date. (You may not pick a date in the future.) When it is correct, tap the arrow above to begin the meeting."
             android:id="@+id/lblMDHeader"
             android:layout_gravity="left"/>
 

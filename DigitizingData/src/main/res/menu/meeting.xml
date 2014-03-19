@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:id="@+id/mnuSMDSend"
           android:title="Send"
           android:menuCategory="system"
@@ -15,4 +15,22 @@
           android:showAsAction="ifRoom|withText"
           android:icon="@drawable/navigation_cancel"
             />
+    <item android:id="@+id/mnuMeetingFineMember"
+        android:title="Fine Member"
+        android:menuCategory="system"
+        android:orderInCategory="31"
+        android:showAsAction="never"
+        />
+    <item android:id="@+id/mnuMeetingChangeDate"
+        android:title="Change Meeting Date"
+        android:menuCategory="system"
+        android:orderInCategory="32"
+        android:showAsAction="never"
+        />
+    <item android:id="@+id/mnuMeetingChangeDate"
+        android:title="Delete Meeting"
+        android:menuCategory="system"
+        android:orderInCategory="33"
+        android:showAsAction="never"
+        />
 </menu>

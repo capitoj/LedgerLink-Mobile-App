@@ -3,15 +3,19 @@ package org.applab.digitizingdata;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.Html;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +64,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
     private Meeting previousMeeting; //The most recent meeting before this one
     private Meeting meetingOfSameDate = null;
     private boolean reloadedExistingMeeting = false; //Flag to determine whether some actions will be performed
+    private VslaCycle selectedCycle = null;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +86,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                             if(repo == null) {
                                 repo = new MeetingRepo(MeetingDefinitionActivity.this);
                             }
-                            Meeting currentMeeting = repo.getCurrentMeeting();
+                            Meeting currentMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
 
                             retSetupMeeting = setupCurrentMeeting(currentMeeting);
 
@@ -125,7 +130,84 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
         repo = new MeetingRepo(MeetingDefinitionActivity.this);
 
-        previousMeeting = repo.getCurrentMeeting();
+        //Setup the Fields by getting the current Cycle
+        VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
+
+        //Deal with the radio buttons
+        RadioGroup grpCycleDates = (RadioGroup)findViewById(R.id.grpMDExistingCycles);
+
+        //Retrieve all the active cycles
+        ArrayList<VslaCycle> activeCycles = cycleRepo.getActiveCycles();
+
+        //Create radio buttons dynamically
+        if(activeCycles != null) {
+            for(VslaCycle cycle: activeCycles) {
+                RadioButton radCycle = new RadioButton(this);
+                String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), "dd MMM yyyy"),
+                        Utils.formatDate(cycle.getEndDate(), "dd MMM yyyy"));
+                radCycle.setText(cycleDates);
+                radCycle.setId(cycle.getCycleId());
+                //radCycle.setTextColor();
+                radCycle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+                radCycle.setTypeface(radCycle.getTypeface(), Typeface.BOLD);
+                //radCycle.setPadding(10,0,0,0);
+                radCycle.setTag(cycle); //Store the VslaCycle object in the Tag property of the radio button
+                //radCycle.setTextColor(txtMeetingDate.getTextColors());
+                grpCycleDates.addView(radCycle);
+
+                if(activeCycles.size() == 1) {
+                    radCycle.setChecked(true);
+                }
+            }
+        }
+
+        if(activeCycles != null && activeCycles.size()>0) {
+            //Populate Fields
+            if(activeCycles.size() == 1) {
+                if(selectedCycle == null) {
+                    selectedCycle = activeCycles.get(0);
+                }
+
+//                txtInstructions.setText(new StringBuilder()
+//                        .append("The current cycle end date is " + Utils.formatDate(selectedCycle.getEndDate(), "dd-MMM-yyyy"))
+//                        .append(". If your cycle has ended, enter the share out date.")
+//                        .toString()
+//                );
+            }
+            else {
+//                txtInstructions.setText(new StringBuilder()
+//                        .append("There is more than one cycle currently running.\n")
+//                        .append("Select the cycle to end and enter the share out date.")
+//                        .toString()
+//                );
+            }
+        }
+        else {
+//            txtInstructions.setText(new StringBuilder()
+//                    .append("There is no cycle that is currently running")
+//                    .toString()
+//            );
+        }
+
+        //Setup the Checked Listener
+        grpCycleDates.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radChecked = (RadioButton) findViewById(checkedId);
+                selectedCycle = (VslaCycle)radChecked.getTag();
+
+                //Setup the Previous Meeting at this point so that it holds the meeting of the selected Cycle
+                if(null != selectedCycle) {
+                    previousMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
+                }
+                //Toast.makeText(getApplicationContext(), "Selected VSLA Cycle is: " + Utils.formatDate(selectedCycle.getStartDate()),Toast.LENGTH_LONG).show();
+            }
+        });
+
+        //TODO: This will be deprecated after the introduction of multi-cycle support
+        if(null != selectedCycle) {
+            previousMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
+        }
 
         //Reset the instruction text
         //StringBuilder sb = new StringBuilder("Ready to enter data for a meeting? ");
@@ -187,7 +269,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         if(viewClicked != null) {
             dateString = (new StringBuilder()
                     // Month is 0 based so add 1
-                    .append(mDay)
+                    .append(String.format("%02d",mDay))
                     .append("-")
                     .append(Utils.getMonthNameAbbrev(mMonth + 1))
                     .append("-")
@@ -245,7 +327,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                     if(repo == null) {
                         repo = new MeetingRepo(MeetingDefinitionActivity.this);
                     }
-                    Meeting currentMeeting = repo.getCurrentMeeting();
+                    Meeting currentMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
 
                     return setupCurrentMeeting(currentMeeting);
                 }
@@ -327,13 +409,15 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             }
 
             //Set the Cycle
-            VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
-            VslaCycle cycle = cycleRepo.getCurrentCycle();
-            if(null != cycle) {
-                meeting.setVslaCycle(cycle);
+            //VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
+            //VslaCycle cycle = cycleRepo.getCurrentCycle();
+
+            //Set Cycle to the selected one
+            if(null != selectedCycle) {
+                meeting.setVslaCycle(selectedCycle);
             }
             else {
-                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting", "The Current Cycle could not be determined", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting", "The Current Cycle could not be determined. Please choose a cycle.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtMeetingDate.requestFocus();
                 return false;
             }
@@ -358,11 +442,11 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             if(null == repo) {
                 repo = new MeetingRepo(MeetingDefinitionActivity.this);
             }
-            Meeting mostRecent = repo.getMostRecentMeetingInCycle(cycle.getCycleId());
+            Meeting mostRecent = repo.getMostRecentMeetingInCycle(selectedCycle.getCycleId());
 
-            //First: Check whether a meeting with this date exists
+            //First: Check whether a meeting with this date exists in the given vsla cycle
             meetingOfSameDate = null;
-            meetingOfSameDate = repo.getMeetingByDate(meeting.getMeetingDate());
+            meetingOfSameDate = repo.getMeetingByDate(meeting.getMeetingDate(), selectedCycle.getCycleId());
             if(null != meetingOfSameDate) {
                 //Pull the Meeting and display it instead of saving a new meeting
                 //cancel the save operation
@@ -371,9 +455,9 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
             //Further Validations
             //check that meeting is with the boundaries of the current cycle
-            if(meeting.getMeetingDate().before(cycle.getStartDate()) || meeting.getMeetingDate().after(cycle.getEndDate())) {
+            if(meeting.getMeetingDate().before(selectedCycle.getStartDate()) || meeting.getMeetingDate().after(selectedCycle.getEndDate())) {
                 Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting",
-                        String.format("The Meeting Date has to be within the current cycle i.e. %s and %s",Utils.formatDate(cycle.getStartDate()), Utils.formatDate(cycle.getEndDate())),
+                        String.format("The Meeting Date has to be within the current cycle i.e. %s and %s",Utils.formatDate(selectedCycle.getStartDate()), Utils.formatDate(selectedCycle.getEndDate())),
                         Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtMeetingDate.requestFocus();
                 return false;

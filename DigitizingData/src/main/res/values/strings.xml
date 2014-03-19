@@ -19,9 +19,9 @@
     <string name="title_activity_meeting_opening_cash_frag">Starting Cash</string>
     <string name="title_activity_gettings_started_wizard_add_member">Add Member</string>
     <string name="title_activity_gettings_started_wizard_add_cycle">New Cycle</string>
-
     <string name="title_activity_gettings_started_wizard_page_1">Welcome</string>
     <string name="title_activity_gettings_started_wizard_page_2">Pass Code</string>
     <string name="activity_activation_vsla_passkey_info">Enter at least 5 digits that you will remember. A passkey is a secret number you will enter to open Ledger Link at every meeting.</string>
+    <string name="title_activity_begin_meeting">BeginMeetingActivity</string>
 
 </resources>

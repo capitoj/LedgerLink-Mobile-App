@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/frmBM_top_control_bar">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="5dp"
+            android:textSize="18sp"
+            android:text="Tap [Begin] to begin a new meeting."
+            android:id="@+id/lblBMHeader"
+            android:layout_gravity="left"/>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/grpBMCurrentMeeting">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:background="#3b5998"
+                android:text="CURRENT MEETING"
+                android:id="@+id/lblBMSection1"
+                />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:textSize="18sp"
+                android:text="You may edit before sending."
+                android:id="@+id/lblBMInstructionCurrent"
+                android:layout_gravity="left"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:paddingLeft="5dp"
+                android:textSize="20sp"
+                android:textColorLink="#0000FF"
+                android:textStyle="bold"
+                android:text="04 Mar 2013"
+                android:id="@+id/lblBMCurrentMeetingDate"
+                android:layout_gravity="left"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/grpBMPastMeetings"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:background="#3b5998"
+                android:text="UNSENT PAST MEETINGS"
+                android:id="@+id/lblBMSection2"
+                />
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:textSize="18sp"
+                android:text="You may not edit, but you may review before sending."
+                android:id="@+id/lblBMInstructionPast"
+                android:layout_gravity="left"/>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="5dp"
+                android:textSize="18sp"
+                android:text="There are several unsent meetings. It is not safe to keep meetings without sending! Please send every week."
+                android:id="@+id/lblBMWarning"
+                android:layout_gravity="left"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

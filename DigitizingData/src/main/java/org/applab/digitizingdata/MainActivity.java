@@ -48,7 +48,7 @@ public class MainActivity extends SherlockActivity {
     private void displayMainMenu() {
         //Load the Main Menu
         mainMenuItems = new ArrayList<MenuItem>();
-        mainMenuItems.add(new MenuItem("beginMeeting", "Begin Meeting"));
+        mainMenuItems.add(new MenuItem("beginMeeting", "Meeting"));
         mainMenuItems.add(new MenuItem("sendData", "Check & Send Data"));
         mainMenuItems.add(new MenuItem("viewSentData", "Sent Data"));
         mainMenuItems.add(new MenuItem("updateCycle", "Review & Edit Cycle"));
@@ -85,7 +85,7 @@ public class MainActivity extends SherlockActivity {
                 String selectedMenuName = selectedMenu.getMenuName();
 
                 if(selectedMenuName.equalsIgnoreCase("beginMeeting")) {
-                    Intent i = new Intent(getApplicationContext(), MeetingDefinitionActivity.class);
+                    Intent i = new Intent(getApplicationContext(), BeginMeetingActivity.class);
                     startActivity(i);
                 }
                 else if(selectedMenuName.equalsIgnoreCase("sendData")) {

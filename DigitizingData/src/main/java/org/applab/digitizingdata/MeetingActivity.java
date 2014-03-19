@@ -59,7 +59,6 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     private static int currentDataItemPosition = 0;
     private static String serverUri = "";
 
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting);
@@ -123,7 +122,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //If(enableData)
-        if(Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
+        if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
             final MenuInflater inflater = getSupportMenuInflater();
             inflater.inflate(R.menu.meeting, menu);
             return true;
@@ -299,7 +298,9 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     private void sendMeetingData(){
         MeetingRepo repo = new MeetingRepo(getApplicationContext());
-        Meeting meeting = repo.getCurrentMeeting();
+
+        //TODO: Confirm this later. Does not support multiple cycles
+        Meeting meeting = repo.getMostRecentMeeting();
 
         HashMap<String, String> meetingData = new HashMap<String, String>();
 

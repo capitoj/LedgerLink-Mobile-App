@@ -24,6 +24,7 @@ import org.applab.digitizingdata.repo.MeetingSavingRepo;
 public class MeetingSummaryFrag extends SherlockFragment {
     ActionBar actionBar;
     private int meetingId = 0;
+    private int previousMeetingId = 0;
     MeetingRepo meetingRepo;
 
     @Override
@@ -63,6 +64,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
         String meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         lblMeetingDate.setText(meetingDate);
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId",0);
+        previousMeetingId = getSherlockActivity().getIntent().getIntExtra("_previousMeetingId",0);
 
         //Get the Cycle that contains this meeting
         meetingRepo = new MeetingRepo(getSherlockActivity().getBaseContext());
@@ -132,7 +134,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
         //Possible Solution: Store the value of Previous Meeting in database->Meetings table
         Meeting previousMeeting = null;
         if(null != meetingRepo) {
-            previousMeeting = meetingRepo.getPreviousMeeting();
+            previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId());
         }
 
         //Force view to be of current meeting if in Data Review mode

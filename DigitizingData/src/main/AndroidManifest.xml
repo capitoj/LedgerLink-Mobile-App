@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- to allow Activation over the internet -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- to allow access to telephony -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -27,15 +27,15 @@
             android:name="org.applab.digitizingdata.LoginActivity"
             android:label="Ledger Link"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="org.applab.digitizingdata.MainActivity"
             android:label="Main Menu" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="org.applab.digitizingdata.MeetingTabHostActivity"
@@ -54,7 +54,7 @@
         <activity
             android:name="org.applab.digitizingdata.EndCycleActivity"
             android:label="@string/title_activity_end_cycle"
-            android:parentActivityName="MainActivity" >
+            android:parentActivityName="org.applab.digitizingdata.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
@@ -65,7 +65,7 @@
         <activity
             android:name="org.applab.digitizingdata.NewCyclePg2Activity"
             android:label="@string/title_activity_new_cycle_pg2"
-            android:parentActivityName="MainActivity" >
+            android:parentActivityName="org.applab.digitizingdata.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
@@ -90,7 +90,7 @@
             android:name="org.applab.digitizingdata.AddMemberActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_add_member"
-            android:parentActivityName="MainActivity" >
+            android:parentActivityName="org.applab.digitizingdata.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
@@ -98,7 +98,7 @@
         <activity
             android:name="org.applab.digitizingdata.MembersListActivity"
             android:label="@string/title_activity_members_list"
-            android:parentActivityName="MainActivity" >
+            android:parentActivityName="org.applab.digitizingdata.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
@@ -106,7 +106,7 @@
         <activity
             android:name="org.applab.digitizingdata.SendMeetingDataActivity"
             android:label="@string/title_activity_send_meeting_data"
-            android:parentActivityName="MainActivity" >
+            android:parentActivityName="org.applab.digitizingdata.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
@@ -117,7 +117,7 @@
         <activity
             android:name="org.applab.digitizingdata.MemberAttendanceHistoryActivity"
             android:label="@string/title_activity_member_attendance_history"
-            android:parentActivityName="MainActivity"
+            android:parentActivityName="org.applab.digitizingdata.MainActivity"
             android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -128,37 +128,28 @@
             android:label="@string/title_activity_activation" >
         </activity>
         <activity
-                android:name="org.applab.digitizingdata.GettingStartedWizardAddMemberActivity"
-                android:label="@string/title_activity_gettings_started_wizard_add_member" >
+            android:name="org.applab.digitizingdata.GettingStartedWizardAddMemberActivity"
+            android:label="@string/title_activity_gettings_started_wizard_add_member" >
         </activity>
         <activity
-                android:name="org.applab.digitizingdata.GettingsStartedWizardNewCycleActivity"
-                android:label="@string/title_activity_gettings_started_wizard_add_cycle" >
-        </activity>
-
-        <activity
-                android:name="org.applab.digitizingdata.GettingStartedWizardPageOne"
-                android:label="@string/title_activity_gettings_started_wizard_page_1" >
+            android:name="org.applab.digitizingdata.GettingsStartedWizardNewCycleActivity"
+            android:label="@string/title_activity_gettings_started_wizard_add_cycle" >
         </activity>
         <activity
-                android:name="org.applab.digitizingdata.GettingStartedWizardPageTwo"
-                android:label="@string/title_activity_gettings_started_wizard_page_2" >
+            android:name="org.applab.digitizingdata.GettingStartedWizardPageOne"
+            android:label="@string/title_activity_gettings_started_wizard_page_1" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.MeetingCashBookFrag"
-            android:label="@string/title_activity_meeting_cash_book_frag" >
+            android:name="org.applab.digitizingdata.GettingStartedWizardPageTwo"
+            android:label="@string/title_activity_gettings_started_wizard_page_2" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.MeetingSendDataFrag"
-            android:label="@string/title_activity_meeting_send_data_frag" >
-        </activity>
+            android:name="org.applab.digitizingdata.DataMigrationActivity"
+            android:label="Data Migration" />
         <activity
-            android:name="org.applab.digitizingdata.MeetingOpeningCashFrag"
-            android:label="@string/title_activity_meeting_opening_cash_frag" >
+            android:name="org.applab.digitizingdata.BeginMeetingActivity"
+            android:label="@string/title_activity_begin_meeting" >
         </activity>
-        <activity
-                android:name="org.applab.digitizingdata.DataMigrationActivity"
-                android:label="Data Migration"/>
     </application>
 
 </manifest>

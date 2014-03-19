@@ -143,6 +143,8 @@ public class NewCycleActivity extends SherlockActivity {
 
         //Set Default End Date
         c.add(Calendar.YEAR,1);
+        //deduct 1 day
+        c.add(Calendar.DATE, -1);
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
         mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -175,7 +177,7 @@ public class NewCycleActivity extends SherlockActivity {
         if(viewClicked != null) {
             viewClicked.setText(new StringBuilder()
                 // Month is 0 based so add 1
-                .append(mDay)
+                .append(String.format("%02d",mDay))
                 .append("-")
                 .append(Utils.getMonthNameAbbrev(mMonth + 1))
                 .append("-")
@@ -185,14 +187,25 @@ public class NewCycleActivity extends SherlockActivity {
             //Default the End Date to StartDate + 52 weeks
             if(settingStartDate && txtEndDate != null) {
                 settingStartDate = false;
-                txtEndDate.setText(new StringBuilder()
+
+                String endDateString = new StringBuilder()
                         // Month is 0 based so add 1
-                        .append(mDay)
+                        .append(String.format("%02d",mDay))
                         .append("-")
                         .append(Utils.getMonthNameAbbrev(mMonth + 1))
                         .append("-")
                         .append(mYear + 1)
-                        .toString());
+                        .toString();
+                Date endDate = Utils.getDateFromString(endDateString, "dd-MMM-yyyy");
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(endDate);
+                //deduct 1 day
+                cal.add(Calendar.DATE, -1);
+
+                //Now have the new date
+                Date newEndDate = cal.getTime();
+
+                txtEndDate.setText(Utils.formatDate(newEndDate, "dd-MMM-yyyy"));
             }
         }
         else {
@@ -204,7 +217,7 @@ public class NewCycleActivity extends SherlockActivity {
         if(theField != null) {
             theField.setText(new StringBuilder()
                     // Month is 0 based so add 1
-                    .append(mDay)
+                    .append(String.format("%02d",mDay))
                     .append("-")
                     .append(Utils.getMonthNameAbbrev(mMonth + 1))
                     .append("-")
@@ -216,7 +229,7 @@ public class NewCycleActivity extends SherlockActivity {
     private void updateDisplay(TextView theField, int theYear, int theMonth, int theDay) {
         if(theField != null) {
             theField.setText(new StringBuilder()
-                    .append(theDay)
+                    .append(String.format("%02d",theDay))
                     .append("-")
                     .append(Utils.getMonthNameAbbrev(theMonth))
                     .append("-")
