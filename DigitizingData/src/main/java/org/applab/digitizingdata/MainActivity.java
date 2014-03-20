@@ -2,15 +2,20 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 
 import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.MenuCustomArrayAdapter;
 import org.applab.digitizingdata.helpers.MenuItem;
+import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.ArrayList;
@@ -26,6 +31,13 @@ public class MainActivity extends SherlockActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //TODO: Setting of Preferences is done in the first Activity that is launched. This is added here for testing
+        //Load the default Shared Preferences
+        PreferenceManager.setDefaultValues(getApplicationContext(),R.xml.preferences,false);
+
+        //Read some settings like Server URL
+        Utils.configureDefaultApplicationPreferences(getApplicationContext());
 
         //Retrieve VSLA Information
         vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
@@ -79,7 +91,6 @@ public class MainActivity extends SherlockActivity {
         lvwMainMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
                 // Launching new Activity on selecting single List Item
                 MenuItem selectedMenu = (MenuItem)mainMenuItems.get(position);
                 String selectedMenuName = selectedMenu.getMenuName();
@@ -122,5 +133,26 @@ public class MainActivity extends SherlockActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    // This method is called once the menu is selected
+    @Override
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.mnuMainSettings:
+                // Launch preferences activity
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+            // more code...
+        }
+        return true;
     }
 }

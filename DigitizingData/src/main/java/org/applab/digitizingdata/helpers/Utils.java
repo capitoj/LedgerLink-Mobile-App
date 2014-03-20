@@ -3,6 +3,8 @@ package org.applab.digitizingdata.helpers;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
 import org.applab.digitizingdata.R;
+import org.applab.digitizingdata.SettingsActivity;
 
 /**
  * Created by Moses on 7/3/13.
@@ -37,8 +40,11 @@ public class Utils {
     public static boolean _membersAccessedFromNewCycle = false;
     public static boolean _membersAccessedFromEditCycle = false;
 
+    //Shared Preferences
+    public static SharedPreferences sharedPreferences = null;
+
     //SERVER Connection
-    public static final String VSLA_SERVER_BASE_URL = "http://74.208.213.214:9905/DigitizingDataRestfulService.svc";
+    public static String VSLA_SERVER_BASE_URL = "http://defaulturl.com/default";
 
     //VSLA DATA MIGRATION
     public static final String VSLA_DATA_MIGRATION_FILENAME = "vslaMigrationInfo.csv";
@@ -67,6 +73,36 @@ public class Utils {
     };
 
     public static MeetingActiveActionBarMenu  _meetingActiveActionBarMenu = MeetingActiveActionBarMenu.MENU_NONE;
+
+    public static SharedPreferences getSharedPreferences(Context context) {
+        if(null == context) {
+            return null;
+        }
+
+        if(null == sharedPreferences) {
+            sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        }
+
+        return sharedPreferences;
+    }
+
+    /**
+     * Setup the Defaults from the Shared Preferences
+     * @param context
+     */
+    public static void configureDefaultApplicationPreferences(Context context) {
+        if(null == context) {
+            return;
+        }
+
+        SharedPreferences preferences = getSharedPreferences(context);
+        if(null == preferences){
+            return;
+        }
+
+        //Otherwise if all is ok continue
+        VSLA_SERVER_BASE_URL = preferences.getString(SettingsActivity.PREF_KEY_SERVER_URL,"http://vsla.com/notset");
+    }
 
     public static String getPhoneImei() {
         try {

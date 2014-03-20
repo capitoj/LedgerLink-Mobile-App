@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <EditTextPreference
+            android:title="Server URL"
+            android:summary="Internet link address to the server where to send data"
+            android:key="prefServerUrl"
+            android:defaultValue="http://74.208.213.214:9905/DigitizingDataRestfulService.svc"/>
+        <EditTextPreference
+            android:title="Help Line Number"
+            android:summary="Telephone number to call for support"
+            android:key="prefHelpLine"
+            android:defaultValue="0777178178"/>
+
+    <ListPreference
+        android:key="prefExecutionMode"
+        android:entries="@array/executionMode"
+        android:summary="You are currently working on Actual VSLA Data. Switch to Training Data to learn how to use the application without destroying members' records."
+        android:entryValues="@array/executionModeValues"
+        android:defaultValue="1"
+        android:title="Switch to Training Mode" />
+
+        <!-- opens another nested subscreen for Training Mode Options -->
+        <PreferenceScreen
+            android:key="prefTrainingModeOptions"
+            android:title="Training Mode Options"
+            android:persistent="false">
+
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="prefRefreshTrainingData"
+                android:summary="The Training Data will be refreshed the next time you sign in. Actual VSLA records will not be refreshed."
+                android:title="Refresh Training Data" >
+            </CheckBoxPreference>
+
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="prefConfirmTrainingMode"
+                android:summary="When you Sign-in, you will be required to confirm that you want to enter into the Training Mode"
+                android:title="Ask for Confirmation" >
+            </CheckBoxPreference>
+
+            <!-- May be just a Yes/No confirmation or user may be required to enter a password -->
+            <EditTextPreference
+            android:title="Training Password"
+            android:summary="A second password that you would enter to sign-in to Training Mode. Leave it blank if it is not required"
+            android:key="prefTrainingPassword"
+            android:defaultValue="12345"/>
+        </PreferenceScreen>
+</PreferenceScreen>

@@ -5,4 +5,14 @@
         <item>Other Names</item>
         <item>Member Number</item>
     </string-array>
+
+    <!-- Shared Preferences: Execution Mode -->
+    <string-array name="executionMode">
+        <item name="1">Actual VSLA Data</item>
+        <item name="2">Training Data</item>
+    </string-array>
+    <string-array name="executionModeValues">
+        <item name="1">1</item>
+        <item name="2">2</item>
+    </string-array>
 </resources>

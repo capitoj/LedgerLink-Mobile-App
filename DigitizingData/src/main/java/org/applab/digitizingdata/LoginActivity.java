@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.View;
@@ -51,6 +52,12 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
+
+        //Load the default Shared Preferences
+        PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preferences, false);
+
+        //Read and setup some settings like Server URL
+        Utils.configureDefaultApplicationPreferences(getApplicationContext());
 
         //Check whether the VSLA has been Activated
         vslaInfoRepo = new VslaInfoRepo(LoginActivity.this);
