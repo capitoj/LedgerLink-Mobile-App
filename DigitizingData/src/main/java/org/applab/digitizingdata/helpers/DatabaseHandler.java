@@ -4,16 +4,20 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.applab.digitizingdata.SettingsActivity;
 import org.applab.digitizingdata.domain.schema.*;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "digitizedata";
+    public static final String DATABASE_NAME = "ledgerlinkdb";
     public static final int DATABASE_VERSION = 20;
+    public static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
+
     public static Context databaseContext = null;
 
     public DatabaseHandler(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, ((Utils.getSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_EXECUTION_MODE_TRAINING)) ? TRAINING_DATABASE_NAME : DATABASE_NAME),
+                null, DATABASE_VERSION);
         databaseContext = context;
     }
 

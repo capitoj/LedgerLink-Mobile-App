@@ -46,6 +46,9 @@ public class Utils {
     //SERVER Connection
     public static String VSLA_SERVER_BASE_URL = "http://defaulturl.com/default";
 
+    //Execution Mode: executeInTrainingMode
+    public static boolean EXECUTE_IN_TRAINING_MODE = false;
+
     //VSLA DATA MIGRATION
     public static final String VSLA_DATA_MIGRATION_FILENAME = "vslaMigrationInfo.csv";
     public static final String MISSING_NAME_MARKER = "MISSING";
@@ -102,6 +105,7 @@ public class Utils {
 
         //Otherwise if all is ok continue
         VSLA_SERVER_BASE_URL = preferences.getString(SettingsActivity.PREF_KEY_SERVER_URL,"http://vsla.com/notset");
+        EXECUTE_IN_TRAINING_MODE = Utils.getSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_EXECUTION_MODE_TRAINING);
     }
 
     public static String getPhoneImei() {
