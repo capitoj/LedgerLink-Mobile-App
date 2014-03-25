@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -16,6 +17,8 @@ import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.MenuCustomArrayAdapter;
 import org.applab.digitizingdata.helpers.MenuItem;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MemberRepo;
+import org.applab.digitizingdata.repo.SampleDataBuilderRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.ArrayList;
@@ -27,10 +30,15 @@ public class MainActivity extends SherlockActivity {
     ArrayList<MenuItem> mainMenuItems = null;
     VslaInfo vslaInfo = null;
     VslaInfoRepo vslaInfoRepo = null;
+    ActionBar actionBar;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Toast.makeText(this,"Main Menu Activity - onCreate() invoked.",Toast.LENGTH_LONG).show();
+
+        actionBar = getSupportActionBar();
 
         //TODO: Setting of Preferences is done in the first Activity that is launched. This is added here for testing
         //Load the default Shared Preferences
@@ -38,6 +46,19 @@ public class MainActivity extends SherlockActivity {
 
         //Read some settings like Server URL
         Utils.configureDefaultApplicationPreferences(getApplicationContext());
+
+        //Load Sample Trainng Data: Testing
+        SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+
+        //If we are in training mode then show it using a custom View with distinguishable background
+        if(Utils.isExecutingInTrainingMode()) {
+            actionBar.setTitle("Main Menu [TRAINING]");
+            actionBar.setCustomView(R.layout.activity_main_training_mode);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
+
+        //actionBar.show();
 
         //Retrieve VSLA Information
         vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
@@ -151,7 +172,6 @@ public class MainActivity extends SherlockActivity {
                 Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 break;
-            // more code...
         }
         return true;
     }

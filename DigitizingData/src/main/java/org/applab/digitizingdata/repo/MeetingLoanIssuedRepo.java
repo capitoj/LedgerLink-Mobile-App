@@ -782,7 +782,14 @@ public class MeetingLoanIssuedRepo {
 
             values.put(LoanIssueSchema.COL_LI_BALANCE, balance);
             values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, totalRepaid);
-            values.put(LoanIssueSchema.COL_LI_DATE_DUE,Utils.formatDateToSqlite(newDateDue));
+            //If the loan has been cleared, then the newDateDue will be null
+            if(null != newDateDue) {
+                values.put(LoanIssueSchema.COL_LI_DATE_DUE,Utils.formatDateToSqlite(newDateDue));
+            }
+            else{
+                //I use ContentValues.putNull(sKey) but I can just leave this line out
+                values.putNull(LoanIssueSchema.COL_LI_DATE_DUE);
+            }
             //Determine whether to flag the loan as cleared
             if(balance <= 0) {
                 values.put(LoanIssueSchema.COL_LI_IS_CLEARED, 1);

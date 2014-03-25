@@ -213,7 +213,7 @@ public class MemberRepo {
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             cursor = db.query(MemberSchema.getTableName(), MemberSchema.getColumnListArray(),
-                    MemberSchema.COL_M_MEMBER_ID + "=?",
+                    MemberSchema.COL_M_MEMBER_NO + "=?",
                     new String[] { String.valueOf(memberNo) }, null, null, null, null);
 
             if(cursor == null){

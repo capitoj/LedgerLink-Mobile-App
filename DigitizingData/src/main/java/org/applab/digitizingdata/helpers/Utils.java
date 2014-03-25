@@ -11,12 +11,11 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
-import org.applab.digitizingdata.R;
+
 import org.applab.digitizingdata.SettingsActivity;
 
 /**
@@ -47,7 +46,10 @@ public class Utils {
     public static String VSLA_SERVER_BASE_URL = "http://defaulturl.com/default";
 
     //Execution Mode: executeInTrainingMode
-    public static boolean EXECUTE_IN_TRAINING_MODE = false;
+    private static boolean EXECUTING_IN_TRAINING_MODE = false;
+
+    //Flag to determine whether training data should be refreshed
+    private static boolean refreshDataFlg = false;
 
     //VSLA DATA MIGRATION
     public static final String VSLA_DATA_MIGRATION_FILENAME = "vslaMigrationInfo.csv";
@@ -77,7 +79,7 @@ public class Utils {
 
     public static MeetingActiveActionBarMenu  _meetingActiveActionBarMenu = MeetingActiveActionBarMenu.MENU_NONE;
 
-    public static SharedPreferences getSharedPreferences(Context context) {
+    public static SharedPreferences getDefaultSharedPreferences(Context context) {
         if(null == context) {
             return null;
         }
@@ -98,14 +100,31 @@ public class Utils {
             return;
         }
 
-        SharedPreferences preferences = getSharedPreferences(context);
+        SharedPreferences preferences = getDefaultSharedPreferences(context);
         if(null == preferences){
             return;
         }
 
         //Otherwise if all is ok continue
         VSLA_SERVER_BASE_URL = preferences.getString(SettingsActivity.PREF_KEY_SERVER_URL,"http://vsla.com/notset");
-        EXECUTE_IN_TRAINING_MODE = Utils.getSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_EXECUTION_MODE_TRAINING);
+        EXECUTING_IN_TRAINING_MODE = Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_EXECUTION_MODE_TRAINING);
+        setRefreshDataFlag(Utils.getDefaultSharedPreferences(context).getBoolean(SettingsActivity.PREF_KEY_REFRESH_TRAINING_DATA, false));
+    }
+
+    public static void setRefreshDataFlag(boolean value) {
+        refreshDataFlg = value;
+    }
+
+    public static boolean isRefreshDataFlgOn() {
+        return refreshDataFlg;
+    }
+
+    public static void setExecutingInTrainingMode(boolean value){
+        EXECUTING_IN_TRAINING_MODE = value;
+    }
+
+    public static boolean isExecutingInTrainingMode(){
+        return EXECUTING_IN_TRAINING_MODE;
     }
 
     public static String getPhoneImei() {

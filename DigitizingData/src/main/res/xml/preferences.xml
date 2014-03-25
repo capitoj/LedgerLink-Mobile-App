@@ -18,7 +18,7 @@
         android:entries="@array/executionMode"
         android:summary="You are currently working on Actual VSLA Data. Switch to Training Data to learn how to use the application without destroying members' records."
         android:entryValues="@array/executionModeValues"
-        android:defaultValue="1"
+        android:defaultValue="2"
         android:title="Switch to Training Mode" />
 
         <!-- opens another nested subscreen for Training Mode Options -->
