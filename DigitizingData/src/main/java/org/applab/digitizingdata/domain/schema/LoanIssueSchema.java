@@ -15,6 +15,7 @@ public class LoanIssueSchema {
     public static final String COL_LI_BALANCE = "Balance";
     public static final String COL_LI_DATE_DUE = "DateDue";
     public static final String COL_LI_TOTAL_REPAID = "TotalRepaid";
+    public static final String COL_LI_CLEARANCE_DATE = "ClearanceDate";
     public static final String COL_LI_IS_CLEARED = "IsCleared";
     public static final String COL_LI_DATE_CLEARED = "DateCleared";
     public static final String COL_LI_IS_DEFAULTED = "IsDefaulted";
@@ -22,7 +23,7 @@ public class LoanIssueSchema {
     public static final String COL_LI_IS_WRITTEN_OFF = "IsWrittenOff";
 
     public static String getCreateTableScript() {
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = null;
 
         // Create Table: LoanIssues
         sb = new StringBuffer();
@@ -36,6 +37,7 @@ public class LoanIssueSchema {
         sb.append(COL_LI_BALANCE + " NUMERIC ,");
         sb.append(COL_LI_DATE_DUE + " TEXT ,");
         sb.append(COL_LI_TOTAL_REPAID + " NUMERIC ,");
+        sb.append(COL_LI_CLEARANCE_DATE + " TEXT ,");
         sb.append(COL_LI_IS_DEFAULTED + " INTEGER ,");
         sb.append(COL_LI_IS_CLEARED + " INTEGER ,");
         sb.append(COL_LI_DATE_CLEARED + " TEXT ,");
@@ -65,6 +67,7 @@ public class LoanIssueSchema {
         sb.append(COL_LI_BALANCE + ",");
         sb.append(COL_LI_DATE_DUE + ",");
         sb.append(COL_LI_TOTAL_REPAID + ",");
+        sb.append(COL_LI_CLEARANCE_DATE + ",");
         sb.append(COL_LI_IS_DEFAULTED + ",");
         sb.append(COL_LI_IS_CLEARED + ",");
         sb.append(COL_LI_DATE_CLEARED + ",");

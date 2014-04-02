@@ -139,31 +139,31 @@ public class SampleDataBuilderRepo {
             cycle = vslaCycleRepo.getMostRecentCycle();
 
             //Add Members
-            addMember(1,"Muhahala","Moses Oscar","Male",33,"Farmer",1);
-            addMember(2,"Kamara", "Eric","Male",30,"Engineer", 2);
-            addMember(3,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
-            addMember(4,"Mugume", "David","Male",35,"Software Engineer", 2);
-            addMember(5,"Rwebembera", "Job","Male",34,"Lecturer", 2);
-            addMember(6,"Nekesa", "Christine","Female",30,"Lecturer", 2);
-            addMember(7,"Masaba", "James","Male",27,"Businessman", 2);
-            addMember(8,"Mungolo", "James","Male",32,"Businessman", 2);
-            addMember(9,"Mateka", "John","Male",39,"Farmer", 2);
-            addMember(10,"Wesonga", "Everlyn","Female",25,"Farmer", 2);
+            addMember(1,"Bwire","Justine","Male",33,"Farmer",1);
+            addMember(2,"Waiswa", "Elam","Male",30,"Fish-monger", 2);
+            addMember(3,"Mateka", "Emily","Female",36,"Farmer", 2);
+            addMember(4,"Nabwire", "Rehema","Female",35,"Teacher", 2);
+            addMember(5,"Mutonyi", "Patrick","Male",34,"Lecturer", 2);
+            addMember(6,"Nekesa", "Esther","Female",30,"Lecturer", 2);
+            addMember(7,"Masaba", "Charles","Male",27,"Businessman", 2);
+            addMember(8,"Mungolo", "Ronald","Male",32,"Businessman", 2);
+            addMember(9,"Mateka", "Edward","Male",39,"Farmer", 2);
+            addMember(10,"Wafula", "Everlyn","Female",25,"Farmer", 2);
             addMember(11,"Wanyama", "Fred","Male",29,"Student", 2);
-            addMember(12,"Wonyaye", "Ronald","Male",27,"Businessman", 2);
-            addMember(13,"Wandera", "Stella","Female",25,"Lecturer", 2);
-            addMember(14,"Night", "Ziita","Female",41,"Farmer", 2);
-            addMember(15,"Makokha", "Charles","Male",36,"Farmer", 2);
-            addMember(16,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
-            addMember(17,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
-            addMember(18,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
-            addMember(19,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
-            addMember(20,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
-            addMember(21,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
-            addMember(22,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
-            addMember(23,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
-            addMember(24,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
-            addMember(25,"Mugisha", "Sarah","Female",36,"Lecturer", 2);
+            addMember(12,"Oundo", "Ronald","Male",27,"Businessman", 2);
+            addMember(13,"Onyango", "Stella","Female",25,"Lecturer", 2);
+            addMember(14,"Taaka", "Felister","Female",41,"Farmer", 2);
+            addMember(15,"Makokha", "Evans","Male",38,"Farmer", 2);
+            addMember(16,"Nalyaka", "Juliet","Female",29,"Farmer", 2);
+            addMember(17,"Mangeni", "Joseph","Male",27,"Teacher", 2);
+            addMember(18,"Kayongo", "Jackson","Male",43,"Teacher", 2);
+            addMember(19,"Nampala", "Stephen","Male",45,"Businessman", 2);
+            addMember(20,"Nangoma", "Angela","Female",28,"Teacher", 2);
+            addMember(21,"Sikuku", "Sylvia","Female",25,"Businesswoman", 2);
+            addMember(22,"Nasirumbi", "Joan","Female",23,"Fish-monger", 2);
+            addMember(23,"Wanyama", "Moses","Male",26,"Farmer", 2);
+            addMember(24,"Wandera", "Agnes","Female",31,"Fish-monger", 2);
+            addMember(25,"Wesonga", "Grace","Female",23,"Businesswoman", 2);
 
             //FIRST MEETING
             //Add First Meeting: on First Day of the Cycle

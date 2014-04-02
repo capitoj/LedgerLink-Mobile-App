@@ -23,7 +23,7 @@ public class MeetingSchema {
     public static final String COL_MT_CASH_SAVED_BANK = "CashSavedBank";
 
     public static String getCreateTableScript() {
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = null;
 
         // Create Table: VslaInfo
         sb = new StringBuffer();

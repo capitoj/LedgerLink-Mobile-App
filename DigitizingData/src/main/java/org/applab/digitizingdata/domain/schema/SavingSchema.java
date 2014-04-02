@@ -12,7 +12,7 @@ public class SavingSchema {
     public static final String COL_S_AMOUNT = "Amount";
 
     public static String getCreateTableScript() {
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = null;
 
         // Create Table: Savings
         sb = new StringBuffer();

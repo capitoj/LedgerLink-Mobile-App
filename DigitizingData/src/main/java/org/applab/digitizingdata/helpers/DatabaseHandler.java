@@ -10,7 +10,7 @@ import org.applab.digitizingdata.domain.schema.*;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "ledgerlinkdb";
-    public static final int DATABASE_VERSION = 20;
+    public static final int DATABASE_VERSION = 21;
     public static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
 
     public static Context databaseContext = null;
@@ -56,6 +56,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // Create Table: LoanRepayments
         sqlQuery = LoanRepaymentSchema.getCreateTableScript();
+        db.execSQL(sqlQuery);
+
+        // Create Table: FineTypes
+        sqlQuery = FineTypeSchema.getCreateTableScript();
+        db.execSQL(sqlQuery);
+
+        // Create Table: Fines
+        sqlQuery = FineSchema.getCreateTableScript();
         db.execSQL(sqlQuery);
 
     }

@@ -19,6 +19,8 @@ public class MemberSchema {
     public static final String COL_M_DATE_LEFT = "DateLeft";
     public static final String COL_M_HAS_LEFT = "HasLeft";
     public static final String COL_M_IS_RECESSED = "IsRecessed";
+    public static final String COL_M_SAVINGS_AT_REGISTRATION = "SavingsAtRegistration";
+    public static final String COL_M_LOAN_BALANCE_AT_REGISTRATION = "LoanBalanceAtRegistration";
 
     public static String getCreateTableScript() {
         StringBuffer sb = new StringBuffer();
@@ -38,7 +40,9 @@ public class MemberSchema {
         sb.append(COL_M_DATE_JOINED + " TEXT ,");
         sb.append(COL_M_DATE_LEFT + " TEXT ,");
         sb.append(COL_M_HAS_LEFT + " INTEGER ,");
-        sb.append(COL_M_IS_RECESSED + " INTEGER");
+        sb.append(COL_M_IS_RECESSED + " INTEGER ,");
+        sb.append(COL_M_SAVINGS_AT_REGISTRATION + " NUMERIC ,");
+        sb.append(COL_M_LOAN_BALANCE_AT_REGISTRATION + " NUMERIC");
         sb.append(")");
 
         return sb.toString();
@@ -66,7 +70,9 @@ public class MemberSchema {
         sb.append(COL_M_DATE_JOINED + ",");
         sb.append(COL_M_DATE_LEFT + ",");
         sb.append(COL_M_HAS_LEFT + ",");
-        sb.append(COL_M_IS_RECESSED);
+        sb.append(COL_M_IS_RECESSED + ",");
+        sb.append(COL_M_SAVINGS_AT_REGISTRATION + ",");
+        sb.append(COL_M_LOAN_BALANCE_AT_REGISTRATION );
 
         return sb.toString();
     }

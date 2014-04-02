@@ -1,17 +1,12 @@
 package org.applab.digitizingdata;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Activity;
 import android.telephony.TelephonyManager;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,14 +17,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.SendDataRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,8 +29,9 @@ import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import com.actionbarsherlock.app.ActionBar;
 
-public class ActivationActivity extends Activity {
+public class ActivationActivity extends SherlockActivity {
     VslaInfoRepo vslaInfoRepo = null;
     HttpClient client;
     int httpStatusCode = 0; //To know whether the Request was successful
@@ -46,13 +39,26 @@ public class ActivationActivity extends Activity {
     String targetVslaCode = null; //fake-fix
     String securityPasskey = null;
     ProgressDialog progressDialog = null;
-
-
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activation);
+
+        actionBar = getSupportActionBar();
+
+        //If we are in training mode then show it using a custom View with distinguishable background
+        //Assumed that the preferences have been set by now
+        if(Utils.isExecutingInTrainingMode()) {
+            actionBar.setTitle("TRAINING MODE");
+            actionBar.setCustomView(R.layout.activity_main_training_mode);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
+        else {
+            actionBar.hide();
+        }
 
         vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
         // ---Button view---
@@ -87,9 +93,9 @@ public class ActivationActivity extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activation, menu);
+        getSupportMenuInflater().inflate(R.menu.activation, menu);
         return true;
     }
 

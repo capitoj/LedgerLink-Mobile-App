@@ -42,13 +42,13 @@ public class MainActivity extends SherlockActivity {
 
         //TODO: Setting of Preferences is done in the first Activity that is launched. This is added here for testing
         //Load the default Shared Preferences
-        PreferenceManager.setDefaultValues(getApplicationContext(),R.xml.preferences,false);
+        //PreferenceManager.setDefaultValues(getApplicationContext(),R.xml.preferences,false);
 
         //Read some settings like Server URL
-        Utils.configureDefaultApplicationPreferences(getApplicationContext());
+        //Utils.configureDefaultApplicationPreferences(getApplicationContext());
 
         //Load Sample Trainng Data: Testing
-        SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+        //SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
 
         //If we are in training mode then show it using a custom View with distinguishable background
         if(Utils.isExecutingInTrainingMode()) {

@@ -44,11 +44,16 @@ public class MembersCustomArrayAdapter extends ArrayAdapter<Member> {
 
             //Assign Values to the Widgets
             txtFullNames.setText(values.get(position).toString());
+            String occupation = values.get(position).getOccupation();
+            if(null == occupation || occupation.trim().length() <= 0) {
+                occupation = "No Occupation";
+            }
             String phoneNo = values.get(position).getPhoneNumber();
             if(null == phoneNo || phoneNo.trim().length() <= 0) {
                 phoneNo = "No Phone";
             }
-            txtPhoneNo.setText(phoneNo);
+            //txtPhoneNo.setText(phoneNo);
+            txtPhoneNo.setText(occupation);
 
             return rowView;
         }

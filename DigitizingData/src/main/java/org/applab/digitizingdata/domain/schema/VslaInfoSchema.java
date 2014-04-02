@@ -23,7 +23,7 @@ public class VslaInfoSchema {
     public static final String COL_VI_GETTING_STARTED_WIZARD_STAGE = "GettingStartedWizard"; //field to show getting started wizard status
 
     public static String getCreateTableScript() {
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = null;
 
         // Create Table: VslaInfo
         sb = new StringBuffer();

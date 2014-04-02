@@ -20,7 +20,7 @@ public class LoanRepaymentSchema {
     public static final String COL_LR_NEXT_DATE_DUE = "NextDateDue";
 
     public static String getCreateTableScript() {
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = null;
 
         // Create Table: LoanRepayments
         sb = new StringBuffer();

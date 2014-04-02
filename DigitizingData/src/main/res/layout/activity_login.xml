@@ -1,9 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#3b5998"
-                tools:context=".LoginActivity">
+                android:layout_height="match_parent">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -13,16 +11,15 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:background="#3b5998"
-        tools:context=".LoginActivity">
+        android:paddingBottom="@dimen/activity_vertical_margin">
     <!-- Steel Blue: #4682B4
+    android:background="#3b5998"
     #3b5998
     #8b9dc3
     #f7f7f7
     #dfe3ee
     -->
-        <TextView
+        <!--<TextView
             android:id="@+id/lbl_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,19 +27,29 @@
             android:layout_centerHorizontal="true"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:text="Ledger Link" />
+            android:text="Ledger Link" />-->
+
+        <ImageView
+            android:id="@+id/imgVALogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_ledger_link_logo"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"
+            />
 
         <TextView
                 android:id="@+id/lbl_vsla_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="24sp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/lbl_title"
+                android:layout_below="@id/imgVALogo"
                 android:paddingTop="2dip"
                 android:layout_marginTop="36dip"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
+                android:textColor="#000"
+                android:textAlignment="textStart"
+                android:gravity="left"
                 android:text="" />
 
         <EditText
@@ -55,7 +62,6 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dip"
                 android:textSize="24sp"
-                android:background="#FFFFFF"
                 android:inputType="numberPassword"
                 android:hint="Enter Pass Key Here">
                 <requestFocus/>
@@ -76,12 +82,6 @@
                 android:textSize="24sp"
                 android:text="Sign In"/>
 
-        <!-- Steel Blue: #4682B4
-    #3b5998
-    #8b9dc3
-    #f7f7f7
-    #dfe3ee
-    -->
 
     </RelativeLayout>
     </RelativeLayout>

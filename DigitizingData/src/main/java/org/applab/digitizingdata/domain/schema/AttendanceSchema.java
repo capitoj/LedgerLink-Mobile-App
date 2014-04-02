@@ -13,7 +13,7 @@ public class AttendanceSchema {
     public static final String COL_A_COMMENTS = "Comments";
 
     public static String getCreateTableScript() {
-        StringBuffer sb = new StringBuffer();
+        StringBuffer sb = null;
 
         // Create Table: Attendance
         sb = new StringBuffer();

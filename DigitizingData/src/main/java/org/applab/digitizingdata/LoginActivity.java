@@ -1,19 +1,20 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
-import android.view.Menu;
+//import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -26,6 +27,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.SampleDataBuilderRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 import org.json.JSONException;
@@ -35,7 +37,7 @@ import org.json.JSONStringer;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends SherlockActivity {
     VslaInfoRepo vslaInfoRepo = null;
     VslaInfo vslaInfo = null;
     boolean wasCalledFromActivation = false;
@@ -46,6 +48,7 @@ public class LoginActivity extends Activity {
     boolean activationSuccessful = false;
     String targetVslaCode = null; //fake-fix
     ProgressDialog progressDialog = null;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +56,28 @@ public class LoginActivity extends Activity {
 
         setContentView(R.layout.activity_login);
 
+        actionBar = getSupportActionBar();
+
+        //TODO: Setting of Preferences is done in the first Activity that is launched.
         //Load the default Shared Preferences
         PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preferences, false);
 
-        //Read and setup some settings like Server URL
+        //Read some settings like Server URL
         Utils.configureDefaultApplicationPreferences(getApplicationContext());
+
+        //Load Sample Trainng Data: Testing
+        SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+
+        //If we are in training mode then show it using a custom View with distinguishable background
+        if(Utils.isExecutingInTrainingMode()) {
+            actionBar.setTitle("TRAINING MODE");
+            actionBar.setCustomView(R.layout.activity_main_training_mode);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
+        else {
+            actionBar.hide();
+        }
 
         //Check whether the VSLA has been Activated
         vslaInfoRepo = new VslaInfoRepo(LoginActivity.this);
@@ -137,7 +157,7 @@ public class LoginActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.login, menu);
+        getSupportMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
 

@@ -52,7 +52,14 @@ public class MembersArrayAdapter extends ArrayAdapter<Member> {
                 if(null == phoneNo || phoneNo.trim().length() <= 0) {
                     phoneNo = "No Phone";
                 }
-                txtSavings.setText(phoneNo);
+
+                String occupation = memb.getOccupation();
+                if(null == occupation || occupation.trim().length() <= 0) {
+                    occupation = "No Occupation";
+                }
+
+                //txtSavings.setText(phoneNo);
+                txtSavings.setText(occupation);
                 //txtLoans.setText(memb.getOccupation());
             }
             else {
