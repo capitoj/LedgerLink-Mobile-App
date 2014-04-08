@@ -16,7 +16,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static Context databaseContext = null;
 
     public DatabaseHandler(Context context) {
-        super(context, ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_EXECUTION_MODE_TRAINING)) ? TRAINING_DATABASE_NAME : DATABASE_NAME),
+        super(context, ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING)) ? TRAINING_DATABASE_NAME : DATABASE_NAME),
                 null, DATABASE_VERSION);
         databaseContext = context;
     }

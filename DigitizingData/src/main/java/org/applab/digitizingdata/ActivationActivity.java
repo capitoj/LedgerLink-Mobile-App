@@ -2,6 +2,8 @@ package org.applab.digitizingdata;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -48,6 +50,7 @@ public class ActivationActivity extends SherlockActivity {
 
         actionBar = getSupportActionBar();
 
+        TextView tvSwitchMode = (TextView)findViewById(R.id.lblVASwitchMode);
         //If we are in training mode then show it using a custom View with distinguishable background
         //Assumed that the preferences have been set by now
         if(Utils.isExecutingInTrainingMode()) {
@@ -55,10 +58,42 @@ public class ActivationActivity extends SherlockActivity {
             actionBar.setCustomView(R.layout.activity_main_training_mode);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
+
+            //Set the label of the link
+            tvSwitchMode.setText("Switch To Actual VSLA Data");
+            tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
         }
         else {
             actionBar.hide();
+            //Set the label of the link
+            tvSwitchMode.setText("Switch To Training Mode");
+            tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
         }
+
+        //Set the textview to be underline
+        tvSwitchMode.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+
+        tvSwitchMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences appPrefs = Utils.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor prefEditor = appPrefs.edit();
+                if(Utils.isExecutingInTrainingMode()){
+                    prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_PROD);
+                    Toast.makeText(getApplicationContext(), "Execution switched to Actual VSLA Data. Please start the app again.",Toast.LENGTH_LONG).show();
+                }
+                else {
+                    prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING);
+                    Toast.makeText(getApplicationContext(), "Execution switched to Training Mode. Please start the app again.",Toast.LENGTH_LONG).show();
+                }
+
+                //Save the values
+                //Can use apply() but would require API 9
+                prefEditor.commit();
+
+                finish();
+            }
+        });
 
         vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
         // ---Button view---

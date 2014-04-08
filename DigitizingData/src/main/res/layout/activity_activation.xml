@@ -144,7 +144,21 @@
                 android:textStyle="bold"
                 android:textSize="24sp"
                 android:text="Register"/>
+        <TextView
+            android:id="@+id/lblVASwitchMode"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:gravity="left"
+            android:layout_below="@id/btnVAActivate"
+            android:paddingTop="2dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textColor="#0000FF"
+            android:text="Switch to Training Mode" />
 
     </RelativeLayout>
 </RelativeLayout>
     </ScrollView>
+
+    <!-- textView.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG); -->

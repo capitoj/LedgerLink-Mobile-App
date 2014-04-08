@@ -7,19 +7,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.webkit.URLUtil;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String PREF_KEY_SERVER_URL = "prefServerUrl";
     public static final String PREF_KEY_HELP_LINE = "prefHelpLine";
-    public static final String PREF_KEY_TRAINING_MODE = "prefRunInTrainingMode";
+    public static final String PREF_KEY_RUN_IN_TRAINING_MODE = "prefRunInTrainingMode";
     public static final String PREF_KEY_EXECUTION_MODE = "prefExecutionMode";
     public static final String PREF_KEY_REFRESH_TRAINING_DATA = "prefRefreshTrainingData";
     public static final String PREF_KEY_CONFIRM_TRAINING_MODE = "prefConfirmTrainingMode";
     public static final String PREF_KEY_TRAINING_PASSWORD = "prefTrainingPassword";
     public static final String PREF_KEY_TRAINING_OPTIONS_SECTION = "prefTrainingModeOptions";
-    public static final String PREF_EXECUTION_MODE_PROD = "1";
-    public static final String PREF_EXECUTION_MODE_TRAINING = "2";
+    public static final String PREF_VALUE_EXECUTION_MODE_PROD = "1";
+    public static final String PREF_VALUE_EXECUTION_MODE_TRAINING = "2";
     public static final String TITLE_EXECUTION_MODE_PROD = "Switch to Training Mode";
     public static final String TITLE_EXECUTION_MODE_TRAINING = "Switch to Actual VSLA Data";
 
@@ -39,7 +38,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             Preference runInTrainingModePref = findPreference(key);
 
             String currentValue = sharedPreferences.getString(key, "0");
-            if(currentValue.equalsIgnoreCase(PREF_EXECUTION_MODE_PROD)) {
+            if(currentValue.equalsIgnoreCase(PREF_VALUE_EXECUTION_MODE_PROD)) {
                 runInTrainingModePref.setTitle(TITLE_EXECUTION_MODE_PROD);
                 runInTrainingModePref.setSummary("You are currently working on Actual VSLA Data. Switch to Training Data to learn how to use the application without destroying members' records.");
             }
