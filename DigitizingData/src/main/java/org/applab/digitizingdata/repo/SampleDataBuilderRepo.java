@@ -107,15 +107,18 @@ public class SampleDataBuilderRepo {
         catch(Exception ex) {
             return false;
         }
+        finally{
+            if(db != null && db.isOpen()){
+                db.close();
+            }
+        }
     }
 
     private static boolean insertRecords(){
-        SQLiteDatabase db = null;
         try {
             if(null == appContext) {
                 return false;
             }
-            db = DatabaseHandler.getInstance(appContext).getWritableDatabase();
 
             //Add VSLA Cycle
             VslaCycle cycle = new VslaCycle();
@@ -225,6 +228,7 @@ public class SampleDataBuilderRepo {
                 catch(Exception ex) {
                     continue;
                 }
+
             }
 
 

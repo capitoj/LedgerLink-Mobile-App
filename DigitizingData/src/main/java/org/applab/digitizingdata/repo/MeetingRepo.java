@@ -10,6 +10,7 @@ import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
+import org.applab.digitizingdata.domain.schema.MemberSchema;
 import org.applab.digitizingdata.domain.schema.SavingSchema;
 import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
@@ -900,4 +901,24 @@ public class MeetingRepo {
         }
     }
 
+    // Deleting single entity
+    public void deleteMeeting(int meetingId) {
+        SQLiteDatabase db = null;
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+
+            // To remove all rows and get a count pass "1" as the whereClause.
+            db.delete(MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                    new String[] { String.valueOf(meetingId) });
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.deleteMeeting", ex.getMessage());
+            return;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 }

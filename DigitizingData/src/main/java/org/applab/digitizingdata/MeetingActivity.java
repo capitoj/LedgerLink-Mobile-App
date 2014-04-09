@@ -194,6 +194,10 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 return true;
             case R.id.mnuMCBFSave:
                 return false;
+            case R.id.mnuMeetingDelete:
+                Intent intent = new Intent(getApplicationContext(), DeleteMeetingActivity.class);
+                intent.putExtra("_meetingId", targetMeetingId);
+                startActivity(intent);
             default:
                 return false;
         }

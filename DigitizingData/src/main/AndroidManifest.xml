@@ -28,6 +28,7 @@
             android:label="Ledger Link" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -151,6 +152,10 @@
         <activity
             android:name="org.applab.digitizingdata.SettingsActivity"
             android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="org.applab.digitizingdata.DeleteMeetingActivity"
+            android:label="@string/title_activity_delete_meeting" >
         </activity>
     </application>
 

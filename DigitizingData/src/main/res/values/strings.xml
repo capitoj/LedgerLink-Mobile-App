@@ -24,5 +24,6 @@
     <string name="activity_activation_vsla_passkey_info">Enter at least 5 digits that you will remember. A passkey is a secret number you will enter to open Ledger Link at every meeting.</string>
     <string name="title_activity_begin_meeting">Begin Meeting</string>
     <string name="title_activity_settings">App Settings</string>
+    <string name="title_activity_delete_meeting">DeleteMeetingActivity</string>
 
 </resources>
