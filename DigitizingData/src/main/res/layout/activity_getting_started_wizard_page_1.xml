@@ -67,8 +67,7 @@
                   android:padding="5dp"
                   android:layout_height="wrap_content"
                   android:gravity="left"
-                  android:text="If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.
-Are you prepared to enter all member and cycle information now? If so you may get started by pressing next."
+                  android:text="If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.\n\nAre you prepared to enter all member and cycle information now? If so you may get started by pressing next."
 
                 />
     </LinearLayout>

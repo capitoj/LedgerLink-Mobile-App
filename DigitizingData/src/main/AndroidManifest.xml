@@ -137,6 +137,11 @@
         <activity
             android:name="org.applab.digitizingdata.GettingStartedWizardPageOne"
             android:label="@string/title_activity_gettings_started_wizard_page_1" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="org.applab.digitizingdata.GettingStartedWizardPageTwo"

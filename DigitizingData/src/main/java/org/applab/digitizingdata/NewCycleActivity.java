@@ -34,20 +34,20 @@ public class NewCycleActivity extends SherlockActivity {
     TextView txtStartDate;
     TextView txtEndDate;
     TextView viewClicked;
-    private boolean settingStartDate = false;
-    public static final int Date_dialog_id = 1;
+    protected boolean settingStartDate = false;
+    protected static final int Date_dialog_id = 1;
     // date and time
-    private int mYear;
-    private int mMonth;
-    private int mDay;
-    private String dialogTitle = "New Cycle";
-    private AlertDialog alertDialog = null;
-    private boolean successAlertDialogShown = false;
-    private boolean isUpdateCycleAction = false;
+    protected int mYear;
+    protected int mMonth;
+    protected int mDay;
+    protected String dialogTitle = "New Cycle";
+    protected AlertDialog alertDialog = null;
+    protected boolean successAlertDialogShown = false;
+    protected boolean isUpdateCycleAction = false;
 
-    private VslaCycle selectedCycle;
+    protected VslaCycle selectedCycle;
 
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_cycle);
 
@@ -134,7 +134,7 @@ public class NewCycleActivity extends SherlockActivity {
 
     }
 
-    private void setupDefaultDates() {
+    protected void setupDefaultDates() {
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
@@ -152,7 +152,7 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     //Event that is raised when the date has been set
-    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+    protected DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             mYear = year;
             mMonth = monthOfYear;
@@ -173,7 +173,7 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     //Displays the selected Date in the TextView
-    private void updateDisplay() {
+    protected void updateDisplay() {
         if(viewClicked != null) {
             viewClicked.setText(new StringBuilder()
                 // Month is 0 based so add 1
@@ -213,7 +213,7 @@ public class NewCycleActivity extends SherlockActivity {
         }
     }
 
-    private void updateDisplay(TextView theField) {
+    protected void updateDisplay(TextView theField) {
         if(theField != null) {
             theField.setText(new StringBuilder()
                     // Month is 0 based so add 1
@@ -226,7 +226,7 @@ public class NewCycleActivity extends SherlockActivity {
         }
     }
 
-    private void updateDisplay(TextView theField, int theYear, int theMonth, int theDay) {
+    protected void updateDisplay(TextView theField, int theYear, int theMonth, int theDay) {
         if(theField != null) {
             theField.setText(new StringBuilder()
                     .append(String.format("%02d",theDay))
@@ -279,7 +279,7 @@ public class NewCycleActivity extends SherlockActivity {
 
     }
 
-    private boolean saveCycleData() {
+    protected boolean saveCycleData() {
         boolean successFlg = false;
 
         VslaCycle cycle = new VslaCycle();
@@ -342,7 +342,7 @@ public class NewCycleActivity extends SherlockActivity {
         return successFlg;
     }
 
-    private boolean validateData(VslaCycle cycle) {
+    protected boolean validateData(VslaCycle cycle) {
         try {
             if(null == cycle) {
                 return false;
@@ -474,7 +474,7 @@ public class NewCycleActivity extends SherlockActivity {
         }
     }
 
-    private void displayMessageBox(String title, String message, String icon) {
+    protected void displayMessageBox(String title, String message, String icon) {
         alertDialog = new AlertDialog.Builder(NewCycleActivity.this).create();
 
         // Setting Dialog Title
@@ -512,7 +512,7 @@ public class NewCycleActivity extends SherlockActivity {
         alertDialog.show();
     }
 
-    private void populateDataFields(VslaCycle cycle) {
+    protected void populateDataFields(VslaCycle cycle) {
         //Clear Fields
         clearDataFields();
 
@@ -539,7 +539,7 @@ public class NewCycleActivity extends SherlockActivity {
         }
     }
 
-    private void clearDataFields() {
+    protected void clearDataFields() {
         try{
             //Now populate
             TextView txtSharePrice = (TextView)findViewById(R.id.txtNCSharePrice);

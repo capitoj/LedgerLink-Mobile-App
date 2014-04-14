@@ -21,7 +21,6 @@ public class VslaCycleSchema {
     public static final String COL_VC_SHARED_AMOUNT = "SharedAmount";
     public static final String COL_VC_INTEREST_AT_SETUP = "InterestAtSetup";    //Interest in case of Mid-CYcle Setup
     public static final String COL_VC_FINES_AT_SETUP = "FinesAtSetup";    //Fines collected so far in case of Mid-CYcle Setup
-
     public static String getCreateTableScript() {
         StringBuffer sb = null;
 

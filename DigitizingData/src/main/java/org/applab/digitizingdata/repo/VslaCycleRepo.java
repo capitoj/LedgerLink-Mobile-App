@@ -1,9 +1,6 @@
 package org.applab.digitizingdata.repo;
 
-import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
-import org.applab.digitizingdata.domain.model.VslaMiddleStartCycle;
-import org.applab.digitizingdata.domain.schema.MeetingSchema;
 import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
@@ -13,8 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.content.ContentValues;
 import android.content.Context;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -51,6 +47,10 @@ public class VslaCycleRepo {
             values.put(VslaCycleSchema.COL_VC_MAX_START_SHARE, cycle.getMaxStartShare());
             values.put(VslaCycleSchema.COL_VC_SHARE_PRICE, cycle.getSharePrice());
             values.put(VslaCycleSchema.COL_VC_IS_ACTIVE, (cycle.isActive()) ? 1 : 0);
+
+            //Adding portion to save GSW data
+            values.put(VslaCycleSchema.COL_VC_FINES_AT_SETUP, cycle.getFinesAtSetup());
+            values.put(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP, cycle.getInterestAtSetup());
 
             // Inserting Row
             long retVal = db.insert(VslaCycleSchema.getTableName(), null, values);
@@ -100,6 +100,8 @@ public class VslaCycleRepo {
                     cycle.setSharePrice(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_SHARE_PRICE)));
                     cycle.setMaxSharesQty(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_SHARE_QTY)));
                     cycle.setMaxStartShare(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_START_SHARE)));
+                    cycle.setInterestAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP)));
+                    cycle.setFinesAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_FINES_AT_SETUP)));
                     if(cursor.getInt(cursor.getColumnIndex(VslaCycleSchema.COL_VC_IS_ACTIVE)) == 1) {
                         cycle.activate();
                     }
@@ -185,6 +187,8 @@ public class VslaCycleRepo {
             cycle.setSharePrice(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_SHARE_PRICE)));
             cycle.setMaxSharesQty(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_SHARE_QTY)));
             cycle.setMaxStartShare(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_START_SHARE)));
+            cycle.setInterestAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP)));
+            cycle.setFinesAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_FINES_AT_SETUP)));
             if(cursor.getInt(cursor.getColumnIndex(VslaCycleSchema.COL_VC_IS_ACTIVE)) == 1) {
                 cycle.activate();
             }
@@ -246,6 +250,8 @@ public class VslaCycleRepo {
             cycle.setSharePrice(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_SHARE_PRICE)));
             cycle.setMaxSharesQty(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_SHARE_QTY)));
             cycle.setMaxStartShare(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_START_SHARE)));
+            cycle.setInterestAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP)));
+            cycle.setFinesAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_FINES_AT_SETUP)));
             if(cursor.getInt(cursor.getColumnIndex(VslaCycleSchema.COL_VC_IS_ACTIVE)) == 1) {
                 cycle.activate();
             }
@@ -308,6 +314,8 @@ public class VslaCycleRepo {
             cycle.setSharePrice(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_SHARE_PRICE)));
             cycle.setMaxSharesQty(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_SHARE_QTY)));
             cycle.setMaxStartShare(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_START_SHARE)));
+            cycle.setInterestAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP)));
+            cycle.setFinesAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_FINES_AT_SETUP)));
             if(cursor.getInt(cursor.getColumnIndex(VslaCycleSchema.COL_VC_IS_ACTIVE)) == 1) {
                 cycle.activate();
             }
@@ -364,6 +372,8 @@ public class VslaCycleRepo {
             values.put(VslaCycleSchema.COL_VC_SHARE_PRICE, cycle.getSharePrice());
             values.put(VslaCycleSchema.COL_VC_IS_ACTIVE, (cycle.isActive()) ? 1 : 0);
             values.put(VslaCycleSchema.COL_VC_IS_ENDED, (cycle.isEnded()) ? 1 : 0);
+            values.put(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP, cycle.getInterestAtSetup());
+            values.put(VslaCycleSchema.COL_VC_FINES_AT_SETUP, cycle.getFinesAtSetup());
 
             //if dateEnded is Null use the current date
             if(cycle.getDateEnded() == null) {
@@ -468,60 +478,6 @@ public class VslaCycleRepo {
     }
 
 
-
-
-    public boolean updateMiddleStartCycle(VslaMiddleStartCycle cycle) {
-        /*
-        Method to update middle start cycle
-        For the getting started wizard
-        TO DO:
-        */
-
-        //Add the cycle...
-
-        return false;
-    }
-
-
-    public boolean addMiddleStartCycle(VslaMiddleStartCycle cycle) {
-        /*
-        Method to add middle start cycle
-        For the getting started wizard
-        TO DO:
-        */
-        boolean returnVal = addCycle(cycle);
-        if(! returnVal)
-        {
-            //return;
-            return returnVal;
-        }
-
-        //Create a dummy meeting to asisst with storing the interest collected and fines information
-        MeetingRepo repo = new MeetingRepo(context);
-        Meeting dummyMeeting = new Meeting();
-
-        //Load recently added cycle from db
-        VslaCycle mostRecentCycle = getMostRecentCycle();
-        dummyMeeting.setVslaCycle(mostRecentCycle);
-
-        //Set the meeting date as the start date of the cycle
-        dummyMeeting.setMeetingDate(mostRecentCycle.getStartDate());
-
-        //Add this meeting
-        returnVal = repo.addMeeting(dummyMeeting);
-        if(returnVal)
-        {
-            return returnVal;
-        }
-
-        //Load the most recent meeting now and set the fines
-        dummyMeeting = repo.getMostRecentMeeting();
-        dummyMeeting.setFines(cycle.getFinesCollected());
-        returnVal = repo.updateOpeningCash(dummyMeeting.getMeetingId(), 0, 0, dummyMeeting.getFines());
-
-
-        return returnVal;
-    }
 
 
 }

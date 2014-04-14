@@ -16,7 +16,7 @@ import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
 
-import org.applab.digitizingdata.SettingsActivity;
+import org.applab.digitizingdata.*;
 
 /**
  * Created by Moses on 7/3/13.
@@ -59,6 +59,12 @@ public class Utils {
 
     //Used when sending Data
     private static String phoneImei;
+
+    //A Defination of Getting started wizard stage indicators
+    public static final int GETTING_STARTED_PAGE_NEW_CYCLE = 1;
+    public static final int GETTING_STARTED_PAGE_ADD_MEMBER = 2;
+    public static final int GETTING_STARTED_PAGE_REVIEW_MEMBERS = 3;
+
 
     //TODO: will create an enum of CURRENT_VIEW_MODE
     public enum MeetingDataViewMode {
@@ -224,6 +230,20 @@ public class Utils {
         }
         catch(Exception ex){
             return null;
+        }
+    }
+
+    //Given a GSW stage, returns the Activity class to launch
+    public static Class resolveGettingStartedWizardStage(int stage) {
+       switch(stage) {
+           case GETTING_STARTED_PAGE_NEW_CYCLE:
+               return GettingsStartedWizardNewCycleActivity.class;
+           case GETTING_STARTED_PAGE_ADD_MEMBER:
+               return GettingStartedWizardAddMemberActivity.class;
+           case GETTING_STARTED_PAGE_REVIEW_MEMBERS:
+               return GettingStartedWizardReviewMembersActivity.class;
+           default:
+               return GettingsStartedWizardNewCycleActivity.class;
         }
     }
 

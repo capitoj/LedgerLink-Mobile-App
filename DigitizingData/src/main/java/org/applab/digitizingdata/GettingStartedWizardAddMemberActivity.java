@@ -23,13 +23,14 @@ import org.applab.digitizingdata.domain.model.MiddleCycleMember;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
+import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.Calendar;
 
 /**
  * Created by Moses on 7/15/13.
  */
-public class GettingStartedWizardAddMemberActivity extends SherlockActivity {
+public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     private ActionBar actionBar;
     private Member selectedMember;
     private int selectedMemberId;
@@ -147,6 +148,10 @@ public class GettingStartedWizardAddMemberActivity extends SherlockActivity {
             selectedMember = repo.getMemberById(selectedMemberId);
             populateDataFields(selectedMember);
         }
+
+        //Set the current stage of the wizard
+        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
+        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_ADD_MEMBER);
     }
 
     @Override
@@ -177,24 +182,25 @@ public class GettingStartedWizardAddMemberActivity extends SherlockActivity {
         return true;
     }
 
-    private boolean saveMemberData() {
+
+    @Override
+    protected boolean saveMemberData() {
         boolean successFlg = false;
         AlertDialog dlg = null;
 
-        MiddleCycleMember member = new MiddleCycleMember();
+        Member member = new Member();
         repo = new MemberRepo(getApplicationContext());
         if (selectedMember != null) {
-            //member = selectedMember;
+            member = selectedMember;
         }
 
-        if (validateData(member)) {
+        if (validateGettingStartedMemberData(member)) {
             boolean retVal = false;
             if (member.getMemberId() != 0) {
-                retVal = repo.updateMiddleCycleMember(member);
+                retVal = repo.updateMember(member);
             }
             else {
-                retVal = repo.addMiddleCycleMember(member);
-
+                retVal = repo.addMember(member);
             }
             if (retVal) {
                 if (member.getMemberId() == 0) {
@@ -208,7 +214,7 @@ public class GettingStartedWizardAddMemberActivity extends SherlockActivity {
                         toast.setGravity(Gravity.LEFT,0,0);
                         toast.show();
 
-                            Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                            Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
                             startActivity(i);
 
                         Utils._membersAccessedFromNewCycle = false;
@@ -225,17 +231,13 @@ public class GettingStartedWizardAddMemberActivity extends SherlockActivity {
                     selectedFinishButton = false;
 
 
-
                 }
                 else {
                     Toast.makeText(this,"The member was updated successfully.",Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
                     startActivity(i);
 
-
-
                 }
-
 
 
 
@@ -243,7 +245,7 @@ public class GettingStartedWizardAddMemberActivity extends SherlockActivity {
                 //clearDataFields(); //Not needed now
             }
             else {
-                dlg = Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, "Add Member", "A problem occurred while adding the new member.", Utils.MSGBOX_ICON_TICK);
+                dlg = Utils.createAlertDialogOk(this, "Add Member", "A problem occurred while adding the new member.", Utils.MSGBOX_ICON_TICK);
                 dlg.show();
             }
         }
@@ -254,154 +256,16 @@ public class GettingStartedWizardAddMemberActivity extends SherlockActivity {
         return successFlg;
     }
 
-    private boolean validateData(Member member) {
+
+    private boolean validateGettingStartedMemberData(Member member) {
         try {
             if(null == member) {
                 return false;
             }
 
-            // Validate: MemberNo
-            TextView txtMemberNo = (TextView)findViewById(R.id.txtAMMemberNo);
-            String memberNo = txtMemberNo.getText().toString().trim();
-            if (memberNo.length() < 1) {
-                Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "The Member Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtMemberNo.requestFocus();
+            //Validate common member information via super class
+            if(! validateData(member)) {
                 return false;
-            }
-            else {
-                int theMemberNo = Integer.parseInt(memberNo);
-                if (theMemberNo <= 0) {
-                    Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "The Member Number must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtMemberNo.requestFocus();
-                    return false;
-                }
-                else {
-                    member.setMemberNo(theMemberNo);
-                }
-            }
-
-            //Validate: Surname
-            TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
-            String surname = txtSurname.getText().toString().trim();
-            if(surname.length() < 1) {
-                Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtSurname.requestFocus();
-                return false;
-            }
-            else {
-                member.setSurname(surname);
-            }
-
-            //Validate: OtherNames
-            TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
-            String otherNames = txtOtherNames.getText().toString().trim();
-            if(otherNames.length() < 1) {
-                Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtOtherNames.requestFocus();
-                return false;
-            }
-            else {
-                member.setOtherNames(otherNames);
-            }
-
-            //Validate: Gender
-            //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
-            Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
-            //String gender = txtGender.getText().toString().trim();
-            String gender = cboGender.getSelectedItem().toString().trim();
-            if(gender.length() < 1) {
-                Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "The Sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                cboGender.requestFocus();
-                return false;
-            }
-            else {
-                member.setGender(gender);
-            }
-
-            // Validate: Age
-            TextView txtAge = (TextView)findViewById(R.id.txtAMAge);
-            String age = txtAge.getText().toString().trim();
-            if (age.length() < 1) {
-                Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "The Age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtAge.requestFocus();
-                return false;
-            }
-            else {
-                int theAge = Integer.parseInt(age);
-                if (theAge <= 0) {
-                    Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "The Age must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtAge.requestFocus();
-                    return false;
-                }
-                else if(theAge > 120) {
-                    Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "The Age is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtAge.requestFocus();
-                    return false;
-                }
-                else {
-                    //Get the DateOfBirth from the Age
-                    Calendar c = Calendar.getInstance();
-                    c.add(Calendar.YEAR, -theAge);
-                    member.setDateOfBirth(c.getTime());
-                }
-            }
-
-            //Validate: Occupation
-            TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
-            String occupation = txtOccupation.getText().toString().trim();
-            if(occupation.length() < 1) {
-                Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtOccupation.requestFocus();
-                return false;
-            }
-            else {
-                member.setOccupation(occupation);
-            }
-
-            //Validate: PhoneNumber
-            TextView txtPhoneNo = (TextView)findViewById(R.id.txtAMPhoneNo);
-            String phoneNo = txtPhoneNo.getText().toString().trim();
-            if(phoneNo.length() < 1) {
-                //Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Phone Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                //txtPhoneNo.requestFocus();
-                //return false;
-                member.setPhoneNumber(null);
-            }
-            else {
-                member.setPhoneNumber(phoneNo);
-            }
-
-            // Validate: Cycles Completed
-            TextView txtCycles = (TextView)findViewById(R.id.txtAMCycles);
-            String cycles = txtCycles.getText().toString().trim();
-            int theCycles = 0;
-            member.setCyclesCompleted(0);
-            if (cycles.length() < 1) {
-//                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Number of Completed Cycles is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-//                txtCycles.requestFocus();
-//                return false;
-
-            }
-            else {
-                theCycles = Integer.parseInt(cycles);
-                if (theCycles < 0) {
-                    Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "The number of cycles must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtCycles.requestFocus();
-                    return false;
-                }
-                else if(theCycles > 100) {
-                    Utils.createAlertDialogOk(GettingStartedWizardAddMemberActivity.this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtCycles.requestFocus();
-                    return false;
-                }
-                else {
-                    member.setCyclesCompleted(theCycles);
-
-                    //Get the Date of Admission
-                    Calendar c = Calendar.getInstance();
-                    c.add(Calendar.YEAR, -theCycles);
-                    member.setDateOfAdmission(c.getTime());
-                }
             }
 
 
@@ -414,23 +278,17 @@ public class GettingStartedWizardAddMemberActivity extends SherlockActivity {
                 TextView txtSavingsSoFar = (TextView)findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
                 String savings = txtSavingsSoFar.getText().toString().trim();
                 amountSavedSoFar = Integer.parseInt(savings);
-                member.setCurrentShareAmount(amountSavedSoFar);
+                member.setSavingsOnSetup(amountSavedSoFar);
 
                 TextView txtLoanAmount = (TextView)findViewById(R.id.txtMDVOutstandingLoanAmount);
                 String loanAmount = txtLoanAmount.getText().toString().trim();
                 outstandingLoan = Integer.parseInt(loanAmount);
-                member.setOutstandingLoan(outstandingLoan);
+                member.setOutstandingLoanOnSetup(outstandingLoan);
 
 
 
 
-            //Final Verifications
-            //TODO: Trying to use Application context to ensure dialog box does not disappear
-            if(!repo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId())) {
-                Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtMemberNo.requestFocus();
-                return false;
-            }
+
 
             return true;
         }

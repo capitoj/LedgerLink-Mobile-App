@@ -190,7 +190,7 @@ public class AddMemberActivity extends SherlockActivity {
         return true;
     }
 
-    private boolean saveMemberData() {
+    protected boolean saveMemberData() {
         boolean successFlg = false;
         AlertDialog dlg = null;
 
@@ -327,7 +327,7 @@ public class AddMemberActivity extends SherlockActivity {
         return successFlg;
     }
 
-    private boolean validateData(Member member) {
+    protected boolean validateData(Member member) {
         try {
             if(null == member) {
                 return false;

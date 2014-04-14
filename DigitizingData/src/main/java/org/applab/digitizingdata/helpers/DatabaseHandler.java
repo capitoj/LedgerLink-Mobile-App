@@ -10,7 +10,7 @@ import org.applab.digitizingdata.domain.schema.*;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "ledgerlinkdb";
-    public static final int DATABASE_VERSION = 21;
+    public static final int DATABASE_VERSION = 22;
     public static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
 
     public static Context databaseContext = null;

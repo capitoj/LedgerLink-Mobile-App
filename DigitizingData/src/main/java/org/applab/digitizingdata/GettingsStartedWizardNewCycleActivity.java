@@ -1,9 +1,7 @@
 package org.applab.digitizingdata;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -11,42 +9,22 @@ import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
-import org.applab.digitizingdata.domain.model.VslaMiddleStartCycle;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MemberRepo;
-import org.applab.digitizingdata.repo.SendDataRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
+import org.applab.digitizingdata.repo.*;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Moses on 6/27/13.
  */
-public class GettingsStartedWizardNewCycleActivity extends SherlockActivity {
-    ActionBar actionBar;
+public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
-    TextView txtStartDate;
-    TextView txtEndDate;
-    TextView viewClicked;
-    private boolean settingStartDate = false;
-    public static final int Date_dialog_id = 1;
-    // date and time
-    private int mYear;
-    private int mMonth;
-    private int mDay;
-    private String dialogTitle = "New Cycle";
-    private AlertDialog alertDialog = null;
-    private boolean successAlertDialogShown = false;
-    private boolean isUpdateCycleAction = false;
-
-    private VslaCycle selectedCycle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,12 +38,7 @@ public class GettingsStartedWizardNewCycleActivity extends SherlockActivity {
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        if(isUpdateCycleAction) {
-            actionBar.setTitle("Edit Cycle");
-        }
-        else {
-            actionBar.setTitle("New Cycle");
-        }
+        actionBar.setTitle("GETTING STARTED");
 
         txtStartDate = (TextView)findViewById(R.id.txtNCStartDate);
         txtEndDate = (TextView)findViewById(R.id.txtNCEndDate);
@@ -134,22 +107,14 @@ public class GettingsStartedWizardNewCycleActivity extends SherlockActivity {
 
         }
 
+
+        //Set the current stage of the wizard
+        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
+        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_NEW_CYCLE);
     }
 
-    private void setupDefaultDates() {
-        final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-        updateDisplay(txtStartDate, mYear, mMonth+1,mDay);
 
-        //Set Default End Date
-        c.add(Calendar.YEAR,1);
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-        updateDisplay(txtEndDate,mYear,mMonth+1,mDay);
-    }
+
 
     //Event that is raised when the date has been set
     private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -172,65 +137,14 @@ public class GettingsStartedWizardNewCycleActivity extends SherlockActivity {
 
     }
 
-    //Displays the selected Date in the TextView
-    private void updateDisplay() {
-        if(viewClicked != null) {
-            viewClicked.setText(new StringBuilder()
-                // Month is 0 based so add 1
-                .append(mDay)
-                .append("-")
-                .append(Utils.getMonthNameAbbrev(mMonth + 1))
-                .append("-")
-                .append(mYear)
-                .toString());
 
-            //Default the End Date to StartDate + 52 weeks
-            if(settingStartDate && txtEndDate != null) {
-                settingStartDate = false;
-                txtEndDate.setText(new StringBuilder()
-                        // Month is 0 based so add 1
-                        .append(mDay)
-                        .append("-")
-                        .append(Utils.getMonthNameAbbrev(mMonth + 1))
-                        .append("-")
-                        .append(mYear + 1)
-                        .toString());
-            }
-        }
-        else {
-            //Not sure yet on what to do
-        }
-    }
-
-    private void updateDisplay(TextView theField) {
-        if(theField != null) {
-            theField.setText(new StringBuilder()
-                    // Month is 0 based so add 1
-                    .append(mDay)
-                    .append("-")
-                    .append(Utils.getMonthNameAbbrev(mMonth + 1))
-                    .append("-")
-                    .append(mYear)
-                    .toString());
-        }
-    }
-
-    private void updateDisplay(TextView theField, int theYear, int theMonth, int theDay) {
-        if(theField != null) {
-            theField.setText(new StringBuilder()
-                    .append(theDay)
-                    .append("-")
-                    .append(Utils.getMonthNameAbbrev(theMonth))
-                    .append("-")
-                    .append(theYear)
-                    .toString());
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         final MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.new_cycle, menu);
+        //Hide cancel button since it does not exist in GSW
+        menu.findItem(R.id.mnuNCCancel).setVisible(false);
         return true;
     }
 
@@ -255,51 +169,58 @@ public class GettingsStartedWizardNewCycleActivity extends SherlockActivity {
                     NavUtils.navigateUpTo(this, upIntent);
                 }
                 return true;
-            case R.id.mnuNCCancel:
+           /* case R.id.mnuNCCancel:
+                //On cancel go back to PageTwo of GSW
                 i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
-                return true;
+                return true;*/
             case R.id.mnuNCNext:
                 //First Save the Cycle Dates
                 //If successful move to next activity
-                return saveCycleData();
+                return saveMiddleCycleData();
         }
         return true;
 
     }
 
-    private boolean saveCycleData() {
-        //Test navigation
-        if(true)
-        {
-        Intent j = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
-        j.putExtra("_isUpdateCycleAction", isUpdateCycleAction);
-        startActivity(j);
-        return true;
-        }
+
+
+    private boolean  saveMiddleCycleData() {
         boolean successFlg = false;
 
-        VslaMiddleStartCycle cycle = new VslaMiddleStartCycle();
+        VslaCycle cycle = new VslaCycle();
         VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
-
-        VslaCycle castedCycle = (VslaCycle) cycle;
         if (selectedCycle != null) {
-            castedCycle = selectedCycle;
+            cycle = selectedCycle;
         }
 
-        if (validateData(cycle)) {
+        if (validateGettingStartedData(cycle)) {
             boolean retVal = false;
             if (cycle.getCycleId() != 0) {
-                retVal = repo.updateMiddleStartCycle(cycle);
+                retVal = repo.updateCycle(cycle);
             }
             else {
 
-                retVal = repo.addMiddleStartCycle(cycle);
+                retVal = repo.addCycle(cycle);
+
+
+
             }
             if (retVal) {
                 if (cycle.getCycleId() == 0) {
                     //Set this new cycle as the selected one
+                    //Retrieve the recently added cycle so as to get the id as well
+                    cycle = repo.getMostRecentCycle();
                     selectedCycle = cycle;
+                    //TODO: create Getting started wizard dummy meeting
+                    retVal = createGettingStartedDummyMeeting(selectedCycle);
+
+                    if(retVal) {
+                        Toast.makeText(this, "Dummy meeting has been created", Toast.LENGTH_LONG).show(); ;
+                    }
+                    else {
+                        Toast.makeText(this, "We failed to create the dummy meeting", Toast.LENGTH_LONG).show(); ;
+                    }
                     //displayMessageBox(dialogTitle, "The New Cycle has been added Successfully.", Utils.MSGBOX_ICON_TICK);
                 }
                 else {
@@ -318,8 +239,6 @@ public class GettingsStartedWizardNewCycleActivity extends SherlockActivity {
                 }
 
                 //Pass on the flag indicating whether this is an Update operation
-                //On success saving...
-                //Go to New member defination activity
                 Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
                 i.putExtra("_isUpdateCycleAction", isUpdateCycleAction);
                 startActivity(i);
@@ -343,110 +262,39 @@ public class GettingsStartedWizardNewCycleActivity extends SherlockActivity {
         return successFlg;
     }
 
-    private boolean validateData(VslaMiddleStartCycle cycle) {
+    //Creates the dummy meeting to be used to getting started wizard
+    private boolean createGettingStartedDummyMeeting(VslaCycle currentCycle) {
+
+        Meeting meeting = new Meeting();
+        meeting.setGettingStarted(true);
+        meeting.setIsCurrent(true);
+        meeting.setVslaCycle(currentCycle);
+        meeting.setMeetingDate(currentCycle.getStartDate());
+
+        MeetingRepo repo = new MeetingRepo(this);
+        return repo.addMeeting(meeting);
+
+    }
+
+
+    private boolean validateGettingStartedData(VslaCycle cycle) {
         try {
             if(null == cycle) {
                 return false;
             }
 
-            // Validate: SharePrice
-            TextView txtSharePrice = (TextView)findViewById(R.id.txtNCSharePrice);
-            String sharePrice = txtSharePrice.getText().toString().trim();
-            if (sharePrice.length() < 1) {
-                displayMessageBox(dialogTitle, "The Share Price is required.", Utils.MSGBOX_ICON_EXCLAMATION);
-                txtSharePrice.requestFocus();
+            //validate Data common to New Cycle
+            if(! validateData(cycle))
+            {
                 return false;
             }
-            else {
-                double theSharePrice = Double.parseDouble(sharePrice);
-                if (theSharePrice <= 0.00) {
-                    displayMessageBox(dialogTitle, "The Share Price must be positive.", Utils.MSGBOX_ICON_EXCLAMATION);
-                    txtSharePrice.requestFocus();
-                    return false;
-                }
-                else {
-                    cycle.setSharePrice(theSharePrice);
-                }
-            }
 
-            // Validate: MaxShareAmount
-            TextView txtMaxShareQty = (TextView)findViewById(R.id.txtNCMaxShares);
-            String maxShareQty = txtMaxShareQty.getText().toString().trim();
-            if (maxShareQty.length() < 1) {
-                displayMessageBox(dialogTitle, "The Maximum Share Quantity is required.", Utils.MSGBOX_ICON_EXCLAMATION);
-                txtMaxShareQty.requestFocus();
-                return false;
-            }
-            else {
-                double theMaxShareQty = Double.parseDouble(maxShareQty);
-                if (theMaxShareQty <= 0.00) {
-                    displayMessageBox(dialogTitle, "The Maximum Share Quantity must be positive.", Utils.MSGBOX_ICON_EXCLAMATION);
-                    txtMaxShareQty.requestFocus();
-                    return false;
-                }
-                else {
-                    cycle.setMaxSharesQty(theMaxShareQty);
-                }
-            }
-
-            // Validate: MaxStartShare
-            cycle.setMaxStartShare(0.0); //Unlimited
-
-            // Validate: StartDate
-            TextView txtStartDate = (TextView)findViewById(R.id.txtNCStartDate);
-            String startDate = txtStartDate.getText().toString().trim();
-            Date dt = Utils.getDateFromString(startDate,Utils.DATE_FIELD_FORMAT);
-
-            //if (dt.before(new Date())) {
-            //    displayMessageBox(dialogTitle, "The Start Date must be today or in the future.", Utils.MSGBOX_ICON_EXCLAMATION);
-            //    txtStartDate.requestFocus();
-            //    return false;
-            //}
-            //else {
-                cycle.setStartDate(dt);
-            //}
-
-            // Validate: EndDate
-            TextView txtEndDate = (TextView)findViewById(R.id.txtNCEndDate);
-            String endDate = txtEndDate.getText().toString().trim();
-            Date dtEnd = Utils.getDateFromString(endDate,Utils.DATE_FIELD_FORMAT);
-
-            if (dtEnd.before(cycle.getStartDate())) {
-                displayMessageBox(dialogTitle, "The End Date must be after the Start Date", Utils.MSGBOX_ICON_EXCLAMATION);
-                txtEndDate.requestFocus();
-                return false;
-            }
-            else {
-                cycle.setEndDate(dtEnd);
-            }
-
-            // Validate: MaxShareAmount
-            TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
-            String interestRate = txtInterestRate.getText().toString().trim();
-            if (interestRate.length() < 1) {
-                displayMessageBox(dialogTitle, "The Interest Rate is required.", Utils.MSGBOX_ICON_EXCLAMATION);
-                txtInterestRate.requestFocus();
-                return false;
-            }
-            else {
-                double theInterestRate = Double.parseDouble(interestRate);
-                if (theInterestRate < 0.00) {
-                    displayMessageBox(dialogTitle, "The Interest Rate should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
-                    txtInterestRate.requestFocus();
-                    return false;
-                }
-                else {
-                    cycle.setInterestRate(theInterestRate);
-                }
-            }
-
-
-
+            //Validation specific to getting started wizard
             //Validate Amount of interested collected so far
             TextView txtInterestCollected = (TextView)findViewById(R.id.txtNCInterestCollectedSoFar);
             String interestCollected = txtInterestCollected.getText().toString().trim();
             if (interestCollected.length() < 1) {
-                displayMessageBox(dialogTitle, "The Interest Collcted Is Required", Utils.MSGBOX_ICON_EXCLAMATION);
+                displayMessageBox(dialogTitle, "The Interest Collected Is Required", Utils.MSGBOX_ICON_EXCLAMATION);
                 txtInterestCollected.requestFocus();
                 return false;
             }
@@ -458,7 +306,7 @@ public class GettingsStartedWizardNewCycleActivity extends SherlockActivity {
                     return false;
                 }
                 else {
-                    cycle.setInterestReceived(theInterestCollected);
+                    cycle.setInterestAtSetup(theInterestCollected);
                 }
             }
 
@@ -484,42 +332,11 @@ public class GettingsStartedWizardNewCycleActivity extends SherlockActivity {
                     return false;
                 }
                 else {
-                    cycle.setFinesCollected(theFinesCollected);
+                    cycle.setFinesAtSetup(theFinesCollected);
                 }
             }
 
 
-
-
-
-
-            //Check that the Cycle Start Date does not overlap with the date the previous cycle ended
-            //First, get the most recent cycle
-            VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getApplicationContext());
-            VslaCycle mostRecentCycle = vslaCycleRepo.getMostRecentCycle();
-
-            if(null != mostRecentCycle) {
-                if(isUpdateCycleAction && mostRecentCycle.getCycleId() == cycle.getCycleId()){
-                    //Fine
-                }
-                else {
-                    //Check the Dates: use startDate vs DateEnded
-                    if(cycle.getStartDate() == null) {
-                        return false;
-                    }
-                    if(mostRecentCycle.getDateEnded() != null) {
-                        if(cycle.getStartDate().before(mostRecentCycle.getDateEnded())) {
-                            Utils.createAlertDialogOk(GettingsStartedWizardNewCycleActivity.this, dialogTitle,
-                                    String.format("The start date of this cycle should be after the share-out date of the previous cycle, which was: %s.", Utils.formatDate(mostRecentCycle.getDateEnded())),
-                                    Utils.MSGBOX_ICON_EXCLAMATION).show();
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            //Set the Cycle as Active
-            cycle.activate();
 
 
 
@@ -533,85 +350,42 @@ public class GettingsStartedWizardNewCycleActivity extends SherlockActivity {
         }
     }
 
-    private void displayMessageBox(String title, String message, String icon) {
-        alertDialog = new AlertDialog.Builder(GettingsStartedWizardNewCycleActivity.this).create();
 
-        // Setting Dialog Title
-        alertDialog.setTitle(title);
 
-        // Setting Dialog Message
-        alertDialog.setMessage(message);
-
-        // Setting Icon to Dialog
-        if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_EXCLAMATION)) {
-            alertDialog.setIcon(R.drawable.phone);
-        }
-        else if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_TICK)) {
-            alertDialog.setIcon(R.drawable.phone);
-        }
-        else if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_QUESTION)) {
-            alertDialog.setIcon(R.drawable.phone);
-        }
-
-        // Setting OK Button
-        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // Write your code here to execute after dialog closed
-                //Can I pass a method delegate? Or function pointer? for what to be executed?
-                // Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
-                if(successAlertDialogShown) {
-                    Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
-                    startActivity(i);
-                    successAlertDialogShown = false;
-                }
-            }
-        });
-
-        // Showing Alert Message
-        alertDialog.show();
-    }
-
-    private void populateDataFields(VslaCycle cycle) {
+    @Override
+    protected void populateDataFields(VslaCycle cycle) {
         //Clear Fields
         clearDataFields();
 
         if(cycle == null) {
             return;
         }
+        super.populateDataFields(cycle);
 
         try {
-            //Now populate
-            TextView txtSharePrice = (TextView)findViewById(R.id.txtNCSharePrice);
-            TextView txtMaxShareQty = (TextView)findViewById(R.id.txtNCMaxShares);
-            TextView txtStartDate = (TextView)findViewById(R.id.txtNCStartDate);
-            TextView txtEndDate = (TextView)findViewById(R.id.txtNCEndDate);
-            TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
+            //Now populate  specific to Getting started wizard
+            TextView txtInterestCollecteSoFar = (TextView)findViewById(R.id.txtNCInterestCollectedSoFar);
+            TextView txtFinesCollectedSoFar = (TextView)findViewById(R.id.lblNCFinesCollectedSoFar);
 
-            txtSharePrice.setText(Utils.formatRealNumber(cycle.getSharePrice()));
-            txtMaxShareQty.setText(Utils.formatRealNumber(cycle.getMaxSharesQty()));
-            txtStartDate.setText(Utils.formatDate(cycle.getStartDate(),"dd-MMM-yyyy"));
-            txtEndDate.setText(Utils.formatDate(cycle.getEndDate(),"dd-MMM-yyyy"));
-            txtInterestRate.setText(Utils.formatRealNumber(cycle.getInterestRate()));
+            //TODO: Set the interest and fines for the middle start cycle
+            txtInterestCollecteSoFar.setText(Utils.formatRealNumber(cycle.getMaxSharesQty()));
+            txtFinesCollectedSoFar.setText(Utils.formatRealNumber(cycle.getMaxSharesQty()));
+
         }
         catch(Exception ex){
 
         }
     }
 
-    private void clearDataFields() {
+    protected void clearDataFields() {
+        super.clearDataFields();
         try{
-            //Now populate
-            TextView txtSharePrice = (TextView)findViewById(R.id.txtNCSharePrice);
-            TextView txtMaxShareQty = (TextView)findViewById(R.id.txtNCMaxShares);
-            TextView txtStartDate = (TextView)findViewById(R.id.txtNCStartDate);
-            TextView txtEndDate = (TextView)findViewById(R.id.txtNCEndDate);
-            TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
+            //Now Clear fields specific to GSWizard
+            TextView txtInterestCollecteSoFar = (TextView)findViewById(R.id.txtNCInterestCollectedSoFar);
+            TextView txtFinesCollectedSoFar = (TextView)findViewById(R.id.lblNCFinesCollectedSoFar);
 
-            txtSharePrice.setText("");
-            txtMaxShareQty.setText("");
-            txtStartDate.setText("");
-            txtEndDate.setText("");
-            txtInterestRate.setText("");
+            txtInterestCollecteSoFar.setText("");
+            txtFinesCollectedSoFar.setText("");
         }
         catch(Exception ex){
 

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.MiddleCycleMember;
 import org.applab.digitizingdata.domain.model.VslaCycle;
@@ -56,6 +57,8 @@ public class MemberRepo {
             values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
 
 
+
+
             // Inserting Row
             long retVal = db.insert(MemberSchema.getTableName(), null, values);
             if (retVal != -1) {
@@ -75,6 +78,80 @@ public class MemberRepo {
             }
         }
     }
+
+
+
+
+
+
+    // Inserts the new member, and updates the members loans and savings in the dummy meeting
+    public boolean addGettingStartedWizardMember(Member member, Meeting dummyGettingStartedMeeting) {
+        SQLiteDatabase db = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(MemberSchema.COL_M_MEMBER_NO, member.getMemberNo());
+            values.put(MemberSchema.COL_M_SURNAME, member.getSurname());
+            values.put(MemberSchema.COL_M_OTHER_NAMES, member.getOtherNames());
+            values.put(MemberSchema.COL_M_OCCUPATION, member.getOccupation());
+            values.put(MemberSchema.COL_M_GENDER, member.getGender());
+
+            if(member.getDateOfBirth() == null) {
+                member.setDateOfBirth(new Date());
+            }
+            values.put(MemberSchema.COL_M_DATE_OF_BIRTH, Utils.formatDateToSqlite(member.getDateOfBirth()));
+            values.put(MemberSchema.COL_M_PHONE_NO, member.getPhoneNumber());
+            if(member.getDateOfAdmission() == null) {
+                member.setDateOfAdmission(new Date());
+            }
+            values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
+
+
+
+
+
+
+            // Inserting Row
+            long retVal = db.insert(MemberSchema.getTableName(), null, values);
+            if (retVal != -1) {
+                MeetingSavingRepo repo = new MeetingSavingRepo(context);
+                boolean savingResult = repo.saveMemberSaving(dummyGettingStartedMeeting.getMeetingId(), (int) retVal, member.getSavingsOnSetup());
+
+                if( ! savingResult) {
+                    System.out.println("Savings to date could not be added for member "+member.getSurname());
+                    return false;
+                }
+                else {
+                    System.out.println("Savings to date added for member "+member.getSurname());
+                    //Save fines
+                    //TODO: Save fines
+                }
+
+
+
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MemberRepo.addMember", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
+
+
+
+
 
     public ArrayList<Member> getAllMembers() {
 

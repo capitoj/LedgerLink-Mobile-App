@@ -19,6 +19,8 @@ public class VslaCycle {
     private boolean isEnded;
     private Date dateEnded;
     private double sharedAmount;
+    private double interestAtSetup;
+    private double finesAtSetup;
 
     public VslaCycle(){
 
@@ -33,6 +35,21 @@ public class VslaCycle {
         this.maxSharesQty = maxSharesQty;
         this.maxStartShare = maxStartShare;
         this.interestRate = interestRate;
+        setInterestAtSetup(0);
+        setFinesAtSetup(0);
+    }
+
+    public VslaCycle(int cycleId, String cycleCode, Date startDate, Date endDate, double sharePrice, double maxSharesQty, double maxStartShare, double interestRate, double interestAtSetup, double finesAtSetup){
+        this.cycleId = cycleId;
+        this.cycleCode = cycleCode;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.sharePrice = sharePrice;
+        this.maxSharesQty = maxSharesQty;
+        this.maxStartShare = maxStartShare;
+        this.interestRate = interestRate;
+        setInterestAtSetup(interestAtSetup);
+        setFinesAtSetup(finesAtSetup);
     }
 
     public VslaCycle(int cycleId) {
@@ -144,4 +161,19 @@ public class VslaCycle {
         this.interestRate = interestRate;
     }
 
+    public double getInterestAtSetup() {
+        return interestAtSetup;
+    }
+
+    public void setInterestAtSetup(double interestAtSetup) {
+        this.interestAtSetup = interestAtSetup;
+    }
+
+    public double getFinesAtSetup() {
+        return finesAtSetup;
+    }
+
+    public void setFinesAtSetup(double finesAtSetup) {
+        this.finesAtSetup = finesAtSetup;
+    }
 }

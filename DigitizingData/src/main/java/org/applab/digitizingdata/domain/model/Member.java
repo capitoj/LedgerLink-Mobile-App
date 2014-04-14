@@ -25,6 +25,10 @@ public class Member {
     private double currentShareAmount;
     private double outstandingLoan;
 
+    //Values for Getting started wizard
+    private double savingsOnSetup;
+    private double outstandingLoanOnSetup;
+
     @Override
     public String toString() {
         return String.format("%s. %s, %s", memberNo, surname, otherNames);
@@ -208,5 +212,21 @@ public class Member {
 
     public Member() {
 
+    }
+
+    public double getSavingsOnSetup() {
+        return savingsOnSetup;
+    }
+
+    public void setSavingsOnSetup(double savingsOnSetup) {
+        this.savingsOnSetup = savingsOnSetup;
+    }
+
+    public double getOutstandingLoanOnSetup() {
+        return outstandingLoanOnSetup;
+    }
+
+    public void setOutstandingLoanOnSetup(double outstandingLoanOnSetup) {
+        this.outstandingLoanOnSetup = outstandingLoanOnSetup;
     }
 }
