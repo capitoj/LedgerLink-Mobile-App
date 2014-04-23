@@ -62,7 +62,7 @@ public class MeetingRepo {
             }
         }
         catch (Exception ex) {
-            Log.e("MemberRepo.addMember", ex.getMessage());
+            Log.e("MeetingRepo.addMeeting", ex.getMessage());
             return false;
         }
         finally {
@@ -699,6 +699,64 @@ public class MeetingRepo {
             String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC LIMIT 1", columnList, MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_CYCLE_ID, vslaCycleId,
                     MeetingSchema.COL_MT_MEETING_ID);
+            cursor = db.rawQuery(selectQuery, null);
+
+            // looping through all rows and adding to list
+            if (cursor != null && cursor.moveToFirst()) {
+                meeting = new Meeting();
+                Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                meeting.setMeetingDate(meetingDate);
+                meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
+                meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTINGS_STARTED_WIZARD)) == 1);
+
+                //Check for Nulls while loading the VSLA Cycle
+                int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
+                meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
+                if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                    meeting.setMeetingDataSent(true);
+                    Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                    meeting.setDateSent(dateMeetingDataSent);
+                }
+                else {
+                    meeting.setMeetingDataSent(false);
+                }
+
+                return meeting;
+            }
+            else {
+                return null;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.getCurrentMeeting", ex.getMessage());
+            return null;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    //Returns the Getting started wizard dummy meeting
+    public Meeting getDummyGettingStartedWizardMeeting() {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        VslaCycleRepo cycleRepo = null;
+        Meeting meeting = null;
+
+        try {
+            cycleRepo = new VslaCycleRepo(context);
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String columnList = MeetingSchema.getColumnList();
+
+            // Select All Query
+            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d LIMIT 1", columnList, MeetingSchema.getTableName(),
+                    MeetingSchema.COL_MT_IS_GETTINGS_STARTED_WIZARD, 1);
             cursor = db.rawQuery(selectQuery, null);
 
             // looping through all rows and adding to list

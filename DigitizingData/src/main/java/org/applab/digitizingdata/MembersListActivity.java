@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -71,7 +72,7 @@ public class MembersListActivity extends SherlockListActivity {
                 startActivity(i);
                 return true;
             case R.id.mnuMListAdd:
-                i = new Intent(getApplicationContext(), AddMemberActivity.class);
+                i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
                 startActivity(i);
                 return true;
         }
@@ -79,7 +80,7 @@ public class MembersListActivity extends SherlockListActivity {
     }
 
     //Populate Members List
-    private void populateMembersList() {
+    protected void populateMembersList() {
         //Load the Main Menu
         MemberRepo memberRepo = new MemberRepo(getApplicationContext());
         members = memberRepo.getAllMembers();
@@ -90,6 +91,8 @@ public class MembersListActivity extends SherlockListActivity {
 
         //Now get the data via the adapter
         MembersArrayAdapter adapter = new MembersArrayAdapter(getBaseContext(), members);
+
+        Log.d(getBaseContext().getPackageName(), members.size() + " members loaded");
 
         //Assign Adapter to ListView
         setListAdapter(adapter);
@@ -109,6 +112,7 @@ public class MembersListActivity extends SherlockListActivity {
                 b.putString("_names", selectedMember.getFullNames());
                 viewMember.putExtras(b);
                 viewMember.putExtra("_caller","reviewMembers");
+                viewMember.putExtra("_isEditAction",true);
                 startActivity(viewMember);
 
             }

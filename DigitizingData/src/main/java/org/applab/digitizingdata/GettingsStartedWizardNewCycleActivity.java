@@ -31,8 +31,12 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_cycle_getting_started_wizard);
 
-        if(getIntent().hasExtra("_isUpdateCycleAction")) {
-            isUpdateCycleAction = getIntent().getBooleanExtra("_isUpdateCycleAction",false);
+        VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
+        selectedCycle = repo.getCurrentCycle();
+
+        if(selectedCycle != null) {
+            //isUpdateCycleAction = getIntent().getBooleanExtra("_isUpdateCycleAction",false);
+            isUpdateCycleAction = true;
         }
 
         actionBar = getSupportActionBar();
@@ -70,8 +74,14 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
         if(isUpdateCycleAction) {
             //Setup the Fields by getting the current Cycle
-            VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
-            selectedCycle = repo.getCurrentCycle();
+            TextView heading = (TextView) findViewById(R.id.lblNCHeading);
+            heading.setText("Review Cycle Information");
+
+            TextView headerText = (TextView) findViewById(R.id.lblNCHeader);
+            heading.setText("Review and confirm that all information is correct. Correct any errors");
+
+
+
             if(selectedCycle != null) {
                 //displayMessageBox("Testing", "Cycle to Update Found", Utils.MSGBOX_ICON_INFORMATION);
                 //Populate Fields
@@ -97,20 +107,19 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
                 //Convert it to New Cycle operation
                 isUpdateCycleAction = false;
-                actionBar.setTitle("New Cycle");
             }
         }
         else {
             //displayMessageBox("Testing", "Cycle to Update NOT Found", MSGBOX_ICON_INFORMATION);
             //Setup the Default Date
             setupDefaultDates();
-
+            //Set the current stage of the wizard
+            VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
+            vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_NEW_CYCLE);
         }
 
 
-        //Set the current stage of the wizard
-        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
-        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_NEW_CYCLE);
+
     }
 
 
@@ -202,9 +211,6 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             else {
 
                 retVal = repo.addCycle(cycle);
-
-
-
             }
             if (retVal) {
                 if (cycle.getCycleId() == 0) {

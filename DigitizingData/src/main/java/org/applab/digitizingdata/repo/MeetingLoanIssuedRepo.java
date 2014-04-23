@@ -723,8 +723,10 @@ public class MeetingLoanIssuedRepo {
                     LoanIssueSchema.COL_LI_MEMBER_ID,memberId,LoanIssueSchema.COL_LI_IS_CLEARED,LoanIssueSchema.COL_LI_IS_CLEARED,
                     LoanIssueSchema.COL_LI_LOAN_ID
             );
-            cursor = db.rawQuery(query, null);
 
+            Log.d(context.getPackageName(), query);
+            cursor = db.rawQuery(query, null);
+            Log.d(context.getPackageName(), "Row count is "+cursor.getCount());
             if (cursor != null && cursor.moveToFirst()) {
 
                 loan = new MeetingLoanIssued();
@@ -756,6 +758,7 @@ public class MeetingLoanIssuedRepo {
             return loan;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MeetingLoanIssuedRepo.getMostRecentLoanIssuedToMember", ex.getMessage());
             return null;
         }

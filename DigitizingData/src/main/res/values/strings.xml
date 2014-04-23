@@ -18,6 +18,7 @@
     <string name="title_activity_meeting_send_data_frag">Send Data</string>
     <string name="title_activity_meeting_opening_cash_frag">Starting Cash</string>
     <string name="title_activity_gettings_started_wizard_add_member">Add Member</string>
+    <string name="title_activity_gettings_started_wizard_review_members">Review Members</string>
     <string name="title_activity_gettings_started_wizard_add_cycle">New Cycle</string>
     <string name="title_activity_gettings_started_wizard_page_1">Welcome</string>
     <string name="title_activity_gettings_started_wizard_page_2">Pass Code</string>

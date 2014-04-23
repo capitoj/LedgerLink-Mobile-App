@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.MiddleCycleMember;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
@@ -41,6 +43,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     private boolean isEditAction;
 
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -48,6 +51,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction",false);
         }
         if(getIntent().hasExtra("_id")){
+            Log.d(getBaseContext().getPackageName(), "Member id "+getIntent().getIntExtra("_id", 0)+" to be loaded");
             this.selectedMemberId = getIntent().getIntExtra("_id",0);
         }
 
@@ -88,8 +92,11 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                         @Override
                         public void onClick(View v) {
                             selectedFinishButton = true;
-                            saveMemberData();
-                            finish();
+                            if(saveMemberData()) {
+                                finish();
+                            }
+
+
                         }
                     });
             customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
@@ -148,10 +155,11 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             selectedMember = repo.getMemberById(selectedMemberId);
             populateDataFields(selectedMember);
         }
-
+         else {
         //Set the current stage of the wizard
         VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
         vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_ADD_MEMBER);
+        }
     }
 
     @Override
@@ -165,15 +173,18 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home:
-                Intent upIntent = new Intent(this, GettingsStartedWizardNewCycleActivity.class);
+                Intent upIntent = new Intent(this, GettingStartedWizardReviewMembersActivity.class);
                 NavUtils.navigateUpTo(this, upIntent);
                 return true;
             case R.id.mnuAMNext:
                 //Save member and add new member
-                if(saveMemberData())
-                {
+                if(saveMemberData()) {
                     clearDataFields();
                 }
+                else {
+                     Toast.makeText(this, "Failed to save member information", Toast.LENGTH_LONG).show();
+                }
+
                 return true;
             case R.id.mnuAMFinished:
                 selectedFinishButton = true;
@@ -187,6 +198,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     protected boolean saveMemberData() {
         boolean successFlg = false;
         AlertDialog dlg = null;
+        MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
 
         Member member = new Member();
         repo = new MemberRepo(getApplicationContext());
@@ -197,10 +209,10 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         if (validateGettingStartedMemberData(member)) {
             boolean retVal = false;
             if (member.getMemberId() != 0) {
-                retVal = repo.updateMember(member);
+                retVal = repo.updateGettingStartedWizardMember(member);
             }
             else {
-                retVal = repo.addMember(member);
+                retVal = repo.addGettingStartedWizardMember(member);
             }
             if (retVal) {
                 if (member.getMemberId() == 0) {
@@ -213,7 +225,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                         Toast toast = Toast.makeText(this,"The new member was added successfully.",Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.LEFT,0,0);
                         toast.show();
-
+                            Log.i(getBaseContext().getPackageName(), "Going to start Review members activity");
                             Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
                             startActivity(i);
 
@@ -234,7 +246,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 }
                 else {
                     Toast.makeText(this,"The member was updated successfully.",Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                    Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
                     startActivity(i);
 
                 }
@@ -265,6 +277,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
             //Validate common member information via super class
             if(! validateData(member)) {
+                Log.d(getBaseContext().getPackageName(), "Data validation failed");
                 return false;
             }
 
@@ -293,6 +306,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             return true;
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return false;
         }
     }
@@ -348,6 +362,15 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             calDbCycles.setTime(member.getDateOfAdmission());
             int cycles = calToday.get(Calendar.YEAR) - calDbCycles.get(Calendar.YEAR);
             txtCyclesCompleted.setText(String.format("%d", cycles));
+
+            Log.d(getBaseContext().getPackageName(), "Member savings and Loans are "+member.getSavingsOnSetup()+" and "+member.getOutstandingLoanOnSetup());
+
+            //Populate fields for savings and loan at setup
+            TextView txtSavingsSoFar = (TextView)findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
+            txtSavingsSoFar.setText(String.format("%.0f",member.getSavingsOnSetup()));
+
+            TextView txtLoanAmount = (TextView)findViewById(R.id.txtMDVOutstandingLoanAmount);
+            txtLoanAmount.setText(String.format("%.0f",member.getOutstandingLoanOnSetup()));
 
         }
         finally {

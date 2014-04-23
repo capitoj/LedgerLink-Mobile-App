@@ -131,6 +131,10 @@
             android:label="@string/title_activity_gettings_started_wizard_add_member" >
         </activity>
         <activity
+                android:name="org.applab.digitizingdata.GettingStartedWizardReviewMembersActivity"
+                android:label="@string/title_activity_gettings_started_wizard_review_members" >
+        </activity>
+        <activity
             android:name="org.applab.digitizingdata.GettingsStartedWizardNewCycleActivity"
             android:label="@string/title_activity_gettings_started_wizard_add_cycle" >
         </activity>

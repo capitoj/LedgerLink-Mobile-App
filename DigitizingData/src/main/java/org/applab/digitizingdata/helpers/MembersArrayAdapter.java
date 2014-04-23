@@ -21,8 +21,15 @@ public class MembersArrayAdapter extends ArrayAdapter<Member> {
     ArrayList<Member> values;
     int position;
 
+
     public MembersArrayAdapter(Context context, ArrayList<Member> values) {
         super(context, R.layout.row_members_main_list, values);
+        this.context = context;
+        this.values = values;
+    }
+
+    public MembersArrayAdapter(Context context, ArrayList<Member> values,int layout) {
+        super(context, layout, values);
         this.context = context;
         this.values = values;
     }
@@ -71,6 +78,7 @@ public class MembersArrayAdapter extends ArrayAdapter<Member> {
             return rowView;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));
             return null;
         }

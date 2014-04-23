@@ -12,7 +12,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
-
+        <TextView android:id="@+id/lblNCHeading"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="Middle Start Cycle"
+                  android:textStyle="bold"
+                />
         <TextView
                 android:id="@+id/lblNCHeader"
                 android:layout_width="fill_parent"

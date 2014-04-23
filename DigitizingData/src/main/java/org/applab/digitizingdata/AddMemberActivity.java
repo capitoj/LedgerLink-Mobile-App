@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,7 @@ public class AddMemberActivity extends SherlockActivity {
 
 
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -332,19 +334,19 @@ public class AddMemberActivity extends SherlockActivity {
             if(null == member) {
                 return false;
             }
-
+            repo = new MemberRepo(getApplicationContext());
             // Validate: MemberNo
             TextView txtMemberNo = (TextView)findViewById(R.id.txtAMMemberNo);
             String memberNo = txtMemberNo.getText().toString().trim();
             if (memberNo.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Member Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The Member Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtMemberNo.requestFocus();
                 return false;
             }
             else {
                 int theMemberNo = Integer.parseInt(memberNo);
                 if (theMemberNo <= 0) {
-                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Member Number must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, "The Member Number must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtMemberNo.requestFocus();
                     return false;
                 }
@@ -357,7 +359,7 @@ public class AddMemberActivity extends SherlockActivity {
             TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
             String surname = txtSurname.getText().toString().trim();
             if(surname.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtSurname.requestFocus();
                 return false;
             }
@@ -369,7 +371,7 @@ public class AddMemberActivity extends SherlockActivity {
             TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
             String otherNames = txtOtherNames.getText().toString().trim();
             if(otherNames.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtOtherNames.requestFocus();
                 return false;
             }
@@ -383,7 +385,7 @@ public class AddMemberActivity extends SherlockActivity {
             //String gender = txtGender.getText().toString().trim();
             String gender = cboGender.getSelectedItem().toString().trim();
             if(gender.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The Sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboGender.requestFocus();
                 return false;
             }
@@ -395,19 +397,19 @@ public class AddMemberActivity extends SherlockActivity {
             TextView txtAge = (TextView)findViewById(R.id.txtAMAge);
             String age = txtAge.getText().toString().trim();
             if (age.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The Age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtAge.requestFocus();
                 return false;
             }
             else {
                 int theAge = Integer.parseInt(age);
                 if (theAge <= 0) {
-                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Age must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, "The Age must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtAge.requestFocus();
                     return false;
                 }
                 else if(theAge > 120) {
-                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Age is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, "The Age is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtAge.requestFocus();
                     return false;
                 }
@@ -423,7 +425,7 @@ public class AddMemberActivity extends SherlockActivity {
             TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
             String occupation = txtOccupation.getText().toString().trim();
             if(occupation.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtOccupation.requestFocus();
                 return false;
             }
@@ -458,12 +460,12 @@ public class AddMemberActivity extends SherlockActivity {
             else {
                 theCycles = Integer.parseInt(cycles);
                 if (theCycles < 0) {
-                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The number of cycles must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, "The number of cycles must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtCycles.requestFocus();
                     return false;
                 }
                 else if(theCycles > 100) {
-                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtCycles.requestFocus();
                     return false;
                 }
@@ -493,6 +495,7 @@ public class AddMemberActivity extends SherlockActivity {
             return true;
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return false;
         }
     }
