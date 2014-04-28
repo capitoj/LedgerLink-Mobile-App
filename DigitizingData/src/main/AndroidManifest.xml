@@ -17,6 +17,9 @@
     <!-- to allow access to telephony -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <!-- to allow access to external storage -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <!-- android:theme="@style/AppTheme" -->
     <application
         android:allowBackup="true"
@@ -150,6 +153,10 @@
         <activity
             android:name="org.applab.digitizingdata.GettingStartedWizardPageTwo"
             android:label="@string/title_activity_gettings_started_wizard_page_2" >
+        </activity>
+        <activity
+                android:name="org.applab.digitizingdata.GettingStartedConfirmationPage"
+                android:label="Confirmation" >
         </activity>
         <activity
             android:name="org.applab.digitizingdata.DataMigrationActivity"

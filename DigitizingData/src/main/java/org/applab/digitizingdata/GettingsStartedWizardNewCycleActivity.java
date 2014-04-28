@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
@@ -221,11 +223,10 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                     //TODO: create Getting started wizard dummy meeting
                     retVal = createGettingStartedDummyMeeting(selectedCycle);
 
-                    if(retVal) {
-                        Toast.makeText(this, "Dummy meeting has been created", Toast.LENGTH_LONG).show(); ;
-                    }
-                    else {
-                        Toast.makeText(this, "We failed to create the dummy meeting", Toast.LENGTH_LONG).show(); ;
+
+                    if(! retVal) {
+                        Log.d(getApplicationContext().getPackageName(), "Failed to create the dummy data import meeting");
+                        Toast.makeText(this, "An error occured while saving the information", Toast.LENGTH_LONG).show(); ;
                     }
                     //displayMessageBox(dialogTitle, "The New Cycle has been added Successfully.", Utils.MSGBOX_ICON_TICK);
                 }
@@ -245,17 +246,21 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                 }
 
                 //Pass on the flag indicating whether this is an Update operation
-                Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+                if(isUpdateCycleAction) {
+                    //Go to confirmation activity
+                    Intent i =  new Intent(getApplicationContext(), GettingStartedConfirmationPage.class);
+                    startActivity(i);
+                }
+                else {
+                Intent i =  new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
                 i.putExtra("_isUpdateCycleAction", isUpdateCycleAction);
                 startActivity(i);
-                /*
-                if(null != alertDialog && alertDialog.isShowing()) {
-                    //Flag that ready to goto Next
-                    successAlertDialogShown = true;
                 }
-                */
+
+
                 successFlg = true;
-                //clearDataFields(); //Not needed now
+
+
             }
             else {
                 displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.", Utils.MSGBOX_ICON_EXCLAMATION);
@@ -370,8 +375,8 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
         try {
             //Now populate  specific to Getting started wizard
-            TextView txtInterestCollecteSoFar = (TextView)findViewById(R.id.txtNCInterestCollectedSoFar);
-            TextView txtFinesCollectedSoFar = (TextView)findViewById(R.id.lblNCFinesCollectedSoFar);
+            EditText txtInterestCollecteSoFar = (EditText)findViewById(R.id.txtNCInterestCollectedSoFar);
+            EditText txtFinesCollectedSoFar = (EditText)findViewById(R.id.txtNCFinesCollectedSoFar);
 
             //TODO: Set the interest and fines for the middle start cycle
             txtInterestCollecteSoFar.setText(Utils.formatRealNumber(cycle.getMaxSharesQty()));
@@ -387,8 +392,8 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         super.clearDataFields();
         try{
             //Now Clear fields specific to GSWizard
-            TextView txtInterestCollecteSoFar = (TextView)findViewById(R.id.txtNCInterestCollectedSoFar);
-            TextView txtFinesCollectedSoFar = (TextView)findViewById(R.id.lblNCFinesCollectedSoFar);
+            EditText txtInterestCollecteSoFar = (EditText)findViewById(R.id.txtNCInterestCollectedSoFar);
+            EditText txtFinesCollectedSoFar = (EditText)findViewById(R.id.txtNCFinesCollectedSoFar);
 
             txtInterestCollecteSoFar.setText("");
             txtFinesCollectedSoFar.setText("");

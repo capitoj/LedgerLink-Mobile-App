@@ -36,14 +36,14 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
         actionBar.setTitle("GETTING STARTED");
 
         //For test purposes, create vsla info if not exists
-        VslaInfoRepo repo = new VslaInfoRepo(getBaseContext());
+        /* VslaInfoRepo repo = new VslaInfoRepo(getBaseContext());
         if(!repo.vslaInfoExists()) {
            repo.saveVslaInfo("TESTVSLA", "TESTVSLA", "1234");
         }
+        */
 
 
         vslaInfoRepo = new VslaInfoRepo(this);

@@ -69,6 +69,7 @@ public class VslaInfoRepo {
             return vslaInfo;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("VslaInfoRepo.getVslaInfo", ex.getMessage());
             return null;
         }

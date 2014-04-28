@@ -4,21 +4,43 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import android.os.Environment;
+import android.util.Log;
 import org.applab.digitizingdata.SettingsActivity;
 import org.applab.digitizingdata.domain.schema.*;
 
+import java.io.File;
+
 public class DatabaseHandler extends SQLiteOpenHelper {
 
+    public static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DATABASE_NAME = "ledgerlinkdb";
     public static final int DATABASE_VERSION = 22;
     public static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
+    public static final String DATA_FOLDER = "LedgerLink";
 
     public static Context databaseContext = null;
 
     public DatabaseHandler(Context context) {
-        super(context, ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING)) ? TRAINING_DATABASE_NAME : DATABASE_NAME),
+        super(context, createDatabaseFolder() + ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING)) ? TRAINING_DATABASE_NAME : DATABASE_NAME),
                 null, DATABASE_VERSION);
         databaseContext = context;
+    }
+
+    public static String createDatabaseFolder() {
+        //creates the database folders and returns path as string
+        File databaseStorageDir = new File(EXTERNAL_STORAGE_LOCATION + File.separator + DATA_FOLDER);
+        if(! databaseStorageDir.exists()) {
+            //create it
+            boolean mkdir = databaseStorageDir.mkdir();
+            if(mkdir) {
+            Log.d("DatabaseHandler.createDatabaseFolder", "Data folder "+databaseStorageDir.getAbsolutePath() +" has been created");
+            }
+            else {
+                Log.d("DatabaseHandler.createDatabaseFolder", "Data folder "+databaseStorageDir.getAbsolutePath() +" failed to be created");
+            }
+        }
+        return databaseStorageDir.getAbsolutePath() + File.separator;
     }
 
     public void onCreate(SQLiteDatabase db) {

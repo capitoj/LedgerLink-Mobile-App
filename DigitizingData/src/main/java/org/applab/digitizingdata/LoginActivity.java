@@ -201,9 +201,11 @@ public class LoginActivity extends SherlockActivity {
         boolean showGettingStartedWizard = false;
         //Determine whether to start the Getting Started Wizard or the Main Menu
         //For now just consider the Vsla Cycle. May be later we shall include a few members
-        VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
-        if(null == cycleRepo.getMostRecentCycle()) {
-            //showGettingStartedWizard = true;
+        //Changed this condition to check the getting started wizard flag
+
+
+        if(! vslaInfo.isGettingStartedWizardComplete()) {
+            showGettingStartedWizard = true;
         }
 
         Intent mainMenu = null;

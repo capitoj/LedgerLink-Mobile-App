@@ -112,6 +112,8 @@ public class MemberRepo {
             long retVal = db.insert(MemberSchema.getTableName(), null, values);
             if (retVal != -1) {
                 Log.d(context.getPackageName(), "GSW member added "+member.getSurname()+" - ret val is "+retVal);
+                //set the members id now
+                member.setMemberId((int) retVal);
                 MeetingSavingRepo repo = new MeetingSavingRepo(context);
 
                 MeetingRepo meetingRepo = new MeetingRepo(context);

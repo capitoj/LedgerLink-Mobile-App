@@ -43,6 +43,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     private boolean isEditAction;
 
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             Log.d(getBaseContext().getPackageName(), "Member id "+getIntent().getIntExtra("_id", 0)+" to be loaded");
             this.selectedMemberId = getIntent().getIntExtra("_id",0);
         }
+
 
 
 
