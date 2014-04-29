@@ -379,8 +379,8 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             EditText txtFinesCollectedSoFar = (EditText)findViewById(R.id.txtNCFinesCollectedSoFar);
 
             //TODO: Set the interest and fines for the middle start cycle
-            txtInterestCollecteSoFar.setText(Utils.formatRealNumber(cycle.getMaxSharesQty()));
-            txtFinesCollectedSoFar.setText(Utils.formatRealNumber(cycle.getMaxSharesQty()));
+            txtInterestCollecteSoFar.setText(Utils.formatRealNumber(cycle.getInterestAtSetup()));
+            txtFinesCollectedSoFar.setText(Utils.formatRealNumber(cycle.getFinesAtSetup()));
 
         }
         catch(Exception ex){
