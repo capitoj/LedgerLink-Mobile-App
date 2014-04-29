@@ -16,6 +16,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.MembersArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
@@ -32,6 +34,8 @@ public class MembersListActivity extends SherlockListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         setContentView(R.layout.activity_members_list);
 
         actionBar = getSupportActionBar();
@@ -90,9 +94,7 @@ public class MembersListActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        MembersArrayAdapter adapter = new MembersArrayAdapter(getBaseContext(), members);
-
-        Log.d(getBaseContext().getPackageName(), members.size() + " members loaded");
+        MembersArrayAdapter adapter = new MembersArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
         setListAdapter(adapter);

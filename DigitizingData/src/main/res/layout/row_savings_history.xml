@@ -4,18 +4,15 @@
                 android:layout_height="wrap_content"
         >
 
-    <TextView
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/txtRSHMeetingDate"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:textStyle="bold"
             android:padding="5dp"
-            android:text="Meeting Date"
-            android:textSize="18sp" >
-    </TextView>
-    <TextView
+            android:text="Meeting Date"/>
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/txtRSHAmount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -23,9 +20,6 @@
             android:paddingLeft="5dp"
             android:layout_marginLeft="5dp"
             android:gravity="left"
-            android:text="Saved: 0UGX"
-            android:textSize="16sp" >
-    </TextView>
-
+            android:text="Saved: 0UGX"/>
 
 </RelativeLayout>

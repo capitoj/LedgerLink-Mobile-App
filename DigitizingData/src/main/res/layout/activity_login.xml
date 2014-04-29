@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -13,13 +11,13 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin">
-    <!-- Steel Blue: #4682B4
-    android:background="#3b5998"
-    #3b5998
-    #8b9dc3
-    #f7f7f7
-    #dfe3ee
-    -->
+        <!-- Steel Blue: #4682B4
+        android:background="#3b5998"
+        #3b5998
+        #8b9dc3
+        #f7f7f7
+        #dfe3ee
+        -->
         <!--<TextView
             android:id="@+id/lbl_title"
             android:layout_width="wrap_content"
@@ -28,73 +26,72 @@
             android:layout_centerHorizontal="true"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:text="Ledger Link" />-->
+            android:text="Ledger Link" />
+
+            android:layout_marginLeft="20dip"
+            -->
 
         <ImageView
+            style="@style/Logo"
             android:id="@+id/imgVALogo"
+            android:layout_width="100dip"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/image_content_desc"
+           />
+
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/InTextHeader"
+            android:id="@+id/lbl_vsla_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_ledger_link_logo"
-            android:scaleType="centerInside"
-            android:adjustViewBounds="true"
-            />
-
-        <TextView
-                android:id="@+id/lbl_vsla_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:layout_below="@id/imgVALogo"
-                android:paddingTop="2dip"
-                android:layout_marginTop="36dip"
-                android:textStyle="bold"
-                android:textColor="#000"
-                android:textAlignment="textStart"
-                android:gravity="left"
-                android:text="" />
-
-        <EditText
-                android:id="@+id/edt_passkey"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lbl_vsla_name"
-                android:layout_marginTop="15dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dip"
-                android:textSize="24sp"
-                android:inputType="numberPassword"
-                android:hint="Enter Pass Key Here">
-                <requestFocus/>
-        </EditText>
-
-        <Button
-                android:id="@+id/btnLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="10dip"
-                android:paddingTop="10dip"
-                android:layout_marginTop="20dip"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/edt_passkey"
-                android:textColor="#FFFFFF"
-                android:background="#191970"
-                android:textStyle="bold"
-                android:textSize="24sp"
-                android:text="Sign In"/>
-
-        <TextView
-            android:id="@+id/lblSISwitchMode"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/btnLogin"
-            android:textSize="18sp"
+            android:layout_height="match_parent"
             android:gravity="left"
-            android:paddingTop="2dp"
-            android:layout_marginTop="10dp"
-            android:textStyle="bold"
-            android:textColor="#0000FF"
-            android:text="Switch to Training Mode" />
+            android:text=" "
+            android:layout_below="@+id/imgVALogo"
+            android:layout_alignLeft="@+id/edt_passkey" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceEditText
+            style="@style/EditTextStyle"
+            android:id="@+id/edt_passkey"
+            android:layout_below="@id/lbl_vsla_name"
+            android:layout_width="265dip"
+            android:layout_height="wrap_content"
+            android:inputType="numberPassword"
+            android:hint="Enter Pass Key Here"
+          />
+
+        <requestFocus />
+
+
+        <org.applab.digitizingdata.fontutils.TypefaceButton
+            style="@style/LoginButton"
+            android:id="@+id/btnLogin"
+            android:layout_width="265dip"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edt_passkey"
+            android:text="Log In" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/btnLogin"
+            android:text="Forgot your pass key: \nPlease call 078000000"
+            android:gravity="left"
+            android:layout_alignLeft="@+id/btnLogin"/>
+        <!--  <TextView
+              android:id="@+id/lblSISwitchMode"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:layout_below="@id/btnLogin"
+              android:textSize="18sp"
+              android:gravity="left"
+              android:paddingTop="2dp"
+              android:layout_marginTop="10dp"
+              android:textStyle="bold"
+              android:textColor="#0000FF"
+              android:text="Switch to Training Mode" /> -->
+
 
     </RelativeLayout>
- </ScrollView>
+</ScrollView>

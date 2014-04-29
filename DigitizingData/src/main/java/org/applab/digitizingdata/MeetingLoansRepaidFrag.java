@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.MembersLoansRepaidArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
@@ -50,6 +52,8 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         actionBar = getSherlockActivity().getSupportActionBar();
         String title = "Meeting";
         switch(Utils._meetingDataViewMode) {
@@ -82,7 +86,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(getSherlockActivity().getBaseContext(), members);
+        MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView

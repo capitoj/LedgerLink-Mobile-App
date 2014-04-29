@@ -1,6 +1,7 @@
 package org.applab.digitizingdata.helpers;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +20,13 @@ public class LoanRepaymentHistoryArrayAdapter extends ArrayAdapter<MemberLoanRep
     Context context;
     ArrayList<MemberLoanRepaymentRecord> values;
     int position;
+    Typeface typeface;
 
-    public LoanRepaymentHistoryArrayAdapter(Context context, ArrayList<MemberLoanRepaymentRecord> values) {
+    public LoanRepaymentHistoryArrayAdapter(Context context, ArrayList<MemberLoanRepaymentRecord> values, String font) {
         super(context, R.layout.row_loan_repayment_history, values);
         this.context = context;
         this.values = values;
+        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
     }
 
     @Override
@@ -41,6 +44,13 @@ public class LoanRepaymentHistoryArrayAdapter extends ArrayAdapter<MemberLoanRep
             TextView txtAmount = (TextView)rowView.findViewById(R.id.txtRLRHAmount);
             TextView txtRollover = (TextView)rowView.findViewById(R.id.txtRLRHRollover);
             TextView txtComments = (TextView)rowView.findViewById(R.id.txtRLRHComments);
+
+            // Set typeface
+            txtMeetingDate.setTypeface(typeface);
+            txtLoanNo.setTypeface(typeface);
+            txtAmount.setTypeface(typeface);
+            txtRollover.setTypeface(typeface);
+            txtComments.setTypeface(typeface);
 
             //Assign Values to the Widgets
             MemberLoanRepaymentRecord repaymentRecord = values.get(position);

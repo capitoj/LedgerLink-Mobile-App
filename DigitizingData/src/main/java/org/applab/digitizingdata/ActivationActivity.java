@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +27,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 import org.json.JSONException;
@@ -46,11 +52,16 @@ public class ActivationActivity extends SherlockActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_activation);
 
         actionBar = getSupportActionBar();
 
-        TextView tvSwitchMode = (TextView)findViewById(R.id.lblVASwitchMode);
+      //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblVASwitchMode);
+
+        ImageView imgVALogo = (ImageView)findViewById(R.id.imgVALogo);
+        imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
+        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int)this.getResources().getDimension(R.dimen.logo_width), (int)this.getResources().getDimension(R.dimen.logo_height)));
         //If we are in training mode then show it using a custom View with distinguishable background
         //Assumed that the preferences have been set by now
         if(Utils.isExecutingInTrainingMode()) {
@@ -60,31 +71,30 @@ public class ActivationActivity extends SherlockActivity {
             actionBar.setDisplayShowHomeEnabled(false);
 
             //Set the label of the link
-            tvSwitchMode.setText("Switch To Actual VSLA Data");
-            tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
+          //  tvSwitchMode.setText("Switch To Actual VSLA Data");
+           // tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
         }
         else {
             actionBar.hide();
             //Set the label of the link
-            tvSwitchMode.setText("Switch To Training Mode");
-            tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
+          //  tvSwitchMode.setText("Switch To Training Mode");
+           // tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
         }
 
         //Set the textview to be underline
-        tvSwitchMode.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+        // tvSwitchMode.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 
-        tvSwitchMode.setOnClickListener(new View.OnClickListener() {
+      /**  tvSwitchMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences appPrefs = Utils.getDefaultSharedPreferences(getApplicationContext());
                 SharedPreferences.Editor prefEditor = appPrefs.edit();
-                if(Utils.isExecutingInTrainingMode()){
+                if (Utils.isExecutingInTrainingMode()) {
                     prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_PROD);
-                    Toast.makeText(getApplicationContext(), "Execution switched to Actual VSLA Data. Please start the app again.",Toast.LENGTH_LONG).show();
-                }
-                else {
+                    Toast.makeText(getApplicationContext(), "Execution switched to Actual VSLA Data. Please start the app again.", Toast.LENGTH_LONG).show();
+                } else {
                     prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING);
-                    Toast.makeText(getApplicationContext(), "Execution switched to Training Mode. Please start the app again.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Execution switched to Training Mode. Please start the app again.", Toast.LENGTH_LONG).show();
                 }
 
                 //Save the values
@@ -93,7 +103,7 @@ public class ActivationActivity extends SherlockActivity {
 
                 finish();
             }
-        });
+        }); */
 
         vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
         // ---Button view---
@@ -122,7 +132,7 @@ public class ActivationActivity extends SherlockActivity {
     private void activateVlsaUsingPostAsync(String request)
     {
         String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL,"vslas","activate");
-        new PostTask(this).execute(uri,request);
+        new PostTask(this).execute(uri, request);
 
         //Do the other stuff in the Async Task
     }
@@ -131,6 +141,19 @@ public class ActivationActivity extends SherlockActivity {
     public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getSupportMenuInflater().inflate(R.menu.activation, menu);
+        return true;
+    }
+
+    // This method is called once the menu is selected
+    @Override
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // Launch preferences activity
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+        }
         return true;
     }
 

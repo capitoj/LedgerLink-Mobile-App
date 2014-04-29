@@ -1,6 +1,7 @@
 package org.applab.digitizingdata.helpers;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +19,13 @@ public class SavingsArrayAdapter extends ArrayAdapter<MemberSavingRecord> {
     Context context;
     ArrayList<MemberSavingRecord> values;
     int position;
+    Typeface typeface;
 
-    public SavingsArrayAdapter(Context context, ArrayList<MemberSavingRecord> values) {
+    public SavingsArrayAdapter(Context context, ArrayList<MemberSavingRecord> values, String font) {
         super(context, R.layout.row_savings_history, values);
         this.context = context;
         this.values = values;
+        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
     }
 
     @Override
@@ -38,6 +41,10 @@ public class SavingsArrayAdapter extends ArrayAdapter<MemberSavingRecord> {
             TextView txtMeetingDate = (TextView)rowView.findViewById(R.id.txtRSHMeetingDate);
             TextView txtAmount = (TextView)rowView.findViewById(R.id.txtRSHAmount);
 
+			// Set typeface
+			txtMeetingDate.setTypeface(typeface);
+			txtAmount.setTypeface(typeface);
+			
             //Assign Values to the Widgets
             MemberSavingRecord savingRecord = values.get(position);
             if(savingRecord != null) {

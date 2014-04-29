@@ -13,6 +13,10 @@ import android.widget.TabHost.TabContentFactory;
 import android.widget.TabWidget;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
+
 import java.util.HashMap;
 
 /**
@@ -71,6 +75,8 @@ public class MeetingTabHostActivity extends SherlockFragmentActivity implements 
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         setContentView(R.layout.activity_meeting);
         initialiseTabHost(savedInstanceState);
         if (savedInstanceState != null) {

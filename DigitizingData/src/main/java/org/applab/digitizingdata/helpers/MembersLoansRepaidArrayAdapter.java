@@ -1,6 +1,7 @@
 package org.applab.digitizingdata.helpers;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,11 +30,13 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
     MeetingLoanRepaymentRepo loansRepaidRepo = null;
     MeetingLoanIssuedRepo loansIssuedRepo = null;
     MeetingRepo meetingRepo = null;
+Typeface typeface;
 
-    public MembersLoansRepaidArrayAdapter(Context context, ArrayList<Member> values) {
+    public MembersLoansRepaidArrayAdapter(Context context, ArrayList<Member> values, String font) {
         super(context, R.layout.row_member_loans_repaid, values);
         this.context = context;
         this.values = values;
+        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
 
         meetingRepo = new MeetingRepo(getContext());
         loansRepaidRepo = new MeetingLoanRepaymentRepo(getContext());
@@ -72,6 +75,12 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             final TextView txtRepaidToday = (TextView)rowView.findViewById(R.id.txtRMLRepayTodaysRepay);
             final TextView txtBalance = (TextView)rowView.findViewById(R.id.txtRMLRepayBalance);
             final TextView txtDateDue = (TextView)rowView.findViewById(R.id.txtRMLRepayDateDue);
+
+            // Set Typeface
+            txtFullNames.setTypeface(typeface);
+            txtRepaidToday.setTypeface(typeface);
+            txtBalance.setTypeface(typeface);
+            txtDateDue.setTypeface(typeface);
 
             //Assign Values to the Widgets
             Member selectedMember = values.get(position);

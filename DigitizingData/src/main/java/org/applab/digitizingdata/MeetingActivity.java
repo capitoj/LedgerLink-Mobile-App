@@ -18,6 +18,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
@@ -61,6 +63,8 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         setContentView(R.layout.activity_meeting);
 
         appContext = getApplicationContext();

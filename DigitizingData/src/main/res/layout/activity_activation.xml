@@ -1,84 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/white">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingRight="@dimen/activity_horizontal_margin"
-                    android:paddingTop="@dimen/activity_vertical_margin"
-                    android:paddingBottom="@dimen/activity_vertical_margin"
-                    >
-        <ImageView
-            android:id="@+id/imgVALogo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_ledger_link_logo"
-            android:scaleType="centerInside"
-            android:adjustViewBounds="true"
-            />
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:layout_alignParentRight="true">
 
-        <!-- <TextView
-                android:id="@+id/lblVATitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="32sp"
-                android:layout_centerHorizontal="true"
-                android:textStyle="bold"
-                android:text="Ledger Link" /> -->
+            <ImageView
+                android:id="@+id/imgVALogo"
+                android:layout_width="100dip"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/image_content_desc"
+                />
 
-        <TextView
-                android:id="@+id/lblVAHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="24sp"
-                android:gravity="left"
-                android:layout_below="@id/imgVALogo"
-                android:paddingTop="2dip"
-                android:layout_marginTop="10dp"
-                android:textStyle="bold"
-                android:text="REGISTER" />
+            <!--  <ImageView
+             android:src="@drawable/ic_ledger_link_logo"
+             android:src="@drawable/ic_ledger_link_logo"
+                  android:id="@+id/imgVALogo"
+                  android:layout_width="150dip"
+                  android:layout_height="100dip"
+                  android:gravity="center"
+                  android:contentDescription="@string/image_content_desc"
+                  android:scaleType="centerCrop"
+                  android:layout_alignParentTop="true"
+                  android:layout_toRightOf="@+id/lblVAHeader" /> -->
 
-        <TextView
-                android:id="@+id/lblVAVslaCode"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+
+            <!-- <TextView
+                    android:id="@+id/lblVATitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="32sp"
+                    android:layout_centerHorizontal="true"
+                    android:textStyle="bold"
+                    android:text="Ledger Link" />
+
+                     android:fontFamily="bold"
+                     android:textSize="24sp"
+                      android:textColor="@color/ledger_link_dark_blue"
+               -->
+
+            <!--  <org.applab.digitizingdata.fontutils.TypefaceTextView
+                  android:id="@+id/lblVAHeader"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  style="@style/InTextHeader"
+                  android:paddingTop="5dip"
+                  android:paddingRight="10dip"
+                  android:paddingBottom="5dip"
+                  android:text="REGISTER"
+                  android:layout_below="@+id/imgVALogo"
+                  android:layout_alignLeft="@+id/txtVAVslaCode" /> -->
+
+            <!--  <TextView style="InTextHeader"
+                  android:id="@+id/lblVAVslaCode"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:textSize="20sp"
+                  android:gravity="left"
+                  android:layout_below="@id/lblVAHeader"
+                  android:paddingTop="2dp"
+                  android:layout_marginTop="10dp"
+                  android:textStyle="bold"
+                  android:text="VSLA Number" />
+
+                  android:textColor="@color/ledger_link_light_blue"
+                android:textAllCaps="true"
+                android:textColorHint="@color/ledger_link_light_blue"
                 android:textSize="20sp"
-                android:gravity="left"
-                android:layout_below="@id/lblVAHeader"
-                android:paddingTop="2dp"
-                android:layout_marginTop="10dp"
-                android:textStyle="bold"
-                android:text="VSLA Number" />
-
-        <EditText
-                android:id="@+id/txtVAVslaCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/lblVAVslaCode"
-                android:layout_marginTop="5dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dip"
-                android:textStyle="bold"
-                android:textSize="20sp"
+                android:background="@drawable/edit_text"
+                android:layout_marginTop="15dp"
+                android:paddingTop="5dip"
+                android:paddingBottom="5dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
                 android:inputType="textCapCharacters"
-                android:hint="Enter VSLA Number">
-            <requestFocus/>
-        </EditText>
+                android:fontFamily="normal"
+                android:layout_centerHorizontal="true"
 
-        <TextView
+                  -->
+
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/EditTextStyle"
+                android:id="@+id/txtVAVslaCode"
+                android:layout_width="265dip"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/imgVALogo"
+                android:inputType="textCapCharacters"
+                android:hint="Enter VSLA Number" />
+
+            <requestFocus />
+
+
+            <!--<TextView
                 android:id="@+id/lblVAPassKey"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -89,7 +115,7 @@
                 android:layout_marginTop="10dp"
                 android:textStyle="bold"
                 android:text="Create a Passkey" />
-        <TextView
+            <TextView
                 android:id="@+id/lblVAPassKeyInfo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -98,67 +124,63 @@
                 android:layout_below="@id/lblVAPassKey"
                 android:paddingTop="2dip"
                 android:layout_marginTop="10dp"
-                android:text="@string/activity_activation_vsla_passkey_info" />
+                android:text="@string/activity_activation_vsla_passkey_info" /> -->
 
-        <EditText
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/EditTextStyle"
                 android:id="@+id/txtVAPassKey"
-                android:layout_width="match_parent"
+                android:layout_below="@id/txtVAVslaCode"
+                android:layout_width="265dip"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lblVAPassKeyInfo"
-                android:layout_marginTop="15dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dp"
-                android:textSize="24sp"
-                android:inputType="numberPassword"
-                android:hint="Enter Passkey"
-                >
-        </EditText>
+                android:inputType="textCapCharacters"
+                android:hint="Enter Passkey Here" />
 
-        <EditText
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/EditTextStyle"
                 android:id="@+id/txtVAConfirmPassKey"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_below="@id/txtVAPassKey"
-                android:layout_marginTop="15dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="5dp"
-                android:textSize="24sp"
-                android:inputType="numberPassword"
-                android:hint="Type Passkey Again"
-                >
-        </EditText>
-
-        <Button
-                android:id="@+id/btnVAActivate"
-                android:layout_width="match_parent"
+                android:layout_width="265dip"
                 android:layout_height="wrap_content"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@id/txtVAConfirmPassKey"
-                android:textColor="#FFFFFF"
-                android:background="#191970"
-                android:textStyle="bold"
-                android:textSize="24sp"
-                android:text="Register"/>
-        <TextView
-            android:id="@+id/lblVASwitchMode"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:gravity="left"
-            android:layout_below="@id/btnVAActivate"
-            android:paddingTop="2dp"
-            android:layout_marginTop="10dp"
-            android:textStyle="bold"
-            android:textColor="#0000FF"
-            android:text="Switch to Training Mode" />
+                android:inputType="textCapCharacters"
+                android:hint="Re-enter Passkey Here" />
 
+            <org.applab.digitizingdata.fontutils.TypefaceButton
+                style="@style/LoginButton"
+                android:id="@+id/btnVAActivate"
+                android:layout_width="265dip"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtVAConfirmPassKey"
+                android:text="Register"
+
+
+                />
+
+            <!--
+            android:layout_centerHorizontal="true"
+                android:textSize="24sp"
+                android:textColor="@color/ledger_link_white"
+            android:layout_marginTop="20dp"
+                android:paddingTop="5dip"
+                android:paddingBottom="5dip"
+                android:paddingLeft="10dip"
+                android:paddingRight="10dip"
+                android:background="@drawable/button"
+
+
+            <TextView
+                   android:id="@+id/lblVASwitchMode"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:textSize="12sp"
+                   android:layout_below="@id/btnVAActivate"
+                   android:paddingTop="2dip"
+                   android:textStyle="bold"
+                   android:textColor="#0000FF"
+                   android:layout_marginTop="10dip"
+                   android:text="Switch to Training Mode" /> -->
+
+        </RelativeLayout>
     </RelativeLayout>
-</RelativeLayout>
-    </ScrollView>
+</ScrollView>
 
     <!-- textView.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG); -->

@@ -5,19 +5,19 @@
           android:title="Edit"
           android:orderInCategory="1"
           android:showAsAction="never"
-          android:icon="@drawable/content_edit"
+          android:icon="@drawable/ic_content_edit"
             />
 
     <item android:id="@+id/mnuMDVDelete"
           android:title="Remove"
           android:orderInCategory="2"
           android:showAsAction="never"
-          android:icon="@drawable/content_discard"
+          android:icon="@drawable/ic_action_discard"
             />
     <item android:id="@+id/mnuMDVBack"
           android:title="Back"
           android:orderInCategory="3"
           android:showAsAction="never"
-          android:icon="@drawable/navigation_back"
+          android:icon="@drawable/ic_navigation_back"
             />
 </menu>

@@ -12,6 +12,9 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.GettingStartedWizardMembersArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersArrayAdapter;
@@ -28,9 +31,10 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
     private ActionBar actionBar;
     private ArrayList<Member> members;
 
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         setContentView(R.layout.activity_getting_started_wizard_review_members);
 
         actionBar = getSupportActionBar();

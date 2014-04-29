@@ -1,6 +1,7 @@
 package org.applab.digitizingdata.helpers;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +29,9 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
     MeetingLoanIssuedRepo loansIssuedRepo = null;
     MeetingSavingRepo savingRepo = null;
     MeetingRepo meetingRepo = null;
+    Typeface typeface;
 
-    public MembersLoansIssuedArrayAdapter(Context context, ArrayList<Member> values) {
+    public MembersLoansIssuedArrayAdapter(Context context, ArrayList<Member> values, String font) {
         super(context, R.layout.row_member_loans_issued, values);
         this.context = context;
         this.values = values;
@@ -37,6 +39,8 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
         loansIssuedRepo = new MeetingLoanIssuedRepo(getContext());
         meetingRepo = new MeetingRepo(getContext());
         savingRepo = new MeetingSavingRepo(getContext());
+
+        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
     }
 
     public void setMeetingId(int meetingId){
@@ -65,6 +69,13 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
             final TextView txtTotalIssued = (TextView)rowView.findViewById(R.id.txtRMLIssuedTotals);
             final TextView txtOutstanding = (TextView)rowView.findViewById(R.id.txtRMLIssuedOutstanding);
             final TextView txtTotalSavings = (TextView)rowView.findViewById(R.id.txtRMLIssuedSavings);
+
+            // Set Typeface
+            txtFullNames.setTypeface(typeface);
+            txtLoanIssuedToday.setTypeface(typeface);
+            txtTotalIssued.setTypeface(typeface);
+            txtOutstanding.setTypeface(typeface);
+            txtTotalSavings.setTypeface(typeface);
 
             //Assign Values to the Widgets
             Member member = values.get(position);

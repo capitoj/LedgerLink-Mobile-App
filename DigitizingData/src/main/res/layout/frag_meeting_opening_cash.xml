@@ -6,13 +6,12 @@
                   android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:text="01-JUL-2013"
                 android:id="@+id/lblMOCFMeetingDate"
                 android:layout_gravity="center"/>
@@ -23,21 +22,19 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp">
 
-            <TextView
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                     android:id="@+id/lblMOCBalBfBox"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Balance In The Box:"
-                    android:textSize="16sp" />
-            <EditText
+                    android:text="Balance In The Box:"/>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
                     android:id="@+id/txtMOCBalBfBox"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
                     android:text=""/>
         </LinearLayout>
 
@@ -48,21 +45,19 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp">
 
-            <TextView
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                     android:id="@+id/lblMOCBalBfBank"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Cash Withdrawn From Bank:"
-                    android:textSize="16sp" />
-            <EditText
+                    android:text="Cash Withdrawn From Bank:" />
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
                     android:id="@+id/txtMOCBalBfBank"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
                     android:text=""/>
         </LinearLayout>
 
@@ -73,21 +68,19 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp">
 
-            <TextView
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                     android:id="@+id/lblMOCFines"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Fines Paid:"
-                    android:textSize="16sp" />
-            <EditText
+                    android:text="Fines Paid:"/>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
                     android:id="@+id/txtMOCFines"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
                     android:text=""/>
         </LinearLayout>
 
@@ -98,22 +91,20 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp">
 
-            <TextView
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                     android:id="@+id/lblMOCTotal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Total Cash:"
-                    android:textSize="18sp" />
-            <TextView
+                    android:text="Total Cash:"/>
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                     android:id="@+id/txtMOCTotal"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="0"
-                    android:textSize="20sp" />
+                    android:text="0" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -7,6 +7,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
+
     <!-- I fully qualify the names coz R.id is universal -->
     <LinearLayout
             android:layout_width="fill_parent"
@@ -15,15 +16,14 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp">
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularTextBold"
                 android:id="@+id/lblMDVMemberNo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:textStyle="normal"
-                android:text="Member No:"
-                android:textSize="16sp" />
-        <TextView
+                android:text="Member No:" />
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -40,7 +40,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp">
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVSurname"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
                 android:textStyle="normal"
                 android:text="Surname"
                 android:textSize="16sp" />
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -65,7 +65,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp">
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVOtherNames"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
                 android:textStyle="normal"
                 android:text="Other Names"
                 android:textSize="16sp" />
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -91,7 +91,7 @@
             android:layout_marginLeft="10dp"
             >
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVGender"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                 android:textStyle="normal"
                 android:text="Gender"
                 android:textSize="16sp" />
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -117,7 +117,7 @@
             android:layout_marginTop="10dp"
             >
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVAge"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                 android:textStyle="normal"
                 android:text="Age"
                 android:textSize="16sp" />
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -143,7 +143,7 @@
             android:layout_marginTop="10dp"
             >
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVOccupation"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
                 android:textStyle="normal"
                 android:text="Occupation"
                 android:textSize="16sp" />
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -168,7 +168,7 @@
             android:layout_marginTop="10dp"
             >
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVPhone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
                 android:textStyle="normal"
                 android:text="Phone Number"
                 android:textSize="16sp" />
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -193,7 +193,7 @@
             android:layout_marginTop="10dp"
             >
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVCyclesCompleted"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
                 android:textStyle="normal"
                 android:text="Number of cycles completed"
                 android:textSize="16sp" />
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"

@@ -11,7 +11,7 @@
                android:minWidth="10dp"
             />
 
-    <TextView android:text="Main Menu"
+    <org.applab.digitizingdata.fontutils.TypefaceTextView android:text="Main Menu"
               android:layout_width="300dip"
               android:layout_height="wrap_content"
               android:id="@+id/txtMenuName"
