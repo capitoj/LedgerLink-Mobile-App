@@ -12,6 +12,15 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblNCHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:layout_marginTop="10dp"
+                    android:text="Enter all cycle information then select next."
+                    android:layout_marginBottom="20dp" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"

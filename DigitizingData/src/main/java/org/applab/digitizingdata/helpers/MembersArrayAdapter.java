@@ -30,6 +30,12 @@ public class MembersArrayAdapter extends ArrayAdapter<Member> {
         this.typeface = Typeface.createFromAsset(context.getAssets(), font);
     }
 
+    public MembersArrayAdapter(Context context, ArrayList<Member> values, int layout) {
+        super(context, layout, values);
+        this.context = context;
+        this.values = values;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
