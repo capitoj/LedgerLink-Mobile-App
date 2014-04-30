@@ -1,12 +1,178 @@
 <resources>
 
     <!--
-        Base application theme for API 14+. This theme completely replaces
-        AppBaseTheme from BOTH res/values/styles.xml and
-        res/values-v11/styles.xml on API 14+ devices.
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <!-- API 14 theme customizations can go here. -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
     </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    <!-- Dividers in layout -->
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <!--  <item name="android:background">?android:attr/listDivider</item> -->
+        <item name="android:background">@color/light_blue</item>
+    </style>
+
+    <!-- Text styles -->
+    <style name="SubHeading" parent="RegularText">
+        <item name="android:background">@drawable/light_blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingLeft">60dip</item>
+        <item name="android:layout_height">25dip</item>
+    </style>
+
+    <style name="MainHeading" parent="android:TextAppearance.Large">
+        <item name="android:background">@drawable/dark_blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">bold</item>
+    </style>
+
+    <style name="TrainingModeBanner" parent="android:TextAppearance.Large">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">bold</item>
+    </style>
+
+    <style name="HeadingAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">bold</item>
+
+    </style>
+
+    <style name="NormalEditText" parent="android:TextAppearance.Medium">
+        <item name="android:fontFamily">normal</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+    </style>
+
+    <style name="RegularText" parent="android:TextAppearance.Medium">
+        <item name="android:fontFamily">normal</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="RegularTextBold" parent="android:TextAppearance.Medium">
+        <item name="android:fontFamily">bold</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+    <style name="SmallerRegularText" parent="android:TextAppearance.Small">
+        <item name="android:fontFamily">normal</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+    </style>
+
+
+    <style name="TextAccentColor" parent="RegularText">
+        <item name="android:textColor">@color/ledger_link_light_blue</item>
+    </style>
+
+    <style name="InTextHeader" parent="android:TextAppearance.Medium">
+        <item name="android:textColor">@color/ledger_link_dark_blue</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">bold</item>
+        <item name="android:paddingTop">5dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:paddingBottom">5dip</item>
+        <item name="android:lineSpacingMultiplier">1</item>
+    </style>
+
+    <style name="FormLabel">
+        <item name="android:fontFamily">normal</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="List" parent="RegularText">
+    </style>
+
+    <style name="ListSubItems" parent="RegularText">
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Date">
+        <item name="android:textSize">20sp</item>
+
+
+    </style>
+
+    <style name="ActionBarMenuItemText">
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@drawable/dark_blue</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">bold</item>
+
+    </style>
+
+    <style name="ActionBarItem">
+
+    </style>
+
+    <style name="generalnotitle">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+
+    <style name="EditTextStyle">
+        <item name="android:textColor">@color/ledger_link_light_blue</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColorHint">@color/ledger_link_light_blue</item>
+        <item name="android:background">@drawable/edit_text</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:fontFamily">normal</item>
+    </style>
+
+    <style name="LoginButton" parent="android:TextAppearance.Large">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textColor">@color/ledger_link_white</item>
+        <item name="android:layout_marginTop">20dip</item>
+        <item name="android:layout_marginBottom">30dip</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:background">@drawable/button</item>
+        <item name="android:fontFamily">bold</item>
+    </style>
+
+    <style name="Logo">
+       <item name="android:gravity">center</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_weight">10</item>
+        <item name="android:paddingTop">80dip</item>
+        <item name="android:paddingBottom">80dip</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:paddingLeft">10dip</item>
+    </style>
+
+
+
+    -<!--Text Sizes tiny- , small - 14sp, med - 18sp, Large -22sp-->
 
 </resources>

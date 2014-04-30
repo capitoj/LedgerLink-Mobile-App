@@ -15,6 +15,9 @@ import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.helpers.Utils;
@@ -31,6 +34,8 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         setContentView(R.layout.activity_new_cycle_getting_started_wizard);
 
         VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());

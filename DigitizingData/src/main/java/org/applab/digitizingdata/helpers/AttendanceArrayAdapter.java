@@ -1,6 +1,7 @@
 package org.applab.digitizingdata.helpers;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,13 @@ public class AttendanceArrayAdapter extends ArrayAdapter<AttendanceRecord> {
     Context context;
     ArrayList<AttendanceRecord> values;
     int position;
+    Typeface typeface;
 
-    public AttendanceArrayAdapter(Context context, ArrayList<AttendanceRecord> values) {
+    public AttendanceArrayAdapter(Context context, ArrayList<AttendanceRecord> values, String font) {
         super(context, R.layout.row_attendance_history, values);
         this.context = context;
         this.values = values;
+        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
     }
 
     @Override
@@ -40,6 +43,11 @@ public class AttendanceArrayAdapter extends ArrayAdapter<AttendanceRecord> {
             TextView txtMeetingDate = (TextView)rowView.findViewById(R.id.txtRAHMeetingDate);
             TextView txtAttendance = (TextView)rowView.findViewById(R.id.txtRAHAttendance);
             TextView txtComments = (TextView)rowView.findViewById(R.id.txtRAHComments);
+
+            // Set typeface
+            txtMeetingDate.setTypeface(typeface);
+            txtComments.setTypeface(typeface);
+            txtAttendance.setTypeface(typeface);
 
             //Assign Values to the Widgets
             AttendanceRecord attendanceRecord = values.get(position);

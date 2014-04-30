@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,14 +35,15 @@ public class MembersRollCallArrayAdapter extends ArrayAdapter<Member> {
     VslaCycle currentCycle;
     private int meetingId;
     private boolean isFromCode = false;
-
+Typeface typeface;
     //Use Class variable to hold state as it will be lost on scrolling
     private final boolean[] mCheckedState;
 
-    public MembersRollCallArrayAdapter(Context context, ArrayList<Member> values) {
+    public MembersRollCallArrayAdapter(Context context, ArrayList<Member> values, String font) {
         super(context, R.layout.row_member_roll_call_2, values);
         this.context = context;
         this.values = values;
+        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
 
         //set array size to number of records in the adapter
         this.mCheckedState = new boolean[values.size()];
@@ -69,6 +71,10 @@ public class MembersRollCallArrayAdapter extends ArrayAdapter<Member> {
             final CheckBox chkAttendance = (CheckBox)rowView.findViewById(R.id.chkRMRCallAttendance);
             final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMRCallFullNames);
             final TextView txtAttendance = (TextView)rowView.findViewById(R.id.txtRMRCallAttendance);
+
+            // Set typeface
+            txtFullNames.setTypeface(typeface);
+            txtAttendance.setTypeface(typeface);
 
             //Assign Values to the Widgets
             txtFullNames.setText(values.get(position).toString());

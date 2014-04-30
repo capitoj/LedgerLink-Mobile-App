@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -24,6 +25,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
@@ -52,6 +55,7 @@ public class AddMemberActivity extends SherlockActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         if(getIntent().hasExtra("_isEditAction")){
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction",false);
@@ -141,7 +145,31 @@ public class AddMemberActivity extends SherlockActivity {
         //Setup the Spinner Items
         Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
         String[] genderList = new String[]{"Male", "Female"};
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item,genderList);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList)
+
+        {
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                return v;
+            }
+
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+
+        };
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboGender.setAdapter(adapter);
 

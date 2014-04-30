@@ -17,6 +17,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
@@ -50,6 +52,7 @@ public class NewCycleActivity extends SherlockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_cycle);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         if(getIntent().hasExtra("_isUpdateCycleAction")) {
             isUpdateCycleAction = getIntent().getBooleanExtra("_isUpdateCycleAction",false);

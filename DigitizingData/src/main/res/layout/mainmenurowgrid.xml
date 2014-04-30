@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_light_blue"
+    android:focusable="false"
+    android:layout_weight="10"
+    >
+ <!-- Change padding to adjust size of icons-->
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_width="100dip"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:contentDescription="@string/image_content_desc"
+        android:layout_weight="10"
+        android:padding="40dip"
+        android:scaleType="centerCrop"/>
+
+    <!-- <TextView
+             android:id="@+id/item_text"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="22sp"
+             android:text=" "
+             android:typeface="sans" /> -->
+
+
+    <!-- <com.example.TestLLUI.customViews.RobotoTextView
+             android:id="@+id/item_text"
+             android:layout_width="fill_parent"
+             android:layout_height="50dp"
+             android:layout_marginTop="5dp"
+             android:textSize="15sp"
+             android:gravity="center_vertical">      -->
+
+
+</LinearLayout>

@@ -18,6 +18,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.helpers.AttendanceArrayAdapter;
 import org.applab.digitizingdata.helpers.AttendanceRecord;
@@ -49,6 +51,8 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
@@ -164,7 +168,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        AttendanceArrayAdapter adapter = new AttendanceArrayAdapter(MemberAttendanceHistoryActivity.this, attendances);
+        AttendanceArrayAdapter adapter = new AttendanceArrayAdapter(MemberAttendanceHistoryActivity.this, attendances, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
         setListAdapter(adapter);

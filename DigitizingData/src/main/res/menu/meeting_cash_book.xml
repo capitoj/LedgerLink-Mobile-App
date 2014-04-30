@@ -3,6 +3,6 @@
           android:title="Save"
           android:orderInCategory="5"
           android:showAsAction="always"
-          android:icon="@drawable/navigation_accept"
+          android:icon="@drawable/ic_navigation_accept"
             />
 </menu>

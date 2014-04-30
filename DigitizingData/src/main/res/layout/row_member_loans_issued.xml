@@ -1,67 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-        >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-    <TextView
-            android:id="@+id/txtRMLIssuedFullNames"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:textStyle="bold"
-            android:padding="5dp"
-            android:gravity="left"
-            android:text="FULL NAMES"
-            android:textSize="18sp" >
-    </TextView>
-    <TextView
-            android:id="@+id/txtRMLIssuedTodaysLoan"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtRMLIssuedFullNames"
-            android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Today: 5,000UGX"
-            android:textSize="16sp" >
-    </TextView>
-    <TextView
-            android:id="@+id/txtRMLIssuedTotals"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtRMLIssuedTodaysLoan"
-            android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Total: 60,000UGX"
-            android:textSize="16sp" >
-    </TextView>
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@+id/txtRMLIssuedFullNames"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:padding="5dp"
+        android:gravity="left"
+        android:text="FULL NAMES" />
 
-    <TextView
-            android:id="@+id/txtRMLIssuedOutstanding"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtRMLIssuedTotals"
-            android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Outstanding: 60,000UGX"
-            android:textSize="16sp" >
-    </TextView>
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@+id/txtRMLIssuedTodaysLoan"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRMLIssuedFullNames"
+        android:paddingLeft="5dp"
+        android:layout_marginLeft="5dp"
+        android:gravity="left"
+        android:text="Today: 5,000UGX" />
 
-    <TextView
-            android:id="@+id/txtRMLIssuedSavings"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtRMLIssuedOutstanding"
-            android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Total Savings: 60,000UGX"
-            android:textSize="16sp" >
-    </TextView>
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@+id/txtRMLIssuedTotals"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRMLIssuedTodaysLoan"
+        android:paddingLeft="5dp"
+        android:layout_marginLeft="5dp"
+        android:gravity="left"
+        android:text="Total: 60,000UGX" />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@+id/txtRMLIssuedOutstanding"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRMLIssuedTotals"
+        android:paddingLeft="5dp"
+        android:layout_marginLeft="5dp"
+        android:gravity="left"
+        android:text="Outstanding: 60,000UGX" />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@+id/txtRMLIssuedSavings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRMLIssuedOutstanding"
+        android:paddingLeft="5dp"
+        android:layout_marginLeft="5dp"
+        android:gravity="left"
+        android:text="Total Savings: 60,000UGX" />
 
 
 </RelativeLayout>

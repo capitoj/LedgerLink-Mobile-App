@@ -18,6 +18,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.R;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -56,6 +58,8 @@ public class EndCycleActivity extends SherlockActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         setContentView(R.layout.activity_end_cycle);
 
         actionBar = getSupportActionBar();

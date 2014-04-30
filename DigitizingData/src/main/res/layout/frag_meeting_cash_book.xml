@@ -6,92 +6,84 @@
                   android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:text="01-JUL-2013"
                 android:id="@+id/lblMCBFMeetingDate"
                 android:layout_gravity="center"/>
 
-            <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:paddingLeft="5dp"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
                     android:text="Cash Collected"
                     android:id="@+id/lblMCBFSection1"
                     android:layout_gravity="left"/>
         <View style="@style/Divider"/>
 
-            <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:paddingLeft="10dp"
-                    android:textStyle="normal"
-                    android:textSize="16sp"
                     android:text="Starting Cash: 0 UGX"
                     android:id="@+id/lblMCBFOpeningCash"
                     android:layout_gravity="center"/>
-            <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:paddingLeft="10dp"
-                    android:textStyle="normal"
-                    android:textSize="16sp"
                     android:text="Savings: 0 UGX"
                     android:id="@+id/lblMCBFSavings"
                     android:layout_gravity="center"/>
 
-            <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:paddingLeft="10dp"
-                    android:textStyle="normal"
-                    android:textSize="16sp"
                     android:text="Loans Repaid: 0 UGX"
                     android:id="@+id/lblMCBFLoansRepaid"
                     android:layout_gravity="center"/>
 
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="10dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:text="Total Collection: 0 UGX"
                 android:id="@+id/lblMCBFTotalCashIn"
                 android:layout_gravity="center"/>
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:text="Cash Issued"
                 android:id="@+id/lblMCBFSection2"
                 android:layout_gravity="left"/>
         <View style="@style/Divider"/>
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="10dp"
-                android:textStyle="normal"
-                android:textSize="16sp"
                 android:text="Loans Issued: 0 UGX"
                 android:id="@+id/lblMCBFLoansIssued"
                 android:layout_gravity="center"/>
@@ -124,31 +116,30 @@
         </LinearLayout>
         -->
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:paddingLeft="10dp"
-                android:textStyle="bold"
-                android:textSize="16sp"
                 android:text="Total Issued: 0 UGX"
                 android:id="@+id/lblMCBFTotalCashOut"
                 android:layout_gravity="center"/>
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:text="Balance Cashbook"
                 android:id="@+id/lblMCBFSection3"
                 android:layout_gravity="left"/>
         <View style="@style/Divider"/>
 
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -166,21 +157,19 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp">
 
-            <TextView
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                     android:id="@+id/lblMCBFCashToBox"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Cash Kept In Box"
-                    android:textSize="16sp" />
-            <EditText
+                    android:text="Cash Kept In Box" />
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
                     android:id="@+id/txtMCBFCashToBox"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
                     android:text=""/>
         </LinearLayout>
         <LinearLayout
@@ -190,21 +179,19 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp">
 
-            <TextView
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                     android:id="@+id/lblMCBFCashToBank"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Cash Sent To Bank"
-                    android:textSize="16sp" />
-            <EditText
+                    android:text="Cash Sent To Bank"/>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
                     android:id="@+id/txtMCBFCashToBank"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
                     android:text=""/>
         </LinearLayout>
 
@@ -215,21 +202,19 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp">
 
-            <TextView
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                     android:id="@+id/lblMCBFWelfare"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Welfare Fund"
-                    android:textSize="16sp" />
-            <EditText
+                    android:text="Welfare Fund" />
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
                     android:id="@+id/txtMCBFWelfare"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
                     android:text=""/>
         </LinearLayout>
     </LinearLayout>

@@ -19,6 +19,9 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.MiddleCycleMember;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
@@ -48,6 +51,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         if(getIntent().hasExtra("_isEditAction")){
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction",false);

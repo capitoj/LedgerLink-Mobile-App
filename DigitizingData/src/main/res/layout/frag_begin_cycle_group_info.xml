@@ -1,103 +1,101 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:orientation="vertical" >
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
     <!-- OMM: This Layout ensures the Save button is always visible i.e. ScrollView has weight=1 -->
     <!-- OMM: The topmost LinearLayout can have height=wrap_content or fill_parent -->
-    <ScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="0dip"
-            android:layout_weight="1" >
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1">
 
-        <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
-            <LinearLayout
+                <!-- Fully qualify the names coz R.id is universal -->
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblBCSharePrice"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:gravity="left"
+                    android:text="Share Price (UGX)"/>
 
-                <!-- I fully qualify the names coz R.id is universal -->
-
-                <TextView
-                        android:id="@+id/lblBCSharePrice"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="Share Price (UGX)"
-                        android:textSize="16dp" />
-
-                <EditText
-                        android:id="@+id/txtBCSharePrice"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dip"
-                        android:inputType="textCapWords"
-                        android:textSize="18dp" />
+                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    style="@style/NormalEditText"
+                    android:id="@+id/txtBCSharePrice"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip"
+                    android:inputType="textCapWords"/>
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+
+                    android:id="@+id/lblBCMaxShares"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:gravity="left"
+                    android:text="Maximum number of shares a member may purchase per meeting" />
 
-                <TextView
-                        android:id="@+id/lblBCMaxShares"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="Maximum number of shares a member may purchase per meeting"
-                        android:textSize="14dp" />
-
-                <EditText
-                        android:id="@+id/txtBCMaxShares"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dip"
-                        android:inputType="number"
-                        android:textSize="16dp" />
+                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    style="@style/NormalEditText"
+                    android:id="@+id/txtBCMaxShares"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip"
+                    android:inputType="number"/>
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblBCStartDate"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                <TextView
-                        android:id="@+id/lblBCStartDate"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="Date your cycle will begin"
-                        android:textSize="14dp" />
+                    android:gravity="left"
+                    android:text="Date your cycle will begin"
+                    android:textSize="14dp" />
 
                 <DatePicker
-                        android:id="@+id/dtpBCStartDate"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
+                    android:id="@+id/dtpBCStartDate"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblBCEndDate"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                <TextView
-                        android:id="@+id/lblBCEndDate"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="Date your cycle will end"
-                        android:textSize="14dp" />
+                    android:gravity="left"
+                    android:text="Date your cycle will end"
+                    android:textSize="14dp" />
 
                 <DatePicker
-                        android:id="@+id/dtpBCEndDate"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content" />
+                    android:id="@+id/dtpBCEndDate"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
 
@@ -105,23 +103,23 @@
     </ScrollView>
 
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:weightSum="100">
+
+        <Button
+            android:id="@+id/btnBCNext1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:weightSum="100" >
+            android:layout_height="fill_parent"
+            android:layout_weight="50"
+            android:text="Save" />
 
         <Button
-                android:id="@+id/btnBCNext1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="50"
-                android:text="Save" />
-
-        <Button
-                android:id="@+id/btnBCCancel"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="50"
-                android:text="Cancel" />
+            android:id="@+id/btnBCCancel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="50"
+            android:text="Cancel" />
     </LinearLayout>
 </LinearLayout>

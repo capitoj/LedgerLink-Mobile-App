@@ -3,6 +3,6 @@
           android:title="Send"
           android:orderInCategory="5"
           android:showAsAction="always"
-          android:icon="@drawable/social_send_now"
+          android:icon="@drawable/ic_social_send_now"
             />
 </menu>

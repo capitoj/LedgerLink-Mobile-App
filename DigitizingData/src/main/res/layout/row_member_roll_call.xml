@@ -15,16 +15,14 @@
             android:id="@+id/chkRMRCAttendance"
             android:layout_gravity="left"/>
 
-    <TextView
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/txtRMRCFullNames"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/chkRMRCAttendance"
             android:padding="5dp"
             android:gravity="left"
-            android:text="FULL NAMES"
-            android:textSize="18sp" >
-    </TextView>
+            android:text="FULL NAMES"/>
 
 
 </RelativeLayout>

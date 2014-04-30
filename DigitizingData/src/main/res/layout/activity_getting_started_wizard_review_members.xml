@@ -8,22 +8,27 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
 
-    <TextView android:id="@+id/lblRvwMembersHeading"
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/SubHeading"
+            android:id="@+id/lblRvwMembersHeading"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="Review Members"
               android:textStyle="bold"
             />
 
-    <TextView android:id="@+id/lblRvwMembersHeading2"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may exit and come back later."
-
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:id="@+id/lblRvwMembersHeading2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may exit and come back later."
             />
 
 
-    <TextView android:id="@+id/lblRvwMembersSummary"
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:id="@+id/lblRvwMembersSummary"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text=""
@@ -36,7 +41,9 @@
 
     </ListView>
 
-    <TextView android:id="@android:id/empty"
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:id="@android:id/empty"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:text="@string/empty_members_list"
@@ -44,4 +51,4 @@
 
     </LinearLayout>
 
-    </RelativeLayout>
+</RelativeLayout>

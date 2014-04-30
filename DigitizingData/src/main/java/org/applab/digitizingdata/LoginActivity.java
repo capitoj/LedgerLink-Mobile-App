@@ -11,6 +11,8 @@ import android.telephony.TelephonyManager;
 //import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.SampleDataBuilderRepo;
@@ -55,6 +59,7 @@ public class LoginActivity extends SherlockActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_login);
 
@@ -70,7 +75,13 @@ public class LoginActivity extends SherlockActivity {
         //Load Sample Trainng Data: Testing
         SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
 
-        TextView tvSwitchMode = (TextView)findViewById(R.id.lblSISwitchMode);
+      //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblSISwitchMode);
+
+        ImageView imgVALogo = (ImageView)findViewById(R.id.imgVALogo);
+        imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
+        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int)this.getResources().getDimension(R.dimen.logo_width), (int)this.getResources().getDimension(R.dimen.logo_height)));
+
+
         //If we are in training mode then show it using a custom View with distinguishable background
         //Assumed that the preferences have been set by now
         if(Utils.isExecutingInTrainingMode()) {
@@ -80,18 +91,18 @@ public class LoginActivity extends SherlockActivity {
             actionBar.setDisplayShowHomeEnabled(false);
 
             //Set the label of the link
-            tvSwitchMode.setText("Switch To Actual VSLA Data");
-            tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
+   //         tvSwitchMode.setText("Switch To Actual VSLA Data");
+     //       tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
         }
         else {
             actionBar.hide();
             //Set the label of the link
-            tvSwitchMode.setText("Switch To Training Mode");
-            tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
+       //     tvSwitchMode.setText("Switch To Training Mode");
+         //   tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
         }
 
         //Set the textview to be underline
-        tvSwitchMode.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+     /**   tvSwitchMode.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 
         tvSwitchMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +124,7 @@ public class LoginActivity extends SherlockActivity {
 
                 finish();
             }
-        });
+        }); */
 
         //Check whether the VSLA has been Activated
         vslaInfoRepo = new VslaInfoRepo(LoginActivity.this);
@@ -128,10 +139,10 @@ public class LoginActivity extends SherlockActivity {
             if(!vslaInfo.isActivated()) {
                 if(vslaInfo.isOffline()) {
                     if(wasCalledFromActivation) {
-                        notActivatedStatusMessage = "We weren't able to send your registration because of a network problem. We've saved it and will try to send it later.";
+                        notActivatedStatusMessage = "We were unable to send your registration because of a network problem. We've saved it and will try to send it later.";
                     }
                     else {
-                        notActivatedStatusMessage = "We weren't able to send your registration last time because of a network problem. We've saved it and will try to send it when you sign in now.";
+                        notActivatedStatusMessage = "We were unable to send your registration last time because of a network problem. We've saved it and will try to send it when you sign in now.";
                     }
                 }
                 else {
@@ -196,6 +207,20 @@ public class LoginActivity extends SherlockActivity {
         getSupportMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
+
+    // This method is called once the menu is selected
+    @Override
+    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // Launch preferences activity
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+        }
+        return true;
+    }
+
 
     private void startMainMenuActivity() {
         boolean showGettingStartedWizard = false;

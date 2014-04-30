@@ -14,6 +14,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
 
 public class MeetingSendDataFrag extends SherlockFragment {
@@ -34,6 +36,8 @@ public class MeetingSendDataFrag extends SherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         actionBar = getSherlockActivity().getSupportActionBar();
         String title = "Meeting";
         switch(Utils._meetingDataViewMode) {
