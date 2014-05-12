@@ -60,7 +60,7 @@ public class MembersSavingsArrayAdapter extends ArrayAdapter<Member> {
             View rowView = inflater.inflate(R.layout.row_member_savings, parent, false);
 
             //Get the Widgets
-            final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMSavFullNames);
+            final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMSavFullName);
             final TextView txtSavingsToday = (TextView)rowView.findViewById(R.id.txtRMSavTodaysSavings);
             final TextView txtTotals = (TextView)rowView.findViewById(R.id.txtRMSavTotals);
 

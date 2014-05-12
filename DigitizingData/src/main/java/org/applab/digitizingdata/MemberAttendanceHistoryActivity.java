@@ -26,7 +26,6 @@ import org.applab.digitizingdata.helpers.AttendanceRecord;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
-import org.applab.digitizingdata.R;
 
 import java.util.ArrayList;
 
@@ -139,7 +138,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         }
 
         //Setup the TextViews
-        TextView txtFullNames = (TextView)findViewById(R.id.txtMAHFullNames);
+        TextView txtFullNames = (TextView)findViewById(R.id.txtMAHFullName);
         TextView txtMeetingDate = (TextView)findViewById(R.id.txtMAHMeetingDate);
         CheckBox chkAttendance = (CheckBox)findViewById(R.id.chkMAHAttendance);
         TextView txtComments = (TextView)findViewById(R.id.txtMAHComment);

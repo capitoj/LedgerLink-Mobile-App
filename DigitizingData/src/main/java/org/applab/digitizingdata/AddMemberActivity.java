@@ -25,12 +25,15 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingFineRepo;
+import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
@@ -47,7 +50,11 @@ public class AddMemberActivity extends SherlockActivity {
     private boolean successAlertDialogShown = false;
     private boolean selectedFinishButton = false;
     private String dlgTitle = "Add Member";
+    private int meetingId;
+   private MeetingFineRepo fineRepo;
+    private MeetingRepo meetingRepo;
     MemberRepo repo;
+    Meeting targetMeeting;
     private boolean isEditAction;
 
 
@@ -57,14 +64,15 @@ public class AddMemberActivity extends SherlockActivity {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        if(getIntent().hasExtra("_isEditAction")){
-            this.isEditAction = getIntent().getBooleanExtra("_isEditAction",false);
+        if(getIntent().hasExtra("_meetingId")) {
+            meetingId = getIntent().getIntExtra("_meetingId", 0);
         }
         if(getIntent().hasExtra("_id")){
             this.selectedMemberId = getIntent().getIntExtra("_id",0);
         }
 
-
+        meetingRepo = new MeetingRepo(getApplicationContext());
+        targetMeeting = meetingRepo.getMeetingById(meetingId);
 
 
         // BEGIN_INCLUDE (inflate_set_custom_view)

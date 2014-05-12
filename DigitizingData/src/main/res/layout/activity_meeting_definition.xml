@@ -13,19 +13,16 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="You have more than one active cycle. Please choose the cycle for the new meeting."
-            android:id="@+id/lblMDMultipleCycles"
-            android:layout_gravity="left" />
+            android:id="@+id/lblMDMultipleCycles" />
 
         <RadioGroup
             style="@style/RegularText"
             android:id="@+id/grpMDExistingCycles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp">
+            android:orientation="vertical">
 
         </RadioGroup>
 
@@ -33,17 +30,14 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="View the date below and tap to change if it is not the correct meeting date. (You may not pick a date in the future.) When it is correct, tap the arrow above to begin the meeting."
-            android:id="@+id/lblMDHeader"
-            android:layout_gravity="left" />
+            android:id="@+id/lblMDHeader"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/TextAccentColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:textStyle="bold"
             android:text="01-JUL-2013"
             android:clickable="true"

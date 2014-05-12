@@ -26,7 +26,6 @@
                     android:id="@+id/lblBCSharePrice"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
                     android:text="Share Price (UGX)"/>
 
                 <org.applab.digitizingdata.fontutils.TypefaceEditText
@@ -34,7 +33,6 @@
                     android:id="@+id/txtBCSharePrice"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dip"
                     android:inputType="textCapWords"/>
             </LinearLayout>
 
@@ -44,11 +42,10 @@
                 android:orientation="vertical">
 
                 <org.applab.digitizingdata.fontutils.TypefaceTextView
-
+style="@style/RegularText"
                     android:id="@+id/lblBCMaxShares"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
                     android:text="Maximum number of shares a member may purchase per meeting" />
 
                 <org.applab.digitizingdata.fontutils.TypefaceEditText
@@ -56,7 +53,6 @@
                     android:id="@+id/txtBCMaxShares"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dip"
                     android:inputType="number"/>
             </LinearLayout>
 
@@ -66,12 +62,11 @@
                 android:orientation="vertical">
 
                 <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
                     android:id="@+id/lblBCStartDate"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="Date your cycle will begin"
-                    android:textSize="14dp" />
+                    android:text="Date your cycle will begin" />
 
                 <DatePicker
                     android:id="@+id/dtpBCStartDate"
@@ -85,12 +80,11 @@
                 android:orientation="vertical">
 
                 <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
                     android:id="@+id/lblBCEndDate"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="Date your cycle will end"
-                    android:textSize="14dp" />
+                    android:text="Date your cycle will end"/>
 
                 <DatePicker
                     android:id="@+id/dtpBCEndDate"

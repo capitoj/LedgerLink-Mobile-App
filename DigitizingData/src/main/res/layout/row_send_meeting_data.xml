@@ -5,13 +5,13 @@
         >
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
             android:id="@+id/txtSMDMeetingDate"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:padding="5dp"
-            android:gravity="left"
             android:text="Meeting Date" />
 
     <!--

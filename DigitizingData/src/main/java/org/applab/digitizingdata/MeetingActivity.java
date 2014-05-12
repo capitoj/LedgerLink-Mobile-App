@@ -90,11 +90,13 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
         actionBar.addTab(actionBar.newTab().setTag("rollCall").setText("Register").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setTag("summary").setText("Summary").setTabListener(this));
-        //actionBar.addTab(actionBar.newTab().setTag("openingCash").setText("Starting Cash").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag("startingCash").setText("Starting Cash").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setTag("savings").setText("Savings").setTabListener(this));
         actionBar.addTab( actionBar.newTab().setTag("loansRepaid").setText("Loans Repaid").setTabListener(this));
+        actionBar.addTab( actionBar.newTab().setTag("fines").setText("Fines").setTabListener(this));
         actionBar.addTab( actionBar.newTab().setTag("loansIssued").setText("New Loans").setTabListener(this));
-        //actionBar.addTab( actionBar.newTab().setTag("cashBook").setText("Cash Book").setTabListener(this));
+        actionBar.addTab( actionBar.newTab().setTag("cashBook").setText("Cash Book").setTabListener(this));
+
 
         //Do not show the Send Data tab when in READ_ONLY Mode
         if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
@@ -105,13 +107,22 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         if(getIntent().hasExtra("_tabToSelect")) {
             String tabTag = getIntent().getStringExtra("_tabToSelect");
             if(tabTag.equalsIgnoreCase("savings")) {
+                actionBar.selectTab(actionBar.getTabAt(3));
+            }
+            else if(tabTag.equalsIgnoreCase("startingCash")) {
                 actionBar.selectTab(actionBar.getTabAt(2));
             }
             else if(tabTag.equalsIgnoreCase("loansRepaid")) {
-                actionBar.selectTab(actionBar.getTabAt(3));
+                actionBar.selectTab(actionBar.getTabAt(4));
             }
             else if(tabTag.equalsIgnoreCase("loansIssued")) {
-                actionBar.selectTab(actionBar.getTabAt(4));
+                actionBar.selectTab(actionBar.getTabAt(6));
+            }
+            else if(tabTag.equalsIgnoreCase("cashBook")) {
+                actionBar.selectTab(actionBar.getTabAt(7));
+            }
+            else if(tabTag.equalsIgnoreCase("fines")) {
+                actionBar.selectTab(actionBar.getTabAt(5));
             }
             else if(tabTag.equalsIgnoreCase("rollCall")) {
                 actionBar.selectTab(actionBar.getTabAt(0));
@@ -202,6 +213,10 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 Intent intent = new Intent(getApplicationContext(), DeleteMeetingActivity.class);
                 intent.putExtra("_meetingId", targetMeetingId);
                 startActivity(intent);
+            case R.id.mnuMeetingFineMember:
+                Intent fineMemberIntent = new Intent(getApplicationContext(), FineMemberMeetingActivity.class);
+                fineMemberIntent.putExtra("_meetingId", targetMeetingId);
+                startActivity(fineMemberIntent);
             default:
                 return false;
         }
@@ -223,7 +238,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             fragment = new MeetingRollCallFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
         }
-        else if(selectedTag.equalsIgnoreCase("openingCash")) {
+        else if(selectedTag.equalsIgnoreCase("startingCash")) {
             fragment = new MeetingOpeningCashFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
         }
@@ -233,6 +248,10 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         }
         else if(selectedTag.equalsIgnoreCase("loansRepaid")) {
             fragment = new MeetingLoansRepaidFrag();
+            fragmentTransaction.replace(android.R.id.content, fragment);
+        }
+        else if(selectedTag.equalsIgnoreCase("fines")) {
+            fragment = new MeetingFinesFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
         }
         else if(selectedTag.equalsIgnoreCase("loansIssued")) {
@@ -348,6 +367,28 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 meetingData.put(SendDataRepo.SAVINGS_ITEM_KEY, meetingSavingsJson);
             }
 
+         /**   // Opening Cash
+            String meetingOpeningCashJson = SendDataRepo.getMeetingOpeningCashJson(meeting.getMeetingId());
+            if(meetingOpeningCashJson != null) {
+                //Add to Map
+                meetingData.put(SendDataRepo.OPENING_CASH_ITEM_KEY, meetingOpeningCashJson);
+            }
+
+            // Cashbook
+            String meetingCashBookJson = SendDataRepo.getMeetingCashBookJson(meeting.getMeetingId());
+            if(meetingCashBookJson != null) {
+                //Add to Map
+                meetingData.put(SendDataRepo.CASHBOOK_ITEM_KEY, meetingCashBookJson);
+            }
+
+            // Fine
+            String meetingFineJson = SendDataRepo.getMeetingFineJson(meeting.getMeetingId());
+            if(meetingFineJson != null) {
+                //Add to Map
+                meetingData.put(SendDataRepo.FINE_ITEM_KEY, meetingFineJson);
+            }
+
+*/
             //Repayments
             String meetingRepaymentsJson = SendDataRepo.getMeetingRepaymentsJson(meeting.getMeetingId());
             if(meetingRepaymentsJson != null) {

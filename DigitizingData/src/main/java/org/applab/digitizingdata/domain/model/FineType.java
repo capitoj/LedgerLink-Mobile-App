@@ -9,6 +9,14 @@ public class FineType {
     private String fineTypeDesc;
     private double defaultAmount;
 
+    public FineType(){
+
+    }
+    public FineType(int fineTypeId, String fineTypeName) {
+        this.fineTypeId = fineTypeId;
+        this.fineTypeName = fineTypeName;
+    }
+
     public int getFineTypeId() {
         return fineTypeId;
     }

@@ -13,7 +13,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/lblMSDFragStatus"
-        android:layout_marginTop="10dp"
         android:text="Internet is Available" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -22,7 +21,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/lblMSDFragInstructions"
         android:layout_below="@id/lblMSDFragStatus"
-        android:layout_marginTop="5dp"
         android:text="Send Data" />
 
 </RelativeLayout>

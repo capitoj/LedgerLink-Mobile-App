@@ -12,7 +12,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="Moses Oscar Muhahala"
             android:id="@+id/lblMLRepayHFullNames"
@@ -22,7 +21,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="01-JUL-2013"
             android:id="@+id/lblMLRepayHMeetingDate"
@@ -32,7 +30,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="Loan Number"
             android:id="@+id/lblMLRepayHLoanNo"
@@ -49,9 +46,7 @@
                 android:id="@+id/txtMLRepayHLoanNo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:layout_weight="6"
-                android:paddingLeft="10dp"
                 android:textAlignment="textEnd"
                 android:text="" />
 
@@ -68,7 +63,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:paddingLeft="5dp"
             android:text="Amount"
             android:id="@+id/lblMLRepayHAmount"
@@ -85,7 +79,6 @@
                 android:id="@+id/txtMLRepayHAmount"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:layout_weight="6"
                 android:inputType="number"
                 android:textAlignment="viewEnd"
@@ -105,11 +98,9 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:paddingLeft="5dp"
             android:text="New Balance"
-            android:id="@+id/lblMLRepayHBalance"
-            android:layout_gravity="left" />
+            android:id="@+id/lblMLRepayHBalance" />
 
 
         <LinearLayout
@@ -124,8 +115,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:layout_marginLeft="5dp"
-                android:gravity="left"
                 android:text=""
                 android:clickable="true" />
 
@@ -142,11 +131,9 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="New Interest:"
-            android:id="@+id/lblMLRepayHInterest"
-            android:layout_gravity="center" />
+            android:id="@+id/lblMLRepayHInterest" />
 
 
         <LinearLayout
@@ -160,7 +147,6 @@
                 android:id="@+id/txtMLRepayHInterest"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:layout_weight="5"
                 android:inputType="number"
                 android:textAlignment="textEnd"
@@ -179,7 +165,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="Rollover Amount:"
             android:id="@+id/lblMLRepayHTotal"
@@ -189,7 +174,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/frmMLRepayHTotal"
-            android:layout_marginLeft="5dp"
             android:weightSum="10">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -198,7 +182,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:gravity="left"
                 android:text=""
                 android:clickable="true" />
 
@@ -215,7 +198,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="Next Date Due:"
             android:id="@+id/lblMLRepayHDateDue"
@@ -226,8 +208,6 @@
             android:id="@+id/txtMLRepayHDateDue"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
             android:text="01-Jul-2013"
             android:clickable="true" />
 
@@ -237,18 +217,15 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:paddingLeft="5dp"
             android:text="Comments"
-            android:id="@+id/lblMLRepayHComment"
-            android:layout_gravity="left" />
+            android:id="@+id/lblMLRepayHComment"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceEditText
             style="@style/NormalEditText"
             android:id="@+id/txtMLRepayHComment"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
             android:inputType="textCapCharacters"
             android:textAlignment="viewEnd"
             android:text="" />
@@ -257,31 +234,25 @@
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="HISTORY"
-            android:id="@+id/lblMLRepayHSection1"
-            android:layout_gravity="left" />
+            android:id="@+id/lblMLRepayHSection1" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:paddingLeft="5dp"
             android:text="Total Balance:"
-            android:id="@+id/lblMLRepayHOutstandingLoans"
-            android:layout_gravity="left" />
+            android:id="@+id/lblMLRepayHOutstandingLoans"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:paddingLeft="5dp"
             android:text="Repayments"
-            android:id="@+id/lblMLRepayHPastLoans"
-            android:layout_gravity="left" />
+            android:id="@+id/lblMLRepayHPastLoans"/>
 
         <ListView
             android:id="@android:id/list"

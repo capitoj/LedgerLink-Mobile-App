@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
 
-    <TextView android:id="@+id/lblConfirmationHeading"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Is Everything Correct?"
-              android:textStyle="bold"
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblConfirmationHeading"
+            style="@style/RegularTextBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Is Everything Correct?"
+            android:textStyle="bold" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblConfirmationText"
+            style="@style/RegularText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="If you are satisfied that all information is correct, please press DONE, otherwise press cancel to revise information"
+
             />
-
-    <TextView android:id="@+id/lblConfirmationText"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="If you are satisfied that all information is correct, please press done, otherwise press cancel to revise information"
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblConfirmationText"
+            style="@style/RegularText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="If you are satisfied that all information is correct, please press DONE, otherwise press cancel to revise information"
 
             />
-
-
-
 
 
     </LinearLayout>
 
-    </RelativeLayout>
+</RelativeLayout>

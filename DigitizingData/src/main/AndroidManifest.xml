@@ -78,6 +78,16 @@
         <activity
             android:name="org.applab.digitizingdata.MemberSavingHistoryActivity"
             android:label="Savings History" />
+        <activity
+            android:name="org.applab.digitizingdata.MemberFinesHistoryActivity"
+            android:label="Fines History" />
+        <activity
+            android:name="org.applab.digitizingdata.FineMemberMeetingActivity"
+            android:label="Fine Member" />
+        <activity
+            android:name="org.applab.digitizingdata.AddFineActivity"
+            android:label="Fine Member" />
+
         <activity android:name="org.applab.digitizingdata.MemberLoansIssuedHistoryActivity" />
         <activity android:name="org.applab.digitizingdata.MemberLoansRepaidHistoryActivity" />
         <activity

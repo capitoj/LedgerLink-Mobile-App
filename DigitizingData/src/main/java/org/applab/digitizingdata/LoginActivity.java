@@ -362,8 +362,8 @@ public class LoginActivity extends SherlockActivity {
                 if (loginActivityWeakReference.get() != null && !loginActivityWeakReference.get().isFinishing()) {
                     if(null == progressDialog) {
                         progressDialog = new ProgressDialog(loginActivityWeakReference.get());
-                        progressDialog.setTitle("Registration");
-                        progressDialog.setMessage("Sending registration");
+                        progressDialog.setTitle("Login");
+                        progressDialog.setMessage("Logging you in..");
                         progressDialog.setMax(10);
                         progressDialog.setProgress(1);
                         progressDialog.setCancelable(false);

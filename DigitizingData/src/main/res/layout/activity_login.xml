@@ -45,7 +45,6 @@
             android:id="@+id/lbl_vsla_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="left"
             android:text=" "
             android:layout_below="@+id/imgVALogo"
             android:layout_alignLeft="@+id/edt_passkey" />
@@ -77,7 +76,6 @@
             android:layout_height="match_parent"
             android:layout_below="@id/btnLogin"
             android:text="Forgot your pass key: \nPlease call 078000000"
-            android:gravity="left"
             android:layout_alignLeft="@+id/btnLogin"/>
         <!--  <TextView
               android:id="@+id/lblSISwitchMode"

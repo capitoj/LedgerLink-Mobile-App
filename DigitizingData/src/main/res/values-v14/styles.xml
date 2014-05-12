@@ -26,14 +26,16 @@
     </style>
 
     <!-- Text styles -->
-    <style name="SubHeading" parent="RegularText">
+    <style name="SubHeading" parent="android:TextAppearance.Medium">
         <item name="android:background">@drawable/light_blue</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">bold</item>
-        <item name="android:textAlignment">center</item>
-        <item name="android:paddingLeft">60dip</item>
+        <item name="android:paddingLeft">20dip</item>
         <item name="android:layout_height">25dip</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginBottom">10dip</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <style name="MainHeading" parent="android:TextAppearance.Large">
@@ -41,6 +43,9 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">bold</item>
+        <item name="android:layout_marginRight">10dip</item>
+        <item name="android:layout_marginLeft">10dip</item>
+
     </style>
 
     <style name="TrainingModeBanner" parent="android:TextAppearance.Large">
@@ -59,32 +64,52 @@
     <style name="NormalEditText" parent="android:TextAppearance.Medium">
         <item name="android:fontFamily">normal</item>
         <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:lineSpacingMultiplier">1</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <style name="RegularText" parent="android:TextAppearance.Medium">
         <item name="android:fontFamily">normal</item>
         <item name="android:textColor">@color/ledger_link_black</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <style name="RegularTextBold" parent="android:TextAppearance.Medium">
         <item name="android:fontFamily">bold</item>
         <item name="android:textColor">@color/ledger_link_black</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <style name="SmallerRegularText" parent="android:TextAppearance.Small">
         <item name="android:fontFamily">normal</item>
         <item name="android:textColor">@color/ledger_link_black</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:gravity">left</item>
     </style>
 
 
     <style name="TextAccentColor" parent="RegularText">
         <item name="android:textColor">@color/ledger_link_light_blue</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:gravity">left</item>
     </style>
 
-    <style name="InTextHeader" parent="android:TextAppearance.Medium">
+    <style name="InTextHeader" parent="RegularText">
         <item name="android:textColor">@color/ledger_link_dark_blue</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">bold</item>
@@ -92,6 +117,7 @@
         <item name="android:paddingRight">10dip</item>
         <item name="android:paddingBottom">5dip</item>
         <item name="android:lineSpacingMultiplier">1</item>
+        <item name="android:layout_margin">20dip</item>
     </style>
 
     <style name="FormLabel">
@@ -100,13 +126,30 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="List" parent="RegularText">
-    </style>
+    <style name="List" parent="RegularText"></style>
 
     <style name="ListSubItems" parent="RegularText">
-        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:layout_marginTop">3dip</item>
+        <item name="android:layout_marginBottom">2dip</item>
+        <item name="android:layout_marginLeft">30dip</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="Spinner" parent="RegularText">
+        <item name="android:layout_marginTop">2dip</item>
+        <item name="android:layout_marginBottom">2dip</item>
+        <item name="android:layout_marginLeft">30dip</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">1dip</item>
+    </style>
+
+    <style name="Checkbox" parent="RegularText">
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginBottom">5dip</item>
+        <item name="android:layout_marginLeft">30dip</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 
     <style name="Date">
         <item name="android:textSize">20sp</item>
@@ -161,18 +204,36 @@
     </style>
 
     <style name="Logo">
-       <item name="android:gravity">center</item>
+        <item name="android:gravity">center_horizontal</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:layout_weight">10</item>
         <item name="android:paddingTop">80dip</item>
         <item name="android:paddingBottom">80dip</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:adjustViewBounds">true</item>
-        <item name="android:paddingLeft">10dip</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:paddingLeft">15dip</item>
+
+
+    </style>
+
+    <style name="ActivationPageLogo">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_weight">15</item>
+        <item name="android:paddingTop">80dip</item>
+        <item name="android:paddingBottom">80dip</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:paddingLeft">15dip</item>
+
+
     </style>
 
 
-
-    <!--Text Sizes tiny- , small - 14sp, med - 18sp, Large -22sp-->
+    <!--
+    <item name="android:paddingLeft">10dip</item>
+    Text Sizes tiny- , small - 14sp, med - 18sp, Large -22sp-->
 
 </resources>

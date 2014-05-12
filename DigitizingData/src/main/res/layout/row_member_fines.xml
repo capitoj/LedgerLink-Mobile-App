@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@+id/txtFineFullName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:padding="5dp"
+        android:text="FULL NAME"/>
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
+        android:id="@+id/txtFineTotal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtFineFullName"
+        android:paddingLeft="5dp"
+        android:text="Total Fines: 60,000UGX"/>
+
+</RelativeLayout>

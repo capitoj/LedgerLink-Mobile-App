@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/frmBM_top_control_bar">
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -13,11 +13,9 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="Tap [Begin] to begin a new meeting."
-            android:id="@+id/lblBMHeader"
-            android:layout_gravity="left"/>
+            android:id="@+id/lblBMHeader" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
@@ -29,44 +27,36 @@
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:layout_marginTop="10dp"
                 android:text="CURRENT MEETING"
                 android:id="@+id/lblBMSection1"
                 android:paddingLeft="10dip" />
 
-         <!--   <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="5dp"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="#FFFFFF"
-                android:background="#3b5998"
-                android:text="CURRENT MEETING"
-                android:id="@+id/lblBMSection1"
-                /> -->
+            <!--   <TextView
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginTop="10dp"
+                   android:paddingLeft="5dp"
+                   android:textStyle="bold"
+                   android:textSize="20sp"
+                   android:textColor="#FFFFFF"
+                   android:background="#3b5998"
+                   android:text="CURRENT MEETING"
+                   android:id="@+id/lblBMSection1"
+                   /> -->
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
                 android:text="You may edit before sending."
-                android:id="@+id/lblBMInstructionCurrent"
-                android:layout_gravity="left"/>
+                android:id="@+id/lblBMInstructionCurrent" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularTextBold"
+                style="@style/TextAccentColor"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:paddingLeft="5dp"
-                android:textStyle="bold"
                 android:text="04 Mar 2013"
-                android:id="@+id/lblBMCurrentMeetingDate"
-                android:layout_gravity="left"/>
+                android:id="@+id/lblBMCurrentMeetingDate" />
 
 
         </LinearLayout>
@@ -76,22 +66,20 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/grpBMPastMeetings"
-            android:layout_marginTop="15dp">
+            android:id="@+id/grpBMPastMeetings">
 
-          <!--  <TextView style="@style/SubHeading"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="5dp"
-                android:text="UNSENT PAST MEETINGS"
-                android:id="@+id/lblBMSection2" /> -->
+            <!--  <TextView style="@style/SubHeading"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="10dp"
+                  android:paddingLeft="5dp"
+                  android:text="UNSENT PAST MEETINGS"
+                  android:id="@+id/lblBMSection2" /> -->
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:layout_marginTop="10dip"
                 android:text="UNSENT PAST MEETINGS"
                 android:id="@+id/lblBMSection2"
                 android:paddingLeft="10dip" />
@@ -112,23 +100,17 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
-                android:textSize="18sp"
                 android:text="You may not edit, but you may review before sending."
-                android:id="@+id/lblBMInstructionPast"
-                android:layout_gravity="left"/>
+                android:id="@+id/lblBMInstructionPast" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
-                android:textSize="18sp"
                 android:text="There are several unsent meetings. It is not safe to keep meetings without sending! Please send every week."
-                android:id="@+id/lblBMWarning"
-                android:layout_gravity="left"/>
+                android:id="@+id/lblBMWarning" />
 
         </LinearLayout>
     </LinearLayout>

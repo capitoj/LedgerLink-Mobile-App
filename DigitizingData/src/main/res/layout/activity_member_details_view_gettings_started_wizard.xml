@@ -11,8 +11,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
+            >
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/SmallerRegularText"
@@ -27,8 +26,8 @@
                 android:id="@+id/lblAMMemberNo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="Member No *:" />
+                android:text="Member No *" />
+            <requestFocus/>
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
@@ -42,16 +41,13 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp">
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblAMSurname"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="Surname *" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
@@ -66,16 +62,13 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp">
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblAMOtherNames"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="Other Names *" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
@@ -90,16 +83,13 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp">
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblAMGender"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="Gender *" />
             <!--
             <EditText
@@ -122,16 +112,13 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblAMAge"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="Age *" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
@@ -147,16 +134,13 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblAMOccupation"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="Occupation *" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
@@ -171,16 +155,13 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblAMPhone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="Phone Number" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
@@ -195,16 +176,13 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblAMCyclesCompleted"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="Number of cycles completed" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
@@ -219,16 +197,13 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
-                android:id="@+id/lblMiddleStartPrompt"
+                style="@style/SubHeading"
+                android:id="@+id/lblMiddleCycleStart"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
+                android:layout_height="25dip"
                 android:text="MIDDLE CYCLE START" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -236,7 +211,6 @@
                 android:id="@+id/lblMiddleStartPrompt"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="If current cycle has started, and your group has held one or more meetings already, enter current totals for member so far." />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -244,14 +218,12 @@
                 android:id="@+id/lblMDVAmountSavedInCurrentCycle"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="Total Amount saved in current cycle" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:text="0"
                 android:inputType="number"
                 android:id="@+id/txtMDVAmountSavedInCurrentCycle" />
@@ -261,14 +233,12 @@
                 android:id="@+id/lblMDVOutstandingLoanAmount"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
                 android:text="Total Amount Of This Member's Regular Loan Outstanding" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:text="0"
                 android:inputType="number"
                 android:id="@+id/txtMDVOutstandingLoanAmount" />

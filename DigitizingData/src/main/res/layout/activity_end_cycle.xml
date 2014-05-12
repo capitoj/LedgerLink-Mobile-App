@@ -24,7 +24,6 @@
 
 
         <RadioGroup
-            style="@style/RegularText"
             android:id="@+id/grpECExistingCycles"
             android:layout_below="@id/lblECInstruction"
             android:layout_width="match_parent"
@@ -38,7 +37,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:text="Share Out Date"
             android:id="@+id/lblECShareOutDate"
             android:layout_below="@id/grpECExistingCycles"
@@ -48,10 +46,8 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:text="02-JUL-2013"
             android:id="@+id/txtECShareOutDate"
-            android:textColor="#0000FF"
             android:layout_below="@id/lblECShareOutDate"
             android:layout_alignParentLeft="true" />
 
@@ -59,7 +55,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:text="Share Out Amount"
             android:id="@+id/lblECShareOutAmount"
             android:layout_below="@id/txtECShareOutDate"

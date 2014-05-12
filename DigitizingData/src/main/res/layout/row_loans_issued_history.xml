@@ -12,51 +12,42 @@
         android:layout_alignParentLeft="true"
         android:paddingTop="2dp"
         android:paddingLeft="5dp"
-        android:layout_marginLeft="5dp"
-        android:gravity="left"
         android:text="Loan No:" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
+        style="@style/ListSubItems"
         android:id="@+id/txtRLIHAmount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRLIHLoanNo"
         android:paddingLeft="5dp"
-        android:layout_marginLeft="5dp"
-        android:gravity="left"
         android:text="Amount:"/>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
+        style="@style/ListSubItems"
         android:id="@+id/txtRLIHMeetingDate"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRLIHAmount"
         android:paddingLeft="5dp"
-        android:layout_marginLeft="5dp"
         android:text="Issued On:"/>
 
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
+        style="@style/ListSubItems"
         android:id="@+id/txtRLIHBalance"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRLIHMeetingDate"
         android:paddingLeft="5dp"
-        android:layout_marginLeft="5dp"
-        android:gravity="left"
         android:text="Balance:" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
+        style="@style/ListSubItems"
         android:id="@+id/txtRLIHDateCleared"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRLIHBalance"
         android:paddingLeft="5dp"
-        android:layout_marginLeft="5dp"
-        android:gravity="left"
         android:text="Cleared On:" />
 </RelativeLayout>

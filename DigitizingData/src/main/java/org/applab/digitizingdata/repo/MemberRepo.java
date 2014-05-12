@@ -152,7 +152,7 @@ public class MemberRepo {
         }
         catch (Exception ex) {
             ex.printStackTrace();
-            Log.e("MemberRepo.addMember", ex.getMessage());
+       //     Log.e("MemberRepo.addMember", ex.getMessage().toString());
             return false;
         }
         finally {

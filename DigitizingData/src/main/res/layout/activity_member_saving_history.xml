@@ -12,7 +12,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="Moses Oscar Muhahala"
             android:id="@+id/lblMSHFullNames"
@@ -22,7 +21,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="01-JUL-2013"
             android:id="@+id/lblMSHMeetingDate"
@@ -32,7 +30,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:text="Amount"
             android:id="@+id/lblMSHAmount" />
 
@@ -46,7 +43,6 @@
                 android:id="@+id/txtMSHAmount"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_weight="6"
                 android:inputType="number"
                 android:textAlignment="viewEnd"
@@ -66,21 +62,17 @@
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
             android:text="HISTORY"
-            android:id="@+id/lblMSHSection1"
-            android:layout_gravity="left" />
+            android:id="@+id/lblMSHSection1"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:paddingLeft="5dp"
             android:text="Total Savings: 15,000 UGX"
-            android:id="@+id/lblMSHTotalSavings"
-            android:layout_gravity="left" />
+            android:id="@+id/lblMSHTotalSavings"/>
 
         <ListView
             android:id="@android:id/list"

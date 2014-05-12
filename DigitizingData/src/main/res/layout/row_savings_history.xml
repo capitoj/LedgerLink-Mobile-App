@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-        >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-            android:id="@+id/txtRSHMeetingDate"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:padding="5dp"
-            android:text="Meeting Date"/>
+        style="@style/ListSubItems"
+        android:id="@+id/txtRSHMeetingDate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="5dp"
+        android:text="Meeting Date" />
+
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-            android:id="@+id/txtRSHAmount"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtRSHMeetingDate"
-            android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Saved: 0UGX"/>
+        style="@style/ListSubItems"
+        android:id="@+id/txtRSHAmount"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRSHMeetingDate"
+        android:paddingLeft="5dp"
+        android:text="Saved: 0UGX" />
 
 </RelativeLayout>

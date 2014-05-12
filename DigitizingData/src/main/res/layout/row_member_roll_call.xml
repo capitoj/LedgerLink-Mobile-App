@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:text=""
-            android:id="@+id/chkRMRCAttendance"
-            android:layout_gravity="left"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text=""
+        android:id="@+id/chkRMRCAttendance"
+        android:layout_gravity="left" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-            android:id="@+id/txtRMRCFullNames"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/chkRMRCAttendance"
-            android:padding="5dp"
-            android:gravity="left"
-            android:text="FULL NAMES"/>
+        style="@style/RegularText"
+        android:id="@+id/txtRMRCFullNames"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/chkRMRCAttendance"
+        android:padding="5dp"
+        android:text="FULL NAME" />
 
 
 </RelativeLayout>

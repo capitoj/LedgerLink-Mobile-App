@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+        style="@style/ListSubItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/chkMemberFine"
+        android:clickable="false"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_below="@id/lblFineFullName"/>
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Latecoming"
+        android:id="@+id/lblFineType"
+        android:layout_below="@id/lblFineFullName"
+        android:layout_toRightOf="@id/chkMemberFine"/>
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="XXX UGX"
+        android:id="@+id/txtMemberFineAmount"
+        android:layout_below="@id/lblFineFullName"
+        android:layout_toRightOf="@id/lblFineType"/>
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text=" XXX "
+        android:id="@+id/lblFineMeetingDate"
+        android:layout_below="@id/lblFineFullName"
+        android:layout_toRightOf="@id/txtMemberFineAmount"/>
+</RelativeLayout>
