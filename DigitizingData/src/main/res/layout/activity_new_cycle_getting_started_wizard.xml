@@ -213,7 +213,7 @@
                 android:id="@+id/txtNCFinesCollectedSoFar"
                 android:layout_width="200dip"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="number"
                 android:text="0" />
 
 
