@@ -217,6 +217,12 @@ public class LoginActivity extends SherlockActivity {
                 Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 break;
+            case R.id.action_about:
+                // Launch about dialog
+                AboutDialog about = new AboutDialog(this);
+                about.setTitle("About LedgerLink");
+                about.show();
+                break;
         }
         return true;
     }
