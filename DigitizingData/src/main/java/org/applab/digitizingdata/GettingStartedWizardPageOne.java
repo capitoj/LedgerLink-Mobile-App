@@ -16,6 +16,9 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
@@ -24,18 +27,34 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
     VslaInfoRepo vslaInfoRepo = null;
     VslaInfo vslaInfo = null;
     ActionBar actionBar;
+    TextView savingsGroupName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
 
         setContentView(R.layout.activity_getting_started_wizard_page_1);
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("GETTING STARTED");
 
-        actionBar.setTitle("Get Started");
+        //For test purposes, create vsla info if not exists
+        /* VslaInfoRepo repo = new VslaInfoRepo(getBaseContext());
+        if(!repo.vslaInfoExists()) {
+           repo.saveVslaInfo("TESTVSLA", "TESTVSLA", "1234");
+        }
+        */
+
+
+        vslaInfoRepo = new VslaInfoRepo(this);
+        vslaInfo = vslaInfoRepo.getVslaInfo();
+
+        savingsGroupName = (TextView)findViewById(R.id.txtNCP_header);
+        savingsGroupName.setText(vslaInfo.getVslaName());
 
     }
 

@@ -1,6 +1,7 @@
 package org.applab.digitizingdata.helpers;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,11 +30,13 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
     MeetingLoanRepaymentRepo loansRepaidRepo = null;
     MeetingLoanIssuedRepo loansIssuedRepo = null;
     MeetingRepo meetingRepo = null;
+    Typeface typeface;
 
-    public MembersLoansRepaidArrayAdapter(Context context, ArrayList<Member> values) {
+    public MembersLoansRepaidArrayAdapter(Context context, ArrayList<Member> values, String font) {
         super(context, R.layout.row_member_loans_repaid, values);
         this.context = context;
         this.values = values;
+        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
 
         meetingRepo = new MeetingRepo(getContext());
         loansRepaidRepo = new MeetingLoanRepaymentRepo(getContext());
@@ -41,7 +44,7 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
 
     }
 
-    public void setMeetingId(int meetingId){
+    public void setMeetingId(int meetingId) {
         this.meetingId = meetingId;
     }
 
@@ -50,63 +53,68 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
         try {
             //Here I populate the ListView Row with data.
             //I will handle the itemClick event in the ListView view on the actual fragment
-            LayoutInflater inflater = (LayoutInflater)context
+            LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View rowView = inflater.inflate(R.layout.row_member_loans_repaid, parent, false);
 
-            if(null == meetingRepo) {
+            if (null == meetingRepo) {
                 meetingRepo = new MeetingRepo(getContext());
             }
 
-            if(null == loansRepaidRepo) {
+            if (null == loansRepaidRepo) {
                 loansRepaidRepo = new MeetingLoanRepaymentRepo(getContext());
             }
 
-            if(null == loansIssuedRepo) {
+            if (null == loansIssuedRepo) {
                 loansIssuedRepo = new MeetingLoanIssuedRepo(getContext());
             }
 
             //Get the Widgets
-            final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMLRepayFullNames);
-            final TextView txtRepaidToday = (TextView)rowView.findViewById(R.id.txtRMLRepayTodaysRepay);
-            final TextView txtBalance = (TextView)rowView.findViewById(R.id.txtRMLRepayBalance);
-            final TextView txtDateDue = (TextView)rowView.findViewById(R.id.txtRMLRepayDateDue);
+            final TextView txtFullName = (TextView) rowView.findViewById(R.id.txtRMLRepayFullName);
+            final TextView txtRepaidToday = (TextView) rowView.findViewById(R.id.txtRMLRepayTodaysRepay);
+            final TextView txtBalance = (TextView) rowView.findViewById(R.id.txtRMLRepayBalance);
+            final TextView txtDateDue = (TextView) rowView.findViewById(R.id.txtRMLRepayDateDue);
+
+            // Set Typeface
+            txtFullName.setTypeface(typeface);
+            txtRepaidToday.setTypeface(typeface);
+            txtBalance.setTypeface(typeface);
+            txtDateDue.setTypeface(typeface);
 
             //Assign Values to the Widgets
             Member selectedMember = values.get(position);
-            txtFullNames.setText(selectedMember.toString());
+            txtFullName.setText(selectedMember.toString());
 
             //Get the Total
             targetMeeting = meetingRepo.getMeetingById(meetingId);
 
             //Get the Repayments in selected Meeting
             double repaymentInMeeting = 0.0;
-            if(null != targetMeeting) {
-                repaymentInMeeting = loansRepaidRepo.getTotalRepaymentByMemberInMeeting(targetMeeting.getMeetingId(),selectedMember.getMemberId());
+            if (null != targetMeeting) {
+                repaymentInMeeting = loansRepaidRepo.getTotalRepaymentByMemberInMeeting(targetMeeting.getMeetingId(), selectedMember.getMemberId());
             }
-            txtRepaidToday.setText(String.format("Paid Today: %,.0f UGX",repaymentInMeeting));
+            txtRepaidToday.setText(String.format("Paid Today: %,.0f UGX", repaymentInMeeting));
 
             //Get the Outstanding Loans in Cycle
             //TODO: In case multiple loans will be allowed, then we shall need to pass the LoanId or LoanNo
             double outstandingLoan = 0.0;
-            if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {
-                outstandingLoan = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(),selectedMember.getMemberId());
+            if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
+                outstandingLoan = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), selectedMember.getMemberId());
             }
-            txtBalance.setText(String.format("Loan Balance: %,.0f UGX",outstandingLoan));
+            txtBalance.setText(String.format("Loan Balance: %,.0f UGX", outstandingLoan));
 
             //Date Due
             txtDateDue.setText("Date Due: -");
-            if(null != targetMeeting) {
+            if (null != targetMeeting) {
                 MeetingLoanIssued recentLoan = loansIssuedRepo.getMostRecentLoanIssuedToMember(selectedMember.getMemberId());
-                if(null != recentLoan) {
-                    txtDateDue.setText(String.format("Date Due: %s",Utils.formatDate(recentLoan.getDateDue())));
+                if (null != recentLoan) {
+                    txtDateDue.setText(String.format("Date Due: %s", Utils.formatDate(recentLoan.getDateDue())));
                 }
             }
 
             return rowView;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));
             return null;
         }

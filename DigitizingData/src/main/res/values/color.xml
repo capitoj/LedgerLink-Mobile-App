@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="dark_blue">#001849</color>
+    <color name="light_blue">#009EE1</color>
+
+    <color name="ledger_link_white">#FFFFFF</color>
+    <color name="ledger_link_light_blue">#009EE1</color>
+    <color name="ledger_link_dark_blue">#001849</color>
+    <color name="ledger_link_black">#000000</color>
+    <color name="ledger_link_red"> #FF0000</color>
+    <color name="ledger_link_grey">#ffb6b6b6</color>
+
+
+    <!--  Light Blues Used for Main Menu-->
+    <color name ="light_blue_top_left">#00AEEF</color>
+    <color name ="light_blue_top_right">#00B3F0</color>
+    <color name="light_blue_mid_top_left">#00B9F1</color>
+    <color name="light_blue_mid_top_right">#00C0F3</color>
+    <color name="light_blue_mid_bottom_left">#44C8F5</color>
+    <color name="light_blue_mid_bottom_right">#6DCFF6</color>
+    <color name="light_blue_bottom_left">#8ED8F8</color>
+    <color name="light_blue_bottom_right">#AAE1FA</color>
+
+    <!-- Light Blues **Not Used-->
+    <color name="mid_light_blue">#57B6DE</color>
+    <color name="end_light_blue">#9BCCE0</color>
+
+</resources>

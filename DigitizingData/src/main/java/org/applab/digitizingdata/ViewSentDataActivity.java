@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.R;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
@@ -30,6 +32,7 @@ public class ViewSentDataActivity extends SherlockListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_send_meeting_data);
 
@@ -58,7 +61,7 @@ public class ViewSentDataActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        SendMeetingDataArrayAdapter adapter = new SendMeetingDataArrayAdapter(getBaseContext(), meetings);
+        SendMeetingDataArrayAdapter adapter = new SendMeetingDataArrayAdapter(getBaseContext(), meetings, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
         setListAdapter(adapter);

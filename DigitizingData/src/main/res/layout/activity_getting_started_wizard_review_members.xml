@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    <TextView android:id="@+id/lblRvwMembersHeading"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Review Members"
-              android:textStyle="bold"
-            />
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/frmMList_top_control_bar" android:orientation="vertical">
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/SubHeading"
+                android:id="@+id/lblRvwMembersHeading"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Review Members"
+                android:textStyle="bold"
+                />
 
-    <TextView android:id="@+id/lblRvwMembersHeading2"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may exit and come back later."
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblRvwMembersHeading2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may exit and come back later."
+                />
+    </LinearLayout>
 
-            />
-
-
-    <TextView android:id="@+id/lblRvwMembersSummary"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text=""
-            />
-
-    <ListView android:id="@android:id/list"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:choiceMode="singleChoice" >
+    <ListView
+            style="@style/List"
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:choiceMode="singleChoice"
+            android:layout_below="@id/frmMList_top_control_bar">
 
     </ListView>
 
-    <TextView android:id="@android:id/empty"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/empty_members_list"
-            />
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:id="@android:id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/empty_members_list"
+            android:layout_below="@id/frmMList_top_control_bar" />
 
-    </LinearLayout>
-
-    </ScrollView>
+</RelativeLayout>

@@ -21,12 +21,52 @@
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
-        <item name="android:background">?android:attr/listDivider</item>
-
+        <!--  <item name="android:background">?android:attr/listDivider</item> -->
+        <item name="android:background">@color/light_blue</item>
     </style>
+
+    <!-- Text-->
+    <style name="beginMeetingDivider">
+    <item name="android:textColor">@color/ledger_link_white</item>
+    <item name="android:background">@color/ledger_link_light_blue</item>
+    <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="inTextHeader">
+        <item name="android:textColor">@color/ledger_link_black</item>
+    </style>
+
+    <!-- Text styles -->
+
 
     <style name="generalnotitle">
         <item name="android:windowNoTitle">true</item>
     </style>
 
+    <style name="editTextStyle">
+        <item name="android:textColor">@color/ledger_link_light_blue</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColorHint">@color/ledger_link_light_blue</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">@drawable/edit_text</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:paddingTop">5dip</item>
+        <item name="android:paddingBottom">5dip</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:inputType">textCapCharacters</item>
+        <item name="android:layout_centerHorizontal">true</item>
+    </style>
+
+    <style name="LoginButton">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/ledger_link_white</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:paddingTop">5dip</item>
+        <item name="android:paddingBottom">5dip</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:background">@drawable/button</item>
+    </style>
 </resources>

@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:orientation="vertical">
-    <RelativeLayout android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="5dp"
-                android:id="@+id/frmNCP_top_control_bar">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-        <TextView android:id="@+id/txtNCP_header"
-                  android:layout_width="wrap_content"
-                  android:padding="5dp"
-                  android:layout_height="wrap_content"
-                  android:gravity="left"
-                  android:text="Update register by adding new members and removing those who are no longer a part of your group."
-                />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/frmNCP_top_control_bar">
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:id="@+id/txtNCP_header"
+            android:layout_width="wrap_content"
+            android:padding="5dp"
+            android:layout_height="wrap_content"
+            android:text="Update register by adding new members and removing those who are no longer a part of your group." />
     </RelativeLayout>
 
-    <ListView android:id="@android:id/list"
-          android:layout_width="fill_parent"
-          android:layout_height="wrap_content"
-          android:choiceMode="singleChoice"
-          android:layout_below="@id/frmNCP_top_control_bar" >
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:choiceMode="singleChoice"
+        android:layout_below="@android:id/empty">
 
-          </ListView>
+    </ListView>
 
-    <TextView android:id="@android:id/empty"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/empty_members_list"
-          android:layout_below="@id/frmNCP_top_control_bar"
-           />
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@android:id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_members_list"
+        android:layout_below="@id/frmNCP_top_control_bar" />
 
 </RelativeLayout>

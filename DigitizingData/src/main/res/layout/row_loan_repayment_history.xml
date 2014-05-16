@@ -4,7 +4,8 @@
                 android:layout_height="wrap_content"
         >
 
-    <TextView
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
             android:id="@+id/txtRLRHLoanNo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -12,52 +13,42 @@
             android:layout_alignParentLeft="true"
             android:paddingTop="2dp"
             android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:textStyle="bold"
-            android:gravity="left"
-            android:text="Loan No:"
-            android:textSize="18sp" />
+            android:text="Loan No "/>
 
-    <TextView
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
             android:id="@+id/txtRLRHMeetingDate"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtRLRHLoanNo"
             android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:text="Date:"
-            android:textSize="16sp" />
+            android:text="Date " />
 
 
-    <TextView
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
             android:id="@+id/txtRLRHAmount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtRLRHMeetingDate"
             android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Amount:"
-            android:textSize="17sp" />
+            android:text="Amount "/>
 
-    <TextView
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
             android:id="@+id/txtRLRHRollover"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtRLRHAmount"
             android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Rollover:"
-            android:textSize="16sp" />
-    <TextView
+            android:text="Rollover " />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
             android:id="@+id/txtRLRHComments"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtRLRHRollover"
             android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Comments:"
-            android:textSize="16sp" />
+            android:text="Comments "/>
 </RelativeLayout>

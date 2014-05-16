@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- LedgerLink Theme -->
+    <style name="LedgerLinkTheme" parent="Theme.Sherlock.Light.DarkActionBar">
+        <item name="actionBarStyle">@style/LedgerLinkActionBarStyle</item>
+        <item name="actionBarTabBarStyle">@style/LedgerLinkActionBarTabBarStyle</item>
+        <item name="actionBarTabTextStyle">@style/LedgerLinkActionBarTabTextStyle</item>
+        <!--<item name="actionDropDownStyle">@style/LedgerLinkDropDownStyle</item>
+        <item name="android:dropDownItemStyle">@style/LedgerLinkDropDownItemStyle</item>
+        <item name="android:spinnerItemStyle">@style/LedgerLinkSpinnerItemStyle</item> -->
+      <!--  <item name="android:windowContentOverlay">@null</item> -->
+    </style>
+
+    <style name="LedgerLinkActionBarStyle" parent="Widget.Sherlock.Light.ActionBar">
+        <item name="android:background">@color/ledger_link_dark_blue</item>
+        <item name="titleTextStyle">@style/LedgerLinkActionBarTextAppearance</item>
+        <!--  <item name="android:subtitleTextStyle">@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle</item>-->
+    </style>
+
+    <style name="LedgerLinkActionBarTextAppearance" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <!-- <item name="android:textSize">@dimen/abs__action_bar_title_text_size</item> -->
+        <item name="android:textColor">@color/ledger_link_white</item>
+    </style>
+
+    <style name="LedgerLinkActionBarSubTitleTextAppearance" parent="TextAppearance.Sherlock.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">@color/ledger_link_white</item>
+    </style>
+
+    <style name="LedgerLinkActionBarTabBarStyle" parent="Widget.Sherlock.Light.ActionBar.TabView">
+        <item name="android:divider">@null</item>
+        <item name="android:background">@drawable/tab_indicator_ab</item>
+        <item name="android:paddingLeft">32dp</item>
+        <item name="android:paddingRight">32dp</item>
+    </style>
+
+    <style name="LedgerLinkActionBarTabTextStyle" parent="Widget.Sherlock.ActionBar.TabText">
+        <item name="android:textAppearance">@null</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:maxLines">2</item>
+    </style>
+
+    <!--<style name="LedgerLinkDropDownStyle" parent="Widget.Sherlock.Spinner.DropDown.ActionBar">
+        <item name="android:background">@drawable/abs__spinner_ab_holo_dark</item>
+        <item name="android:dropDownSelector">@drawable/abs__list_selector_holo_dark</item>
+        <item name="android:popupBackground">@drawable/abs__menu_dropdown_panel_holo_light</item>
+    </style>
+
+    <style name="LedgerLinkSpinnerItemStyle" parent="TextAppearance.Sherlock.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/ledger_link_white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="LedgerLinkDropDownItemStyle" parent="TextAppearance.Sherlock.Widget.DropDownItem">
+        <item name="android:textColor">@color/ledger_link_white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+    -->
+
+</resources>

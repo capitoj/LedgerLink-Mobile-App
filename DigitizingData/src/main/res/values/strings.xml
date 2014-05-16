@@ -18,12 +18,16 @@
     <string name="title_activity_meeting_send_data_frag">Send Data</string>
     <string name="title_activity_meeting_opening_cash_frag">Starting Cash</string>
     <string name="title_activity_gettings_started_wizard_add_member">Add Member</string>
+    <string name="title_activity_gettings_started_wizard_review_members">Review Members</string>
     <string name="title_activity_gettings_started_wizard_add_cycle">New Cycle</string>
     <string name="title_activity_gettings_started_wizard_page_1">Welcome</string>
     <string name="title_activity_gettings_started_wizard_page_2">Pass Code</string>
     <string name="activity_activation_vsla_passkey_info">Enter at least 5 digits that you will remember. A passkey is a secret number you will enter to open Ledger Link at every meeting.</string>
     <string name="title_activity_begin_meeting">Begin Meeting</string>
     <string name="title_activity_settings">App Settings</string>
+    <string name="image_content_desc">icon</string>
     <string name="title_activity_delete_meeting">DeleteMeetingActivity</string>
-
+    <string name="about_legal">All rights reserved. Not liable for any damage incurred from use of this software.</string>
+    <string name="about_version">Version 1.0.2</string>
+    <string name="action_about">About</string>
 </resources>

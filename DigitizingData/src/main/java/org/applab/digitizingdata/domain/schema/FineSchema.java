@@ -4,7 +4,7 @@ package org.applab.digitizingdata.domain.schema;
  * Created by Moses on 7/13/13.
  */
 public class FineSchema {
-    // Table: Savings
+    // Table: Fines
     public static final String TBL_FINES = "Fines";
     public static final String COL_F_FINE_ID = "_id";
     public static final String COL_F_MEETING_ID = "MeetingId";
@@ -18,7 +18,7 @@ public class FineSchema {
     public static String getCreateTableScript() {
         StringBuffer sb = null;
 
-        // Create Table: Savings
+        // Create Table: Fines
         sb = new StringBuffer();
         sb.append("CREATE TABLE " + TBL_FINES + " (");
         sb.append(COL_F_FINE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,");

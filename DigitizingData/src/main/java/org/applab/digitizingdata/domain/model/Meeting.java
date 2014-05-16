@@ -25,6 +25,10 @@ public class Meeting {
     private double closingBalanceBox;
     private boolean cashBookBalanced;
 
+    //flag of whether this is a Getting started wizard meeting
+    private boolean isGettingStarted;
+
+
     public double getOpeningBalanceBox() {
         return openingBalanceBox;
     }
@@ -175,10 +179,14 @@ public class Meeting {
         this.meetingDate = meetingDate;
         this.isStartOfCycle = isStartOfCycle;
         this.isEndOfCycle = isEndOfCycle;
+
+        //Ensure getting started flag defaults to false
+        setGettingStarted(false);
     }
 
     public Meeting() {
-
+        //Ensure getting started flag defaults to false
+        setGettingStarted(false);
     }
 
     public boolean sendMeetingData() {
@@ -191,5 +199,13 @@ public class Meeting {
 
     public boolean getMeetingData() {
         return true;
+    }
+
+    public boolean isGettingStarted() {
+        return isGettingStarted;
+    }
+
+    public void setGettingStarted(boolean gettingStarted) {
+        isGettingStarted = gettingStarted;
     }
 }

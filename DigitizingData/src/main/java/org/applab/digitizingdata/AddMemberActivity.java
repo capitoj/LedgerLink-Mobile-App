@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +25,15 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingFineRepo;
+import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
@@ -43,22 +50,29 @@ public class AddMemberActivity extends SherlockActivity {
     private boolean successAlertDialogShown = false;
     private boolean selectedFinishButton = false;
     private String dlgTitle = "Add Member";
+    private int meetingId;
+   private MeetingFineRepo fineRepo;
+    private MeetingRepo meetingRepo;
     MemberRepo repo;
+    Meeting targetMeeting;
     private boolean isEditAction;
 
 
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        if(getIntent().hasExtra("_isEditAction")){
-            this.isEditAction = getIntent().getBooleanExtra("_isEditAction",false);
+        if(getIntent().hasExtra("_meetingId")) {
+            meetingId = getIntent().getIntExtra("_meetingId", 0);
         }
         if(getIntent().hasExtra("_id")){
             this.selectedMemberId = getIntent().getIntExtra("_id",0);
         }
 
-
+        meetingRepo = new MeetingRepo(getApplicationContext());
+        targetMeeting = meetingRepo.getMeetingById(meetingId);
 
 
         // BEGIN_INCLUDE (inflate_set_custom_view)
@@ -139,7 +153,31 @@ public class AddMemberActivity extends SherlockActivity {
         //Setup the Spinner Items
         Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
         String[] genderList = new String[]{"Male", "Female"};
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item,genderList);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList)
+
+        {
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                return v;
+            }
+
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+
+        };
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboGender.setAdapter(adapter);
 
@@ -190,7 +228,7 @@ public class AddMemberActivity extends SherlockActivity {
         return true;
     }
 
-    private boolean saveMemberData() {
+    protected boolean saveMemberData() {
         boolean successFlg = false;
         AlertDialog dlg = null;
 
@@ -327,24 +365,24 @@ public class AddMemberActivity extends SherlockActivity {
         return successFlg;
     }
 
-    private boolean validateData(Member member) {
+    protected boolean validateData(Member member) {
         try {
             if(null == member) {
                 return false;
             }
-
+            repo = new MemberRepo(getApplicationContext());
             // Validate: MemberNo
             TextView txtMemberNo = (TextView)findViewById(R.id.txtAMMemberNo);
             String memberNo = txtMemberNo.getText().toString().trim();
             if (memberNo.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Member Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The Member Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtMemberNo.requestFocus();
                 return false;
             }
             else {
                 int theMemberNo = Integer.parseInt(memberNo);
                 if (theMemberNo <= 0) {
-                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Member Number must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, "The Member Number must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtMemberNo.requestFocus();
                     return false;
                 }
@@ -357,7 +395,7 @@ public class AddMemberActivity extends SherlockActivity {
             TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
             String surname = txtSurname.getText().toString().trim();
             if(surname.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtSurname.requestFocus();
                 return false;
             }
@@ -369,7 +407,7 @@ public class AddMemberActivity extends SherlockActivity {
             TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
             String otherNames = txtOtherNames.getText().toString().trim();
             if(otherNames.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtOtherNames.requestFocus();
                 return false;
             }
@@ -383,7 +421,7 @@ public class AddMemberActivity extends SherlockActivity {
             //String gender = txtGender.getText().toString().trim();
             String gender = cboGender.getSelectedItem().toString().trim();
             if(gender.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The Sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboGender.requestFocus();
                 return false;
             }
@@ -395,19 +433,19 @@ public class AddMemberActivity extends SherlockActivity {
             TextView txtAge = (TextView)findViewById(R.id.txtAMAge);
             String age = txtAge.getText().toString().trim();
             if (age.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The Age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtAge.requestFocus();
                 return false;
             }
             else {
                 int theAge = Integer.parseInt(age);
                 if (theAge <= 0) {
-                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Age must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, "The Age must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtAge.requestFocus();
                     return false;
                 }
                 else if(theAge > 120) {
-                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Age is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, "The Age is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtAge.requestFocus();
                     return false;
                 }
@@ -423,7 +461,7 @@ public class AddMemberActivity extends SherlockActivity {
             TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
             String occupation = txtOccupation.getText().toString().trim();
             if(occupation.length() < 1) {
-                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtOccupation.requestFocus();
                 return false;
             }
@@ -458,12 +496,12 @@ public class AddMemberActivity extends SherlockActivity {
             else {
                 theCycles = Integer.parseInt(cycles);
                 if (theCycles < 0) {
-                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The number of cycles must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, "The number of cycles must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtCycles.requestFocus();
                     return false;
                 }
                 else if(theCycles > 100) {
-                    Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtCycles.requestFocus();
                     return false;
                 }
@@ -493,6 +531,7 @@ public class AddMemberActivity extends SherlockActivity {
             return true;
         }
         catch (Exception ex){
+            ex.printStackTrace();
             return false;
         }
     }

@@ -1,121 +1,213 @@
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
-        <TextView
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:paddingLeft="5dp"
-                android:textStyle="bold"
-                android:textSize="18sp"
                 android:text="01-JUL-2013"
                 android:id="@+id/lblMOCFMeetingDate"
-                android:layout_gravity="center"/>
-        <LinearLayout
+                android:layout_gravity="center" />
+
+            <!-- Auto entered from figure left in the box at the end of previous meeting: The differnce of cash in bank and cash in box-->
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblExpectedStartingCash"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp">
+                android:layout_below="@id/lblMOCFMeetingDate"
+                android:text="Expected Starting Cash" />
 
-            <TextView
-                    android:id="@+id/lblMOCBalBfBox"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Balance In The Box:"
-                    android:textSize="16sp" />
-            <EditText
-                    android:id="@+id/txtMOCBalBfBox"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
-        </LinearLayout>
-
-        <LinearLayout
+            <!-- Date of Previous meeting, Previous Total Cah in Box , currency -->
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/ListSubItems"
+                android:id="@+id/lblTotalCashInBox"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp">
+                android:layout_below="@id/lblExpectedStartingCash"
+                android:text="4 Mar 2014 Total Cash in Box 1,000,000 UGX" />
 
-            <TextView
-                    android:id="@+id/lblMOCBalBfBank"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Cash Withdrawn From Bank:"
-                    android:textSize="16sp" />
-            <EditText
-                    android:id="@+id/txtMOCBalBfBank"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
-        </LinearLayout>
-
-        <LinearLayout
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/ListSubItems"
+                android:id="@+id/lblCashTakenToBank"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp">
+                android:layout_below="@id/lblTotalCashInBox"
+                android:text="Cash Taken to Bank 900,000 UGX" />
 
-            <TextView
-                    android:id="@+id/lblMOCFines"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Fines Paid:"
-                    android:textSize="16sp" />
-            <EditText
-                    android:id="@+id/txtMOCFines"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
-        </LinearLayout>
 
-        <LinearLayout
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblActualStartingCash"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp">
+                android:layout_below="@id/lblCashTakenToBank"
+                android:text="Actual Starting Cash" />
 
-            <TextView
-                    android:id="@+id/lblMOCTotal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="normal"
-                    android:text="Total Cash:"
-                    android:textSize="18sp" />
-            <TextView
-                    android:id="@+id/txtMOCTotal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="0"
-                    android:textSize="20sp" />
-        </LinearLayout>
-    </LinearLayout>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
+                android:id="@+id/txtActualStartingCash"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblActualStartingCash"
+                android:inputType="number"
+                android:text="" />
+
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblStartingCashCurrency"
+                android:layout_width="115dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblActualStartingCash"
+                android:inputType="number"
+                android:layout_toRightOf="@+id/txtActualStartingCash"
+                android:text=" UGX" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblStartingCashComment"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtActualStartingCash"
+                android:text="Comment" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
+                android:id="@+id/txtStartingCashComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblStartingCashComment"
+                android:inputType="textMultiLine" />
+
+        </RelativeLayout>
+
+        <!--   <org.applab.digitizingdata.fontutils.TypefaceTextView
+               style="@style/RegularText"
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="10dp"
+               android:paddingLeft="5dp"
+               android:text="01-JUL-2013"
+               android:id="@+id/lblMOCFMeetingDate"
+               android:layout_gravity="center" />
+
+           <LinearLayout
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical"
+               android:layout_marginTop="10dp">
+
+               <org.applab.digitizingdata.fontutils.TypefaceTextView
+                   style="@style/RegularText"
+                   android:id="@+id/lblMOCBalBfBox"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:gravity="left"
+                   android:text="Balance In The Box:" />
+
+               <org.applab.digitizingdata.fontutils.TypefaceEditText
+                   style="@style/NormalEditText"
+                   android:id="@+id/txtMOCBalBfBox"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:inputType="number"
+                   android:text="" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal"
+               android:layout_marginTop="5dp">
+
+               <org.applab.digitizingdata.fontutils.TypefaceTextView
+                   style="@style/RegularText"
+                   android:id="@+id/lblMOCBalBfBank"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:gravity="left"
+                   android:text="Actual Starting Cash" />
+
+               <org.applab.digitizingdata.fontutils.TypefaceEditText
+                   style="@style/NormalEditText"
+                   android:id="@+id/txtMOCBalBfBank"
+                   android:layout_width="200dip"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@id/lblMOCBalBfBank"
+                   android:inputType="number"
+                   android:text="" />
+
+               <org.applab.digitizingdata.fontutils.TypefaceTextView
+                   style="@style/RegularText"
+                   android:id="@+id/lblStartingCashCurrency"
+                   android:layout_width="115dp"
+                   android:layout_height="wrap_content"
+                   android:gravity="left"
+                   android:text="UGX"
+                   android:layout_gravity="right" />
+
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical"
+               android:layout_marginTop="5dp">
+
+               <org.applab.digitizingdata.fontutils.TypefaceTextView
+                   style="@style/RegularText"
+                   android:id="@+id/lblMOCFines"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:gravity="left"
+                   android:text="Fines Paid:" />
+
+               <org.applab.digitizingdata.fontutils.TypefaceEditText
+                   style="@style/NormalEditText"
+                   android:id="@+id/txtMOCFines"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:inputType="number"
+                   android:text="" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="fill_parent"
+               android:layout_height="wrap_content"
+               android:orientation="vertical"
+               android:layout_marginTop="10dp">
+
+               <org.applab.digitizingdata.fontutils.TypefaceTextView
+                   style="@style/RegularText"
+                   android:id="@+id/lblMOCTotal"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:gravity="left"
+                   android:text="Total Cash:" />
+
+               <org.applab.digitizingdata.fontutils.TypefaceTextView
+                   style="@style/RegularText"
+                   android:id="@+id/txtMOCTotal"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:gravity="left"
+                   android:text="0" />
+           </LinearLayout> -->
+
+    </RelativeLayout>
 </ScrollView>
 
 

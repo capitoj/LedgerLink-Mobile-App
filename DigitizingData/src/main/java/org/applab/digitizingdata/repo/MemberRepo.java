@@ -6,9 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.domain.model.MiddleCycleMember;
-import org.applab.digitizingdata.domain.model.VslaCycle;
+import android.widget.EditText;
+import android.widget.TextView;
+import org.applab.digitizingdata.R;
+import org.applab.digitizingdata.domain.model.*;
 import org.applab.digitizingdata.domain.schema.MemberSchema;
 import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
@@ -56,6 +57,8 @@ public class MemberRepo {
             values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
 
 
+
+
             // Inserting Row
             long retVal = db.insert(MemberSchema.getTableName(), null, values);
             if (retVal != -1) {
@@ -66,6 +69,7 @@ public class MemberRepo {
             }
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MemberRepo.addMember", ex.getMessage());
             return false;
         }
@@ -75,6 +79,222 @@ public class MemberRepo {
             }
         }
     }
+
+
+
+
+
+
+    // Inserts the new member, and updates the members loans and savings in the dummy meeting
+    public boolean addGettingStartedWizardMember(Member member) {
+        SQLiteDatabase db = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(MemberSchema.COL_M_MEMBER_NO, member.getMemberNo());
+            values.put(MemberSchema.COL_M_SURNAME, member.getSurname());
+            values.put(MemberSchema.COL_M_OTHER_NAMES, member.getOtherNames());
+            values.put(MemberSchema.COL_M_OCCUPATION, member.getOccupation());
+            values.put(MemberSchema.COL_M_GENDER, member.getGender());
+
+            if(member.getDateOfBirth() == null) {
+                member.setDateOfBirth(new Date());
+            }
+            values.put(MemberSchema.COL_M_DATE_OF_BIRTH, Utils.formatDateToSqlite(member.getDateOfBirth()));
+            values.put(MemberSchema.COL_M_PHONE_NO, member.getPhoneNumber());
+            if(member.getDateOfAdmission() == null) {
+                member.setDateOfAdmission(new Date());
+            }
+            values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
+
+            // Inserting Row
+            long retVal = db.insert(MemberSchema.getTableName(), null, values);
+            if (retVal != -1) {
+                Log.d(context.getPackageName(), "GSW member added "+member.getSurname()+" - ret val is "+retVal);
+                //set the members id now
+                member.setMemberId((int) retVal);
+                MeetingSavingRepo repo = new MeetingSavingRepo(context);
+
+                MeetingRepo meetingRepo = new MeetingRepo(context);
+                Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+                boolean savingResult = repo.saveMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), (int) retVal, member.getSavingsOnSetup());
+
+                if( ! savingResult) {
+                    Log.d(context.getPackageName(), "Savings to date could not be added for member "+member.getSurname());
+                    System.out.println("Savings to date could not be added for member "+member.getSurname());
+                    return false;
+                }
+                else {
+                    Log.d(context.getPackageName(), "Savings to date added for member "+member.getSurname());
+                    //Save loan IFF loan amount on setup is greater than zero
+                    if(member.getOutstandingLoanOnSetup() <= 0) {
+                        Log.d(context.getPackageName(), "Saving of loan on setup skipped because loan amount is "+member.getOutstandingLoanOnSetup());
+                       return savingResult;
+                    }
+
+
+                    //Save the loan
+                    boolean loanSaveResult = updateMemberLoanOnSetup(member);
+                    if( ! loanSaveResult ) {
+                        Log.d(context.getPackageName(), "Failed to save GSW loan on setup"+member.getSurname());
+                    }
+                }
+
+
+
+                return true;
+            }
+            else {
+                Log.d(context.getPackageName(), "GSW member not added "+member.getSurname());
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+       //     Log.e("MemberRepo.addMember", ex.getMessage().toString());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
+    public boolean updateMemberLoanOnSetup(Member member) {
+        Log.d(context.getPackageName(), "Metrod entry updateMemberLoanOnSetup");
+        boolean savingResult = false;
+        MeetingRepo meetingRepo = new MeetingRepo(context);
+
+
+        Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+
+        //If loan on setup exists, then update else insert
+        MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
+        MeetingLoanIssued loanIssuedToMemberInMeeting = meetingLoanIssuedRepo.getLoanIssuedToMemberInMeeting(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
+
+        final Calendar c = Calendar.getInstance();
+        c.setTime(dummyGettingStartedWizardMeeting.getMeetingDate());
+        c.add(Calendar.MONTH, 1);
+
+        if(loanIssuedToMemberInMeeting == null) {
+            Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued not found, so create new record");
+        if(member.getOutstandingLoanOnSetup() <= 0) {
+            Log.d(context.getPackageName(), "Saving of loan on setup skipped because loan amount is "+member.getOutstandingLoanOnSetup());
+            return true;
+        }
+        meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
+        int loanId = meetingLoanIssuedRepo.getMemberLoanId(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
+
+        //First get the Interest Rate for the Current Cycle
+        double interest = 0.0;
+
+        //Save the loan
+        boolean loanSaveResult = meetingLoanIssuedRepo.saveMemberLoanIssue(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), loanId, member.getOutstandingLoanOnSetup(),interest, c.getTime());
+
+        Log.d(context.getPackageName(), "updateMemberLoanOnSetup: Create record for loan on setup, Result:"+loanSaveResult);
+
+
+        return loanSaveResult;
+        }
+        else {
+            //Update loan balances
+            Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued record found, update it");
+            meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
+            return meetingLoanIssuedRepo.updateMemberLoanBalances(loanIssuedToMemberInMeeting.getLoanId(),0,member.getOutstandingLoanOnSetup(),loanIssuedToMemberInMeeting.getDateDue()) ;
+        }
+    }
+
+
+    public boolean updateGettingStartedWizardMember(Member member){
+        SQLiteDatabase db = null;
+
+        try {
+            if(member == null){
+                return false;
+            }
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(MemberSchema.COL_M_MEMBER_NO, member.getMemberNo());
+            values.put(MemberSchema.COL_M_SURNAME, member.getSurname());
+            values.put(MemberSchema.COL_M_OTHER_NAMES, member.getOtherNames());
+            values.put(MemberSchema.COL_M_OCCUPATION, member.getOccupation());
+            values.put(MemberSchema.COL_M_GENDER, member.getGender());
+            if(member.getDateOfBirth() == null) {
+                member.setDateOfBirth(new Date());
+            }
+            values.put(MemberSchema.COL_M_DATE_OF_BIRTH, Utils.formatDateToSqlite(member.getDateOfBirth()));
+            values.put(MemberSchema.COL_M_PHONE_NO, member.getPhoneNumber());
+            if(member.getDateOfAdmission() == null) {
+                member.setDateOfAdmission(new Date());
+            }
+            values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
+
+
+            // updating row
+            int retVal = db.update(MemberSchema.getTableName(), values, MemberSchema.COL_M_MEMBER_ID + " = ?",
+                    new String[] { String.valueOf(member.getMemberId()) });
+
+            if (retVal > 0) {
+                //Update savings at setup
+                MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
+                MeetingRepo meetingRepo = new MeetingRepo(context);
+                boolean updateReturnValue = meetingSavingRepo.saveMemberSaving(meetingRepo.getDummyGettingStartedWizardMeeting().getMeetingId(), member.getMemberId(), member.getSavingsOnSetup());
+
+                if(updateReturnValue) {
+                    Log.d(context.getPackageName(), "Savings to date saved for member "+member.getSurname());
+
+
+
+                    //Save the loan
+                    boolean loanSaveResult = updateMemberLoanOnSetup(member);
+                    if( ! loanSaveResult ) {
+                        Log.d(context.getPackageName(), "Failed to save GSW loan on setup"+member.getSurname());
+                    }
+                }
+
+                //TODO: Update loans
+
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            Log.e("MemberRepo.updateGettingStartedMember", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    //Loads the saavings at setup and loans at setup for the member
+     public boolean loadMemberGettingStartedWizardValues(Member member) {
+         MeetingRepo meetingRepo = new MeetingRepo(context);
+         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+
+         MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
+         Log.d(context.getPackageName(), "Member id is "+member.getMemberId());
+         MeetingLoanIssued loanIssuedToMemberInMeeting = meetingLoanIssuedRepo.getLoanIssuedToMemberInMeeting(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
+
+         //If loan object is null, set the loan on setup as 0
+         Log.d(context.getPackageName(), "Loan Issued To Member object is "+loanIssuedToMemberInMeeting);
+         member.setOutstandingLoanOnSetup(loanIssuedToMemberInMeeting == null ? 0 : loanIssuedToMemberInMeeting.getLoanBalance());
+
+         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
+         double memberSaving = meetingSavingRepo.getMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
+         member.setSavingsOnSetup(memberSaving);
+         return true;
+     }
+
+
 
     public ArrayList<Member> getAllMembers() {
 
@@ -109,6 +329,9 @@ public class MemberRepo {
                     member.setOccupation(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_OCCUPATION)));
                     member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
 
+                    if(! loadMemberGettingStartedWizardValues(member)) {
+                        Log.d(context.getPackageName(), "Failed to load Loan at setup and saving at setup for member "+member.getFullNames());
+                    }
                     if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
                         member.setDateOfBirth(new Date());
                     }
@@ -131,6 +354,7 @@ public class MemberRepo {
             return members;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MemberRepo.getAllMembers", ex.getMessage());
             return new ArrayList<Member>();
         }
@@ -173,6 +397,7 @@ public class MemberRepo {
             member.setGender(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_GENDER)));
             member.setOccupation(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_OCCUPATION)));
             member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
+            loadMemberGettingStartedWizardValues(member);
 
             if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
                 member.setDateOfBirth(new Date());
@@ -186,10 +411,12 @@ public class MemberRepo {
             else {
                 member.setDateOfAdmission(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))));
             }
+
             // return the entity
             return member;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MemberRepo.getMemberById", ex.getMessage());
             return null;
         }
@@ -248,6 +475,7 @@ public class MemberRepo {
             return member;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MemberRepo.getMemberByMemberNo", ex.getMessage());
             return null;
         }
@@ -299,6 +527,7 @@ public class MemberRepo {
             }
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MemberRepo.updateMember", ex.getMessage());
             return false;
         }
@@ -323,6 +552,7 @@ public class MemberRepo {
                     new String[] { String.valueOf(member.getMemberId()) });
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MemberRepo.deleteMember", ex.getMessage());
             return;
         }
@@ -341,7 +571,7 @@ public class MemberRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             cursor = db.query(MemberSchema.getTableName(), MemberSchema.getColumnListArray(),
                     MemberSchema.COL_M_MEMBER_ID + "<>? and " + MemberSchema.COL_M_MEMBER_NO + "=?",
-                    new String[] { String.valueOf(memberId), String.valueOf(memberNo) }, null, null, null, null);
+                    new String[]{String.valueOf(memberId), String.valueOf(memberNo)}, null, null, null, null);
 
             if(cursor == null){
                 return true;
@@ -355,6 +585,7 @@ public class MemberRepo {
             return false;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MemberRepo.isMemberNoAvailable", ex.getMessage());
             return false;
         }
@@ -369,37 +600,5 @@ public class MemberRepo {
         }
     }
 
-    public boolean addMiddleCycleMember(MiddleCycleMember member) {
-        //First add member
-        boolean  retValue = false;
-        retValue = addMember(member);
 
-        if(!retValue)
-        {
-            return retValue;
-        }
-
-
-        //Save the savings and outstanding loan
-
-
-        return retValue;
-
-    }
-
-    public boolean updateMiddleCycleMember(MiddleCycleMember member) {
-        boolean  retValue = false;
-        retValue = updateMember(member);
-
-        if(!retValue)
-        {
-            return retValue;
-        }
-
-
-        //Save the savings and outstanding loan
-
-
-        return retValue;
-    }
 }

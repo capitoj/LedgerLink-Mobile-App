@@ -26,6 +26,8 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
@@ -84,6 +86,8 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
@@ -466,7 +470,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        LoanRepaymentHistoryArrayAdapter adapter = new LoanRepaymentHistoryArrayAdapter(MemberLoansRepaidHistoryActivity.this, loanRepayments);
+        LoanRepaymentHistoryArrayAdapter adapter = new LoanRepaymentHistoryArrayAdapter(MemberLoansRepaidHistoryActivity.this, loanRepayments, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
         setListAdapter(adapter);

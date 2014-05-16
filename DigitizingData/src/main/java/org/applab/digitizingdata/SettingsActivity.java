@@ -3,10 +3,14 @@ package org.applab.digitizingdata;
 /**
  * Created by Moses on 3/20/14.
  */
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String PREF_KEY_SERVER_URL = "prefServerUrl";
@@ -25,6 +29,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         addPreferencesFromResource(R.xml.preferences);
     }
 
@@ -46,6 +52,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
                 runInTrainingModePref.setTitle(TITLE_EXECUTION_MODE_TRAINING);
                 runInTrainingModePref.setSummary("You are currently working on Training Data. Be sure to switch back to Actual VSLA Data to continue capturing meeting data.");
             }
+            restartApplication();
+
         }
     }
 
@@ -61,5 +69,18 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         super.onPause();
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    private void restartApplication()
+    {
+
+        if (null != getApplicationContext())
+        {
+
+        Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(
+                getBaseContext().getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
+        }
     }
 }

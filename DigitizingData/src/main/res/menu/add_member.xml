@@ -3,12 +3,12 @@
           android:title="enter next"
           android:orderInCategory="0"
           android:showAsAction="never"
-          android:icon="@drawable/social_add_person"
+          android:icon="@drawable/ic_social_add_person"
             />
     <item android:id="@+id/mnuAMFinished"
           android:title="finished"
           android:orderInCategory="1"
           android:showAsAction="never"
-          android:icon="@drawable/navigation_accept"
+          android:icon="@drawable/ic_navigation_accept"
             />
 </menu>

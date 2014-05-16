@@ -1,102 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
-            android:textStyle="bold"
-            android:textSize="24sp"
             android:text="Moses Oscar Muhahala"
             android:id="@+id/lblMSHFullNames"
-            android:layout_gravity="center"/>
-    <TextView
+            android:layout_gravity="center" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
-            android:textStyle="bold"
-            android:textSize="18sp"
             android:text="01-JUL-2013"
             android:id="@+id/lblMSHMeetingDate"
-            android:layout_gravity="center"/>
-    <TextView
+            android:layout_gravity="center" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textSize = "18sp"
             android:text="Amount"
-            android:id="@+id/lblMSHAmount"/>
+            android:id="@+id/lblMSHAmount" />
 
-    <LinearLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:weightSum="10" >
+            android:weightSum="10">
 
-        <EditText
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
                 android:id="@+id/txtMSHAmount"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:layout_weight="6"
                 android:inputType="number"
-                android:textSize="18sp"
                 android:textAlignment="viewEnd"
                 android:imeOptions="actionDone"
-                android:text=""/>
-        <TextView
+                android:text="" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:textSize = "16sp"
                 android:text="UGX"
-                android:id="@+id/lblMSHCurrency"/>
-    </LinearLayout>
+                android:id="@+id/lblMSHCurrency" />
+        </LinearLayout>
 
-    <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/SubHeading"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_height="25dip"
             android:paddingLeft="5dp"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="#FFFFFF"
-            android:background="#3b5998"
             android:text="HISTORY"
-            android:id="@+id/lblMSHSection1"
-            android:layout_gravity="left"/>
+            android:id="@+id/lblMSHSection1"/>
 
-    <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:paddingLeft="5dp"
-            android:textStyle="bold"
-            android:textSize="18sp"
             android:text="Total Savings: 15,000 UGX"
-            android:id="@+id/lblMSHTotalSavings"
-            android:layout_gravity="left"/>
+            android:id="@+id/lblMSHTotalSavings"/>
 
-    <ListView android:id="@android:id/list"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:choiceMode="singleChoice"
-            />
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:choiceMode="singleChoice" />
 
-    <TextView android:id="@android:id/empty"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="No History"
-            />
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:id="@android:id/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No History" />
 
-</LinearLayout>
-    </ScrollView>
+    </LinearLayout>
+</ScrollView>

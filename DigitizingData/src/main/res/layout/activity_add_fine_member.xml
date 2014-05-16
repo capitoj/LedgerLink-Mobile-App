@@ -1,0 +1,83 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/InTextHeader"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="FINE MEMBER"
+            android:id="@+id/lblMemberFinesHeader" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Select type of fine and the amount. Check the box if the member has paid."
+            android:id="@+id/lblFMessage"
+            android:layout_below="@id/lblMemberFinesHeader" />
+
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/ListSubItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Fine Type"
+            android:id="@+id/lblFineType"
+            android:layout_below="@id/lblFMessage"
+
+            />
+
+        <Spinner
+            style="@style/Spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Latecoming"
+            android:id="@+id/cboFineType"
+            android:layout_below="@id/lblFineType" />
+        <!-- android:layout_below="@id/lblFineFullName"-->
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/ListSubItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Amount"
+            android:id="@+id/lblMemberFineAmount"
+            android:layout_below="@id/cboFineType" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceEditText
+            style="@style/NormalEditText"
+            android:id="@+id/txtFFineAmount"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:text=""
+            android:layout_below="@id/lblMemberFineAmount" />
+
+        <CheckBox
+style="@style/Checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chkFPaidStatus"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_below="@id/txtFFineAmount"
+            android:checked="false"
+            />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/Checkbox"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Paid"
+            android:id="@+id/lblFPaid"
+            android:layout_toRightOf="@id/chkFPaidStatus"
+            android:layout_below="@+id/txtFFineAmount" />
+
+    </RelativeLayout>
+</ScrollView>

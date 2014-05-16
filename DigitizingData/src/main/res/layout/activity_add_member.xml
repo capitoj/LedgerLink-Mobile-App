@@ -1,112 +1,93 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:orientation="vertical"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
-        <!-- I fully qualify the names coz R.id is universal -->
+
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/SmallerRegularText"
+                android:id="@+id/lblAMInstruction"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp">
+                android:text="('*' = required)" />
 
-            <TextView
-                    android:id="@+id/lblAMInstruction"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="('*' = required)"
-                    android:textSize="14sp" />
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblAMMemberNo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Member No *:" />
 
-            <TextView
-                    android:id="@+id/lblAMMemberNo"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="Member No *:"
-                    android:textSize="16sp" />
-            <EditText
-                    android:id="@+id/txtAMMemberNo"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
+                android:id="@+id/txtAMMemberNo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblAMSurname"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp">
+                android:text="Surname *" />
 
-            <TextView
-                    android:id="@+id/lblAMSurname"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="Surname *"
-                    android:textSize="16sp" />
-            <EditText
-                    android:id="@+id/txtAMSurname"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
+                android:id="@+id/txtAMSurname"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblAMOtherNames"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp">
+                android:text="Other Names *" />
 
-            <TextView
-                    android:id="@+id/lblAMOtherNames"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="Other Names *"
-                    android:textSize="16sp" />
-            <EditText
-                    android:id="@+id/txtAMOtherNames"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
+                android:id="@+id/txtAMOtherNames"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:text="" />
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblAMGender"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                >
-
-            <TextView
-                    android:id="@+id/lblAMGender"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="Gender *"
-                    android:textSize="16sp" />
+                android:text="Gender *" />
             <!--
             <EditText
                     android:id="@+id/txtAMGender"
@@ -117,115 +98,98 @@
                     android:textSize="18sp"
                     android:text=""/>
                     -->
-            <Spinner android:id="@+id/cboAMGender"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:spinnerMode="dropdown"
-                    android:prompt="@string/add_member_gender_prompt"
-                    />
+            <Spinner
+                android:id="@+id/cboAMGender"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:spinnerMode="dropdown"
+                android:gravity="left"
+                android:prompt="@string/add_member_gender_prompt" />
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblAMAge"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                >
+                android:text="Age *" />
 
-            <TextView
-                    android:id="@+id/lblAMAge"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="Age *"
-                    android:textSize="16sp" />
-            <EditText
-                    android:id="@+id/txtAMAge"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
+                android:id="@+id/txtAMAge"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblAMOccupation"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                >
+                android:text="Occupation *" />
 
-            <TextView
-                    android:id="@+id/lblAMOccupation"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="Occupation *"
-                    android:textSize="16sp" />
-            <EditText
-                    android:id="@+id/txtAMOccupation"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
+                android:id="@+id/txtAMOccupation"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:text="" />
         </LinearLayout>
+
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblAMPhone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                >
+                android:text="Phone Number" />
 
-            <TextView
-                    android:id="@+id/lblAMPhone"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="Phone Number"
-                    android:textSize="16sp" />
-            <EditText
-                    android:id="@+id/txtAMPhoneNo"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
+                android:id="@+id/txtAMPhoneNo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:text="" />
         </LinearLayout>
+
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblAMCyclesCompleted"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                >
+                android:text="Number of cycles completed" />
 
-            <TextView
-                    android:id="@+id/lblAMCyclesCompleted"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textStyle="bold"
-                    android:text="Number of cycles completed"
-                    android:textSize="16sp" />
-            <EditText
-                    android:id="@+id/txtAMCycles"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/NormalEditText"
+                android:id="@+id/txtAMCycles"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

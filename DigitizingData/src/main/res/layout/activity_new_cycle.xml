@@ -1,211 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
-    <LinearLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-        <TextView
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                 android:id="@+id/lblNCHeader"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:layout_marginTop="10dp"
-                android:text="Enter all cycle information then select next."
-                android:textSize="16sp"
-                android:layout_marginBottom="20dp"/>
-    </LinearLayout>
+                android:text="Enter all cycle information then select next." />
+        </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="10dp">
-
-                <!-- I fully qualify the names coz R.id is universal -->
-
-                <TextView
-                        android:id="@+id/lblNCSharePrice"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:textStyle="bold"
-                        android:text="Star (Share) value"
-                        android:textSize="16sp" />
-                <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:textSize = "14sp"
-                        android:text="Amount that it costs to buy one share"
-                        android:id="@+id/lblNCShareValueDesc"/>
-          <LinearLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:weightSum="10" >
-                <EditText
-                        android:id="@+id/txtNCSharePrice"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="6"
-                        android:inputType="number"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:text=""/>
-                <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="4"
-                        android:textSize = "18sp"
-                        android:text="UGX"
-                        android:id="@+id/lblNCCurrency"/>
-          </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="10dp">
-
-                <TextView
-                        android:id="@+id/lblNCMaxShares"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="Maximum number of stars (shares) a member may purchase per meeting"
-                        android:textSize="14dp"
-                        android:layout_marginTop="10dp"/>
-
-                <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:weightSum="10" >
-
-                <EditText
-                        android:id="@+id/txtNCMaxShares"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:layout_weight="6"
-                        android:textStyle="bold"
-                        android:textSize="18sp" />
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:paddingLeft="5dp"
-                            android:layout_weight="4"
-                            android:textSize = "18sp"
-                            android:text="Stars"
-                            android:id="@+id/lblNCSpace1"/>
-            </LinearLayout>
-                </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="10dp"
-                    >
-
-                <TextView
-                        android:id="@+id/lblNCStartDate"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:gravity="left"
-                        android:text="Date your cycle will begin"
-                        android:textSize="16sp"/>
-
-                <TextView
-                        android:id="@+id/txtNCStartDate"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:text="01-Jul-2013"
-                        android:textStyle="bold"
-                        android:textColor="#0000FF"
-                        android:textSize="20sp"
-                        android:focusable="true"
-                        android:clickable="true"/>
-            </LinearLayout>
-
-            <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginLeft="10dp">
-
-                <TextView
-                        android:id="@+id/lblNCEndDate"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:gravity="left"
-                        android:text="Date your cycle will end"
-                        android:textSize="16sp"
-                        />
-
-                <TextView
-                        android:id="@+id/txtNCEndDate"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:textStyle="bold"
-                        android:textColor="#0000FF"
-                        android:text="30-Jun-2013"
-                        android:textSize="20sp"
-                        android:focusable="true"
-                        android:clickable="true"/>
-            </LinearLayout>
-
-    <LinearLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp">
+            android:orientation="vertical">
 
-        <TextView
+            <!-- I fully qualify the names coz R.id is universal -->
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblNCSharePrice"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Star (Share) value: Amount that it costs to buy one share " />
+            <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
+                 style="@style/RegularText"
+                 android:layout_width="fill_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="1dp"
+                 android:text="Amount that it costs to buy one share"
+                 android:id="@+id/lblNCShareValueDesc"/> -->
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="10">
+
+                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    style="@style/NormalEditText"
+                    android:id="@+id/txtNCSharePrice"
+                    android:layout_width="600dip"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="8"
+                    android:inputType="number"
+                    android:text="" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="4"
+                    android:text="UGX"
+                    android:id="@+id/lblNCCurrency" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblNCMaxShares"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Maximum number of stars (shares) a member may purchase per meeting" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="10">
+
+                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    style="@style/NormalEditText"
+                    android:id="@+id/txtNCMaxShares"
+                    android:layout_width="300dip"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_weight="7" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:paddingLeft="5dp"
+                    android:layout_weight="4"
+                    android:text="Stars"
+                    android:id="@+id/lblNCSpace1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblNCStartDate"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Date your cycle will begin" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/TextAccentColor"
+                android:id="@+id/txtNCStartDate"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="01-Jul-2013"
+                android:focusable="true"
+                android:clickable="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lblNCEndDate"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Date your cycle will end" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/TextAccentColor"
+                android:id="@+id/txtNCEndDate"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="30-Jun-2013"
+                android:focusable="true"
+                android:clickable="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                 android:id="@+id/lblNCInterestRate"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="Loan Interest Rate per Month"
-                android:textSize="14dp"
-                android:layout_marginTop="10dp"/>
+                android:text="Loan Interest Rate per Month" />
 
-        <LinearLayout
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="10" >
+                android:weightSum="10">
 
-            <EditText
+                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    style="@style/NormalEditText"
                     android:id="@+id/txtNCInterestRate"
-                    android:layout_width="fill_parent"
+                    android:layout_width="350dip"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:layout_weight="8"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
-            <TextView
+                    android:layout_weight="7" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:paddingLeft="5dp"
                     android:layout_weight="2"
-                    android:textSize = "18sp"
-                    android:textStyle="bold"
                     android:text="%"
-                    android:id="@+id/lblNCSpaceIntRate"/>
+                    android:id="@+id/lblNCSpaceIntRate" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-</LinearLayout>
-    </ScrollView>
+    </LinearLayout>
+</ScrollView>

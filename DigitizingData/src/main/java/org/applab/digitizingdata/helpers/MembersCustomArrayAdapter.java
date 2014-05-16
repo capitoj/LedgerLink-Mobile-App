@@ -1,6 +1,7 @@
 package org.applab.digitizingdata.helpers;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,13 @@ public class MembersCustomArrayAdapter extends ArrayAdapter<Member> {
     Context context;
     ArrayList<Member> values;
     int position;
+    Typeface typeface;
 
-    public MembersCustomArrayAdapter(Context context, ArrayList<Member> values) {
+    public MembersCustomArrayAdapter(Context context, ArrayList<Member> values, String font) {
         super(context, R.layout.memberlistrowlayout, values);
         this.context = context;
         this.values = values;
+        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
     }
 
     @Override
@@ -41,6 +44,10 @@ public class MembersCustomArrayAdapter extends ArrayAdapter<Member> {
             //Get the Widgets
             final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtMFullNames);
             final TextView txtPhoneNo = (TextView)rowView.findViewById(R.id.txtMPhoneNo);
+
+            // Set Typeface
+            txtFullNames.setTypeface(typeface);
+            txtPhoneNo.setTypeface(typeface);
 
             //Assign Values to the Widgets
             txtFullNames.setText(values.get(position).toString());

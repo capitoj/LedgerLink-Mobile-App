@@ -1,16 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This will display a distinguishable background with words TRAINING MODE -->
+<?xml version="1.0" encoding="utf-8"?><!-- This will display a distinguishable background with words TRAINING MODE -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:background="#FF0000"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@drawable/red"
     android:layout_height="match_parent">
-    <TextView
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/TrainingModeBanner"
         android:id="@+id/lblMainTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textStyle="bold"
-        android:text="IN TRAINING MODE"
-        android:textSize="24sp" />
-
+        android:text="IN TRAINING MODE" />
 </LinearLayout>

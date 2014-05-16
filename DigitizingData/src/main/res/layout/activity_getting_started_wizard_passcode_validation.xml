@@ -1,55 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
-    <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp">
+            android:orientation="vertical">
 
-
-        <TextView android:id="@+id/txtNCP_header"
-                  android:layout_width="wrap_content"
-                  android:padding="5dp"
-                  android:layout_height="wrap_content"
-                  android:gravity="left"
-                  android:text="Savings Group Name"
-                />
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularTextBold"
+                android:id="@+id/txtNCP_header"
+                android:layout_width="wrap_content"
+                android:padding="5dp"
+                android:layout_height="wrap_content"
+                android:text="Savings Group Name" />
 
         </LinearLayout>
 
-        <LinearLayout android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical"
-                      android:layout_marginLeft="10dp"
-                      android:layout_marginTop="10dp">
-        <TextView android:id="@+id/lblGSW_passkey"
-                  android:layout_width="wrap_content"
-                  android:padding="5dp"
-                  android:layout_height="wrap_content"
-                  android:gravity="left"
-                  android:text="Enter the Pass Key you were given"
-                />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <EditText android:id="@+id/txtGSW_passkey"
-                      android:layout_width="fill_parent"
-                      android:layout_height="wrap_content"
-                      android:inputType="number"
-                      android:textStyle="bold"
-                      android:textSize="18sp"
-                      android:text=""
-                    />
+            <!--            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                            android:id="@+id/lblGSW_passkey"
+                              android:layout_width="wrap_content"
+                              android:padding="5dp"
+                              android:layout_height="wrap_content"
+                              android:gravity="left"
+                              android:text="Enter the Pass Key you were given"
+                            /> -->
+
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                style="@style/EditTextStyle"
+                android:id="@+id/txtGSW_passkey"
+                android:layout_width="265dip"
+                android:layout_height="wrap_content"
+                android:inputType="numberPassword"
+                android:layout_gravity="center_horizontal"
+                android:hint="Enter Pass Key Here Again"
+                android:text="" />
         </LinearLayout>
 
 
-     </LinearLayout>
+    </LinearLayout>
 </ScrollView>

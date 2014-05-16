@@ -16,6 +16,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockListFragment;
 
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersRollCallArrayAdapter;
@@ -46,6 +48,8 @@ public class MeetingRollCallFrag extends SherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         actionBar = getSherlockActivity().getSupportActionBar();
         String title = "Meeting";
         switch(Utils._meetingDataViewMode) {
@@ -78,7 +82,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        MembersRollCallArrayAdapter adapter = new MembersRollCallArrayAdapter(getSherlockActivity().getBaseContext(), members);
+        MembersRollCallArrayAdapter adapter = new MembersRollCallArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
         //Pass on the meeting Id to the adapter
         adapter.setMeetingId(meetingId);
         ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMRCFMembers);

@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             style="android:actionButtonStyle"
-             android:id="@+id/actionbar_enter_next"
-             android:layout_width="0dp"
-             android:layout_height="match_parent"
-             android:layout_weight="1">
+    style="android:actionButtonStyle"
+    android:id="@+id/actionbar_enter_next"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1">
 
-    <TextView style="android:actionBarTabTextStyle"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:paddingRight="5dp"
-              android:drawableLeft="@drawable/social_add_person"
-              android:drawablePadding="5dp"
-              android:gravity="center_vertical"
-              android:text="Enter Next" />
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ActionBarMenuItemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="3dip"
+        android:layout_gravity="center"
+        android:drawableLeft="@drawable/ic_social_add_person"
+        android:drawablePadding="3dip"
+        android:gravity="center_vertical"
+        android:text="Enter \nNext" />
 </FrameLayout>
+
+    <!-- android:paddingLeft="10dp"
+        android:paddingRight="1dp"
+        android:drawableLeft="@drawable/ic_social_add_person"
+        android:drawablePadding="3dp"-->

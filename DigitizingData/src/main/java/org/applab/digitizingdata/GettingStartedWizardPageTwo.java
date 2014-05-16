@@ -8,6 +8,9 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
@@ -17,9 +20,12 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
     VslaInfo vslaInfo = null;
     ActionBar actionBar;
 
+    TextView savingsGroupName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
 
         setContentView(R.layout.activity_getting_started_wizard_passcode_validation);
@@ -31,6 +37,10 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
 
         vslaInfoRepo = new VslaInfoRepo(this);
         vslaInfo = vslaInfoRepo.getVslaInfo();
+
+        savingsGroupName = (TextView)findViewById(R.id.txtNCP_header);
+        savingsGroupName.setText(vslaInfo.getVslaName());
+
     }
 
 
@@ -60,13 +70,12 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
             txtPassKey = (TextView)findViewById(R.id.txtGSW_passkey);
             String passKey = txtPassKey.getText().toString().trim();
 
-            //Test purposes
-            vslaInfo.setPassKey("");
 
             if(passKey.equalsIgnoreCase(vslaInfo.getPassKey())) {
-                Intent mainMenu = new Intent(getBaseContext(), GettingsStartedWizardNewCycleActivity.class);
+                //Decide which activity to launch, from the current Getting started wizard stage
+                Intent stage = new Intent(getBaseContext(), Utils.resolveGettingStartedWizardStage(vslaInfo.getGettingStartedWizardStage()));
 
-                startActivity(mainMenu);
+                startActivity(stage);
             }
             else {
                 Utils.createAlertDialogOk(this, "Security", "The Pass Key is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@+id/txtMListFullNames"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:padding="5dp"
+        android:text="FULL NAMES" />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
+        android:id="@+id/txtMListTotalSavings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtMListFullNames"
+        android:paddingLeft="5dp"
+        android:text="Savings: 55,000UGX" />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
+        android:id="@+id/txtMListTotalLoans"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtMListTotalSavings"
+        android:paddingLeft="5dp"
+        android:text="Loans: 40,000UGX" />
+
+
+</RelativeLayout>

@@ -18,10 +18,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.digitizingdata.LoginActivity;
 import org.applab.digitizingdata.MainActivity;
+import org.applab.digitizingdata.datatransformation.FinesDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.LoanDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.RepaymentDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingFine;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.domain.model.VslaInfo;
@@ -53,6 +55,9 @@ public class SendDataRepo {
     public static final String MEETING_DETAILS_ITEM_KEY = "meetingDetails";
     public static final String ATTENDANCE_ITEM_KEY = "attendance";
     public static final String SAVINGS_ITEM_KEY = "savings";
+    public static final String FINES_ITEM_KEY = "fines";
+    public static final String CASHBOOK_ITEM_KEY = "cashBook";
+    public static final String OPENING_CASH_ITEM_KEY = "openingCash";
     public static final String LOANS_ITEM_KEY = "loans";
     public static final String REPAYMENTS_ITEM_KEY = "repayments";
 
@@ -72,6 +77,9 @@ public class SendDataRepo {
         meetingDataItems.put(5, SAVINGS_ITEM_KEY);
         meetingDataItems.put(6, LOANS_ITEM_KEY);
         meetingDataItems.put(7, REPAYMENTS_ITEM_KEY);
+        meetingDataItems.put(8, CASHBOOK_ITEM_KEY);
+        meetingDataItems.put(9, OPENING_CASH_ITEM_KEY);
+        meetingDataItems.put(10, FINES_ITEM_KEY);
 
         progressDialogMessages = new HashMap<Integer, String>();
         progressDialogMessages.put(1, "Sending Cycle Information...");
@@ -81,6 +89,9 @@ public class SendDataRepo {
         progressDialogMessages.put(5, "Sending Savings Register...");
         progressDialogMessages.put(6, "Sending Loan Repayments Register...");
         progressDialogMessages.put(7, "Sending New Loans Issued...");
+        progressDialogMessages.put(8, "Sending CashBook Amount...");
+        progressDialogMessages.put(9, "Sending Opening Cash Record...");
+        progressDialogMessages.put(10, "Sending Fines Issued...");
     }
 
     private static String getVslaCode() {
@@ -533,4 +544,49 @@ public class SendDataRepo {
         }
         return jsonRequest;
     }
+
+    public static String getMeetingFinesJson(int meetingId) {
+
+        if(meetingId == 0) {
+            return null;
+        }
+
+        //Build JSON input string
+        JSONStringer js = new JSONStringer();
+        String jsonRequest = null;
+
+        try {
+            MeetingFineRepo fineRepo = new MeetingFineRepo(DatabaseHandler.databaseContext);
+            ArrayList<FinesDataTransferRecord> fines= fineRepo.getMeetingFinesForAllMembers(meetingId);
+            js.object()
+                    .key("HeaderInfo").object()
+                    .key("VslaCode").value(getVslaCode())
+                    .key("PhoneImei").value(getPhoneImei())
+                    .key("NetworkOperator").value(getNetworkOperator())
+                    .key("NetworkType").value(networkType)
+                    .key("DataItem").value(FINES_ITEM_KEY)
+                    .endObject()
+                    .key("MeetingId").value(meetingId)
+                    .key("MembersCount").value(fines.size())
+                    .key("Fines").array();
+            for(FinesDataTransferRecord record : fines) {
+                js.object()
+                        .key("FineId").value(record.getFinesId())
+                        .key("MemberId").value(record.getMemberId())
+                        .key("Amount").value(record.getAmount())
+                        .endObject();
+            }
+            js.endArray()
+                    .endObject();
+            jsonRequest = js.toString();
+        }
+        catch(JSONException ex) {
+            return null;
+        }
+        catch(Exception ex) {
+            return null;
+        }
+        return jsonRequest;
+    }
+
 }

@@ -1,10 +1,8 @@
 package org.applab.digitizingdata;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,10 +12,12 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 
@@ -41,6 +41,7 @@ public class MeetingOpeningCashFrag extends SherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         actionBar = getSherlockActivity().getSupportActionBar();
         String title = "Meeting";
@@ -84,17 +85,21 @@ public class MeetingOpeningCashFrag extends SherlockFragment {
             case R.id.mnuMCBFSave:
                 return false;
             case R.id.mnuMOCFSave:
-                TextView txtTotalCash = (TextView)getSherlockActivity().findViewById(R.id.txtMOCTotal);
+                saveOpeningCash();
+                /**  // TextView txtTotalCash = (TextView)getSherlockActivity().findViewById(R.id.txtMOCTotal);
+                TextView txtTotalCash = (TextView)getSherlockActivity().findViewById(R.id.txtActualStartingCash);
                 if(saveOpeningCash()) {
                     Toast.makeText(getSherlockActivity().getApplicationContext(), "Starting Cash has been saved", Toast.LENGTH_LONG).show();
 
-                    txtTotalCash.setText(String.format("%,.0f UGX",totalCash));
+                   // txtTotalCash.setText(String.format("%,.0f UGX",totalCash));
+                    txtTotalCash.setText(String.format("4 Mar 2014 Total Cash In Box %,.0f UGX", totalCash));
                 }
                 else {
                     Toast.makeText(getSherlockActivity().getApplicationContext(), "Starting Cash not saved", Toast.LENGTH_LONG).show();
 
-                    txtTotalCash.setText(String.format("%,.0f UGX",0));
-                }
+                    //txtTotalCash.setText(String.format("%,.0f UGX",0));
+                    txtTotalCash.setText(String.format("4 Mar 2014 Total Cash In Box %,.0f UGX", 0));
+                } */
                 return true;
             default:
                 return false;
@@ -106,10 +111,11 @@ public class MeetingOpeningCashFrag extends SherlockFragment {
         double theCashFromBox = 0.0;
         double theCashFromBank = 0.0;
         double theFinesPaid = 0.0;
+        String comment = "";
 
         try{
-            TextView txtCashFromBox = (TextView)getSherlockActivity().findViewById(R.id.txtMOCBalBfBox);
-            String amountBox = txtCashFromBox.getText().toString().trim();
+            TextView txtActualCashInBox = (TextView)getSherlockActivity().findViewById(R.id.txtActualStartingCash);
+            String amountBox = txtActualCashInBox.getText().toString().trim();
             if (amountBox.length() < 1) {
                 //Allow it to be Zero
                 theCashFromBox = 0.0;
@@ -118,12 +124,27 @@ public class MeetingOpeningCashFrag extends SherlockFragment {
                 theCashFromBox = Double.parseDouble(amountBox);
                 if (theCashFromBox < 0.00) {
                     Utils.createAlertDialogOk(getSherlockActivity().getBaseContext(), "Meeting","The value for Cash from Box is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtCashFromBox.requestFocus();
+                    txtActualCashInBox.requestFocus();
                     return false;
                 }
             }
 
-            TextView txtCashFromBank = (TextView)getSherlockActivity().findViewById(R.id.txtMOCBalBfBank);
+            TextView txtStartingCashComment = (TextView)getSherlockActivity().findViewById(R.id.txtStartingCashComment);
+            String startingCashComment = txtStartingCashComment.getText().toString().trim();
+            if (startingCashComment.length() < 1) {
+                //Allow it to be Zero
+                comment = "";
+            }
+            else {
+                comment = startingCashComment;
+                if (theCashFromBank < 0.00) {
+                    Utils.createAlertDialogOk(getSherlockActivity().getBaseContext(), "Meeting","The value for Cash withdrawn from Bank is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtStartingCashComment.requestFocus();
+                    return false;
+                }
+            }
+
+           /** TextView txtCashFromBank = (TextView)getSherlockActivity().findViewById(R.id.txtMOCBalBfBank);
             String amountBank = txtCashFromBank.getText().toString().trim();
             if (amountBank.length() < 1) {
                 //Allow it to be Zero
@@ -151,7 +172,8 @@ public class MeetingOpeningCashFrag extends SherlockFragment {
                     txtFinesPaid.requestFocus();
                     return false;
                 }
-            }
+            } */
+
 
             //Now Save
             MeetingRepo meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
@@ -170,20 +192,33 @@ public class MeetingOpeningCashFrag extends SherlockFragment {
         MeetingRepo meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
         HashMap<String, Double> openingCash = meetingRepo.getMeetingOpeningCash(meetingId);
 
-        TextView txtCashBox = (TextView)getSherlockActivity().findViewById(R.id.txtMOCBalBfBox);
+        TextView lblExpectedStartingCash = (TextView)getSherlockActivity().findViewById(R.id.lblExpectedStartingCash);
+        TextView lblCashInBox = (TextView)getSherlockActivity().findViewById(R.id.lblTotalCashInBox);
+        TextView lblCashTakenToBank = (TextView)getSherlockActivity().findViewById(R.id.lblCashTakenToBank);
+
+
+      /**  TextView txtStartingCash = (TextView)getSherlockActivity().findViewById(R.id.txtActualStartingCash);
+        TextView txtComment = (TextView)getSherlockActivity().findViewById(R.id.txtStartingCashComment);
+*/
+        /**TextView txtCashBox = (TextView)getSherlockActivity().findViewById(R.id.txtMOCBalBfBox);
         TextView txtCashBank = (TextView)getSherlockActivity().findViewById(R.id.txtMOCBalBfBank);
         TextView txtFinesPaid = (TextView)getSherlockActivity().findViewById(R.id.txtMOCFines);
-        TextView txtCashTotal = (TextView)getSherlockActivity().findViewById(R.id.txtMOCTotal);
+        TextView txtCashTotal = (TextView)getSherlockActivity().findViewById(R.id.txtMOCTotal); */
 
         if(null != openingCash) {
-            txtCashBox.setText(String.format("%.0f", openingCash.get(MeetingSchema.COL_MT_CASH_FROM_BOX)));
+
+            lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", (openingCash.get(MeetingSchema.COL_MT_CASH_FROM_BOX) - openingCash.get(MeetingSchema.COL_MT_CASH_FROM_BANK))));
+            lblCashInBox.setText(String.format("Total Cash in Box %.0f UGX", openingCash.get(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
+            lblCashTakenToBank.setText(String.format("Cash Taken to Bank %.0f UGX", openingCash.get(MeetingSchema.COL_MT_CASH_SAVED_BANK)));
+
+          /**  txtCashBox.setText(String.format("%.0f", openingCash.get(MeetingSchema.COL_MT_CASH_FROM_BOX)));
             txtCashBank.setText(String.format("%.0f", openingCash.get(MeetingSchema.COL_MT_CASH_FROM_BANK)));
             txtFinesPaid.setText(String.format("%.0f", openingCash.get(MeetingSchema.COL_MT_CASH_FINES)));
             double cashTotal = 0.0;
             for(double value : openingCash.values()) {
                 cashTotal += value;
             }
-            txtCashTotal.setText(String.format("%,.0f UGX",cashTotal));
+            txtCashTotal.setText(String.format("%,.0f UGX",cashTotal)); */
         }
     }
 }

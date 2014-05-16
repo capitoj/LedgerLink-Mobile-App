@@ -4,20 +4,15 @@
                 android:orientation="vertical">
     <RelativeLayout android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="5dp"
                     android:id="@+id/frmMLIssuedF_top_control_bar">
 
-        <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:paddingLeft="5dp"
-                android:textStyle="bold"
-                android:textSize="24sp"
                 android:text="01-JUL-2013"
                 android:id="@+id/lblMLIssuedFMeetingDate"
                 android:layout_gravity="center"/>
@@ -81,11 +76,12 @@
 
     </ListView>
 
-    <TextView android:id="@+id/txtMLIssuedFEmpty"
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@+id/txtMLIssuedFEmpty"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:paddingLeft="5dp"
-              android:textSize="18sp"
               android:text="@string/empty_members_list"
               android:layout_below="@id/frmMLIssuedF_top_control_bar"
             />

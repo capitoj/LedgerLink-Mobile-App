@@ -1,54 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/frmMAH_top_control_bar">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/frmMAH_top_control_bar">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:paddingLeft="5dp"
-        android:textSize="18sp"
-        android:text="You have more than one active cycle. Please choose the cycle for the new meeting."
-        android:id="@+id/lblMDMultipleCycles"
-        android:layout_gravity="left"/>
-
-    <RadioGroup
-        android:id="@+id/grpMDExistingCycles"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:layout_marginTop="10dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    </RadioGroup>
-
-    <TextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:paddingLeft="5dp"
-            android:textSize="18sp"
-            android:text="View the date below and tap to change if it is not the correct meeting date. (You may not pick a date in the future.) When it is correct, tap the arrow above to begin the meeting."
-            android:id="@+id/lblMDHeader"
-            android:layout_gravity="left"/>
+            android:text="You have more than one active cycle. Please choose the cycle for the new meeting."
+            android:id="@+id/lblMDMultipleCycles" />
 
-    <TextView
+        <RadioGroup
+            style="@style/RegularText"
+            android:id="@+id/grpMDExistingCycles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </RadioGroup>
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="View the date below and tap to change if it is not the correct meeting date. (You may not pick a date in the future.) When it is correct, tap the arrow above to begin the meeting."
+            android:id="@+id/lblMDHeader"/>
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/TextAccentColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:textStyle="bold"
-            android:textColor="#0000FF"
-            android:textSize="24sp"
             android:text="01-JUL-2013"
             android:clickable="true"
             android:id="@+id/txtMDMeetingDate"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
 
-</LinearLayout>
-    </ScrollView>
+    </LinearLayout>
+</ScrollView>

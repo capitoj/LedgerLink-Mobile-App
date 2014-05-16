@@ -69,6 +69,7 @@ public class VslaInfoRepo {
             return vslaInfo;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("VslaInfoRepo.getVslaInfo", ex.getMessage());
             return null;
         }
@@ -233,6 +234,93 @@ public class VslaInfoRepo {
             else{
                 values.put(VslaInfoSchema.COL_VI_IS_DATA_MIGRATED, 0);
             }
+
+            // Update
+            // updating row
+            long retVal = db.update(VslaInfoSchema.getTableName(), values, null,null);
+
+            if (retVal != -1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("VslaInfoRepo.updateDataMigrationStatusFlag", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
+
+    //Updates whether the Getting started wizard has been completed
+    public boolean updateGettingStartedWizardCompleteFlag(boolean isDataMigrated) {
+        SQLiteDatabase db = null;
+        boolean performUpdate = false;
+        int loanId = 0;
+        try {
+            //Check if exists
+            if(!vslaInfoExists()) {
+                return false;
+            }
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            if(isDataMigrated) {
+                values.put(VslaInfoSchema.COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE, 1);
+            }
+            else{
+                values.put(VslaInfoSchema.COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE, 0);
+            }
+
+            // Update
+            // updating row
+            long retVal = db.update(VslaInfoSchema.getTableName(), values, null,null);
+
+            if (retVal != -1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("VslaInfoRepo.updateDataMigrationStatusFlag", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
+
+
+    //Updates the current stage of the getting started wizard
+    public boolean updateGettingStartedWizardStage(int stage) {
+        SQLiteDatabase db = null;
+        boolean performUpdate = false;
+        int loanId = 0;
+        try {
+            //Check if exists
+            if(!vslaInfoExists()) {
+                return false;
+            }
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+                values.put(VslaInfoSchema.COL_VI_GETTING_STARTED_WIZARD_STAGE, stage);
+
 
             // Update
             // updating row

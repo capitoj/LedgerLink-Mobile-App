@@ -8,7 +8,8 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".SendDataActivity">
 
-    <TextView
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />

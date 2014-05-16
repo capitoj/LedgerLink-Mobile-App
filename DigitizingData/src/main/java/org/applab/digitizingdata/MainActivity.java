@@ -1,11 +1,24 @@
 package org.applab.digitizingdata;
 
+
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.AbsListView.LayoutParams;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -27,6 +40,10 @@ import java.util.ArrayList;
  * Created by Moses on 6/13/13.
  */
 public class MainActivity extends SherlockActivity {
+
+    GridView gridView;
+    ArrayList<MenuItem> mainMenuItemsGridArray = new ArrayList<MenuItem>();
+    CustomGridViewAdapter customGridAdapter;
     ArrayList<MenuItem> mainMenuItems = null;
     VslaInfo vslaInfo = null;
     VslaInfoRepo vslaInfoRepo = null;
@@ -34,35 +51,13 @@ public class MainActivity extends SherlockActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //Toast.makeText(this,"Main Menu Activity - onCreate() invoked.",Toast.LENGTH_LONG).show();
+        setContentView(R.layout.main_menu);
 
         actionBar = getSupportActionBar();
 
-        //TODO: Setting of Preferences is done in the first Activity that is launched. This is added here for testing
-        //Load the default Shared Preferences
-        //PreferenceManager.setDefaultValues(getApplicationContext(),R.xml.preferences,false);
-
-        //Read some settings like Server URL
-        //Utils.configureDefaultApplicationPreferences(getApplicationContext());
-
-        //Load Sample Trainng Data: Testing
-        //SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
-
-        //If we are in training mode then show it using a custom View with distinguishable background
-        if(Utils.isExecutingInTrainingMode()) {
-            actionBar.setTitle("Main Menu [TRAINING]");
-            actionBar.setCustomView(R.layout.activity_main_training_mode);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(false);
-        }
-
-        //actionBar.show();
-
         //Retrieve VSLA Information
         vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
-        if(vslaInfoRepo != null) {
+        if (vslaInfoRepo != null) {
             vslaInfo = vslaInfoRepo.getVslaInfo();
         }
 
@@ -75,85 +70,148 @@ public class MainActivity extends SherlockActivity {
     public void onResume() {
         super.onResume();
 
-        displayMainMenu();
+        //displayMainMenu();
     }
 
     private void displayMainMenu() {
-        //Load the Main Menu
-        mainMenuItems = new ArrayList<MenuItem>();
-        mainMenuItems.add(new MenuItem("beginMeeting", "Meeting"));
-        mainMenuItems.add(new MenuItem("sendData", "Check & Send Data"));
-        mainMenuItems.add(new MenuItem("viewSentData", "Sent Data"));
-        mainMenuItems.add(new MenuItem("updateCycle", "Review & Edit Cycle"));
-        mainMenuItems.add(new MenuItem("endCycle", "End Cycle"));
-        mainMenuItems.add(new MenuItem("beginCycle", "Begin New Cycle"));
-        mainMenuItems.add(new MenuItem("reviewMembers", "Review & Edit Members"));
+
+
+        //set grid view item
+        mainMenuItemsGridArray.add(new MenuItem("beginMeeting", "MEETING", R.drawable.meeting));
+        mainMenuItemsGridArray.add(new MenuItem("viewSentData", "SENT DATA", R.drawable.sent_data));
+        mainMenuItemsGridArray.add(new MenuItem("reviewMembers", "REVIEW & EDIT MEMBERS", R.drawable.review_members));
+        mainMenuItemsGridArray.add(new MenuItem("updateCycle", "REVIEW & EDIT CYCLE", R.drawable.edit_cycle));
+        mainMenuItemsGridArray.add(new MenuItem("endCycle", "END CYCLE", R.drawable.end_cycle));
+        mainMenuItemsGridArray.add(new MenuItem("beginCycle", "BEGIN NEW CYCLE", R.drawable.begin_new_cycle));
+
 
         //Display the Data Migration Menu if data has not yet been migrated
-        if(null != vslaInfo) {
-            if(vslaInfo.isDataMigrated()) {
-                //Hide the dataMigration Menu
-            }
-            else{
-                //Show the Data Migration Menu
-                mainMenuItems.add(new MenuItem("dataMigration", "Data Migration"));
-            }
-        }
+        /** if (null != vslaInfo) {
+         if (vslaInfo.isDataMigrated()) {
+         //Hide the dataMigration Menu
+         } else {
+         //Show the Data Migration Menu
+         mainMenuItems.add(new MenuItem("dataMigration", "Data Migration", R.drawable.));
+         }
+         }  */
 
-        //mainMenuItems.add(new MenuItem("help", "Help"));
+        gridView = (GridView) findViewById(R.id.grid);
+        Log.d("HERE", String.valueOf(mainMenuItemsGridArray.size()));
 
-        ListView lvwMainMenu = (ListView)findViewById(R.id.menuList);
-        MenuCustomArrayAdapter adapter = new MenuCustomArrayAdapter(this, mainMenuItems);
+        customGridAdapter = new CustomGridViewAdapter(this, R.layout.mainmenurowgrid, mainMenuItemsGridArray);
+        gridView.setAdapter(customGridAdapter);
 
-        //Assign Adapter to ListView
-        lvwMainMenu.setAdapter(adapter);
-
-        // listening to single list item on click
-        lvwMainMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // Launching new Activity on selecting single List Item
-                MenuItem selectedMenu = (MenuItem)mainMenuItems.get(position);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent,
+                                    View v, int position, long id) {
+                MenuItem selectedMenu = mainMenuItemsGridArray.get(position);
                 String selectedMenuName = selectedMenu.getMenuName();
 
-                if(selectedMenuName.equalsIgnoreCase("beginMeeting")) {
+                if (selectedMenuName.equalsIgnoreCase("beginMeeting")) {
                     Intent i = new Intent(getApplicationContext(), BeginMeetingActivity.class);
                     startActivity(i);
-                }
-                else if(selectedMenuName.equalsIgnoreCase("sendData")) {
+                } else if (selectedMenuName.equalsIgnoreCase("sendData")) {
                     Intent i = new Intent(getApplicationContext(), SendMeetingDataActivity.class);
                     startActivity(i);
-                }
-                else if(selectedMenuName.equalsIgnoreCase("viewSentData")) {
+                } else if (selectedMenuName.equalsIgnoreCase("viewSentData")) {
                     Intent i = new Intent(getApplicationContext(), ViewSentDataActivity.class);
                     startActivity(i);
-                }
-                else if(selectedMenuName.equalsIgnoreCase("updateCycle")) {
+                } else if (selectedMenuName.equalsIgnoreCase("updateCycle")) {
                     Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
                     i.putExtra("_isUpdateCycleAction", true);
                     startActivity(i);
-                }
-                else if(selectedMenuName.equalsIgnoreCase("endCycle")) {
+                } else if (selectedMenuName.equalsIgnoreCase("endCycle")) {
                     Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
                     startActivity(i);
-                }
-                else if(selectedMenuName.equalsIgnoreCase("beginCycle")) {
+                } else if (selectedMenuName.equalsIgnoreCase("beginCycle")) {
                     Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
                     startActivity(i);
-                }
-                else if(selectedMenuName.equalsIgnoreCase("reviewMembers")) {
+                } else if (selectedMenuName.equalsIgnoreCase("reviewMembers")) {
                     Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
                     startActivity(i);
-                }
-                else if(selectedMenuName.equalsIgnoreCase("dataMigration")) {
+                } else if (selectedMenuName.equalsIgnoreCase("dataMigration")) {
                     Intent i = new Intent(getApplicationContext(), DataMigrationActivity.class);
                     startActivity(i);
-                }
-                else if(selectedMenuName.equalsIgnoreCase("help")) {
+                } else if (selectedMenuName.equalsIgnoreCase("help")) {
 
                 }
             }
         });
+
+    }
+
+    private Bitmap convertToBitMap(int imageResource) {
+        return BitmapFactory.decodeResource(this.getResources(), imageResource);
+    }
+
+    public class CustomGridViewAdapter extends ArrayAdapter<MenuItem> {
+        Context context;
+        int layoutResourceId;
+        ArrayList<MenuItem> data = new ArrayList<MenuItem>();
+
+        public CustomGridViewAdapter(Context context, int layoutResourceId,
+                                     ArrayList<MenuItem> data) {
+            super(context, layoutResourceId, data);
+            this.layoutResourceId = layoutResourceId;
+            this.context = context;
+            this.data = data;
+
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View row = convertView;
+            MenuItemHolder holder = null;
+            if (row == null) {
+
+                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+                row = inflater.inflate(layoutResourceId, parent, false);
+                row.setLayoutParams(new LayoutParams((int)((Activity)context).getResources().getDimension(R.dimen.view_width), (int) ((Activity)context).getResources().getDimension(R.dimen.view_height)));
+
+                holder = new MenuItemHolder();
+                holder.imageItem = (ImageView) row.findViewById(R.id.item_image);
+
+
+                row.setTag(holder);
+
+            } else {
+                holder = (MenuItemHolder) row.getTag();
+            }
+
+
+            MenuItem item = data.get(position);
+            try {
+                holder.imageItem.setImageBitmap(convertToBitMap(item.getMenuImage()));
+                if(item.getMenuName().equalsIgnoreCase("beginMeeting")){
+                    row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_top_left));
+                }
+                if(item.getMenuName().equalsIgnoreCase("viewSentData")){
+                    row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_top_right));
+                }
+                if(item.getMenuName().equalsIgnoreCase("reviewMembers")){
+                    row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_mid_top_left));
+                }
+                if(item.getMenuName().equalsIgnoreCase("updateCycle")){
+                    row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_mid_top_right));
+                }
+                if(item.getMenuName().equalsIgnoreCase("endCycle")){
+                    row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_mid_bottom_left));
+                }
+                if(item.getMenuName().equalsIgnoreCase("beginCycle")){
+                    row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_mid_bottom_right));
+                }
+            } catch (Exception ex) {
+                ex.getMessage().toString();
+
+            }
+            return row;
+        }
+
+        class MenuItemHolder {
+            ImageView imageItem;
+
+        }
+
     }
 
     @Override
@@ -168,6 +226,7 @@ public class MainActivity extends SherlockActivity {
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mnuMainSettings:
+
                 // Launch preferences activity
                 Intent i = new Intent(this, SettingsActivity.class);
                 startActivity(i);

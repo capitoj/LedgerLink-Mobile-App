@@ -1,31 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:weightSum="100" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:weightSum="100">
 
-    <TextView
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
         android:id="@+id/txtMFullNames"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:gravity="left"
-        android:textStyle="bold"
-        android:text="FULL NAMES"
-        android:textSize="18sp" >
-    </TextView>
+        android:text="FULL NAMES" />
 
-    <TextView
-            android:id="@+id/txtMPhoneNo"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Phone No."
-            android:textSize="14dp" >
-    </TextView>
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSubItems"
+        android:id="@+id/txtMPhoneNo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Phone No." />
 
 </LinearLayout>
 
