@@ -55,6 +55,8 @@ public class SampleDataBuilderRepo {
 
         //If the Refresh succeeded, turn off the Refresh Flag so that data will not be refreshed every time
         if(refreshSucceeded) {
+            //Set the Getting Started Wizard flag
+            
             //Reset the Refresh Flag i.e. set it to False and the Shared Preference to Unchecked
             Utils.setRefreshDataFlag(false);
             SharedPreferences appPrefs = Utils.getDefaultSharedPreferences(appContext);

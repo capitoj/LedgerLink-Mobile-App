@@ -8,6 +8,10 @@ import android.util.Log;
 
 import org.applab.digitizingdata.datatransformation.RepaymentDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
+import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
+import org.applab.digitizingdata.domain.model.MeetingLoanRepayment;
+import org.applab.digitizingdata.domain.schema.AttendanceSchema;
+import org.applab.digitizingdata.domain.schema.FineSchema;
 import org.applab.digitizingdata.domain.schema.LoanIssueSchema;
 import org.applab.digitizingdata.domain.schema.LoanRepaymentSchema;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
@@ -309,7 +313,6 @@ public class MeetingLoanRepaymentRepo {
         }
     }
 
-
     //TODO: Update this query to display the added fields
     public ArrayList<MemberLoanRepaymentRecord> getLoansRepaymentsByMemberInCycle(int cycleId, int memberId) {
         SQLiteDatabase db = null;
@@ -365,6 +368,61 @@ public class MeetingLoanRepaymentRepo {
             }
         }
     }
+
+    public ArrayList<MemberLoanRepaymentRecord> getLoansRepaymentsByMeetingId(int meetingId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        ArrayList<MemberLoanRepaymentRecord> repayments;
+
+        try {
+            repayments = new ArrayList<MemberLoanRepaymentRecord>();
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  L.%s AS RepaymentId, M.%s AS MeetingDate, L.%s AS Amount, " +
+                    "L.%s AS LoanId, L.%s AS RolloverAmount, L.%s AS Comments, LI.%s AS LoanNo" +
+                    " FROM %s AS L INNER JOIN %s AS M ON L.%s=M.%s INNER JOIN %s AS LI ON L.%s=LI.%s " +
+                    " WHERE L.%s=%d ORDER BY L.%s DESC",
+                    LoanRepaymentSchema.COL_LR_REPAYMENT_ID,MeetingSchema.COL_MT_MEETING_DATE, LoanRepaymentSchema.COL_LR_AMOUNT,
+                    LoanRepaymentSchema.COL_LR_LOAN_ID, LoanRepaymentSchema.COL_LR_ROLLOVER_AMOUNT, LoanRepaymentSchema.COL_LR_COMMENTS,
+                    LoanIssueSchema.COL_LI_LOAN_NO, LoanRepaymentSchema.getTableName(), MeetingSchema.getTableName(), LoanRepaymentSchema.COL_LR_MEETING_ID,MeetingSchema.COL_MT_MEETING_ID,
+                    LoanIssueSchema.getTableName(), LoanRepaymentSchema.COL_LR_LOAN_ID, LoanIssueSchema.COL_LI_LOAN_ID, LoanRepaymentSchema.COL_LR_MEETING_ID,meetingId,
+                    LoanRepaymentSchema.COL_LR_REPAYMENT_ID
+            );
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    MemberLoanRepaymentRecord repaymentRecord = new MemberLoanRepaymentRecord();
+                    Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("MeetingDate")));
+                    repaymentRecord.setMeetingDate(meetingDate);
+                    repaymentRecord.setLoanId(cursor.getInt(cursor.getColumnIndex("LoanId")));
+                    repaymentRecord.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
+                    repaymentRecord.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
+                    repaymentRecord.setRolloverAmount(cursor.getDouble(cursor.getColumnIndex("RolloverAmount")));
+                    repaymentRecord.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+                    repaymentRecord.setRepaymentId(cursor.getInt(cursor.getColumnIndex("RepaymentId")));
+
+                    repayments.add(repaymentRecord);
+                } while (cursor.moveToNext());
+            }
+            return repayments;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingLoanRepaymentRepo.getLoansRepaymentsByMeetingId", ex.getMessage());
+            return null;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
 
     public MemberLoanRepaymentRecord getLoansRepaymentByMemberInMeeting(int meetingId, int memberId) {
         SQLiteDatabase db = null;
@@ -430,6 +488,79 @@ public class MeetingLoanRepaymentRepo {
         }
     }
 
+    /**
+     * Returns a Loan Repayment Record. Useful when dealing with deleting, reversing or editing an individual repayment
+     * @param repaymentId
+     * @return
+     */
+    public MemberLoanRepaymentRecord getLoansRepaymentByRepaymentId(int repaymentId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        MemberLoanRepaymentRecord repaymentRecord = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  LR.%s AS RepaymentId, M.%s AS MeetingDate, LR.%s AS Amount, " +
+                    "LR.%s AS LoanId, LR.%s AS RolloverAmount, LR.%s AS Comments, LI.%s AS LoanNo, LR.%s AS BalanceBefore, " +
+                    "LR.%s AS BalanceAfter, LR.%s AS InterestAmount, LR.%s AS LastDateDue , LR.%s AS NextDateDue " +
+                    " FROM %s AS LR INNER JOIN %s AS M ON LR.%s=M.%s INNER JOIN %s AS LI ON LR.%s=LI.%s " +
+                    " WHERE LR.%s=%d LIMIT 1",
+                    LoanRepaymentSchema.COL_LR_REPAYMENT_ID,MeetingSchema.COL_MT_MEETING_DATE, LoanRepaymentSchema.COL_LR_AMOUNT,
+                    LoanRepaymentSchema.COL_LR_LOAN_ID, LoanRepaymentSchema.COL_LR_ROLLOVER_AMOUNT, LoanRepaymentSchema.COL_LR_COMMENTS,
+                    LoanIssueSchema.COL_LI_LOAN_NO, LoanRepaymentSchema.COL_LR_BAL_BEFORE, LoanRepaymentSchema.COL_LR_BAL_AFTER,
+                    LoanRepaymentSchema.COL_LR_INTEREST_AMOUNT, LoanRepaymentSchema.COL_LR_LAST_DATE_DUE, LoanRepaymentSchema.COL_LR_NEXT_DATE_DUE,
+                    LoanRepaymentSchema.getTableName(), MeetingSchema.getTableName(), LoanRepaymentSchema.COL_LR_MEETING_ID,MeetingSchema.COL_MT_MEETING_ID,
+                    LoanIssueSchema.getTableName(), LoanRepaymentSchema.COL_LR_LOAN_ID, LoanIssueSchema.COL_LI_LOAN_ID, LoanRepaymentSchema.COL_LR_REPAYMENT_ID,repaymentId
+            );
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+                repaymentRecord = new MemberLoanRepaymentRecord();
+                Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("MeetingDate")));
+                repaymentRecord.setMeetingDate(meetingDate);
+                repaymentRecord.setLoanId(cursor.getInt(cursor.getColumnIndex("LoanId")));
+                repaymentRecord.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
+                repaymentRecord.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
+                repaymentRecord.setRolloverAmount(cursor.getDouble(cursor.getColumnIndex("RolloverAmount")));
+                repaymentRecord.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
+                repaymentRecord.setRepaymentId(cursor.getInt(cursor.getColumnIndex("RepaymentId")));
+                if(!cursor.isNull(cursor.getColumnIndex("LastDateDue"))){
+                    Date lastDateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("LastDateDue")));
+                    repaymentRecord.setLastDateDue(lastDateDue);
+                }
+                if(!cursor.isNull(cursor.getColumnIndex("NextDateDue"))){
+                    Date nextDateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("NextDateDue")));
+                    repaymentRecord.setNextDateDue(nextDateDue);
+                }
+                repaymentRecord.setBalanceBefore(cursor.getDouble(cursor.getColumnIndex("BalanceBefore")));
+                repaymentRecord.setBalanceAfter(cursor.getDouble(cursor.getColumnIndex("BalanceAfter")));
+                repaymentRecord.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("InterestAmount")));
+
+            }
+            return repaymentRecord;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingLoanRepaymentRepo.getLoansRepaymentsByRepaymentId", ex.getMessage());
+            return null;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    /**
+     * Retrieve Repayments made by all members in a meeting. This is for Data Transfer to the bank.
+     * @param meetingId
+     * @return
+     */
     public ArrayList<RepaymentDataTransferRecord> getMeetingRepaymentsForAllMembers(int meetingId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -488,6 +619,107 @@ public class MeetingLoanRepaymentRepo {
                 cursor.close();
             }
 
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    /**
+     * Reverses a Loan Repayment. Requires that the target be the most recent repayment
+     * @param repaymentId
+     * @return
+     */
+    public boolean reverseLoanRepayment(int repaymentId) {
+
+        SQLiteDatabase db = null;
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+
+            int affectedRows = 0;
+
+            //Retrieve the repayment record
+            MemberLoanRepaymentRecord repaymentRecord = getLoansRepaymentByRepaymentId(repaymentId);
+
+            if(null == repaymentRecord) {
+                return false;
+            }
+
+            //Reverse the Repayment: First Retrieve the Loan then
+            //1. Add the repayment amount to the loan balance
+            int targetLoanId = repaymentRecord.getLoanId();
+
+            MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(DatabaseHandler.databaseContext);
+            MeetingLoanIssued targetLoan = loanIssuedRepo.getLoanIssuedByLoanId(targetLoanId);
+
+            if(null == targetLoan) {
+                return false;
+            }
+
+            double revertedLoanBalance = targetLoan.getLoanBalance() + repaymentRecord.getAmount();
+            double revertedTotalPaid = targetLoan.getTotalRepaid() - repaymentRecord.getAmount();
+            Date revertedDateDue = repaymentRecord.getLastDateDue();
+            boolean revertedBalancesSuccessfully = loanIssuedRepo.updateMemberLoanBalances(targetLoanId, revertedTotalPaid, revertedLoanBalance, revertedDateDue);
+
+            if(!revertedBalancesSuccessfully) {
+                return false;
+            }
+
+            //Delete the Loan Repayment
+            affectedRows = db.delete(LoanRepaymentSchema.getTableName(), LoanRepaymentSchema.COL_LR_REPAYMENT_ID + " = ?",
+                    new String[] {String.valueOf(repaymentId)});
+
+            if(affectedRows > 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+        catch (Exception ex) {
+            Log.e("MeetingLoanRepaymentRepo.reverseLoanRepayment", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    /**
+     * Reverses Loan Repayments made in a meeting.
+     * @param meetingId
+     * @return
+     */
+    public boolean reverseLoanRepaymentsForMeeting(int meetingId) {
+
+        SQLiteDatabase db = null;
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+
+            int affectedRows = 0;
+
+            ArrayList<MemberLoanRepaymentRecord> repayments = getLoansRepaymentsByMeetingId(meetingId);
+
+            if(null == repayments) {
+                return false;
+            }
+
+            //Loop through all the repayments and reverse each individual repayment.
+            //TODO: This can be done better by overloading the method to use the repaymentrecord instead of repaymentid
+            for(MemberLoanRepaymentRecord repaymentRecord : repayments){
+                reverseLoanRepayment(repaymentRecord.getRepaymentId());
+            }
+
+            return true;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingLoanRepaymentRepo.reverseLoanRepaymentsForMeeting", ex.getMessage());
+            return false;
+        }
+        finally {
             if (db != null) {
                 db.close();
             }

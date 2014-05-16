@@ -44,40 +44,6 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="5dp"
-            android:textSize="18sp"
-            android:text="Are you sure you want to delete this meeting? If so, tap [Done]. The following information will be deleted:."
-            android:id="@+id/lblDMInstructions"
-            android:layout_gravity="left"/>
-
-
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:paddingLeft="5dp"
-            android:textSize="18sp"
-            android:text="View the date below and tap to change if it is not the correct meeting date. (You may not pick a date in the future.) When it is correct, tap the arrow above to begin the meeting."
-            android:id="@+id/lblMDHeader"
-            android:layout_gravity="left"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textStyle="bold"
-            android:textColor="#0000FF"
-            android:textSize="24sp"
-            android:text="01-JUL-2013"
-            android:clickable="true"
-            android:id="@+id/txtMDMeetingDate"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:paddingLeft="5dp"
             android:textSize="18sp"

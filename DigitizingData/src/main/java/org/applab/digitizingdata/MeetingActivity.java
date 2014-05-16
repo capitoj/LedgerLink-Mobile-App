@@ -117,6 +117,9 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         if(getIntent().hasExtra("_enableSendData")) {
             enableSendData = getIntent().getBooleanExtra("_enableSendData", false);
         }
+        if(getIntent().hasExtra("_meetingId")) {
+            targetMeetingId = getIntent().getIntExtra("_meetingId", 0);
+        }
     }
 
     @Override

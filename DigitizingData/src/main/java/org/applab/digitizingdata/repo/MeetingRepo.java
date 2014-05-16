@@ -9,6 +9,10 @@ import android.util.Log;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.domain.schema.AttendanceSchema;
+import org.applab.digitizingdata.domain.schema.FineSchema;
+import org.applab.digitizingdata.domain.schema.LoanIssueSchema;
+import org.applab.digitizingdata.domain.schema.LoanRepaymentSchema;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
 import org.applab.digitizingdata.domain.schema.MemberSchema;
 import org.applab.digitizingdata.domain.schema.SavingSchema;
@@ -902,18 +906,66 @@ public class MeetingRepo {
     }
 
     // Deleting single entity
-    public void deleteMeeting(int meetingId) {
+    public boolean deleteMeeting(int meetingId) {
         SQLiteDatabase db = null;
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
 
+            int affectedRows = 0;
+
+            //Do a Transaction
+            db.beginTransaction(); //This will create a database Lock
+            //db.beginTransactionNonExclusive();  //Non-exclusive lock, but requires API Level 11
+
+            //Delete Attendance for the target meeting
+            affectedRows = db.delete(AttendanceSchema.getTableName(), AttendanceSchema.COL_A_MEETING_ID + " = ?",
+                    new String[] {String.valueOf(meetingId)});
+
+            //Delete Savings for the target meeting
+            affectedRows = db.delete(SavingSchema.getTableName(), SavingSchema.COL_S_MEETING_ID + " = ?",
+                    new String[] {String.valueOf(meetingId)});
+
+            //Delete Fines for the target meeting
+            affectedRows = db.delete(FineSchema.getTableName(), FineSchema.COL_F_MEETING_ID + " = ?",
+                    new String[] {String.valueOf(meetingId)});
+
+            //Delete Loan Issues for the target meeting
+            affectedRows = db.delete(LoanIssueSchema.getTableName(), LoanIssueSchema.COL_LI_MEETING_ID + " = ?",
+                    new String[] {String.valueOf(meetingId)});
+
+            //TODO: Ending the Transaction pre-maturely before reverting Repayments due to Database Lock issues
+            //TODO: Will re-visit this later to ensure reverting of Repayments and Deletion of Meeting are in the same Transaction scope
+            db.setTransactionSuccessful();
+            db.endTransaction();
+
+            //Delete Loan Repayments for the target meeting
+            //Reverse Loan Repayments will do it in a clean manner
+            //NB: Calling this within a transaction and avoiding Database Lock requires API Level 11
+            MeetingLoanRepaymentRepo repaymentRepo = new MeetingLoanRepaymentRepo(DatabaseHandler.databaseContext);
+            boolean repaymentsReversedSuccessfully = repaymentRepo.reverseLoanRepaymentsForMeeting(meetingId);
+
+            //Reversal of repayments returns false only when a problem occurs, it will return True in cases where there were no repayments
+            if(!repaymentsReversedSuccessfully) {
+                return false;
+            }
+
+            //Now Delete the Meeting
             // To remove all rows and get a count pass "1" as the whereClause.
-            db.delete(MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_ID + " = ?",
-                    new String[] { String.valueOf(meetingId) });
+            affectedRows = db.delete(MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                    new String[]{String.valueOf(meetingId)});
+
+            if(affectedRows >= 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+
         }
         catch (Exception ex) {
             Log.e("MeetingRepo.deleteMeeting", ex.getMessage());
-            return;
+            db.endTransaction();
+            return false;
         }
         finally {
             if (db != null) {
