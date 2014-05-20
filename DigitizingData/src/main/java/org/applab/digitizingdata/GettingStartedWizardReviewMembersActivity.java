@@ -117,6 +117,8 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
             }
         });
+
+        Utils.setListViewHeightBasedOnChildren(getListView());
     }
 
 

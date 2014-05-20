@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -24,24 +24,26 @@
                 android:layout_height="wrap_content"
                 android:text="Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may exit and come back later."
                 />
+
+        <ListView
+                style="@style/List"
+                android:id="@android:id/list"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:choiceMode="singleChoice"
+                android:layout_below="@id/frmMList_top_control_bar">
+
+        </ListView>
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@android:id/empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty_members_list"
+                android:layout_below="@id/frmMList_top_control_bar" />
     </LinearLayout>
 
-    <ListView
-            style="@style/List"
-            android:id="@android:id/list"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:choiceMode="singleChoice"
-            android:layout_below="@id/frmMList_top_control_bar">
 
-    </ListView>
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:id="@android:id/empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/empty_members_list"
-            android:layout_below="@id/frmMList_top_control_bar" />
-
-</RelativeLayout>
+</ScrollView>
