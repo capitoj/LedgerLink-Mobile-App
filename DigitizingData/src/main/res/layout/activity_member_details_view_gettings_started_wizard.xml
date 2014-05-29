@@ -26,16 +26,23 @@
                 android:id="@+id/lblAMMemberNo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Member No *" />
-            <requestFocus/>
+                android:text="Member number" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
-                style="@style/NormalEditText"
-                android:id="@+id/txtAMMemberNo"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="" />
+
+            <Spinner
+                    android:id="@+id/cboAMMemberNo"
+                    style="@style/RegularText"
+                    android:layout_height="wrap_content"
+                    android:layout_width="200dip"
+                    android:spinnerMode="dropdown"
+                    />
+            <!--<org.applab.digitizingdata.fontutils.TypefaceEditText-->
+                <!--style="@style/NormalEditText"-->
+                <!--android:id="@+id/txtAMMemberNo"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:inputType="number"-->
+                <!--android:text="" />-->
         </LinearLayout>
 
         <LinearLayout
@@ -48,7 +55,7 @@
                 android:id="@+id/lblAMSurname"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Surname *" />
+                android:text="Surname" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
@@ -69,7 +76,7 @@
                 android:id="@+id/lblAMOtherNames"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Other Names *" />
+                android:text="Other names" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
@@ -90,21 +97,13 @@
                 android:id="@+id/lblAMGender"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Gender *" />
-            <!--
-            <EditText
-                    android:id="@+id/txtAMGender"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapWords"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:text=""/>
-                    -->
+                android:text="Sex (M/F)" />
+
             <Spinner
                 android:id="@+id/cboAMGender"
+                style="@style/RegularText"
                 android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
+                android:layout_width="200dip"
                 android:spinnerMode="dropdown"
                 android:prompt="@string/add_member_gender_prompt" />
         </LinearLayout>
@@ -119,15 +118,17 @@
                 android:id="@+id/lblAMAge"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Age *" />
+                android:text="Age" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
-                style="@style/NormalEditText"
-                android:id="@+id/txtAMAge"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="" />
+
+
+            <Spinner
+                    android:id="@+id/cboAMAge"
+                    style="@style/RegularText"
+                    android:layout_height="wrap_content"
+                    android:layout_width="200dip"
+                    android:spinnerMode="dropdown"
+                    />
 
         </LinearLayout>
 
@@ -141,7 +142,7 @@
                 android:id="@+id/lblAMOccupation"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Occupation *" />
+                android:text="What does this member do to make money?" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
@@ -162,7 +163,7 @@
                 android:id="@+id/lblAMPhone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Phone Number" />
+                android:text="Phone number" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
@@ -183,7 +184,7 @@
                 android:id="@+id/lblAMCyclesCompleted"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Number of cycles completed" />
+                android:text="Number of cycles member completed" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
@@ -218,7 +219,7 @@
                 android:id="@+id/lblMDVAmountSavedInCurrentCycle"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Amount saved in current cycle" />
+                android:text="Total amount this member has saved in current cycle so far" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
@@ -233,7 +234,7 @@
                 android:id="@+id/lblMDVOutstandingLoanAmount"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Amount Of This Member's Regular Loan Outstanding" />
+                android:text="Total amount of this member's regular loan outstanding" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"

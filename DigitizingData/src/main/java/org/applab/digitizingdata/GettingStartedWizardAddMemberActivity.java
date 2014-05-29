@@ -24,12 +24,14 @@ import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.MiddleCycleMember;
+import org.applab.digitizingdata.fontutils.TypefaceTextView;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -93,7 +95,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             actionBar.setTitle("Edit Member");
         }
         else {
-            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_next_cancel, null);
+            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back_next_cancel, null);
             customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
@@ -113,10 +115,13 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                             saveMemberData();
                         }
                     });
-            customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+            customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Intent i =  new Intent(getApplicationContext(), GettingsStartedWizardNewCycleActivity.class);
+                            i.putExtra("_isFromAddMembers", true);
+                            startActivity(i);
                             finish();
                         }
                     });
@@ -140,13 +145,16 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
             setContentView(R.layout.activity_member_details_view_gettings_started_wizard);
 
-
+         //Set instructions
+        TypefaceTextView lblAMInstruction = (TypefaceTextView) findViewById(R.id.lblAMInstruction);
+        lblAMInstruction.setText("Enter each member. Save and add another member by selecting + and when you have entered all members, select done");
 
         //Setup the Spinner Items
         Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
-        String[] genderList = new String[]{"Male", "Female"};
+        String[] genderList = new String[]{"select sex", "Male", "Female"};
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item,genderList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         cboGender.setAdapter(adapter);
 
         cboGender.setOnItemSelectedListener(new CustomGenderSpinnerListener());
@@ -155,6 +163,9 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         cboGender.setFocusable(true);
         cboGender.setFocusableInTouchMode(true);
         cboGender.setClickable(true);
+
+        buildMemberNoSpinner();
+        buildAgeSpinner();
 
         clearDataFields();
         if(isEditAction){
@@ -168,6 +179,64 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_ADD_MEMBER);
         }
     }
+
+    /* Populates the member no spinner with available member numbers */
+    private void buildMemberNoSpinner() {
+        Spinner cboAMMemberNo = (Spinner)findViewById(R.id.cboAMMemberNo);
+
+
+        repo = new MemberRepo(getApplicationContext());
+        ArrayList<String> memberNumberArrayList = new ArrayList<String>();
+        memberNumberArrayList.add("select number");
+        for(String mNo : repo.getListOfAvailableMemberNumbers(30)) {
+            Log.d(getBaseContext().getPackageName(), "Member number found " + mNo);
+            memberNumberArrayList.add(mNo);
+        }
+
+        String[] memberNumberList = memberNumberArrayList.toArray(new String[memberNumberArrayList.size()]);
+        memberNumberArrayList.toArray(memberNumberList);
+
+        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item,memberNumberList);
+        memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+
+        cboAMMemberNo.setAdapter(memberNoAdapter);
+        cboAMMemberNo.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+        //Make the spinner selectable
+        cboAMMemberNo.setFocusable(true);
+        cboAMMemberNo.setFocusableInTouchMode(true);
+        cboAMMemberNo.setClickable(true);
+    }
+
+
+
+    /* Populates the member no spinner with available member numbers */
+    private void buildAgeSpinner() {
+        Spinner cboAMAge = (Spinner)findViewById(R.id.cboAMAge);
+
+
+        repo = new MemberRepo(getApplicationContext());
+        ArrayList<String> ageArrayList = new ArrayList<String>();
+        ageArrayList.add("select age");
+        for(int i=16; i<=80; i++) {
+
+            ageArrayList.add(i + "");
+        }
+
+        String[] ageList = ageArrayList.toArray(new String[ageArrayList.size()]);
+        ageArrayList.toArray(ageList);
+
+        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item,ageList);
+        memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cboAMAge.setAdapter(memberNoAdapter);
+        cboAMAge.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+        //Make the spinner selectable
+        cboAMAge.setFocusable(true);
+        cboAMAge.setFocusableInTouchMode(true);
+        cboAMAge.setClickable(true);
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -184,6 +253,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 NavUtils.navigateUpTo(this, upIntent);
                 return true;
             case R.id.mnuAMNext:
+                //TODO: If member number is nothing, allow proceeding without saving
                 //Save member and add new member
                 if(saveMemberData()) {
                     clearDataFields();
@@ -213,7 +283,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             member = selectedMember;
         }
 
-        if (validateGettingStartedMemberData(member)) {
+        if (validateData(member)) {
             boolean retVal = false;
             if (member.getMemberId() != 0) {
                 retVal = repo.updateGettingStartedWizardMember(member);
@@ -276,38 +346,167 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     }
 
 
-    private boolean validateGettingStartedMemberData(Member member) {
+    @Override
+    protected boolean validateData(Member member) {
         try {
             if(null == member) {
                 return false;
             }
+            repo = new MemberRepo(getApplicationContext());
+            // Validate: MemberNo
+            Spinner cboAMMemberNo = (Spinner)findViewById(R.id.cboAMMemberNo);
+            if(cboAMMemberNo.getSelectedItemPosition() < 1) {
+                Utils.createAlertDialogOk(this, dlgTitle, "The Member Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                cboAMMemberNo.requestFocus();
+                return false;
+            }
+            else {
+                String memberNo = cboAMMemberNo.getSelectedItem().toString().trim();
+                int theMemberNo = Integer.parseInt(memberNo);
+                member.setMemberNo(theMemberNo);
+            }
 
-            //Validate common member information via super class
-            if(! validateData(member)) {
-                Log.d(getBaseContext().getPackageName(), "Data validation failed");
+
+
+
+            //Validate: Surname
+            TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
+            String surname = txtSurname.getText().toString().trim();
+            if(surname.length() < 1) {
+                Utils.createAlertDialogOk(this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtSurname.requestFocus();
+                return false;
+            }
+            else {
+                member.setSurname(surname);
+            }
+
+            //Validate: OtherNames
+            TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
+            String otherNames = txtOtherNames.getText().toString().trim();
+            if(otherNames.length() < 1) {
+                Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtOtherNames.requestFocus();
+                return false;
+            }
+            else {
+                member.setOtherNames(otherNames);
+            }
+
+            //Validate: Gender
+            //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
+            Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
+            if(cboGender.getSelectedItemPosition() < 1) {
+                Utils.createAlertDialogOk(this, dlgTitle, "The sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                cboGender.requestFocus();
+                return false;
+            }
+            else {
+                String gender = cboGender.getSelectedItem().toString().trim();
+                member.setGender(gender);
+            }
+
+            // Validate: Age
+            Spinner cboAge = (Spinner)findViewById(R.id.cboAMAge);
+            if(cboAge.getSelectedItemPosition() == 0) {
+                Utils.createAlertDialogOk(this, dlgTitle, "The age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                cboAge.requestFocus();
+                return false;
+            }
+            else {
+                String age = cboAge.getSelectedItem().toString().trim();
+                Integer theAge = Integer.parseInt(age);
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.YEAR, -theAge);
+                member.setDateOfBirth(c.getTime());
+            }
+
+
+
+            //Validate: Occupation
+            TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
+            String occupation = txtOccupation.getText().toString().trim();
+            if(occupation.length() < 1) {
+                Utils.createAlertDialogOk(this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtOccupation.requestFocus();
+                return false;
+            }
+            else {
+                member.setOccupation(occupation);
+            }
+
+            //Validate: PhoneNumber
+            TextView txtPhoneNo = (TextView)findViewById(R.id.txtAMPhoneNo);
+            String phoneNo = txtPhoneNo.getText().toString().trim();
+            if(phoneNo.length() < 1) {
+                //Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Phone Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                //txtPhoneNo.requestFocus();
+                //return false;
+                member.setPhoneNumber(null);
+            }
+            else {
+                member.setPhoneNumber(phoneNo);
+            }
+
+            // Validate: Cycles Completed
+            TextView txtCycles = (TextView)findViewById(R.id.txtAMCycles);
+            String cycles = txtCycles.getText().toString().trim();
+            int theCycles = 0;
+            member.setCyclesCompleted(0);
+            if (cycles.length() < 1) {
+//                Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Number of Completed Cycles is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+//                txtCycles.requestFocus();
+//                return false;
+
+            }
+            else {
+                theCycles = Integer.parseInt(cycles);
+                if (theCycles < 0) {
+                    Utils.createAlertDialogOk(this, dlgTitle, "The number of cycles must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtCycles.requestFocus();
+                    return false;
+                }
+                else if(theCycles > 100) {
+                    Utils.createAlertDialogOk(this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtCycles.requestFocus();
+                    return false;
+                }
+                else {
+                    member.setCyclesCompleted(theCycles);
+
+                    //Get the Date of Admission
+                    Calendar c = Calendar.getInstance();
+                    c.add(Calendar.YEAR, -theCycles);
+                    member.setDateOfAdmission(c.getTime());
+                }
+            }
+
+
+
+
+
+
+            //Final Verifications
+            //TODO: Trying to use Application context to ensure dialog box does not disappear
+            if(!repo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId())) {
+                Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                cboAMMemberNo.requestFocus();
                 return false;
             }
 
 
-            //Block to perform validation for getting started wizard
+            int amountSavedSoFar = 0;
+            int outstandingLoan = 0;
 
+            TextView txtSavingsSoFar = (TextView)findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
+            String savings = txtSavingsSoFar.getText().toString().trim();
+            amountSavedSoFar = Integer.parseInt(savings);
+            member.setSavingsOnSetup(amountSavedSoFar);
 
-                int amountSavedSoFar = 0;
-                int outstandingLoan = 0;
-
-                TextView txtSavingsSoFar = (TextView)findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
-                String savings = txtSavingsSoFar.getText().toString().trim();
-                amountSavedSoFar = Integer.parseInt(savings);
-                member.setSavingsOnSetup(amountSavedSoFar);
-
-                TextView txtLoanAmount = (TextView)findViewById(R.id.txtMDVOutstandingLoanAmount);
-                String loanAmount = txtLoanAmount.getText().toString().trim();
-                outstandingLoan = Integer.parseInt(loanAmount);
-                member.setOutstandingLoanOnSetup(outstandingLoan);
-
-
-
-
+            TextView txtLoanAmount = (TextView)findViewById(R.id.txtMDVOutstandingLoanAmount);
+            String loanAmount = txtLoanAmount.getText().toString().trim();
+            outstandingLoan = Integer.parseInt(loanAmount);
+            member.setOutstandingLoanOnSetup(outstandingLoan);
 
 
             return true;
@@ -317,6 +516,12 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             return false;
         }
     }
+
+
+
+
+
+
 
     private void populateDataFields(Member member) {
         try {
@@ -353,16 +558,10 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             if (member.getPhoneNumber() != null) {
                 txtPhone.setText(member.getPhoneNumber());
             }
-            TextView txtAge = (TextView)findViewById(R.id.txtAMAge);
-            //txtAge.setText(String.format("%d", 0));
 
-            //TODO: I need to retrieve the Age from the DateOfBirth
+
+
             Calendar calToday = Calendar.getInstance();
-            Calendar calDb = Calendar.getInstance();
-            calDb.setTime(member.getDateOfBirth());
-            int computedAge = calToday.get(Calendar.YEAR) - calDb.get(Calendar.YEAR);
-            txtAge.setText(String.format("%d", computedAge));
-
             //TODO: When we allow members to take leave, we may be better allowing this field to be editable
             TextView txtCyclesCompleted = (TextView)findViewById(R.id.txtAMCycles);
             Calendar calDbCycles = Calendar.getInstance();
@@ -389,8 +588,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
     private void clearDataFields() {
         // Populate the Fields
-        TextView txtMemberNo = (TextView)findViewById(R.id.txtAMMemberNo);
-        txtMemberNo.setText(null);
+        Spinner cboAMMemberNo = (Spinner)findViewById(R.id.cboAMMemberNo);
+        //txtMemberNo.setText(null);
         TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
         txtSurname.setText(null);
         TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
@@ -401,12 +600,11 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         txtOccupation.setText(null);
         TextView txtPhone = (TextView)findViewById(R.id.txtAMPhoneNo);
         txtPhone.setText(null);
-        TextView txtAge = (TextView)findViewById(R.id.txtAMAge);
-        txtAge.setText(null);
+
         TextView txtCycles = (TextView)findViewById(R.id.txtAMCycles);
         txtCycles.setText(null);
 
-        txtMemberNo.requestFocus();
+        cboAMMemberNo.requestFocus();
     }
 
 }
