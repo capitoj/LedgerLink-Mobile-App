@@ -24,14 +24,6 @@
             android:text="If you are satisfied that all information is correct, please press DONE, otherwise press cancel to revise information"
 
             />
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            android:id="@+id/lblConfirmationText"
-            style="@style/RegularText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="If you are satisfied that all information is correct, please press DONE, otherwise press cancel to revise information"
-
-            />
 
 
     </LinearLayout>

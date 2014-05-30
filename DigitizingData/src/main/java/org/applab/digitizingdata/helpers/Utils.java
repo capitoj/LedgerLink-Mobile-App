@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -16,6 +17,7 @@ import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
 
+import android.widget.Spinner;
 import org.applab.digitizingdata.*;
 
 /**
@@ -62,9 +64,14 @@ public class Utils {
     private static String phoneImei;
 
     //A Defination of Getting started wizard stage indicators
-    public static final int GETTING_STARTED_PAGE_NEW_CYCLE = 1;
-    public static final int GETTING_STARTED_PAGE_ADD_MEMBER = 2;
-    public static final int GETTING_STARTED_PAGE_REVIEW_MEMBERS = 3;
+    public static final int GETTING_STARTED_PAGE_ONE = 1;
+    public static final int GETTING_STARTED_PAGE_PIN = 2;
+    public static final int GETTING_STARTED_PAGE_NEW_CYCLE = 3;
+    public static final int GETTING_STARTED_PAGE_ADD_MEMBER = 4;
+    public static final int GETTING_STARTED_PAGE_REVIEW_MEMBERS = 5;
+    public static final int GETTING_STARTED_PAGE_REVIEW_CYCLE = 6;
+
+
 
 
     //TODO: will create an enum of CURRENT_VIEW_MODE
@@ -243,8 +250,14 @@ public class Utils {
                return GettingStartedWizardAddMemberActivity.class;
            case GETTING_STARTED_PAGE_REVIEW_MEMBERS:
                return GettingStartedWizardReviewMembersActivity.class;
-           default:
+           case GETTING_STARTED_PAGE_REVIEW_CYCLE:
                return GettingsStartedWizardNewCycleActivity.class;
+           case GETTING_STARTED_PAGE_ONE:
+               return GettingStartedWizardPageOne.class;
+           case GETTING_STARTED_PAGE_PIN:
+               return GettingStartedWizardPageTwo.class;
+           default:
+               return GettingStartedWizardPageOne.class;
         }
     }
 
@@ -327,6 +340,15 @@ public class Utils {
 
         return alertDialog;
     }
+
+
+    /** This method sets the selected option of a spinner from a given value **/
+    public static void setSpinnerSelection(String value, Spinner spinner) {
+        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+        int spinnerPosition = adapter.getPosition(value);
+        spinner.setSelection(spinnerPosition);
+    }
+
 
     /**
      * This method is a hack helps align a ListView within a scrolling screen

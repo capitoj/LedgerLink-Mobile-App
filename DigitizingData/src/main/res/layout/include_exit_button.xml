@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="android:actionButtonStyle"
+    android:id="@+id/actionbar_exit"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1">
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ActionBarMenuItemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingRight="3dp"
+        android:drawableLeft="@drawable/ic_navigation_cancel"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        android:text="exit" />
+</FrameLayout>

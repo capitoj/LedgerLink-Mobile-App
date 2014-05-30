@@ -2,9 +2,11 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.internal.view.menu.ActionMenuItemView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -14,6 +16,7 @@ import org.applab.digitizingdata.repo.VslaInfoRepo;
 public class GettingStartedConfirmationPage extends SherlockActivity {
 
 
+    private Menu MENU;
     ActionBar actionBar;
     boolean confirmed = false;
 
@@ -64,7 +67,11 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
                     content.setText("You have entered all information about your savings group and the current cycle. You may now use the phone at every meeting to enter savings and loan activity.");
                     confirmed = true;
 
+
                     //TODO: hide cancel menu button
+                    MENU.findItem(R.id.mnuAMCancel).setVisible(false);
+                    MENU.findItem(R.id.mnuAMDone).setVisible(false);
+
                 }
 
 
@@ -78,6 +85,9 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         final MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.done_cancel, menu);
+
+        MENU = menu;
+
         return true;
 
     }

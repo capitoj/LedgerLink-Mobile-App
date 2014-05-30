@@ -34,22 +34,22 @@ public class MeetingRepo {
 
     }
 
-    public MeetingRepo(Context context) {
+    public MeetingRepo(Context context){
         this.context = context;
     }
 
-    public boolean addMeeting(Meeting meeting) {
+    public boolean addMeeting(Meeting meeting){
         SQLiteDatabase db = null;
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
-            if (meeting.getMeetingDate() == null) {
+            if(meeting.getMeetingDate() == null) {
                 meeting.setMeetingDate(new Date());
             }
             values.put(MeetingSchema.COL_MT_IS_GETTINGS_STARTED_WIZARD, meeting.isGettingStarted());
             values.put(MeetingSchema.COL_MT_MEETING_DATE, Utils.formatDateToSqlite(meeting.getMeetingDate()));
-            if (meeting.getVslaCycle() != null) {
+            if(meeting.getVslaCycle() != null){
                 values.put(MeetingSchema.COL_MT_CYCLE_ID, meeting.getVslaCycle().getCycleId());
             }
             // Inserting Row
@@ -57,13 +57,16 @@ public class MeetingRepo {
 
             if (retVal != -1) {
                 return true;
-            } else {
+            }
+            else {
                 return false;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.addMeeting", ex.getMessage());
             return false;
-        } finally {
+        }
+        finally {
             if (db != null) {
                 db.close();
             }
@@ -151,9 +154,9 @@ public class MeetingRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            values.put(MeetingSchema.COL_MT_IS_DATA_SENT, (isDataSent) ? 1 : 0);
-            if (isDataSent) {
-                if (dateSent == null) {
+            values.put(MeetingSchema.COL_MT_IS_DATA_SENT, (isDataSent)?1:0);
+            if(isDataSent) {
+                if(dateSent == null) {
                     dateSent = new Date();
                 }
                 values.put(MeetingSchema.COL_MT_DATE_SENT, Utils.formatDateToSqlite(dateSent));
@@ -161,16 +164,19 @@ public class MeetingRepo {
 
             long retVal = -1;
             retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
-                    new String[]{String.valueOf(meetingId)});
+                    new String[] { String.valueOf(meetingId) });
             if (retVal != -1) {
                 return true;
-            } else {
+            }
+            else {
                 return false;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.updateDataSentFlag", ex.getMessage());
             return false;
-        } finally {
+        }
+        finally {
             if (db != null) {
                 db.close();
             }
@@ -206,11 +212,12 @@ public class MeetingRepo {
                     //Check for Nulls while loading the VSLA Cycle
                     int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                     meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                    if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                    if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                         meeting.setMeetingDataSent(true);
                         Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                         meeting.setDateSent(dateMeetingDataSent);
-                    } else {
+                    }
+                    else {
                         meeting.setMeetingDataSent(false);
                     }
 
@@ -221,10 +228,12 @@ public class MeetingRepo {
 
             // return the list
             return meetings;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getAllMeetings", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -264,11 +273,12 @@ public class MeetingRepo {
                     //Check for Nulls while loading the VSLA Cycle
                     int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                     meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                    if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                    if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                         meeting.setMeetingDataSent(true);
                         Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                         meeting.setDateSent(dateMeetingDataSent);
-                    } else {
+                    }
+                    else {
                         meeting.setMeetingDataSent(false);
                     }
 
@@ -279,10 +289,12 @@ public class MeetingRepo {
 
             // return the list
             return meetings;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getMeeting", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -305,7 +317,7 @@ public class MeetingRepo {
             meetings = new ArrayList<Meeting>();
             String columnList = MeetingSchema.getColumnList();
 
-            if (isDataSent) {
+            if(isDataSent) {
                 dataSentFlag = 1;
             }
 
@@ -328,11 +340,12 @@ public class MeetingRepo {
                     //Check for Nulls while loading the VSLA Cycle
                     int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                     meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                    if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                    if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                         meeting.setMeetingDataSent(true);
                         Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                         meeting.setDateSent(dateMeetingDataSent);
-                    } else {
+                    }
+                    else {
                         meeting.setMeetingDataSent(false);
                     }
 
@@ -343,10 +356,12 @@ public class MeetingRepo {
 
             // return the list
             return meetings;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getMeeting", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -497,22 +512,26 @@ public class MeetingRepo {
                 //Check for Nulls while loading the VSLA Cycle
                 int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                 meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                     meeting.setMeetingDataSent(true);
                     Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                     meeting.setDateSent(dateMeetingDataSent);
-                } else {
+                }
+                else {
                     meeting.setMeetingDataSent(false);
                 }
 
                 return meeting;
-            } else {
+            }
+            else {
                 return null;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getMeetingById", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -536,7 +555,7 @@ public class MeetingRepo {
 
             // Select All Query
             String selectQuery = String.format("SELECT %s FROM %s WHERE date(%s)='%s' ORDER BY %s DESC LIMIT 1", columnList, MeetingSchema.getTableName(),
-                    MeetingSchema.COL_MT_MEETING_DATE, Utils.formatDate(theMeetingDate, "yyyy-MM-dd"),
+                    MeetingSchema.COL_MT_MEETING_DATE, Utils.formatDate(theMeetingDate,"yyyy-MM-dd"),
                     MeetingSchema.COL_MT_MEETING_ID);
             cursor = db.rawQuery(selectQuery, null);
 
@@ -551,22 +570,26 @@ public class MeetingRepo {
                 //Check for Nulls while loading the VSLA Cycle
                 int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                 meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                     meeting.setMeetingDataSent(true);
                     Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                     meeting.setDateSent(dateMeetingDataSent);
-                } else {
+                }
+                else {
                     meeting.setMeetingDataSent(false);
                 }
 
                 return meeting;
-            } else {
+            }
+            else {
                 return null;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getMeetingByDate", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -579,12 +602,11 @@ public class MeetingRepo {
 
     /**
      * Retrieves a Meeting by Date from a particular Vsla Cycle
-     *
      * @param theMeetingDate
      * @param vslaCycleId
      * @return
      */
-    public Meeting getMeetingByDate(Date theMeetingDate, int vslaCycleId) {
+    public Meeting getMeetingByDate(Date theMeetingDate, int vslaCycleId ) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         VslaCycleRepo cycleRepo = null;
@@ -597,7 +619,7 @@ public class MeetingRepo {
 
             // Select All Query
             String selectQuery = String.format("SELECT %s FROM %s WHERE date(%s)='%s' AND %s=%d ORDER BY %s DESC LIMIT 1", columnList, MeetingSchema.getTableName(),
-                    MeetingSchema.COL_MT_MEETING_DATE, Utils.formatDate(theMeetingDate, "yyyy-MM-dd"),
+                    MeetingSchema.COL_MT_MEETING_DATE, Utils.formatDate(theMeetingDate,"yyyy-MM-dd"),
                     MeetingSchema.COL_MT_CYCLE_ID, vslaCycleId,
                     MeetingSchema.COL_MT_MEETING_ID);
             cursor = db.rawQuery(selectQuery, null);
@@ -613,22 +635,26 @@ public class MeetingRepo {
                 //Check for Nulls while loading the VSLA Cycle
                 int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                 meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                     meeting.setMeetingDataSent(true);
                     Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                     meeting.setDateSent(dateMeetingDataSent);
-                } else {
+                }
+                else {
                     meeting.setMeetingDataSent(false);
                 }
 
                 return meeting;
-            } else {
+            }
+            else {
                 return null;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getMeetingByDate", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -651,49 +677,49 @@ public class MeetingRepo {
             String columnList = MeetingSchema.getColumnList();
 
             // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC LIMIT 2",
-                    columnList,
-                    MeetingSchema.getTableName(),
+            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC LIMIT 2", columnList, MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_CYCLE_ID, vslaCycleId,
                     MeetingSchema.COL_MT_MEETING_ID);
             cursor = db.rawQuery(selectQuery, null);
 
             //Get the second row
             if (cursor != null && cursor.moveToFirst()) {
-                if (cursor.getCount() < 2) {
-                    Log.d("MeetingRepo", String.valueOf(cursor.getCount()));
-                    Log.d("MeetingRepo", "NotNULL");
+                if(cursor.getCount() < 2) {
                     return null;
                 }
-                if (cursor.moveToLast()) {
-                    Log.d("MeetingRepo", String.valueOf(cursor.getCount()));
-                    Log.d("MeetingRepo", "NotNULL2");
+                if(cursor.moveToLast()) {
                     meeting = new Meeting();
                     Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                     meeting.setMeetingDate(meetingDate);
                     meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
+
                     meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTINGS_STARTED_WIZARD)) == 1);
                     //Check for Nulls while loading the VSLA Cycle
                     int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                     meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                    if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                    if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                         meeting.setMeetingDataSent(true);
                         Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                         meeting.setDateSent(dateMeetingDataSent);
-                    } else {
+                    }
+                    else {
                         meeting.setMeetingDataSent(false);
                     }
                     return meeting;
-                } else {
+                }
+                else {
                     return null;
                 }
-            } else {
+            }
+            else {
                 return null;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getPreviousMeeting", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -732,22 +758,26 @@ public class MeetingRepo {
                 //Check for Nulls while loading the VSLA Cycle
                 int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                 meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                     meeting.setMeetingDataSent(true);
                     Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                     meeting.setDateSent(dateMeetingDataSent);
-                } else {
+                }
+                else {
                     meeting.setMeetingDataSent(false);
                 }
 
                 return meeting;
-            } else {
+            }
+            else {
                 return null;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getCurrentMeeting", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -786,22 +816,26 @@ public class MeetingRepo {
                 //Check for Nulls while loading the VSLA Cycle
                 int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                 meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                     meeting.setMeetingDataSent(true);
                     Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                     meeting.setDateSent(dateMeetingDataSent);
-                } else {
+                }
+                else {
                     meeting.setMeetingDataSent(false);
                 }
 
                 return meeting;
-            } else {
+            }
+            else {
                 return null;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getCurrentMeeting", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -839,22 +873,26 @@ public class MeetingRepo {
                 //Check for Nulls while loading the VSLA Cycle
                 int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                 meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                     meeting.setMeetingDataSent(true);
                     Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                     meeting.setDateSent(dateMeetingDataSent);
-                } else {
+                }
+                else {
                     meeting.setMeetingDataSent(false);
                 }
 
                 return meeting;
-            } else {
+            }
+            else {
                 return null;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getMostRecentMeeting", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -892,22 +930,69 @@ public class MeetingRepo {
                 //Check for Nulls while loading the VSLA Cycle
                 int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
                 meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
                     meeting.setMeetingDataSent(true);
                     Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
                     meeting.setDateSent(dateMeetingDataSent);
-                } else {
+                }
+                else {
                     meeting.setMeetingDataSent(false);
                 }
 
                 return meeting;
-            } else {
+            }
+            else {
                 return null;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.getMostRecentMeeting", ex.getMessage());
             return null;
-        } finally {
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    /* Deactivates a meeting i.e sets the is current flag to false*/
+    public boolean deactivateMeeting(Meeting meeting) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        VslaCycleRepo cycleRepo = null;
+
+        try {
+            if(meeting == null) {
+                return false;
+            }
+            cycleRepo = new VslaCycleRepo(context);
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(MeetingSchema.COL_MT_IS_CURRENT,0);
+             //Update the specific one to InActive
+
+                values.put(MeetingSchema.COL_MT_IS_CURRENT,0);
+                int retVal2 = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                        new String[] { String.valueOf(meeting.getMeetingId()) });
+                if(retVal2 > 0) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.activateMeeting", ex.getMessage());
+            return false;
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -920,7 +1005,6 @@ public class MeetingRepo {
 
     /**
      * This will deactivate all other meetings and activate the one passed to make it the current meeting.
-     *
      * @param meeting
      * @return
      */
@@ -930,37 +1014,41 @@ public class MeetingRepo {
         VslaCycleRepo cycleRepo = null;
 
         try {
-            if (meeting == null) {
+            if(meeting == null) {
                 return false;
             }
             cycleRepo = new VslaCycleRepo(context);
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            values.put(MeetingSchema.COL_MT_MEETING_ID, 0);
+            values.put(MeetingSchema.COL_MT_IS_CURRENT,0);
 
             // updating row:
-            int retVal = db.update(MeetingSchema.getTableName(), values, null, null);
+            int retVal = db.update(MeetingSchema.getTableName(), values, null,null);
 
             if (retVal > 0) {
 
                 //Update the specific one to Active
                 values.clear();
-                values.put(MeetingSchema.COL_MT_MEETING_ID, 1);
+                values.put(MeetingSchema.COL_MT_IS_CURRENT,1);
                 int retVal2 = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
-                        new String[]{String.valueOf(meeting.getMeetingId())});
-                if (retVal2 > 0) {
+                        new String[] { String.valueOf(meeting.getMeetingId()) });
+                if(retVal2 > 0) {
                     return true;
-                } else {
+                }
+                else {
                     return false;
                 }
-            } else {
+            }
+            else {
                 return false;
             }
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.activateMeeting", ex.getMessage());
             return false;
-        } finally {
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -979,11 +1067,13 @@ public class MeetingRepo {
 
             // To remove all rows and get a count pass "1" as the whereClause.
             db.delete(MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_ID + " = ?",
-                    new String[]{String.valueOf(meetingId)});
-        } catch (Exception ex) {
+                    new String[] { String.valueOf(meetingId) });
+        }
+        catch (Exception ex) {
             Log.e("MeetingRepo.deleteMeeting", ex.getMessage());
             return;
-        } finally {
+        }
+        finally {
             if (db != null) {
                 db.close();
             }

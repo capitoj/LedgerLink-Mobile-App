@@ -597,4 +597,17 @@ public class MemberRepo {
     }
 
 
+    /*Returns a list of available member numbers that can be used */
+    public ArrayList<String> getListOfAvailableMemberNumbers(int count) {
+        ArrayList<String> memberNumbers = new ArrayList<String>();
+
+        for(int i=1; memberNumbers.size()<count; i++) {
+            if(isMemberNoAvailable(i, 0)) {
+                memberNumbers.add(i+"");
+            }
+        }
+        return memberNumbers;
+    }
+
+
 }

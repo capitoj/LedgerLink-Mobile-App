@@ -30,10 +30,16 @@ import java.util.Calendar;
  */
 public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
+    protected boolean _isFromAddMembers = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(getIntent().hasExtra("_isFromAddMembers")) {
+            _isFromAddMembers = getIntent().getBooleanExtra("_isFromAddMembers",false);
+        }
+
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_new_cycle_getting_started_wizard);
@@ -47,7 +53,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         }
 
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
         actionBar.setTitle("GETTING STARTED");
 
@@ -81,12 +87,15 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
         if(isUpdateCycleAction) {
             //Setup the Fields by getting the current Cycle
-            TextView heading = (TextView) findViewById(R.id.lblNCHeading);
+
+            //Not from add members activity, change the labels
+            if(! _isFromAddMembers) {
+            TextView heading = (TextView) findViewById(R.id.lblNewCycleHeading);
             heading.setText("Review Cycle Information");
 
-            TextView headerText = (TextView) findViewById(R.id.lblNCHeader);
-            heading.setText("Review and confirm that all information is correct. Correct any errors");
-
+            TextView headerText = (TextView) findViewById(R.id.lblNCHeading);
+                headerText.setText("Review and confirm that all information is correct. Correct any errors");
+            }
 
 
             if(selectedCycle != null) {
@@ -101,6 +110,10 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                //Set current GSW stage
+                VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
+                vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_REVIEW_CYCLE);
             }
             else {
                 TextView txtInstructions = (TextView)findViewById(R.id.lblNCHeader);
@@ -160,40 +173,36 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         final MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.new_cycle, menu);
         //Hide cancel button since it does not exist in GSW
-        menu.findItem(R.id.mnuNCCancel).setVisible(false);
+        MenuItem cancelItem = menu.findItem(R.id.mnuNCCancel);
+        MenuItem doneItem = menu.findItem(R.id.mnuNCNext);
+        cancelItem.setIcon(null);
+        doneItem.setIcon(null);
+        if(isUpdateCycleAction) {
+            //menu.findItem(R.id.mnuNCCancel)
+            doneItem.setTitle("done");
+            cancelItem.setTitle("exit");
+        }
+        else {
+            cancelItem.setVisible(false);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i;
         switch(item.getItemId()) {
-            case android.R.id.home:
-                Intent upIntent = new Intent(this, MainActivity.class);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    // This activity is not part of the application's task, so
-                    // create a new task
-                    // with a synthesized back stack.
-                    TaskStackBuilder
-                            .from(this)
-                            .addNextIntent(new Intent(this, MainActivity.class))
-                            .addNextIntent(upIntent).startActivities();
-                    finish();
-                } else {
-                    // This activity is part of the application's task, so simply
-                    // navigate up to the hierarchical parent activity.
-                    NavUtils.navigateUpTo(this, upIntent);
-                }
-                return true;
-           /* case R.id.mnuNCCancel:
-                //On cancel go back to PageTwo of GSW
-                i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
-                return true;*/
+
             case R.id.mnuNCNext:
                 //First Save the Cycle Dates
                 //If successful move to next activity
                 return saveMiddleCycleData();
+
+            case R.id.mnuNCCancel:
+                //If reviewing, this exits the app
+                if(isUpdateCycleAction) {
+                    finish();
+                }
+
         }
         return true;
 
@@ -251,21 +260,19 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                 }
 
                 //Pass on the flag indicating whether this is an Update operation
-                if(isUpdateCycleAction) {
+                Intent i;
+                if(isUpdateCycleAction && !_isFromAddMembers) {
                     //Go to confirmation activity
-                    Intent i =  new Intent(getApplicationContext(), GettingStartedConfirmationPage.class);
+                    i =  new Intent(getApplicationContext(), GettingStartedConfirmationPage.class);
                     startActivity(i);
+                    finish();
                 }
                 else {
-                Intent i =  new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+                i =  new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
                 i.putExtra("_isUpdateCycleAction", isUpdateCycleAction);
                 startActivity(i);
+                finish();
                 }
-
-
-                successFlg = true;
-
-
             }
             else {
                 displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.", Utils.MSGBOX_ICON_EXCLAMATION);
@@ -280,13 +287,11 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
     //Creates the dummy meeting to be used to getting started wizard
     private boolean createGettingStartedDummyMeeting(VslaCycle currentCycle) {
-
         Meeting meeting = new Meeting();
         meeting.setGettingStarted(true);
         meeting.setIsCurrent(true);
         meeting.setVslaCycle(currentCycle);
         meeting.setMeetingDate(currentCycle.getStartDate());
-
         MeetingRepo repo = new MeetingRepo(this);
         return repo.addMeeting(meeting);
 

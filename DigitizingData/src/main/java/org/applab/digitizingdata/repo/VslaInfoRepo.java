@@ -262,8 +262,7 @@ public class VslaInfoRepo {
     //Updates whether the Getting started wizard has been completed
     public boolean updateGettingStartedWizardCompleteFlag(boolean isDataMigrated) {
         SQLiteDatabase db = null;
-        boolean performUpdate = false;
-        int loanId = 0;
+
         try {
             //Check if exists
             if(!vslaInfoExists()) {
@@ -275,6 +274,10 @@ public class VslaInfoRepo {
 
             if(isDataMigrated) {
                 values.put(VslaInfoSchema.COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE, 1);
+
+                //Update the GSW meeting to inactive
+                MeetingRepo meetingRepo = new MeetingRepo(context);
+                meetingRepo.deactivateMeeting(meetingRepo.getDummyGettingStartedWizardMeeting());
             }
             else{
                 values.put(VslaInfoSchema.COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE, 0);
