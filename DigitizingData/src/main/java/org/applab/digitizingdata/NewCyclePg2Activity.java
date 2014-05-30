@@ -1,17 +1,12 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -147,7 +142,7 @@ public class NewCyclePg2Activity extends SherlockListActivity {
                 // Pass on data
                 Bundle b = new Bundle();
                 b.putInt("_id", selectedMember.getMemberId());
-                b.putString("_names", selectedMember.getFullNames());
+                b.putString("_names", selectedMember.getFullName());
 
                 viewMember.putExtras(b);
                 viewMember.putExtra("_caller","newCyclePg2");

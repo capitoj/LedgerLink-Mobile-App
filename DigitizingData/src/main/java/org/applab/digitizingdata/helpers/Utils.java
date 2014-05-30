@@ -26,6 +26,7 @@ public class Utils {
     ** DATE UTILS
      */
     public static final String DATE_FIELD_FORMAT = "dd-MMM-yyyy";
+    public static final String OTHER_DATE_FIELD_FORMAT = "dd MMM yyyy";
     public static final String REAL_FIELD_FORMAT = "#0";
     public static final String INTEGER_FIELD_FORMAT = "#0";
 

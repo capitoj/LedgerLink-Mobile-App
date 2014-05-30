@@ -61,7 +61,9 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         actionBar = getSherlockActivity().getSupportActionBar();
-        String title = "Meeting";
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        String title = String.format("Meeting    %s", meetingDate);
+
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
@@ -70,14 +72,14 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-                title="Meeting";
+              //  title="Meeting";
                 break;
         }
         actionBar.setTitle(title);
 
-        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
+        /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate);
+        lblMeetingDate.setText(meetingDate); */
 
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
@@ -156,7 +158,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
             TextView lblTotalSavings = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFSavings);
             TextView lblTotalLoansRepaid = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFLoansRepaid);
 
-            double openingCash = meetingRepo.getMeetingTotalOpeningCash(meetingId);
+            double openingCash = meetingRepo.getMeetingTotalExpectedStartingCash(meetingId);
             double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
 

@@ -2,12 +2,10 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,7 +53,9 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         actionBar = getSherlockActivity().getSupportActionBar();
-        String title = "Meeting";
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        String title = String.format("Meeting    %s", meetingDate);
+
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
@@ -64,14 +64,14 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-                title="Meeting";
+                //title="Meeting";
                 break;
         }
         actionBar.setTitle(title);
 
-        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLRepayFMeetingDate);
+       /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLRepayFMeetingDate);
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate);
+        lblMeetingDate.setText(meetingDate); */
 
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
@@ -110,7 +110,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
 
                     // Pass on data
                     viewHistory.putExtra("_memberId", selectedMember.getMemberId());
-                    viewHistory.putExtra("_names", selectedMember.getFullNames());
+                    viewHistory.putExtra("_names", selectedMember.getFullName());
                     viewHistory.putExtra("_meetingDate",meetingDate);
                     viewHistory.putExtra("_meetingId", meetingId);
 

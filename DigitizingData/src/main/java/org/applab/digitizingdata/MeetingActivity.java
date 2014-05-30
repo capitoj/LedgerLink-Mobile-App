@@ -20,13 +20,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,12 +40,11 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Hashtable;
 
 /**
  * Created by Moses on 6/27/13.
  */
-public class MeetingActivity extends SherlockFragmentActivity implements ActionBar.TabListener{
+public class MeetingActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
     public static Context appContext;
     private ActionBar actionBar;
     boolean enableSendData = false;
@@ -72,9 +69,11 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         //ActionBar
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        String meetingDate = getIntent().getStringExtra("_meetingDate");
 
-        String title = "Meeting";
-        switch(Utils._meetingDataViewMode) {
+        String title = String.format("Meeting    %s", meetingDate);
+
+        switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
                 break;
@@ -82,54 +81,49 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 title = "Sent Data";
                 break;
             default:
-                title="Meeting";
                 break;
         }
         actionBar.setTitle(title);
+
+        // actionBar.setSubtitle(meetingDate);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         actionBar.addTab(actionBar.newTab().setTag("rollCall").setText("Register").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setTag("summary").setText("Summary").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setTag("startingCash").setText("Starting Cash").setTabListener(this));
         actionBar.addTab(actionBar.newTab().setTag("savings").setText("Savings").setTabListener(this));
-        actionBar.addTab( actionBar.newTab().setTag("loansRepaid").setText("Loans Repaid").setTabListener(this));
-        actionBar.addTab( actionBar.newTab().setTag("fines").setText("Fines").setTabListener(this));
-        actionBar.addTab( actionBar.newTab().setTag("loansIssued").setText("New Loans").setTabListener(this));
-        actionBar.addTab( actionBar.newTab().setTag("cashBook").setText("Cash Book").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag("loansRepaid").setText("Loans Repaid").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag("fines").setText("Fines").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag("loansIssued").setText("New Loans").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag("cashBook").setText("Cash Book").setTabListener(this));
 
 
         //Do not show the Send Data tab when in READ_ONLY Mode
-        if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
-            actionBar.addTab( actionBar.newTab().setTag("sendData").setText("Send Data").setTabListener(this));
+        if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+            actionBar.addTab(actionBar.newTab().setTag("sendData").setText("Send Data").setTabListener(this));
         }
 
 
-        if(getIntent().hasExtra("_tabToSelect")) {
+        if (getIntent().hasExtra("_tabToSelect")) {
             String tabTag = getIntent().getStringExtra("_tabToSelect");
-            if(tabTag.equalsIgnoreCase("savings")) {
+            if (tabTag.equalsIgnoreCase("savings")) {
                 actionBar.selectTab(actionBar.getTabAt(3));
-            }
-            else if(tabTag.equalsIgnoreCase("startingCash")) {
+            } else if (tabTag.equalsIgnoreCase("startingCash")) {
                 actionBar.selectTab(actionBar.getTabAt(2));
-            }
-            else if(tabTag.equalsIgnoreCase("loansRepaid")) {
+            } else if (tabTag.equalsIgnoreCase("loansRepaid")) {
                 actionBar.selectTab(actionBar.getTabAt(4));
-            }
-            else if(tabTag.equalsIgnoreCase("loansIssued")) {
+            } else if (tabTag.equalsIgnoreCase("loansIssued")) {
                 actionBar.selectTab(actionBar.getTabAt(6));
-            }
-            else if(tabTag.equalsIgnoreCase("cashBook")) {
+            } else if (tabTag.equalsIgnoreCase("cashBook")) {
                 actionBar.selectTab(actionBar.getTabAt(7));
-            }
-            else if(tabTag.equalsIgnoreCase("fines")) {
+            } else if (tabTag.equalsIgnoreCase("fines")) {
                 actionBar.selectTab(actionBar.getTabAt(5));
-            }
-            else if(tabTag.equalsIgnoreCase("rollCall")) {
+            } else if (tabTag.equalsIgnoreCase("rollCall")) {
                 actionBar.selectTab(actionBar.getTabAt(0));
             }
         }
 
-        if(getIntent().hasExtra("_enableSendData")) {
+        if (getIntent().hasExtra("_enableSendData")) {
             enableSendData = getIntent().getBooleanExtra("_enableSendData", false);
         }
     }
@@ -137,12 +131,11 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //If(enableData)
-        if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
+        if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
             final MenuInflater inflater = getSupportMenuInflater();
             inflater.inflate(R.menu.meeting, menu);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -174,7 +167,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MainActivity.class);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
@@ -192,21 +185,22 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                     NavUtils.navigateUpTo(this, upIntent);
                 }
                 return true;
-            case R.id.mnuSMDSend:
-                //Send Meeting Data: Build JSON String and send it
-                sendMeetingData();
-//                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(i);
-                return true;
+
             case R.id.mnuMSDFSend:
                 //For the Send Data Fragment in case data is sent during the meeting
                 sendMeetingData();
                 return true;
-            case R.id.mnuSMDCancel:
-                //Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG).show();
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
-                return true;
+            /** case R.id.mnuSMDSend:
+             //Send Meeting Data: Build JSON String and send it
+             sendMeetingData();
+             //                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+             //                startActivity(i);
+             return true;
+             case R.id.mnuSMDCancel:
+             //Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG).show();
+             Intent i = new Intent(getApplicationContext(), MainActivity.class);
+             startActivity(i);
+             return true; */
             case R.id.mnuMCBFSave:
                 return false;
             case R.id.mnuMeetingDelete:
@@ -215,7 +209,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 startActivity(intent);
             case R.id.mnuMeetingFineMember:
                 Intent fineMemberIntent = new Intent(getApplicationContext(), FineMemberMeetingActivity.class);
-                fineMemberIntent.putExtra("_meetingId", targetMeetingId);
+                fineMemberIntent.putExtra("_meetingId", getIntent().getIntExtra("_meetingId", 0));
                 startActivity(fineMemberIntent);
             default:
                 return false;
@@ -224,52 +218,43 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        String selectedTag = (String)tab.getTag();
+        String selectedTag = (String) tab.getTag();
         SherlockFragment fragment;
 
         mActionMode = null;
 
-        if(selectedTag.equalsIgnoreCase("summary")) {
+        if (selectedTag.equalsIgnoreCase("summary")) {
             fragment = new MeetingSummaryFrag();
             getSupportFragmentManager().beginTransaction()
                     .replace(android.R.id.content, fragment).commit();
-        }
-        else if(selectedTag.equalsIgnoreCase("rollCall")) {
+        } else if (selectedTag.equalsIgnoreCase("rollCall")) {
             fragment = new MeetingRollCallFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        }
-        else if(selectedTag.equalsIgnoreCase("startingCash")) {
-            fragment = new MeetingOpeningCashFrag();
+        } else if (selectedTag.equalsIgnoreCase("startingCash")) {
+            fragment = new MeetingStartingCashFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        }
-        else if(selectedTag.equalsIgnoreCase("savings")) {
+        } else if (selectedTag.equalsIgnoreCase("savings")) {
             fragment = new MeetingSavingsFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        }
-        else if(selectedTag.equalsIgnoreCase("loansRepaid")) {
+        } else if (selectedTag.equalsIgnoreCase("loansRepaid")) {
             fragment = new MeetingLoansRepaidFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        }
-        else if(selectedTag.equalsIgnoreCase("fines")) {
+        } else if (selectedTag.equalsIgnoreCase("fines")) {
             fragment = new MeetingFinesFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        }
-        else if(selectedTag.equalsIgnoreCase("loansIssued")) {
+        } else if (selectedTag.equalsIgnoreCase("loansIssued")) {
             fragment = new MeetingLoansIssuedFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        }
-        else if(selectedTag.equalsIgnoreCase("cashBook")) {
+        } else if (selectedTag.equalsIgnoreCase("cashBook")) {
             fragment = new MeetingCashBookFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
 
             //Create an Context Action Bar Menu
             //mActionMode = MeetingActivity.this.startActionMode(cashBookActionModeCallback);
-        }
-        else if(selectedTag.equalsIgnoreCase("sendData")) {
+        } else if (selectedTag.equalsIgnoreCase("sendData")) {
             fragment = new MeetingSendDataFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        }
-        else {
+        } else {
             //Not Sure what to do
         }
     }
@@ -323,7 +308,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         }
     };
 
-    private void sendMeetingData(){
+    private void sendMeetingData() {
         MeetingRepo repo = new MeetingRepo(getApplicationContext());
 
         //TODO: Confirm this later. Does not support multiple cycles
@@ -331,74 +316,74 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
         HashMap<String, String> meetingData = new HashMap<String, String>();
 
-        if(null != meeting) {
+        if (null != meeting) {
             //Get the Cycle in which this meeting belongs to
             String vslaCycleJson = SendDataRepo.getVslaCycleJson(meeting.getVslaCycle().getCycleId());
-            if(vslaCycleJson != null) {
+            if (vslaCycleJson != null) {
                 //Add to Map
                 meetingData.put(SendDataRepo.CYCLE_INFO_ITEM_KEY, vslaCycleJson);
             }
 
             //Members
             String membersJson = SendDataRepo.getMembersJson();
-            if(membersJson != null) {
+            if (membersJson != null) {
                 //Add to Map
                 meetingData.put(SendDataRepo.MEMBERS_ITEM_KEY, membersJson);
             }
 
             //Meeting Details
             String meetingJson = SendDataRepo.getMeetingJson(meeting);
-            if(meetingJson != null) {
+            if (meetingJson != null) {
                 //Add to Map
                 meetingData.put(SendDataRepo.MEETING_DETAILS_ITEM_KEY, meetingJson);
             }
 
             //Attendance
             String meetingAttendanceJson = SendDataRepo.getMeetingAttendanceJson(meeting.getMeetingId());
-            if(meetingAttendanceJson != null) {
+            if (meetingAttendanceJson != null) {
                 //Add to Map
                 meetingData.put(SendDataRepo.ATTENDANCE_ITEM_KEY, meetingAttendanceJson);
             }
 
             //Savings
             String meetingSavingsJson = SendDataRepo.getMeetingSavingsJson(meeting.getMeetingId());
-            if(meetingSavingsJson != null) {
+            if (meetingSavingsJson != null) {
                 //Add to Map
                 meetingData.put(SendDataRepo.SAVINGS_ITEM_KEY, meetingSavingsJson);
             }
 
-         /**   // Opening Cash
-            String meetingOpeningCashJson = SendDataRepo.getMeetingOpeningCashJson(meeting.getMeetingId());
-            if(meetingOpeningCashJson != null) {
-                //Add to Map
-                meetingData.put(SendDataRepo.OPENING_CASH_ITEM_KEY, meetingOpeningCashJson);
-            }
+            /**   // Opening Cash
+             String meetingOpeningCashJson = SendDataRepo.getMeetingOpeningCashJson(meeting.getMeetingId());
+             if(meetingOpeningCashJson != null) {
+             //Add to Map
+             meetingData.put(SendDataRepo.OPENING_CASH_ITEM_KEY, meetingOpeningCashJson);
+             }
 
-            // Cashbook
-            String meetingCashBookJson = SendDataRepo.getMeetingCashBookJson(meeting.getMeetingId());
-            if(meetingCashBookJson != null) {
-                //Add to Map
-                meetingData.put(SendDataRepo.CASHBOOK_ITEM_KEY, meetingCashBookJson);
-            }
+             // Cashbook
+             String meetingCashBookJson = SendDataRepo.getMeetingCashBookJson(meeting.getMeetingId());
+             if(meetingCashBookJson != null) {
+             //Add to Map
+             meetingData.put(SendDataRepo.CASHBOOK_ITEM_KEY, meetingCashBookJson);
+             }
 
-            // Fine
-            String meetingFineJson = SendDataRepo.getMeetingFineJson(meeting.getMeetingId());
-            if(meetingFineJson != null) {
-                //Add to Map
-                meetingData.put(SendDataRepo.FINE_ITEM_KEY, meetingFineJson);
-            }
+             // Fine
+             String meetingFineJson = SendDataRepo.getMeetingFineJson(meeting.getMeetingId());
+             if(meetingFineJson != null) {
+             //Add to Map
+             meetingData.put(SendDataRepo.FINE_ITEM_KEY, meetingFineJson);
+             }
 
-*/
+             */
             //Repayments
             String meetingRepaymentsJson = SendDataRepo.getMeetingRepaymentsJson(meeting.getMeetingId());
-            if(meetingRepaymentsJson != null) {
+            if (meetingRepaymentsJson != null) {
                 //Add to Map
                 meetingData.put(SendDataRepo.REPAYMENTS_ITEM_KEY, meetingRepaymentsJson);
             }
 
             //Loan Issued
             String meetingLoansJson = SendDataRepo.getMeetingLoanIssuesJson(meeting.getMeetingId());
-            if(meetingLoansJson != null) {
+            if (meetingLoansJson != null) {
                 //Add to Map
                 meetingData.put(SendDataRepo.LOANS_ITEM_KEY, meetingLoansJson);
             }
@@ -417,7 +402,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         SendDataRepo.dataToBeSent = dataFromPhone;
         currentDataItemPosition = 1;
         String request = SendDataRepo.dataToBeSent.get(SendDataRepo.meetingDataItems.get(currentDataItemPosition));
-        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL,"vslas","submitdata");
+        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
 
         new SendDataPostAsyncTask(this).execute(serverUri, request);
     }
@@ -440,12 +425,12 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             super.onPreExecute();
             try {
                 if (meetingActivityWeakReference.get() != null && !meetingActivityWeakReference.get().isFinishing()) {
-                    if(null == progressDialog) {
+                    if (null == progressDialog) {
                         progressDialog = new ProgressDialog(meetingActivityWeakReference.get());
                         progressDialog.setTitle("Sending Meeting Data...");
 
                         message = SendDataRepo.progressDialogMessages.get(currentDataItemPosition);
-                        if(message == null) {
+                        if (message == null) {
                             message = "Please wait...";
                         }
                         progressDialog.setMessage(message);
@@ -456,8 +441,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                         progressDialog.show();
                     }
                 }
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 progressDialog.setMessage(ex.getMessage());
             }
         }
@@ -468,7 +452,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             String uri = params[0];
             try {
                 message = SendDataRepo.progressDialogMessages.get(currentDataItemPosition);
-                if(message == null) {
+                if (message == null) {
                     message = "Please wait...";
                 }
                 publishProgress(message);
@@ -510,23 +494,19 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 // close the connection
                 httpClient.getConnectionManager().shutdown();
 
-                if(httpStatusCode == 200) //sucess
+                if (httpStatusCode == 200) //sucess
                 {
                     result = new JSONObject(responseString);
                 }
 
                 return result;
-            }
-            catch(ClientProtocolException exClient) {
+            } catch (ClientProtocolException exClient) {
                 return null;
-            }
-            catch(IOException exIo) {
+            } catch (IOException exIo) {
                 return null;
-            }
-            catch(JSONException exJson) {
+            } catch (JSONException exJson) {
                 return null;
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 return null;
             }
         }
@@ -534,7 +514,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         @Override
         protected void onProgressUpdate(String... values) {
             super.onProgressUpdate(values);
-            if(null != progressDialog){
+            if (null != progressDialog) {
                 progressDialog.setMessage(values[0]);
             }
         }
@@ -544,21 +524,20 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             super.onPostExecute(result);
 
             try {
-                if(result != null) {
+                if (result != null) {
                     actionSucceeded = ((result.getInt("StatusCode") == 0) ? true : false);
                 }
-                if(actionSucceeded) {
+                if (actionSucceeded) {
                     //Record that the piece of info has been submitted
                     //Pick and Post the next piece of item if there is any RECURSION
                     currentDataItemPosition++;
                     String nextRequest = SendDataRepo.dataToBeSent.get(SendDataRepo.meetingDataItems.get(currentDataItemPosition));
-                    if(nextRequest != null) {
+                    if (nextRequest != null) {
                         new SendDataPostAsyncTask(meetingActivityWeakReference.get()).execute(serverUri, nextRequest);
-                    }
-                    else {
+                    } else {
                         //Finished
                         //Have some code to run when process is finished
-                        Toast.makeText(DatabaseHandler.databaseContext, "Meeting Data was Sent Successfully",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DatabaseHandler.databaseContext, "Meeting Data was Sent Successfully", Toast.LENGTH_SHORT).show();
 
                         //If the process has finished, then mark the meeting as sent
                         Calendar cal = Calendar.getInstance();
@@ -572,28 +551,25 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                         Intent i = new Intent(meetingActivityWeakReference.get(), SendMeetingDataActivity.class);
                         meetingActivityWeakReference.get().startActivity(i);
                     }
-                }
-                else {
+                } else {
                     //Process failed
-                    Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed due to internet connection error. Try again later.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed due to internet connection error. Try again later.", Toast.LENGTH_LONG).show();
                     dismissProgressDialog();
                 }
-            }
-            catch(JSONException exJson) {
+            } catch (JSONException exJson) {
                 //Process failed
-                Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed due to a data format error. Try again later.",Toast.LENGTH_LONG).show();
+                Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed due to a data format error. Try again later.", Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 //Process failed
-                Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed. Try again later.",Toast.LENGTH_LONG).show();
+                Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed. Try again later.", Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
             }
         }
 
         //Dismisses the currently showing progress dialog
         private void dismissProgressDialog() {
-            if(progressDialog != null) {
+            if (progressDialog != null) {
                 progressDialog.dismiss();
                 //set it to null
                 progressDialog = null;

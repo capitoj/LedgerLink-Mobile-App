@@ -6,12 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import android.widget.EditText;
-import android.widget.TextView;
-import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.*;
 import org.applab.digitizingdata.domain.schema.MemberSchema;
-import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 
@@ -275,7 +271,7 @@ public class MemberRepo {
         }
     }
 
-    //Loads the saavings at setup and loans at setup for the member
+    // Loads the savings at setup and loans at setup for the member
      public boolean loadMemberGettingStartedWizardValues(Member member) {
          MeetingRepo meetingRepo = new MeetingRepo(context);
          Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
@@ -330,7 +326,7 @@ public class MemberRepo {
                     member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
 
                     if(! loadMemberGettingStartedWizardValues(member)) {
-                        Log.d(context.getPackageName(), "Failed to load Loan at setup and saving at setup for member "+member.getFullNames());
+                        Log.d(context.getPackageName(), "Failed to load Loan at setup and saving at setup for member "+member.getFullName());
                     }
                     if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
                         member.setDateOfBirth(new Date());

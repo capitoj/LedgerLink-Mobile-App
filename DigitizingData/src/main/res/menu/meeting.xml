@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/mnuSMDSend"
+   <!-- <item android:id="@+id/mnuSMDSend"
           android:title="Send"
           android:menuCategory="system"
           android:orderInCategory="20"
@@ -14,7 +14,7 @@
           android:orderInCategory="11"
           android:showAsAction="ifRoom|withText"
           android:icon="@drawable/ic_navigation_cancel"
-            />
+            /> -->
     <item android:id="@+id/mnuMeetingFineMember"
         android:title="Fine Member"
         android:menuCategory="system"

@@ -58,7 +58,7 @@ public class AddFineActivity extends SherlockActivity {
     MeetingFineRepo fineRepo;
     private boolean isEditAction;
     ArrayList<FineType> fineTypes = null;
-    private boolean paymentStatus = false;
+    private int paymentStatus = 0;
     private AlertDialog alertDialog;
     FineType selectedFineType;
     private MeetingFine fine;
@@ -76,6 +76,7 @@ public class AddFineActivity extends SherlockActivity {
         if(getIntent().hasExtra("_meetingId")) {
             this.meetingId = getIntent().getIntExtra("_meetingId", 0);
         }
+
 
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
@@ -127,9 +128,9 @@ public class AddFineActivity extends SherlockActivity {
             @Override
             public void onClick(View v) {
                 if (((CheckBox) v).isChecked()) {
-                    paymentStatus = true;
+                    paymentStatus = 1;
                 } else {
-                    paymentStatus = false;
+                    paymentStatus = 0;
                 }
             }
         });
@@ -246,6 +247,7 @@ public class AddFineActivity extends SherlockActivity {
                 fineRepo = new MeetingFineRepo(AddFineActivity.this);
             }
 
+            Log.d("AddFineActivity.saveMemberFine", "Meeting:" + String.valueOf(meetingId)+ " Amount: "+String.valueOf(fine.getAmount()) + " Member: "+String.valueOf(selectedMemberId)+ " FineType: "+String.valueOf(selectedFineType.getFineTypeId())+ " PaymentStatus: "+String.valueOf(paymentStatus));
             successFlg = fineRepo.saveMemberFine(meetingId, selectedMemberId, fine.getAmount(), selectedFineType.getFineTypeId(), paymentStatus);
         } else {
             //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
@@ -325,8 +327,9 @@ public class AddFineActivity extends SherlockActivity {
         }
 
         // Hardcode for now
-        fineTypes.add(new FineType(1, "Others"));
-        fineTypes.add(new FineType(2, "Late coming"));
+        fineTypes.add(new FineType(0, "Select FineType"));
+        fineTypes.add(new FineType(1, "Other"));
+        fineTypes.add(new FineType(2, "Late Coming"));
         fineTypes.add(new FineType(3, "Disorder"));
         return fineTypes;
     }

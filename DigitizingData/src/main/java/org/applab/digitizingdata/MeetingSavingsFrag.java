@@ -57,7 +57,9 @@ public class MeetingSavingsFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         actionBar = getSherlockActivity().getSupportActionBar();
-        String title = "Meeting";
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        String title = String.format("Meeting    %s", meetingDate);
+
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
@@ -71,9 +73,9 @@ public class MeetingSavingsFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
 
-        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
+        /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate);
+        lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
         //Populate the Members

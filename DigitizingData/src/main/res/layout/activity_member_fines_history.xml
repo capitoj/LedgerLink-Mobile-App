@@ -12,7 +12,6 @@
             style="@style/InTextHeader"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:text="FINES"
             android:id="@+id/lblMemberFinesHeader" />
 
@@ -20,7 +19,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:text="Check box to indicate paid. Swipe to delete."
             android:id="@+id/lblFMessage"
             android:layout_gravity="center" />
@@ -29,8 +27,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:weightSum="10">
-
+            >
+<!--android:weightSum="10" -->
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularTextBold"
                 android:layout_width="fill_parent"
@@ -82,11 +80,17 @@
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
-            <ListView
+           <ListView
                 android:id="@android:id/list"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:choiceMode="singleChoice" />
+
+          <!--  <de.timroes.android.listview.EnhancedListView
+                android:id="@android:id/list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice" /> -->
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"

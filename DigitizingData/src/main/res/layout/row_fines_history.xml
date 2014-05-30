@@ -4,42 +4,43 @@
     android:layout_height="wrap_content">
 
     <CheckBox
-        style="@style/ListSubItems"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
         android:id="@+id/chkMemberFine"
-        android:clickable="false"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_alignParentRight="true"
+        style="@style/Checkbox"
+        android:layout_width="25dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_below="@id/lblFineFullName"/>
+        android:layout_below="@id/lblFineFullName"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginLeft="15dip"
+        android:focusableInTouchMode="false" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Latecoming"
         android:id="@+id/lblFineType"
+        style="@style/ListSubItemsWithCheckbox"
+        android:layout_width="60dip"
+        android:layout_height="wrap_content"
         android:layout_below="@id/lblFineFullName"
-        android:layout_toRightOf="@id/chkMemberFine"/>
+        android:layout_marginLeft="1dip"
+        android:layout_toRightOf="@id/chkMemberFine"
+        android:text="Latecoming" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="XXX UGX"
         android:id="@+id/txtMemberFineAmount"
+        style="@style/ListSubItemsWithCheckbox"
+        android:layout_width="80dip"
+        android:layout_height="wrap_content"
         android:layout_below="@id/lblFineFullName"
-        android:layout_toRightOf="@id/lblFineType"/>
+        android:layout_toRightOf="@id/lblFineType"
+        android:text="XXX UGX" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        android:id="@+id/lblFineMeetingDate"
+        style="@style/ListSubItemsWithCheckbox"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text=" XXX "
-        android:id="@+id/lblFineMeetingDate"
         android:layout_below="@id/lblFineFullName"
-        android:layout_toRightOf="@id/txtMemberFineAmount"/>
+        android:layout_toRightOf="@id/txtMemberFineAmount"
+        android:text=" XXX " />
 </RelativeLayout>

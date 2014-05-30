@@ -28,11 +28,10 @@ import org.applab.digitizingdata.repo.MeetingRepo;
 
 import java.util.ArrayList;
 
-
 /**
  * Created by Moses on 7/7/13.
  */
-public class MemberFinesHistoryActivity extends SherlockListActivity {
+public class MemberFinesHistoryActivity2 extends SherlockListActivity {
     ActionBar actionBar;
     String meetingDate;
     int memberId;
@@ -45,23 +44,6 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
     boolean proceedWithSaving = false;
     boolean alertDialogShowing = false;
     SwipeDetector swipeDetector = new SwipeDetector();
-
-
-    private enum ControlGroup {
-        SWIPE_TO_DISMISS
-    }
-
-    private static final String PREF_UNDO_STYLE = "de.timroes.android.listviewdemo.UNDO_STYLE";
-    private static final String PREF_SWIPE_TO_DISMISS = "de.timroes.android.listviewdemo.SWIPE_TO_DISMISS";
-    private static final String PREF_SWIPE_DIRECTION = "de.timroes.android.listviewdemo.SWIPE_DIRECTION";
-    private static final String PREF_SWIPE_LAYOUT = "de.timroes.android.listviewdemo.SWIPE_LAYOUT";
-
-    /**private EnhancedListAdapter mAdapter;
-    private EnhancedListView mListView;
-    private DrawerLayout mDrawerLayout; */
-
-    private Bundle mUndoStylePref;
-    private Bundle mSwipeDirectionPref;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,8 +118,8 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
             memberId = getIntent().getIntExtra("_memberId", 0);
         }
 
-        fineRepo = new MeetingFineRepo(MemberFinesHistoryActivity.this);
-        meetingRepo = new MeetingRepo(MemberFinesHistoryActivity.this);
+        fineRepo = new MeetingFineRepo(MemberFinesHistoryActivity2.this);
+        meetingRepo = new MeetingRepo(MemberFinesHistoryActivity2.this);
         targetMeeting = meetingRepo.getMeetingById(meetingId);
 
         if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
@@ -151,7 +133,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
     private void populateFineHistory() {
         if (fineRepo == null) {
-            fineRepo = new MeetingFineRepo(MemberFinesHistoryActivity.this);
+            fineRepo = new MeetingFineRepo(MemberFinesHistoryActivity2.this);
         }
         fines = fineRepo.getMemberFineHistoryInCycle(targetCycleId, memberId);
 
@@ -160,26 +142,26 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        FineHistoryArrayAdapter adapter = new FineHistoryArrayAdapter(MemberFinesHistoryActivity.this, fines, "fonts/roboto-regular.ttf");
+        FineHistoryArrayAdapter adapter = new FineHistoryArrayAdapter(MemberFinesHistoryActivity2.this, fines, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
         setListAdapter(adapter);
 
-  /**      getListView().setOnTouchListener(swipeDetector);
+        getListView().setOnTouchListener(swipeDetector);
 
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 if (swipeDetector.swipeDetected()) {
                     if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
-                       // view.setBackgroundColor(R.color.light_blue_bottom_right);
+                        view.setBackgroundColor(R.color.light_blue_bottom_right);
                     } else {
 
                     }
                 }
             }
 
-        });*/
+        });
 
         //Hack to ensure all Items in the List View are visible
         Utils.setListViewHeightBasedOnChildren(getListView());
@@ -218,7 +200,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                 }
                 return true;
             case R.id.mnuMFBack:
-                i = new Intent(MemberFinesHistoryActivity.this, MeetingActivity.class);
+                i = new Intent(MemberFinesHistoryActivity2.this, MeetingActivity.class);
                 i.putExtra("_tabToSelect", "fines");
                 i.putExtra("_meetingDate", meetingDate);
                 i.putExtra("_meetingId", meetingId);

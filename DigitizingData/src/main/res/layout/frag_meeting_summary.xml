@@ -190,6 +190,14 @@
             android:paddingLeft="5dp"
             android:text="Loans Outstanding: 1,500,000 UGX"
             android:id="@+id/lblMSFOutstandingLoans"/>
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:text="Fines: 1,500 UGX"
+            android:id="@+id/lblMSFFines"/>
         <!--
         <TextView
                 android:layout_width="fill_parent"

@@ -45,7 +45,7 @@ public class MeetingFinesFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        return (RelativeLayout)inflater.inflate(R.layout.frag_meeting_fines, container, false);
+        return (RelativeLayout) inflater.inflate(R.layout.frag_meeting_fines, container, false);
     }
 
     @Override
@@ -54,8 +54,9 @@ public class MeetingFinesFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         actionBar = getSherlockActivity().getSupportActionBar();
-        String title = "Meeting";
-        switch(Utils._meetingDataViewMode) {
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        String title = String.format("Meeting    %s", meetingDate);
+        switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
                 break;
@@ -63,14 +64,14 @@ public class MeetingFinesFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-                title="Meeting";
+                // title="Meeting";
                 break;
         }
         actionBar.setTitle(title);
 
-       /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate); */
+        /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
+         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+         lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
         //Populate the Members
@@ -90,8 +91,8 @@ public class MeetingFinesFrag extends SherlockFragment {
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMFineMembers);
-        TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMFineEmpty);
+        ListView lvwMembers = (ListView) getSherlockActivity().findViewById(R.id.lvwMFineMembers);
+        TextView txtEmpty = (TextView) getSherlockActivity().findViewById(R.id.txtMFineEmpty);
 
         lvwMembers.setEmptyView(txtEmpty);
         lvwMembers.setAdapter(adapter);
@@ -101,15 +102,15 @@ public class MeetingFinesFrag extends SherlockFragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 //Do not invoke the event when in Read only Mode
-                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = (Member) members.get(position);
                     Intent i = new Intent(view.getContext(), MemberFinesHistoryActivity.class);
 
                     // Pass on data
-                    i.putExtra("_meetingDate",meetingDate);
+                    i.putExtra("_meetingDate", meetingDate);
                     i.putExtra("_memberId", selectedMember.getMemberId());
-                    i.putExtra("_names", selectedMember.toString());
-                    i.putExtra("_meetingId",meetingId);
+                    i.putExtra("_name", selectedMember.toString());
+                    i.putExtra("_meetingId", meetingId);
 
                     startActivity(i);
                 }

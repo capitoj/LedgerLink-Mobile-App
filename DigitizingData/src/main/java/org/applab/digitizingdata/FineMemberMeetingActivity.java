@@ -2,6 +2,7 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,7 @@ public class FineMemberMeetingActivity extends SherlockActivity {
         TextView lblReviewFinesMessage = (TextView) findViewById(R.id.lblReviewFinesMessage);
         lblReviewFinesMessage.setText("Select the member below to add a fine.");
 
-
+Log.d("FineMemberMeetingActivity", "populate List next");
 
         //Populate the Members
         populateMembersList();

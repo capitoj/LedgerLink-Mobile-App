@@ -81,7 +81,7 @@ public class MembersFinesArrayAdapter extends ArrayAdapter<Member> {
                 totalFines  = fineRepo.getMemberTotalFinesInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
 
-            txtTotalFines.setText(String.format("Total: %,.0f UGX", totalFines));
+            txtTotalFines.setText(String.format("Total Fines: %,.0f UGX", totalFines));
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

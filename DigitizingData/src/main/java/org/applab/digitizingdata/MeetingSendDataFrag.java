@@ -40,6 +40,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
 
         actionBar = getSherlockActivity().getSupportActionBar();
         String title = "Meeting";
+
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
@@ -86,10 +87,10 @@ public class MeetingSendDataFrag extends SherlockFragment {
         switch(item.getItemId()) {
             case android.R.id.home:
                 return false;
-            case R.id.mnuSMDSend:
+        /**    case R.id.mnuSMDSend:
                 return false;
             case R.id.mnuSMDCancel:
-                return false;
+                return false; */
             case R.id.mnuMCBFSave:
                 return false;
             case R.id.mnuMSDFSend:

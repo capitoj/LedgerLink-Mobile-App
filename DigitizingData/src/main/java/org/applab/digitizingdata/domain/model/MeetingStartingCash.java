@@ -9,6 +9,7 @@ public class MeetingStartingCash {
     private int startingCashId;
     private Meeting meeting;
     private double actualStartingCash;
+    private double cashSavedInBank;
     private String comment;
     private double amount;
     private Date dateSent;
@@ -59,5 +60,13 @@ public class MeetingStartingCash {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public double getCashSavedInBank() {
+        return cashSavedInBank;
+    }
+
+    public void setCashSavedInBank(double cashSavedInBank){
+        this.cashSavedInBank = cashSavedInBank;
     }
 }

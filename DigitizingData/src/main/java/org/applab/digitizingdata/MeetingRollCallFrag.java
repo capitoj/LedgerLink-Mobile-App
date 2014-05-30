@@ -51,7 +51,10 @@ public class MeetingRollCallFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         actionBar = getSherlockActivity().getSupportActionBar();
-        String title = "Meeting";
+        //String title = "Meeting";
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        String title = String.format("Meeting    %s", meetingDate);
+
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
@@ -60,7 +63,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-                title="Meeting";
+                //title="Meeting";
                 break;
         }
         actionBar.setTitle(title);

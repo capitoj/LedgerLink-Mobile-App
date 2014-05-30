@@ -31,7 +31,7 @@
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
-            android:text="Cash Collected"
+            android:text="Starting Cash"
             android:id="@+id/lblCashCollected"
             android:layout_gravity="left" />
 

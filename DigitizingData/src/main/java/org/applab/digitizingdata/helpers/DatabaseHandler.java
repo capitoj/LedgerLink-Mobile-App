@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 import org.applab.digitizingdata.SettingsActivity;
+import org.applab.digitizingdata.domain.model.FineType;
 import org.applab.digitizingdata.domain.schema.*;
 
 import java.io.File;
@@ -15,7 +16,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DATABASE_NAME = "ledgerlinkdb";
-    public static final int DATABASE_VERSION = 22;
+    public static final int DATABASE_VERSION = 24;
     public static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
     public static final String DATA_FOLDER = "LedgerLink";
 
@@ -116,6 +117,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         //Table: LoanRepayments
         db.execSQL(LoanRepaymentSchema.getDropTableScript());
+
+        //Table:FineTypes
+        db.execSQL(FineTypeSchema.getDropTableScript());
+
+        //Table: Fines
+        db.execSQL(FineSchema.getDropTableScript());
 
 //        db.execSQL("DROP TRIGGER IF EXISTS dept_id_trigger");
 //        db.execSQL("DROP TRIGGER IF EXISTS dept_id_trigger22");
