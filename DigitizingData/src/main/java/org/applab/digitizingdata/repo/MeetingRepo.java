@@ -914,6 +914,49 @@ public class MeetingRepo {
         }
     }
 
+    /* Deactivates a meeting i.e sets the is current flag to false*/
+    public boolean deactivateMeeting(Meeting meeting) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        VslaCycleRepo cycleRepo = null;
+
+        try {
+            if(meeting == null) {
+                return false;
+            }
+            cycleRepo = new VslaCycleRepo(context);
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(MeetingSchema.COL_MT_IS_CURRENT,0);
+             //Update the specific one to InActive
+
+                values.put(MeetingSchema.COL_MT_IS_CURRENT,0);
+                int retVal2 = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                        new String[] { String.valueOf(meeting.getMeetingId()) });
+                if(retVal2 > 0) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.activateMeeting", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     /**
      * This will deactivate all other meetings and activate the one passed to make it the current meeting.
      * @param meeting
@@ -932,7 +975,7 @@ public class MeetingRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            values.put(MeetingSchema.COL_MT_MEETING_ID,0);
+            values.put(MeetingSchema.COL_MT_IS_CURRENT,0);
 
             // updating row:
             int retVal = db.update(MeetingSchema.getTableName(), values, null,null);
@@ -941,7 +984,7 @@ public class MeetingRepo {
 
                 //Update the specific one to Active
                 values.clear();
-                values.put(MeetingSchema.COL_MT_MEETING_ID,1);
+                values.put(MeetingSchema.COL_MT_IS_CURRENT,1);
                 int retVal2 = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                         new String[] { String.valueOf(meeting.getMeetingId()) });
                 if(retVal2 > 0) {
