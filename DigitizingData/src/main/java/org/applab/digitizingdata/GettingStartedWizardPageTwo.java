@@ -42,6 +42,8 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
         savingsGroupName = (TextView)findViewById(R.id.txtNCP_header);
         savingsGroupName.setText(vslaInfo.getVslaName());
 
+        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_PIN);
+
     }
 
 
@@ -60,7 +62,7 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
                 //First Save the Cycle Dates
                 //If successful move to next activity
                 //validate passkey
-                ValidPassKey();
+                validatePassKey();
 
         }
         return true;
@@ -69,7 +71,7 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
 
 
 
-    public void ValidPassKey()
+    public void validatePassKey()
     {
         TextView txtPassKey = null;
         try {
@@ -79,7 +81,8 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
 
             if(passKey.equalsIgnoreCase(vslaInfo.getPassKey())) {
                 //Decide which activity to launch, from the current Getting started wizard stage
-                Intent stage = new Intent(getBaseContext(), Utils.resolveGettingStartedWizardStage(vslaInfo.getGettingStartedWizardStage()));
+                //Intent stage = new Intent(getBaseContext(), Utils.resolveGettingStartedWizardStage(vslaInfo.getGettingStartedWizardStage()));
+                Intent stage = new Intent(getBaseContext(), GettingsStartedWizardNewCycleActivity.class);
                 startActivity(stage);
                 finish();
             }

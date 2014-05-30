@@ -70,6 +70,8 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
 
         txtGSWInfoText += nextText;
         txtGSW_info.setText(txtGSWInfoText);
+
+        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_ONE);
     }
 
 

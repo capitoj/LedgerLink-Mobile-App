@@ -76,7 +76,7 @@ public class MembersListActivity extends SherlockListActivity {
                 startActivity(i);
                 return true;
             case R.id.mnuMListAdd:
-                i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+                i = new Intent(getApplicationContext(), AddMemberActivity.class);
                 startActivity(i);
                 return true;
         }

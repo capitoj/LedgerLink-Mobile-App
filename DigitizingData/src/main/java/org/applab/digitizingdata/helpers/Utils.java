@@ -63,10 +63,12 @@ public class Utils {
     private static String phoneImei;
 
     //A Defination of Getting started wizard stage indicators
-    public static final int GETTING_STARTED_PAGE_NEW_CYCLE = 1;
-    public static final int GETTING_STARTED_PAGE_ADD_MEMBER = 2;
-    public static final int GETTING_STARTED_PAGE_REVIEW_MEMBERS = 3;
-    public static final int GETTING_STARTED_PAGE_REVIEW_CYCLE = 4;
+    public static final int GETTING_STARTED_PAGE_ONE = 1;
+    public static final int GETTING_STARTED_PAGE_PIN = 2;
+    public static final int GETTING_STARTED_PAGE_NEW_CYCLE = 3;
+    public static final int GETTING_STARTED_PAGE_ADD_MEMBER = 4;
+    public static final int GETTING_STARTED_PAGE_REVIEW_MEMBERS = 5;
+    public static final int GETTING_STARTED_PAGE_REVIEW_CYCLE = 6;
 
 
 
@@ -249,8 +251,12 @@ public class Utils {
                return GettingStartedWizardReviewMembersActivity.class;
            case GETTING_STARTED_PAGE_REVIEW_CYCLE:
                return GettingsStartedWizardNewCycleActivity.class;
+           case GETTING_STARTED_PAGE_ONE:
+               return GettingStartedWizardPageOne.class;
+           case GETTING_STARTED_PAGE_PIN:
+               return GettingStartedWizardPageTwo.class;
            default:
-               return GettingsStartedWizardNewCycleActivity.class;
+               return GettingStartedWizardPageOne.class;
         }
     }
 

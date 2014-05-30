@@ -16,6 +16,7 @@ import org.applab.digitizingdata.repo.VslaInfoRepo;
 public class GettingStartedConfirmationPage extends SherlockActivity {
 
 
+    private Menu MENU;
     ActionBar actionBar;
     boolean confirmed = false;
 
@@ -68,7 +69,8 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
 
 
                     //TODO: hide cancel menu button
-
+                    MENU.findItem(R.id.mnuAMCancel).setVisible(false);
+                    MENU.findItem(R.id.mnuAMDone).setVisible(false);
 
                 }
 
@@ -83,6 +85,9 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         final MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.done_cancel, menu);
+
+        MENU = menu;
+
         return true;
 
     }

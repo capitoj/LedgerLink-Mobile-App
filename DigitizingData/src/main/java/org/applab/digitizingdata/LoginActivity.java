@@ -241,7 +241,7 @@ public class LoginActivity extends SherlockActivity {
 
         Intent mainMenu = null;
         if(showGettingStartedWizard) {
-            mainMenu = new Intent(getBaseContext(), GettingStartedWizardPageOne.class);
+            mainMenu = new Intent(getBaseContext(), Utils.resolveGettingStartedWizardStage(vslaInfo.getGettingStartedWizardStage()));
         }
         else {
             mainMenu = new Intent(getBaseContext(), MainActivity.class);
