@@ -186,13 +186,14 @@
                 android:layout_height="wrap_content"
                 android:text="Number of cycles member completed" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
-                style="@style/NormalEditText"
-                android:id="@+id/txtAMCycles"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="" />
+
+            <Spinner
+                    android:id="@+id/cboAMCycles"
+                    style="@style/RegularText"
+                    android:layout_height="wrap_content"
+                    android:layout_width="200dip"
+                    android:spinnerMode="dropdown"
+                    />
         </LinearLayout>
         <!-- Middle Cycle start info -->
         <LinearLayout
@@ -220,15 +221,24 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Total amount this member has saved in current cycle so far" />
-
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
-                android:layout_width="fill_parent"
+                android:layout_width="200dip"
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:inputType="number"
                 android:id="@+id/txtMDVAmountSavedInCurrentCycle" />
 
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                        style="@style/InlineTextItem"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:text="UGX"
+                        android:id="@+id/lblNCCurrency" />
+                </LinearLayout>
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblMDVOutstandingLoanAmount"
@@ -236,13 +246,26 @@
                 android:layout_height="wrap_content"
                 android:text="Total amount of this member's regular loan outstanding" />
 
+
+
+            <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
-                android:layout_width="fill_parent"
+                android:layout_width="200dip"
                 android:layout_height="wrap_content"
                 android:text="0"
                 android:inputType="number"
                 android:id="@+id/txtMDVOutstandingLoanAmount" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                        style="@style/InlineTextItem"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:text="UGX"
+                        android:id="@+id/lblNCCurrency" />
+                </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

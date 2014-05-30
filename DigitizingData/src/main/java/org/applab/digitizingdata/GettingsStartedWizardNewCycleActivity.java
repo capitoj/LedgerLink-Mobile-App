@@ -90,11 +90,11 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
             //Not from add members activity, change the labels
             if(! _isFromAddMembers) {
-            TextView heading = (TextView) findViewById(R.id.lblNCHeading);
+            TextView heading = (TextView) findViewById(R.id.lblNewCycleHeading);
             heading.setText("Review Cycle Information");
 
-            TextView headerText = (TextView) findViewById(R.id.lblNCHeader);
-            heading.setText("Review and confirm that all information is correct. Correct any errors");
+            TextView headerText = (TextView) findViewById(R.id.lblNCHeading);
+                headerText.setText("Review and confirm that all information is correct. Correct any errors");
             }
 
 
@@ -110,6 +110,10 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                //Set current GSW stage
+                VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
+                vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_REVIEW_CYCLE);
             }
             else {
                 TextView txtInstructions = (TextView)findViewById(R.id.lblNCHeader);
@@ -169,19 +173,36 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         final MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.new_cycle, menu);
         //Hide cancel button since it does not exist in GSW
-        menu.findItem(R.id.mnuNCCancel).setVisible(false);
+        MenuItem cancelItem = menu.findItem(R.id.mnuNCCancel);
+        MenuItem doneItem = menu.findItem(R.id.mnuNCNext);
+        cancelItem.setIcon(null);
+        doneItem.setIcon(null);
+        if(isUpdateCycleAction) {
+            //menu.findItem(R.id.mnuNCCancel)
+            doneItem.setTitle("done");
+            cancelItem.setTitle("exit");
+        }
+        else {
+            cancelItem.setVisible(false);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i;
         switch(item.getItemId()) {
 
             case R.id.mnuNCNext:
                 //First Save the Cycle Dates
                 //If successful move to next activity
                 return saveMiddleCycleData();
+
+            case R.id.mnuNCCancel:
+                //If reviewing, this exits the app
+                if(isUpdateCycleAction) {
+                    finish();
+                }
+
         }
         return true;
 

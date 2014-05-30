@@ -14,6 +14,15 @@
             android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularHeading"
+                    android:id="@+id/lblNewCycleHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textStyle="bold"
+                    />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblNCHeading"
                 android:layout_width="fill_parent"

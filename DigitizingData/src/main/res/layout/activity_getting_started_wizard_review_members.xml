@@ -9,7 +9,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/frmMList_top_control_bar" android:orientation="vertical">
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/SubHeading"
+                style="@style/RegularHeading"
                 android:id="@+id/lblRvwMembersHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
