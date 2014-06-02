@@ -12,6 +12,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingFine;
 import org.applab.digitizingdata.domain.model.MeetingStartingCash;
 import org.applab.digitizingdata.helpers.Utils;
@@ -156,14 +157,22 @@ public class MeetingCashBookFrag extends SherlockFragment {
 
             double totalCashOut = totalLoansIssued;
             double totalCashIn = actualStartingCash + totalSavings + totalLoansRepaid + totalFines;
+            double totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued - cashToBank + totalFines;
 
-            expectedStartingCash = totalSavings + totalLoansRepaid - totalLoansIssued - cashToBank + totalFines;
+           // expectedStartingCash = totalSavings + totalLoansRepaid - totalLoansIssued - cashToBank + totalFines;
 
-            cashToBox = totalCashIn - totalCashOut;
-            String comment = startingCashDetails.getComment();
+            //Get the Cycle that contains this meeting
+            Meeting currentMeeting = meetingRepo.getMeetingById(meetingId);
 
-            Log.d("Select Start CashFrag", startingCashDetails.getComment());
-
+            // Get the Cycle that contains previous meeting inorder to get the expected starting Cash
+            Meeting previousMeeting = null;
+            if (null != meetingRepo) {
+                previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId());
+            }
+            expectedStartingCash  = meetingRepo.getMeetingTotalExpectedStartingCash(previousMeeting.getMeetingId());
+            //cashToBox = totalCashIn - totalCashOut - cashToBank;
+            cashToBox = totalCashInBox;
+                    String comment = startingCashDetails.getComment();
 
             lblTotalCashInBox.setText(String.format("Total Cash In Box %,.0f UGX", cashToBox));
             lblExpectedStartingCash.setText(String.format("Expected Starting Cash %,.0f UGX", expectedStartingCash));

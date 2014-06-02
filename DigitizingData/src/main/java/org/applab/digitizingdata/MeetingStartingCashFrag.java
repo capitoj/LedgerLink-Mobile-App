@@ -211,9 +211,6 @@ public class MeetingStartingCashFrag extends SherlockFragment {
 
 
         // HashMap<String, Double> startingCash = meetingRepo.getMeetingStartingCash(meetingId);
-         if (null != previousMeeting) {
-             Log.d("Starting", "In HERE!");
-         }
         HashMap<String, Double> startingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
 
 
