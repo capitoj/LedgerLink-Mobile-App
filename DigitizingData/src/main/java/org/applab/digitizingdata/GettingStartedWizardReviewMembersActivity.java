@@ -153,7 +153,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 // Pass on data
                 Bundle b = new Bundle();
                 b.putInt("_id", selectedMember.getMemberId());
-                b.putString("_names", selectedMember.getFullNames());
+                b.putString("_names", selectedMember.getFullName());
                 viewMember.putExtras(b);
                 viewMember.putExtra("_caller", "reviewMembers");
                 viewMember.putExtra("_isEditAction", true);

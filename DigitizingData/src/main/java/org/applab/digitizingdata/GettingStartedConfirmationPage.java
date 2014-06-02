@@ -2,6 +2,8 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
@@ -39,9 +41,24 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         Intent i;
         switch(item.getItemId()) {
 
+            case android.R.id.home:
+                if( !confirmed) {
+                    //Only navigate to main if confirmed
+                    return true;
+                }
+                Intent upIntent = new Intent(this, MainActivity.class);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                    TaskStackBuilder
+                            .from(this)
+                            .addNextIntent(new Intent(this, MainActivity.class))
+                            .addNextIntent(upIntent).startActivities();
+                    finish();
+                } else {
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
+                return true;
 
             case R.id.mnuAMCancel:
-                //exit app
                 Intent mainMenu = new Intent(getBaseContext(), GettingStartedWizardReviewMembersActivity.class);
                 startActivity(mainMenu);
             return true;

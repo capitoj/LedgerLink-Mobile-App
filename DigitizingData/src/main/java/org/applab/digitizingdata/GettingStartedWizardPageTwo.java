@@ -40,7 +40,15 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
         vslaInfo = vslaInfoRepo.getVslaInfo();
 
         savingsGroupName = (TextView)findViewById(R.id.txtNCP_header);
-        savingsGroupName.setText(vslaInfo.getVslaName());
+        if(!vslaInfo.isActivated()) {
+            //If not activated, show message to avoid displaying "Offline Mode" as vsla name
+            savingsGroupName.setText("(not yet activated)");
+        }
+        else {
+
+            savingsGroupName.setText(vslaInfo.getVslaName());
+        }
+
 
         vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_PIN);
 
