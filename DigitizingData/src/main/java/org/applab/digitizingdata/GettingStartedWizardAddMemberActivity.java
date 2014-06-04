@@ -303,6 +303,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                         toast.setGravity(Gravity.LEFT, 0, 0);
                         toast.show();
                         //Clear the Fields and keep adding new records
+                        //Set member to null to ensure member id is removed from list of member ids
+                        selectedMember = null;
                         clearDataFields();
                     }
                     selectedFinishButton = false;
@@ -312,7 +314,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     Toast.makeText(this, "The member was updated successfully.", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
                     startActivity(i);
-
+                    finish();
                 }
                 successFlg = true;
                 //clearDataFields(); //Not needed now
@@ -337,7 +339,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             // Validate: MemberNo
             Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
             if (cboAMMemberNo.getSelectedItemPosition() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The Member Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, "The member number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAMMemberNo.requestFocus();
                 return false;
             } else {

@@ -70,6 +70,10 @@ public class AddMemberActivity extends SherlockActivity {
         if(getIntent().hasExtra("_id")){
             this.selectedMemberId = getIntent().getIntExtra("_id",0);
         }
+        if(getIntent().hasExtra("_isEditAction")){
+            this.isEditAction = getIntent().getBooleanExtra("_isEditAction", false);
+        }
+
 
         meetingRepo = new MeetingRepo(getApplicationContext());
         targetMeeting = meetingRepo.getMeetingById(meetingId);

@@ -50,6 +50,8 @@
         <item name="android:gravity">left</item>
     </style>
 
+
+
     <style name="MainHeading" parent="android:TextAppearance.Medium">
         <item name="android:background">@drawable/dark_blue</item>
         <item name="android:textColor">@color/white</item>

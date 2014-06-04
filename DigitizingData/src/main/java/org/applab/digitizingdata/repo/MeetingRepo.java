@@ -59,6 +59,7 @@ public class MeetingRepo {
                 return true;
             }
             else {
+                meeting.setMeetingId(Integer.parseInt(retVal+""));
                 return false;
             }
         }

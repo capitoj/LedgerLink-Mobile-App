@@ -151,6 +151,12 @@ public class VslaInfoRepo {
             }
 
             if (retVal != -1) {
+
+                //If executing in trainng mode, set GSW as completed
+                if(Utils.isExecutingInTrainingMode()) {
+                    updateGettingStartedWizardCompleteFlag(true);
+                }
+
                 return true;
             }
             else {
@@ -198,6 +204,10 @@ public class VslaInfoRepo {
             }
 
             if (retVal != -1) {
+                //If executing in trainng mode, set GSW as completed
+                if(Utils.isExecutingInTrainingMode()) {
+                    updateGettingStartedWizardCompleteFlag(true);
+                }
                 return true;
             }
             else {
@@ -214,6 +224,7 @@ public class VslaInfoRepo {
             }
         }
     }
+
 
     public boolean updateDataMigrationStatusFlag(boolean isDataMigrated) {
         SQLiteDatabase db = null;

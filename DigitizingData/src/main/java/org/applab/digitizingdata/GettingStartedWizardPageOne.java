@@ -59,9 +59,15 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
 
         vslaInfoRepo = new VslaInfoRepo(this);
         vslaInfo = vslaInfoRepo.getVslaInfo();
-
         savingsGroupName = (TextView)findViewById(R.id.txtNCP_header);
+        if(!vslaInfo.isActivated()) {
+          //If not activated, show message to avoid displaying "Offline Mode" as vsla name
+            savingsGroupName.setText("(not yet activated)");
+        }
+        else {
+
         savingsGroupName.setText(vslaInfo.getVslaName());
+        }
 
         TypefaceTextView txtGSW_info = (TypefaceTextView) findViewById(R.id.txtGSW_info);
         String txtGSWInfoText = "If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.\n\nAre you prepared to enter all member and cycle information now? If so you may get started by pressing ";

@@ -351,7 +351,7 @@ public class MemberRepo {
         }
         catch (Exception ex) {
             ex.printStackTrace();
-            Log.e("MemberRepo.getAllMembers", ex.getMessage());
+            //Log.e("MemberRepo.getAllMembers", ex.getMessage());
             return new ArrayList<Member>();
         }
         finally {

@@ -1,5 +1,6 @@
 package org.applab.digitizingdata.repo;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
@@ -136,6 +137,19 @@ public class VslaCycleRepo {
                 db.close();
             }
         }
+    }
+
+
+    //Creates the dummy GSW meeting
+    public boolean createGettingStartedDummyMeeting(VslaCycle currentCycle) {
+        Meeting meeting = new Meeting();
+        meeting.setGettingStarted(true);
+        meeting.setIsCurrent(true);
+        meeting.setVslaCycle(currentCycle);
+        meeting.setMeetingDate(currentCycle.getStartDate());
+        MeetingRepo repo = new MeetingRepo(context);
+        return repo.addMeeting(meeting);
+
     }
 
     //Return cycles that are still active

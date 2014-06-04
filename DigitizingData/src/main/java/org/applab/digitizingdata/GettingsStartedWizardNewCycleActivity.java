@@ -235,7 +235,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                     cycle = repo.getMostRecentCycle();
                     selectedCycle = cycle;
                     //TODO: create Getting started wizard dummy meeting
-                    retVal = createGettingStartedDummyMeeting(selectedCycle);
+                    retVal = repo.createGettingStartedDummyMeeting(selectedCycle);
 
 
                     if(! retVal) {
@@ -285,17 +285,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         return successFlg;
     }
 
-    //Creates the dummy meeting to be used to getting started wizard
-    private boolean createGettingStartedDummyMeeting(VslaCycle currentCycle) {
-        Meeting meeting = new Meeting();
-        meeting.setGettingStarted(true);
-        meeting.setIsCurrent(true);
-        meeting.setVslaCycle(currentCycle);
-        meeting.setMeetingDate(currentCycle.getStartDate());
-        MeetingRepo repo = new MeetingRepo(this);
-        return repo.addMeeting(meeting);
 
-    }
 
 
     private boolean validateGettingStartedData(VslaCycle cycle) {
