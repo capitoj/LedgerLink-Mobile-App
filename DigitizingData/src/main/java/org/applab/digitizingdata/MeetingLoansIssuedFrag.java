@@ -135,9 +135,9 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
 
         //Hack to ensure all Items in the List View are visible
         //Utils.setListViewHeightBasedOnChildren(lvwMembers);
-        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
-        lblMeetingDate.setFocusable(true);
-        lblMeetingDate.requestFocus();
+       // TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
+        //lblMeetingDate.setFocusable(true);
+        //lblMeetingDate.requestFocus();
 
     }
 

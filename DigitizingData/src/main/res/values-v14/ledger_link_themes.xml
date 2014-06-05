@@ -10,7 +10,7 @@
          <item name="android:dropDownItemStyle">@style/LedgerLinkDropDownItemStyle</item>
          <item name="android:spinnerItemStyle">@style/LedgerLinkSpinnerItemStyle</item> -->
         <item name="android:textAppearance">@style/LedgerLinkActionBarTextAppearance</item>
-        <item name="android:windowContentOverlay">@drawable/white</item>
+        <item name="android:windowBackground">@drawable/white</item>
     </style>
 
     <style name="LedgerLinkActionBarStyle" parent="Widget.Sherlock.Light.ActionBar">

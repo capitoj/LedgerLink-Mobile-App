@@ -14,7 +14,10 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
@@ -45,9 +48,12 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
 
         setContentView(R.layout.activity_getting_started_wizard_page_1);
 
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customActionBarView = null;
+
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setTitle("Get started");
+
 
         //For test purposes, create vsla info if not exists
         /* VslaInfoRepo repo = new VslaInfoRepo(getBaseContext());
@@ -56,6 +62,29 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
         }
         */
 
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_next, null);
+        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent stage = new Intent(getBaseContext(), GettingsStartedWizardNewCycleActivity.class);
+                        startActivity(stage);
+                        finish();
+                    }
+                });
+
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setTitle("Get started");
+       /** actionBar.setDisplayOptions(
+                ActionBar.DISPLAY_SHOW_CUSTOM,
+                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_SHOW_TITLE); */
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL));
+
+        actionBar.setDisplayShowCustomEnabled(true);
 
         vslaInfoRepo = new VslaInfoRepo(this);
         vslaInfo = vslaInfoRepo.getVslaInfo();
@@ -71,7 +100,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
 
         TypefaceTextView txtGSW_info = (TypefaceTextView) findViewById(R.id.txtGSW_info);
         String txtGSWInfoText = "If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.\n\nAre you prepared to enter all member and cycle information now? If so you may get started by pressing ";
-        Spannable nextText = new SpannableString("next.");
+        Spannable nextText = new SpannableString("\"next.\"");
         nextText.setSpan(new ForegroundColorSpan(Color.BLUE), 0,nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         txtGSWInfoText += nextText;
@@ -82,7 +111,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
 
 
 
-    @Override
+  /**  @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
         switch(item.getItemId()) {
@@ -107,5 +136,5 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
         return true;
 
     }
-    
+    */
 }

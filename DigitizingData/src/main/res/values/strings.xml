@@ -13,7 +13,7 @@
     <string name="title_activity_send_meeting_data">Send Meeting Data</string>
     <string name="title_activity_member_attendance_history">Attendance History</string>
     <string name="title_activity_activation">Register</string>
-    <string name="add_member_gender_prompt">Select Sex</string>
+    <string name="add_member_gender_prompt">select sex</string>
     <string name="title_activity_meeting_cash_book_frag">Cash Book</string>
     <string name="title_activity_meeting_send_data_frag">Send Data</string>
     <string name="title_activity_meeting_opening_cash_frag">Starting Cash</string>

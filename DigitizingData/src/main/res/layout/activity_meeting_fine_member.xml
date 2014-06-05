@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/frmMFine_top_control_bar">
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularTextBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="FINE MEMBER"
+            android:id="@+id/lblFineMember" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="Select the member below to add a fine."
+            android:id="@+id/lblReviewFinesMessage"
+            android:layout_below="@id/lblFineMember"/>
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lvwMFineMembers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:choiceMode="singleChoice"
+        android:layout_below="@id/frmMFine_top_control_bar">
+
+    </ListView>
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@+id/txtMFineEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_members_list"
+        android:layout_below="@id/frmMFine_top_control_bar" />
+
+</RelativeLayout>
