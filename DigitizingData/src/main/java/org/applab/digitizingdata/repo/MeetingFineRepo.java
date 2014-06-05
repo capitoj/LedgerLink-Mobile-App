@@ -125,29 +125,22 @@ public class MeetingFineRepo {
     }
 
     public double getMemberTotalFinesInCycle(int cycleId, int memberId) {
-        Log.d("Some Total fines in Here", "KWANZA");
         SQLiteDatabase db = null;
         Cursor cursor = null;
         double totalFines = 0.00;
 
         try {
-            Log.d("Some Total fines in Here", "UNHA");
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             String sumQuery = String.format("SELECT  SUM(%s) AS TotalFines FROM %s WHERE %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d)",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
                     FineSchema.COL_F_MEMBER_ID, memberId,
                     FineSchema.COL_F_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID, cycleId);
-            //,
-            // MeetingSchema.getTableName(),MeetingSchema.COL_MT_CYCLE_ID,cycleId);
 
             cursor = db.rawQuery(sumQuery, null);
-            Log.d("Some Total fines in Here", sumQuery);
             if (cursor != null && cursor.moveToFirst()) {
                 totalFines = cursor.getDouble(cursor.getColumnIndex("TotalFines"));
-                Log.d("Some Total fines in Here", "YES" + String.valueOf(totalFines));
             }
-            Log.d("Some Total fines in Here", "YES" + String.valueOf(totalFines));
 
             return totalFines;
         } catch (Exception ex) {
@@ -164,6 +157,8 @@ public class MeetingFineRepo {
             }
         }
     }
+
+
 
     public double getTotalFinesInMeeting(int meetingId) {
         SQLiteDatabase db = null;
@@ -183,6 +178,41 @@ public class MeetingFineRepo {
 
 
             return totalFines;
+        } catch (Exception ex) {
+            Log.e("MeetingFineRepo.getTotalFinesInMeeting", ex.getMessage());
+            return 0;
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public double getTotalFinesPaidInMeeting(int meetingId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        double totalFinesPaidInMeeting = 0.00;
+        int paymentStatus = 1;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sumQuery = String.format("SELECT  SUM(%s) AS TotalFinesPaid FROM %s WHERE %s=%d AND %s=%d",
+                    FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
+                    FineSchema.COL_F_IS_CLEARED, paymentStatus,
+                    FineSchema.COL_F_MEETING_ID, meetingId);
+            cursor = db.rawQuery(sumQuery, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                totalFinesPaidInMeeting = cursor.getDouble(cursor.getColumnIndex("TotalFinesPaid"));
+            }
+
+
+            return totalFinesPaidInMeeting;
         } catch (Exception ex) {
             Log.e("MeetingFineRepo.getTotalFinesInMeeting", ex.getMessage());
             return 0;
@@ -230,6 +260,42 @@ public class MeetingFineRepo {
             }
         }
     }
+
+    public double getTotalFinesPaidInCycle(int cycleId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        double totalFines = 0.00;
+        int paymentStatus = 1;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sumQuery = String.format("SELECT  SUM(%s) AS TotalFinesPaidInCycle FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d) AND %s=%d",
+                    FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
+                    FineSchema.COL_F_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
+                    MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID, cycleId,
+                    FineSchema.COL_F_IS_CLEARED, paymentStatus);
+            cursor = db.rawQuery(sumQuery, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                totalFines = cursor.getDouble(cursor.getColumnIndex("TotalFinesPaidInCycle"));
+            }
+
+            return totalFines;
+        } catch (Exception ex) {
+            Log.e("MeetingFineRepo.getTotalFineInCycle", ex.getMessage());
+            return 0;
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
 
     public boolean saveMemberFine(int meetingId, int memberId, double fineAmount, int fineTypeId, int paymentStatus) {
         SQLiteDatabase db = null;

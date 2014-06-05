@@ -120,7 +120,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
              repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
              loanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
              */
-            TextView lblTotalCashInBox = (TextView) getSherlockActivity().findViewById(R.id.lblExpectedStartingCash);
+            TextView lblTotalCashInBox = (TextView) getSherlockActivity().findViewById(R.id.lblTotalCashInBox);
             TextView lblExpectedStartingCash = (TextView) getSherlockActivity().findViewById(R.id.lblExpectedStartingCash);
             TextView lblActualStartingCash = (TextView) getSherlockActivity().findViewById(R.id.lblActualStartingCash);
             TextView lblCashDifference = (TextView) getSherlockActivity().findViewById(R.id.lblCashDifference);
@@ -144,22 +144,20 @@ public class MeetingCashBookFrag extends SherlockFragment {
             startingCashDetails = meetingRepo.getMeetingActualStartingCashDetails(meetingId);
             double expectedStartingCash = 0.0;
 
-            // = startingCashDetails.getExpectedStartingCash();
-
-
             double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
             double totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
             double totalFines = fineRepo.getTotalFinesInMeeting(meetingId);
 
             double actualStartingCash = startingCashDetails.getActualStartingCash();
+            expectedStartingCash = startingCashDetails.getExpectedStartingCash();
+
+
 
 
             double totalCashOut = totalLoansIssued;
             double totalCashIn = actualStartingCash + totalSavings + totalLoansRepaid + totalFines;
             double totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued - cashToBank + totalFines;
-
-           // expectedStartingCash = totalSavings + totalLoansRepaid - totalLoansIssued - cashToBank + totalFines;
 
             //Get the Cycle that contains this meeting
             Meeting currentMeeting = meetingRepo.getMeetingById(meetingId);
@@ -169,12 +167,15 @@ public class MeetingCashBookFrag extends SherlockFragment {
             if (null != meetingRepo) {
                 previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId());
             }
-            expectedStartingCash  = meetingRepo.getMeetingTotalExpectedStartingCash(previousMeeting.getMeetingId());
-            //cashToBox = totalCashIn - totalCashOut - cashToBank;
-            cashToBox = totalCashInBox;
-                    String comment = startingCashDetails.getComment();
 
-            lblTotalCashInBox.setText(String.format("Total Cash In Box %,.0f UGX", cashToBox));
+            // Get cah values for previous meeting to compute expected Starting Cash
+
+            //expectedStartingCash  = meetingRepo.getMeetingTotalExpectedStartingCash(previousMeeting.getMeetingId());
+
+
+            String comment = startingCashDetails.getComment();
+
+            lblTotalCashInBox.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
             lblExpectedStartingCash.setText(String.format("Expected Starting Cash %,.0f UGX", expectedStartingCash));
             lblActualStartingCash.setText(String.format("Actual Starting Cash %,.0f UGX", actualStartingCash));
             lblCashDifference.setText(String.format("Difference %,.0f UGX", expectedStartingCash - actualStartingCash));

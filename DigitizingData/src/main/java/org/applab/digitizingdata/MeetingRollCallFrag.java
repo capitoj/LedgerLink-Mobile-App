@@ -51,7 +51,6 @@ public class MeetingRollCallFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         actionBar = getSherlockActivity().getSupportActionBar();
-        //String title = "Meeting";
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         String title = String.format("Meeting    %s", meetingDate);
 
@@ -68,11 +67,11 @@ public class MeetingRollCallFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
 
-        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMRCFMeetingDate);
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        //TODO: I need to find a way of getting the Meeting Id from meetingRepo.getCurrentMeeting();
+        //TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMRCFMeetingDate);
+        //meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        //TODO: Get the Meeting Id from meetingRepo.getCurrentMeeting();
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-        lblMeetingDate.setText(meetingDate);
+        //lblMeetingDate.setText(meetingDate);
 
         //Populate the Members
         populateMembersList();

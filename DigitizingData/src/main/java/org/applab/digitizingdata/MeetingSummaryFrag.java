@@ -67,7 +67,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
-        TextView lblMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFMeetingDate);
+        //TextView lblMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFMeetingDate);
         // lblMeetingDate.setText(meetingDate);
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
         previousMeetingId = getSherlockActivity().getIntent().getIntExtra("_previousMeetingId", 0);
@@ -206,8 +206,8 @@ txtFines.setText(String.format("Fines: %,.0f UGX", finesCollected));
             txtTotalRepayments.setText("");
             txtTotalLoanIssues.setText("");
 
-            //Optional: I may remove this code. Remove the controls
-            LinearLayout parent = (LinearLayout) lblMeetingDate.getParent();
+            //Optional: You May remove this code. Remove the controls
+          /**  LinearLayout parent = (LinearLayout) lblMeetingDate.getParent();
             if (null != parent) {
                 parent.removeView(txtAttendedCount);
                 parent.removeView(txtDataSent);
@@ -216,7 +216,7 @@ txtFines.setText(String.format("Fines: %,.0f UGX", finesCollected));
                 parent.removeView(txtTotalSavings);
                 parent.removeView(txtTotalRepayments);
                 parent.removeView(txtTotalLoanIssues);
-            }
+            } */
         }
 
         //If this is a Review then do not display the data

@@ -74,7 +74,7 @@ public class MeetingRepo {
         }
     }
 
-    public boolean updateStartingCash(int meetingId, double cashFromBox, double cashFromBank, double finesPaid, String actualStartingCashComment) {
+    public boolean updateStartingCash(int meetingId, double cashFromBox, double cashTakenToBox, double cashFromBank, double finesPaid, String actualStartingCashComment) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         try {
@@ -89,6 +89,7 @@ public class MeetingRepo {
             ContentValues values = new ContentValues();
 
             values.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cashFromBox);
+            values.put(MeetingSchema.COL_MT_CASH_SAVED_BOX, cashTakenToBox);
             //values.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cashFromBank);
             // values.put(MeetingSchema.COL_MT_CASH_FINES, finesPaid);
             values.put(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT, actualStartingCashComment);
@@ -382,9 +383,10 @@ public class MeetingRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
 
             // Select All Query
-            String selectQuery = String.format("SELECT IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s FROM %s WHERE %s=%d",
+            String selectQuery = String.format("SELECT IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s FROM %s WHERE %s=%d",
                     MeetingSchema.COL_MT_CASH_FROM_BOX, MeetingSchema.COL_MT_CASH_FROM_BOX,
                     MeetingSchema.COL_MT_CASH_FROM_BANK, MeetingSchema.COL_MT_CASH_FROM_BANK,
+                    MeetingSchema.COL_MT_CASH_SAVED_BOX, MeetingSchema.COL_MT_CASH_SAVED_BOX,
                     MeetingSchema.COL_MT_CASH_FINES, MeetingSchema.COL_MT_CASH_FINES,
                     MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_MEETING_ID, meetingId);
@@ -395,6 +397,9 @@ public class MeetingRepo {
                 startingCash.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
                 startingCash.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
                 startingCash.put(MeetingSchema.COL_MT_CASH_FINES, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FINES)));
+                startingCash.put(MeetingSchema.COL_MT_CASH_SAVED_BOX, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
+                Log.d("Meeting Repo", String.valueOf(startingCash.get(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
+
                 return startingCash;
             } else {
                 return null;
@@ -422,8 +427,9 @@ public class MeetingRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
 
             // Select All Query
-            String selectQuery = String.format("SELECT IFNULL(%s,0) AS %s, %s AS %s, %s AS %s FROM %s WHERE %s=%d",
+            String selectQuery = String.format("SELECT IFNULL(%s,0) AS %s, %s AS %s, %s AS %s, %s AS %s FROM %s WHERE %s=%d",
                     MeetingSchema.COL_MT_CASH_FROM_BOX, MeetingSchema.COL_MT_CASH_FROM_BOX,
+                    MeetingSchema.COL_MT_CASH_SAVED_BOX, MeetingSchema.COL_MT_CASH_SAVED_BOX,
                     MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT, MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT,
                     MeetingSchema.COL_MT_CASH_FROM_BANK, MeetingSchema.COL_MT_CASH_FROM_BANK,
                     MeetingSchema.getTableName(),
@@ -433,6 +439,8 @@ public class MeetingRepo {
             if (cursor != null && cursor.moveToFirst()) {
                 startingCash.setActualStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
                 startingCash.setComment(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT)));
+                startingCash.setExpectedStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
+                Log.d("Meeting Repo", String.valueOf(startingCash.getExpectedStartingCash()));
                 startingCash.setCashSavedInBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
 
             }
@@ -1079,5 +1087,42 @@ public class MeetingRepo {
                 db.close();
             }
         }
+    }
+
+    public double getTotalCashToBankInCycle(int cycleId) {
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        double totalCashToBank = 0.00;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sumQuery = String.format("SELECT  SUM(%s) AS TotalCashToBank FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
+                    MeetingSchema.COL_MT_CASH_FROM_BANK, MeetingSchema.getTableName(),
+                    MeetingSchema.COL_MT_MEETING_ID,MeetingSchema.COL_MT_MEETING_ID,
+                    MeetingSchema.getTableName(),MeetingSchema.COL_MT_CYCLE_ID,cycleId);
+            cursor = db.rawQuery(sumQuery, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                totalCashToBank = cursor.getDouble(cursor.getColumnIndex("TotalCashToBank"));
+            }
+
+            return totalCashToBank;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingSavingRepo.getTotalSavingsInCycle", ex.getMessage());
+            return 0;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+
     }
 }

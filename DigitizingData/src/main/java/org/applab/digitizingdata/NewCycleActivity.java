@@ -84,7 +84,7 @@ public class NewCycleActivity extends SherlockActivity {
             }
         });
 
-        //Set onClick Listeners to load the DateDialog for endDate
+        // Set onClick Listeners to load the DateDialog for endDate
         txtEndDate.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +97,7 @@ public class NewCycleActivity extends SherlockActivity {
         });
 
         if(isUpdateCycleAction) {
-            //Setup the Fields by getting the current Cycle
+            // Setup the Fields by getting the current Cycle
             VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
             selectedCycle = repo.getCurrentCycle();
             if(selectedCycle != null) {

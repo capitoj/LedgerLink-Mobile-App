@@ -38,23 +38,30 @@ public class FineMemberMeetingActivity extends SherlockActivity {
     ArrayList<Member> members;
     String meetingDate;
     int meetingId;
+    String tabToSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        setContentView(R.layout.frag_meeting_fines);
+        setContentView(R.layout.activity_meeting_fine_member);
 
         meetingDate = getIntent().getStringExtra("_meetingDate");
 
         meetingId = getIntent().getIntExtra("_meetingId", 0);
 
+        tabToSelect = getIntent().getStringExtra("_tabToSelect");
+
+
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel, null);
+        View customActionBarView = null;
+        actionBar = getSupportActionBar();
+        //final View
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel, null);
        /** customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -68,19 +75,13 @@ public class FineMemberMeetingActivity extends SherlockActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect", "fines");
-                        i.putExtra("_meetingDate",meetingDate);
-                        i.putExtra("_meetingId", meetingId);
-                        startActivity(i);
                         finish();
                     }
                 });
 
 
-        actionBar = getSupportActionBar();
-        String title = "Meeting";
-        switch(Utils._meetingDataViewMode) {
+        String title = "";
+       /** switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
                 break;
@@ -90,36 +91,43 @@ public class FineMemberMeetingActivity extends SherlockActivity {
             default:
                 title="Meeting";
                 break;
-        }
-        actionBar.setTitle(title);
+        } */
+       actionBar.setTitle(title);
+        actionBar.setDisplayOptions(
+                ActionBar.DISPLAY_SHOW_CUSTOM,
+                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_SHOW_TITLE);
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT));
 
         /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
          meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */
 
-        TextView lblReviewFinesMessage = (TextView) findViewById(R.id.lblReviewFinesMessage);
+       /** TextView lblReviewFinesMessage = (TextView) findViewById(R.id.lblReviewFinesMessage);
         lblReviewFinesMessage.setText("Select the member below to add a fine.");
 
-Log.d("FineMemberMeetingActivity", "populate List next");
+        TextView lblFineMember = (TextView) findViewById(R.id.lblFineMember);
+        lblFineMember.isShown(); */
 
         //Populate the Members
         populateMembersList();
     }
 
-    //Populate Members List
+    // Populate Members List
     private void populateMembersList() {
-        //Load the Main Menu
+        // Load the Main Menu
         MemberRepo memberRepo = new MemberRepo(getApplicationContext());
         members = memberRepo.getAllMembers();
 
-        //Now get the data via the adapter
+        // Now get the data via the adapter
         MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
         adapter.setMeetingId(meetingId);
 
 
-        //Assign Adapter to ListView
-        //OMM: Since I was unable to do a SherlockListFragment to work
-        //setListAdapter(adapter);
+        // Assign Adapter to ListView
         ListView lvwMembers = (ListView)findViewById(R.id.lvwMFineMembers);
         TextView txtEmpty = (TextView)findViewById(R.id.txtMFineEmpty);
 
@@ -145,26 +153,6 @@ Log.d("FineMemberMeetingActivity", "populate List next");
                 }
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.member_fine_history, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

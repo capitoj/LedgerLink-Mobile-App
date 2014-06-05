@@ -18,7 +18,6 @@
                 style="@style/RegularTextBold"
                 android:id="@+id/txtNCP_header"
                 android:layout_width="wrap_content"
-                android:padding="5dp"
                 android:layout_height="wrap_content"
                 android:text="Savings Group Name" />
 
@@ -34,7 +33,6 @@
                 android:id="@+id/txtNCP_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:text="Before the first meeting, enter the current cycle’s information such as the star (share) value, and the names, ages, and occupations for each member." />
         </LinearLayout>
 
@@ -54,16 +52,16 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="2dip"
+            android:layout_marginBottom="150dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/txtGSW_info"
+                android:layout_marginTop="-5dip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dip"
-                android:text=""
-
                 />
         </LinearLayout>
     </LinearLayout>

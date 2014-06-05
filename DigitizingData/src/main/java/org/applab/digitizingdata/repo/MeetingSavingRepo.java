@@ -204,6 +204,43 @@ public class MeetingSavingRepo {
         }
     }
 
+    public double getTotalSavingsInCycleForPreviousMeeting(int cycleId, int meetingId){
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        double totalSavings = 0.00;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sumQuery = String.format("SELECT  SUM(%s) AS TotalSavings FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d) AND %s NOT %d",
+                    SavingSchema.COL_S_AMOUNT, SavingSchema.getTableName(),
+                    SavingSchema.COL_S_MEETING_ID,MeetingSchema.COL_MT_MEETING_ID,
+                    MeetingSchema.getTableName(),MeetingSchema.COL_MT_CYCLE_ID,cycleId,
+                    SavingSchema.COL_S_MEETING_ID, meetingId);
+
+            cursor = db.rawQuery(sumQuery, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                totalSavings = cursor.getDouble(cursor.getColumnIndex("TotalSavings"));
+            }
+
+            return totalSavings;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingSavingRepo.getTotalSavingsInCycle", ex.getMessage());
+            return 0;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     public boolean saveMemberSaving(int meetingId, int memberId, double amount) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;

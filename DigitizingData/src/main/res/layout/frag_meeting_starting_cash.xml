@@ -12,13 +12,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <!--<org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="5dp"
                 android:id="@+id/lblMOCFMeetingDate"
-                android:layout_gravity="center" />
+                android:layout_gravity="center" /> -->
 
             <!-- Auto entered from figure left in the box at the end of previous meeting: The differnce of cash in bank and cash in box-->
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -26,7 +26,8 @@
                 android:id="@+id/lblExpectedStartingCash"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lblMOCFMeetingDate"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
                 android:text="Expected Starting Cash" />
 
             <!-- Date of Previous meeting, Previous Total Cah in Box , currency -->
