@@ -154,6 +154,7 @@ public class MeetingSavingRepo {
             return totalSavings;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MeetingSavingRepo.getTotalSavingsInMeeting", ex.getMessage());
             return 0;
         }

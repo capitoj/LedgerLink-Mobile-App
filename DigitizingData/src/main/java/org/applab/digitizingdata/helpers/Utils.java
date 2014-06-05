@@ -241,6 +241,7 @@ public class Utils {
         }
     }
 
+
     //Given a GSW stage, returns the Activity class to launch
     public static Class resolveGettingStartedWizardStage(int stage) {
        switch(stage) {

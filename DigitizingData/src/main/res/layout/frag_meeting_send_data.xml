@@ -1,13 +1,22 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MeetingSendDataFrag">
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="fill_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  >
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/RegularText"
         android:layout_width="fill_parent"
@@ -22,12 +31,13 @@
         android:id="@+id/lblMSDFragInstructions"
         android:layout_below="@id/lblMSDFragStatus"
         android:text="Send Data" />
+    </LinearLayout>
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
                   android:layout_height="match_parent"
-                  android:orientation="horizontal"
+                  android:orientation="vertical"
                   android:divider="?android:attr/dividerHorizontal"
                   android:showDividers="middle"
                   android:dividerPadding="5dp">
@@ -46,6 +56,91 @@
                 android:id="@+id/lblMSDFragSavings"
                 android:text="" />
 
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblMSDFragLoanPayments"
+                android:text="" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblMSDFragFines"
+                android:text="" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lblMSDFragNewLoans"
+                android:text="" />
+
    </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="fill_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:dividerPadding="5dp">
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/SubHeading"
+                android:id="@+id/txtMSDFragCurrentMeetingHeading"
+                android:layout_width="fill_parent"
+                android:layout_height="25dip"
+                android:text="CURRENT MEETING" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/txtMSDFragCurrentMeetingDetails"
+                android:layout_width="fill_parent"
+                android:layout_height="25dip"
+                android:text="--" />
+
+
+
+
+     </LinearLayout>
+
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="fill_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:dividerPadding="5dp"
+                  android:id="@+id/layoutMSDUnsentPastMeetings">
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/SubHeading"
+                android:id="@+id/txtMSDFragPastMeetingsHeading"
+                android:layout_width="fill_parent"
+                android:layout_height="25dip"
+                android:text="UNSENT PAST MEETINGS" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/txtMSDFragPastMeetingsDetails"
+                android:layout_width="fill_parent"
+                android:layout_height="25dip"
+                android:text="--" />
+
+        <!-- This will house the past meetings list -->
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="fill_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:dividerPadding="5dp">
+     </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>
+</ScrollView>

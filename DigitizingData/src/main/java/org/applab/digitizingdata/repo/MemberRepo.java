@@ -365,6 +365,53 @@ public class MemberRepo {
         }
     }
 
+
+
+    //Counts members
+    public int countMembers() {
+
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            members = new ArrayList<Member>();
+            String columnList = MemberSchema.getColumnList();
+
+            // Select All Query
+            String selectQuery = String.format("SELECT %s FROM %s ORDER BY %s", columnList, MemberSchema.getTableName(),
+                    MemberSchema.COL_M_MEMBER_NO);
+
+            cursor = db.rawQuery(selectQuery, null);
+
+            if(cursor == null){
+                return 0;
+            }
+
+            return cursor.getCount();
+
+
+
+
+
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return 0;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
     public Member getMemberById(int memberId) {
         Member member = null;
 

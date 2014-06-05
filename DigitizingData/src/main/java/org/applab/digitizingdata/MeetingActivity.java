@@ -25,6 +25,7 @@ import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
+import org.applab.digitizingdata.repo.VslaCycleRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -125,6 +126,17 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
         if (getIntent().hasExtra("_enableSendData")) {
             enableSendData = getIntent().getBooleanExtra("_enableSendData", false);
+        }
+
+        if(targetMeetingId == 0) {
+        //If target meeting id is 0, then load it as current meeting id
+        VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getBaseContext());
+
+        MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
+        targetMeetingId = meetingRepo.getCurrentMeeting(vslaCycleRepo.getCurrentCycle().getCycleId()).getMeetingId();
+
+        //Define the meeting id to be accessed by all tab fragments
+        getIntent().putExtra("_meetingId", targetMeetingId);
         }
     }
 

@@ -62,7 +62,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
         savingsGroupName = (TextView)findViewById(R.id.txtNCP_header);
         if(!vslaInfo.isActivated()) {
           //If not activated, show message to avoid displaying "Offline Mode" as vsla name
-            savingsGroupName.setText("(not yet activated)");
+            savingsGroupName.setText("");
         }
         else {
 

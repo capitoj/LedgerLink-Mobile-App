@@ -463,7 +463,8 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
         }
         catch(Exception ex) {
-            Log.e("MemberLoansIssuedHistory.saveMemberLoan", ex.getMessage());
+            ex.printStackTrace();
+            //Log.e("MemberLoansIssuedHistory.saveMemberLoan", ex.getMessage());
             return false;
         }
     }
