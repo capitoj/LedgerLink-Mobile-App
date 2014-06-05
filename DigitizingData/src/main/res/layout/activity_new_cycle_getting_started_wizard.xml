@@ -57,7 +57,7 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="20dp">
 
                 <org.applab.digitizingdata.fontutils.TypefaceEditText
                     android:id="@+id/txtNCSharePrice"
@@ -216,42 +216,60 @@
             android:layout_marginBottom="70dip"
             android:orientation="vertical">
 
-
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblNCInterestCollectedSoFar"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Total amount of interest collected this cycle so far" />
+                android:text="Total amount of interest collected this cycle so far." />
 
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 android:id="@+id/txtNCInterestCollectedSoFar"
                 style="@style/NormalEditText"
                 android:layout_width="200dip"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dip"
-                android:inputType="number"
-                android:text="0" />
+                android:inputType="number"/>
 
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblNCInterestCurrency"
+                style="@style/InlineTextItem"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="UGX" />
+
+</LinearLayout>
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblNCFinesCollectedSoFar"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Total amount of fines collected so far" />
+                android:text="Total amount of fines collected so far." />
 
-
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dip">
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 android:id="@+id/txtNCFinesCollectedSoFar"
                 style="@style/NormalEditText"
                 android:layout_width="200dip"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="0" />
+                android:inputType="number"/>
 
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblNCFinesCurrency"
+                style="@style/InlineTextItem"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:text="UGX" />
 
+</LinearLayout>
         </LinearLayout>
 
     </LinearLayout>

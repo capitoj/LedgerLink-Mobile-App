@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -371,19 +373,26 @@ public class NewCycleActivity extends SherlockActivity {
                 }
             }
 
-            // Validate: MaxShareAmount
-            TextView txtMaxShareQty = (TextView)findViewById(R.id.txtNCMaxShares);
-            String maxShareQty = txtMaxShareQty.getText().toString().trim();
+       /**     String maxShareQty = txtMaxShareQty.getText().toString().trim();
             if (maxShareQty.length() < 1) {
                 displayMessageBox(dialogTitle, "The Maximum Share Quantity is required.", Utils.MSGBOX_ICON_EXCLAMATION);
                 txtMaxShareQty.requestFocus();
                 return false;
             }
-            else {
+            else { */
+
+                // Validate: MaxShareAmount
+            Spinner cboMaxShareQty = (Spinner)findViewById(R.id.cboNCMaxShares);
+            if (cboMaxShareQty.getSelectedItemPosition() == 0) {
+                Utils.createAlertDialogOk(this, dialogTitle, "The Maximum Share Quantity is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                cboMaxShareQty.requestFocus();
+                return false;
+            } else {
+                String maxShareQty = cboMaxShareQty.getSelectedItem().toString().trim();
                 double theMaxShareQty = Double.parseDouble(maxShareQty);
                 if (theMaxShareQty <= 0.00) {
                     displayMessageBox(dialogTitle, "The Maximum Share Quantity must be positive.", Utils.MSGBOX_ICON_EXCLAMATION);
-                    txtMaxShareQty.requestFocus();
+                    cboMaxShareQty.requestFocus();
                     return false;
                 }
                 else {
@@ -526,14 +535,14 @@ public class NewCycleActivity extends SherlockActivity {
         try {
             //Now populate
             TextView txtSharePrice = (TextView)findViewById(R.id.txtNCSharePrice);
-            TextView txtMaxShareQty = (TextView)findViewById(R.id.txtNCMaxShares);
+            Spinner cboMaxShareQty = (Spinner)findViewById(R.id.cboNCMaxShares);
             TextView txtStartDate = (TextView)findViewById(R.id.txtNCStartDate);
             TextView txtEndDate = (TextView)findViewById(R.id.txtNCEndDate);
             TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
 
             txtSharePrice.setText(Utils.formatRealNumber(cycle.getSharePrice()));
-            txtMaxShareQty.setText(Utils.formatRealNumber(cycle.getMaxSharesQty()));
-            txtStartDate.setText(Utils.formatDate(cycle.getStartDate(),"dd-MMM-yyyy"));
+            Utils.setSpinnerSelection(cycle.getMaxSharesQty() + "", cboMaxShareQty);
+            txtStartDate.setText(Utils.formatDate(cycle.getStartDate(), "dd-MMM-yyyy"));
             txtEndDate.setText(Utils.formatDate(cycle.getEndDate(),"dd-MMM-yyyy"));
             txtInterestRate.setText(Utils.formatRealNumber(cycle.getInterestRate()));
         }
@@ -544,21 +553,21 @@ public class NewCycleActivity extends SherlockActivity {
 
     protected void clearDataFields() {
         try{
-            //Now populate
+            // Now populate
             TextView txtSharePrice = (TextView)findViewById(R.id.txtNCSharePrice);
-            TextView txtMaxShareQty = (TextView)findViewById(R.id.txtNCMaxShares);
+            Spinner cboMaxShareQty = (Spinner)findViewById(R.id.cboNCMaxShares);
             TextView txtStartDate = (TextView)findViewById(R.id.txtNCStartDate);
             TextView txtEndDate = (TextView)findViewById(R.id.txtNCEndDate);
             TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
 
             txtSharePrice.setText("");
-            txtMaxShareQty.setText("");
+            Utils.setSpinnerSelection(selectedCycle.getMaxSharesQty() + "", cboMaxShareQty);
             txtStartDate.setText("");
             txtEndDate.setText("");
             txtInterestRate.setText("");
         }
         catch(Exception ex){
-
+            Log.d("NewCycleActivity","Initialization Failed!");
         }
 
     }
