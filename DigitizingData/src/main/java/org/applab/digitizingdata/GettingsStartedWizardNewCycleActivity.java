@@ -224,6 +224,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
              case android.R.id.home:
                  Intent upIntent = new Intent(this, GettingStartedWizardPageOne.class);
                  if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+
                      // This activity is not part of the application's task, so
                      // create a new task
                      // with a synthesized back stack.
@@ -233,6 +234,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                              .addNextIntent(upIntent).startActivities();
                      finish();
                  } else {
+
                      // This activity is part of the application's task, so simply
                      // navigate up to the hierarchical parent activity.
                      NavUtils.navigateUpTo(this, upIntent);
@@ -261,21 +263,24 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             }
             if (retVal) {
                 if (cycle.getCycleId() == 0) {
+
                     //Set this new cycle as the selected one
                     //Retrieve the recently added cycle so as to get the id as well
                     cycle = repo.getMostRecentCycle();
                     selectedCycle = cycle;
-                    //TODO: create Getting started wizard dummy meeting
+
+                    //TODO: Create Getting started wizard dummy meeting
                     retVal = repo.createGettingStartedDummyMeeting(selectedCycle);
 
 
                     if (!retVal) {
                         Log.d(getApplicationContext().getPackageName(), "Failed to create the dummy data import meeting");
                         Toast.makeText(this, "An error occured while saving the information", Toast.LENGTH_LONG).show();
-                        ;
                     }
+
                     //displayMessageBox(dialogTitle, "The New Cycle has been added Successfully.", Utils.MSGBOX_ICON_TICK);
                 } else {
+
                     //displayMessageBox("Update Cycle", "The Cycle has been updated Successfully.", Utils.MSGBOX_ICON_TICK);
                 }
 
@@ -290,10 +295,11 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                     return false;
                 }
 
-                //Pass on the flag indicating whether this is an Update operation
+                // Pass on the flag indicating whether this is an Update operation
                 Intent i;
                 if (isUpdateCycleAction && !_isFromAddMembers) {
-                    //Go to confirmation activity
+
+                    // Go to confirmation activity
                     i = new Intent(getApplicationContext(), GettingStartedConfirmationPage.class);
                     startActivity(i);
                     finish();
@@ -307,7 +313,8 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                 displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.", Utils.MSGBOX_ICON_EXCLAMATION);
             }
         } else {
-            //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
+
+            // displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
         }
 
         return successFlg;
@@ -370,7 +377,6 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         }
     }
 
-
     @Override
     protected void populateDataFields(VslaCycle cycle) {
         // Clear Fields
@@ -413,7 +419,6 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
     /* Populates the max shares spinner  */
     private void buildMaxSharesSpinner() {
-        Log.d("GWS", "Got here");
 
         Spinner cboNCMaxShares = (Spinner) findViewById(R.id.cboNCMaxShares);
         ArrayList<String> maxSharesArrayList = new ArrayList<String>();
