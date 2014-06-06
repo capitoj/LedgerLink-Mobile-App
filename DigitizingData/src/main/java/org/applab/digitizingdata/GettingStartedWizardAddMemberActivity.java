@@ -2,7 +2,15 @@ package org.applab.digitizingdata;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,9 +20,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
@@ -26,8 +37,6 @@ import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
-
 
 
 /**
@@ -73,7 +82,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                             startActivity(i);
                             finish();
                         }
-                    });
+                    }
+            );
         } else {
             actionBar.setTitle("New Member");
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back_next_cancel, null);
@@ -85,7 +95,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                             selectedFinishButton = false;
                             saveMemberData();
                         }
-                    });
+                    }
+            );
             customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
@@ -96,7 +107,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                             startActivity(i);
                             finish();
                         }
-                    });
+                    }
+            );
         }
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                 new View.OnClickListener() {
@@ -119,23 +131,41 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
 
                     }
-                });
+                }
+        );
         actionBar.setTitle("New Member");
+        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM,
                 ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
+                        | ActionBar.DISPLAY_SHOW_TITLE
+        );
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT)
+        );
         // END_INCLUDE (inflate_set_custom_view)
         //if in getting started wizard.. use the getting started layout
         //else use the default layout
         setContentView(R.layout.activity_member_details_view_gettings_started_wizard);
-        //Set instructions
+
+        // Set instructions
         TypefaceTextView lblAMInstruction = (TypefaceTextView) findViewById(R.id.lblAMInstruction);
-        lblAMInstruction.setText("Enter each member. Save and add another member by selecting + and when you have entered all members, select done");
+
+        SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
+        SpannableStringBuilder nextText = new SpannableStringBuilder("\"next.\"");
+        nextText.setSpan(new StyleSpan(Typeface.BOLD), 0,nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        SpannableStringBuilder plusText = new SpannableStringBuilder("\"+\"");
+        plusText.setSpan(new StyleSpan(Typeface.BOLD), 0,plusText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        headingInstruction.append("Enter each member. Save and add another member by selecting ");
+        headingInstruction.append(plusText);
+        headingInstruction.append(" and when you have entered all members, select ");
+        headingInstruction.append(nextText);
+        lblAMInstruction.setText(headingInstruction);
+
         clearDataFields();
         if (isEditAction) {
             repo = new MemberRepo(getApplicationContext());
@@ -149,13 +179,34 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     }
 
     private void buildGenderSpinner() {
+
         //Setup the Spinner Items
         Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
         String[] genderList = new String[]{"select sex", "Male", "Female"};
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                return v;
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+        };
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboGender.setAdapter(adapter);
         cboGender.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+
         //Make the spinner selectable
         cboGender.setFocusable(true);
         cboGender.setFocusableInTouchMode(true);
@@ -179,7 +230,28 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         }
         String[] memberNumberList = memberNumberArrayList.toArray(new String[memberNumberArrayList.size()]);
         memberNumberArrayList.toArray(memberNumberList);
-        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, memberNumberList);
+        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, memberNumberList) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                return v;
+            }
+
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+        };
+
         memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboAMMemberNo.setAdapter(memberNoAdapter);
         cboAMMemberNo.setOnItemSelectedListener(new CustomGenderSpinnerListener());
@@ -201,7 +273,26 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         }
         String[] ageList = ageArrayList.toArray(new String[ageArrayList.size()]);
         ageArrayList.toArray(ageList);
-        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, ageList);
+        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, ageList) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                return v;
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+        };
         memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboAMAge.setAdapter(memberNoAdapter);
         cboAMAge.setOnItemSelectedListener(new CustomGenderSpinnerListener());
@@ -216,18 +307,41 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
         Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
         repo = new MemberRepo(getApplicationContext());
-        ArrayList<String> ageArrayList = new ArrayList<String>();
-        ageArrayList.add("select number");
+        ArrayList<String> cyclesArrayList = new ArrayList<String>();
+        cyclesArrayList.add("select number");
         for (int i = 0; i <= 20; i++) {
-            ageArrayList.add(i + "");
+            cyclesArrayList.add(i + "");
         }
-        String[] ageList = ageArrayList.toArray(new String[ageArrayList.size()]);
-        ageArrayList.toArray(ageList);
-        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, ageList);
+        String[] ageList = cyclesArrayList.toArray(new String[cyclesArrayList.size()]);
+        cyclesArrayList.toArray(ageList);
+        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, ageList) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                return v;
+            }
+
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+        };
+
+
         memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboAMCycles.setAdapter(memberNoAdapter);
         cboAMCycles.setOnItemSelectedListener(new CustomGenderSpinnerListener());
-        //Make the spinner selectable
+
+        // Make the spinner selectable
         cboAMCycles.setFocusable(true);
         cboAMCycles.setFocusableInTouchMode(true);
         cboAMCycles.setClickable(true);
@@ -241,9 +355,34 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         return true;
     }
 
-    /*
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+     Intent i;
+         switch(item.getItemId()) {
+             case android.R.id.home:
+                 Intent upIntent = new Intent(this, GettingsStartedWizardNewCycleActivity.class);
+                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+
+                     // This activity is not part of the application's task, so
+                     // create a new task
+                     // with a synthesized back stack.
+                     TaskStackBuilder
+                             .from(this)
+                             .addNextIntent(new Intent(this, GettingsStartedWizardNewCycleActivity.class))
+                             .addNextIntent(upIntent).startActivities();
+                     finish();
+                 } else {
+
+                     // This activity is part of the application's task, so simply
+                     // navigate up to the hierarchical parent activity.
+                     NavUtils.navigateUpTo(this, upIntent);
+                 }
+
+         }
+         return true;
+     /**
         switch(item.getItemId()) {
             case R.id.mnuAMNext:
                 //TODO: If member number is nothing, allow proceeding without saving
@@ -261,9 +400,9 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 return saveMemberData();
         }
         return true;
+    */
     }
 
-    */
 
     @Override
     protected boolean saveMemberData() {

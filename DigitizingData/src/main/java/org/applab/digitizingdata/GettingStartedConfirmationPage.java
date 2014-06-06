@@ -1,18 +1,27 @@
 package org.applab.digitizingdata;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.TextView;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.internal.view.menu.ActionMenuItemView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.digitizingdata.domain.model.VslaInfo;
+import org.applab.digitizingdata.fontutils.TypefaceTextView;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 public class GettingStartedConfirmationPage extends SherlockActivity {
@@ -23,34 +32,50 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
     boolean confirmed = false;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getting_started_wizard_is_everything_correct);
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("GETTING STARTED");
-    }
+        actionBar.setTitle("GET STARTED");
 
+        // Set instructions
+        TypefaceTextView lblConfirmationText = (TypefaceTextView) findViewById(R.id.lblConfirmationText);
+
+        SpannableString doneText = new SpannableString("\"DONE\"");
+        doneText.setSpan(new StyleSpan(Typeface.BOLD), 0, doneText.length() - 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+        SpannableString cancelText = new SpannableString("\"cancel\"");
+        cancelText.setSpan(new StyleSpan(Typeface.BOLD), 0, cancelText.length() - 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+        SpannableStringBuilder instruction = new SpannableStringBuilder();
+        instruction.append("If you are satisfied that all information is correct, please press ");
+        instruction.append(doneText);
+        instruction.append(" otherwise press ");
+        instruction.append(cancelText);
+        instruction.append(" to revise information.");
+
+        lblConfirmationText.setText(instruction, TextView.BufferType.SPANNABLE);
+
+    }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
 
             case android.R.id.home:
-                if( !confirmed) {
+                if (!confirmed) {
                     //Only navigate to main if confirmed
                     return true;
                 }
-                Intent upIntent = new Intent(this, MainActivity.class);
+                Intent upIntent = new Intent(this, GettingStartedWizardReviewMembersActivity.class);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
                     TaskStackBuilder
                             .from(this)
-                            .addNextIntent(new Intent(this, MainActivity.class))
+                            .addNextIntent(new Intent(this, GettingStartedWizardReviewMembersActivity.class))
                             .addNextIntent(upIntent).startActivities();
                     finish();
                 } else {
@@ -61,10 +86,10 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
             case R.id.mnuAMCancel:
                 Intent mainMenu = new Intent(getBaseContext(), GettingStartedWizardReviewMembersActivity.class);
                 startActivity(mainMenu);
-            return true;
+                return true;
             case R.id.mnuAMDone:
                 //IF already confirmed, load the main activity
-                if(confirmed) {
+                if (confirmed) {
                     Intent mainActivity = new Intent(getBaseContext(), MainActivity.class);
                     startActivity(mainActivity);
 
@@ -75,7 +100,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
                 VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
                 boolean updateStatus = vslaInfoRepo.updateGettingStartedWizardCompleteFlag(true);
 
-                if(updateStatus) {
+                if (updateStatus) {
                     //Update text
                     TextView heading = (TextView) findViewById(R.id.lblConfirmationHeading);
                     heading.setText("Thank You!");
@@ -108,5 +133,5 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         return true;
 
     }
-    
+
 }

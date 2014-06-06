@@ -86,8 +86,9 @@
 
     </style>
 
-    <style name="NormalEditText" parent="android:TextAppearance.Medium">
+    <style name="NormalEditText">
         <item name="android:fontFamily">normal</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/ledger_link_black</item>
         <item name="android:lineSpacingMultiplier">1.0</item>
         <item name="android:layout_marginLeft">20dip</item>
@@ -95,8 +96,21 @@
         <item name="android:gravity">left</item>
     </style>
 
-    <style name="RegularText" parent="android:TextAppearance.Medium">
+
+
+    <style name="RegularTextInstruction" parent="android:TextAppearance.Medium">
         <item name="android:fontFamily">normal</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:gravity">left</item>
+    </style>
+
+    <style name="RegularText">
+        <item name="android:fontFamily">normal</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/ledger_link_black</item>
         <item name="android:lineSpacingMultiplier">1.0</item>
         <item name="android:layout_marginTop">10dip</item>
@@ -116,9 +130,10 @@
     </style>
 
 
-    <style name="InlineTextItem" parent="android:TextAppearance.Medium">
+    <style name="InlineTextItem">
         <item name="android:fontFamily">normal</item>
         <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:lineSpacingMultiplier">1.0</item>
         <item name="android:layout_marginTop">10dip</item>
         <item name="android:layout_marginLeft">-10dip</item>
@@ -126,8 +141,20 @@
         <item name="android:gravity">left</item>
     </style>
 
-    <style name="RegularTextBold" parent="android:TextAppearance.Medium">
+    <style name="RegularTextBoldInstruction" parent="android:TextAppearance.Medium">
         <item name="android:fontFamily">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:lineSpacingMultiplier">1.5</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:gravity">left</item>
+    </style>
+
+    <style name="RegularTextBold">
+        <item name="android:fontFamily">bold</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/ledger_link_black</item>
         <item name="android:lineSpacingMultiplier">1.5</item>
         <item name="android:layout_marginTop">10dip</item>
@@ -221,6 +248,8 @@
         <item name="android:fontFamily">bold</item>
 
     </style>
+
+
 
     <style name="ActionBarItem">
 
