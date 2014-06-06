@@ -85,7 +85,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         );
 
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("Get started");
+        actionBar.setTitle("GET STARTED");
 
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
@@ -96,7 +96,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         actionBar.setDisplayShowCustomEnabled(true);
 
         // Populate Max Shares Spinner
-        buildMaxSharesSpinner();
+        super.buildMaxSharesSpinner();
 
         txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
         txtEndDate = (TextView) findViewById(R.id.txtNCEndDate);
@@ -434,7 +434,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
     }
 
     /* Populates the max shares spinner  */
-    private void buildMaxSharesSpinner() {
+    /**private void buildMaxSharesSpinner() {
 
         Spinner cboNCMaxShares = (Spinner) findViewById(R.id.cboNCMaxShares);
         ArrayList<String> maxSharesArrayList = new ArrayList<String>();
@@ -474,6 +474,6 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         cboNCMaxShares.setFocusable(true);
         cboNCMaxShares.setFocusableInTouchMode(true);
         cboNCMaxShares.setClickable(true);
-    }
+    } */
 
 }

@@ -5,11 +5,14 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,11 +24,13 @@ import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
+import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -389,8 +394,8 @@ public class NewCycleActivity extends SherlockActivity {
                 return false;
             } else {
                 String maxShareQty = cboMaxShareQty.getSelectedItem().toString().trim();
-                double theMaxShareQty = Double.parseDouble(maxShareQty);
-                if (theMaxShareQty <= 0.00) {
+               int theMaxShareQty = Integer.valueOf(maxShareQty);
+                if (theMaxShareQty <= 0) {
                     displayMessageBox(dialogTitle, "The Maximum Share Quantity must be positive.", Utils.MSGBOX_ICON_EXCLAMATION);
                     cboMaxShareQty.requestFocus();
                     return false;
@@ -525,7 +530,7 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     protected void populateDataFields(VslaCycle cycle) {
-        //Clear Fields
+        // Clear Fields
         clearDataFields();
 
         if(cycle == null) {
@@ -533,7 +538,7 @@ public class NewCycleActivity extends SherlockActivity {
         }
 
         try {
-            //Now populate
+            // Now populate
             TextView txtSharePrice = (TextView)findViewById(R.id.txtNCSharePrice);
             Spinner cboMaxShareQty = (Spinner)findViewById(R.id.cboNCMaxShares);
             TextView txtStartDate = (TextView)findViewById(R.id.txtNCStartDate);
@@ -561,7 +566,7 @@ public class NewCycleActivity extends SherlockActivity {
             TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
 
             txtSharePrice.setText("");
-            Utils.setSpinnerSelection(selectedCycle.getMaxSharesQty() + "", cboMaxShareQty);
+            Utils.setSpinnerSelection(0 + "", cboMaxShareQty);
             txtStartDate.setText("");
             txtEndDate.setText("");
             txtInterestRate.setText("");
@@ -570,6 +575,49 @@ public class NewCycleActivity extends SherlockActivity {
             Log.d("NewCycleActivity","Initialization Failed!");
         }
 
+    }
+
+    /* Populates the max shares spinner  */
+    public void buildMaxSharesSpinner() {
+
+        Spinner cboNCMaxShares = (Spinner) findViewById(R.id.cboNCMaxShares);
+        ArrayList<String> maxSharesArrayList = new ArrayList<String>();
+        maxSharesArrayList.add("select number");
+        for (int i = 1; i <= 100; i++) {
+            maxSharesArrayList.add(i + "");
+        }
+        String[] maxSharesList = maxSharesArrayList.toArray(new String[maxSharesArrayList.size()]);
+        maxSharesArrayList.toArray(maxSharesList);
+        ArrayAdapter<CharSequence> maxSharesAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, maxSharesList) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                return v;
+            }
+
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+        };
+
+        maxSharesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cboNCMaxShares.setAdapter(maxSharesAdapter);
+        cboNCMaxShares.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+
+        // Make the spinner selectable
+        cboNCMaxShares.setFocusable(true);
+        cboNCMaxShares.setFocusableInTouchMode(true);
+        cboNCMaxShares.setClickable(true);
     }
 
 }

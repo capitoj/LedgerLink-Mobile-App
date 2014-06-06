@@ -1,27 +1,34 @@
 package org.applab.digitizingdata;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
+import org.applab.digitizingdata.fontutils.TypefaceTextView;
 import org.applab.digitizingdata.helpers.GettingStartedWizardMembersArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.ArrayList;
-
-
 
 
 /**
@@ -38,6 +45,17 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
         inflateCustombar();
         setContentView(R.layout.activity_getting_started_wizard_review_members);
+
+        TypefaceTextView reviewSubHeading = (TypefaceTextView) findViewById(R.id.lblRvwMembersSubHeading);
+        SpannableStringBuilder reviewSubHeadingPart = new SpannableStringBuilder("Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may");
+        SpannableString exitText = new SpannableString("\"exit\"");
+        exitText.setSpan(new StyleSpan(Typeface.BOLD), 0, exitText.length() - 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+        reviewSubHeadingPart.append(exitText);
+        reviewSubHeadingPart.append(" and come back later.");
+
+        reviewSubHeading.setText(reviewSubHeadingPart);
+
         //Populate the Members
         populateMembersList();
         VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
@@ -52,7 +70,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_exit, null);
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_exit_enternext_next, null);
         customActionBarView.findViewById(R.id.actionbar_exit).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -61,7 +79,8 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                         //startActivity(i);
                         finish();
                     }
-                });
+                }
+        );
 
         customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
                 new View.OnClickListener() {
@@ -71,10 +90,11 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                         startActivity(i);
                         finish();
                     }
-                });
+                }
+        );
 
 
-        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -83,21 +103,26 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                         startActivity(i);
                         finish();
                     }
-                });
+                }
+        );
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("GET STARTED");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayOptions(
+       /** actionBar.setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM,
                 ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
+                        | ActionBar.DISPLAY_SHOW_TITLE
+        ); */
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
     }
 
     @Override
