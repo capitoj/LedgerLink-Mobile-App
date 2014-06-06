@@ -3,6 +3,7 @@ package org.applab.digitizingdata;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
     int selectedMeetingId;
     private boolean viewingCurrentMeeting;
     private ArrayList<Meeting> unsentMeetings;
+    //public FragmentTransaction fragmentTransaction;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -128,7 +130,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         populateSelectedMeetingSummary();
         TextView txtStatus = (TextView)getSherlockActivity().findViewById(R.id.lblMSDFragStatus);
         TextView txtInstructions = (TextView)getSherlockActivity().findViewById(R.id.lblMSDFragInstructions);
-        if(isNetworkConnected(getSherlockActivity().getApplicationContext())) {
+        if(Utils.isNetworkConnected(getSherlockActivity().getApplicationContext())) {
             txtStatus.setText("The data network is available.");
             txtInstructions.setText("You can send the meeting data now by tapping the Send button above.");
             //Show button
@@ -140,12 +142,20 @@ public class MeetingSendDataFrag extends SherlockFragment {
             //Hide button
             MENU.findItem(R.id.mnuMSDFSend).setVisible(false);
         }
+
+        //Set onclick event of send meeting button
+        MENU.findItem(R.id.mnuMSDFSend).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                MeetingActivity meetingActivity = (MeetingActivity) getSherlockActivity();
+                meetingActivity.sendMeetingData(selectedMeetingId);
+                return true;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+
     }
 
-    public static boolean isNetworkConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isAvailable() && cm.getActiveNetworkInfo().isConnected());
-    }
+
 
     /*counts the number of past unset meetings, and computes current meeting saved values */
     public void loadFragmentInformation(int meetingIdToLoad) {
@@ -222,7 +232,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
     //Populates the summary for the current meeting
     public void populateSelectedMeetingSummary() {
 
-        final SherlockFragmentActivity parentActivity = getSherlockActivity();
+        //final SherlockFragmentActivity parentActivity = getSherlockActivity();
 
         TextView lblMSDFragRollcall = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragRollcall);
         lblMSDFragRollcall.setText(String.format("Roll Call %d/%d", selectedMeetingAttendance, numberOfMembers));
@@ -231,24 +241,54 @@ public class MeetingSendDataFrag extends SherlockFragment {
             @Override
             public void onClick(View view) {
                 if(viewingCurrentMeeting) {
-                    //parentActivity.getSupportFragmentManager().findFragmentByTag("rollCall").
-
-                    getSherlockActivity().getSupportActionBar().setSelectedNavigationItem(parentActivity.getSupportFragmentManager().findFragmentByTag("rollCall").getId());
+                    actionBar.selectTab(actionBar.getTabAt(0));
                 }
             }
         });
 
         TextView lblMSDFragSavings = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragSavings);
         lblMSDFragSavings.setText(String.format("Savings %,.0f UGX", totalSavingsInCurrentMeeting));
+        lblMSDFragSavings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(viewingCurrentMeeting) {
+                    actionBar.selectTab(actionBar.getTabAt(3));
+                }
+            }
+        });
 
         TextView lblMSDFragLoanPayments = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragLoanPayments);
         lblMSDFragLoanPayments.setText(String.format("Loan Payments %,.0f UGX", totalLoansRepaidInCurrentMeeting));
+        lblMSDFragLoanPayments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(viewingCurrentMeeting) {
+                    actionBar.selectTab(actionBar.getTabAt(4));
+                }
+            }
+        });
 
         TextView lblMSDFragFines = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragFines);
         lblMSDFragFines.setText(String.format("Fines %,.0f UGX", totalFinesInCurrentMeeting));
+        lblMSDFragFines.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(viewingCurrentMeeting) {
+                    actionBar.selectTab(actionBar.getTabAt(5));
+                }
+            }
+        });
 
         TextView lblMSDFragNewLoans = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragNewLoans);
         lblMSDFragNewLoans.setText(String.format("New Loans %,.0f UGX", totalLoansIssuedInCurrentMeeting));
+        lblMSDFragNewLoans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(viewingCurrentMeeting) {
+                    actionBar.selectTab(actionBar.getTabAt(6));
+                }
+            }
+        });
 
 
     }
