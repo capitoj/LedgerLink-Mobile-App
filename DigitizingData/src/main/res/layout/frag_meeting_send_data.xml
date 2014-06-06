@@ -83,7 +83,8 @@
                   android:layout_width="fill_parent"
                   android:layout_height="match_parent"
                   android:orientation="vertical"
-                  android:dividerPadding="5dp">
+                  android:dividerPadding="5dp"
+                  android:id="@+id/layoutMSDCurrentMeetingSummary">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/SubHeading"
@@ -94,10 +95,16 @@
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
+                android:id="@+id/txtMSDFragCurrentMeetingInstructions"
+                android:layout_width="fill_parent"
+                android:layout_height="25dip"
+                android:text="You may edit before sending." />
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                 android:id="@+id/txtMSDFragCurrentMeetingDetails"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:text="--" />
+                android:text="" />
 
 
 
@@ -122,18 +129,22 @@
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
-                android:id="@+id/txtMSDFragPastMeetingsDetails"
-                android:layout_width="fill_parent"
+                android:id="@+id/txtMSDFragPastMeetingInstructions"
+                android:layout_width="wrap_content"
                 android:layout_height="25dip"
-                android:text="--" />
+                android:text="You may not edit, but you may review before sending." />
 
-        <!-- This will house the past meetings list -->
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="fill_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="vertical"
-                  android:dividerPadding="5dp">
-     </LinearLayout>
+        <ListView
+                style="@style/List"
+                android:id="@+id/lstMSDPastMeetingList"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:choiceMode="singleChoice"
+/>
+
+
+
+
 
 
     </LinearLayout>
