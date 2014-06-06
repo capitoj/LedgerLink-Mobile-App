@@ -197,7 +197,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                     NavUtils.navigateUpTo(this, upIntent);
                 }
                 return true;
-
+            /** This event has been set from the send data fragment
             case R.id.mnuMSDFSend:
                 //For the Send Data Fragment in case data is sent during the meeting
                 sendMeetingData();
@@ -320,11 +320,13 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         }
     };
 
-    private void sendMeetingData() {
+    //Change this to send specified meeting by id
+    public void sendMeetingData(int meetingId) {
         MeetingRepo repo = new MeetingRepo(getApplicationContext());
 
         //TODO: Confirm this later. Does not support multiple cycles
-        Meeting meeting = repo.getMostRecentMeeting();
+        //Meeting meeting = repo.getMostRecentMeeting();
+        Meeting meeting = repo.getMeetingById(meetingId);
 
         HashMap<String, String> meetingData = new HashMap<String, String>();
 
