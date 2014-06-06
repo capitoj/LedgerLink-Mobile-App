@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -12,8 +13,10 @@ import android.support.v4.app.TaskStackBuilder;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +41,6 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
     VslaInfo vslaInfo = null;
     ActionBar actionBar;
     TextView savingsGroupName;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
                     }
                 });
 
-        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("Get started");
        /** actionBar.setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM,
@@ -99,11 +101,12 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
         }
 
         TypefaceTextView txtGSW_info = (TypefaceTextView) findViewById(R.id.txtGSW_info);
-        String txtGSWInfoText = "If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.\n\nAre you prepared to enter all member and cycle information now? If so you may get started by pressing ";
-        Spannable nextText = new SpannableString("\"next.\"");
-        nextText.setSpan(new ForegroundColorSpan(Color.BLUE), 0,nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder txtGSWInfoText = new SpannableStringBuilder("If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.\n\nAre you prepared to enter all member and cycle information now? If so you may get started by pressing ");
+        SpannableString nextText = new SpannableString("\"next.\"");
+        nextText.setSpan(new StyleSpan(Typeface.BOLD), 0,nextText.length()-1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
-        txtGSWInfoText += nextText;
+        txtGSWInfoText.append(nextText);
+
         txtGSW_info.setText(txtGSWInfoText);
 
         vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_ONE);

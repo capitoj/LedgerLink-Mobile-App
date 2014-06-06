@@ -3,10 +3,17 @@ package org.applab.digitizingdata;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,6 +33,7 @@ import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.fontutils.TypefaceTextView;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.*;
@@ -118,6 +126,14 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             }
         });
 
+        TypefaceTextView headerText = (TypefaceTextView) findViewById(R.id.lblNCHeading);
+        SpannableStringBuilder headingInstruction = new SpannableStringBuilder("Enter all cycle information then select ");
+        SpannableString nextText = new SpannableString("\"next.\"");
+        nextText.setSpan(new StyleSpan(Typeface.BOLD), 0,nextText.length()-1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+        headingInstruction.append(nextText);
+        headerText.setText(headingInstruction);
+
 
 
         if (isUpdateCycleAction) {
@@ -128,7 +144,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                 //TextView heading = (TextView) findViewById(R.id.lblNewCycleHeading);
                 //heading.setText("Review Cycle Information");
 
-                TextView headerText = (TextView) findViewById(R.id.lblNCHeading);
+                headerText = (TypefaceTextView) findViewById(R.id.lblNCHeading);
                 headerText.setText("Review and confirm that all information is correct. Correct any errors");
             }
 

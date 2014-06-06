@@ -10,7 +10,7 @@
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblConfirmationHeading"
-            style="@style/RegularTextBold"
+            style="@style/RegularTextBoldInstruction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Is Everything Correct?"
