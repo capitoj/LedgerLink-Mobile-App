@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal"
+              android:divider="@drawable/divider_vertical_ledger_link_blue"
+              android:showDividers="middle"
+              android:dividerPadding="5dp"
+    android:focusable="true">
+
+    <include layout="@layout/include_exit_button" />
+    <include layout="@layout/include_enter_next_button" />
+    <include layout="@layout/include_next_button" />
+</LinearLayout>

@@ -14,8 +14,7 @@
         android:layout_gravity="center"
         android:drawableLeft="@drawable/ic_social_add_person"
         android:drawablePadding="3dip"
-        android:gravity="center_vertical"
-        android:text="Enter \nNext" />
+        android:gravity="center_vertical"/>
 </FrameLayout>
 
     <!-- android:paddingLeft="10dp"
