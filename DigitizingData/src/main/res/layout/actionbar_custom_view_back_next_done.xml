@@ -4,34 +4,32 @@
     android:layout_height="40dip"
     android:divider="?android:attr/dividerVertical"
     android:dividerPadding="12dip"
-    android:focusable="true"
     android:orientation="horizontal"
-    android:showDividers="middle"
-   >
+    android:showDividers="middle">
 
     <include
-        layout="@layout/include_exit_button"
-        android:layout_width="30dip"
+        layout="@layout/include_back_button"
+        android:layout_width="70dip"
         android:layout_height="match_parent"
+        android:layout_marginBottom="6dip"
         android:layout_marginRight="3dip"
-        android:layout_marginTop="6dip"
-        android:layout_marginBottom="6dip"/>
+        android:layout_marginTop="6dip" />
 
     <include
         layout="@layout/include_enter_next_button"
         android:layout_width="40dip"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:layout_marginRight="3dip"
+        android:layout_marginBottom="6dip"
         android:layout_marginLeft="3dip"
-        android:layout_marginTop="6dip"
-        android:layout_marginBottom="6dip"/>
+        android:layout_marginRight="3dip"
+        android:layout_marginTop="6dip" />
 
     <include
-        layout="@layout/include_next_button"
-        android:layout_width="70dip"
+        layout="@layout/include_done_button"
+        android:layout_width="75dip"
         android:layout_height="match_parent"
+        android:layout_marginBottom="6dip"
         android:layout_marginLeft="3dip"
-        android:layout_marginTop="6dip"
-        android:layout_marginBottom="6dip"/>
+        android:layout_marginTop="6dip" />
 </LinearLayout>

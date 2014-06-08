@@ -5,9 +5,24 @@
               android:orientation="horizontal"
               android:divider="?android:attr/dividerVertical"
               android:showDividers="middle"
-              android:dividerPadding="5dp">
+              android:dividerPadding="12dip">
 
-    <include layout="@layout/include_back_button" />
-    <include layout="@layout/include_edit_button" />
-    <include layout="@layout/include_delete_button" />
+    <include layout="@layout/include_back_button"
+        android:layout_width="70dip"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="6dip"
+        android:layout_marginRight="3dip"
+        android:layout_marginTop="6dip"  />
+    <include layout="@layout/include_edit_button"
+        android:layout_width="75dip"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="6dip"
+        android:layout_marginRight="3dip"
+        android:layout_marginTop="6dip"/>
+    <include layout="@layout/include_delete_button"
+        android:layout_width="80dip"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="6dip"
+        android:layout_marginLeft="3dip"
+        android:layout_marginTop="6dip" />
 </LinearLayout>
