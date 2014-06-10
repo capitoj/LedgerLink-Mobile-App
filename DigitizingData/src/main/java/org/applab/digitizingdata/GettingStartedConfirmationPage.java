@@ -37,7 +37,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getting_started_wizard_is_everything_correct);
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false); //Please leave this as false
         actionBar.setTitle("GET STARTED");
 
         // Set instructions
