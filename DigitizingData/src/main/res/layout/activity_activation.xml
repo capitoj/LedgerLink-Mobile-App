@@ -93,12 +93,23 @@
 
                   -->
 
+            <TextView style="RegularTextLogin"
+                android:id="@+id/lblVAVslaCode"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_alignTop="@+id/txtVAVslaCode"
+                android:layout_below="@id/imgVALogo"
+                android:paddingTop="2dp"
+                android:layout_marginTop="10dp"
+                android:text="VSLA Number" />
+
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/EditTextStyle"
                 android:id="@+id/txtVAVslaCode"
                 android:layout_width="265dip"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/imgVALogo"
+                android:layout_below="@id/lblVAVslaCode"
                 android:inputType="textCapCharacters"
                 android:hint="Enter VSLA Number" />
 
@@ -155,6 +166,14 @@
 
 
                 />
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="65dp"></TableLayout>
 
             <!--
             android:layout_centerHorizontal="true"

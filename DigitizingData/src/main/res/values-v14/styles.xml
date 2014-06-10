@@ -121,6 +121,18 @@
         <item name="android:gravity">left</item>
     </style>
 
+    <style name="RegularTextLogin">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:layout_marginTop">20dip</item>
+        <item name="android:layout_marginBottom">30dip</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:layout_marginLeft">43dip</item>
+        <item name="android:fontFamily">bold</item>
+    </style>
+
     <style name="RegularTextInstructionBold">
         <item name="android:fontFamily">bold</item>
         <item name="android:textColor">@color/ledger_link_black</item>
