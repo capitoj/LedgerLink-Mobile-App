@@ -6,8 +6,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
@@ -64,14 +62,35 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             Log.d(getBaseContext().getPackageName(), "Member id " + getIntent().getIntExtra("_id", 0) + " to be loaded");
             this.selectedMemberId = getIntent().getIntExtra("_id", 0);
         }
+
+        setContentView(R.layout.activity_member_details_view_gettings_started_wizard);
+
+        // Set instructions
+        TypefaceTextView lblAMInstruction = (TypefaceTextView) findViewById(R.id.lblAMInstruction);
+
+        SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
+
+        SpannableStringBuilder plusText = new SpannableStringBuilder("+ ");
+        plusText.setSpan(new StyleSpan(Typeface.BOLD), 0, plusText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        SpannableStringBuilder nextText = new SpannableStringBuilder("next.");
+        nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        headingInstruction.append("Enter each member. Save and add another member by selecting ");
+        headingInstruction.append(plusText);
+        headingInstruction.append("and when you have entered all members, select ");
+        headingInstruction.append(nextText);
+
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
         actionBar = getSupportActionBar();
+
         if (isEditAction) {
-            actionBar.setTitle("Edit Member");
+            // actionBar.setTitle("Edit Member");
+            actionBar.setTitle("GET STARTED");
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_cancel, null);
             customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                     new View.OnClickListener() {
@@ -84,9 +103,11 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                         }
                     }
             );
+
+            headingInstruction = new SpannableStringBuilder("");
         } else {
-            actionBar.setTitle("New Member");
-            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back_next_cancel, null);
+            // actionBar.setTitle("New Member");
+            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back_next_done, null);
             customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
@@ -133,37 +154,19 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     }
                 }
         );
-        actionBar.setTitle("New Member");
+        // actionBar.setTitle("New Member");
+        actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE
-        );
+        actionBar.setTitle("GET STARTED");
+
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT)
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
         );
-        // END_INCLUDE (inflate_set_custom_view)
-        //if in getting started wizard.. use the getting started layout
-        //else use the default layout
-        setContentView(R.layout.activity_member_details_view_gettings_started_wizard);
 
-        // Set instructions
-        TypefaceTextView lblAMInstruction = (TypefaceTextView) findViewById(R.id.lblAMInstruction);
+        actionBar.setDisplayShowCustomEnabled(true);
 
-        SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
-        SpannableStringBuilder nextText = new SpannableStringBuilder("\"next.\"");
-        nextText.setSpan(new StyleSpan(Typeface.BOLD), 0,nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        SpannableStringBuilder plusText = new SpannableStringBuilder("\"+\"");
-        plusText.setSpan(new StyleSpan(Typeface.BOLD), 0,plusText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        headingInstruction.append("Enter each member. Save and add another member by selecting ");
-        headingInstruction.append(plusText);
-        headingInstruction.append(" and when you have entered all members, select ");
-        headingInstruction.append(nextText);
         lblAMInstruction.setText(headingInstruction);
 
         clearDataFields();

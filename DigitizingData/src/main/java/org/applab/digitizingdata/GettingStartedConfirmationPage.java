@@ -43,20 +43,20 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         // Set instructions
         TypefaceTextView lblConfirmationText = (TypefaceTextView) findViewById(R.id.lblConfirmationText);
 
-        SpannableString doneText = new SpannableString("\"DONE\"");
-        doneText.setSpan(new StyleSpan(Typeface.BOLD), 0, doneText.length() - 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        SpannableString doneText = new SpannableString("done ");
+        doneText.setSpan(new StyleSpan(Typeface.BOLD), 0, doneText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        SpannableString cancelText = new SpannableString("\"cancel\"");
-        cancelText.setSpan(new StyleSpan(Typeface.BOLD), 0, cancelText.length() - 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        SpannableString cancelText = new SpannableString("cancel ");
+        cancelText.setSpan(new StyleSpan(Typeface.BOLD), 0, cancelText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         SpannableStringBuilder instruction = new SpannableStringBuilder();
         instruction.append("If you are satisfied that all information is correct, please press ");
         instruction.append(doneText);
-        instruction.append(" otherwise press ");
+        instruction.append("otherwise press ");
         instruction.append(cancelText);
         instruction.append(" to revise information.");
 
-        lblConfirmationText.setText(instruction, TextView.BufferType.SPANNABLE);
+        lblConfirmationText.setText(instruction);
 
     }
 

@@ -24,7 +24,7 @@
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblRvwMembersSubHeading"
-            style="@style/RegularTextSmall"
+            style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dip"

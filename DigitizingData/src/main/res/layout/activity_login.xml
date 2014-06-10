@@ -49,6 +49,24 @@
             android:layout_below="@+id/imgVALogo"
             android:layout_alignLeft="@+id/edt_passkey" />
 
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:id="@+id/lblLoginMsg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=" "
+            android:layout_below="@+id/imgVALogo"
+            android:layout_alignLeft="@+id/edt_passkey" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularTextLogin"
+            android:id="@+id/lblPassKeyPrompt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Passkey "
+            android:layout_below="@+id/imgVALogo"
+            android:layout_alignRight="@+id/edt_passkey" />
+
         <org.applab.digitizingdata.fontutils.TypefaceEditText
             style="@style/EditTextStyle"
             android:id="@+id/edt_passkey"

@@ -128,8 +128,8 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
         TypefaceTextView headerText = (TypefaceTextView) findViewById(R.id.lblNCHeading);
         SpannableStringBuilder headingInstruction = new SpannableStringBuilder("Enter all cycle information then select ");
-        SpannableString nextText = new SpannableString("\"next.\"");
-        nextText.setSpan(new StyleSpan(Typeface.BOLD), 0,nextText.length()-1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        SpannableString nextText = new SpannableString("next.");
+        nextText.setSpan(new StyleSpan(Typeface.BOLD), 0,nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         headingInstruction.append(nextText);
         headerText.setText(headingInstruction);
@@ -145,7 +145,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                 //heading.setText("Review Cycle Information");
 
                 headerText = (TypefaceTextView) findViewById(R.id.lblNCHeading);
-                headerText.setText("Review and confirm that all information is correct. Correct any errors");
+                headerText.setText("Review and confirm that all information is correct. Correct any errors.");
             }
 
 
