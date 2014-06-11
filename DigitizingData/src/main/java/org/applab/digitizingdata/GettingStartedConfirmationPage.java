@@ -27,7 +27,7 @@ import org.applab.digitizingdata.repo.VslaInfoRepo;
 public class GettingStartedConfirmationPage extends SherlockActivity {
 
 
-    private Menu MENU;
+    private Menu MENU; //Menu holder to be able to manipulate menu items later on
     ActionBar actionBar;
     boolean confirmed = false;
 
@@ -37,7 +37,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getting_started_wizard_is_everything_correct);
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false); //Please leave this as false, it will be enabled on confirmation
         actionBar.setTitle("GET STARTED");
 
         // Set instructions
@@ -67,19 +67,12 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         switch (item.getItemId()) {
 
             case android.R.id.home:
-                if (!confirmed) {
-                    //Only navigate to main if confirmed
-                    return true;
-                }
-                Intent upIntent = new Intent(this, GettingStartedWizardReviewMembersActivity.class);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    TaskStackBuilder
-                            .from(this)
-                            .addNextIntent(new Intent(this, GettingStartedWizardReviewMembersActivity.class))
-                            .addNextIntent(upIntent).startActivities();
+                if (confirmed) {
+                    Intent mainActivity = new Intent(getBaseContext(), MainActivity.class);
+                    startActivity(mainActivity);
+
                     finish();
-                } else {
-                    NavUtils.navigateUpTo(this, upIntent);
+                    return true;
                 }
                 return true;
 
@@ -108,6 +101,9 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
                     TextView content = (TextView) findViewById(R.id.lblConfirmationText);
                     content.setText("You have entered all information about your savings group and the current cycle. You may now use the phone at every meeting to enter savings and loan activity.");
                     confirmed = true;
+
+                    //Enable home button
+                    actionBar.setDisplayHomeAsUpEnabled(true);
 
 
                     //TODO: hide cancel menu button

@@ -546,7 +546,7 @@ public class NewCycleActivity extends SherlockActivity {
             TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
 
             txtSharePrice.setText(Utils.formatRealNumber(cycle.getSharePrice()));
-            Utils.setSpinnerSelection(cycle.getMaxSharesQty() + "", cboMaxShareQty);
+            Utils.setSpinnerSelection(String.format("%.0f", cycle.getMaxSharesQty()), cboMaxShareQty); //format shares qty with no decimal points so that the Utils can select it correctly
             txtStartDate.setText(Utils.formatDate(cycle.getStartDate(), "dd-MMM-yyyy"));
             txtEndDate.setText(Utils.formatDate(cycle.getEndDate(),"dd-MMM-yyyy"));
             txtInterestRate.setText(Utils.formatRealNumber(cycle.getInterestRate()));
@@ -566,7 +566,7 @@ public class NewCycleActivity extends SherlockActivity {
             TextView txtInterestRate = (TextView)findViewById(R.id.txtNCInterestRate);
 
             txtSharePrice.setText("");
-            Utils.setSpinnerSelection(0 + "", cboMaxShareQty);
+            cboMaxShareQty.setSelection(0);
             txtStartDate.setText("");
             txtEndDate.setText("");
             txtInterestRate.setText("");

@@ -46,14 +46,15 @@ import java.util.Calendar;
  */
 public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
-    protected boolean _isFromAddMembers = false;
+    protected boolean _isFromReviewMembers = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getIntent().hasExtra("_isFromAddMembers")) {
-            _isFromAddMembers = getIntent().getBooleanExtra("_isFromAddMembers", false);
+        if (getIntent().hasExtra("_isFromReviewMembers")) {
+            _isFromReviewMembers = getIntent().getBooleanExtra("_isFromReviewMembers", false);
+
         }
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
@@ -140,7 +141,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             //Setup the Fields by getting the current Cycle
 
             //Not from add members activity, change the labels
-            if (!_isFromAddMembers) {
+            if (_isFromReviewMembers) {
                 //TextView heading = (TextView) findViewById(R.id.lblNewCycleHeading);
                 //heading.setText("Review Cycle Information");
 
@@ -313,7 +314,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
                 // Pass on the flag indicating whether this is an Update operation
                 Intent i;
-                if (isUpdateCycleAction && !_isFromAddMembers) {
+                if (isUpdateCycleAction && _isFromReviewMembers) {
 
                     // Go to confirmation activity
                     i = new Intent(getApplicationContext(), GettingStartedConfirmationPage.class);
