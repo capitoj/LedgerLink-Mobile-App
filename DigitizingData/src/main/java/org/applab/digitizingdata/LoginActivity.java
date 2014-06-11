@@ -185,12 +185,6 @@ public class LoginActivity extends SherlockActivity {
             activationLoginMsg.setText(notActivatedStatusMessage);
             lblPasskey.setVisibility(View.INVISIBLE);
         }
-        else {
-            //Change font size
-            txtVslaName.setTextSize(18);
-        }
-        txtVslaName.setText(vslaName);
-
 
         // ---Button view---
         Button btnLogin = (Button)findViewById(R.id.btnLogin);
