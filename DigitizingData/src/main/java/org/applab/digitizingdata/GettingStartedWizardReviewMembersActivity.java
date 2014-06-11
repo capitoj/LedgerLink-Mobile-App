@@ -16,20 +16,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.fontutils.TypefaceTextView;
 import org.applab.digitizingdata.helpers.GettingStartedWizardMembersArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MemberRepo;
-import org.applab.digitizingdata.repo.VslaInfoRepo;
+import org.applab.digitizingdata.repo.*;
 
 import java.util.ArrayList;
+import java.util.Date;
+
+
 
 
 /**
@@ -56,6 +61,32 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         reviewSubHeadingPart.append("and come back later.");
 
         reviewSubHeading.setText(reviewSubHeadingPart);
+
+
+        //Load the summary information
+        MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
+        Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+
+
+
+        //Set cycle start date in label
+        Date startDate = dummyGettingStartedWizardMeeting.getMeetingDate();
+        TextView lblRvwMembersDate = (TextView) findViewById(R.id.lblRvwMembersDate);
+        lblRvwMembersDate.setText("As of "+Utils.formatDate(startDate));
+
+        //Set savings in GSW meeting
+        MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getBaseContext());
+        TextView lblRvwMembersTotalSavings = (TextView) findViewById(R.id.lblRvwMembersTotalSavings);
+        lblRvwMembersTotalSavings.setText(String.format("Total savings this cycle %,.0f UGX", meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId())));
+
+        //Set loans issued in GSW meeting
+        MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(getBaseContext());
+        TextView lblRvwMembersTotalLoan = (TextView) findViewById(R.id.lblRvwMembersTotalLoan);
+        lblRvwMembersTotalLoan.setText(String.format("Total loans outstanding %,.0f UGX", meetingLoanIssuedRepo.getTotalLoansIssuedInMeeting(dummyGettingStartedWizardMeeting.getMeetingId())));
+
+
+
+
 
         //Populate the Members
         populateMembersList();
@@ -101,6 +132,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                     public void onClick(View v) {
                         Intent i = new Intent(getApplicationContext(), GettingsStartedWizardNewCycleActivity.class);
                         i.putExtra("_isUpdateCycleAction", true);
+                        i.putExtra("_isFromReviewMembers", true);
                         startActivity(i);
                         finish();
                     }

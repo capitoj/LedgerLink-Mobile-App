@@ -2,24 +2,15 @@ package org.applab.digitizingdata;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
-//import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.actionbarsherlock.view.Menu;
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-
+import com.actionbarsherlock.view.Menu;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -29,12 +20,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.SampleDataBuilderRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +32,7 @@ import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+//import android.view.Menu;
 
 public class LoginActivity extends SherlockActivity {
     VslaInfoRepo vslaInfoRepo = null;
@@ -239,9 +230,13 @@ public class LoginActivity extends SherlockActivity {
             showGettingStartedWizard = true;
         }
 
-        Intent mainMenu = null;
+        Intent mainMenu;
         if(showGettingStartedWizard) {
             mainMenu = new Intent(getBaseContext(), Utils.resolveGettingStartedWizardStage(vslaInfo.getGettingStartedWizardStage()));
+            if(vslaInfo.getGettingStartedWizardStage() == Utils.GETTING_STARTED_PAGE_REVIEW_CYCLE) {
+                //we are in review cycle mode
+                mainMenu.putExtra("_isFromReviewMembers", true);
+            }
         }
         else {
             mainMenu = new Intent(getBaseContext(), MainActivity.class);

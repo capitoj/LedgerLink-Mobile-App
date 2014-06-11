@@ -124,7 +124,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                         public void onClick(View v) {
 
                             Intent i = new Intent(getApplicationContext(), GettingsStartedWizardNewCycleActivity.class);
-                            i.putExtra("_isFromAddMembers", true);
+                            i.putExtra("_isFromReviewMembers", false);
                             startActivity(i);
                             finish();
                         }
@@ -366,14 +366,18 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
          switch(item.getItemId()) {
              case android.R.id.home:
                  Intent upIntent = new Intent(this, GettingsStartedWizardNewCycleActivity.class);
-                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+                 upIntent.putExtra("_isFromReviewMembers", false);
+                 startActivity(upIntent);
+                 finish();
+                 /*if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
 
                      // This activity is not part of the application's task, so
                      // create a new task
                      // with a synthesized back stack.
+
                      TaskStackBuilder
                              .from(this)
-                             .addNextIntent(new Intent(this, GettingsStartedWizardNewCycleActivity.class))
+                             .addNextIntent(upIntent)
                              .addNextIntent(upIntent).startActivities();
                      finish();
                  } else {
@@ -381,7 +385,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                      // This activity is part of the application's task, so simply
                      // navigate up to the hierarchical parent activity.
                      NavUtils.navigateUpTo(this, upIntent);
-                 }
+                 } */
 
          }
          return true;

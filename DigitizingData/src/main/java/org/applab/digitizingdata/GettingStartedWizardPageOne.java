@@ -1,37 +1,22 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-
-import android.text.Html;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-
+import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.fontutils.TypefaceTextView;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
@@ -70,6 +55,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
                     @Override
                     public void onClick(View v) {
                         Intent stage = new Intent(getBaseContext(), GettingsStartedWizardNewCycleActivity.class);
+                        stage.putExtra("_isFromReviewMembers", false);
                         startActivity(stage);
                         finish();
                     }
