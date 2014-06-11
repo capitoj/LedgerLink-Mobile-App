@@ -30,4 +30,5 @@
     <string name="about_legal">All rights reserved. Not liable for any damage incurred from use of this software.</string>
     <string name="about_version">Version 1.0.3</string>
     <string name="action_about">About</string>
+    <string name="register">REGISTER</string>
 </resources>

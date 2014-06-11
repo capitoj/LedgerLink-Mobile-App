@@ -98,7 +98,6 @@
     </style>
 
 
-
     <style name="RegularTextInstruction">
         <item name="android:fontFamily">normal</item>
         <item name="android:textColor">@color/ledger_link_black</item>
@@ -125,11 +124,10 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/ledger_link_black</item>
         <item name="android:lineSpacingMultiplier">1.0</item>
-        <item name="android:layout_marginTop">20dip</item>
-        <item name="android:layout_marginBottom">30dip</item>
+        <item name="android:layout_marginTop">30dip</item>
+        <item name="android:layout_marginBottom">-2dip</item>
         <item name="android:paddingTop">10dip</item>
-        <item name="android:paddingBottom">10dip</item>
-        <item name="android:layout_marginLeft">43dip</item>
+        <item name="android:paddingBottom">5dip</item>
         <item name="android:fontFamily">bold</item>
     </style>
 
@@ -163,6 +161,17 @@
         <item name="android:layout_marginLeft">20dip</item>
         <item name="android:layout_marginRight">20dip</item>
         <item name="android:gravity">left</item>
+    </style>
+
+    <style name="RegularTextActivationLoginMsg">
+        <item name="android:fontFamily">normal</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:layout_marginTop">5dip</item>
+        <item name="android:layout_marginBottom">30dip</item>
+        <item name="android:paddingTop">5dip</item>
+        <item name="android:paddingBottom">5dip</item>
     </style>
 
 
@@ -202,13 +211,13 @@
         <item name="android:textColor">@color/ledger_link_dark_blue</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">bold</item>
-        <item name="android:paddingTop">5dip</item>
-        <item name="android:paddingRight">10dip</item>
         <item name="android:lineSpacingMultiplier">1</item>
-        <item name="android:layout_marginBottom">10dip</item>
-        <item name="android:layout_marginTop">10dip</item>
-        <item name="android:layout_marginLeft">20dip</item>
-        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:layout_marginTop">30dip</item>
+        <item name="android:layout_marginBottom">-2dip</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:paddingBottom">5dip</item>
+        <item name="android:layout_marginLeft">0dip</item>
+        <item name="android:layout_marginRight">0dip</item>
     </style>
 
     <style name="FormLabel">
@@ -278,7 +287,6 @@
     </style>
 
 
-
     <style name="ActionBarItem">
 
     </style>
@@ -288,13 +296,13 @@
     </style>
 
 
-    <style name="EditTextStyle">
+    <style name="EditTextLogin">
         <item name="android:textColor">@color/ledger_link_light_blue</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColorHint">@color/ledger_link_light_blue</item>
         <item name="android:background">@drawable/edit_text</item>
-        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginTop">5dp</item>
         <item name="android:paddingTop">10dip</item>
         <item name="android:paddingBottom">10dip</item>
         <item name="android:paddingLeft">10dip</item>
@@ -307,7 +315,7 @@
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:textColor">@color/ledger_link_white</item>
         <item name="android:layout_marginTop">20dip</item>
-        <item name="android:layout_marginBottom">30dip</item>
+        <item name="android:layout_marginBottom">5dip</item>
         <item name="android:paddingTop">10dip</item>
         <item name="android:paddingBottom">10dip</item>
         <item name="android:paddingLeft">10dip</item>

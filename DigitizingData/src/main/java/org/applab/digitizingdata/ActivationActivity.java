@@ -155,7 +155,7 @@ public class ActivationActivity extends SherlockActivity {
 
     private boolean saveOfflineVslaInfo() {
         try{
-            TextView txtVslaCode = (TextView) findViewById(R.id.edtVAVslaCode);
+            TextView txtVslaCode = (TextView) findViewById(R.id.txtVAVslaCode);
             TextView txtPassKey = (TextView) findViewById(R.id.txtVAPassKey);
             TextView txtConfirmPassKey = (TextView) findViewById(R.id.txtVAConfirmPassKey);
 
@@ -190,7 +190,7 @@ public class ActivationActivity extends SherlockActivity {
 
     private void saveActivatedVslaInfo() {
         try{
-            TextView txtVslaCode = (TextView) findViewById(R.id.edtVAVslaCode);
+            TextView txtVslaCode = (TextView) findViewById(R.id.txtVAVslaCode);
             TextView txtPassKey = (TextView) findViewById(R.id.txtVAPassKey);
             TextView txtConfirmPassKey = (TextView) findViewById(R.id.txtVAConfirmPassKey);
 

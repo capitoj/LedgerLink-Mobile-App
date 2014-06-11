@@ -49,7 +49,7 @@
                             />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
-                style="@style/EditTextStyle"
+                style="@style/EditTextLogin"
                 android:id="@+id/txtGSW_passkey"
                 android:layout_width="265dip"
                 android:layout_height="wrap_content"

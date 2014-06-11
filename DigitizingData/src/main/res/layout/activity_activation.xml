@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:background="@drawable/white">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   <!-- <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"> -->
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
@@ -19,86 +19,83 @@
             android:paddingTop="@dimen/activity_vertical_margin">
 
             <ImageView
-                android:id="@+id/imgVALogo"
                 style="@style/Logo"
+                android:id="@+id/imgVALogo"
                 android:layout_width="100dip"
                 android:layout_height="match_parent"
-                android:contentDescription="@string/image_content_desc" />
+                android:contentDescription="@string/image_content_desc"
+                android:textAlignment="center" />
 
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblVAHeader"
                 style="@style/InTextHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/edtVAVslaCode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/imgVALogo"
-                android:paddingBottom="5dip"
-                android:paddingRight="10dip"
-                android:paddingTop="5dip"
-                android:text="REGISTER" />
+                android:layout_alignRight="@id/imgVALogo"
+                android:text="@string/register"
+                android:layout_alignLeft="@+id/lblVAVslaCode" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularTextLogin"
                 android:id="@+id/lblVAVslaCode"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_alignRight="@+id/edt_passkey"
                 android:layout_below="@id/lblVAHeader"
-                android:text="VSLA Number" />
+                android:text="VSLA Number"
+                android:layout_alignLeft="@+id/txtVAVslaCode"
+                android:layout_alignRight="@+id/txtVAVslaCode" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
-                style="@style/EditTextStyle"
-                android:id="@+id/edtVAVslaCode"
+                style="@style/EditTextLogin"
+                android:id="@+id/txtVAVslaCode"
                 android:layout_width="265dip"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lblVAVslaCode"
                 android:hint="Enter VSLA Number"
-                android:inputType="textCapCharacters" />
-
+                android:inputType="textCapCharacters"
+                android:layout_below="@id/lblVAVslaCode"/>
             <requestFocus />
 
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblVAPassKey"
                 style="@style/RegularTextLogin"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/edtVAVslaCode"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:paddingTop="2dip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="Create a Passkey"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:layout_below="@id/txtVAVslaCode"
+                android:layout_alignRight="@id/txtVAVslaCode"
+                android:layout_alignLeft="@+id/txtVAVslaCode" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblVAPassKeyInfo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/lblVAPassKey"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:paddingTop="2dip"
                 android:text="@string/activity_activation_vsla_passkey_info"
-                android:textSize="16sp" />
+                android:layout_marginBottom="5dip"
+                android:layout_below="@id/lblVAPassKey"
+                android:layout_alignRight="@id/lblVAPassKey"
+                android:layout_alignLeft="@+id/txtVAPassKey" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 android:id="@+id/txtVAPassKey"
-                style="@style/EditTextStyle"
+                style="@style/EditTextLogin"
                 android:layout_width="265dip"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lblVAPassKeyInfo"
                 android:hint="Enter Passkey Here"
-                android:inputType="textCapCharacters" />
+                android:inputType="textCapCharacters"
+                android:textAlignment="center" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 android:id="@+id/txtVAConfirmPassKey"
-                style="@style/EditTextStyle"
+                style="@style/EditTextLogin"
                 android:layout_width="265dip"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtVAPassKey"
                 android:hint="Re-enter Passkey Here"
+                android:layout_marginTop="20dip"
                 android:inputType="textCapCharacters" />
 
             <org.applab.digitizingdata.fontutils.TypefaceButton
@@ -112,30 +109,14 @@
 
                 />
 
-            <!--
-            android:layout_centerHorizontal="true"
-                android:textSize="24sp"
-                android:textColor="@color/ledger_link_white"
-            android:layout_marginTop="20dp"
-                android:paddingTop="5dip"
-                android:paddingBottom="5dip"
-                android:paddingLeft="10dip"
-                android:paddingRight="10dip"
-                android:background="@drawable/button"
-
-
-            <TextView
-                   android:id="@+id/lblVASwitchMode"
-                   android:layout_width="fill_parent"
-                   android:layout_height="wrap_content"
-                   android:textSize="12sp"
-                   android:layout_below="@id/btnVAActivate"
-                   android:paddingTop="2dip"
-                   android:textStyle="bold"
-                   android:textColor="#0000FF"
-                   android:layout_marginTop="10dip"
-                   android:text="Switch to Training Mode" /> -->
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/btnVAActivate"
+                android:text="Need help? Please call 078000000"
+                android:layout_alignLeft="@id/btnVAActivate"/>
 
         </RelativeLayout>
-    </RelativeLayout>
+  <!--  </RelativeLayout> -->
 </ScrollView>
