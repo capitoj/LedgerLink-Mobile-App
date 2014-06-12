@@ -21,33 +21,34 @@
             android:textAlignment="center" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularTextActivationLoginMsg"
-            android:id="@+id/lblActivationLoginMsg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text=" "
-            android:layout_below="@+id/imgVALogo"
-            android:layout_alignLeft="@+id/edt_passkey"
-            android:layout_alignRight="@+id/edt_passkey"
-            android:textAlignment="center" />
-
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/InTextHeader"
             android:id="@+id/lbl_vsla_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text=" "
+            android:text="VSLA NAME "
             android:layout_below="@+id/imgVALogo"
             android:layout_alignLeft="@+id/edt_passkey"
             android:layout_alignRight="@+id/edt_passkey"  />
 
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularTextActivationLoginMsg"
+            android:id="@+id/lblActivationLoginMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Activation Message"
+            android:layout_marginTop="50dip"
+            android:paddingTop="40dip"
+            android:paddingBottom="-5dip"
+            android:layout_above="@+id/edt_passkey"
+            android:layout_alignLeft="@+id/lbl_vsla_name"
+            android:layout_alignRight="@+id/lbl_vsla_name" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularTextLogin"
             android:id="@+id/lblPassKeyPrompt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Passkey "
+            android:text="Passkey"
             android:layout_below="@+id/lbl_vsla_name"
             android:layout_alignLeft="@+id/edt_passkey"
             android:layout_alignRight="@+id/edt_passkey"/>
@@ -79,7 +80,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/btnLogin"
-            android:layout_marginTop="10dip"
             android:textSize="14sp"
             android:text="Forgot your pass key: \nPlease call 078000000"
             android:layout_alignLeft="@id/btnLogin"/>
