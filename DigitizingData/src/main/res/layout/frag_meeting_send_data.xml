@@ -131,7 +131,7 @@
                 style="@style/RegularText"
                 android:id="@+id/txtMSDFragPastMeetingInstructions"
                 android:layout_width="wrap_content"
-                android:layout_height="25dip"
+                android:layout_height="wrap_content"
                 android:text="You may not edit, but you may review before sending." />
 
         <ListView
