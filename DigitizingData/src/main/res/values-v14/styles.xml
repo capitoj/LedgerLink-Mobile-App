@@ -124,7 +124,7 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/ledger_link_black</item>
         <item name="android:lineSpacingMultiplier">1.0</item>
-        <item name="android:layout_marginTop">30dip</item>
+        <item name="android:layout_marginTop">10dip</item>
         <item name="android:layout_marginBottom">-2dip</item>
         <item name="android:paddingTop">10dip</item>
         <item name="android:paddingBottom">5dip</item>
@@ -168,8 +168,8 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/ledger_link_black</item>
         <item name="android:lineSpacingMultiplier">1.0</item>
-        <item name="android:layout_marginTop">5dip</item>
-        <item name="android:layout_marginBottom">30dip</item>
+        <item name="android:layout_marginTop">20dip</item>
+        <item name="android:layout_marginBottom">10dip</item>
         <item name="android:paddingTop">5dip</item>
         <item name="android:paddingBottom">5dip</item>
     </style>
@@ -207,16 +207,16 @@
         <item name="android:gravity">left</item>
     </style>
 
-    <style name="InTextHeader" parent="RegularText">
+    <style name="InTextHeader" parent="RegularTextLogin">
         <item name="android:textColor">@color/ledger_link_dark_blue</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">bold</item>
         <item name="android:lineSpacingMultiplier">1</item>
-        <item name="android:layout_marginTop">30dip</item>
-        <item name="android:layout_marginBottom">-2dip</item>
-        <item name="android:paddingTop">10dip</item>
-        <item name="android:paddingBottom">5dip</item>
-        <item name="android:layout_marginLeft">0dip</item>
+        <item name="android:layout_marginTop">-2dip</item>
+        <item name="android:layout_marginBottom">1dip</item>
+        <item name="android:paddingTop">1dip</item>
+        <item name="android:paddingBottom">2dip</item>
+        <item name="android:layout_marginLeft">1dip</item>
         <item name="android:layout_marginRight">0dip</item>
     </style>
 
@@ -327,9 +327,9 @@
     <style name="Logo">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:scaleType">centerCrop</item>
-        <item name="android:layout_weight">10</item>
-        <item name="android:paddingTop">80dip</item>
-        <item name="android:paddingBottom">80dip</item>
+        <item name="android:layout_weight">8</item>
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:paddingBottom">10dip</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:layout_marginLeft">20dip</item>

@@ -139,10 +139,10 @@ public class LoginActivity extends SherlockActivity {
             if(!vslaInfo.isActivated()) {
                 if(vslaInfo.isOffline()) {
                     if(wasCalledFromActivation) {
-                        notActivatedStatusMessage = "We were unable to send your registration because of a network problem. We've saved it and will try to send it later.";
+                        notActivatedStatusMessage = "We weren't able to send your registration because of a network problem. We've saved it and will try to send it later.";
                     }
                     else {
-                        notActivatedStatusMessage = "We were unable to send your registration last time because of a network problem. We've saved it and will try to send it when you sign in now.";
+                        notActivatedStatusMessage = "We weren't able to send your registration last time because of a network problem. We've saved it and will try to send it when you sign in now.";
                     }
                 }
                 else {
@@ -181,7 +181,7 @@ public class LoginActivity extends SherlockActivity {
             txtVslaName.setText(vslaName);
             activationLoginMsg.setVisibility(View.GONE);
         } else {
-
+            txtVslaName.setVisibility(View.INVISIBLE);
             activationLoginMsg.setText(notActivatedStatusMessage);
             lblPasskey.setVisibility(View.INVISIBLE);
         }
