@@ -87,7 +87,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
         }
 
         TypefaceTextView txtGSW_info = (TypefaceTextView) findViewById(R.id.txtGSW_info);
-        SpannableStringBuilder txtGSWInfoText = new SpannableStringBuilder("If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.\n\nAre you prepared to enter all member and cycle information now? If so you may get started by pressing ");
+        SpannableStringBuilder txtGSWInfoText = new SpannableStringBuilder("If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.\n\nAre you prepared to enter all member and cycle information now? If so you may get started by tapping ");
         SpannableString nextText = new SpannableString("next.");
         nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 

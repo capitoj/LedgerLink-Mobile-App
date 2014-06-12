@@ -56,9 +56,9 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         cancelText.setSpan(new StyleSpan(Typeface.BOLD), 0, cancelText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         SpannableStringBuilder instruction = new SpannableStringBuilder();
-        instruction.append("If you are satisfied that all information is correct, please press ");
+        instruction.append("If you are satisfied that all information is correct, please tap ");
         instruction.append(doneText);
-        instruction.append("otherwise press ");
+        instruction.append("otherwise tap ");
         instruction.append(cancelText);
         instruction.append(" to revise information.");
 
@@ -148,7 +148,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_cancel, null);
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
 
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                 new View.OnClickListener() {

@@ -155,7 +155,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         });
 
         TypefaceTextView headerText = (TypefaceTextView) findViewById(R.id.lblNCHeading);
-        SpannableStringBuilder headingInstruction = new SpannableStringBuilder("Enter all cycle information then select ");
+        SpannableStringBuilder headingInstruction = new SpannableStringBuilder("Enter all cycle information then tap ");
         SpannableString nextText = new SpannableString("next.");
         nextText.setSpan(new StyleSpan(Typeface.BOLD), 0,nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 

@@ -74,9 +74,9 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         SpannableStringBuilder nextText = new SpannableStringBuilder("next.");
         nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        headingInstruction.append("Enter each member. Save and add another member by selecting ");
+        headingInstruction.append("Enter each member. Save and add another member by tapping ");
         headingInstruction.append(plusText);
-        headingInstruction.append("and when you have entered all members, select ");
+        headingInstruction.append("and when you have entered all members, tap ");
         headingInstruction.append(nextText);
 
         // BEGIN_INCLUDE (inflate_set_custom_view)
