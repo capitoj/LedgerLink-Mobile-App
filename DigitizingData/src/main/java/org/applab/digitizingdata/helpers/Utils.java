@@ -71,6 +71,7 @@ public class Utils {
     public static final int GETTING_STARTED_PAGE_ADD_MEMBER = 4;
     public static final int GETTING_STARTED_PAGE_REVIEW_MEMBERS = 5;
     public static final int GETTING_STARTED_PAGE_REVIEW_CYCLE = 6;
+    public static final int GETTING_STARTED_PAGE_CONFIRMATION = 7;
 
 
 
@@ -258,6 +259,8 @@ public class Utils {
                return GettingStartedWizardPageOne.class;
            case GETTING_STARTED_PAGE_PIN:
                return GettingStartedWizardPageTwo.class;
+           case GETTING_STARTED_PAGE_CONFIRMATION:
+               return GettingStartedConfirmationPage.class;
            default:
                return GettingStartedWizardPageOne.class;
         }
