@@ -1,9 +1,6 @@
 package org.applab.digitizingdata;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +12,6 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
@@ -37,10 +33,10 @@ public class MeetingSendDataFrag extends SherlockFragment {
     int numberOfPastUnsentMeetings = 0;
     private Meeting selectedMeeting, currentMeeting;
     private int numberOfMembers;
-    private double totalSavingsInCurrentMeeting;
-    private double totalLoansRepaidInCurrentMeeting;
-    private double totalFinesInCurrentMeeting;
-    private double totalLoansIssuedInCurrentMeeting;
+    private double totalSavingsInSelectedMeeting;
+    private double totalLoansRepaidInSelectedMeeting;
+    private double totalFinesInSelectedMeeting;
+    private double totalLoansIssuedInSelectedMeeting;
     private int selectedMeetingAttendance;
     int currentMeetingId;
     int selectedMeetingId;
@@ -171,20 +167,20 @@ public class MeetingSendDataFrag extends SherlockFragment {
 
         //Get total savings in current meeting
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getSherlockActivity().getBaseContext());
-        totalSavingsInCurrentMeeting = meetingSavingRepo.getTotalSavingsInMeeting(selectedMeetingId);
+        totalSavingsInSelectedMeeting = meetingSavingRepo.getTotalSavingsInMeeting(selectedMeetingId);
 
         
         MeetingLoanRepaymentRepo meetingLoanRepaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getBaseContext());
-        totalLoansRepaidInCurrentMeeting = meetingLoanRepaymentRepo.getTotalLoansRepaidInMeeting(selectedMeetingId);
+        totalLoansRepaidInSelectedMeeting = meetingLoanRepaymentRepo.getTotalLoansRepaidInMeeting(selectedMeetingId);
 
 
         //Get total fines in meeting
         MeetingFineRepo meetingFineRepo = new MeetingFineRepo(getSherlockActivity().getBaseContext());
-        totalFinesInCurrentMeeting = meetingFineRepo.getTotalFinesInMeeting(selectedMeetingId);
+        totalFinesInSelectedMeeting = meetingFineRepo.getTotalFinesInMeeting(selectedMeetingId);
         
         //Get total loans in current meeting
         MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getBaseContext());
-        totalLoansIssuedInCurrentMeeting = meetingLoanIssuedRepo.getTotalLoansIssuedInMeeting(selectedMeetingId);
+        totalLoansIssuedInSelectedMeeting = meetingLoanIssuedRepo.getTotalLoansIssuedInMeeting(selectedMeetingId);
         
         //Get attendance in current meeting
         MeetingAttendanceRepo meetingAttendanceRepo = new MeetingAttendanceRepo(getSherlockActivity().getBaseContext());
@@ -216,7 +212,6 @@ public class MeetingSendDataFrag extends SherlockFragment {
         membersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                // Launching new Activity on selecting single List Item
                 Meeting meeting = unsentMeetings.get(position);
                 selectedMeetingId = meeting.getMeetingId();
                 viewingCurrentMeeting = false;
@@ -232,7 +227,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
     //Populates the summary for the current meeting
     public void populateSelectedMeetingSummary() {
 
-        //final SherlockFragmentActivity parentActivity = getSherlockActivity();
+        //TODO: We are relying on tab indexes to select the tabs, this may break when the orders are changed we may consider finding a way of selecting by tab text
 
         TextView lblMSDFragRollcall = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragRollcall);
         lblMSDFragRollcall.setText(String.format("Roll Call %d/%d", selectedMeetingAttendance, numberOfMembers));
@@ -247,7 +242,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         });
 
         TextView lblMSDFragSavings = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragSavings);
-        lblMSDFragSavings.setText(String.format("Savings %,.0f UGX", totalSavingsInCurrentMeeting));
+        lblMSDFragSavings.setText(String.format("Savings %,.0f UGX", totalSavingsInSelectedMeeting));
         lblMSDFragSavings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -258,7 +253,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         });
 
         TextView lblMSDFragLoanPayments = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragLoanPayments);
-        lblMSDFragLoanPayments.setText(String.format("Loan Payments %,.0f UGX", totalLoansRepaidInCurrentMeeting));
+        lblMSDFragLoanPayments.setText(String.format("Loan Payments %,.0f UGX", totalLoansRepaidInSelectedMeeting));
         lblMSDFragLoanPayments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -269,7 +264,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         });
 
         TextView lblMSDFragFines = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragFines);
-        lblMSDFragFines.setText(String.format("Fines %,.0f UGX", totalFinesInCurrentMeeting));
+        lblMSDFragFines.setText(String.format("Fines %,.0f UGX", totalFinesInSelectedMeeting));
         lblMSDFragFines.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -280,7 +275,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         });
 
         TextView lblMSDFragNewLoans = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragNewLoans);
-        lblMSDFragNewLoans.setText(String.format("New Loans %,.0f UGX", totalLoansIssuedInCurrentMeeting));
+        lblMSDFragNewLoans.setText(String.format("New Loans %,.0f UGX", totalLoansIssuedInSelectedMeeting));
         lblMSDFragNewLoans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
