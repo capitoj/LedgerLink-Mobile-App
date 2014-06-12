@@ -61,7 +61,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
                     }
                 });
 
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle("Get started");
        /** actionBar.setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM,
