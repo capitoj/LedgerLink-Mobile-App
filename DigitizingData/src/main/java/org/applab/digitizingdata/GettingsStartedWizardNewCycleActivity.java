@@ -74,16 +74,43 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         View customActionBarView = null;
 
         actionBar = getSupportActionBar();
+        if(_isFromReviewMembers) {
+            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_exit_done, null);
 
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_next, null);
-        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        saveMiddleCycleData();
+            customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            saveMiddleCycleData();
+                        }
                     }
-                }
-        );
+            );
+
+            customActionBarView.findViewById(R.id.actionbar_exit).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                            System.exit(0);
+                        }
+                    }
+            );
+        }
+        else {
+            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_next, null);
+            customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            saveMiddleCycleData();
+                        }
+                    }
+            );
+        }
+
+
+
+
 
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("GET STARTED");
