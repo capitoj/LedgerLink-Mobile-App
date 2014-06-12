@@ -201,6 +201,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         Log.d(getBaseContext().getPackageName(), members.size() + " members loaded");
         //Assign Adapter to ListView
         setListAdapter(adapter);
+        getListView().setDivider(null);
         // listening to single list item on click
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,

@@ -1,14 +1,11 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.applab.digitizingdata.R;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -29,16 +25,13 @@ import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by Moses on 7/15/13.
@@ -87,7 +80,7 @@ public class AddMemberActivity extends SherlockActivity {
         actionBar = getSupportActionBar();
 
         if(isEditAction) {
-            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_cancel, null);
+            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
             customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                     new View.OnClickListener() {
                         @Override

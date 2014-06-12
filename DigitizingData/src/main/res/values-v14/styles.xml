@@ -226,7 +226,11 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="List" parent="RegularText"></style>
+    <style name="List">
+        <item name="android:layout_marginLeft">5dip</item>
+        <item name="android:layout_marginTop">20dip</item>
+        <item name="android:layout_marginBottom">20dip</item>
+    </style>
 
     <style name="RegularTextListItems">
         <item name="android:fontFamily">normal</item>

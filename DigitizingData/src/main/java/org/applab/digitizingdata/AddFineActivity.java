@@ -2,21 +2,16 @@ package org.applab.digitizingdata;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -30,19 +25,12 @@ import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.CustomFineTypeSpinnerListener;
-import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.FineTypeCustomArrayAdapter;
-import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
-import org.applab.digitizingdata.helpers.MembersFinesArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.FineTypeRepo;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
-import org.applab.digitizingdata.repo.MemberRepo;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by Moses on 7/15/13.
@@ -85,7 +73,7 @@ public class AddFineActivity extends SherlockActivity {
         View customActionBarView = null;
         actionBar = getSupportActionBar();
 
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_cancel, null);
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                 new View.OnClickListener() {
                     @Override

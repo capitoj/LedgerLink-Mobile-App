@@ -1,6 +1,5 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -20,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -28,12 +26,9 @@ import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.helpers.LoanRepaymentHistoryArrayAdapter;
-import org.applab.digitizingdata.helpers.LoansIssuedHistoryArrayAdapter;
-import org.applab.digitizingdata.helpers.MemberLoanIssueRecord;
 import org.applab.digitizingdata.helpers.MemberLoanRepaymentRecord;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
@@ -92,7 +87,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_cancel, null);
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                 new View.OnClickListener() {
                     @Override

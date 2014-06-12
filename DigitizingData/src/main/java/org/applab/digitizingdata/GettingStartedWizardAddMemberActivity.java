@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
@@ -91,7 +89,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         if (isEditAction) {
             // actionBar.setTitle("Edit Member");
             actionBar.setTitle("GET STARTED");
-            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_cancel, null);
+            customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
             customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                     new View.OnClickListener() {
                         @Override

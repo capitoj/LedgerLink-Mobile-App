@@ -105,7 +105,6 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
                     //Enable home button
                     actionBar.setDisplayHomeAsUpEnabled(true);
 
-
                     //TODO: hide cancel menu button
                     MENU.findItem(R.id.mnuAMCancel).setVisible(false);
                     MENU.findItem(R.id.mnuAMDone).setVisible(false);
