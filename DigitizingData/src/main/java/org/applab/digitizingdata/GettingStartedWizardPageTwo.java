@@ -101,7 +101,9 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
         }
         catch(Exception ex) {
             Utils.createAlertDialogOk(this, "Security", "The Pass Key could not be validated.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-            txtPassKey.requestFocus();
+            if (txtPassKey != null) {
+                txtPassKey.requestFocus();
+            }
         }
     }
 

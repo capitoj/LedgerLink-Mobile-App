@@ -31,7 +31,6 @@ import org.applab.digitizingdata.repo.VslaInfoRepo;
 public class GettingStartedConfirmationPage extends SherlockActivity {
 
 
-    private Menu MENU; //Menu holder to be able to manipulate menu items later on
     ActionBar actionBar;
     boolean confirmed = false;
     private View customActionBarView;
@@ -65,7 +64,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         lblConfirmationText.setText(instruction);
 
         VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
-        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_REVIEW_MEMBERS);
+        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_CONFIRMATION);
 
 
     }
@@ -85,22 +84,6 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
                     return true;
                 }
                 return true;
-
-            case R.id.mnuAMCancel:
-                i = new Intent(getBaseContext(), GettingStartedWizardReviewMembersActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.actionbar_cancel:
-                i = new Intent(getBaseContext(), GettingStartedWizardReviewMembersActivity.class);
-                startActivity(i);
-                return true;
-            case R.id.actionbar_done:
-                return progressConfirmation();
-
-            case R.id.mnuAMDone:
-                return progressConfirmation();
-
-
         }
         return true;
 
@@ -134,8 +117,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
             //TODO: hide cancel menu button
             customActionBarView.findViewById(R.id.actionbar_cancel).setVisibility(View.GONE);
             customActionBarView.findViewById(R.id.actionbar_done).setVisibility(View.GONE);
-            //MENU.findItem(R.id.mnuAMCancel).setVisible(false);
-            //MENU.findItem(R.id.mnuAMDone).setVisible(false);
+
 
         }
         return false;
@@ -195,8 +177,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         //final MenuInflater inflater = getSupportMenuInflater();
         //inflater.inflate(R.menu.done_cancel, menu);
-
-        MENU = menu;
+        Menu MENU = menu;
 
         return true;
 
