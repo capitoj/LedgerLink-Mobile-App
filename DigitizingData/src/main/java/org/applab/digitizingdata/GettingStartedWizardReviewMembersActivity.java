@@ -144,11 +144,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         actionBar.setTitle("GET STARTED");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-       /** actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE
-        ); */
+
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,

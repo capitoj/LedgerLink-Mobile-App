@@ -37,6 +37,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
     double theFinesPaid = 0.0;
     String comment = "";
     boolean successFlg = false;
+    private MeetingActivity parentActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,7 +71,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-
+        parentActivity = (MeetingActivity) getSherlockActivity();
         populateStartingCash();
     }
 
@@ -93,7 +94,8 @@ public class MeetingStartingCashFrag extends SherlockFragment {
             case R.id.mnuMCBFSave:
                 return false;
             case R.id.mnuMOCFSave:
-                saveStartingCash();
+                //Save only if not in view only
+                if(! parentActivity.isViewOnly()) saveStartingCash();
                 /**  // TextView txtTotalCash = (TextView)getSherlockActivity().findViewById(R.id.txtMOCTotal);
                  TextView txtTotalCash = (TextView)getSherlockActivity().findViewById(R.id.txtActualStartingCash);
                  if(saveStartingCash()) {

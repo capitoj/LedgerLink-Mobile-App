@@ -374,6 +374,76 @@ public class MeetingRepo {
         }
     }
 
+
+
+    public ArrayList<Meeting> getAllMeetingsByActiveStatus(boolean isCurrent) {
+        ArrayList<Meeting> meetings = null;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        int dataSentFlag = 0;
+        VslaCycleRepo cycleRepo = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            meetings = new ArrayList<Meeting>();
+            String columnList = MeetingSchema.getColumnList();
+
+            if(isCurrent) {
+                dataSentFlag = 1;
+            }
+
+            cycleRepo = new VslaCycleRepo(context);
+
+            // Select All Query
+            String selectQuery = String.format("SELECT %s FROM %s WHERE COALESCE(%s,0)=%d ORDER BY %s DESC", columnList, MeetingSchema.getTableName(),
+                    MeetingSchema.COL_MT_IS_CURRENT, dataSentFlag, MeetingSchema.COL_MT_MEETING_ID);
+            cursor = db.rawQuery(selectQuery, null);
+
+            // looping through all rows and adding to list
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Meeting meeting = new Meeting();
+                    Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                    meeting.setMeetingDate(meetingDate);
+                    meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
+                    meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTINGS_STARTED_WIZARD)) == 1);
+
+                    //Check for Nulls while loading the VSLA Cycle
+                    int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
+                    meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
+                    if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                        meeting.setMeetingDataSent(true);
+                        Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                        meeting.setDateSent(dateMeetingDataSent);
+                    }
+                    else {
+                        meeting.setMeetingDataSent(false);
+                    }
+
+                    meetings.add(meeting);
+
+                } while (cursor.moveToNext());
+            }
+
+            // return the list
+            return meetings;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.getMeeting", ex.getMessage());
+            return null;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
     public HashMap<String, Double> getMeetingStartingCash(int meetingId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -537,7 +607,8 @@ public class MeetingRepo {
             }
         }
         catch (Exception ex) {
-            Log.e("MeetingRepo.getMeetingById", ex.getMessage());
+            ex.printStackTrace();
+            //Log.e("MeetingRepo.getMeetingById", ex.getMessage());
             return null;
         }
         finally {
@@ -969,6 +1040,16 @@ public class MeetingRepo {
         }
     }
 
+
+
+
+
+
+
+
+
+
+
     /* Deactivates a meeting i.e sets the is current flag to false*/
     public boolean deactivateMeeting(Meeting meeting) {
         SQLiteDatabase db = null;
@@ -1066,6 +1147,91 @@ public class MeetingRepo {
                 db.close();
             }
         }
+    }
+
+    //Given a meeting id, generates a map of all meeting data to be sent out
+    public HashMap<String, String> generateMeetingDataMapToSendToServer(int meetingId)
+    {
+
+        Meeting meeting = getMeetingById(meetingId);
+        HashMap<String, String> meetingData = new HashMap<String, String>();
+        if (null != meeting)
+        {
+            //Get the Cycle in which this meeting belongs to
+            String vslaCycleJson = SendDataRepo.getVslaCycleJson(meeting.getVslaCycle().getCycleId());
+            if (vslaCycleJson != null)
+            {
+                //Add to Map
+                meetingData.put(SendDataRepo.CYCLE_INFO_ITEM_KEY, vslaCycleJson);
+            }
+            //Members
+            String membersJson = SendDataRepo.getMembersJson();
+            if (membersJson != null)
+            {
+                //Add to Map
+                meetingData.put(SendDataRepo.MEMBERS_ITEM_KEY, membersJson);
+            }
+            //Meeting Details
+            String meetingJson = SendDataRepo.getMeetingJson(meeting);
+            if (meetingJson != null)
+            {
+                //Add to Map
+                meetingData.put(SendDataRepo.MEETING_DETAILS_ITEM_KEY, meetingJson);
+            }
+            //Attendance
+            String meetingAttendanceJson = SendDataRepo.getMeetingAttendanceJson(meeting.getMeetingId());
+            if (meetingAttendanceJson != null)
+            {
+                //Add to Map
+                meetingData.put(SendDataRepo.ATTENDANCE_ITEM_KEY, meetingAttendanceJson);
+            }
+            //Savings
+            String meetingSavingsJson = SendDataRepo.getMeetingSavingsJson(meeting.getMeetingId());
+            if (meetingSavingsJson != null)
+            {
+                //Add to Map
+                meetingData.put(SendDataRepo.SAVINGS_ITEM_KEY, meetingSavingsJson);
+            }
+            /**   // Opening Cash
+             String meetingOpeningCashJson = SendDataRepo.getMeetingOpeningCashJson(meeting.getMeetingId());
+             if(meetingOpeningCashJson != null) {
+             //Add to Map
+             meetingData.put(SendDataRepo.OPENING_CASH_ITEM_KEY, meetingOpeningCashJson);
+             }
+
+             // Cashbook
+             String meetingCashBookJson = SendDataRepo.getMeetingCashBookJson(meeting.getMeetingId());
+             if(meetingCashBookJson != null) {
+             //Add to Map
+             meetingData.put(SendDataRepo.CASHBOOK_ITEM_KEY, meetingCashBookJson);
+             }
+
+
+
+             */
+            // Fine
+            String meetingFineJson = SendDataRepo.getMeetingFinesJson(meeting.getMeetingId());
+            if(meetingFineJson != null) {
+                //Add to Map
+                meetingData.put(SendDataRepo.FINES_ITEM_KEY, meetingFineJson);
+            }
+            //Repayments
+            String meetingRepaymentsJson = SendDataRepo.getMeetingRepaymentsJson(meeting.getMeetingId());
+            if (meetingRepaymentsJson != null)
+            {
+                //Add to Map
+                meetingData.put(SendDataRepo.REPAYMENTS_ITEM_KEY, meetingRepaymentsJson);
+            }
+            //Loan Issued
+            String meetingLoansJson = SendDataRepo.getMeetingLoanIssuesJson(meeting.getMeetingId());
+            if (meetingLoansJson != null)
+            {
+                //Add to Map
+                meetingData.put(SendDataRepo.LOANS_ITEM_KEY, meetingLoansJson);
+            }
+
+        }
+        return meetingData;
     }
 
     // Deleting single entity

@@ -112,6 +112,15 @@
                 android:text="There are several unsent meetings. It is not safe to keep meetings without sending! Please send every week."
                 android:id="@+id/lblBMWarning" />
 
+
+            <ListView
+                    style="@style/List"
+                    android:id="@+id/lstBMPastMeetingList"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:choiceMode="singleChoice"
+                    />
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
