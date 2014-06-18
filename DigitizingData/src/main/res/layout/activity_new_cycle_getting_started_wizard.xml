@@ -36,7 +36,8 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <!-- I fully qualify the names coz R.id is universal -->
+            <!-- Fully qualify the names coz R.id is universal -->
+
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblNCSharePrice"
                 style="@style/RegularText"
@@ -105,19 +106,20 @@
                     android:layout_width="200dip"
                     android:layout_height="wrap_content"
                     android:spinnerMode="dropdown" />
-                <!--  <org.applab.digitizingdata.fontutils.TypefaceTextView
-                      android:id="@+id/lblNCSpace1"
-                      style="@style/InlineTextItem"
-                      android:layout_width="fill_parent"
-                      android:layout_height="fill_parent"
-                      android:text="Stars" /> -->
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCSpace1"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="4"
+                    android:text="Stars" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -125,7 +127,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Date cycle begins" />
+                android:text="Date your cycle will begin" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 android:id="@+id/txtNCStartDate"

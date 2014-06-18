@@ -511,6 +511,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             } else {
                 member.setOtherNames(otherNames);
             }
+
             //Validate: Gender
             //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
             Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
@@ -522,6 +523,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 String gender = cboGender.getSelectedItem().toString().trim();
                 member.setGender(gender);
             }
+
             // Validate: Age
             Spinner cboAge = (Spinner) findViewById(R.id.cboAMAge);
             if (cboAge.getSelectedItemPosition() == 0) {
@@ -535,6 +537,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 c.add(Calendar.YEAR, -theAge);
                 member.setDateOfBirth(c.getTime());
             }
+
             //Validate: Occupation
             TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
             String occupation = txtOccupation.getText().toString().trim();
@@ -556,6 +559,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             } else {
                 member.setPhoneNumber(phoneNo);
             }
+
             // Validate: Cycles Completed
             Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
             if (cboAMCycles.getSelectedItemPosition() == 0) {
@@ -627,6 +631,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             if (member.getPhoneNumber() != null) {
                 txtPhone.setText(member.getPhoneNumber());
             }
+
             //Set the age
             Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
             Calendar calToday = Calendar.getInstance();
@@ -655,13 +660,16 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     }
 
     private void clearDataFields() {
+
         //Spinner items
         buildGenderSpinner();
         buildMemberNoSpinner();
         buildAgeSpinner();
         buildCyclesCompletedSpinner();
+
         // Populate the Fields
         Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
+
         //txtMemberNo.setText(null);
         TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
         txtSurname.setText(null);

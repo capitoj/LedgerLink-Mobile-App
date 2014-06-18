@@ -9,8 +9,7 @@ public class MemberFineRecord {
     private int fineId;
     private Date meetingDate;
     private double amount;
-
-
+    private int fineTypeId;
     private int status;
 
     public int getFineId() {
@@ -19,6 +18,14 @@ public class MemberFineRecord {
 
     public void setFineId(int fineId) {
         this.fineId = fineId;
+    }
+
+    public int getFineTypeId() {
+        return fineTypeId;
+    }
+
+    public void setFineTypeId(int fineTypeId) {
+        this.fineTypeId = fineTypeId;
     }
 
     public double getAmount() {

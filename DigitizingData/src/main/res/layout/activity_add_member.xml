@@ -10,6 +10,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -26,19 +27,19 @@
                 android:layout_height="wrap_content"
                 android:text="Member No *:" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <Spinner
+                android:id="@+id/cboAMMemberNo"
                 style="@style/NormalEditText"
-                android:id="@+id/txtAMMemberNo"
-                android:layout_width="fill_parent"
+                android:layout_width="200dip"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="" />
+                android:spinnerMode="dropdown" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -59,7 +60,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -80,7 +82,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -100,16 +103,17 @@
                     -->
             <Spinner
                 android:id="@+id/cboAMGender"
+                style="@style/NormalEditText"
+                android:layout_width="200dip"
                 android:layout_height="wrap_content"
-                android:layout_width="fill_parent"
                 android:spinnerMode="dropdown"
-                android:gravity="left"
                 android:prompt="@string/add_member_gender_prompt" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -119,27 +123,28 @@
                 android:layout_height="wrap_content"
                 android:text="Age *" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <Spinner
+                android:id="@+id/cboAMAge"
                 style="@style/NormalEditText"
-                android:id="@+id/txtAMAge"
-                android:layout_width="fill_parent"
+                android:layout_width="200dip"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="" />
+                android:prompt="@string/add_member_gender_prompt"
+                android:spinnerMode="dropdown" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
                 android:id="@+id/lblAMOccupation"
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Occupation *" />
+                android:text="What does this member do to make money?" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
@@ -153,6 +158,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -174,6 +180,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -183,13 +190,12 @@
                 android:layout_height="wrap_content"
                 android:text="Number of cycles completed" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <Spinner
+                android:id="@+id/cboAMCycles"
                 style="@style/NormalEditText"
-                android:id="@+id/txtAMCycles"
-                android:layout_width="fill_parent"
+                android:layout_width="200dip"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:text="" />
+                android:spinnerMode="dropdown" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

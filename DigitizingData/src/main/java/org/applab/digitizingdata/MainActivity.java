@@ -54,6 +54,7 @@ public class MainActivity extends SherlockActivity {
         setContentView(R.layout.main_menu);
 
         actionBar = getSupportActionBar();
+        actionBar.setTitle("Ledger Link");
 
         //Retrieve VSLA Information
         vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
@@ -96,7 +97,6 @@ public class MainActivity extends SherlockActivity {
          }  */
 
         gridView = (GridView) findViewById(R.id.grid);
-        Log.d("HERE", String.valueOf(mainMenuItemsGridArray.size()));
 
         customGridAdapter = new CustomGridViewAdapter(this, R.layout.mainmenurowgrid, mainMenuItemsGridArray);
         gridView.setAdapter(customGridAdapter);

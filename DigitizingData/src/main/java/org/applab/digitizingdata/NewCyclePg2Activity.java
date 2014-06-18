@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
@@ -37,13 +39,11 @@ public class NewCyclePg2Activity extends SherlockListActivity {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_new_cycle_pg2);
+        inflateCustombar();
 
         if(getIntent().hasExtra("_isUpdateCycleAction")) {
             isUpdateCycleAction = getIntent().getBooleanExtra("_isUpdateCycleAction",false);
         }
-
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         if(isUpdateCycleAction) {
             actionBar.setTitle("Edit Cycle");
@@ -56,10 +56,82 @@ public class NewCyclePg2Activity extends SherlockListActivity {
         populateMembersList();
     }
 
+    /* inflates custom menu bar for review members */
+    public void inflateCustombar() {
+
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customActionBarView = null;
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_exit_enternext_done, null);
+        customActionBarView.findViewById(R.id.actionbar_exit).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
+                        //startActivity(i);
+                        finish();
+                        System.exit(0);
+                    }
+                }
+        );
+
+        customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isUpdateCycleAction) {
+                            Utils._membersAccessedFromEditCycle = true;
+                        }
+                        else {
+                            Utils._membersAccessedFromNewCycle = true;
+                        }
+                        Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
+                        startActivity(i);
+                    }
+                }
+        );
+
+
+        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isUpdateCycleAction) {
+                            Toast toast = Toast.makeText(getBaseContext(), "You have successfully edited cycle", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.LEFT,0,0);
+                            toast.show();
+                        }
+                        else {
+                            Toast toast = Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.LEFT,0,0);
+                            toast.show();
+                        }
+
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(i);
+                    }
+                }
+        );
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("NEW CYCLE");
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
-        inflater.inflate(R.menu.new_cycle_pg2, menu);
         return true;
     }
 

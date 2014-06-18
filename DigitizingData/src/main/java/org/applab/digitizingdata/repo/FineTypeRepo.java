@@ -7,6 +7,7 @@ import android.util.Log;
 
 import org.applab.digitizingdata.domain.model.FineType;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.domain.schema.FineSchema;
 import org.applab.digitizingdata.domain.schema.FineTypeSchema;
 import org.applab.digitizingdata.domain.schema.MemberSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
@@ -83,4 +84,37 @@ public class FineTypeRepo {
             }
         }
     }
+
+    public String getFineTypeName(int fineTypeId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        String fineTypeName = "Unknown";
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT %s FROM %s WHERE %s=%d",
+                    FineTypeSchema.COL_FT_FINE_TYPE_NAME, FineTypeSchema.getTableName(),
+                    FineTypeSchema.COL_FT_FINE_TYPE_ID, fineTypeId);
+            cursor = db.rawQuery(query, null);
+
+
+            if (cursor != null && cursor.moveToFirst()) {
+                fineTypeName = cursor.getString(cursor.getColumnIndex(FineTypeSchema.COL_FT_FINE_TYPE_NAME));
+            }
+            return fineTypeName;
+        } catch (Exception ex) {
+            Log.e("MeetingFineTypeRepo.getMemberFineTypeName", ex.getMessage());
+            return fineTypeName;
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
 }

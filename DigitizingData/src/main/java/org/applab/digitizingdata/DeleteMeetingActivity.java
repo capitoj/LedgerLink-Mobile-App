@@ -18,7 +18,6 @@ import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MeetingSavingRepo;
-import org.applab.digitizingdata.R;
 
 public class DeleteMeetingActivity extends SherlockActivity {
     ActionBar actionBar;
@@ -35,7 +34,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_next_cancel, null);
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_next, null);
         customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
                 new View.OnClickListener() {
                     @Override

@@ -27,7 +27,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Fine Type"
-            android:id="@+id/lblFineType"
+            android:id="@+id/txtFineType"
             android:layout_below="@id/lblFMessage"
 
             />
@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:text="Latecoming"
             android:id="@+id/cboFineType"
-            android:layout_below="@id/lblFineType" />
+            android:layout_below="@id/txtFineType" />
         <!-- android:layout_below="@id/lblFineFullName"-->
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
