@@ -8,19 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.actionbarsherlock.internal.nineoldandroids.animation.PropertyValuesHolder;
-
 import org.applab.digitizingdata.R;
-import org.applab.digitizingdata.domain.model.MeetingFine;
 import org.applab.digitizingdata.domain.model.VslaCycle;
-import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
+import org.applab.digitizingdata.repo.FineTypeRepo;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
-import java.net.ProtocolException;
 import java.util.ArrayList;
 
 /**
@@ -32,6 +27,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
     ArrayList<MemberFineRecord> values;
     int position;
     Typeface typeface;
+    FineTypeRepo fineTypeRepo;
     MeetingFineRepo finesRepo;
     VslaCycleRepo cycleRepo;
     VslaCycle currentCycle;
@@ -43,20 +39,9 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
         this.typeface = Typeface.createFromAsset(context.getAssets(), font);
 
         finesRepo = new MeetingFineRepo(getContext());
+        fineTypeRepo = new FineTypeRepo(getContext());
         cycleRepo = new VslaCycleRepo(getContext());
         currentCycle = cycleRepo.getCurrentCycle();
-    }
-
-    static class ViewHolder {
-        /**
-         * protected TextView text;
-         * protected CheckBox checkbox;
-         */
-        protected CheckBox chkMemberFineStatus;
-        protected TextView lblFineMeetingDate;
-        protected TextView lblFineType;
-        protected TextView lblFineAmount;
-        protected ViewGroup layout;
     }
 
     @Override
@@ -87,23 +72,23 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
                 }
             });
 
-            TextView lblFineMeetingDate = (TextView) rowView.findViewById(R.id.lblFineMeetingDate);
-            TextView lblFineType = (TextView) rowView.findViewById(R.id.lblFineType);
-            TextView lblFineAmount = (TextView) rowView.findViewById(R.id.txtMemberFineAmount);
+            final TextView txtFineMeetingDate = (TextView) rowView.findViewById(R.id.txtFineMeetingDate);
+            final TextView txtFineType = (TextView) rowView.findViewById(R.id.txtFineType);
+            final TextView txtFineAmount = (TextView) rowView.findViewById(R.id.txtMemberFineAmount);
 
             // Set typeface
-            lblFineMeetingDate.setTypeface(typeface);
-            lblFineAmount.setTypeface(typeface);
-            lblFineType.setTypeface(typeface);
+            txtFineMeetingDate.setTypeface(typeface);
+            txtFineAmount.setTypeface(typeface);
+            txtFineType.setTypeface(typeface);
 
 
             if (fineRecord != null) {
-                lblFineMeetingDate.setText(String.format(Utils.formatDate(fineRecord.getMeetingDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
-                lblFineAmount.setText(String.format("%,.0fUGX", fineRecord.getAmount()));
-                lblFineType.setText("Change This text");
+                txtFineMeetingDate.setText(String.format(Utils.formatDate(fineRecord.getMeetingDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                txtFineAmount.setText(String.format("%,.0fUGX", fineRecord.getAmount()));
+                txtFineType.setText(String.valueOf(fineTypeRepo.getFineTypeName(fineRecord.getFineTypeId())));
                 chkMemberFineStatus.setChecked(fineRecord.getStatus() != 0);
             }
-
+            Log.d("FineHistoryArrayAdapter.getView", String.valueOf(fineRecord.getAmount()));
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

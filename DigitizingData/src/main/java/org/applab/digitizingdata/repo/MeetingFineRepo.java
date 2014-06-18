@@ -98,7 +98,7 @@ public class MeetingFineRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT  %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
+            String query = String.format("SELECT %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
                     FineSchema.COL_F_IS_CLEARED, FineSchema.getTableName(),
                     FineSchema.COL_F_MEETING_ID, meetingId,
                     FineSchema.COL_F_MEMBER_ID, memberId, FineSchema.COL_F_FINE_ID);
@@ -356,9 +356,10 @@ public class MeetingFineRepo {
 
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             //TODO: I don't think I need the Sub-Query: can do Meetings.CycleId = xx
-            String query = String.format("SELECT  %s.%s AS FineId, %s.%s AS MeetingDate, %s.%s AS Amount, %s.%s AS Status " +
+            String query = String.format("SELECT  %s.%s AS FineId, %s.%s AS FineTypeId, %s.%s AS MeetingDate, %s.%s AS Amount, %s.%s AS Status " +
                             " FROM %s INNER JOIN %s ON %s.%s=%s.%s WHERE %s.%s=%d AND %s.%s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY %s.%s DESC",
                     FineSchema.getTableName(), FineSchema.COL_F_FINE_ID,
+                    FineSchema.getTableName(), FineSchema.COL_F_FINE_TYPE_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_DATE,
                     FineSchema.getTableName(), FineSchema.COL_F_AMOUNT,
                     FineSchema.getTableName(), FineSchema.COL_F_IS_CLEARED,
@@ -371,17 +372,17 @@ public class MeetingFineRepo {
                     FineSchema.getTableName(), FineSchema.COL_F_FINE_ID
             );
             cursor = db.rawQuery(query, null);
-            Log.d("MeetingFineRepo", query);
+
 
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     MemberFineRecord fine = new MemberFineRecord();
                     Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("MeetingDate")));
                     fine.setMeetingDate(meetingDate);
+                    fine.setFineTypeId(cursor.getColumnIndex("FineTypeId"));
                     fine.setFineId(cursor.getInt(cursor.getColumnIndex("FineId")));
                     fine.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
                     fine.setStatus(cursor.getInt(cursor.getColumnIndex("Status")));
-
                     fines.add(fine);
                 } while (cursor.moveToNext());
             }

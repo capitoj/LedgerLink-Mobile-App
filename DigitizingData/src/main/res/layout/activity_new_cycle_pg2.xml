@@ -10,16 +10,17 @@
         android:id="@+id/frmNCP_top_control_bar">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
+            style="@style/RegularTextInstruction"
             android:id="@+id/txtNCP_header"
-            android:layout_width="wrap_content"
-            android:padding="5dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
             android:text="Update register by adding new members and removing those who are no longer a part of your group." />
     </RelativeLayout>
 
     <ListView
         android:id="@android:id/list"
+        style="@style/List"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:choiceMode="singleChoice"

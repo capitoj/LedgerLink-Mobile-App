@@ -4,25 +4,23 @@
     android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
+        style="@style/RegularTextListItems"
         android:id="@+id/txtMListFullName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:padding="5dp"
-        android:text="FULL NAMES" />
+        android:text="0. FULL NAMES" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSubItems"
         android:id="@+id/txtMListTotalSavings"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtMListFullName"
-        android:paddingLeft="5dp"
-        android:layout_marginLeft="5dp"
-        android:gravity="left"
-        android:text="Savings: 55,000UGX" />
+        android:text="Savings: 55,000UGX"
+        android:layout_below="@+id/txtMListFullName"
+        android:layout_alignParentRight="true" />
+
 
     <!--
     <TextView

@@ -49,7 +49,6 @@ import java.util.HashMap;
 
 
 
-
 public class BeginMeetingActivity extends SherlockActivity {
     ActionBar actionBar;
     MeetingRepo meetingRepo = null;

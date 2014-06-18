@@ -15,10 +15,10 @@
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSubItems"
-        android:id="@+id/txtMPhoneNo"
+        android:id="@+id/txtMOccupation"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Phone No." />
+        android:text="Occupation" />
 
 </LinearLayout>
 

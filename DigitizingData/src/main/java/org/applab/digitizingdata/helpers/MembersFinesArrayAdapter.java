@@ -65,7 +65,6 @@ public class MembersFinesArrayAdapter extends ArrayAdapter<Member> {
             final TextView txtFullName = (TextView) rowView.findViewById(R.id.txtFineFullName);
             final TextView txtTotalFines = (TextView)rowView.findViewById(R.id.txtFineTotal);
 
-
             // Set typeface
             txtFullName.setTypeface(typeface);
             txtTotalFines.setTypeface(typeface);

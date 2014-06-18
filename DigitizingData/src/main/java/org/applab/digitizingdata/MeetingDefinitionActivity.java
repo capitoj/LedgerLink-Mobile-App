@@ -17,12 +17,10 @@ import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
@@ -35,15 +33,10 @@ import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
-import org.applab.digitizingdata.R;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Created by Moses on 7/4/13.
@@ -201,7 +194,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_next_cancel, null);
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_next, null);
         customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
