@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lblVAPassKeyInfo"
                 android:hint="Enter Passkey Here"
-                android:inputType="textCapCharacters"
+                android:inputType="numberPassword"
                 android:textAlignment="center" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
@@ -96,7 +96,7 @@
                 android:layout_below="@id/txtVAPassKey"
                 android:hint="Re-enter Passkey Here"
                 android:layout_marginTop="20dip"
-                android:inputType="textCapCharacters" />
+                android:inputType="numberPassword" />
 
             <org.applab.digitizingdata.fontutils.TypefaceButton
                 android:id="@+id/btnVAActivate"
