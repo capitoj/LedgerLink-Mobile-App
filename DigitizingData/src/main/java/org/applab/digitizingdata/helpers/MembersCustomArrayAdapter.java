@@ -43,11 +43,11 @@ public class MembersCustomArrayAdapter extends ArrayAdapter<Member> {
 
             //Get the Widgets
             final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtMFullNames);
-            final TextView txtPhoneNo = (TextView)rowView.findViewById(R.id.txtMPhoneNo);
+            final TextView txtOccupation = (TextView)rowView.findViewById(R.id.txtMOccupation);
 
             // Set Typeface
             txtFullNames.setTypeface(typeface);
-            txtPhoneNo.setTypeface(typeface);
+            txtOccupation.setTypeface(typeface);
 
             //Assign Values to the Widgets
             txtFullNames.setText(values.get(position).toString());
@@ -60,7 +60,7 @@ public class MembersCustomArrayAdapter extends ArrayAdapter<Member> {
                 phoneNo = "No Phone";
             }
             //txtPhoneNo.setText(phoneNo);
-            txtPhoneNo.setText(occupation);
+            txtOccupation.setText(occupation);
 
             return rowView;
         }

@@ -108,10 +108,6 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             );
         }
 
-
-
-
-
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("GET STARTED");
 

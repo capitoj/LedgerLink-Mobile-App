@@ -11,7 +11,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -62,8 +66,13 @@ public class EndCycleActivity extends SherlockActivity {
 
         setContentView(R.layout.activity_end_cycle);
 
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        inflateCustombar();
+
+        // Solve the auto focus
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+       /** actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);*/
 
         txtShareOutDate = (TextView)findViewById(R.id.txtECShareOutDate);
         txtInstructions = (TextView)findViewById(R.id.lblECInstruction);
@@ -102,6 +111,7 @@ public class EndCycleActivity extends SherlockActivity {
 
                 if(activeCycles.size() == 1) {
                     radCycle.setChecked(true);
+                    grpCycleDates.setVisibility(View.GONE);
                 }
             }
         }
@@ -160,6 +170,47 @@ public class EndCycleActivity extends SherlockActivity {
         });
     }
 
+    /* inflates custom menu bar for review members */
+    public void inflateCustombar() {
+
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customActionBarView = null;
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
+        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                }
+        );
+
+        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        updateCycleData();
+                    }
+                }
+        );
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("END CYCLE");
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
+    }
+
+
     //Event that is raised when the date has been set
     private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -193,8 +244,6 @@ public class EndCycleActivity extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
-        inflater.inflate(R.menu.end_cycle, menu);
         return true;
     }
 
