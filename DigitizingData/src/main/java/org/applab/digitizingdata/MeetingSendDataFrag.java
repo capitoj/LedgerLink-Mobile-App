@@ -43,6 +43,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
     private boolean viewingCurrentMeeting;
     private ArrayList<Meeting> unsentMeetings;
     private ArrayList<Meeting> activeMeetings;
+    private MeetingActivity parentActivity;
     //public FragmentTransaction fragmentTransaction;
 
     @Override
@@ -78,6 +79,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
+        parentActivity = (MeetingActivity) getSherlockActivity();
         refreshFragmentView();
 
     }
@@ -95,12 +97,10 @@ public class MeetingSendDataFrag extends SherlockFragment {
         //Hide unrequired views
         layoutMSDUnsentPastMeetings.setVisibility( (numberOfPastUnsentMeetings==0) ? View.GONE : View.VISIBLE);
 
-        //If viewing current meeting, hide the current meeting summary
-        LinearLayout layoutMSDCurrentMeetingSummary = (LinearLayout) getSherlockActivity().findViewById(R.id.layoutMSDCurrentMeetingSummary);
-        layoutMSDCurrentMeetingSummary.setVisibility(viewingCurrentMeeting ? View.GONE : View.VISIBLE);
+
 
         //TODO: Load current meeting(s)
-        //could be more than one
+        /*/could be more than one
         if(activeMeetings != null) {
             if(activeMeetings.size()>0) {
                 TextView txtMSDFragCurrentMeetingDetails = (TextView) getSherlockActivity().findViewById(R.id.txtMSDFragCurrentMeetingDetails);
@@ -116,6 +116,36 @@ public class MeetingSendDataFrag extends SherlockFragment {
                     }
                 });
             }
+        } */
+        //If viewing current meeting, hide the current meeting summary
+        LinearLayout layoutMSDCurrentMeetingSummary = (LinearLayout) getSherlockActivity().findViewById(R.id.layoutMSDCurrentMeetingSummary);
+        layoutMSDCurrentMeetingSummary.setVisibility(selectedMeeting.isCurrent() ? View.GONE : View.VISIBLE);
+        //Populate summary of the "Current" meeting from the parent activity
+        //Apply null check
+        if(parentActivity.getCurrentMeeting() != null) {
+            TextView txtMSDFragCurrentMeetingDetails = (TextView) getSherlockActivity().findViewById(R.id.txtMSDFragCurrentMeetingDetails);
+            txtMSDFragCurrentMeetingDetails.setText(Utils.formatDate(parentActivity.getCurrentMeeting().getMeetingDate(), "dd MMM yyyy"));
+
+            txtMSDFragCurrentMeetingDetails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                    selectedMeetingId = parentActivity.getCurrentMeeting().getMeetingId();
+                    getSherlockActivity().getIntent().putExtra("_meetingId", selectedMeetingId);
+                    //make the view mode modifiable
+
+                    getSherlockActivity().getIntent().putExtra("_viewOnly", false);
+                    getSherlockActivity().getIntent().putExtra("_meetingDate", Utils.formatDate(parentActivity.getCurrentMeeting().getMeetingDate(), "dd MMM yyyy"));
+                    getSherlockActivity().getIntent().getExtras();
+                    viewingCurrentMeeting = true;
+                    refreshFragmentView();
+                }
+            });
+        }
+        else {
+            //current meeting is null, i.e no current meeting in view hide the current meeting section
+            //TODO: to accomodate concurrent cycles, this section may show all current meetings for the differenct cycles
+            layoutMSDCurrentMeetingSummary.setVisibility(View.GONE);
         }
 
 
@@ -228,6 +258,9 @@ public class MeetingSendDataFrag extends SherlockFragment {
                 Meeting meeting = unsentMeetings.get(position);
                 selectedMeetingId = meeting.getMeetingId();
                 getSherlockActivity().getIntent().putExtra("_meetingId", selectedMeetingId);
+                //make the view read only
+                getSherlockActivity().getIntent().putExtra("_viewOnly", true);
+                getSherlockActivity().getIntent().putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
                 //viewingCurrentMeeting = false;
 
                 //Load this meeting details
@@ -242,6 +275,9 @@ public class MeetingSendDataFrag extends SherlockFragment {
     public void populateSelectedMeetingSummary() {
 
         //TODO: We are relying on tab indexes to select the tabs, this may break when the orders are changed we may consider finding a way of selecting by tab text
+        parentActivity.getIntent().putExtra("_meetingDate", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+        parentActivity.getIntent().putExtra("_meetingId",selectedMeeting.getMeetingId());
+        //parentActivity.getIntent().putExtra("_viewOnly",true);
 
         TextView lblMSDFragRollcall = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragRollcall);
         lblMSDFragRollcall.setText(String.format("Roll Call %d/%d", selectedMeetingAttendance, numberOfMembers));
@@ -249,9 +285,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         lblMSDFragRollcall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(viewingCurrentMeeting) {
-                    actionBar.selectTab(actionBar.getTabAt(0));
-                }
+                actionBar.selectTab(actionBar.getTabAt(0));
             }
         });
 
@@ -260,9 +294,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         lblMSDFragSavings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(viewingCurrentMeeting) {
-                    actionBar.selectTab(actionBar.getTabAt(3));
-                }
+                actionBar.selectTab(actionBar.getTabAt(3));
             }
         });
 
@@ -271,9 +303,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         lblMSDFragLoanPayments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(viewingCurrentMeeting) {
-                    actionBar.selectTab(actionBar.getTabAt(4));
-                }
+                actionBar.selectTab(actionBar.getTabAt(4));
             }
         });
 
@@ -282,9 +312,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         lblMSDFragFines.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(viewingCurrentMeeting) {
-                    actionBar.selectTab(actionBar.getTabAt(5));
-                }
+                actionBar.selectTab(actionBar.getTabAt(5));
             }
         });
 
@@ -293,9 +321,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         lblMSDFragNewLoans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(viewingCurrentMeeting) {
-                    actionBar.selectTab(actionBar.getTabAt(6));
-                }
+                actionBar.selectTab(actionBar.getTabAt(6));
             }
         });
 

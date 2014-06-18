@@ -35,6 +35,7 @@ public class MembersRollCallArrayAdapter extends ArrayAdapter<Member> {
     VslaCycle currentCycle;
     private int meetingId;
     private boolean isFromCode = false;
+    public boolean viewOnly = false;
 Typeface typeface;
     //Use Class variable to hold state as it will be lost on scrolling
     private final boolean[] mCheckedState;
@@ -91,7 +92,7 @@ Typeface typeface;
             txtAttendance.setText(String.format("Attended %d. Missed %d",attended, missed));
 
             //Do not invoke the event when in Read only Mode
-            if(Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+            if(Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY || viewOnly) {
                 chkAttendance.setClickable(false);
             }
 

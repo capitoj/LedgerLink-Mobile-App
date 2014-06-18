@@ -38,6 +38,7 @@ public class MeetingRepo {
         this.context = context;
     }
 
+    //Should add this meeting, deactivate all other meetings in cycle, and activate this meeting
     public boolean addMeeting(Meeting meeting){
         SQLiteDatabase db = null;
 
@@ -55,12 +56,14 @@ public class MeetingRepo {
             // Inserting Row
             long retVal = db.insert(MeetingSchema.getTableName(), null, values);
 
-            if (retVal != -1) {
-                return true;
+            if (retVal == -1) {
+                return false;
             }
             else {
                 meeting.setMeetingId(Integer.parseInt(retVal+""));
-                return false;
+                //try to activate this meeting
+                activateMeeting(meeting);
+                return true;
             }
         }
         catch (Exception ex) {
@@ -338,6 +341,7 @@ public class MeetingRepo {
                     meeting.setMeetingDate(meetingDate);
                     meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
                     meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTINGS_STARTED_WIZARD)) == 1);
+                    meeting.setIsCurrent(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_CURRENT)) == 1);
 
                     //Check for Nulls while loading the VSLA Cycle
                     int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
@@ -395,7 +399,7 @@ public class MeetingRepo {
             cycleRepo = new VslaCycleRepo(context);
 
             // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s WHERE COALESCE(%s,0)=%d ORDER BY %s DESC", columnList, MeetingSchema.getTableName(),
+            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC", columnList, MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_IS_CURRENT, dataSentFlag, MeetingSchema.COL_MT_MEETING_ID);
             cursor = db.rawQuery(selectQuery, null);
 
@@ -1113,16 +1117,24 @@ public class MeetingRepo {
 
             values.put(MeetingSchema.COL_MT_IS_CURRENT,0);
 
+            String whereClause = MeetingSchema.COL_MT_CYCLE_ID + " = ? ";
+            String[] whereArgs = new String[] { String.valueOf(meeting.getVslaCycle().getCycleId()) };
+
             // updating row:
-            int retVal = db.update(MeetingSchema.getTableName(), values, null,null);
+            int retVal = db.update(MeetingSchema.getTableName(), values, whereClause , whereArgs);
 
             if (retVal > 0) {
 
-                //Update the specific one to Active
+                //Update the specific one to Active in this cycle
                 values.clear();
                 values.put(MeetingSchema.COL_MT_IS_CURRENT,1);
-                int retVal2 = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
-                        new String[] { String.valueOf(meeting.getMeetingId()) });
+
+                whereClause = MeetingSchema.COL_MT_CYCLE_ID + " = ? AND "+MeetingSchema.COL_MT_MEETING_ID +" = ? ";
+                whereArgs = new String[] { String.valueOf(meeting.getVslaCycle().getCycleId()), String.valueOf(meeting.getMeetingId()) };
+
+
+                int retVal2 = db.update(MeetingSchema.getTableName(), values, whereClause,
+                        whereArgs);
                 if(retVal2 > 0) {
                     return true;
                 }
@@ -1135,6 +1147,7 @@ public class MeetingRepo {
             }
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MeetingRepo.activateMeeting", ex.getMessage());
             return false;
         }

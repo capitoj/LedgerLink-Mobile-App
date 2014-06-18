@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/frmMRCF_top_control_bar">
+        android:id="@+id/frmMRCF_top_control_bar" android:orientation="vertical">
 
        <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
@@ -28,25 +28,31 @@
             android:text="Tap box to tick member as present. Leave boxes empty for absent members. Press and hold name to add comment."
             android:id="@+id/lblMRCFInstructions"
             android:layout_gravity="center" />
-    </RelativeLayout>
 
-    <ListView
-        style="@style/List"
-        android:id="@+id/lvwMRCFMembers"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:choiceMode="singleChoice"
-        android:layout_below="@id/frmMRCF_top_control_bar">
 
-    </ListView>
+        <ListView
+                style="@style/List"
+                android:id="@+id/lvwMRCFMembers"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:choiceMode="singleChoice"
+                android:layout_below="@id/frmMRCF_top_control_bar">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
-        android:id="@+id/lvwMRCFEmpty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:text="@string/empty_members_list"
-        android:layout_below="@id/frmMRCF_top_control_bar" />
+        </ListView>
 
-</RelativeLayout>
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:id="@+id/lvwMRCFEmpty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:text="@string/empty_members_list"
+                android:layout_below="@id/frmMRCF_top_control_bar" />
+    </LinearLayout>
+
+
+
+
+
+</ScrollView>

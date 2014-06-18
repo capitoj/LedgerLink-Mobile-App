@@ -35,6 +35,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
     MeetingLoanIssuedRepo loanIssuedRepo = null;
     MeetingFineRepo fineRepo = null;
     MeetingStartingCash startingCashDetails = null;
+    private MeetingActivity parentActivity; //to access parent meeting activity
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +86,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
         lblMeetingDate.setText(meetingDate); */
 
         populateCashBookFields();
+        parentActivity = (MeetingActivity) getSherlockActivity();
     }
 
     @Override
@@ -104,6 +106,12 @@ public class MeetingCashBookFrag extends SherlockFragment {
             case R.id.mnuSMDCancel:
                 return false; */
             case R.id.mnuMCBFSave:
+                //If readonly mode, don't save balances but show message
+                if(parentActivity.isViewOnly()) {
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                //TODO: Save cashbook values here
                 Toast.makeText(getSherlockActivity().getApplicationContext(), "The Cashbook balances have been saved successfully.", Toast.LENGTH_LONG).show();
                 return true;
             default:

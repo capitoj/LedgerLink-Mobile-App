@@ -5,10 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 
 import com.actionbarsherlock.app.ActionBar;
@@ -31,6 +28,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
     ArrayList<Member> members;
     String meetingDate;
     int meetingId;
+    private MeetingActivity parentActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,6 +75,8 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
 
         //Populate the Members
         populateMembersList();
+
+        parentActivity = (MeetingActivity) getSherlockActivity();
     }
 
     //Populate Members List
@@ -104,6 +104,10 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                                     int position, long id) {
 
                 //Do not invoke the event when in Read only Mode
+                if(parentActivity.isViewOnly()) {
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = members.get(position);
                     Intent viewHistory = new Intent(view.getContext(), MemberLoansRepaidHistoryActivity.class);

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
@@ -95,7 +96,12 @@ public class MeetingStartingCashFrag extends SherlockFragment {
                 return false;
             case R.id.mnuMOCFSave:
                 //Save only if not in view only
-                if(! parentActivity.isViewOnly()) saveStartingCash();
+                if(parentActivity.isViewOnly())
+                {
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                saveStartingCash();
                 /**  // TextView txtTotalCash = (TextView)getSherlockActivity().findViewById(R.id.txtMOCTotal);
                  TextView txtTotalCash = (TextView)getSherlockActivity().findViewById(R.id.txtActualStartingCash);
                  if(saveStartingCash()) {

@@ -5,12 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -45,7 +40,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
         if (container == null) {
             return null;
         }
-        return (RelativeLayout)inflater.inflate(R.layout.frag_meeting_rollcall, container, false);
+        return (ScrollView)inflater.inflate(R.layout.frag_meeting_rollcall, container, false);
     }
 
     @Override
@@ -98,6 +93,8 @@ public class MeetingRollCallFrag extends SherlockFragment {
 
         //Now get the data via the adapter
         MembersRollCallArrayAdapter adapter = new MembersRollCallArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        //set whether this adapter is view only, to disable changing roll call in view only mode
+        adapter.viewOnly = parentActivity.isViewOnly();
         //Pass on the meeting Id to the adapter
         adapter.setMeetingId(meetingId);
         ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMRCFMembers);
@@ -112,7 +109,11 @@ public class MeetingRollCallFrag extends SherlockFragment {
                                     int position, long id) {
 
                 //Do not invoke the event when in Read only Mode
-                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY && !parentActivity.isViewOnly()) {
+                if(parentActivity.isViewOnly()) {
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     CheckBox chkAttendance = (CheckBox)view.findViewById(R.id.chkRMRCallAttendance);
                     chkAttendance.toggle();
                 }
@@ -123,7 +124,11 @@ public class MeetingRollCallFrag extends SherlockFragment {
             public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
 
                 //Do not invoke the event when in Read only Mode
-                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY && !parentActivity.isViewOnly()) {
+                if(parentActivity.isViewOnly()) {
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = (Member)parent.getItemAtPosition(position);
                     //Member selectedMember = members.get(position);
                     Intent i = new Intent(view.getContext(), MemberAttendanceHistoryActivity.class);
@@ -138,5 +143,6 @@ public class MeetingRollCallFrag extends SherlockFragment {
                 return true;
             }
         });
+        Utils.setListViewHeightBasedOnChildren(lvwMembers);
     }
 }

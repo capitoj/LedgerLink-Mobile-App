@@ -49,6 +49,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     public static Context appContext;
     private ActionBar actionBar;
     boolean enableSendData = false;
+    Meeting currentMeeting;
 
 
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
@@ -160,6 +161,19 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         } else {
             return false;
         }
+    }
+
+    public Meeting getCurrentMeeting() {
+        if(currentMeeting != null) return currentMeeting;
+
+        if(getIntent().hasExtra("_currentMeetingId")) {
+            //try to load it from db
+            MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
+            currentMeeting = meetingRepo.getMeetingById(getIntent().getIntExtra("_currentMeetingId", 0)) ;
+            return currentMeeting;
+        }
+        //else return null
+        return currentMeeting;
     }
 
 

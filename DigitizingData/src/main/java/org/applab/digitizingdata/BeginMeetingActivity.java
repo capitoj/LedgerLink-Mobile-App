@@ -30,6 +30,7 @@ import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.helpers.ConcurrentMeetingsArrayAdapter;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.MeetingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
@@ -63,6 +64,7 @@ public class BeginMeetingActivity extends SherlockActivity {
     private static Meeting currentMeeting = null;
     private static int httpStatusCode = 0; //To know whether the Request was successful
     private static int numberOfSentMeetings = 0;
+    private ArrayList<Meeting> currentMeetings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,7 @@ public class BeginMeetingActivity extends SherlockActivity {
 
 
     }
+
 
     private void refreshActivityView()
     {
@@ -98,6 +101,11 @@ public class BeginMeetingActivity extends SherlockActivity {
         StringBuilder sb = null;
         // if(pastMeetings.size() > 0) {
         if (null != pastMeetings) {
+            if(pastMeetings.size() > 1) {
+                //Set the title to plural
+                TextView currentMeetingsSectionHeading = (TextView) findViewById(R.id.lblBMSection1);
+                currentMeetingsSectionHeading.setText("CURRENT MEETINGS");
+            }
             if (pastMeetings.size() > 0) {
 
                 //Setup the Instruction
@@ -106,6 +114,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                 tvInstructionsHeader.setText(Html.fromHtml(sb.toString()));
 
                 //Quick-fix for Determining the Most recent Meeting whose data is not sent
+                //Show list with current meetings Since we are now considering the flag
                 Meeting mostRecentUnsentMeeting = pastMeetings.get(0);
                 for (Meeting meeting : pastMeetings) {
                     if (mostRecentUnsentMeeting.getMeetingDate().compareTo(meeting.getMeetingDate()) <= 0) {
@@ -114,8 +123,27 @@ public class BeginMeetingActivity extends SherlockActivity {
                 }
 
                 //Display it
-                TextView tvMostRecentUnsentMeeting = (TextView) findViewById(R.id.lblBMCurrentMeetingDate);
-                tvMostRecentUnsentMeeting.setText(Utils.formatDate(mostRecentUnsentMeeting.getMeetingDate(), "dd MMM yyyy"));
+                //TextView tvMostRecentUnsentMeeting = (TextView) findViewById(R.id.lblBMCurrentMeetingDate);
+                //tvMostRecentUnsentMeeting.setText(Utils.formatDate(mostRecentUnsentMeeting.getMeetingDate(), "dd MMM yyyy"));
+
+                //Set onclick event for the current meeting
+                final Meeting finalMostRecentUnsentMeeting = mostRecentUnsentMeeting;
+//                tvMostRecentUnsentMeeting.setOnClickListener(new View.OnClickListener()
+//                {
+//                    @Override
+//                    public void onClick(View view)
+//                    {
+//                        //load details for this meeting in meeting activity
+//                        //it modifiable mode
+//                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+//                        i.putExtra("_meetingId", finalMostRecentUnsentMeeting.getMeetingId());
+//                        i.putExtra("_currentMeetingId", finalMostRecentUnsentMeeting.getMeetingId());
+//                        //make the view mode modifiable
+//                        i.putExtra("_viewOnly", false);
+//                        i.putExtra("_meetingDate", Utils.formatDate(finalMostRecentUnsentMeeting.getMeetingDate(), "dd MMM yyyy"));
+//                        startActivity(i);
+//                    }
+//                });
 
                 if (pastMeetings.size() > 1) {
                     for (Meeting meeting : pastMeetings) {
@@ -169,6 +197,18 @@ public class BeginMeetingActivity extends SherlockActivity {
 
     //Populate Meetings List
     protected void populateMeetingsList() {
+
+        //populate the current meetings
+        populateCurrentMeetingsList();
+
+        //This is dirty but we have to do what we gotta do TODO: will clean up later
+        //Remove meetings set as current from the past list..
+        //These should be displayed in current section
+        for(int i=0; i<pastMeetings.size(); i++) {
+            if(pastMeetings.get(i).isCurrent()) {
+                pastMeetings.remove(i);
+            }
+        }
         //Now get the data via the adapter
         MeetingsArrayAdapter adapter = new MeetingsArrayAdapter(getBaseContext(), pastMeetings);
 
@@ -185,7 +225,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                 Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                 i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
                 i.putExtra("_meetingId",meeting.getMeetingId());
-                i.putExtra("_viewOnly",true);
+                i.putExtra("_viewOnly",true);  //viewing past meeetings should be read only
                 startActivity(i);
                 return;
 
@@ -193,6 +233,41 @@ public class BeginMeetingActivity extends SherlockActivity {
         });
         Utils.setListViewHeightBasedOnChildren(membersListView);
     }
+
+
+
+    //Populate Meetings List
+    protected void populateCurrentMeetingsList() {
+        //to populate the current meetings
+        //Now get the data via the adapter
+        currentMeetings = meetingRepo.getAllMeetingsByActiveStatus(true);
+        ConcurrentMeetingsArrayAdapter adapter = new ConcurrentMeetingsArrayAdapter(getBaseContext(), currentMeetings);
+
+
+        // listening to single list item on click
+        ListView currentMeetingsList = (ListView) findViewById(R.id.lstBMCurrentMeetings);
+
+        currentMeetingsList.setAdapter(adapter);
+        currentMeetingsList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id)
+            {
+
+                Meeting meeting = currentMeetings.get(position);
+                //Do as you wish with this meeting
+                Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
+                i.putExtra("_meetingId", meeting.getMeetingId());
+                i.putExtra("_viewOnly", false);  //viewing past meeetings should be read only
+                startActivity(i);
+                return;
+
+            }
+        });
+        //Utils.setListViewHeightBasedOnChildren(currentMeetingsList);
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {

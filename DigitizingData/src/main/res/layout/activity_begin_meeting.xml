@@ -19,8 +19,8 @@
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/grpBMCurrentMeeting">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -51,12 +51,22 @@
                 android:text="You may edit before sending."
                 android:id="@+id/lblBMInstructionCurrent" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/TextAccentColor"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="04 Mar 2013"
-                android:id="@+id/lblBMCurrentMeetingDate" />
+            <!--<org.applab.digitizingdata.fontutils.TypefaceTextView-->
+                <!--style="@style/TextAccentColor"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="04 Mar 2013"-->
+                <!--android:id="@+id/lblBMCurrentMeetingDate" />-->
+
+            <ListView
+                    android:id="@+id/lstBMCurrentMeetings"
+                    style="@style/TextAccentColor"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_below="@id/lblBMInstructionCurrent"
+                    android:choiceMode="singleChoice">
+
+            </ListView>
 
 
         </LinearLayout>
