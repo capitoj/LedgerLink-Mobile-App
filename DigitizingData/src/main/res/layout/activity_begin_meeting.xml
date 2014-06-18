@@ -19,8 +19,8 @@
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/grpBMCurrentMeeting">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -58,18 +58,19 @@
                 <!--android:text="04 Mar 2013"-->
                 <!--android:id="@+id/lblBMCurrentMeetingDate" />-->
 
+
+
             <ListView
                     android:id="@+id/lstBMCurrentMeetings"
                     style="@style/TextAccentColor"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_below="@id/lblBMInstructionCurrent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:choiceMode="singleChoice">
-
             </ListView>
 
 
         </LinearLayout>
+
 
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -121,6 +122,8 @@
                 android:paddingLeft="5dp"
                 android:text="There are several unsent meetings. It is not safe to keep meetings without sending! Please send every week."
                 android:id="@+id/lblBMWarning" />
+
+
 
 
             <ListView

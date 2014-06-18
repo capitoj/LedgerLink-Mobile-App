@@ -45,11 +45,11 @@ public class ConcurrentMeetingsArrayAdapter extends ArrayAdapter<Meeting> {
             final TextView cycleInformationTextView = (TextView)rowView.findViewById(R.id.txtMeetingCycleSummary);
 
             //Assign Values to the Widgets
-            String meetingDate = String.format("%s", Utils.formatDate(values.get(position).getMeetingDate()));
+            String meetingDate = String.format("%s", Utils.formatDate(values.get(position).getMeetingDate(), "dd MMM yyyy"));
             txtMeetingDate.setText(meetingDate);
 
 
-            String cycleSummary = String.format("Cycle %s - %s", Utils.formatDate(values.get(position).getVslaCycle().getStartDate()), Utils.formatDate(values.get(position).getVslaCycle().getEndDate()));
+            String cycleSummary = String.format("Cycle %s - %s", Utils.formatDate(values.get(position).getVslaCycle().getStartDate(), "dd MMM yyyy"), Utils.formatDate(values.get(position).getVslaCycle().getEndDate(), "dd MMM yyyy"));
             cycleInformationTextView.setText(cycleSummary);
 
             return rowView;

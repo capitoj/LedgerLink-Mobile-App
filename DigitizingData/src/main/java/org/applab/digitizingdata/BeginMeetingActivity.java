@@ -209,7 +209,7 @@ public class BeginMeetingActivity extends SherlockActivity {
             }
         }
         //Now get the data via the adapter
-        MeetingsArrayAdapter adapter = new MeetingsArrayAdapter(getBaseContext(), pastMeetings);
+        ConcurrentMeetingsArrayAdapter adapter = new ConcurrentMeetingsArrayAdapter(getBaseContext(), pastMeetings);
 
 
         // listening to single list item on click
@@ -264,7 +264,7 @@ public class BeginMeetingActivity extends SherlockActivity {
 
             }
         });
-        //Utils.setListViewHeightBasedOnChildren(currentMeetingsList);
+        Utils.setListViewHeightBasedOnChildren(currentMeetingsList);
     }
 
 
@@ -303,6 +303,8 @@ public class BeginMeetingActivity extends SherlockActivity {
                         }
                     }
                 });
+
+
         customActionBarView.findViewById(R.id.actionbar_begin).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -352,7 +354,11 @@ public class BeginMeetingActivity extends SherlockActivity {
 
     //Change this to send specified meeting by id
     public void sendMeetingData(int meetingId) {
-
+        //If no network, hide send meeting button
+        if(!Utils.isNetworkConnected(getApplicationContext())) {
+            Toast.makeText(DatabaseHandler.databaseContext, "Can not send information because mobile data or internet connection is not available.", Toast.LENGTH_LONG).show();
+            return;
+        }
         //TODO: Confirm this later. Does not support multiple cycles
         //Meeting meeting = repo.getMostRecentMeeting();
         MeetingRepo repo = new MeetingRepo(getApplicationContext());
