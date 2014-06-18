@@ -31,7 +31,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
     private static com.actionbarsherlock.view.Menu MENU;
     ActionBar actionBar = null;
     int numberOfPastUnsentMeetings = 0;
-    private Meeting selectedMeeting, currentMeeting;
+    private Meeting selectedMeeting;
     private int numberOfMembers;
     private double totalSavingsInSelectedMeeting;
     private double totalLoansRepaidInSelectedMeeting;
@@ -42,6 +42,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
     int selectedMeetingId;
     private boolean viewingCurrentMeeting;
     private ArrayList<Meeting> unsentMeetings;
+    private ArrayList<Meeting> activeMeetings;
     //public FragmentTransaction fragmentTransaction;
 
     @Override
@@ -51,15 +52,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
             return null;
         }
         setHasOptionsMenu(true);
-        currentMeetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
-        //get the current meeting by id
-        MeetingRepo meetingRepo = new MeetingRepo(getSherlockActivity().getBaseContext());
-        currentMeeting = meetingRepo.getMeetingById(currentMeetingId);
-
-
-        selectedMeetingId = currentMeetingId;
-        viewingCurrentMeeting = true;
         return inflater.inflate(R.layout.frag_meeting_send_data, container, false);
 
     }
@@ -106,19 +99,26 @@ public class MeetingSendDataFrag extends SherlockFragment {
         LinearLayout layoutMSDCurrentMeetingSummary = (LinearLayout) getSherlockActivity().findViewById(R.id.layoutMSDCurrentMeetingSummary);
         layoutMSDCurrentMeetingSummary.setVisibility(viewingCurrentMeeting ? View.GONE : View.VISIBLE);
 
-        //Load current meeting date in its summary
-        TextView txtMSDFragCurrentMeetingDetails = (TextView) getSherlockActivity().findViewById(R.id.txtMSDFragCurrentMeetingDetails);
-        txtMSDFragCurrentMeetingDetails.setText(Utils.formatDate(currentMeeting.getMeetingDate(), "dd MMM yyyy"));
+        //TODO: Load current meeting(s)
+        //could be more than one
+        if(activeMeetings != null) {
+            if(activeMeetings.size()>0) {
+                TextView txtMSDFragCurrentMeetingDetails = (TextView) getSherlockActivity().findViewById(R.id.txtMSDFragCurrentMeetingDetails);
+                txtMSDFragCurrentMeetingDetails.setText(Utils.formatDate(activeMeetings.get(0).getMeetingDate(), "dd MMM yyyy"));
 
-        txtMSDFragCurrentMeetingDetails.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //To change body of implemented methods use File | Settings | File Templates.
-                selectedMeetingId = currentMeetingId;
-                viewingCurrentMeeting = true;
-                refreshFragmentView();
+                txtMSDFragCurrentMeetingDetails.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //To change body of implemented methods use File | Settings | File Templates.
+                        selectedMeetingId = currentMeetingId;
+                        viewingCurrentMeeting = true;
+                        refreshFragmentView();
+                    }
+                });
             }
-        });
+        }
+
+
 
 
 
@@ -156,14 +156,27 @@ public class MeetingSendDataFrag extends SherlockFragment {
     /*counts the number of past unset meetings, and computes current meeting saved values */
     public void loadFragmentInformation(int meetingIdToLoad) {
 
-       MeetingRepo meetingRepo = new MeetingRepo(this.getSherlockActivity().getBaseContext());
-       unsentMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
+        selectedMeetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+
+        //get the current meeting by id
+        MeetingRepo meetingRepo = new MeetingRepo(getSherlockActivity().getBaseContext());
+        selectedMeeting = meetingRepo.getMeetingById(selectedMeetingId);
+
+
+
+        if(selectedMeeting.isCurrent()) {
+            viewingCurrentMeeting = true;
+        }
+       
+        activeMeetings = meetingRepo.getAllMeetingsByActiveStatus(true);
+
+        unsentMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
        numberOfPastUnsentMeetings = unsentMeetings.size();
 
         Log.i("Unset meeting count ",""+numberOfPastUnsentMeetings);
 
         //Get the current meeting
-        selectedMeeting = meetingRepo.getMeetingById(meetingIdToLoad);
+        //selectedMeeting = meetingRepo.getMeetingById(meetingIdToLoad);
 
         //Get total savings in current meeting
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getSherlockActivity().getBaseContext());
@@ -214,7 +227,8 @@ public class MeetingSendDataFrag extends SherlockFragment {
                                     int position, long id) {
                 Meeting meeting = unsentMeetings.get(position);
                 selectedMeetingId = meeting.getMeetingId();
-                viewingCurrentMeeting = false;
+                getSherlockActivity().getIntent().putExtra("_meetingId", selectedMeetingId);
+                //viewingCurrentMeeting = false;
 
                 //Load this meeting details
                 refreshFragmentView();

@@ -16,6 +16,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockListFragment;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
@@ -23,6 +24,7 @@ import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersRollCallArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
+import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
@@ -34,7 +36,8 @@ public class MeetingRollCallFrag extends SherlockFragment {
     ActionBar actionBar;
     ArrayList<Member> members = null;
     int meetingId;
-    String meetingDate;
+    Meeting selectedMeeting;
+    private MeetingActivity parentActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,8 +54,16 @@ public class MeetingRollCallFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         actionBar = getSherlockActivity().getSupportActionBar();
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        String title = String.format("Meeting    %s", meetingDate);
+        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+        //get date from meeting repo via id
+        String title = "Meeting";
+        if(meetingId != 0) {
+            MeetingRepo meetingRepo = new MeetingRepo(this.getSherlockActivity().getBaseContext());
+            selectedMeeting = meetingRepo.getMeetingById(meetingId);
+            title = String.format("Meeting    %s", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+        }
+
+
 
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -66,11 +77,13 @@ public class MeetingRollCallFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
+        parentActivity = (MeetingActivity) getSherlockActivity();
+
 
         //TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMRCFMeetingDate);
         //meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         //TODO: Get the Meeting Id from meetingRepo.getCurrentMeeting();
-        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+
         //lblMeetingDate.setText(meetingDate);
 
         //Populate the Members
@@ -99,7 +112,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
                                     int position, long id) {
 
                 //Do not invoke the event when in Read only Mode
-                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY && !parentActivity.isViewOnly()) {
                     CheckBox chkAttendance = (CheckBox)view.findViewById(R.id.chkRMRCallAttendance);
                     chkAttendance.toggle();
                 }
@@ -110,13 +123,13 @@ public class MeetingRollCallFrag extends SherlockFragment {
             public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
 
                 //Do not invoke the event when in Read only Mode
-                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY && !parentActivity.isViewOnly()) {
                     Member selectedMember = (Member)parent.getItemAtPosition(position);
                     //Member selectedMember = members.get(position);
                     Intent i = new Intent(view.getContext(), MemberAttendanceHistoryActivity.class);
 
                     // Pass on data
-                    i.putExtra("_meetingDate",meetingDate);
+                    if(selectedMeeting != null) i.putExtra("_meetingDate",selectedMeeting.getMeetingDate());
                     i.putExtra("_memberId", selectedMember.getMemberId());
                     i.putExtra("_names", selectedMember.toString());
                     i.putExtra("_meetingId",meetingId);

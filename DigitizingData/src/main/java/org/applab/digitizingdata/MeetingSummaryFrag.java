@@ -29,6 +29,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
     private int meetingId = 0;
     private int previousMeetingId = 0;
     MeetingRepo meetingRepo;
+    private MeetingActivity parentActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,6 +68,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
+        parentActivity = (MeetingActivity) getSherlockActivity();
         //TextView lblMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFMeetingDate);
         // lblMeetingDate.setText(meetingDate);
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);

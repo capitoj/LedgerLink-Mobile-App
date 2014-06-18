@@ -50,6 +50,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     private ActionBar actionBar;
     boolean enableSendData = false;
 
+
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
     private static ProgressDialog progressDialog = null;
@@ -128,6 +129,15 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             enableSendData = getIntent().getBooleanExtra("_enableSendData", false);
         }
 
+
+        /*if(viewOnly) {
+            Utils._meetingDataViewMode = Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY;
+        }*/
+
+        if (getIntent().hasExtra("_meetingId")) {
+            targetMeetingId = getIntent().getIntExtra("_meetingId", 0);
+        }
+
         if(targetMeetingId == 0) {
         //If target meeting id is 0, then load it as current meeting id
         VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getBaseContext());
@@ -152,30 +162,8 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         }
     }
 
-//    @Override
-//    public boolean onPrepareOptionsMenu (Menu menu) {
-//        //Determine what menu to display
-//        menu.clear();
-//        final MenuInflater inflater = getSupportMenuInflater();
-//        switch(Utils._meetingActiveActionBarMenu) {
-//            case MENU_NONE:
-//                break;
-//            case MENU_START_CASH_TAB:
-//                //getMenuInflater().inflate(R.menu.secondmenu, menu);
-//                break;
-//            case MENU_CASH_BOOK_TAB:
-//                inflater.inflate(R.menu.meeting_cash_book, menu);
-//                break;
-//            case MENU_SEND_DATA_TAB:
-//                break;
-//            case MENU_REVIEW_SEND:
-//                inflater.inflate(R.menu.meeting, menu);
-//                break;
-//            default:
-//                break;
-//        }
-//        return super.onPrepareOptionsMenu(menu);
-//    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -282,6 +270,13 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     }
 
 
+    public boolean isViewOnly() {
+        if (getIntent().hasExtra("_viewOnly")) {
+            return getIntent().getBooleanExtra("_viewOnly", false);
+        }
+        return false;
+    }
+
     protected Object mActionMode;
     private ActionMode.Callback cashBookActionModeCallback = new ActionMode.Callback() {
 
@@ -322,89 +317,17 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     //Change this to send specified meeting by id
     public void sendMeetingData(int meetingId) {
+
+
         MeetingRepo repo = new MeetingRepo(getApplicationContext());
 
         //TODO: Confirm this later. Does not support multiple cycles
         //Meeting meeting = repo.getMostRecentMeeting();
         Meeting meeting = repo.getMeetingById(meetingId);
 
-        HashMap<String, String> meetingData = new HashMap<String, String>();
+        HashMap<String, String> meetingData = repo.generateMeetingDataMapToSendToServer(meetingId);
 
-        if (null != meeting) {
-            //Get the Cycle in which this meeting belongs to
-            String vslaCycleJson = SendDataRepo.getVslaCycleJson(meeting.getVslaCycle().getCycleId());
-            if (vslaCycleJson != null) {
-                //Add to Map
-                meetingData.put(SendDataRepo.CYCLE_INFO_ITEM_KEY, vslaCycleJson);
-            }
-
-            //Members
-            String membersJson = SendDataRepo.getMembersJson();
-            if (membersJson != null) {
-                //Add to Map
-                meetingData.put(SendDataRepo.MEMBERS_ITEM_KEY, membersJson);
-            }
-
-            //Meeting Details
-            String meetingJson = SendDataRepo.getMeetingJson(meeting);
-            if (meetingJson != null) {
-                //Add to Map
-                meetingData.put(SendDataRepo.MEETING_DETAILS_ITEM_KEY, meetingJson);
-            }
-
-            //Attendance
-            String meetingAttendanceJson = SendDataRepo.getMeetingAttendanceJson(meeting.getMeetingId());
-            if (meetingAttendanceJson != null) {
-                //Add to Map
-                meetingData.put(SendDataRepo.ATTENDANCE_ITEM_KEY, meetingAttendanceJson);
-            }
-
-            //Savings
-            String meetingSavingsJson = SendDataRepo.getMeetingSavingsJson(meeting.getMeetingId());
-            if (meetingSavingsJson != null) {
-                //Add to Map
-                meetingData.put(SendDataRepo.SAVINGS_ITEM_KEY, meetingSavingsJson);
-            }
-
-            /**   // Opening Cash
-             String meetingOpeningCashJson = SendDataRepo.getMeetingOpeningCashJson(meeting.getMeetingId());
-             if(meetingOpeningCashJson != null) {
-             //Add to Map
-             meetingData.put(SendDataRepo.OPENING_CASH_ITEM_KEY, meetingOpeningCashJson);
-             }
-
-             // Cashbook
-             String meetingCashBookJson = SendDataRepo.getMeetingCashBookJson(meeting.getMeetingId());
-             if(meetingCashBookJson != null) {
-             //Add to Map
-             meetingData.put(SendDataRepo.CASHBOOK_ITEM_KEY, meetingCashBookJson);
-             }
-
-             // Fine
-             String meetingFineJson = SendDataRepo.getMeetingFineJson(meeting.getMeetingId());
-             if(meetingFineJson != null) {
-             //Add to Map
-             meetingData.put(SendDataRepo.FINE_ITEM_KEY, meetingFineJson);
-             }
-
-             */
-            //Repayments
-            String meetingRepaymentsJson = SendDataRepo.getMeetingRepaymentsJson(meeting.getMeetingId());
-            if (meetingRepaymentsJson != null) {
-                //Add to Map
-                meetingData.put(SendDataRepo.REPAYMENTS_ITEM_KEY, meetingRepaymentsJson);
-            }
-
-            //Loan Issued
-            String meetingLoansJson = SendDataRepo.getMeetingLoanIssuesJson(meeting.getMeetingId());
-            if (meetingLoansJson != null) {
-                //Add to Map
-                meetingData.put(SendDataRepo.LOANS_ITEM_KEY, meetingLoansJson);
-            }
-
-            //Now send the Data
-            sendDataUsingPostAsync(meeting.getMeetingId(), meetingData);
-        }
+        sendDataUsingPostAsync(meeting.getMeetingId(), meetingData);
     }
 
     //Brought this method back from SendDataRepo
@@ -590,4 +513,6 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             }
         }
     }
+
+
 }

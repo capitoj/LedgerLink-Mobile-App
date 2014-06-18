@@ -195,9 +195,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                 vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_REVIEW_CYCLE);
             } else {
                 TextView txtInstructions = (TextView) findViewById(R.id.lblNCHeader);
-                txtInstructions.setText(new StringBuilder()
-                                .append("There is no cycle that is currently running. A New Cycle will be created.")
-                                .toString()
+                txtInstructions.setText("There is no cycle that is currently running. A New Cycle will be created."
                 );
 
                 //setup default dates
