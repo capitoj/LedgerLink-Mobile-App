@@ -36,7 +36,8 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <!-- I fully qualify the names coz R.id is universal -->
+            <!-- Fully qualify the names coz R.id is universal -->
+
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblNCSharePrice"
                 style="@style/RegularText"
