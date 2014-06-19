@@ -16,6 +16,7 @@ import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersArrayAdapter;
 import org.applab.digitizingdata.repo.MemberRepo;
 
@@ -41,7 +42,18 @@ public class MembersListActivity extends SherlockListActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Populate the Members
-        populateMembersList();
+        //Run this as long running task
+
+        Runnable populateMembers = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(populateMembers, "Please wait...", "Loading member list...", MembersListActivity.this);
+
 
     }
 
@@ -90,10 +102,18 @@ public class MembersListActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        MembersArrayAdapter adapter = new MembersArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersArrayAdapter adapter = new MembersArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
-        setListAdapter(adapter);
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                setListAdapter(adapter);
+            }
+        });
+
 
         // listening to single list item on click
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {

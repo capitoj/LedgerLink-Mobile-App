@@ -98,7 +98,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
                 //Save only if not in view only
                 if(parentActivity.isViewOnly())
                 {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return true;
                 }
                 saveStartingCash();

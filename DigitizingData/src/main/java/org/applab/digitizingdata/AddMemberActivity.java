@@ -27,6 +27,7 @@ import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
@@ -500,7 +501,7 @@ public class AddMemberActivity extends SherlockActivity {
         }
     }
 
-    private void populateDataFields(Member member) {
+    private void populateDataFields(final Member member) {
         try {
 
             clearDataFields();
@@ -509,8 +510,16 @@ public class AddMemberActivity extends SherlockActivity {
             }
 
             // Populate the Fields
-            Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
-            Utils.setSpinnerSelection(member.getMemberNo() + "", cboAMMemberNo);
+            final Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
+            cboAMMemberNo.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    Utils.setSpinnerSelection(member.getMemberNo() + "", cboAMMemberNo);
+                }
+            });
+
 
             TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
             if (member.getSurname() != null) {
@@ -538,21 +547,38 @@ public class AddMemberActivity extends SherlockActivity {
             }
 
             // Set the age
-            Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
+            final Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
             Calendar calToday = Calendar.getInstance();
             Calendar calDb = Calendar.getInstance();
             calDb.setTime(member.getDateOfBirth());
-            int computedAge = calToday.get(Calendar.YEAR) - calDb.get(Calendar.YEAR);
-            Utils.setSpinnerSelection(computedAge + "", cboAMAge);
+            final int computedAge = calToday.get(Calendar.YEAR) - calDb.get(Calendar.YEAR);
+
+            cboAMAge.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    Utils.setSpinnerSelection(computedAge + "", cboAMAge);
+                }
+            });
+
             calToday = Calendar.getInstance();
 
             // TODO: It may be preferable to allow this field to be editable if members are allowed to take leave
             // Set cycles
-            Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
+            final Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
             Calendar calDbCycles = Calendar.getInstance();
             calDbCycles.setTime(member.getDateOfAdmission());
-            int cycles = calToday.get(Calendar.YEAR) - calDbCycles.get(Calendar.YEAR);
-            Utils.setSpinnerSelection(cycles + "", cboAMCycles);
+            final int cycles = calToday.get(Calendar.YEAR) - calDbCycles.get(Calendar.YEAR);
+            cboAMCycles.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    Utils.setSpinnerSelection(cycles + "", cboAMCycles);
+                }
+            });
+
 
 
         }
@@ -627,16 +653,27 @@ public class AddMemberActivity extends SherlockActivity {
 
         Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         repo = new MemberRepo(getApplicationContext());
-        ArrayList<String> memberNumberArrayList = new ArrayList<String>();
+        final ArrayList<String> memberNumberArrayList = new ArrayList<String>();
         memberNumberArrayList.add("select number");
         //If we have a selected member, then add the member number to the adapter
         if (selectedMember != null && selectedMember.getMemberNo() != 0) {
             memberNumberArrayList.add(selectedMember.getMemberNo() + "");
         }
-        for (String mNo : repo.getListOfAvailableMemberNumbers(30)) {
-            Log.d(getBaseContext().getPackageName(), "Member number found " + mNo);
-            memberNumberArrayList.add(mNo);
-        }
+
+        //This portion could take long so run it as long task
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                for (String mNo : repo.getListOfAvailableMemberNumbers(30)) {
+                    Log.d(getBaseContext().getPackageName(), "Member number found " + mNo);
+                    memberNumberArrayList.add(mNo);
+                }
+            }
+        };
+        LongTaskRunner.runLongTask(runnable, "Please wait...", "Please wait a moment...", AddMemberActivity.this);
+
         String[] memberNumberList = memberNumberArrayList.toArray(new String[memberNumberArrayList.size()]);
         memberNumberArrayList.toArray(memberNumberList);
         ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, memberNumberList) {

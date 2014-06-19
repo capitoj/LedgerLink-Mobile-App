@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -34,6 +31,7 @@ public class MeetingFinesFrag extends SherlockFragment {
     String meetingDate;
     int meetingId;
     private MeetingActivity parentActivity;
+    private RelativeLayout fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +46,9 @@ public class MeetingFinesFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        return (RelativeLayout) inflater.inflate(R.layout.frag_meeting_fines, container, false);
+        fragmentView = (RelativeLayout) inflater.inflate(R.layout.frag_meeting_fines, container, false);
+        initializeFragment();
+        return fragmentView;
     }
 
     @Override
@@ -62,6 +62,12 @@ public class MeetingFinesFrag extends SherlockFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+
+    }
+
+    private void initializeFragment()
+    {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         parentActivity = (MeetingActivity) getSherlockActivity();
@@ -80,13 +86,10 @@ public class MeetingFinesFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
-
         /** TextView lblMeetingDate = (TextView)parentActivity.findViewById(R.id.lblMSavFMeetingDate);
          meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */
         meetingId = parentActivity.getIntent().getIntExtra("_meetingId", 0);
-
-
         //Wrap and run long task
         Runnable runnable = new Runnable()
         {
@@ -98,7 +101,6 @@ public class MeetingFinesFrag extends SherlockFragment {
             }
         };
         LongTaskRunner.runLongTask(runnable, "Please wait", "Loading list of fines...", parentActivity);
-
     }
 
 
@@ -115,8 +117,8 @@ public class MeetingFinesFrag extends SherlockFragment {
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        final ListView lvwMembers = (ListView) getSherlockActivity().findViewById(R.id.lvwMFineMembers);
-        final TextView txtEmpty = (TextView) getSherlockActivity().findViewById(R.id.txtMFineEmpty);
+        final ListView lvwMembers = (ListView) fragmentView.findViewById(R.id.lvwMFineMembers);
+        final TextView txtEmpty = (TextView) fragmentView.findViewById(R.id.txtMFineEmpty);
 
         Runnable runOnUiThread = new Runnable()
         {
@@ -136,6 +138,10 @@ public class MeetingFinesFrag extends SherlockFragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 //Do not invoke the event when in Read only Mode
+                if(parentActivity.isViewOnly()) {
+                    Toast.makeText(parentActivity.getBaseContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = members.get(position);
                     Intent i = new Intent(view.getContext(), MemberFinesHistoryActivity.class);
