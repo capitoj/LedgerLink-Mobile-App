@@ -516,6 +516,7 @@ public class AddMemberActivity extends SherlockActivity {
                 @Override
                 public void run()
                 {
+
                     Utils.setSpinnerSelection(member.getMemberNo() + "", cboAMMemberNo);
                 }
             });
@@ -558,6 +559,7 @@ public class AddMemberActivity extends SherlockActivity {
                 @Override
                 public void run()
                 {
+
                     Utils.setSpinnerSelection(computedAge + "", cboAMAge);
                 }
             });
@@ -575,6 +577,7 @@ public class AddMemberActivity extends SherlockActivity {
                 @Override
                 public void run()
                 {
+
                     Utils.setSpinnerSelection(cycles + "", cboAMCycles);
                 }
             });
@@ -592,7 +595,18 @@ public class AddMemberActivity extends SherlockActivity {
     private void clearDataFields() {
         //Spinner items
         buildGenderSpinner();
-        buildMemberNoSpinner();
+        //This portion could take long so run it as long task
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                buildMemberNoSpinner();
+            }
+        };
+        LongTaskRunner.runLongTask(runnable, "Please wait...", "Please wait a moment...", AddMemberActivity.this);
+
+
         buildAgeSpinner();
         buildCyclesCompletedSpinner();
 
@@ -651,7 +665,7 @@ public class AddMemberActivity extends SherlockActivity {
     /* Populates the member no spinner with available member numbers */
     private void buildMemberNoSpinner() {
 
-        Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
+        final Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         repo = new MemberRepo(getApplicationContext());
         final ArrayList<String> memberNumberArrayList = new ArrayList<String>();
         memberNumberArrayList.add("select number");
@@ -660,23 +674,16 @@ public class AddMemberActivity extends SherlockActivity {
             memberNumberArrayList.add(selectedMember.getMemberNo() + "");
         }
 
-        //This portion could take long so run it as long task
-        Runnable runnable = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                for (String mNo : repo.getListOfAvailableMemberNumbers(30)) {
-                    Log.d(getBaseContext().getPackageName(), "Member number found " + mNo);
-                    memberNumberArrayList.add(mNo);
-                }
-            }
-        };
-        LongTaskRunner.runLongTask(runnable, "Please wait...", "Please wait a moment...", AddMemberActivity.this);
+
+        for (String mNo : repo.getListOfAvailableMemberNumbers(30)) {
+            Log.d(getBaseContext().getPackageName(), "Member number found " + mNo);
+            memberNumberArrayList.add(mNo);
+        }
+
 
         String[] memberNumberList = memberNumberArrayList.toArray(new String[memberNumberArrayList.size()]);
         memberNumberArrayList.toArray(memberNumberList);
-        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, memberNumberList) {
+        final ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, memberNumberList) {
             public View getView(int position, View convertView, ViewGroup parent) {
                 View v = super.getView(position, convertView, parent);
 
@@ -699,7 +706,16 @@ public class AddMemberActivity extends SherlockActivity {
         };
 
         memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboAMMemberNo.setAdapter(memberNoAdapter);
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                cboAMMemberNo.setAdapter(memberNoAdapter);
+            }
+        };
+        runOnUiThread(runnable);
+
         cboAMMemberNo.setOnItemSelectedListener(new CustomGenderSpinnerListener());
         //Make the spinner selectable
         cboAMMemberNo.setFocusable(true);
