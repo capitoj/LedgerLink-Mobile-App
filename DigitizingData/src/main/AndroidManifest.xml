@@ -179,11 +179,20 @@
                 android:label="Confirmation" >
         </activity>
         <activity
+                android:name="org.applab.digitizingdata.EditCycleSelectCycle"
+                android:label="Select Cycle" >
+        </activity>
+        <activity
             android:name="org.applab.digitizingdata.DataMigrationActivity"
             android:label="Data Migration" />
         <activity
             android:name="org.applab.digitizingdata.BeginMeetingActivity"
             android:label="@string/title_activity_begin_meeting" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="org.applab.digitizingdata.SettingsActivity"

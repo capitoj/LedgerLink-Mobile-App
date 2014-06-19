@@ -108,8 +108,21 @@ public class NewCycleActivity extends SherlockActivity {
 
         if (isUpdateCycleAction) {
             // Setup the Fields by getting the current Cycle
-            VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
-            selectedCycle = repo.getCurrentCycle();
+
+            if(! getIntent().hasExtra("_cycleId")) {
+                VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
+                selectedCycle = repo.getCurrentCycle();
+            }
+            else if(getIntent().getIntExtra("_cycleId", 0) != 0)
+            {
+                //for concurrent cycles , if cycle id is passed then load the specified cycle
+                VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
+                selectedCycle = repo.getCycle(getIntent().getIntExtra("_cycleId", 0));
+            }
+            else {
+                VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
+                selectedCycle = repo.getCurrentCycle();
+            }
             if (selectedCycle != null) {
                 //displayMessageBox("Testing", "Cycle to Update Found", Utils.MSGBOX_ICON_INFORMATION);
                 //Populate Fields
@@ -560,7 +573,7 @@ public class NewCycleActivity extends SherlockActivity {
         alertDialog.show();
     }
 
-    protected void populateDataFields(VslaCycle cycle) {
+    protected void populateDataFields(final VslaCycle cycle) {
         // Clear Fields
         clearDataFields();
 
@@ -571,13 +584,24 @@ public class NewCycleActivity extends SherlockActivity {
         try {
             // Now populate
             TextView txtSharePrice = (TextView) findViewById(R.id.txtNCSharePrice);
-            Spinner cboMaxShareQty = (Spinner) findViewById(R.id.cboNCMaxShares);
+            final Spinner cboMaxShareQty = (Spinner) findViewById(R.id.cboNCMaxShares);
             TextView txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
             TextView txtEndDate = (TextView) findViewById(R.id.txtNCEndDate);
             TextView txtInterestRate = (TextView) findViewById(R.id.txtNCInterestRate);
 
             txtSharePrice.setText(Utils.formatRealNumber(cycle.getSharePrice()));
-            Utils.setSpinnerSelection(String.format("%.0f", cycle.getMaxSharesQty()), cboMaxShareQty); //format shares qty with no decimal points so that the Utils can select it correctly
+            //Fix... select spinner on post creation
+            //fix for failure to select these values
+            cboMaxShareQty.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    Utils.setSpinnerSelection(String.format("%.0f", cycle.getMaxSharesQty()), cboMaxShareQty); //format shares qty with no decimal points so that the Utils can select it correctly
+                }
+            });
+
+            //cboMaxShareQty.setSelection(6 , true);
             txtStartDate.setText(Utils.formatDate(cycle.getStartDate(), "dd-MMM-yyyy"));
             txtEndDate.setText(Utils.formatDate(cycle.getEndDate(), "dd-MMM-yyyy"));
             txtInterestRate.setText(Utils.formatRealNumber(cycle.getInterestRate()));
@@ -641,7 +665,7 @@ public class NewCycleActivity extends SherlockActivity {
 
         maxSharesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboNCMaxShares.setAdapter(maxSharesAdapter);
-        cboNCMaxShares.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+        //cboNCMaxShares.setOnItemSelectedListener(new CustomGenderSpinnerListener());
 
         // Make the spinner selectable
         cboNCMaxShares.setFocusable(true);

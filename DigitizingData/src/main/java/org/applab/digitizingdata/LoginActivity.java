@@ -32,6 +32,7 @@ import org.apache.http.util.EntityUtils;
 import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.SampleDataBuilderRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
@@ -73,7 +74,17 @@ public class LoginActivity extends SherlockActivity {
         Utils.configureDefaultApplicationPreferences(getApplicationContext());
 
         //Load Sample Trainng Data: Testing
-        SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+        Runnable dataLoader = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+            }
+        };
+        //Load this as long running task
+        LongTaskRunner.runLongTask(dataLoader, "Please wait...", "Please wait as LedgerLink refreshes the test training data...", LoginActivity.this);
+
 
         //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblSISwitchMode);
 

@@ -117,8 +117,10 @@ public class MainActivity extends SherlockActivity {
                     Intent i = new Intent(getApplicationContext(), ViewSentDataActivity.class);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("updateCycle")) {
-                    Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
-                    i.putExtra("_isUpdateCycleAction", true);
+                    //Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+                    //i.putExtra("_isUpdateCycleAction", true);
+                    //For multiple active cycles, show activity to allow selecting
+                    Intent i = new Intent(getApplicationContext(), EditCycleSelectCycle.class);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("endCycle")) {
                     Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);

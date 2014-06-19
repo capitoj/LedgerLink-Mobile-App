@@ -33,6 +33,7 @@ public class MeetingSavingsFrag extends SherlockFragment {
     String meetingDate;
     int meetingId;
     private MeetingActivity parentActivity;
+    private RelativeLayout fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,18 +48,26 @@ public class MeetingSavingsFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        return (RelativeLayout)inflater.inflate(R.layout.frag_meeting_savings, container, false);
+        fragmentView =  (RelativeLayout)inflater.inflate(R.layout.frag_meeting_savings, container, false);
+        initializeFragment();
+        return fragmentView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
+
+
+    }
+
+    private void initializeFragment()
+    {
+
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         actionBar = getSherlockActivity().getSupportActionBar();
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         String title = String.format("Meeting    %s", meetingDate);
-
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
@@ -71,12 +80,10 @@ public class MeetingSavingsFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
-
         /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-
         parentActivity = (MeetingActivity) getSherlockActivity();
         //Wrap long task in runnable an run asynchronously
         Runnable populateRunnable = new Runnable()
@@ -89,11 +96,7 @@ public class MeetingSavingsFrag extends SherlockFragment {
             }
         };
         LongTaskRunner.runLongTask(populateRunnable, "Please wait", "Loading savings information", parentActivity);
-
-
     }
-
-
 
 
     //Populate Members List
@@ -109,14 +112,15 @@ public class MeetingSavingsFrag extends SherlockFragment {
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        final ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMSavFMembers);
-        final TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMSavFEmpty);
+        final ListView lvwMembers = (ListView)fragmentView.findViewById(R.id.lvwMSavFMembers);
+        final TextView txtEmpty = (TextView)fragmentView.findViewById(R.id.txtMSavFEmpty);
 
         parentActivity.runOnUiThread(new Runnable()
         {
             @Override
             public void run()
             {
+
                 lvwMembers.setEmptyView(txtEmpty);
                 lvwMembers.setAdapter(adapter);
             }
@@ -129,7 +133,7 @@ public class MeetingSavingsFrag extends SherlockFragment {
                                     int position, long id) {
                 //Do not invoke the event when in Read only Mode
                 if(parentActivity.isViewOnly()) {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {

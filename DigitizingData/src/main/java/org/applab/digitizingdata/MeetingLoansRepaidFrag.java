@@ -30,6 +30,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
     String meetingDate;
     int meetingId;
     private MeetingActivity parentActivity;
+    private RelativeLayout fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,17 +45,26 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        return (RelativeLayout)inflater.inflate(R.layout.frag_meeting_loans_repaid, container, false);
+        fragmentView = (RelativeLayout) inflater.inflate(R.layout.frag_meeting_loans_repaid, container, false);
+        initializeFragment();
+        return fragmentView;
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
+
+
+
+    }
+
+    private void initializeFragment()
+    {
+
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         actionBar = getSherlockActivity().getSupportActionBar();
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         String title = String.format("Meeting    %s", meetingDate);
-
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
@@ -67,14 +77,11 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
-
-       /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLRepayFMeetingDate);
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate); */
-
+        /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLRepayFMeetingDate);
+         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+         lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
         parentActivity = (MeetingActivity) getSherlockActivity();
-
         //Wrap and run long task
         Runnable populatorRunnable = new Runnable()
         {
@@ -86,9 +93,6 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
             }
         };
         LongTaskRunner.runLongTask(populatorRunnable, "Please wait...", "Loading list of loans repaid...", parentActivity);
-
-
-
     }
 
     //Populate Members List
@@ -104,8 +108,8 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        final ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMLRepayFMembers);
-        final TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMLRepayFEmpty);
+        final ListView lvwMembers = (ListView)fragmentView.findViewById(R.id.lvwMLRepayFMembers);
+        final TextView txtEmpty = (TextView)fragmentView.findViewById(R.id.txtMLRepayFEmpty);
 
         Runnable runOnUiRunnable = new Runnable()
         {
@@ -126,7 +130,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
 
                 //Do not invoke the event when in Read only Mode
                 if(parentActivity.isViewOnly()) {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {

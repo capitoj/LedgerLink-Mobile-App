@@ -33,14 +33,17 @@ public class MeetingRollCallFrag extends SherlockFragment {
     int meetingId;
     Meeting selectedMeeting;
     private MeetingActivity parentActivity;
-
+    ScrollView fragmentView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         if (container == null) {
             return null;
         }
-        return (ScrollView)inflater.inflate(R.layout.frag_meeting_rollcall, container, false);
+        fragmentView = (ScrollView)inflater.inflate(R.layout.frag_meeting_rollcall, container, false);
+        reloadFragmentInfo();
+
+        return fragmentView;
     }
 
 
@@ -49,6 +52,11 @@ public class MeetingRollCallFrag extends SherlockFragment {
     {
 
         super.onAttach(activity);
+
+    }
+
+    private void reloadFragmentInfo()
+    {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         parentActivity = (MeetingActivity) getSherlockActivity();
@@ -61,9 +69,6 @@ public class MeetingRollCallFrag extends SherlockFragment {
             selectedMeeting = meetingRepo.getMeetingById(meetingId);
             title = String.format("Meeting    %s", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
         }
-
-
-
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
@@ -76,13 +81,9 @@ public class MeetingRollCallFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
-
-
-
         //TextView lblMeetingDate = (TextView)parentActivity.findViewById(R.id.lblMRCFMeetingDate);
         //meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
         //TODO: Get the Meeting Id from meetingRepo.getCurrentMeeting();
-
         //Wrap this long task in a runnable and run it asynchronously so as to prevent app freezes
         Runnable loaderRunnable = new Runnable() {
             @Override
@@ -90,7 +91,6 @@ public class MeetingRollCallFrag extends SherlockFragment {
                 populateMembersList();
             }
         };
-
         LongTaskRunner.runLongTask(loaderRunnable, "Please wait..", "Loading member list", parentActivity);
     }
 
@@ -113,11 +113,11 @@ public class MeetingRollCallFrag extends SherlockFragment {
         adapter.viewOnly = parentActivity.isViewOnly();
         //Pass on the meeting Id to the adapter
         adapter.setMeetingId(meetingId);
-        final ListView lvwMembers = (ListView)parentActivity.findViewById(R.id.lvwMRCFMembers);
-        final TextView txtEmpty = (TextView)parentActivity.findViewById(R.id.lvwMRCFEmpty);
+        final ListView lvwMembers = (ListView)fragmentView.findViewById(R.id.lvwMRCFMembers);
+        final TextView txtEmpty = (TextView)fragmentView.findViewById(R.id.lvwMRCFEmpty);
 
         Runnable r = new Runnable()
-        {
+            {
             @Override
             public void run()
             {
@@ -137,7 +137,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
 
                 //Do not invoke the event when in Read only Mode
                 if(parentActivity.isViewOnly()) {
-                    Toast.makeText(parentActivity.getBaseContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    Toast.makeText(parentActivity.getBaseContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
