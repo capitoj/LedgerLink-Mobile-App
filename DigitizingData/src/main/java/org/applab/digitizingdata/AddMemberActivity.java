@@ -509,17 +509,7 @@ public class AddMemberActivity extends SherlockActivity {
                 return;
             }
 
-            // Populate the Fields
-            final Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
-            cboAMMemberNo.post(new Runnable()
-            {
-                @Override
-                public void run()
-                {
 
-                    Utils.setSpinnerSelection(member.getMemberNo() + "", cboAMMemberNo);
-                }
-            });
 
 
             TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
@@ -712,6 +702,18 @@ public class AddMemberActivity extends SherlockActivity {
             public void run()
             {
                 cboAMMemberNo.setAdapter(memberNoAdapter);
+                // Populate the Fields
+                if(selectedMember != null) {
+                    cboAMMemberNo.post(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+
+                            Utils.setSpinnerSelection(selectedMember.getMemberNo() + "", cboAMMemberNo);
+                        }
+                    });
+                }
             }
         };
         runOnUiThread(runnable);

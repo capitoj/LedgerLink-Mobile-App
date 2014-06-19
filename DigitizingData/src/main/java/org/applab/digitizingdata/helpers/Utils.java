@@ -357,6 +357,7 @@ public class Utils {
     public static void setSpinnerSelection(String value, Spinner spinner) {
         ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
         int spinnerPosition = adapter.getPosition(value);
+
         spinner.setSelection(spinnerPosition);
     }
 
