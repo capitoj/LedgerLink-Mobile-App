@@ -20,6 +20,7 @@ import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
@@ -53,7 +54,16 @@ public class NewCyclePg2Activity extends SherlockListActivity {
         }
 
         //Populate the Members
-        populateMembersList();
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(runnable, "Please wait...", "Loading member list...", NewCyclePg2Activity.this );
+
     }
 
     /* inflates custom menu bar for review members */
@@ -197,10 +207,19 @@ public class NewCyclePg2Activity extends SherlockListActivity {
         }
 
         // Get the data via the adapter; Pass on font type as well - Hard coded for now
-        MembersCustomArrayAdapter adapter = new MembersCustomArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersCustomArrayAdapter adapter = new MembersCustomArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
-        setListAdapter(adapter);
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                setListAdapter(adapter);
+            }
+        };
+        runOnUiThread(runnable);
+
 
         // listening to single list item on click
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {

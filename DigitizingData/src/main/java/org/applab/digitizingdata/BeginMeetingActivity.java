@@ -258,7 +258,8 @@ public class BeginMeetingActivity extends SherlockActivity {
                 Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                 i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
                 i.putExtra("_meetingId", meeting.getMeetingId());
-                i.putExtra("_viewOnly", false);  //viewing past meeetings should be read only
+                i.putExtra("_currentMeetingId", meeting.getMeetingId());
+                i.putExtra("_viewOnly", false);  //viewing current meeetings should not be read only
                 startActivity(i);
                 return;
 

@@ -98,11 +98,11 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(getSherlockActivity().getApplicationContext());
+        MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        final MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(parentActivity.getBaseContext(), members, "fonts/roboto-regular.ttf");
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
@@ -130,7 +130,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
 
                 //Do not invoke the event when in Read only Mode
                 if(parentActivity.isViewOnly()) {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+                    Toast.makeText(parentActivity.getBaseContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {

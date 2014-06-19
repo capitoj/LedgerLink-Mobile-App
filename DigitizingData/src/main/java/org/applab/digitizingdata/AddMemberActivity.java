@@ -409,7 +409,7 @@ public class AddMemberActivity extends SherlockActivity {
             }
 
             //Validate: OtherNames
-            TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
+            TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherName);
             String otherNames = txtOtherNames.getText().toString().trim();
             if(otherNames.length() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
@@ -521,7 +521,7 @@ public class AddMemberActivity extends SherlockActivity {
             if (member.getSurname() != null) {
                 txtSurname.setText(member.getSurname());
             }
-            TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
+            TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherName);
             if (member.getOtherNames() != null) {
                 txtOtherNames.setText(member.getOtherNames());
             }
@@ -613,7 +613,7 @@ public class AddMemberActivity extends SherlockActivity {
 
         TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
         txtSurname.setText(null);
-        TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
+        TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherName);
         txtOtherNames.setText(null);
         //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
         //txtGender.setText(null);
