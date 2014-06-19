@@ -1,5 +1,6 @@
 package org.applab.digitizingdata;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,9 +12,11 @@ import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersRollCallArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
@@ -74,11 +77,24 @@ public class MeetingSavingsFrag extends SherlockFragment {
         lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
-        //Populate the Members
-        populateMembersList();
-
         parentActivity = (MeetingActivity) getSherlockActivity();
+        //Wrap long task in runnable an run asynchronously
+        Runnable populateRunnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //Populate the Members
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(populateRunnable, "Please wait", "Loading savings information", parentActivity);
+
+
     }
+
+
+
 
     //Populate Members List
     private void populateMembersList() {
@@ -87,17 +103,25 @@ public class MeetingSavingsFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        MembersSavingsArrayAdapter adapter = new MembersSavingsArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersSavingsArrayAdapter adapter = new MembersSavingsArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMSavFMembers);
-        TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMSavFEmpty);
+        final ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMSavFMembers);
+        final TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMSavFEmpty);
 
-        lvwMembers.setEmptyView(txtEmpty);
-        lvwMembers.setAdapter(adapter);
+        parentActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                lvwMembers.setEmptyView(txtEmpty);
+                lvwMembers.setAdapter(adapter);
+            }
+        });
+
 
         // listening to single list item on click
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -103,7 +103,7 @@ public class MemberFinesHistoryActivity extends SherlockActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                        Intent i = new Intent(getBaseContext(), MeetingActivity.class);
                         i.putExtra("_tabToSelect", "fines");
                         i.putExtra("_meetingDate", meetingDate);
                         i.putExtra("_meetingId", meetingId);
@@ -274,6 +274,7 @@ public class MemberFinesHistoryActivity extends SherlockActivity {
                 i.putExtra("_meetingDate", meetingDate);
                 i.putExtra("_meetingId", meetingId);
                 startActivity(i);
+                finish();
                 return true;
             /** case R.id.mnuMSHSave:
 

@@ -1,5 +1,6 @@
 package org.applab.digitizingdata;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersFinesArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
@@ -31,6 +33,7 @@ public class MeetingFinesFrag extends SherlockFragment {
     ArrayList<Member> members;
     String meetingDate;
     int meetingId;
+    private MeetingActivity parentActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,10 +54,19 @@ public class MeetingFinesFrag extends SherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        actionBar = getSherlockActivity().getSupportActionBar();
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+    }
+
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+        parentActivity = (MeetingActivity) getSherlockActivity();
+        actionBar = parentActivity.getSupportActionBar();
+        meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
         String title = String.format("Meeting    %s", meetingDate);
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -69,33 +81,55 @@ public class MeetingFinesFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
 
-        /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
-         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        /** TextView lblMeetingDate = (TextView)parentActivity.findViewById(R.id.lblMSavFMeetingDate);
+         meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */
-        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+        meetingId = parentActivity.getIntent().getIntExtra("_meetingId", 0);
 
-        //Populate the Members
-        populateMembersList();
+
+        //Wrap and run long task
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //Populate the Members
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(runnable, "Please wait", "Loading list of fines...", parentActivity);
+
     }
+
 
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(getSherlockActivity().getApplicationContext());
+        MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(parentActivity.getBaseContext(), members, "fonts/roboto-regular.ttf");
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        ListView lvwMembers = (ListView) getSherlockActivity().findViewById(R.id.lvwMFineMembers);
-        TextView txtEmpty = (TextView) getSherlockActivity().findViewById(R.id.txtMFineEmpty);
+        final ListView lvwMembers = (ListView) getSherlockActivity().findViewById(R.id.lvwMFineMembers);
+        final TextView txtEmpty = (TextView) getSherlockActivity().findViewById(R.id.txtMFineEmpty);
 
-        lvwMembers.setEmptyView(txtEmpty);
-        lvwMembers.setAdapter(adapter);
+        Runnable runOnUiThread = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                lvwMembers.setEmptyView(txtEmpty);
+                lvwMembers.setAdapter(adapter);
+            }
+        };
+        parentActivity.runOnUiThread(runOnUiThread);
+
+
 
         // listening to single list item on click
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -103,7 +137,7 @@ public class MeetingFinesFrag extends SherlockFragment {
                                     int position, long id) {
                 //Do not invoke the event when in Read only Mode
                 if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
-                    Member selectedMember = (Member) members.get(position);
+                    Member selectedMember = members.get(position);
                     Intent i = new Intent(view.getContext(), MemberFinesHistoryActivity.class);
 
                     // Pass on data
@@ -113,6 +147,9 @@ public class MeetingFinesFrag extends SherlockFragment {
                     i.putExtra("_meetingId", meetingId);
 
                     startActivity(i);
+
+                    //parentActivity.finish();
+
                 }
             }
         });

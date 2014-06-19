@@ -1,7 +1,9 @@
 package org.applab.digitizingdata;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +11,14 @@ import android.widget.*;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockListFragment;
 
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersRollCallArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 
@@ -43,17 +43,21 @@ public class MeetingRollCallFrag extends SherlockFragment {
         return (ScrollView)inflater.inflate(R.layout.frag_meeting_rollcall, container, false);
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        actionBar = getSherlockActivity().getSupportActionBar();
-        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+    @Override
+    public void onAttach(Activity activity)
+    {
+
+        super.onAttach(activity);
+
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+        parentActivity = (MeetingActivity) getSherlockActivity();
+        actionBar = parentActivity.getSupportActionBar();
+        meetingId = parentActivity.getIntent().getIntExtra("_meetingId", 0);
         //get date from meeting repo via id
         String title = "Meeting";
         if(meetingId != 0) {
-            MeetingRepo meetingRepo = new MeetingRepo(this.getSherlockActivity().getBaseContext());
+            MeetingRepo meetingRepo = new MeetingRepo(this.parentActivity.getBaseContext());
             selectedMeeting = meetingRepo.getMeetingById(meetingId);
             title = String.format("Meeting    %s", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
         }
@@ -72,36 +76,59 @@ public class MeetingRollCallFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
-        parentActivity = (MeetingActivity) getSherlockActivity();
 
 
-        //TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMRCFMeetingDate);
-        //meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+
+        //TextView lblMeetingDate = (TextView)parentActivity.findViewById(R.id.lblMRCFMeetingDate);
+        //meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
         //TODO: Get the Meeting Id from meetingRepo.getCurrentMeeting();
 
-        //lblMeetingDate.setText(meetingDate);
+        //Wrap this long task in a runnable and run it asynchronously so as to prevent app freezes
+        Runnable loaderRunnable = new Runnable() {
+            @Override
+            public void run() {
+                populateMembersList();
+            }
+        };
 
-        //Populate the Members
-        populateMembersList();
+        LongTaskRunner.runLongTask(loaderRunnable, "Please wait..", "Loading member list", parentActivity);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
     }
 
     //Populate Members List
     private void populateMembersList() {
+
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(getSherlockActivity().getApplicationContext());
+        MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        MembersRollCallArrayAdapter adapter = new MembersRollCallArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersRollCallArrayAdapter adapter = new MembersRollCallArrayAdapter(parentActivity.getBaseContext(), members, "fonts/roboto-regular.ttf");
         //set whether this adapter is view only, to disable changing roll call in view only mode
         adapter.viewOnly = parentActivity.isViewOnly();
         //Pass on the meeting Id to the adapter
         adapter.setMeetingId(meetingId);
-        ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMRCFMembers);
-        TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.lvwMRCFEmpty);
+        final ListView lvwMembers = (ListView)parentActivity.findViewById(R.id.lvwMRCFMembers);
+        final TextView txtEmpty = (TextView)parentActivity.findViewById(R.id.lvwMRCFEmpty);
 
-        lvwMembers.setEmptyView(txtEmpty);
-        lvwMembers.setAdapter(adapter);
+        Runnable r = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                lvwMembers.setEmptyView(txtEmpty);
+                lvwMembers.setAdapter(adapter);
+                Utils.setListViewHeightBasedOnChildren(lvwMembers);
+            }
+        };
+        parentActivity.runOnUiThread(r);
+
+
 
         // listening to single list item on click
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -110,7 +137,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
 
                 //Do not invoke the event when in Read only Mode
                 if(parentActivity.isViewOnly()) {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    Toast.makeText(parentActivity.getBaseContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
@@ -120,29 +147,32 @@ public class MeetingRollCallFrag extends SherlockFragment {
 
     }
 });
-        lvwMembers.setOnItemLongClickListener (new AdapterView.OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
-
+        lvwMembers.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        {
+            public boolean onItemLongClick(AdapterView parent, View view, int position, long id)
+            {
                 //Do not invoke the event when in Read only Mode
-                if(parentActivity.isViewOnly()) {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                if (parentActivity.isViewOnly())
+                {
+                    Toast.makeText(parentActivity.getBaseContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
                     return true;
                 }
-                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
-                    Member selectedMember = (Member)parent.getItemAtPosition(position);
+                if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY)
+                {
+                    Member selectedMember = (Member) parent.getItemAtPosition(position);
                     //Member selectedMember = members.get(position);
                     Intent i = new Intent(view.getContext(), MemberAttendanceHistoryActivity.class);
-
                     // Pass on data
-                    if(selectedMeeting != null) i.putExtra("_meetingDate",selectedMeeting.getMeetingDate());
+                    if (selectedMeeting != null) i.putExtra("_meetingDate", selectedMeeting.getMeetingDate());
                     i.putExtra("_memberId", selectedMember.getMemberId());
                     i.putExtra("_names", selectedMember.toString());
-                    i.putExtra("_meetingId",meetingId);
+                    i.putExtra("_meetingId", meetingId);
                     startActivity(i);
+                    parentActivity.finish();
                 }
                 return true;
             }
         });
-        Utils.setListViewHeightBasedOnChildren(lvwMembers);
+
     }
 }

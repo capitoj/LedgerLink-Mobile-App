@@ -1,5 +1,6 @@
 package org.applab.digitizingdata;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -151,6 +153,13 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         }
     }
 
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //If(enableData)
@@ -287,6 +296,9 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     public boolean isViewOnly() {
         if (getIntent().hasExtra("_viewOnly")) {
             return getIntent().getBooleanExtra("_viewOnly", false);
+        }
+        if(getCurrentMeeting() != null) {
+            return ! getCurrentMeeting().isCurrent();
         }
         return false;
     }
@@ -527,6 +539,4 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             }
         }
     }
-
-
 }

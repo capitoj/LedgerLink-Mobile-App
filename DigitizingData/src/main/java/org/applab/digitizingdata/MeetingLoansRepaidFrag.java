@@ -14,6 +14,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersLoansRepaidArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
@@ -72,11 +73,22 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         lblMeetingDate.setText(meetingDate); */
 
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-
-        //Populate the Members
-        populateMembersList();
-
         parentActivity = (MeetingActivity) getSherlockActivity();
+
+        //Wrap and run long task
+        Runnable populatorRunnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //Populate the Members
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(populatorRunnable, "Please wait...", "Loading list of loans repaid...", parentActivity);
+
+
+
     }
 
     //Populate Members List
@@ -86,17 +98,26 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMLRepayFMembers);
-        TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMLRepayFEmpty);
+        final ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMLRepayFMembers);
+        final TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMLRepayFEmpty);
 
-        lvwMembers.setEmptyView(txtEmpty);
-        lvwMembers.setAdapter(adapter);
+        Runnable runOnUiRunnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                lvwMembers.setEmptyView(txtEmpty);
+                lvwMembers.setAdapter(adapter);
+            }
+        };
+        parentActivity.runOnUiThread(runOnUiRunnable);
+
 
         // listening to single list item on click
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
