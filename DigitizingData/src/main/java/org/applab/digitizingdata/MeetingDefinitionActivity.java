@@ -368,6 +368,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             i.putExtra("_meetingDate",Utils.formatDate(currentMeeting.getMeetingDate(), "dd-MMM-yyyy"));
             i.putExtra("_meetingId",currentMeeting.getMeetingId());
             i.putExtra("_currentMeetingId",currentMeeting.getMeetingId());
+            i.putExtra("_viewOnly", false);
 
             int previousMeetingId = 0;
             if(null != previousMeeting) {
