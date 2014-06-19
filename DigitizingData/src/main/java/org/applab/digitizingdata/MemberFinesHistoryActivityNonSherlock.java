@@ -4,13 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -18,9 +19,12 @@ import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
+import org.applab.digitizingdata.fontutils.TypefaceTextView;
+import org.applab.digitizingdata.helpers.BaseSwipeListViewListener;
 import org.applab.digitizingdata.helpers.FineHistoryArrayAdapter;
 import org.applab.digitizingdata.helpers.MemberFineRecord;
 import org.applab.digitizingdata.helpers.SwipeDetector;
+import org.applab.digitizingdata.helpers.SwipeListView;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
@@ -31,7 +35,7 @@ import java.util.ArrayList;
 /**
  * Created by Moses on 7/7/13.
  */
-public class MemberFinesHistoryActivityOldCopy extends SherlockListActivity {
+public class MemberFinesHistoryActivityNonSherlock extends SherlockActivity {
     ActionBar actionBar;
     String meetingDate;
     int memberId;
@@ -42,6 +46,9 @@ public class MemberFinesHistoryActivityOldCopy extends SherlockListActivity {
     ArrayList<MemberFineRecord> fines;
     int targetCycleId = 0;
     boolean proceedWithSaving = false;
+    SwipeListView fineSwipeListView;
+    TypefaceTextView noHistoryText;
+
     boolean alertDialogShowing = false;
     SwipeDetector swipeDetector = new SwipeDetector();
 
@@ -55,9 +62,11 @@ public class MemberFinesHistoryActivityOldCopy extends SherlockListActivity {
     private static final String PREF_SWIPE_DIRECTION = "de.timroes.android.listviewdemo.SWIPE_DIRECTION";
     private static final String PREF_SWIPE_LAYOUT = "de.timroes.android.listviewdemo.SWIPE_LAYOUT";
 
-    /**private EnhancedListAdapter mAdapter;
-    private EnhancedListView mListView;
-    private DrawerLayout mDrawerLayout; */
+    /**
+     * private EnhancedListAdapter mAdapter;
+     * private EnhancedListView mListView;
+     * private DrawerLayout mDrawerLayout;
+     */
 
     private Bundle mUndoStylePref;
     private Bundle mSwipeDirectionPref;
@@ -91,7 +100,7 @@ public class MemberFinesHistoryActivityOldCopy extends SherlockListActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                        Intent i = new Intent(getBaseContext(), MeetingActivity.class);
                         i.putExtra("_tabToSelect", "fines");
                         i.putExtra("_meetingDate", meetingDate);
                         i.putExtra("_meetingId", meetingId);
@@ -119,9 +128,56 @@ public class MemberFinesHistoryActivityOldCopy extends SherlockListActivity {
 
         setContentView(R.layout.activity_member_fines_history);
 
-        /**    TextView lblMeetingDate = (TextView)findViewById(R.id.lblMSHMeetingDate);
-         meetingDate = getIntent().getStringExtra("_meetingDate");
-         lblMeetingDate.setText(meetingDate); */
+      /**  fineSwipeListView = (SwipeListView) findViewById(R.id.list);
+
+        fineSwipeListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+            @Override
+            public void onOpened(int position, boolean toRight) {
+            }
+
+            @Override
+            public void onClosed(int position, boolean fromRight) {
+            }
+
+            @Override
+            public void onListChanged() {
+            }
+
+            @Override
+            public void onMove(int position, float x) {
+            }
+
+            @Override
+            public void onStartOpen(int position, int action, boolean right) {
+                Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
+            }
+
+            @Override
+            public void onStartClose(int position, boolean right) {
+                Log.d("SWIPE", String.format("onStartClose %d", position));
+            }
+
+            @Override
+            public void onClickFrontView(int position) {
+                Log.d("SWIPE", String.format("onClickFrontView %d", position));
+
+                fineSwipeListView.openAnimate(position); //when you touch front view it will open
+
+            }
+
+            @Override
+            public void onClickBackView(int position) {
+                Log.d("SWIPE", String.format("onClickBackView %d", position));
+
+                fineSwipeListView.closeAnimate(position);//when you touch back view it will close
+            }
+
+            @Override
+            public void onDismiss(int[] reverseSortedPositions) {
+
+            }
+
+        });
 
         TextView lblFullName = (TextView) findViewById(R.id.lblFineFullName);
         String fullName = getIntent().getStringExtra("_name");
@@ -135,8 +191,8 @@ public class MemberFinesHistoryActivityOldCopy extends SherlockListActivity {
             memberId = getIntent().getIntExtra("_memberId", 0);
         }
 
-        fineRepo = new MeetingFineRepo(MemberFinesHistoryActivityOldCopy.this);
-        meetingRepo = new MeetingRepo(MemberFinesHistoryActivityOldCopy.this);
+        fineRepo = new MeetingFineRepo(MemberFinesHistoryActivityNonSherlock.this);
+        meetingRepo = new MeetingRepo(MemberFinesHistoryActivityNonSherlock.this);
         targetMeeting = meetingRepo.getMeetingById(meetingId);
 
         if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
@@ -150,38 +206,31 @@ public class MemberFinesHistoryActivityOldCopy extends SherlockListActivity {
 
     private void populateFineHistory() {
         if (fineRepo == null) {
-            fineRepo = new MeetingFineRepo(MemberFinesHistoryActivityOldCopy.this);
+            fineRepo = new MeetingFineRepo(MemberFinesHistoryActivityNonSherlock.this);
         }
         fines = fineRepo.getMemberFineHistoryInCycle(targetCycleId, memberId);
 
         if (fines == null) {
             fines = new ArrayList<MemberFineRecord>();
+
         }
 
         //Now get the data via the adapter
-        FineHistoryArrayAdapter adapter = new FineHistoryArrayAdapter(MemberFinesHistoryActivityOldCopy.this, fines, "fonts/roboto-regular.ttf");
+        FineHistoryArrayAdapter adapter = new FineHistoryArrayAdapter(MemberFinesHistoryActivityNonSherlock.this, fines, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
-        setListAdapter(adapter);
+        // setListAdapter(adapter);
 
-  /**      getListView().setOnTouchListener(swipeDetector);
+        fineSwipeListView.setAdapter(adapter);
 
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                if (swipeDetector.swipeDetected()) {
-                    if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
-                       // view.setBackgroundColor(R.color.light_blue_bottom_right);
-                    } else {
-
-                    }
-                }
-            }
-
-        });*/
+        fineSwipeListView.setSwipeMode(SwipeListView.SWIPE_MODE_LEFT); // there are five swiping modes
+        fineSwipeListView.setSwipeActionLeft(SwipeListView.SWIPE_ACTION_REVEAL);
+        fineSwipeListView.setAnimationTime(50); // Animation time
+        fineSwipeListView.setSwipeOpenOnLongPress(true); // enable or disable SwipeOpenOnLongPress
+*/
 
         //Hack to ensure all Items in the List View are visible
-        Utils.setListViewHeightBasedOnChildren(getListView());
+        Utils.setListViewHeightBasedOnChildren(fineSwipeListView);
     }
 
     @Override
@@ -217,11 +266,12 @@ public class MemberFinesHistoryActivityOldCopy extends SherlockListActivity {
                 }
                 return true;
             case R.id.mnuMFBack:
-                i = new Intent(MemberFinesHistoryActivityOldCopy.this, MeetingActivity.class);
+                i = new Intent(MemberFinesHistoryActivityNonSherlock.this, MeetingActivity.class);
                 i.putExtra("_tabToSelect", "fines");
                 i.putExtra("_meetingDate", meetingDate);
                 i.putExtra("_meetingId", meetingId);
                 startActivity(i);
+                finish();
                 return true;
             /** case R.id.mnuMSHSave:
 
