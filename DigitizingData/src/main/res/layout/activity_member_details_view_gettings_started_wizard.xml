@@ -71,14 +71,14 @@
             android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                android:id="@+id/lblAMOtherNames"
+                android:id="@+id/lblAMOtherName"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Other names" />
+                android:text="Other name" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
-                android:id="@+id/txtAMOtherNames"
+                android:id="@+id/txtAMOtherName"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -188,7 +188,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Number of cycles member completed" />
-
 
             <Spinner
                 android:id="@+id/cboAMCycles"

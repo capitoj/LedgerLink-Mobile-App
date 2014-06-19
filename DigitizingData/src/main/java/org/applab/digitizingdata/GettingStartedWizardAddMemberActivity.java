@@ -502,7 +502,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 member.setSurname(surname);
             }
             //Validate: OtherNames
-            TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherNames);
+            TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
             String otherNames = txtOtherNames.getText().toString().trim();
             if (otherNames.length() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
@@ -610,6 +610,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             if (member == null) {
                 return;
             }
+
             // Populate the Fields
             Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
             Utils.setSpinnerSelection(member.getMemberNo() + "", cboAMMemberNo);
@@ -617,7 +618,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             if (member.getSurname() != null) {
                 txtSurname.setText(member.getSurname());
             }
-            TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherNames);
+            TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
             if (member.getOtherNames() != null) {
                 txtOtherNames.setText(member.getOtherNames());
             }
@@ -673,7 +674,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         //txtMemberNo.setText(null);
         TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
         txtSurname.setText(null);
-        TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherNames);
+        TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
         txtOtherNames.setText(null);
         //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
         //txtGender.setText(null);

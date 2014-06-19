@@ -46,12 +46,11 @@ public class AddMemberActivity extends SherlockActivity {
     private boolean selectedFinishButton = false;
     private String dlgTitle = "Add Member";
     private int meetingId;
-   private MeetingFineRepo fineRepo;
+    private MeetingFineRepo fineRepo;
     private MeetingRepo meetingRepo;
     MemberRepo repo;
     Meeting targetMeeting;
     private boolean isEditAction;
-
 
 
     @Override
@@ -59,13 +58,13 @@ public class AddMemberActivity extends SherlockActivity {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        if(getIntent().hasExtra("_meetingId")) {
+        if (getIntent().hasExtra("_meetingId")) {
             meetingId = getIntent().getIntExtra("_meetingId", 0);
         }
-        if(getIntent().hasExtra("_id")){
-            this.selectedMemberId = getIntent().getIntExtra("_id",0);
+        if (getIntent().hasExtra("_id")) {
+            this.selectedMemberId = getIntent().getIntExtra("_id", 0);
         }
-        if(getIntent().hasExtra("_isEditAction")){
+        if (getIntent().hasExtra("_isEditAction")) {
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction", false);
         }
 
@@ -83,9 +82,8 @@ public class AddMemberActivity extends SherlockActivity {
         setContentView(R.layout.activity_add_member);
 
 
-
         //Setup the Spinner Items
-        Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
+        Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
         String[] genderList = new String[]{"Male", "Female"};
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList)
 
@@ -123,14 +121,14 @@ public class AddMemberActivity extends SherlockActivity {
         cboGender.setClickable(true);
 
         clearDataFields();
-        if(isEditAction){
+        if (isEditAction) {
             repo = new MemberRepo(getApplicationContext());
             selectedMember = repo.getMemberById(selectedMemberId);
             populateDataFields(selectedMember);
         }
     }
 
-    private void inflateCustomActionBar(){
+    private void inflateCustomActionBar() {
 
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
@@ -139,7 +137,7 @@ public class AddMemberActivity extends SherlockActivity {
         View customActionBarView = null;
         actionBar = getSupportActionBar();
 
-        if(isEditAction) {
+        if (isEditAction) {
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
             customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                     new View.OnClickListener() {
@@ -149,18 +147,19 @@ public class AddMemberActivity extends SherlockActivity {
                             saveMemberData();
                             finish();
                         }
-                    });
+                    }
+            );
             customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             finish();
                         }
-                    });
+                    }
+            );
 
             actionBar.setTitle("Edit Member");
-        }
-        else {
+        } else {
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_next_cancel, null);
             customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                     new View.OnClickListener() {
@@ -170,36 +169,50 @@ public class AddMemberActivity extends SherlockActivity {
                             saveMemberData();
                             finish();
                         }
-                    });
+                    }
+            );
             customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             saveMemberData();
                         }
-                    });
+                    }
+            );
             customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             finish();
                         }
-                    });
+                    }
+            );
 
 
-            actionBar.setTitle("New Member");
+            // actionBar.setTitle("New Member");
         }
 
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        // actionBar.setDisplayShowTitleEnabled(true);
+        //actionBar.setDisplayHomeAsUpEnabled(false);
 
+        /** actionBar.setCustomView(customActionBarView,
+         new ActionBar.LayoutParams(
+         ViewGroup.LayoutParams.WRAP_CONTENT,
+         ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+         ); */
+        actionBar.setDisplayOptions(
+                ActionBar.DISPLAY_SHOW_CUSTOM,
+                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_SHOW_TITLE
+        );
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL)
         );
 
-        actionBar.setDisplayShowCustomEnabled(true);
+
+        //actionBar.setDisplayShowCustomEnabled(true);
     }
 
     @Override
@@ -211,7 +224,7 @@ public class AddMemberActivity extends SherlockActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MainActivity.class);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
@@ -248,8 +261,7 @@ public class AddMemberActivity extends SherlockActivity {
             boolean retVal = false;
             if (member.getMemberId() != 0) {
                 retVal = repo.updateMember(member);
-            }
-            else {
+            } else {
                 retVal = repo.addMember(member);
 
             }
@@ -260,30 +272,27 @@ public class AddMemberActivity extends SherlockActivity {
                     //Otherwise they will assume the value of the selectedMember variable because it is not null
                     selectedMember = member;
 
-                    if(selectedFinishButton) {
-                        Toast toast = Toast.makeText(this,"The new member was added successfully.",Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.LEFT,0,0);
+                    if (selectedFinishButton) {
+                        Toast toast = Toast.makeText(this, "The new member was added successfully.", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.LEFT, 0, 0);
                         toast.show();
-                        if(Utils._membersAccessedFromNewCycle) {
+                        if (Utils._membersAccessedFromNewCycle) {
                             Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
                             i.putExtra("_isUpdateCycleAction", false);
                             startActivity(i);
-                        }
-                        else if(Utils._membersAccessedFromEditCycle) {
+                        } else if (Utils._membersAccessedFromEditCycle) {
                             Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
                             i.putExtra("_isUpdateCycleAction", true);
                             startActivity(i);
-                        }
-                        else {
+                        } else {
                             Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
                             startActivity(i);
                         }
                         Utils._membersAccessedFromNewCycle = false;
                         Utils._membersAccessedFromEditCycle = false;
-                    }
-                    else {
-                        Toast toast = Toast.makeText(this,"The new member was added successfully. Add another member.",Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.LEFT,0,0);
+                    } else {
+                        Toast toast = Toast.makeText(this, "The new member was added successfully. Add another member.", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.LEFT, 0, 0);
                         toast.show();
                         //Clear the Fields and keep adding new records
                         clearDataFields();
@@ -327,9 +336,8 @@ public class AddMemberActivity extends SherlockActivity {
                     });
                     dlg.show();
                     */
-                }
-                else {
-                    Toast.makeText(this,"The member was updated successfully.",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "The member was updated successfully.", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
                     startActivity(i);
 
@@ -358,13 +366,11 @@ public class AddMemberActivity extends SherlockActivity {
 
                 successFlg = true;
                 //clearDataFields(); //Not needed now
-            }
-            else {
+            } else {
                 dlg = Utils.createAlertDialogOk(AddMemberActivity.this, "Add Member", "A problem occurred while adding the new member.", Utils.MSGBOX_ICON_TICK);
                 dlg.show();
             }
-        }
-        else {
+        } else {
             //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
         }
 
@@ -373,7 +379,7 @@ public class AddMemberActivity extends SherlockActivity {
 
     protected boolean validateData(Member member) {
         try {
-            if(null == member) {
+            if (null == member) {
                 return false;
             }
             repo = new MemberRepo(getApplicationContext());
@@ -391,26 +397,24 @@ public class AddMemberActivity extends SherlockActivity {
             }
 
             //Validate: Surname
-            TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
+            TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
             String surname = txtSurname.getText().toString().trim();
-            if(surname.length() < 1) {
+            if (surname.length() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtSurname.requestFocus();
                 return false;
-            }
-            else {
+            } else {
                 member.setSurname(surname);
             }
 
             //Validate: OtherNames
-            TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
+            TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
             String otherNames = txtOtherNames.getText().toString().trim();
-            if(otherNames.length() < 1) {
+            if (otherNames.length() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtOtherNames.requestFocus();
                 return false;
-            }
-            else {
+            } else {
                 member.setOtherNames(otherNames);
             }
 
@@ -440,27 +444,25 @@ public class AddMemberActivity extends SherlockActivity {
             }
 
             //Validate: Occupation
-            TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
+            TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
             String occupation = txtOccupation.getText().toString().trim();
-            if(occupation.length() < 1) {
+            if (occupation.length() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtOccupation.requestFocus();
                 return false;
-            }
-            else {
+            } else {
                 member.setOccupation(occupation);
             }
 
             //Validate: PhoneNumber
-            TextView txtPhoneNo = (TextView)findViewById(R.id.txtAMPhoneNo);
+            TextView txtPhoneNo = (TextView) findViewById(R.id.txtAMPhoneNo);
             String phoneNo = txtPhoneNo.getText().toString().trim();
-            if(phoneNo.length() < 1) {
+            if (phoneNo.length() < 1) {
                 //Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Phone Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtPhoneNo.requestFocus();
                 //return false;
                 member.setPhoneNumber(null);
-            }
-            else {
+            } else {
                 member.setPhoneNumber(phoneNo);
             }
 
@@ -486,15 +488,14 @@ public class AddMemberActivity extends SherlockActivity {
 
             //Final Verifications
             //TODO: Trying to use Application context to ensure dialog box does not disappear
-            if(!repo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId())) {
+            if (!repo.isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
                 Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAMMemberNo.requestFocus();
                 return false;
             }
 
             return true;
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
@@ -512,27 +513,27 @@ public class AddMemberActivity extends SherlockActivity {
             Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
             Utils.setSpinnerSelection(member.getMemberNo() + "", cboAMMemberNo);
 
-            TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
+            TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
             if (member.getSurname() != null) {
                 txtSurname.setText(member.getSurname());
             }
-            TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
+            TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
             if (member.getOtherNames() != null) {
                 txtOtherNames.setText(member.getOtherNames());
             }
 
-            Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
-            if(member.getGender() != null) {
-                if(member.getGender().startsWith("F") || member.getGender().startsWith("f")){
+            Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
+            if (member.getGender() != null) {
+                if (member.getGender().startsWith("F") || member.getGender().startsWith("f")) {
                     cboGender.setSelection(1);
                 }
             }
 
-            TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
+            TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
             if (member.getOccupation() != null) {
                 txtOccupation.setText(member.getOccupation());
             }
-            TextView txtPhone = (TextView)findViewById(R.id.txtAMPhoneNo);
+            TextView txtPhone = (TextView) findViewById(R.id.txtAMPhoneNo);
             if (member.getPhoneNumber() != null) {
                 txtPhone.setText(member.getPhoneNumber());
             }
@@ -555,8 +556,7 @@ public class AddMemberActivity extends SherlockActivity {
             Utils.setSpinnerSelection(cycles + "", cboAMCycles);
 
 
-        }
-        finally {
+        } finally {
 
         }
 
@@ -573,15 +573,15 @@ public class AddMemberActivity extends SherlockActivity {
         // Populate the Fields
         Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
 
-        TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
+        TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
         txtSurname.setText(null);
-        TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherNames);
+        TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
         txtOtherNames.setText(null);
         //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
         //txtGender.setText(null);
-        TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
+        TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
         txtOccupation.setText(null);
-        TextView txtPhone = (TextView)findViewById(R.id.txtAMPhoneNo);
+        TextView txtPhone = (TextView) findViewById(R.id.txtAMPhoneNo);
         txtPhone.setText(null);
 
         cboAMMemberNo.requestFocus();

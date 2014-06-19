@@ -113,7 +113,6 @@ public class MeetingFinesFrag extends SherlockFragment {
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
-        //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
         final ListView lvwMembers = (ListView) getSherlockActivity().findViewById(R.id.lvwMFineMembers);
         final TextView txtEmpty = (TextView) getSherlockActivity().findViewById(R.id.txtMFineEmpty);
