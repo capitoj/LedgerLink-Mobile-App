@@ -147,8 +147,10 @@ public class AddMemberActivity extends SherlockActivity {
                         @Override
                         public void onClick(View v) {
                             selectedFinishButton = true;
-                            saveMemberData();
-                            finish();
+                            if(saveMemberData())
+                            {
+                                finish();
+                            }
                         }
                     });
             customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
@@ -180,9 +182,12 @@ public class AddMemberActivity extends SherlockActivity {
                         }
                     });
             customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                    new View.OnClickListener() {
+                    new View.OnClickListener()
+                    {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View v)
+                        {
+
                             finish();
                         }
                     });
@@ -524,6 +529,9 @@ public class AddMemberActivity extends SherlockActivity {
             Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
             if(member.getGender() != null) {
                 if(member.getGender().startsWith("F") || member.getGender().startsWith("f")){
+                    cboGender.setSelection(2);
+                }
+                else if(member.getGender().startsWith("M") || member.getGender().startsWith("m")){
                     cboGender.setSelection(1);
                 }
             }
