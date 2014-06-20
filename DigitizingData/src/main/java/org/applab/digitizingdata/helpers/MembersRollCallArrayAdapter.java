@@ -67,7 +67,7 @@ Typeface typeface;
             View rowView = inflater.inflate(R.layout.row_member_roll_call_2, parent, false);
 
             //Get the Widgets
-            //final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMRCFullNames);
+            //final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMRCFullName);
             //final CheckBox chkAttendance = (CheckBox)rowView.findViewById(R.id.chkRMRCAttendance);
             final CheckBox chkAttendance = (CheckBox)rowView.findViewById(R.id.chkRMRCallAttendance);
             final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMRCallFullNames);

@@ -25,7 +25,7 @@
                 android:id="@+id/lblAMMemberNo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Member Number *:" />
+                android:text="Member Number *" />
 
             <Spinner
                 android:id="@+id/cboAMMemberNo"
@@ -65,14 +65,14 @@
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
-                android:id="@+id/lblAMOtherName"
+                android:id="@+id/lblAMOtherNames"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Other Names *" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
-                android:id="@+id/txtAMOtherName"
+                android:id="@+id/txtAMOtherNames"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
@@ -90,7 +90,7 @@
                 android:id="@+id/lblAMGender"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Gender *" />
+                android:text="Sex(M/F) *" />
             <!--
             <EditText
                     android:id="@+id/txtAMGender"
@@ -166,7 +166,7 @@
                 android:id="@+id/lblAMPhone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Phone Number" />
+                android:text="Phone number" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
@@ -188,7 +188,7 @@
                 android:id="@+id/lblAMCyclesCompleted"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Number of cycles completed" />
+                android:text="Number of cycles member completed" />
 
             <Spinner
                 android:id="@+id/cboAMCycles"

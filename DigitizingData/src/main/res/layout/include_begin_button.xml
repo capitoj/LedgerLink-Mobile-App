@@ -11,9 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingRight="1dip"
+        android:paddingRight="3dip"
         android:drawableLeft="@drawable/begin_meeting_24"
-        android:drawablePadding="1dip"
+        android:drawablePadding="6dip"
         android:gravity="center_vertical"
         android:text="begin" />
 </FrameLayout>

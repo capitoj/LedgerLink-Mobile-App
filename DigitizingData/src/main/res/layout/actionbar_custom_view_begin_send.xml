@@ -5,8 +5,19 @@
               android:orientation="horizontal"
               android:divider="?android:attr/dividerVertical"
               android:showDividers="middle"
-              android:dividerPadding="5dp">
+              android:dividerPadding="12dp">
 
-    <include layout="@layout/include_begin_button" />
-    <include layout="@layout/include_send_button" />
+    <include layout="@layout/include_begin_button"
+        android:layout_width="80dip"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="6dip"
+        android:layout_marginRight="2dip"
+        android:layout_marginTop="6dip"/>
+
+    <include layout="@layout/include_send_button"
+        android:layout_width="80dip"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="6dip"
+        android:layout_marginRight="2dip"
+        android:layout_marginTop="6dip" />
 </LinearLayout>

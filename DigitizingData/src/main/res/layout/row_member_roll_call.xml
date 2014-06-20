@@ -16,11 +16,10 @@
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/RegularText"
-        android:id="@+id/txtRMRCFullNames"
+        android:id="@+id/txtRMRCFullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/chkRMRCAttendance"
-        android:padding="5dp"
         android:text="FULL NAME" />
 
 

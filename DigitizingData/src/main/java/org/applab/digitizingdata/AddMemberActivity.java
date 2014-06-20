@@ -97,7 +97,8 @@ public class AddMemberActivity extends SherlockActivity {
 
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+               // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }
@@ -431,6 +432,7 @@ public class AddMemberActivity extends SherlockActivity {
                 String gender = cboGender.getSelectedItem().toString().trim();
                 member.setGender(gender);
             }
+
             // Validate: Age
             Spinner cboAge = (Spinner) findViewById(R.id.cboAMAge);
             if (cboAge.getSelectedItemPosition() == 0) {
@@ -636,7 +638,8 @@ public class AddMemberActivity extends SherlockActivity {
 
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }
@@ -687,7 +690,8 @@ public class AddMemberActivity extends SherlockActivity {
 
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }
@@ -751,7 +755,8 @@ public class AddMemberActivity extends SherlockActivity {
 
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }
@@ -792,7 +797,8 @@ public class AddMemberActivity extends SherlockActivity {
 
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }

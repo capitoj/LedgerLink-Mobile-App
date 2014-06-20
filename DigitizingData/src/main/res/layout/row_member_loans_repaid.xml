@@ -4,41 +4,36 @@
     android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
         android:id="@+id/txtRMLRepayFullName"
+        style="@style/RegularTextListItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:padding="5dp"
-        android:text="FULL NAMES" />
+        android:layout_alignParentTop="true"
+        android:text="0. FULL NAME" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
         android:id="@+id/txtRMLRepayTodaysRepay"
+        style="@style/ListSubItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLRepayFullName"
-        android:paddingLeft="5dp"
         android:text="Paid Today: 5,000UGX" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
         android:id="@+id/txtRMLRepayBalance"
+        style="@style/ListSubItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLRepayTodaysRepay"
-        android:paddingLeft="5dp"
         android:text="Loan Balance: 60,000UGX" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
         android:id="@+id/txtRMLRepayDateDue"
+        style="@style/ListSubItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLRepayBalance"
-        android:paddingLeft="5dp"
         android:text="Date Due: 01-Jan-2013" />
-
 
 </RelativeLayout>

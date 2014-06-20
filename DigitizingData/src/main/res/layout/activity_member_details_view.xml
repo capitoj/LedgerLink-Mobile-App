@@ -19,14 +19,14 @@
                 android:id="@+id/lblMDVMemberNo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Member number:" />
+                android:text="Member Number" />
 
-            <Spinner
-                android:id="@+id/cboMDVMemberNo"
-                style="@style/NormalEditText"
-                android:layout_width="200dip"
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
+                android:id="@+id/txtMDVMemberNo"
+                android:text="100"/>
         </LinearLayout>
 
         <LinearLayout
@@ -58,18 +58,18 @@
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
-                android:id="@+id/lblMDVOtherName"
+                android:id="@+id/lblMDVOtherNames"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="normal"
-                android:text="Other name" />
+                android:text="Other Names" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Moses Oscar"
-                android:id="@+id/txtMDVOtherName" />
+                android:id="@+id/txtMDVOtherNames" />
         </LinearLayout>
 
         <LinearLayout
@@ -83,15 +83,14 @@
                 android:id="@+id/lblMDVGender"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Gender" />
+                android:text="Sex (M/F)" />
 
-            <Spinner
-                android:id="@+id/cboMDVGender"
-                style="@style/NormalEditText"
-                android:layout_width="200dip"
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:prompt="@string/add_member_gender_prompt"
-                android:spinnerMode="dropdown" />
+                android:text="Male"
+                android:id="@+id/txtMDVGender" />
         </LinearLayout>
 
         <LinearLayout
@@ -107,13 +106,12 @@
                 android:layout_height="wrap_content"
                 android:text="Age" />
 
-            <Spinner
-                android:id="@+id/cboMDVAge"
-                style="@style/NormalEditText"
-                android:layout_width="200dip"
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:prompt="@string/add_member_gender_prompt"
-                android:spinnerMode="dropdown" />
+                android:text="27"
+                android:id="@+id/txtMDVAge" />
         </LinearLayout>
 
         <LinearLayout
@@ -127,7 +125,7 @@
                 android:id="@+id/lblMDVOccupation"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Occupation" />
+                android:text="What does this member do to make money?" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -148,7 +146,7 @@
                 android:id="@+id/lblMDVPhone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Phone Number" />
+                android:text="Phone number" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -169,14 +167,14 @@
                 android:id="@+id/lblMDVCyclesCompleted"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Number of cycles completed" />
+                android:text="Number of cycles member completed" />
 
-            <Spinner
-                android:id="@+id/cboMDVCyclesCompleted"
-                style="@style/NormalEditText"
-                android:layout_width="200dip"
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
+                android:text="3"
+                android:id="@+id/txtMDVCyclesCompleted" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

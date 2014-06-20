@@ -310,6 +310,71 @@ public class MeetingRepo {
         }
     }
 
+    public ArrayList<Meeting> getAllNonGSWMeetings() {
+        ArrayList<Meeting> meetings = null;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        int _isGSW = 0;
+        VslaCycleRepo cycleRepo = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            meetings = new ArrayList<Meeting>();
+            String columnList = MeetingSchema.getColumnList();
+
+            cycleRepo = new VslaCycleRepo(context);
+
+            // Select All Query
+            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC", columnList, MeetingSchema.getTableName(),
+                    MeetingSchema.COL_MT_IS_GETTINGS_STARTED_WIZARD, _isGSW, MeetingSchema.COL_MT_MEETING_ID);
+            cursor = db.rawQuery(selectQuery, null);
+
+            // looping through all rows and adding to list
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    Meeting meeting = new Meeting();
+                    Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                    meeting.setMeetingDate(meetingDate);
+                    meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
+                    meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTINGS_STARTED_WIZARD)) == 1);
+                    meeting.setIsCurrent(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_CURRENT)) == 1);
+
+                    //Check for Nulls while loading the VSLA Cycle
+                    int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
+                    meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
+                    if(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                        meeting.setMeetingDataSent(true);
+                        Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                        meeting.setDateSent(dateMeetingDataSent);
+                    }
+                    else {
+                        meeting.setMeetingDataSent(false);
+                    }
+
+                    meetings.add(meeting);
+
+                } while (cursor.moveToNext());
+            }
+
+            // return the list
+            return meetings;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRepo.getMeeting", ex.getMessage());
+            return null;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
     public ArrayList<Meeting> getAllMeetingsByDataSentStatus(boolean isDataSent) {
         ArrayList<Meeting> meetings = null;
         SQLiteDatabase db = null;

@@ -139,7 +139,6 @@ public class VslaCycleRepo {
         }
     }
 
-
     //Creates the dummy GSW meeting
     public boolean createGettingStartedDummyMeeting(VslaCycle currentCycle) {
         Meeting meeting = new Meeting();

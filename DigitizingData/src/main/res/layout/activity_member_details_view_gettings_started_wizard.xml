@@ -235,8 +235,7 @@
                     style="@style/NormalEditText"
                     android:layout_width="200dip"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:text="0"/>
+                    android:inputType="number"/>
 
                 <org.applab.digitizingdata.fontutils.TypefaceTextView
                     android:id="@+id/lblNCCurrency"
@@ -264,8 +263,7 @@
                     style="@style/NormalEditText"
                     android:layout_width="200dip"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:text="0"/>
+                    android:inputType="number"/>
 
                 <org.applab.digitizingdata.fontutils.TypefaceTextView
                     android:id="@+id/lblNCCurrency"

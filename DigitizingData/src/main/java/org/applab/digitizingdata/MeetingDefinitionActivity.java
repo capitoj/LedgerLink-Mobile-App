@@ -66,8 +66,6 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         inflateCustomBar();
 
-
-
         setContentView(R.layout.activity_meeting_definition);
 
         repo = new MeetingRepo(MeetingDefinitionActivity.this);
@@ -76,14 +74,14 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
 
         //Deal with the radio buttons
-        RadioGroup grpCycleDates = (RadioGroup)findViewById(R.id.grpMDExistingCycles);
+        RadioGroup grpCycleDates = (RadioGroup) findViewById(R.id.grpMDExistingCycles);
 
         //Retrieve all the active cycles
         ArrayList<VslaCycle> activeCycles = cycleRepo.getActiveCycles();
 
         //Create radio buttons dynamically
-        if(activeCycles != null) {
-            for(VslaCycle cycle: activeCycles) {
+        if (activeCycles != null) {
+            for (VslaCycle cycle : activeCycles) {
                 RadioButton radCycle = new RadioButton(this);
                 String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), "dd MMM yyyy"),
                         Utils.formatDate(cycle.getEndDate(), "dd MMM yyyy"));
@@ -97,16 +95,16 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 //radCycle.setTextColor(txtMeetingDate.getTextColors());
                 grpCycleDates.addView(radCycle);
 
-                if(activeCycles.size() == 1) {
+                if (activeCycles.size() == 1) {
                     radCycle.setChecked(true);
                 }
             }
         }
 
-        if(activeCycles != null && activeCycles.size()>0) {
+        if (activeCycles != null && activeCycles.size() > 0) {
             //Populate Fields
-            if(activeCycles.size() == 1) {
-                if(selectedCycle == null) {
+            if (activeCycles.size() == 1) {
+                if (selectedCycle == null) {
                     selectedCycle = activeCycles.get(0);
                 }
 
@@ -115,16 +113,14 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 //                        .append(". If your cycle has ended, enter the share out date.")
 //                        .toString()
 //                );
-            }
-            else {
+            } else {
 //                txtInstructions.setText(new StringBuilder()
 //                        .append("There is more than one cycle currently running.\n")
 //                        .append("Select the cycle to end and enter the share out date.")
 //                        .toString()
 //                );
             }
-        }
-        else {
+        } else {
 //            txtInstructions.setText(new StringBuilder()
 //                    .append("There is no cycle that is currently running")
 //                    .toString()
@@ -132,14 +128,13 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         }
 
         //Setup the Checked Listener
-        grpCycleDates.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        grpCycleDates.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 RadioButton radChecked = (RadioButton) findViewById(checkedId);
-                selectedCycle = (VslaCycle)radChecked.getTag();
+                selectedCycle = (VslaCycle) radChecked.getTag();
 
                 //Setup the Previous Meeting at this point so that it holds the meeting of the selected Cycle
-                if(null != selectedCycle) {
+                if (null != selectedCycle) {
                     previousMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
                 }
                 //Toast.makeText(getApplicationContext(), "Selected VSLA Cycle is: " + Utils.formatDate(selectedCycle.getStartDate()),Toast.LENGTH_LONG).show();
@@ -147,7 +142,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         });
 
         //TODO: This will be deprecated after the introduction of multi-cycle support
-        if(null != selectedCycle) {
+        if (null != selectedCycle) {
             previousMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
         }
 
@@ -157,22 +152,22 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         //sb.append("To return to the main menu without starting a new meeting, select <b><i>cancel</i></b>. ");
         //sb.append("If necessary, tap date to select a date in the past. You may not select a date in the future.");
 
-        StringBuilder sb = new StringBuilder("View the date below and tap it to change if it is not the correct meeting date. (You may not select a date in the future.) Tap the arrow above to begin the meeting.");
+        StringBuilder sb = new StringBuilder("View the date below and tap to change if it is not the correct meeting date. (You may not pick a date in the future.) When it is correct, tap the arrow above to begin the meeting.");
 
-        TextView txtInstructions = (TextView)findViewById(R.id.lblMDHeader);
+        TextView txtInstructions = (TextView) findViewById(R.id.lblMDHeader);
         txtInstructions.setText(Html.fromHtml(sb.toString()));
 
-        txtMeetingDate = (TextView)findViewById(R.id.txtMDMeetingDate);
+        txtMeetingDate = (TextView) findViewById(R.id.txtMDMeetingDate);
         viewClicked = txtMeetingDate;
         initializeDate();
 
         //Set onClick Listeners to load the DateDialog for MeetingDate
-        txtMeetingDate.setOnClickListener( new View.OnClickListener() {
+        txtMeetingDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //I want the Event Handler to handle both startDate and endDate
-                viewClicked = (TextView)view;
-                DatePickerDialog datePickerDialog = new DatePickerDialog( MeetingDefinitionActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                viewClicked = (TextView) view;
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MeetingDefinitionActivity.this, mDateSetListener, mYear, mMonth, mDay);
                 //TODO: Enable this feature in API 11 and above
                 //datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.show();
@@ -188,8 +183,8 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
     }
 
-    private void inflateCustomBar()
-    {
+    private void inflateCustomBar() {
+
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
@@ -199,12 +194,13 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         //If Save Operation was successful, get the currently saved meeting
                         //TODO: I can avoid the trip to the database by making the new meeting variable be module-level
                         boolean retSetupMeeting = false;
-                        if(saveMeetingDate()) {
+                        if (saveMeetingDate()) {
                             //Get the Current Meeting ID
-                            if(repo == null) {
+                            if (repo == null) {
                                 repo = new MeetingRepo(MeetingDefinitionActivity.this);
                             }
                             Meeting currentMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
@@ -213,17 +209,17 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
                         }
                         //Otherwise check whether the date entered was actually for an existing meeting whose data has not yet been sent
-                        else if(null != meetingOfSameDate) {
+                        else if (null != meetingOfSameDate) {
                             reloadedExistingMeeting = true;
                             retSetupMeeting = setupCurrentMeeting(meetingOfSameDate);
 
-                        }
-                        else{
+                        } else {
                             return;
                         }
 
                     }
-                });
+                }
+        );
         customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -231,17 +227,21 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                         finish();
                         return;
                     }
-                });
+                }
+        );
+
         actionBar = getSupportActionBar();
         actionBar.setTitle("Meeting");
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
+
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_SHOW_TITLE
+        );
+
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT)
+        );
     }
 
     //Event that is raised when the date has been set
@@ -264,23 +264,22 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
     //Displays the selected Date in the TextView
     private void updateDisplay() {
-        if(viewClicked != null) {
+        if (viewClicked != null) {
             dateString = (new StringBuilder()
                     // Month is 0 based so add 1
-                    .append(String.format("%02d",mDay))
+                    .append(String.format("%02d", mDay))
                     .append("-")
                     .append(Utils.getMonthNameAbbrev(mMonth + 1))
                     .append("-")
                     .append(mYear)).toString();
             viewClicked.setText(dateString);
-        }
-        else {
+        } else {
             //Not sure yet on what to do
         }
     }
 
-    private void initializeDate(){
-        if(viewClicked != null) {
+    private void initializeDate() {
+        if (viewClicked != null) {
             dateString = Utils.formatDate(new Date());
             viewClicked.setText(dateString);
         }
@@ -298,7 +297,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MainActivity.class);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
@@ -321,9 +320,9 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             case R.id.mnuMDSave:
                 //If Save Operation was successful, get the currently saved meeting
                 //TODO: I can avoid the trip to the database by making the new meeting variable be module-level
-                if(saveMeetingDate()) {
+                if (saveMeetingDate()) {
                     //Get the Current Meeting ID
-                    if(repo == null) {
+                    if (repo == null) {
                         repo = new MeetingRepo(MeetingDefinitionActivity.this);
                     }
                     Meeting currentMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
@@ -331,11 +330,10 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                     return setupCurrentMeeting(currentMeeting);
                 }
                 //Otherwise check whether the date entered was actually for an existing meeting whose data has not yet been sent
-                else if(null != meetingOfSameDate) {
+                else if (null != meetingOfSameDate) {
                     reloadedExistingMeeting = true;
                     return setupCurrentMeeting(meetingOfSameDate);
-                }
-                else{
+                } else {
                     return false;
                 }
 
@@ -345,16 +343,16 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
     private boolean setupCurrentMeeting(Meeting currentMeeting) {
         Intent i = null;
-        if(null != currentMeeting) {
+        if (null != currentMeeting) {
             //Setup Meeting
             memberRepo = new MemberRepo(MeetingDefinitionActivity.this);
             attendanceRepo = new MeetingAttendanceRepo(MeetingDefinitionActivity.this);
-            if(memberRepo != null && attendanceRepo != null) {
+            if (memberRepo != null && attendanceRepo != null) {
                 //Get the Members
                 members = memberRepo.getAllMembers();
 
                 //Preset Meeting Attendance to Absent if it is a NEW meeting
-                if(!reloadedExistingMeeting) {
+                if (!reloadedExistingMeeting) {
                     presetMeetingAttendance(currentMeeting.getMeetingId(), 0);
 
                     //TODO: Do the same for Savings, Loans etc
@@ -365,46 +363,45 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             Utils._meetingDataViewMode = Utils.MeetingDataViewMode.VIEW_MODE_CAPTURE;
 
             i = new Intent(getApplicationContext(), MeetingActivity.class);
-            i.putExtra("_meetingDate",Utils.formatDate(currentMeeting.getMeetingDate(), "dd-MMM-yyyy"));
-            i.putExtra("_meetingId",currentMeeting.getMeetingId());
-            i.putExtra("_currentMeetingId",currentMeeting.getMeetingId());
+            i.putExtra("_meetingDate", Utils.formatDate(currentMeeting.getMeetingDate(), "dd-MMM-yyyy"));
+            i.putExtra("_meetingId", currentMeeting.getMeetingId());
+            i.putExtra("_currentMeetingId", currentMeeting.getMeetingId());
 
             int previousMeetingId = 0;
-            if(null != previousMeeting) {
+            if (null != previousMeeting) {
                 previousMeetingId = previousMeeting.getMeetingId();
             }
             i.putExtra("_previousMeetingId", previousMeetingId);
             startActivity(i);
             return true;
-        }
-        else {
-            Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting","There was a problem while setting up the meeting",Utils.MSGBOX_ICON_EXCLAMATION).show();
+        } else {
+            Utils.createAlertDialogOk(MeetingDefinitionActivity.this, "Begin Meeting", "There was a problem while setting up the meeting", Utils.MSGBOX_ICON_EXCLAMATION).show();
             return false;
         }
 
     }
+
     public void presetMeetingAttendance(int meetingId, int isPresent) {
-        for(Member m: members) {
+        for (Member m : members) {
             attendanceRepo.saveMemberAttendance(meetingId, m.getMemberId(), isPresent);
         }
     }
 
-    private boolean saveMeetingDate(){
+    private boolean saveMeetingDate() {
         boolean successFlg = false;
         Meeting meeting = new Meeting();
         repo = new MeetingRepo(getApplicationContext());
 
-        if(validateMeeting(meeting)) {
+        if (validateMeeting(meeting)) {
             return repo.addMeeting(meeting);
-        }
-        else{
+        } else {
             return false;
         }
     }
 
-    private boolean validateMeeting(Meeting meeting){
+    private boolean validateMeeting(Meeting meeting) {
         try {
-            if(null == meeting) {
+            if (null == meeting) {
                 return false;
             }
 
@@ -413,33 +410,31 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             //VslaCycle cycle = cycleRepo.getCurrentCycle();
 
             //Set Cycle to the selected one
-            if(null != selectedCycle) {
+            if (null != selectedCycle) {
                 meeting.setVslaCycle(selectedCycle);
-            }
-            else {
-                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting", "The Current Cycle could not be determined. Please choose a cycle.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            } else {
+                Utils.createAlertDialogOk(MeetingDefinitionActivity.this, "Begin Meeting", "The Current Cycle could not be determined. Please choose a cycle.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtMeetingDate.requestFocus();
                 return false;
             }
 
             //Validate the Meeting Date
-            TextView txtMeetingDate = (TextView)findViewById(R.id.txtMDMeetingDate);
+            TextView txtMeetingDate = (TextView) findViewById(R.id.txtMDMeetingDate);
             String meetingDate = txtMeetingDate.getText().toString().trim();
-            Date dt = Utils.getDateFromString(meetingDate,Utils.DATE_FIELD_FORMAT);
+            Date dt = Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT);
 
             if (dt.after(new Date())) {
-                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting", "The Meeting date cannot be in the future.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MeetingDefinitionActivity.this, "Begin Meeting", "The Meeting date cannot be in the future.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtMeetingDate.requestFocus();
                 return false;
-            }
-            else {
+            } else {
                 meeting.setMeetingDate(dt);
             }
 
             //Before Proceeding determine whether to reload an existing meeting
             //as long as the meeting has not been closed i.e. data sent
             //Get the Most Recent Meeting
-            if(null == repo) {
+            if (null == repo) {
                 repo = new MeetingRepo(MeetingDefinitionActivity.this);
             }
             Meeting mostRecent = repo.getMostRecentMeetingInCycle(selectedCycle.getCycleId());
@@ -447,26 +442,26 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             //First: Check whether a meeting with this date exists in the given vsla cycle
             meetingOfSameDate = null;
             meetingOfSameDate = repo.getMeetingByDate(meeting.getMeetingDate(), selectedCycle.getCycleId());
-            if(null != meetingOfSameDate) {
+            if (null != meetingOfSameDate) {
                 //Pull the Meeting and display it instead of saving a new meeting
                 //cancel the save operation
-               return false;
+                return false;
             }
 
             //Further Validations
             //check that meeting is with the boundaries of the current cycle
-            if(meeting.getMeetingDate().before(selectedCycle.getStartDate()) || meeting.getMeetingDate().after(selectedCycle.getEndDate())) {
-                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting",
-                        String.format("The Meeting Date has to be within the current cycle i.e. %s and %s",Utils.formatDate(selectedCycle.getStartDate()), Utils.formatDate(selectedCycle.getEndDate())),
+            if (meeting.getMeetingDate().before(selectedCycle.getStartDate()) || meeting.getMeetingDate().after(selectedCycle.getEndDate())) {
+                Utils.createAlertDialogOk(MeetingDefinitionActivity.this, "Begin Meeting",
+                        String.format("The Meeting Date has to be within the current cycle i.e. %s and %s", Utils.formatDate(selectedCycle.getStartDate()), Utils.formatDate(selectedCycle.getEndDate())),
                         Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtMeetingDate.requestFocus();
                 return false;
             }
 
             //Ensure the current date is later than the date of the most recent meeting
-            if(null != mostRecent) {
-                if(meeting.getMeetingDate().before(mostRecent.getMeetingDate())) {
-                    Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting",
+            if (null != mostRecent) {
+                if (meeting.getMeetingDate().before(mostRecent.getMeetingDate())) {
+                    Utils.createAlertDialogOk(MeetingDefinitionActivity.this, "Begin Meeting",
                             String.format("The Meeting Date has to be after the date of the last meeting: %s", Utils.formatDate(mostRecent.getMeetingDate())),
                             Utils.MSGBOX_ICON_EXCLAMATION).show();
                     //txtMeetingDate.requestFocus();
@@ -475,8 +470,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             }
 
             return true;
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             Log.e("MeetingDefinitionActivity.validateMeeting", ex.getMessage());
             return false;
         }

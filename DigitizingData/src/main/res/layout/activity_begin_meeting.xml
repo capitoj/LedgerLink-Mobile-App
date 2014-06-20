@@ -13,7 +13,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:text="Tap [Begin] to begin a new meeting."
             android:id="@+id/lblBMHeader" />
 

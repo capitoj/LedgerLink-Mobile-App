@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -48,7 +49,6 @@ import java.util.Date;
 import java.util.HashMap;
 
 
-
 public class BeginMeetingActivity extends SherlockActivity {
     ActionBar actionBar;
     MeetingRepo meetingRepo = null;
@@ -64,6 +64,7 @@ public class BeginMeetingActivity extends SherlockActivity {
     private static int httpStatusCode = 0; //To know whether the Request was successful
     private static int numberOfSentMeetings = 0;
     private ArrayList<Meeting> currentMeetings;
+    private boolean noPriorMeetings = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,15 +72,12 @@ public class BeginMeetingActivity extends SherlockActivity {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_begin_meeting);
         refreshActivityView();
-
-
     }
 
 
-    private void refreshActivityView()
-    {
+    private void refreshActivityView() {
 
-        inflateCustomBar();
+
         //Check the past meetings that have not been sent
         if (null == cycleRepo) cycleRepo = new VslaCycleRepo(getApplicationContext());
 
@@ -87,6 +85,14 @@ public class BeginMeetingActivity extends SherlockActivity {
 
         recentCycle = cycleRepo.getMostRecentCycle();
         pastMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
+
+        // Check fore fresh start; no meetings other than GSW
+        if (meetingRepo.getAllNonGSWMeetings().isEmpty()) {
+            noPriorMeetings = true;
+        }
+
+        inflateCustomBar();
+
         //populate the list
         populateMeetingsList();
         //add LayoutParams
@@ -100,7 +106,7 @@ public class BeginMeetingActivity extends SherlockActivity {
         StringBuilder sb = null;
         // if(pastMeetings.size() > 0) {
         if (null != pastMeetings) {
-            if(pastMeetings.size() > 1) {
+            if (pastMeetings.size() > 1) {
                 //Set the title to plural
                 TextView currentMeetingsSectionHeading = (TextView) findViewById(R.id.lblBMSection1);
                 currentMeetingsSectionHeading.setText("CURRENT MEETINGS");
@@ -146,6 +152,7 @@ public class BeginMeetingActivity extends SherlockActivity {
 
                 if (pastMeetings.size() > 1) {
                     for (Meeting meeting : pastMeetings) {
+
                         //Skip the Current meeting i.e. mostRecentUnsentMeeting coz it is already displayed
                         if (meeting.getMeetingId() == mostRecentUnsentMeeting.getMeetingId()) {
                             continue;
@@ -171,24 +178,42 @@ public class BeginMeetingActivity extends SherlockActivity {
                         grpPastMeetings.removeView(tvWarning);
                     }
                 } else {
+
                     //Hide the Section for Past Meetings
                     LinearLayout parent = (LinearLayout) grpPastMeetings.getParent();
                     parent.removeView(grpPastMeetings);
 
                 }
             } else {
-                //Hide the Section for Past Meetings
+
+                // Hide the Section for Past Meetings
                 LinearLayout parent = (LinearLayout) grpPastMeetings.getParent();
-                parent.removeView(grpPastMeetings);
+                grpPastMeetings.setVisibility(View.GONE);
 
-                //Hide the Section for Current Meeting
-                parent.removeView(grpCurrentMeeting);
+                // Hide the Section for Current Meeting
+                grpCurrentMeeting.setVisibility(View.GONE);
 
-                //Display the default Instructions
+                // Display the default Instructions
                 sb = new StringBuilder("Tap <b>Begin</b> to begin a new meeting.");
 
             }
         }
+
+        // Take care of Fresh start No meetings at all
+        if (noPriorMeetings) {
+
+            //Hide the Section for Past Meetings
+            LinearLayout parent = (LinearLayout) grpPastMeetings.getParent();
+            grpPastMeetings.setVisibility(View.GONE);
+
+            //Hide the Section for Current Meeting
+            grpCurrentMeeting.setVisibility(View.GONE);
+
+            //Display the default Instructions
+            sb = new StringBuilder("Tap <b>Begin</b> to begin a new meeting.");
+
+        }
+
         //Show the Instructions
         tvInstructionsHeader.setText(Html.fromHtml(sb.toString()));
     }
@@ -203,8 +228,8 @@ public class BeginMeetingActivity extends SherlockActivity {
         //This is dirty but we have to do what we gotta do TODO: will clean up later
         //Remove meetings set as current from the past list..
         //These should be displayed in current section
-        for(int i=0; i<pastMeetings.size(); i++) {
-            if(pastMeetings.get(i).isCurrent()) {
+        for (int i = 0; i < pastMeetings.size(); i++) {
+            if (pastMeetings.get(i).isCurrent()) {
                 pastMeetings.remove(i);
             }
         }
@@ -223,8 +248,8 @@ public class BeginMeetingActivity extends SherlockActivity {
                 //Do as you wish with this meeting
                 Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                 i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
-                i.putExtra("_meetingId",meeting.getMeetingId());
-                i.putExtra("_viewOnly",true);  //viewing past meeetings should be read only
+                i.putExtra("_meetingId", meeting.getMeetingId());
+                i.putExtra("_viewOnly", true);  //viewing past meeetings should be read only
                 startActivity(i);
                 return;
 
@@ -232,7 +257,6 @@ public class BeginMeetingActivity extends SherlockActivity {
         });
         Utils.setListViewHeightBasedOnChildren(membersListView);
     }
-
 
 
     //Populate Meetings List
@@ -247,11 +271,9 @@ public class BeginMeetingActivity extends SherlockActivity {
         ListView currentMeetingsList = (ListView) findViewById(R.id.lstBMCurrentMeetings);
 
         currentMeetingsList.setAdapter(adapter);
-        currentMeetingsList.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        currentMeetingsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id)
-            {
+                                    int position, long id) {
 
                 Meeting meeting = currentMeetings.get(position);
                 //Do as you wish with this meeting
@@ -276,34 +298,33 @@ public class BeginMeetingActivity extends SherlockActivity {
     }
 
 
-    private void inflateCustomBar()
-    {
+    private void inflateCustomBar() {
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_begin_send, null);
-        customActionBarView.findViewById(R.id.actionbar_send).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                      //send all meeting data
-                        numberOfSentMeetings = 0;
-                        for(Meeting thisMeeting : pastMeetings) {
-                          sendMeetingData(thisMeeting.getMeetingId());
 
-                          //If sending of previous meeting failed, stop this loop
-                            if(!actionSucceeded) {
-                                break;
+            final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_begin_send, null);
+            customActionBarView.findViewById(R.id.actionbar_send).setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //send all meeting data
+                            numberOfSentMeetings = 0;
+                            for (Meeting thisMeeting : pastMeetings) {
+                                sendMeetingData(thisMeeting.getMeetingId());
+
+                                //If sending of previous meeting failed, stop this loop
+                                if (!actionSucceeded) {
+                                    break;
+                                }
+                            }
+                            if (numberOfSentMeetings > 0) {
+                                refreshActivityView();
                             }
                         }
-                        if(numberOfSentMeetings > 0)
-                        {
-                            refreshActivityView();
-                        }
                     }
-                });
-
+            );
 
         customActionBarView.findViewById(R.id.actionbar_begin).setOnClickListener(
                 new View.OnClickListener() {
@@ -314,7 +335,14 @@ public class BeginMeetingActivity extends SherlockActivity {
                         finish();
                         return;
                     }
-                });
+                }
+        );
+
+        if (noPriorMeetings){
+            customActionBarView.findViewById(R.id.actionbar_send).setVisibility(View.GONE);
+        }
+
+
         actionBar = getSupportActionBar();
         actionBar.setTitle("Meeting");
         actionBar.setHomeButtonEnabled(true);
@@ -351,11 +379,10 @@ public class BeginMeetingActivity extends SherlockActivity {
     }
 
 
-
     //Change this to send specified meeting by id
     public void sendMeetingData(int meetingId) {
         //If no network, hide send meeting button
-        if(!Utils.isNetworkConnected(getApplicationContext())) {
+        if (!Utils.isNetworkConnected(getApplicationContext())) {
             Toast.makeText(DatabaseHandler.databaseContext, "Can not send information because mobile data or internet connection is not available.", Toast.LENGTH_LONG).show();
             return;
         }
@@ -368,7 +395,6 @@ public class BeginMeetingActivity extends SherlockActivity {
 
         sendDataUsingPostAsync(meetingId, meetingData);
     }
-
 
 
     //Brought this method back from SendDataRepo
@@ -386,15 +412,12 @@ public class BeginMeetingActivity extends SherlockActivity {
     }
 
 
-
     // The definition of our task class
-    private static class SendDataPostAsyncTask extends AsyncTask<String, String, JSONObject>
-    {
+    private static class SendDataPostAsyncTask extends AsyncTask<String, String, JSONObject> {
 
         //Use a Weak Reference
         private final WeakReference<BeginMeetingActivity> meetingActivityWeakReference;
         private String message = "Please wait...";
-
 
 
         //Initialize the Weak reference in the constructor
@@ -409,7 +432,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                 if (meetingActivityWeakReference.get() != null && !meetingActivityWeakReference.get().isFinishing()) {
                     if (null == progressDialog) {
                         progressDialog = new ProgressDialog(meetingActivityWeakReference.get());
-                        progressDialog.setTitle("Sending Meeting Data..."+currentMeeting.getMeetingId());
+                        progressDialog.setTitle("Sending Meeting Data..." + currentMeeting.getMeetingId());
 
                         message = SendDataRepo.progressDialogMessages.get(currentDataItemPosition);
                         if (message == null) {
@@ -455,8 +478,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                 // Response handler
                 ResponseHandler<String> rh = new ResponseHandler<String>() {
                     // invoked when client receives response
-                    public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException
-                    {
+                    public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
 
                         // get response entity
                         HttpEntity entity = response.getEntity();

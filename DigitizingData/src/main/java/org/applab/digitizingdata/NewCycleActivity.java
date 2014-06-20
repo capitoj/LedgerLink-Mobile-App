@@ -648,7 +648,7 @@ public class NewCycleActivity extends SherlockActivity {
 
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }

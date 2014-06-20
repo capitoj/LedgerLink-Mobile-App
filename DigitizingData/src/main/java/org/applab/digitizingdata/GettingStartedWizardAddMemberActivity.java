@@ -1,6 +1,7 @@
 package org.applab.digitizingdata;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -46,6 +47,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     private boolean successAlertDialogShown = false;
     private boolean selectedFinishButton = false;
     private String dlgTitle = "Add Member";
+    protected AlertDialog alertDialog = null;
     private boolean isEditAction;
 
     @Override
@@ -69,10 +71,10 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
 
         SpannableStringBuilder plusText = new SpannableStringBuilder("+ ");
-        plusText.setSpan(new StyleSpan(Typeface.BOLD), 0, plusText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        plusText.setSpan(new StyleSpan(Typeface.BOLD), 0, plusText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         SpannableStringBuilder nextText = new SpannableStringBuilder("next.");
-        nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         headingInstruction.append("Enter each member. Save and add another member by tapping ");
         headingInstruction.append(plusText);
@@ -190,7 +192,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }
@@ -237,7 +240,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }
@@ -280,7 +284,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }
@@ -321,7 +326,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }
@@ -360,13 +366,13 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-     Intent i;
-         switch(item.getItemId()) {
-             case android.R.id.home:
-                 Intent upIntent = new Intent(this, GettingsStartedWizardNewCycleActivity.class);
-                 upIntent.putExtra("_isFromReviewMembers", false);
-                 startActivity(upIntent);
-                 finish();
+        Intent i;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent upIntent = new Intent(this, GettingsStartedWizardNewCycleActivity.class);
+                upIntent.putExtra("_isFromReviewMembers", false);
+                startActivity(upIntent);
+                finish();
                  /*if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
 
                      // This activity is not part of the application's task, so
@@ -385,27 +391,27 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                      NavUtils.navigateUpTo(this, upIntent);
                  } */
 
-         }
-         return true;
-     /**
-        switch(item.getItemId()) {
-            case R.id.mnuAMNext:
-                //TODO: If member number is nothing, allow proceeding without saving
-                //Save member and add new member
-                if(saveMemberData()) {
-                    clearDataFields();
-                }
-                else {
-                     Toast.makeText(this, "Failed to save member information", Toast.LENGTH_LONG).show();
-                }
-
-                return true;
-            case R.id.mnuAMFinished:
-                selectedFinishButton = true;
-                return saveMemberData();
         }
         return true;
-    */
+        /**
+         switch(item.getItemId()) {
+         case R.id.mnuAMNext:
+         //TODO: If member number is nothing, allow proceeding without saving
+         //Save member and add new member
+         if(saveMemberData()) {
+         clearDataFields();
+         }
+         else {
+         Toast.makeText(this, "Failed to save member information", Toast.LENGTH_LONG).show();
+         }
+
+         return true;
+         case R.id.mnuAMFinished:
+         selectedFinishButton = true;
+         return saveMemberData();
+         }
+         return true;
+         */
     }
 
 
@@ -480,6 +486,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 return false;
             }
             repo = new MemberRepo(getApplicationContext());
+
             // Validate: MemberNo
             Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
             if (cboAMMemberNo.getSelectedItemPosition() < 1) {
@@ -491,6 +498,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 int theMemberNo = Integer.parseInt(memberNo);
                 member.setMemberNo(theMemberNo);
             }
+
             //Validate: Surname
             TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
             String surname = txtSurname.getText().toString().trim();
@@ -501,6 +509,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             } else {
                 member.setSurname(surname);
             }
+
             //Validate: OtherNames
             TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
             String otherNames = txtOtherNames.getText().toString().trim();
@@ -548,6 +557,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             } else {
                 member.setOccupation(occupation);
             }
+
             //Validate: PhoneNumber
             TextView txtPhoneNo = (TextView) findViewById(R.id.txtAMPhoneNo);
             String phoneNo = txtPhoneNo.getText().toString().trim();
@@ -579,6 +589,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 c.add(Calendar.YEAR, -theCycles);
                 member.setDateOfAdmission(c.getTime());
             }
+
             //Final Verifications
             //TODO: Trying to use Application context to ensure dialog box does not disappear
             if (!repo.isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
@@ -586,21 +597,104 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 cboAMMemberNo.requestFocus();
                 return false;
             }
-            int amountSavedSoFar = 0;
-            int outstandingLoan = 0;
+
+
+            //Validation specific to getting started wizard
+            //Validate Amount of savings for this member
             TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
             String savings = txtSavingsSoFar.getText().toString().trim();
-            amountSavedSoFar = Integer.parseInt(savings);
-            member.setSavingsOnSetup(amountSavedSoFar);
+            if (savings.length() < 1) {
+                displayMessageBox(dlgTitle, "Total Amount this Member has Saved in Current Cycle so far is Required", Utils.MSGBOX_ICON_EXCLAMATION);
+                txtSavingsSoFar.requestFocus();
+                return false;
+            } else {
+                double amountSavedSoFar = Double.parseDouble(savings);
+                if (amountSavedSoFar < 0.00) {
+                    displayMessageBox(dlgTitle, "Total Amount this Member has Saved in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    txtSavingsSoFar.requestFocus();
+                    return false;
+                } else {
+                    member.setSavingsOnSetup(amountSavedSoFar);
+                }
+            }
+
+            //Validate Amount of Loan outstanding for this member
             TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
             String loanAmount = txtLoanAmount.getText().toString().trim();
-            outstandingLoan = Integer.parseInt(loanAmount);
-            member.setOutstandingLoanOnSetup(outstandingLoan);
+            if (loanAmount.length() < 1) {
+                displayMessageBox(dlgTitle, "Total Amount of this Member's Regular Loan Outstanding is Required", Utils.MSGBOX_ICON_EXCLAMATION);
+                txtLoanAmount.requestFocus();
+                return false;
+            } else {
+                double outstandingLoan = Double.parseDouble(loanAmount);
+                if (outstandingLoan < 0.00) {
+                    displayMessageBox(dlgTitle, "Total Amount of this Member's Regular Loan Outstanding should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    txtLoanAmount.requestFocus();
+                    return false;
+                } else {
+                    member.setOutstandingLoanOnSetup(outstandingLoan);
+                }
+            }
+
+
+            /**
+             int amountSavedSoFar = 0;
+             int outstandingLoan = 0;
+
+             TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
+             String savings = txtSavingsSoFar.getText().toString().trim();
+             amountSavedSoFar = Integer.parseInt(savings);
+             member.setSavingsOnSetup(amountSavedSoFar);
+             TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
+             String loanAmount = txtLoanAmount.getText().toString().trim();
+             outstandingLoan = Integer.parseInt(loanAmount);
+             member.setOutstandingLoanOnSetup(outstandingLoan); */
             return true;
-        } catch (Exception ex) {
+
+        } catch (
+                Exception ex
+                )
+        {
             ex.printStackTrace();
             return false;
         }
+
+    }
+
+    protected void displayMessageBox(String title, String message, String icon) {
+        alertDialog = new AlertDialog.Builder(GettingStartedWizardAddMemberActivity.this).create();
+
+        // Setting Dialog Title
+        alertDialog.setTitle(title);
+
+        // Setting Dialog Message
+        alertDialog.setMessage(message);
+
+        // Setting Icon to Dialog
+        if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_EXCLAMATION)) {
+            alertDialog.setIcon(R.drawable.phone);
+        } else if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_TICK)) {
+            alertDialog.setIcon(R.drawable.phone);
+        } else if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_QUESTION)) {
+            alertDialog.setIcon(R.drawable.phone);
+        }
+
+        // Setting OK Button
+        alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // Write your code here to execute after dialog closed
+                //Can I pass a method delegate? Or function pointer? for what to be executed?
+                // Toast.makeText(getApplicationContext(), "You clicked on OK", Toast.LENGTH_SHORT).show();
+                if (successAlertDialogShown) {
+                    Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+                    startActivity(i);
+                    successAlertDialogShown = false;
+                }
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
     }
 
     private void populateDataFields(Member member) {
