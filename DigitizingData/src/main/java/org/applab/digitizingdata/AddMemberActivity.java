@@ -511,9 +511,6 @@ public class AddMemberActivity extends SherlockActivity {
                 return;
             }
 
-
-
-
             TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
             if (member.getSurname() != null) {
                 txtSurname.setText(member.getSurname());

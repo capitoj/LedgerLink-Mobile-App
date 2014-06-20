@@ -55,13 +55,14 @@ public class EditCycleSelectCycle extends SherlockActivity {
 
         setContentView(R.layout.activity_meeting_definition);
 
-
-
         //Setup the Fields by getting the current Cycle
         VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
 
         //Deal with the radio buttons
         grpCycleDates = (RadioGroup)findViewById(R.id.grpMDExistingCycles);
+
+        TextView lblMDHeading = (TextView)findViewById(R.id.lblMDHeading);
+        lblMDHeading.setVisibility(View.GONE);
 
         //Retrieve all the active cycles
         ArrayList<VslaCycle> activeCycles = cycleRepo.getActiveCycles();
