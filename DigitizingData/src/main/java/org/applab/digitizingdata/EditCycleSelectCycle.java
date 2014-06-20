@@ -199,6 +199,7 @@ public class EditCycleSelectCycle extends SherlockActivity {
                 });
         actionBar = getSupportActionBar();
         actionBar.setTitle("EDIT CYCLE");
+
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -210,7 +211,14 @@ public class EditCycleSelectCycle extends SherlockActivity {
 
         actionBar.setDisplayShowCustomEnabled(true);
 
-        actionBar.show();
+      /**  actionBar.setDisplayOptions(
+                ActionBar.DISPLAY_SHOW_CUSTOM,
+                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_SHOW_TITLE);
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT)); */
     }
 
 

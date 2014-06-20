@@ -140,8 +140,7 @@ public class EndCycleActivity extends SherlockActivity {
             }
             else {
                 txtInstructions.setText(new StringBuilder()
-                        .append("There is more than one cycle currently running.\n")
-                        .append("Select the cycle to end and enter the share out date.")
+                        .append("There is more than one unfinished cycle. Select the cycle to end.")
                         .toString()
                 );
             }
