@@ -15,7 +15,7 @@
         android:text="Loan No:" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtRLIHAmount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:text="Amount:"/>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtRLIHMeetingDate"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
 
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtRLIHBalance"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:text="Balance:" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtRLIHDateCleared"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

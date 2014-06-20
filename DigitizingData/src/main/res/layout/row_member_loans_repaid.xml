@@ -14,7 +14,7 @@
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRMLRepayTodaysRepay"
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLRepayFullName"
@@ -22,7 +22,7 @@
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRMLRepayBalance"
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLRepayTodaysRepay"
@@ -30,7 +30,7 @@
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRMLRepayDateDue"
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLRepayBalance"

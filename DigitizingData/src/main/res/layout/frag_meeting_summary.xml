@@ -4,18 +4,20 @@
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dip"
+        android:layout_marginBottom="50dip"
+        android:orientation="vertical">
 
-       <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="01-JUL-2013"
-            android:id="@+id/lblMSFMeetingDate"
-            android:layout_gravity="center" /> -->
+        <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
+             style="@style/RegularText"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:paddingLeft="5dp"
+             android:text="01-JUL-2013"
+             android:id="@+id/lblMSFMeetingDate"
+             android:layout_gravity="center" /> -->
         <!--
             <TextView
                     android:layout_width="fill_parent"
@@ -31,66 +33,54 @@
 
         <!-- <View style="@style/Divider"/> -->
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/SubHeading"
-            android:layout_width="fill_parent"
-            android:layout_height="25dip"
-            android:text="Past Meeting"
             android:id="@+id/lblMSFSection2"
-            android:paddingLeft="5dp" />
+            style="@style/SubHeading"
+            android:layout_width="match_parent"
+            android:layout_height="25dip"
+            android:text="Past Meeting"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
+            android:id="@+id/lblMSFDataSentStatus"
+            style="@style/RegularTextListItems"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="Date: "
-            android:id="@+id/lblMSFPreviousMeetingDate"/>
+            android:text="Data: Not Sent" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
+            android:id="@+id/lblMSFAttended"
+            style="@style/RegularTextListItems"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="Members Present: 28"
-            android:id="@+id/lblMSFAttended"/>
+            android:text="Attended: 28" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
+            android:id="@+id/lblMSFCollections"
+            style="@style/RegularTextListItems"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="Data: Not Sent"
-            android:id="@+id/lblMSFDataSentStatus"/>
+            android:text="Total collections: 150,000 UGX" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
+            android:id="@+id/lblMSFLastSavings"
+            style="@style/ListRegularSubItems"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="Total Collections: 150,000 UGX"
-            android:id="@+id/lblMSFCollections" />
+            android:text="Savings: 100,000 UGX" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
+            android:id="@+id/lblMSFLastLoansRepaid"
+            style="@style/ListRegularSubItems"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="Savings: 100,000 UGX"
-            android:id="@+id/lblMSFLastSavings"/>
+            android:text="Loans repaid: 50,000 UGX" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
+            android:id="@+id/lblMSFLastLoansIssued"
+            style="@style/ListRegularSubItems"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Loans Repaid: 50,000 UGX"
-            android:id="@+id/lblMSFLastLoansRepaid"/>
-
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Loans Repaid: 50,000 UGX"
-            android:id="@+id/lblMSFLastLoansIssued"/>
+            android:text="Loans issued: 10,000 UGX"
+            android:layout_marginBottom="20dip"/>
 
         <!--
         <TextView
@@ -144,52 +134,52 @@
       -->
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMSFSection1"
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
-            android:paddingLeft="5dip"
-            android:text="Current Cycle"
-            android:id="@+id/lblMSFSection1" />
-        <!-- <View style="@style/Divider"/> -->
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="From: 02-Jul-2013"
-            android:id="@+id/lblMSFCycleStartDate"/>
+            android:text="Current Totals" />
+
+        <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
+             style="@style/RegularText"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:paddingLeft="5dp"
+             android:text="From: 02-Jul-2013"
+             android:id="@+id/lblMSFCycleStartDate"/>
+
+         <org.applab.digitizingdata.fontutils.TypefaceTextView
+             style="@style/RegularText"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:paddingLeft="5dp"
+             android:text="To: 30-Jun-2014"
+             android:id="@+id/lblMSFCycleEndDate"/> -->
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
+            android:id="@+id/lblMSFTotalSavings"
+            style="@style/RegularTextListItems"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="To: 30-Jun-2014"
-            android:id="@+id/lblMSFCycleEndDate"/>
+            android:text="Total Savings: 1,000,000 UGX" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
+            android:id="@+id/lblMSFOutstandingLoans"
+            style="@style/RegularTextListItems"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="Total Savings: 1,000,000 UGX"
-            android:id="@+id/lblMSFTotalSavings"/>
-
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="Loans Issued: 1,500,000 UGX"
-            android:id="@+id/lblMSFIssuedLoans"/>
-
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:text="Loans Outstanding: 1,500,000 UGX"
-            android:id="@+id/lblMSFOutstandingLoans"/>
+            android:layout_marginBottom="30dip"/>
+
+        <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
+             style="@style/RegularText"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:paddingLeft="5dp"
+             android:text="Loans Issued: 1,500,000 UGX"
+             android:id="@+id/lblMSFIssuedLoans"/> -->
+
+
         <!--
         <TextView
                 android:layout_width="fill_parent"

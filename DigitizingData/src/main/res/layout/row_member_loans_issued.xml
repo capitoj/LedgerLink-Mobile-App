@@ -13,7 +13,7 @@
         android:text="0. FULL NAME" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtRMLIssuedOutstanding"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         android:text="Outstanding: 60,000UGX" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtRMLComment"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

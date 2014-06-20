@@ -23,7 +23,7 @@
 
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/ListSubItems"
+            style="@style/ListSmallSubItems"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Fine Type"
@@ -42,7 +42,7 @@
         <!-- android:layout_below="@id/lblFineFullName"-->
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/ListSubItems"
+            style="@style/ListSmallSubItems"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Amount"

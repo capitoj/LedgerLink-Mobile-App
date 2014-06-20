@@ -14,7 +14,7 @@
         android:text="FULL NAMES" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtMOccupation"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
