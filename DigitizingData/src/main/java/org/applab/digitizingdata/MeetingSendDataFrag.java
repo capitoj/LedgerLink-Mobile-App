@@ -17,6 +17,7 @@ import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
+import org.applab.digitizingdata.helpers.ConcurrentMeetingsArrayAdapter;
 import org.applab.digitizingdata.helpers.MeetingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.*;
@@ -119,7 +120,8 @@ public class MeetingSendDataFrag extends SherlockFragment {
         } */
         //If viewing current meeting, hide the current meeting summary
         LinearLayout layoutMSDCurrentMeetingSummary = (LinearLayout) getSherlockActivity().findViewById(R.id.layoutMSDCurrentMeetingSummary);
-        layoutMSDCurrentMeetingSummary.setVisibility(selectedMeeting.isCurrent() ? View.GONE : View.VISIBLE);
+        //layoutMSDCurrentMeetingSummary.setVisibility(selectedMeeting.isCurrent() ? View.GONE : View.VISIBLE);
+        layoutMSDCurrentMeetingSummary.setVisibility(viewingCurrentMeeting ? View.GONE : View.VISIBLE);
         //Populate summary of the "Current" meeting from the parent activity
         //Apply null check
         if(parentActivity.getCurrentMeeting() != null) {
@@ -245,7 +247,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
     //Populate Meetings List
     protected void populateMeetingsList() {
         //Now get the data via the adapter
-        MeetingsArrayAdapter adapter = new MeetingsArrayAdapter(getSherlockActivity().getBaseContext(), unsentMeetings);
+        ConcurrentMeetingsArrayAdapter adapter = new ConcurrentMeetingsArrayAdapter(getSherlockActivity().getBaseContext(), unsentMeetings);
 
 
         // listening to single list item on click

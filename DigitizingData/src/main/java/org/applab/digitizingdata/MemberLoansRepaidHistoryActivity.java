@@ -94,6 +94,11 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     public void onClick(View v) {
                         if(recentLoan == null) {
                             //Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                            i.putExtra("_tabToSelect","loansRepaid");
+                            i.putExtra("_meetingDate",meetingDate);
+                            i.putExtra("_meetingId", meetingId);
+                            startActivity(i);
                             finish();
                         }
                         else if(saveMemberLoanRepayment()) {

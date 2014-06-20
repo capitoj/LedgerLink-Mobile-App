@@ -29,6 +29,7 @@ import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
@@ -176,6 +177,7 @@ public class NewCycleActivity extends SherlockActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        //Save this as long task
                         saveCycleData();
                     }
                 }
@@ -351,55 +353,76 @@ public class NewCycleActivity extends SherlockActivity {
         boolean successFlg = false;
 
         VslaCycle cycle = new VslaCycle();
-        VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
+        
         if (selectedCycle != null) {
             cycle = selectedCycle;
         }
 
         if (validateData(cycle)) {
-            boolean retVal = false;
-            if (cycle.getCycleId() != 0) {
-                retVal = repo.updateCycle(cycle);
+            final VslaCycle finalCycle = cycle;
+            Runnable runnable = new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    saveCycleDataToDb(finalCycle);
+                }
+            };
+            LongTaskRunner.runLongTask(runnable, "Please wait...", "Saving cycle information...", NewCycleActivity.this);
+
+            return true;
+                //clearDataFields(); //Not needed now
             } else {
-
-                retVal = repo.addCycle(cycle);
+                //displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.", Utils.MSGBOX_ICON_EXCLAMATION);
+            return false;
             }
-            if (retVal) {
-                if (cycle.getCycleId() == 0) {
-                    //Set this new cycle as the selected one
-                    selectedCycle = cycle;
-                    //displayMessageBox(dialogTitle, "The New Cycle has been added Successfully.", Utils.MSGBOX_ICON_TICK);
-                } else {
-                    //displayMessageBox("Update Cycle", "The Cycle has been updated Successfully.", Utils.MSGBOX_ICON_TICK);
-                }
+        }
 
-                String testJson = SendDataRepo.getVslaCycleJson(repo.getCurrentCycle());
-                if (testJson.length() < 0) {
-                    return false;
-                }
-                MemberRepo memberRepo = new MemberRepo(getApplicationContext());
+    private boolean saveCycleDataToDb(VslaCycle cycle)
+    {
+        VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
+        boolean retVal = false;
+        if (cycle.getCycleId() != 0) {
+            retVal = repo.updateCycle(cycle);
+        } else {
 
-                String membersJson = SendDataRepo.getMembersJson(memberRepo.getAllMembers());
-                if (membersJson.length() < 0) {
-                    return false;
-                }
+            retVal = repo.addCycle(cycle);
+        }
+        boolean successFlg = false;
+        if (retVal) {
+            if (cycle.getCycleId() == 0) {
+                //Set this new cycle as the selected one
+                selectedCycle = cycle;
+                //displayMessageBox(dialogTitle, "The New Cycle has been added Successfully.", Utils.MSGBOX_ICON_TICK);
+            } else {
+                //displayMessageBox("Update Cycle", "The Cycle has been updated Successfully.", Utils.MSGBOX_ICON_TICK);
+            }
 
-                //Pass on the flag indicating whether this is an Update operation
-                Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
-                i.putExtra("_isUpdateCycleAction", isUpdateCycleAction);
-                startActivity(i);
+            String testJson = SendDataRepo.getVslaCycleJson(repo.getCurrentCycle());
+            if (testJson.length() < 0) {
+                return false;
+            }
+            MemberRepo memberRepo = new MemberRepo(getApplicationContext());
+
+            String membersJson = SendDataRepo.getMembersJson(memberRepo.getAllMembers());
+            if (membersJson.length() < 0) {
+                return false;
+            }
+
+            //Pass on the flag indicating whether this is an Update operation
+            Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+            i.putExtra("_isUpdateCycleAction", isUpdateCycleAction);
+            startActivity(i);
                 /*
                 if(null != alertDialog && alertDialog.isShowing()) {
                     //Flag that ready to goto Next
                     successAlertDialogShown = true;
                 }
                 */
-                successFlg = true;
-                //clearDataFields(); //Not needed now
-            } else {
-                displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.", Utils.MSGBOX_ICON_EXCLAMATION);
-            }
-        } else {
+            successFlg = true;
+    }
+
+    else {
             //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
         }
 
