@@ -1,64 +1,54 @@
 package org.applab.digitizingdata;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.text.Html;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import org.applab.digitizingdata.domain.model.Meeting;
-import org.applab.digitizingdata.domain.model.Member;
+
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.helpers.ConcurrentMeetingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.helpers.VslaCyclesArrayAdapter;
-import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-
 
 
 /**
  * Created by Moses on 7/4/13.
  */
-public class EditCycleSelectCycle extends SherlockActivity {
+public class SelectCycle extends SherlockActivity {
 
     ActionBar actionBar;
 
     private VslaCycle selectedCycle = null;
     private RadioGroup grpCycleDates;
+    private boolean isEndCycleAction;
+    private boolean multipleCycles = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
         inflateCustomBar();
 
+        setContentView(R.layout.activity_select_cycle);
 
-
-        setContentView(R.layout.activity_select_cycle_to_edit);
-
+        if (getIntent().hasExtra("_isEndCycleAction")) {
+            isEndCycleAction = getIntent().getBooleanExtra("_isEndCycleAction", false);
+        }
         //Setup the Fields by getting the current Cycle
         VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
 
@@ -67,31 +57,43 @@ public class EditCycleSelectCycle extends SherlockActivity {
 
         //Retrieve all the active cycles
         ListView cyclesListView = (ListView) findViewById(R.id.lstSelectCycleToEdit);
-        TextView txtInstructions = (TextView)findViewById(R.id.lblMDMultipleCycles);
+        TextView txtInstructions = (TextView) findViewById(R.id.lblMDMultipleCycles);
 
         ArrayList<VslaCycle> activeCycles = cycleRepo.getActiveCycles();
-        if(activeCycles != null && activeCycles.size()==0) {
-            //no cycles
-             cyclesListView.setVisibility(View.GONE);
+        if (activeCycles != null && activeCycles.size() == 0) {
+            // no cycles
+            cyclesListView.setVisibility(View.GONE);
             txtInstructions.setText("There are no active cycles to modify");
             return;
         }
 
 
         final VslaCyclesArrayAdapter adapter = new VslaCyclesArrayAdapter(getBaseContext(), activeCycles);
-
-
         cyclesListView.setAdapter(adapter);
         cyclesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
                 selectedCycle = adapter.getItem(position);
-                Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
-                i.putExtra("_isUpdateCycleAction", true);
-                i.putExtra("_cycleId", selectedCycle.getCycleId());
-                startActivity(i);
-                finish();
+
+                multipleCycles = true;
+                if (isEndCycleAction) {
+                    Log.d("SelectCycle", String.valueOf(multipleCycles));
+
+                    Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+                    i.putExtra("_multipleCycles", multipleCycles);
+                    i.putExtra("_cycleId", selectedCycle.getCycleId());
+                    startActivity(i);
+                    finish();
+                } else {
+                    Log.d("SelectCycle", String.valueOf(multipleCycles));
+                    Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+                    i.putExtra("_isUpdateCycleAction", true);
+                    i.putExtra("_multipleCycles", multipleCycles);
+                    i.putExtra("_cycleId", selectedCycle.getCycleId());
+                    startActivity(i);
+                    finish();
+                }
             }
         });
 //        grpCycleDates.addView(cyclesListView);
@@ -121,27 +123,34 @@ public class EditCycleSelectCycle extends SherlockActivity {
 //        }
 
 
-
-        if(activeCycles != null && activeCycles.size()>0) {
+        if (activeCycles != null && activeCycles.size() > 0) {
             //Populate Fields
-            if(activeCycles.size() == 1) {
-//                //just launch the modifying activity
-                if(selectedCycle == null) {
+            if (activeCycles.size() == 1) {
+
+                // Just launch the modifying or ending activity
+                if (selectedCycle == null) {
                     selectedCycle = activeCycles.get(0);
                 }
 
-                Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
-                i.putExtra("_isUpdateCycleAction", true);
-                i.putExtra("_cycleId", selectedCycle.getCycleId());
-                startActivity(i);
-                finish();
+                if (isEndCycleAction) {
+                    Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+                    i.putExtra("_cycleId", selectedCycle.getCycleId());
+                    i.putExtra("_multipleCycles", multipleCycles);
+                    startActivity(i);
+                    finish();
+                } else {
+                    Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+                    i.putExtra("_isUpdateCycleAction", true);
+                    i.putExtra("_cycleId", selectedCycle.getCycleId());
+                    i.putExtra("_multipleCycles", multipleCycles);
+                    startActivity(i);
+                    finish();
+                }
 
+            } else {
+                multipleCycles = true;
             }
-            else {
-
-            }
-        }
-        else {
+        } else {
 
         }
 
@@ -155,20 +164,24 @@ public class EditCycleSelectCycle extends SherlockActivity {
 //                }
 //        });
 
-        String instructions = "Select next to modify the cycle";
-        if(activeCycles.size()>1) {
-            instructions = "There is more than one cycle currently running.\n" +
-                    "Select the cycle to edit.";
+        String instructions = "";
+        if (!isEndCycleAction) {
+            instructions = "Select next to modify the cycle";
+            if (activeCycles.size() > 1) {
+                instructions = "There is more than one cycle currently running. Select the cycle to edit.";
+            }
+        } else {
+            instructions = "Select next to end the cycle";
+            if (activeCycles.size() > 1) {
+                instructions = "There is more than one unfinished cycle. Select the cycle to end.";
+            }
         }
         txtInstructions.setText(instructions);
 
 
-
-
     }
 
-    private void inflateCustomBar()
-    {
+    private void inflateCustomBar() {
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
@@ -178,7 +191,7 @@ public class EditCycleSelectCycle extends SherlockActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(selectedCycle == null) {
+                        if (selectedCycle == null) {
                             Toast.makeText(getApplicationContext(), "Please select the cycle you wish to modify", Toast.LENGTH_LONG).show();
                             return;
                         }
@@ -189,7 +202,8 @@ public class EditCycleSelectCycle extends SherlockActivity {
                         startActivity(i);
                         finish();
                     }
-                });
+                }
+        );
         customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -197,12 +211,18 @@ public class EditCycleSelectCycle extends SherlockActivity {
                         finish();
                         return;
                     }
-                });
+                }
+        );
 
         customActionBarView.findViewById(R.id.actionbar_next).setVisibility(View.GONE);
 
         actionBar = getSupportActionBar();
-        actionBar.setTitle("EDIT CYCLE");
+
+        if (isEndCycleAction) {
+            actionBar.setTitle("END CYCLE");
+        } else {
+            actionBar.setTitle("EDIT CYCLE");
+        }
 
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -215,17 +235,15 @@ public class EditCycleSelectCycle extends SherlockActivity {
 
         actionBar.setDisplayShowCustomEnabled(true);
 
-      /**  actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT)); */
+        /**  actionBar.setDisplayOptions(
+         ActionBar.DISPLAY_SHOW_CUSTOM,
+         ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+         | ActionBar.DISPLAY_SHOW_TITLE);
+         actionBar.setCustomView(customActionBarView,
+         new ActionBar.LayoutParams(
+         ViewGroup.LayoutParams.MATCH_PARENT,
+         ViewGroup.LayoutParams.MATCH_PARENT)); */
     }
-
-
 
 
     @Override
@@ -239,7 +257,7 @@ public class EditCycleSelectCycle extends SherlockActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MainActivity.class);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {

@@ -1,13 +1,16 @@
 package org.applab.digitizingdata;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import android.widget.Toast;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
@@ -26,7 +29,7 @@ import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 import java.util.HashMap;
 
-public class MeetingStartingCashFrag extends SherlockFragment {
+public class MeetingStartingCashFrag extends SherlockFragment implements TabHost.OnTabChangeListener {
 
     ActionBar actionBar = null;
     String meetingDate = null;
@@ -39,6 +42,8 @@ public class MeetingStartingCashFrag extends SherlockFragment {
     String comment = "";
     boolean successFlg = false;
     private MeetingActivity parentActivity;
+    TextView txtActualCashInBox;
+    TextView txtActualCashInBoxComment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,8 +101,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
                 return false;
             case R.id.mnuMOCFSave:
                 //Save only if not in view only
-                if(parentActivity.isViewOnly())
-                {
+                if (parentActivity.isViewOnly()) {
                     Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return true;
                 }
@@ -125,7 +129,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
     public boolean saveStartingCash() {
 
         try {
-            TextView txtActualCashInBox = (TextView) getSherlockActivity().findViewById(R.id.txtActualStartingCash);
+            txtActualCashInBox = (TextView) getSherlockActivity().findViewById(R.id.txtActualStartingCash);
             String amountBox = txtActualCashInBox.getText().toString().trim();
             if (amountBox.length() < 1) {
                 //Allow it to be Zero
@@ -141,16 +145,17 @@ public class MeetingStartingCashFrag extends SherlockFragment {
                 }
             }
 
-            TextView txtStartingCashComment = (TextView) getSherlockActivity().findViewById(R.id.txtStartingCashComment);
-            String startingCashComment = txtStartingCashComment.getText().toString().trim();
+            txtActualCashInBoxComment = (TextView) getSherlockActivity().findViewById(R.id.txtStartingCashComment);
+            String startingCashComment = txtActualCashInBoxComment.getText().toString().trim();
             if (startingCashComment.length() < 1) {
-                // Allow it to be Zero
+
+                // Allow it to be nothing
                 comment = "";
             } else {
                 comment = startingCashComment;
                 if (theCashFromBank < 0.00) {
                     Utils.createAlertDialogOk(getSherlockActivity().getBaseContext(), "Meeting", "The value for Cash withdrawn from Bank is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtStartingCashComment.requestFocus();
+                    txtActualCashInBoxComment.requestFocus();
                     return false;
                 }
             }
@@ -244,15 +249,24 @@ public class MeetingStartingCashFrag extends SherlockFragment {
 
         }
 
-        HashMap<String, Double> startingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
+        //HashMap<String, Double> startingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
+
+        MeetingStartingCash startingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
+
 
         if (null != startingCash) {
             // lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", (startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BOX) - startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BANK))));
-            expectedStartingCash = startingCash.get(MeetingSchema.COL_MT_CASH_SAVED_BOX);
+            //expectedStartingCash = startingCash.get(MeetingSchema.COL_MT_CASH_SAVED_BOX);
+            expectedStartingCash = startingCash.getExpectedStartingCash();
+
             lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", expectedStartingCash));
 
             lblActualCashInBox.setText(String.format("Total Cash in Box %.0f UGX", expectedStartingCash - totalCashToBank));
             lblCashTakenToBank.setText(String.format("Cash Taken to Bank %.0f UGX", totalCashToBank));
+            if (startingCash.getActualStartingCash() > 0) {
+                txtActualCashInBox.setText(String.valueOf(startingCash.getActualStartingCash()));
+                txtActualCashInBoxComment.setText(String.valueOf(startingCash.getComment()));
+            }
 
             // lblActualCashInBox.setText(String.format("Total Cash in Box %.0f UGX", startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BOX)));
             //lblCashTakenToBank.setText(String.format("Cash Taken to Bank %.0f UGX", startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BANK)));
@@ -275,4 +289,36 @@ public class MeetingStartingCashFrag extends SherlockFragment {
 
          } */
     }
+
+    /**
+     * public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+     * if (parentActivity.isViewOnly()) {
+     * Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+     * <p/>
+     * }
+     * Log.d("MSC", "unselected");
+     * saveStartingCash();
+     * <p/>
+     * <p/>
+     * }
+     * <p/>
+     * <p/>
+     * public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+     * Log.d("MSC", "reselected");
+     * populateStartingCash();
+     * }
+     * <p/>
+     * public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+     * Log.d("MSC", "selected");
+     * populateStartingCash();
+     * }
+     */
+    @Override
+    public void onTabChanged(String tabId) {
+
+        Log.d("MSC", "onTabChanged(): tabId=" + tabId);
+
+
+    }
+
 }

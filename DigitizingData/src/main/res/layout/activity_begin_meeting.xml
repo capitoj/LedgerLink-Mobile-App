@@ -27,8 +27,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
                 android:text="CURRENT MEETING"
-                android:id="@+id/lblBMSection1"
-                android:paddingLeft="10dip" />
+                android:id="@+id/lblBMSection1"/>
 
             <!--   <TextView
                    android:layout_width="fill_parent"
@@ -46,7 +45,6 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
                 android:text="You may edit before sending."
                 android:id="@+id/lblBMInstructionCurrent" />
 
@@ -91,8 +89,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
                 android:text="UNSENT PAST MEETINGS"
-                android:id="@+id/lblBMSection2"
-                android:paddingLeft="10dip" />
+                android:id="@+id/lblBMSection2"/>
 
             <!--<TextView style="@style/LedgerLinkSubHeading"
                 android:layout_width="fill_parent"

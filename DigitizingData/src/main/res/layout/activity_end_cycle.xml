@@ -22,19 +22,32 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:text="If your cycle has ended, enter the share out date." />
-        <requestFocus/>
 
+        <requestFocus />
 
-        <RadioGroup
-            android:id="@+id/grpECExistingCycles"
-            style="@style/RegularText"
+       <!-- <ListView
+            android:id="@+id/lstCyclesToEnd"
+            style="@style/RegularTextDateListItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lblECInstruction"
             android:layout_marginBottom="10dip"
-            android:layout_marginTop="10dip"
-            android:orientation="vertical"></RadioGroup>
+            android:choiceMode="singleChoice"
+            android:dividerHeight="2dip">
 
+
+        </ListView> -->
+
+
+        <!--   <RadioGroup
+               android:id="@+id/grpECExistingCycles"
+               style="@style/RegularText"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_below="@id/lblECInstruction"
+               android:layout_marginBottom="10dip"
+               android:layout_marginTop="10dip"
+               android:orientation="vertical"></RadioGroup>
+        -->
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblECShareOutDate"
@@ -42,7 +55,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/grpECExistingCycles"
+            android:layout_below="@id/lblECInstruction"
             android:text="Share Out Date" />
 
         <org.applab.digitizingdata.fontutils.TypefaceEditText

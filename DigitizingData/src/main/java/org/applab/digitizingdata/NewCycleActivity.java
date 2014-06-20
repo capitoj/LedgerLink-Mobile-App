@@ -21,14 +21,11 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
@@ -58,6 +55,7 @@ public class NewCycleActivity extends SherlockActivity {
     protected AlertDialog alertDialog = null;
     protected boolean successAlertDialogShown = false;
     protected boolean isUpdateCycleAction = false;
+    protected boolean multipleCyclesIndicator = false;
 
     protected VslaCycle selectedCycle;
 
@@ -70,6 +68,10 @@ public class NewCycleActivity extends SherlockActivity {
 
         if (getIntent().hasExtra("_isUpdateCycleAction")) {
             isUpdateCycleAction = getIntent().getBooleanExtra("_isUpdateCycleAction", false);
+        }
+
+        if (getIntent().hasExtra("_multipleCycles")) {
+            multipleCyclesIndicator = getIntent().getBooleanExtra("_multipleCycles", false);
         }
 
         inflateCustombar();
@@ -209,9 +211,15 @@ public class NewCycleActivity extends SherlockActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        Intent i = new Intent(getApplicationContext(), EditCycleSelectCycle.class);
+                        Intent i;
+                        if (multipleCyclesIndicator) {
+                            i = new Intent(getApplicationContext(), SelectCycle.class);
+                        } else {
+                            i = new Intent(getApplicationContext(), MainActivity.class);
+                        }
+                        i.putExtra("_isEndCycleAction", true);
                         startActivity(i);
+                        finish();
                     }
                 }
         );
@@ -560,7 +568,7 @@ public class NewCycleActivity extends SherlockActivity {
             //Check that the Cycle Start Date does not overlap with the date the previous cycle ended
             //First, get the most recent cycle
             VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getApplicationContext());
-            VslaCycle mostRecentCycle = vslaCycleRepo.getMostRecentCycle();
+            VslaCycle mostRecentCycle = vslaCycleRepo.getMostRecentUnEndedCycle();
 
             if (null != mostRecentCycle) {
                 if (isUpdateCycleAction && mostRecentCycle.getCycleId() == cycle.getCycleId()) {
