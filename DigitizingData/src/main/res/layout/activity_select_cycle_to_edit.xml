@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/frmMAH_top_control_bar">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dip">
+
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            style="@style/RegularTextInstruction"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="You have more than one active cycle. Please choose the cycle for the new meeting."
+            android:id="@+id/lblMDMultipleCycles" />
+
+        <ListView
+                android:id="@+id/lstSelectCycleToEdit"
+                style="@style/List"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:choiceMode="singleChoice">
+
+        </ListView>
+
+
+
+    </LinearLayout>
+</ScrollView>

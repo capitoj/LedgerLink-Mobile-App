@@ -65,14 +65,14 @@
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
-                android:id="@+id/lblAMOtherNames"
+                android:id="@+id/lblAMOtherName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Other Names *" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
-                android:id="@+id/txtAMOtherNames"
+                android:id="@+id/txtAMOtherName"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
