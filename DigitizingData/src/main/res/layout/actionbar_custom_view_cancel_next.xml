@@ -13,7 +13,7 @@
         android:layout_width="80dip"
         android:layout_height="match_parent"
         android:layout_marginBottom="6dip"
-        android:layout_marginRight="5dip"
+        android:layout_marginRight="3dip"
         android:layout_marginTop="6dip" />
 
     <include
@@ -21,6 +21,6 @@
         android:layout_width="75dip"
         android:layout_height="match_parent"
         android:layout_marginBottom="6dip"
-        android:layout_marginRight="5dip"
+        android:layout_marginRight="2dip"
         android:layout_marginTop="6dip" />
 </LinearLayout>
