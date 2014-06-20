@@ -126,6 +126,9 @@ public class NewCycleActivity extends SherlockActivity {
             }
             if (selectedCycle != null) {
                 //displayMessageBox("Testing", "Cycle to Update Found", Utils.MSGBOX_ICON_INFORMATION);
+                //Change the title in edit mode
+                TextView lblNCHeader = (TextView) findViewById(R.id.lblNCHeader);
+                lblNCHeader.setText("Edit the cycle beginning "+Utils.formatDate(selectedCycle.getStartDate(), "dd MMM yyyy")+" and ending "+Utils.formatDate(selectedCycle.getEndDate(), "dd MMM yyyy")+".");
                 //Populate Fields
                 populateDataFields(selectedCycle);
 

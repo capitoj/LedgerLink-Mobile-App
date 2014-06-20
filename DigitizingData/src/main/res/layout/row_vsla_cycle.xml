@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -11,4 +11,4 @@
         android:padding="5dp"
         android:text="01 Jan 2013 - 31 Dec 2013"/>
 
-</LinearLayout>
+</RelativeLayout>

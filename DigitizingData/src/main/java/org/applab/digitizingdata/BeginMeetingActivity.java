@@ -84,7 +84,8 @@ public class BeginMeetingActivity extends SherlockActivity {
         if (null == meetingRepo) meetingRepo = new MeetingRepo(getApplicationContext());
 
         recentCycle = cycleRepo.getMostRecentCycle();
-        pastMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
+        //past meetings should be not active and not sent
+        pastMeetings = meetingRepo.getAllMeetingsByDataSentStatusAndActiveStatus(false, false);
 
         // Check fore fresh start; no meetings other than GSW
         if (meetingRepo.getAllNonGSWMeetings().isEmpty()) {

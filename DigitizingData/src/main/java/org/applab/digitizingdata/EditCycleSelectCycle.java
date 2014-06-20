@@ -24,7 +24,9 @@ import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
+import org.applab.digitizingdata.helpers.ConcurrentMeetingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.helpers.VslaCyclesArrayAdapter;
 import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
@@ -33,6 +35,7 @@ import org.applab.digitizingdata.repo.VslaCycleRepo;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 
 
@@ -54,49 +57,83 @@ public class EditCycleSelectCycle extends SherlockActivity {
 
 
 
-        setContentView(R.layout.activity_meeting_definition);
+        setContentView(R.layout.activity_select_cycle_to_edit);
 
         //Setup the Fields by getting the current Cycle
         VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
 
         //Deal with the radio buttons
-        grpCycleDates = (RadioGroup)findViewById(R.id.grpMDExistingCycles);
-
-        TextView lblMDHeading = (TextView)findViewById(R.id.lblMDHeading);
-        lblMDHeading.setVisibility(View.GONE);
+        //grpCycleDates = (RadioGroup)findViewById(R.id.grpMDExistingCycles);
 
         //Retrieve all the active cycles
+        ListView cyclesListView = (ListView) findViewById(R.id.lstSelectCycleToEdit);
+        TextView txtInstructions = (TextView)findViewById(R.id.lblMDMultipleCycles);
+
         ArrayList<VslaCycle> activeCycles = cycleRepo.getActiveCycles();
+        if(activeCycles != null && activeCycles.size()==0) {
+            //no cycles
+             cyclesListView.setVisibility(View.GONE);
+            txtInstructions.setText("There are no active cycles to modify");
+            return;
+        }
+
+
+        final VslaCyclesArrayAdapter adapter = new VslaCyclesArrayAdapter(getBaseContext(), activeCycles);
+
+
+        cyclesListView.setAdapter(adapter);
+        cyclesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                selectedCycle = adapter.getItem(position);
+                Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+                i.putExtra("_isUpdateCycleAction", true);
+                i.putExtra("_cycleId", selectedCycle.getCycleId());
+                startActivity(i);
+                finish();
+            }
+        });
+//        grpCycleDates.addView(cyclesListView);
+        Utils.setListViewHeightBasedOnChildren(cyclesListView);
 
         //Create radio buttons dynamically
-        if(activeCycles != null) {
-            for(VslaCycle cycle: activeCycles) {
-                RadioButton radCycle = new RadioButton(this);
-                String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), "dd MMM yyyy"),
-                        Utils.formatDate(cycle.getEndDate(), "dd MMM yyyy"));
-                radCycle.setText(cycleDates);
-                radCycle.setId(cycle.getCycleId());
-                //radCycle.setTextColor();
-                radCycle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                radCycle.setTypeface(radCycle.getTypeface(), Typeface.BOLD);
-                //radCycle.setPadding(10,0,0,0);
-                radCycle.setTag(cycle); //Store the VslaCycle object in the Tag property of the radio button
-                //radCycle.setTextColor(txtMeetingDate.getTextColors());
-                grpCycleDates.addView(radCycle);
+//        if(activeCycles != null) {
+//            for(VslaCycle cycle: activeCycles) {
+//                RadioButton radCycle = new RadioButton(this);
+//                String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), "dd MMM yyyy"),
+//                        Utils.formatDate(cycle.getEndDate(), "dd MMM yyyy"));
+//                radCycle.setText(cycleDates);
+//                radCycle.setId(cycle.getCycleId());
+//                //radCycle.setTextColor();
+//                radCycle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+//                radCycle.setTypeface(radCycle.getTypeface(), Typeface.BOLD);
+//                //radCycle.setPadding(10,0,0,0);
+//                radCycle.setTag(cycle); //Store the VslaCycle object in the Tag property of the radio button
+//                //radCycle.setTextColor(txtMeetingDate.getTextColors());
+//                grpCycleDates.addView(radCycle);
+//
+//                if(activeCycles.size() == 1) {
+//                    radCycle.setChecked(true);
+//                }
+//            }
+//        }
 
-                if(activeCycles.size() == 1) {
-                    radCycle.setChecked(true);
-                }
-            }
-        }
+
 
         if(activeCycles != null && activeCycles.size()>0) {
             //Populate Fields
             if(activeCycles.size() == 1) {
+//                //just launch the modifying activity
                 if(selectedCycle == null) {
                     selectedCycle = activeCycles.get(0);
                 }
 
+                Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+                i.putExtra("_isUpdateCycleAction", true);
+                i.putExtra("_cycleId", selectedCycle.getCycleId());
+                startActivity(i);
+                finish();
 
             }
             else {
@@ -108,26 +145,23 @@ public class EditCycleSelectCycle extends SherlockActivity {
         }
 
         //Setup the Checked Listener
-        grpCycleDates.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton radChecked = (RadioButton) findViewById(checkedId);
-                selectedCycle = (VslaCycle)radChecked.getTag();
+//        grpCycleDates.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+//        {
+//            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                RadioButton radChecked = (RadioButton) findViewById(checkedId);
+//                selectedCycle = (VslaCycle)radChecked.getTag();
+//
+//                }
+//        });
 
-                }
-        });
-        TextView txtInstructions = (TextView)findViewById(R.id.lblMDMultipleCycles);
         String instructions = "Select next to modify the cycle";
         if(activeCycles.size()>1) {
-            instructions = "You have more than one active cycle. Please choose the cycle you want to modify";
+            instructions = "There is more than one cycle currently running.\n" +
+                    "Select the cycle to edit.";
         }
         txtInstructions.setText(instructions);
 
 
-        TextView txtDateInstructions = (TextView)findViewById(R.id.lblMDHeader);
-        txtDateInstructions.setVisibility(View.GONE);
-        TextView txtMeetingDate = (TextView) findViewById(R.id.txtMDMeetingDate);
-        txtMeetingDate.setVisibility(View.GONE);
 
 
     }
