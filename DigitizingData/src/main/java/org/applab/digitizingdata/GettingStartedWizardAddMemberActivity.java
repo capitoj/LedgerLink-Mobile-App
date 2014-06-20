@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -41,17 +42,24 @@ import java.util.Calendar;
 public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     MemberRepo repo;
     private ActionBar actionBar;
-    private Member selectedMember;
     private int selectedMemberId;
     private boolean successAlertDialogShown = false;
     private boolean selectedFinishButton = false;
     private String dlgTitle = "Add Member";
     private boolean isEditAction;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//
+//
+//        super.onCreate(savedInstanceState);
+//        initializeActivity();
+//    }
 
-        super.onCreate(savedInstanceState);
+    @Override
+    protected void initializeActivity()
+    {
+
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         if (getIntent().hasExtra("_isEditAction")) {
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction", false);
@@ -60,32 +68,24 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             Log.d(getBaseContext().getPackageName(), "Member id " + getIntent().getIntExtra("_id", 0) + " to be loaded");
             this.selectedMemberId = getIntent().getIntExtra("_id", 0);
         }
-
         setContentView(R.layout.activity_member_details_view_gettings_started_wizard);
-
         // Set instructions
         TypefaceTextView lblAMInstruction = (TypefaceTextView) findViewById(R.id.lblAMInstruction);
-
         SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
-
         SpannableStringBuilder plusText = new SpannableStringBuilder("+ ");
         plusText.setSpan(new StyleSpan(Typeface.BOLD), 0, plusText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
         SpannableStringBuilder nextText = new SpannableStringBuilder("next.");
         nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
         headingInstruction.append("Enter each member. Save and add another member by tapping ");
         headingInstruction.append(plusText);
         headingInstruction.append("and when you have entered all members, tap ");
         headingInstruction.append(nextText);
-
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
         actionBar = getSupportActionBar();
-
         if (isEditAction) {
             // actionBar.setTitle("Edit Member");
             actionBar.setTitle("GET STARTED");
@@ -156,17 +156,14 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("GET STARTED");
-
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
         );
-
         actionBar.setDisplayShowCustomEnabled(true);
-
         lblAMInstruction.setText(headingInstruction);
-
+        cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         clearDataFields();
         if (isEditAction) {
             repo = new MemberRepo(getApplicationContext());
@@ -214,139 +211,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         cboGender.setClickable(true);
     }
 
-    /* Populates the member no spinner with available member numbers */
-    private void buildMemberNoSpinner() {
 
-        Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
-        repo = new MemberRepo(getApplicationContext());
-        ArrayList<String> memberNumberArrayList = new ArrayList<String>();
-        memberNumberArrayList.add("select number");
-        //If we have a selected member, then add the member number to the adapter
-        if (selectedMember != null && selectedMember.getMemberNo() != 0) {
-            memberNumberArrayList.add(selectedMember.getMemberNo() + "");
-        }
-        for (String mNo : repo.getListOfAvailableMemberNumbers(30)) {
-            Log.d(getBaseContext().getPackageName(), "Member number found " + mNo);
-            memberNumberArrayList.add(mNo);
-        }
-        String[] memberNumberList = memberNumberArrayList.toArray(new String[memberNumberArrayList.size()]);
-        memberNumberArrayList.toArray(memberNumberList);
-        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, memberNumberList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-
-                return v;
-            }
-
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                return v;
-            }
-        };
-
-        memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboAMMemberNo.setAdapter(memberNoAdapter);
-        cboAMMemberNo.setOnItemSelectedListener(new CustomGenderSpinnerListener());
-        //Make the spinner selectable
-        cboAMMemberNo.setFocusable(true);
-        cboAMMemberNo.setFocusableInTouchMode(true);
-        cboAMMemberNo.setClickable(true);
-    }
-
-    /* Populates the member age spinner  */
-    private void buildAgeSpinner() {
-
-        Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
-        repo = new MemberRepo(getApplicationContext());
-        ArrayList<String> ageArrayList = new ArrayList<String>();
-        ageArrayList.add("select age");
-        for (int i = 16; i <= 80; i++) {
-            ageArrayList.add(i + "");
-        }
-        String[] ageList = ageArrayList.toArray(new String[ageArrayList.size()]);
-        ageArrayList.toArray(ageList);
-        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, ageList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-
-                return v;
-            }
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                return v;
-            }
-        };
-        memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboAMAge.setAdapter(memberNoAdapter);
-        cboAMAge.setOnItemSelectedListener(new CustomGenderSpinnerListener());
-        //Make the spinner selectable
-        cboAMAge.setFocusable(true);
-        cboAMAge.setFocusableInTouchMode(true);
-        cboAMAge.setClickable(true);
-    }
-
-    /* Populates the member cycles completed spinner */
-    private void buildCyclesCompletedSpinner() {
-
-        Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
-        repo = new MemberRepo(getApplicationContext());
-        ArrayList<String> cyclesArrayList = new ArrayList<String>();
-        cyclesArrayList.add("select number");
-        for (int i = 0; i <= 20; i++) {
-            cyclesArrayList.add(i + "");
-        }
-        String[] ageList = cyclesArrayList.toArray(new String[cyclesArrayList.size()]);
-        cyclesArrayList.toArray(ageList);
-        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, ageList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-
-                return v;
-            }
-
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                return v;
-            }
-        };
-
-
-        memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboAMCycles.setAdapter(memberNoAdapter);
-        cboAMCycles.setOnItemSelectedListener(new CustomGenderSpinnerListener());
-
-        // Make the spinner selectable
-        cboAMCycles.setFocusable(true);
-        cboAMCycles.setFocusableInTouchMode(true);
-        cboAMCycles.setClickable(true);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -603,86 +468,31 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         }
     }
 
-    private void populateDataFields(Member member) {
 
-        try {
-            clearDataFields();
-            if (member == null) {
-                return;
-            }
 
-            // Populate the Fields
-            Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
-            Utils.setSpinnerSelection(member.getMemberNo() + "", cboAMMemberNo);
-            TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
-            if (member.getSurname() != null) {
-                txtSurname.setText(member.getSurname());
-            }
-            TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
-            if (member.getOtherNames() != null) {
-                txtOtherNames.setText(member.getOtherNames());
-            }
-            Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
-            Utils.setSpinnerSelection(member.getGender(), cboGender);
-            TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
-            if (member.getOccupation() != null) {
-                txtOccupation.setText(member.getOccupation());
-            }
-            TextView txtPhone = (TextView) findViewById(R.id.txtAMPhoneNo);
-            if (member.getPhoneNumber() != null) {
-                txtPhone.setText(member.getPhoneNumber());
-            }
+    @Override
+    protected void populateDataFields(Member member) {
 
-            //Set the age
-            Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
-            Calendar calToday = Calendar.getInstance();
-            Calendar calDb = Calendar.getInstance();
-            calDb.setTime(member.getDateOfBirth());
-            int computedAge = calToday.get(Calendar.YEAR) - calDb.get(Calendar.YEAR);
-            Utils.setSpinnerSelection(computedAge + "", cboAMAge);
-            calToday = Calendar.getInstance();
-            //TODO: When we allow members to take leave, we may be better allowing this field to be editable
-            //Set cycles
-            Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
-            Calendar calDbCycles = Calendar.getInstance();
-            calDbCycles.setTime(member.getDateOfAdmission());
-            int cycles = calToday.get(Calendar.YEAR) - calDbCycles.get(Calendar.YEAR);
-            Utils.setSpinnerSelection(cycles + "", cboAMCycles);
-            Log.d(getBaseContext().getPackageName(), "Member savings and Loans are " + member.getSavingsOnSetup() + " and " + member.getOutstandingLoanOnSetup());
-            //Populate fields for savings and loan at setup
-            TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
-            txtSavingsSoFar.setText(String.format("%.0f", member.getSavingsOnSetup()));
-            TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
-            txtLoanAmount.setText(String.format("%.0f", member.getOutstandingLoanOnSetup()));
+        super.populateDataFields(member);
 
-        } finally {
-        }
+        TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
+        txtSavingsSoFar.setText(String.format("%.0f", member.getSavingsOnSetup()));
+        TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
+        txtLoanAmount.setText(String.format("%.0f", member.getOutstandingLoanOnSetup()));
 
     }
 
-    private void clearDataFields() {
+    @Override
+    protected void clearDataFields() {
 
-        //Spinner items
-        buildGenderSpinner();
-        buildMemberNoSpinner();
-        buildAgeSpinner();
-        buildCyclesCompletedSpinner();
+        super.clearDataFields();
 
-        // Populate the Fields
-        Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
+        //Clear GSW values
+        TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
+        txtSavingsSoFar.setText(null);
+        TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
+        txtLoanAmount.setText(null);
 
-        //txtMemberNo.setText(null);
-        TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
-        txtSurname.setText(null);
-        TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
-        txtOtherNames.setText(null);
-        //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
-        //txtGender.setText(null);
-        TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
-        txtOccupation.setText(null);
-        TextView txtPhone = (TextView) findViewById(R.id.txtAMPhoneNo);
-        txtPhone.setText(null);
-        cboAMMemberNo.requestFocus();
     }
 
 }

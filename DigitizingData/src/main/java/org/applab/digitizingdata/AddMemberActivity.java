@@ -41,7 +41,7 @@ import java.util.Calendar;
  */
 public class AddMemberActivity extends SherlockActivity {
     private ActionBar actionBar;
-    private Member selectedMember;
+    public Member selectedMember;
     private int selectedMemberId;
     private boolean successAlertDialogShown = false;
     private boolean selectedFinishButton = false;
@@ -52,14 +52,20 @@ public class AddMemberActivity extends SherlockActivity {
     MemberRepo repo;
     Meeting targetMeeting;
     private boolean isEditAction;
+    public Spinner cboAMMemberNo;
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+        initializeActivity();
+    }
 
+    protected void initializeActivity()
+    {
+
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         if(getIntent().hasExtra("_meetingId")) {
             meetingId = getIntent().getIntExtra("_meetingId", 0);
         }
@@ -69,22 +75,13 @@ public class AddMemberActivity extends SherlockActivity {
         if(getIntent().hasExtra("_isEditAction")){
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction", false);
         }
-
-
         meetingRepo = new MeetingRepo(getApplicationContext());
         targetMeeting = meetingRepo.getMeetingById(meetingId);
-
-
         inflateCustomActionBar();
         // END_INCLUDE (inflate_set_custom_view)
         //if in getting started wizard.. use the getting started layout
         //else use the default layout
-
-
         setContentView(R.layout.activity_add_member);
-
-
-
         //Setup the Spinner Items
         Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
         String[] genderList = new String[]{"Male", "Female"};
@@ -115,14 +112,12 @@ public class AddMemberActivity extends SherlockActivity {
         };
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboGender.setAdapter(adapter);
-
         cboGender.setOnItemSelectedListener(new CustomGenderSpinnerListener());
-
         //Make the spinner selectable
         cboGender.setFocusable(true);
         cboGender.setFocusableInTouchMode(true);
         cboGender.setClickable(true);
-
+        cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         clearDataFields();
         if(isEditAction){
             repo = new MemberRepo(getApplicationContext());
@@ -506,7 +501,7 @@ public class AddMemberActivity extends SherlockActivity {
         }
     }
 
-    private void populateDataFields(final Member member) {
+    protected void populateDataFields(final Member member) {
         try {
 
             clearDataFields();
@@ -590,7 +585,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
 
-    private void clearDataFields() {
+    protected void clearDataFields() {
         //Spinner items
         buildGenderSpinner();
         //This portion could take long so run it as long task
@@ -603,7 +598,7 @@ public class AddMemberActivity extends SherlockActivity {
             }
         };
         LongTaskRunner.runLongTask(runnable, "Please wait...", "Please wait a moment...", AddMemberActivity.this);
-
+        //buildMemberNoSpinner();
 
         buildAgeSpinner();
         buildCyclesCompletedSpinner();
@@ -661,9 +656,9 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     /* Populates the member no spinner with available member numbers */
-    private void buildMemberNoSpinner() {
+    protected void buildMemberNoSpinner() {
 
-        final Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
+
         repo = new MemberRepo(getApplicationContext());
         final ArrayList<String> memberNumberArrayList = new ArrayList<String>();
         memberNumberArrayList.add("select number");
@@ -734,7 +729,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     /* Populates the member age spinner  */
-    private void buildAgeSpinner() {
+    protected void buildAgeSpinner() {
 
         Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
         repo = new MemberRepo(getApplicationContext());
@@ -775,7 +770,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     /* Populates the member cycles completed spinner */
-    private void buildCyclesCompletedSpinner() {
+    protected void buildCyclesCompletedSpinner() {
 
         Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
         repo = new MemberRepo(getApplicationContext());

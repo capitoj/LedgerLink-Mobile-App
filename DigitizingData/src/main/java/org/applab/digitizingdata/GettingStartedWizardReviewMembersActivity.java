@@ -193,10 +193,20 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
             members = new ArrayList<Member>();
         }
         //Now get the data via the adapter
-        GettingStartedWizardMembersArrayAdapter adapter = new GettingStartedWizardMembersArrayAdapter(getBaseContext(), members);
+        final GettingStartedWizardMembersArrayAdapter adapter = new GettingStartedWizardMembersArrayAdapter(getBaseContext(), members);
         Log.d(getBaseContext().getPackageName(), members.size() + " members loaded");
         //Assign Adapter to ListView
-        setListAdapter(adapter);
+        //Assign Adapter to ListView
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+
+                setListAdapter(adapter);
+                Utils.setListViewHeightBasedOnChildren(getListView());
+            }
+        });
         getListView().setDivider(null);
         // listening to single list item on click
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -217,7 +227,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
             }
         });
-        Utils.setListViewHeightBasedOnChildren(getListView());
+
     }
 
 
