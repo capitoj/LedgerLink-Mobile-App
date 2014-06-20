@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="40dip"
+    android:layout_height="match_parent"
     android:divider="?android:attr/dividerVertical"
     android:dividerPadding="12dip"
     android:orientation="horizontal"
@@ -9,16 +9,16 @@
     android:gravity="right">
 
     <include
-        layout="@layout/include_back_button"
-        android:layout_width="70dip"
+        layout="@layout/include_cancel_button"
+        android:layout_width="80dip"
         android:layout_height="match_parent"
         android:layout_marginBottom="6dip"
-        android:layout_marginRight="3dip"
+        android:layout_marginRight="2dip"
         android:layout_marginTop="6dip" />
 
     <include
-        layout="@layout/include_enter_next_button"
-        android:layout_width="40dip"
+        layout="@layout/include_back_button"
+        android:layout_width="80dip"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_marginBottom="6dip"
@@ -32,5 +32,5 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="6dip"
         android:layout_marginLeft="3dip"
-        android:layout_marginTop="6dip" />
+        android:layout_marginTop="6dip" />/>
 </LinearLayout>

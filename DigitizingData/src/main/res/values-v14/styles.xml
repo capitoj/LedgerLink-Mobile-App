@@ -233,6 +233,17 @@
         <item name="android:layout_marginBottom">20dip</item>
     </style>
 
+    <style name="RegularTextDateListItems">
+        <item name="android:fontFamily">normal</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/ledger_link_black</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:layout_marginTop">10dip</item>
+        <item name="android:layout_marginLeft">35dip</item>
+        <item name="android:layout_marginRight">35dip</item>
+        <item name="android:gravity">center</item>
+    </style>
+
     <style name="RegularTextListItems">
         <item name="android:fontFamily">normal</item>
         <item name="android:textSize">20sp</item>

@@ -9,16 +9,25 @@
     android:gravity="right">
 
     <include
-        layout="@layout/include_back_button"
-        android:layout_width="70dip"
+        layout="@layout/include_cancel_button"
+        android:layout_width="80dip"
         android:layout_height="match_parent"
         android:layout_marginBottom="6dip"
         android:layout_marginRight="3dip"
         android:layout_marginTop="6dip" />
 
     <include
-        layout="@layout/include_enter_next_button"
-        android:layout_width="40dip"
+        layout="@layout/include_back_button"
+        android:layout_width="70dip"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="3dip"
+        android:layout_marginBottom="6dip"
+        android:layout_marginRight="3dip"
+        android:layout_marginTop="6dip" />
+
+    <include
+        layout="@layout/include_next_button"
+        android:layout_width="70dip"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_marginBottom="6dip"

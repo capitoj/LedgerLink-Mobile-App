@@ -67,11 +67,12 @@ public class NewCycleActivity extends SherlockActivity {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        inflateCustombar();
 
         if (getIntent().hasExtra("_isUpdateCycleAction")) {
             isUpdateCycleAction = getIntent().getBooleanExtra("_isUpdateCycleAction", false);
         }
+
+        inflateCustombar();
 
         if (isUpdateCycleAction) {
             actionBar.setTitle("Edit Cycle");
@@ -110,17 +111,14 @@ public class NewCycleActivity extends SherlockActivity {
         if (isUpdateCycleAction) {
             // Setup the Fields by getting the current Cycle
 
-            if(! getIntent().hasExtra("_cycleId")) {
+            if (!getIntent().hasExtra("_cycleId")) {
                 VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
                 selectedCycle = repo.getCurrentCycle();
-            }
-            else if(getIntent().getIntExtra("_cycleId", 0) != 0)
-            {
+            } else if (getIntent().getIntExtra("_cycleId", 0) != 0) {
                 //for concurrent cycles , if cycle id is passed then load the specified cycle
                 VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
                 selectedCycle = repo.getCycle(getIntent().getIntExtra("_cycleId", 0));
-            }
-            else {
+            } else {
                 VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
                 selectedCycle = repo.getCurrentCycle();
             }
@@ -128,7 +126,7 @@ public class NewCycleActivity extends SherlockActivity {
                 //displayMessageBox("Testing", "Cycle to Update Found", Utils.MSGBOX_ICON_INFORMATION);
                 //Change the title in edit mode
                 TextView lblNCHeader = (TextView) findViewById(R.id.lblNCHeader);
-                lblNCHeader.setText("Edit the cycle beginning "+Utils.formatDate(selectedCycle.getStartDate(), "dd MMM yyyy")+" and ending "+Utils.formatDate(selectedCycle.getEndDate(), "dd MMM yyyy")+".");
+                lblNCHeader.setText("Edit the cycle beginning " + Utils.formatDate(selectedCycle.getStartDate(), "dd MMM yyyy") + " and ending " + Utils.formatDate(selectedCycle.getEndDate(), "dd MMM yyyy") + ".");
                 //Populate Fields
                 populateDataFields(selectedCycle);
 
@@ -174,7 +172,7 @@ public class NewCycleActivity extends SherlockActivity {
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_next, null);
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_back_next_done, null);
 
         customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
                 new View.OnClickListener() {
@@ -194,6 +192,36 @@ public class NewCycleActivity extends SherlockActivity {
                     }
                 }
         );
+
+        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        saveCycleData();
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(i);
+
+                    }
+                }
+        );
+
+        customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent i = new Intent(getApplicationContext(), EditCycleSelectCycle.class);
+                        startActivity(i);
+                    }
+                }
+        );
+
+        if (isUpdateCycleAction) {
+            customActionBarView.findViewById(R.id.actionbar_next).setVisibility(View.GONE);
+        } else {
+            customActionBarView.findViewById(R.id.actionbar_back).setVisibility(View.GONE);
+            customActionBarView.findViewById(R.id.actionbar_done).setVisibility(View.GONE);
+        }
 
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
@@ -356,33 +384,30 @@ public class NewCycleActivity extends SherlockActivity {
         boolean successFlg = false;
 
         VslaCycle cycle = new VslaCycle();
-        
+
         if (selectedCycle != null) {
             cycle = selectedCycle;
         }
 
         if (validateData(cycle)) {
             final VslaCycle finalCycle = cycle;
-            Runnable runnable = new Runnable()
-            {
+            Runnable runnable = new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     saveCycleDataToDb(finalCycle);
                 }
             };
             LongTaskRunner.runLongTask(runnable, "Please wait...", "Saving cycle information...", NewCycleActivity.this);
 
             return true;
-                //clearDataFields(); //Not needed now
-            } else {
-                //displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.", Utils.MSGBOX_ICON_EXCLAMATION);
+            //clearDataFields(); //Not needed now
+        } else {
+            //displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.", Utils.MSGBOX_ICON_EXCLAMATION);
             return false;
-            }
         }
+    }
 
-    private boolean saveCycleDataToDb(VslaCycle cycle)
-    {
+    private boolean saveCycleDataToDb(VslaCycle cycle) {
         VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
         boolean retVal = false;
         if (cycle.getCycleId() != 0) {
@@ -412,6 +437,10 @@ public class NewCycleActivity extends SherlockActivity {
                 return false;
             }
 
+            if(isUpdateCycleAction){
+                return true;
+            }
+
             //Pass on the flag indicating whether this is an Update operation
             Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
             i.putExtra("_isUpdateCycleAction", isUpdateCycleAction);
@@ -423,9 +452,7 @@ public class NewCycleActivity extends SherlockActivity {
                 }
                 */
             successFlg = true;
-    }
-
-    else {
+        } else {
             //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
         }
 
@@ -618,11 +645,9 @@ public class NewCycleActivity extends SherlockActivity {
             txtSharePrice.setText(Utils.formatRealNumber(cycle.getSharePrice()));
             //Fix... select spinner on post creation
             //fix for failure to select these values
-            cboMaxShareQty.post(new Runnable()
-            {
+            cboMaxShareQty.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     Utils.setSpinnerSelection(String.format("%.0f", cycle.getMaxSharesQty()), cboMaxShareQty); //format shares qty with no decimal points so that the Utils can select it correctly
                 }
             });

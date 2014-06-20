@@ -97,6 +97,7 @@ public class EditCycleSelectCycle extends SherlockActivity {
 //        grpCycleDates.addView(cyclesListView);
         Utils.setListViewHeightBasedOnChildren(cyclesListView);
 
+
         //Create radio buttons dynamically
 //        if(activeCycles != null) {
 //            for(VslaCycle cycle: activeCycles) {
@@ -197,6 +198,9 @@ public class EditCycleSelectCycle extends SherlockActivity {
                         return;
                     }
                 });
+
+        customActionBarView.findViewById(R.id.actionbar_next).setVisibility(View.GONE);
+
         actionBar = getSupportActionBar();
         actionBar.setTitle("EDIT CYCLE");
 
