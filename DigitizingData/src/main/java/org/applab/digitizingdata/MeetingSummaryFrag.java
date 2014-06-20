@@ -78,15 +78,17 @@ public class MeetingSummaryFrag extends SherlockFragment {
         meetingRepo = new MeetingRepo(getSherlockActivity().getBaseContext());
         Meeting currentMeeting = meetingRepo.getMeetingById(meetingId);
 
-        TextView lblCycleStartDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFCycleStartDate);
-        TextView lblCycleEndDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFCycleEndDate);
         TextView lblTotalSavings = (TextView) getSherlockActivity().findViewById(R.id.lblMSFTotalSavings);
-        TextView lblIssuedLoans = (TextView) getSherlockActivity().findViewById(R.id.lblMSFIssuedLoans);
         TextView lblOutstandingLoans = (TextView) getSherlockActivity().findViewById(R.id.lblMSFOutstandingLoans);
+
+        TextView lblSectionLastMeeting = (TextView) getSherlockActivity().findViewById(R.id.lblMSFSection2);
+
+        //TextView lblCycleStartDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFCycleStartDate);
+        //TextView lblCycleEndDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFCycleEndDate);
+        // TextView lblIssuedLoans = (TextView) getSherlockActivity().findViewById(R.id.lblMSFIssuedLoans);
         //TextView lblCashInBank = (TextView)getSherlockActivity().findViewById(R.id.lblMSFCashInBank);
 
         MeetingFineRepo fineRepo = new MeetingFineRepo(getSherlockActivity().getApplicationContext());
-
 
         MeetingSavingRepo savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
         MeetingLoanIssuedRepo loansIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
@@ -118,23 +120,22 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
             //TODO: May Add Attendance
         }
-        lblCycleStartDate.setText(String.format("From: %s", startDate));
-        lblCycleEndDate.setText(String.format("To: %s", endDate));
-        lblTotalSavings.setText(String.format("Total Savings: %,.0f UGX", totalSavings));
-        lblIssuedLoans.setText(String.format("Loans Issued: %,.0f UGX", issuedLoans));
+
         lblOutstandingLoans.setText(String.format("Loans Outstanding: %,.0f UGX", outstandingLoans));
+        lblTotalSavings.setText(String.format("Total Savings: %,.0f UGX", totalSavings));
+        // lblCycleStartDate.setText(String.format("From: %s", startDate));
+        // lblCycleEndDate.setText(String.format("To: %s", endDate));
+        // lblIssuedLoans.setText(String.format("Loans Issued: %,.0f UGX", issuedLoans));
         //lblCashInBank.setText(String.format("Total Cash In Bank: %s", "Not Available"));
 
 
-        //TODO: Get Info about the Last Meeting: Should I get previous Meeting in Current Cycle?
-        TextView txtPreviousMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFPreviousMeetingDate);
+        // TODO: Get Info about the Last Meeting: Previous Meeting in Current Cycle?
         TextView txtAttendedCount = (TextView) getSherlockActivity().findViewById(R.id.lblMSFAttended);
         TextView txtDataSent = (TextView) getSherlockActivity().findViewById(R.id.lblMSFDataSentStatus);
         TextView txtTotalCollections = (TextView) getSherlockActivity().findViewById(R.id.lblMSFCollections);
         TextView txtTotalSavings = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastSavings);
         TextView txtTotalRepayments = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastLoansRepaid);
         TextView txtTotalLoanIssues = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastLoansIssued);
-
 
         if (null == meetingRepo) {
             meetingRepo = new MeetingRepo(getSherlockActivity().getBaseContext());
@@ -153,17 +154,16 @@ public class MeetingSummaryFrag extends SherlockFragment {
             previousMeeting = currentMeeting;
 
             //Also Rename the Section Marker
-            TextView lblSectionLastMeeting = (TextView) getSherlockActivity().findViewById(R.id.lblMSFSection2);
             lblSectionLastMeeting.setText("Current Meeting Summary");
         }
 
 
         if (null != previousMeeting) {
-            txtPreviousMeetingDate.setText(String.format("Date: %s", Utils.formatDate(previousMeeting.getMeetingDate())));
+            lblSectionLastMeeting.setText(String.format("PAST MEETING: %s", Utils.formatDate(previousMeeting.getMeetingDate())));
 
             MeetingAttendanceRepo attendanceRepo = new MeetingAttendanceRepo(getSherlockActivity().getBaseContext());
             if (null != attendanceRepo) {
-                txtAttendedCount.setText(String.format("Members Present: %d", attendanceRepo.getAttendanceCountByMeetingId(previousMeeting.getMeetingId(), 1)));
+                txtAttendedCount.setText(String.format("Attended: %d", attendanceRepo.getAttendanceCountByMeetingId(previousMeeting.getMeetingId(), 1)));
             }
 
             txtDataSent.setText(String.format("Data: %s", (previousMeeting.isMeetingDataSent()) ? "Sent" : "Not Sent"));
@@ -181,44 +181,38 @@ public class MeetingSummaryFrag extends SherlockFragment {
             txtTotalSavings.setText(String.format("Savings: %,.0f UGX", totalMeetingSavings));
 
             totalLoansRepaidInMeeting = loansRepaidRepo.getTotalLoansRepaidInMeeting(previousMeeting.getMeetingId());
-            txtTotalRepayments.setText(String.format("Loans Repaid: %,.0f UGX", totalLoansRepaidInMeeting));
+            txtTotalRepayments.setText(String.format("Loans repaid: %,.0f UGX", totalLoansRepaidInMeeting));
 
             totalLoansIssuedInMeeting = loansIssuedRepo.getTotalLoansIssuedInMeeting(previousMeeting.getMeetingId());
-            txtTotalLoanIssues.setText(String.format("Loans Issued: %,.0f UGX", totalLoansIssuedInMeeting));
+            txtTotalLoanIssues.setText(String.format("Loans issued: %,.0f UGX", totalLoansIssuedInMeeting));
 
-            TextView txtFines = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastLoansIssued);
-
-
-            double finesCollected = fineRepo.getTotalFinesInCycle(previousMeeting.getVslaCycle().getCycleId());
-txtFines.setText(String.format("Fines: %,.0f UGX", finesCollected));
-
+       /**     double finesCollected = fineRepo.getTotalFinesInCycle(previousMeeting.getVslaCycle().getCycleId());
+            txtFines.setText(String.format("Fines: %,.0f UGX", finesCollected)); */
 
 
             totalMeetingCollections = totalMeetingSavings + totalLoansRepaidInMeeting;
             txtTotalCollections.setText(String.format("Total Collections: %,.0f UGX", totalMeetingCollections));
 
 
-
         } else {
             txtAttendedCount.setText("");
             txtDataSent.setText("");
-            txtPreviousMeetingDate.setText("None");
             txtTotalCollections.setText("");
             txtTotalSavings.setText("");
             txtTotalRepayments.setText("");
             txtTotalLoanIssues.setText("");
 
             //Optional: You May remove this code. Remove the controls
-          /**  LinearLayout parent = (LinearLayout) lblMeetingDate.getParent();
-            if (null != parent) {
-                parent.removeView(txtAttendedCount);
-                parent.removeView(txtDataSent);
-                //parent.removeView(txtPreviousMeetingDate);
-                parent.removeView(txtTotalCollections);
-                parent.removeView(txtTotalSavings);
-                parent.removeView(txtTotalRepayments);
-                parent.removeView(txtTotalLoanIssues);
-            } */
+            /**  LinearLayout parent = (LinearLayout) lblMeetingDate.getParent();
+             if (null != parent) {
+             parent.removeView(txtAttendedCount);
+             parent.removeView(txtDataSent);
+             //parent.removeView(txtPreviousMeetingDate);
+             parent.removeView(txtTotalCollections);
+             parent.removeView(txtTotalSavings);
+             parent.removeView(txtTotalRepayments);
+             parent.removeView(txtTotalLoanIssues);
+             } */
         }
 
         //If this is a Review then do not display the data
