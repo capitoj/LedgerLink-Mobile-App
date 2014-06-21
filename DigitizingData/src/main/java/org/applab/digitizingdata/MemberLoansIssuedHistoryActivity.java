@@ -134,7 +134,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         meetingDate = getIntent().getStringExtra("_meetingDate");
         lblMeetingDate.setText(meetingDate);
 
-        TextView lblFullNames = (TextView)findViewById(R.id.lblMLIssuedHFullNames);
+        TextView lblFullNames = (TextView)findViewById(R.id.lblMLIssuedHFullName);
         String fullNames = getIntent().getStringExtra("_names");
         lblFullNames.setText(fullNames);
 

@@ -10,7 +10,7 @@
         android:id="@+id/frmMFine_top_control_bar">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
+            style="@style/RegularTextInstruction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"

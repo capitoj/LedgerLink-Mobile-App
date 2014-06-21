@@ -5,7 +5,8 @@
               android:orientation="horizontal"
               android:divider="?android:attr/dividerVertical"
               android:showDividers="middle"
-              android:dividerPadding="12dip">
+              android:dividerPadding="12dip"
+              android:gravity="right">
 
     <include layout="@layout/include_back_button" />
  </LinearLayout>

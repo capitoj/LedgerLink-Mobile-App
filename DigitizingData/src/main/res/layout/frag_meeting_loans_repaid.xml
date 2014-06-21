@@ -36,7 +36,6 @@
         android:id="@+id/txtMLRepayFEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
         android:text="@string/empty_members_list"
         android:layout_below="@id/frmMLRepayF_top_control_bar" />
 

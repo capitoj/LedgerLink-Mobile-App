@@ -4,6 +4,7 @@
     android:layout_height="40dip"
     android:divider="?android:attr/dividerVertical"
     android:dividerPadding="12dip"
+    android:gravity="right"
     android:orientation="horizontal"
     android:showDividers="middle">
 

@@ -21,13 +21,12 @@
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMRCFInstructions"
-            style="@style/RegularText"
+            style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_gravity="center"
-            android:paddingLeft="5dp"
             android:text="Tap box to tick member as present. Leave boxes empty for absent members. Press and hold name to add comment." />
 
 
@@ -48,7 +47,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/frmMRCF_top_control_bar"
-            android:paddingLeft="5dp"
             android:text="@string/empty_members_list" />
     </LinearLayout>
 

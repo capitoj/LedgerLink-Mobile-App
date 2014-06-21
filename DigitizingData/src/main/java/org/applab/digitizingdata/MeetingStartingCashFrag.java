@@ -229,14 +229,29 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
          double totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(previousMeeting.getMeetingId());
          double totalFines = fineRepo.getTotalFinesInMeeting(previousMeeting.getMeetingId()); */
 
-        double totalSavings = savingRepo.getTotalSavingsInCycle(previousMeeting.getVslaCycle().getCycleId());
-        double totalLoansRepaid = loanRepaymentRepo.getTotalLoansRepaidInCycle(previousMeeting.getVslaCycle().getCycleId());
-        double totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInCycle(previousMeeting.getVslaCycle().getCycleId());
-        double totalFines = fineRepo.getTotalFinesPaidInCycle(previousMeeting.getVslaCycle().getCycleId());
-        double totalCashToBank = meetingRepo.getTotalCashToBankInCycle(previousMeeting.getVslaCycle().getCycleId());
+        double totalSavings = 0.0;
+        double totalLoansRepaid = 0.0;
+        double totalLoansIssued = 0.0;
+        double totalFines = 0.0;
+        double totalCashToBank = 0.0;
+        double totalCashOutThisCycle = 0.0;
+        double totalCashInThisCycle = 0.0;
+        MeetingStartingCash startingCash = null;
 
-        double totalCashOutThisCycle = totalLoansIssued;
-        double totalCashInThisCycle = totalSavings + totalLoansRepaid + totalFines;
+
+        if (previousMeeting != null) {
+            totalSavings = savingRepo.getTotalSavingsInCycle(previousMeeting.getVslaCycle().getCycleId());
+            totalLoansRepaid = loanRepaymentRepo.getTotalLoansRepaidInCycle(previousMeeting.getVslaCycle().getCycleId());
+            totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInCycle(previousMeeting.getVslaCycle().getCycleId());
+            totalFines = fineRepo.getTotalFinesPaidInCycle(previousMeeting.getVslaCycle().getCycleId());
+            totalCashToBank = meetingRepo.getTotalCashToBankInCycle(previousMeeting.getVslaCycle().getCycleId());
+            totalCashOutThisCycle = totalLoansIssued;
+            totalCashInThisCycle = totalSavings + totalLoansRepaid + totalFines;
+
+            startingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
+
+        }
+
 
         double totalCashThisMeeting = savingRepo.getTotalSavingsInMeeting(meetingId) + loanRepaymentRepo.getTotalLoansRepaidInMeeting(meetingId) + fineRepo.getTotalFinesInMeeting(meetingId) - loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
 
@@ -251,68 +266,28 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
 
         //HashMap<String, Double> startingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
 
-        MeetingStartingCash startingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
-
 
         if (null != startingCash) {
             // lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", (startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BOX) - startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BANK))));
             //expectedStartingCash = startingCash.get(MeetingSchema.COL_MT_CASH_SAVED_BOX);
             expectedStartingCash = startingCash.getExpectedStartingCash();
 
-            lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", expectedStartingCash));
-
-            lblActualCashInBox.setText(String.format("Total Cash in Box %.0f UGX", expectedStartingCash - totalCashToBank));
-            lblCashTakenToBank.setText(String.format("Cash Taken to Bank %.0f UGX", totalCashToBank));
             if (startingCash.getActualStartingCash() > 0) {
                 txtActualCashInBox.setText(String.valueOf(startingCash.getActualStartingCash()));
                 txtActualCashInBoxComment.setText(String.valueOf(startingCash.getComment()));
             }
 
-            // lblActualCashInBox.setText(String.format("Total Cash in Box %.0f UGX", startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BOX)));
-            //lblCashTakenToBank.setText(String.format("Cash Taken to Bank %.0f UGX", startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BANK)));
-
-            /**  txtCashBox.setText(String.format("%.0f", startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BOX)));
-             txtCashBank.setText(String.format("%.0f", startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BANK)));
-             txtFinesPaid.setText(String.format("%.0f", startingCash.get(MeetingSchema.COL_MT_CASH_FINES)));
-             double cashTotal = 0.0;
-             for(double value : startingCash.values()) {
-             cashTotal += value;
-             }
-             txtCashTotal.setText(String.format("%,.0f UGX",cashTotal)); */
         }
-        /** }
-         else{
-         // Assume all values are 0
-         lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", 0));
-         lblActualCashInBox.setText(String.format("Total Cash in Box %.0f UGX", 0));
-         lblCashTakenToBank.setText(String.format("Cash Taken to Bank %.0f UGX", 0));
+      /**  else{
+            txtActualCashInBox.setText("");
+            txtActualCashInBoxComment.setText("");
+        } */
+        lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", expectedStartingCash));
 
-         } */
+        lblActualCashInBox.setText(String.format("Total Cash in Box %.0f UGX", expectedStartingCash - totalCashToBank));
+        lblCashTakenToBank.setText(String.format("Cash Taken to Bank %.0f UGX", totalCashToBank));
     }
 
-    /**
-     * public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-     * if (parentActivity.isViewOnly()) {
-     * Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
-     * <p/>
-     * }
-     * Log.d("MSC", "unselected");
-     * saveStartingCash();
-     * <p/>
-     * <p/>
-     * }
-     * <p/>
-     * <p/>
-     * public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-     * Log.d("MSC", "reselected");
-     * populateStartingCash();
-     * }
-     * <p/>
-     * public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-     * Log.d("MSC", "selected");
-     * populateStartingCash();
-     * }
-     */
     @Override
     public void onTabChanged(String tabId) {
 

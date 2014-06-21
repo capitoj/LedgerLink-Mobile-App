@@ -91,7 +91,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 radCycle.setId(cycle.getCycleId());
                 //radCycle.setTextColor();
                 radCycle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                radCycle.setTypeface(radCycle.getTypeface(), Typeface.BOLD);
+                //radCycle.setTypeface(radCycle.getTypeface(), Typeface.BOLD);
                 //radCycle.setPadding(10,0,0,0);
                 radCycle.setTag(cycle); //Store the VslaCycle object in the Tag property of the radio button
                 //radCycle.setTextColor(txtMeetingDate.getTextColors());
@@ -201,7 +201,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                     public void onClick(View v) {
 
                         //If Save Operation was successful, get the currently saved meeting
-                        //TODO: I can avoid the trip to the database by making the new meeting variable be module-level
+                        //TODO: See how to avoid the trip to the database by making the new meeting variable module-level
                         boolean retSetupMeeting = false;
                         if(saveMeetingDate()) {
                             //Get the Current Meeting ID

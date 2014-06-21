@@ -4,9 +4,9 @@
     android:layout_height="40dip"
     android:divider="?android:attr/dividerVertical"
     android:dividerPadding="12dip"
+    android:gravity="right"
     android:orientation="horizontal"
-    android:showDividers="middle"
-    android:gravity="right">
+    android:showDividers="middle">
 
     <include
         layout="@layout/include_cancel_button"
@@ -20,8 +20,8 @@
         layout="@layout/include_back_button"
         android:layout_width="70dip"
         android:layout_height="match_parent"
-        android:layout_marginLeft="3dip"
         android:layout_marginBottom="6dip"
+        android:layout_marginLeft="3dip"
         android:layout_marginRight="3dip"
         android:layout_marginTop="6dip" />
 

@@ -9,19 +9,18 @@
         android:layout_height="match_parent">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/InTextHeader"
+            style="@style/RegularTextInstructionBold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="FINES"
             android:id="@+id/lblMemberFinesHeader" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
+            style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Check box to indicate paid. Swipe to delete."
-            android:id="@+id/lblFMessage"
-            android:layout_gravity="center" />
+            android:id="@+id/lblFMessage" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -30,7 +29,7 @@
             >
 <!--android:weightSum="10" -->
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularTextBold"
+                style="@style/RegularTextListItems"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Moses Oscar Muhahala"
@@ -112,6 +111,7 @@
                 android:id="@android:id/empty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
                 android:text="No History" />
         </LinearLayout>
     </LinearLayout>

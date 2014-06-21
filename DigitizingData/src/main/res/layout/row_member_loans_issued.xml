@@ -6,7 +6,7 @@
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/RegularTextListItems"
         android:id="@+id/txtRMLIssuedFullName"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -15,7 +15,7 @@
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/txtRMLIssuedOutstanding"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLIssuedFullName"
         android:text="Outstanding: 60,000UGX" />
@@ -23,10 +23,11 @@
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/txtRMLComment"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtRMLIssuedFullName"
-        android:text="To buy chicken feed" />
+        android:layout_below="@id/txtRMLIssuedOutstanding"
+        android:text="To buy chicken feed"
+        android:layout_marginBottom="20dip"/>
 
     <!--
     <org.applab.digitizingdata.fontutils.TypefaceTextView

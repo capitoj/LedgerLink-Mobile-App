@@ -92,7 +92,7 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
             if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {
                 outstandingLoansByMember = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
-            txtOutstanding.setText(String.format("Outstanding Bal: %,.0fUGX", outstandingLoansByMember));
+            txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", outstandingLoansByMember));
 
           /**  double comment = 0.0;
             if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {

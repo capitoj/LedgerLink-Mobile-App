@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
+                style="@style/RegularTextListItems"
                 android:id="@+id/txtMeetingDate"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:padding="5dp"
                 android:text="01 Jan 2013"/>
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/SmallerRegularText"
+                style="@style/RegularText"
                 android:id="@+id/txtMeetingCycleSummary"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/txtMeetingDate"
-                android:padding="5dp"
-                android:text=""/>
+                android:textColor="@color/ledger_link_grey"
+                android:text="xxx-xxx"
+            android:layout_marginBottom="3dip"/>
+
     </RelativeLayout>

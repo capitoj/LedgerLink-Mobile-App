@@ -5,6 +5,7 @@
     android:divider="?android:attr/dividerVertical"
     android:dividerPadding="12dip"
     android:focusable="true"
+    android:gravity="right"
     android:orientation="horizontal"
     android:showDividers="middle">
 

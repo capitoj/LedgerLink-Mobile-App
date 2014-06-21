@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frmBM_top_control_bar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/frmBM_top_control_bar">
+    android:layout_height="wrap_content">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
+            android:id="@+id/lblBMHeader"
+            style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Tap [Begin] to begin a new meeting."
-            android:id="@+id/lblBMHeader" />
+            android:text="Tap [Begin] to begin a new meeting." />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
+            android:id="@+id/grpBMCurrentMeeting"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/grpBMCurrentMeeting">
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblBMSection1"
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:text="CURRENT MEETING"
-                android:id="@+id/lblBMSection1"/>
+                android:text="CURRENT MEETING" />
 
             <!--   <TextView
                    android:layout_width="fill_parent"
@@ -42,39 +42,40 @@
                    android:id="@+id/lblBMSection1"
                    /> -->
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
+                android:id="@+id/lblBMInstructionCurrent"
+                style="@style/RegularTextInstruction"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="You may edit before sending."
-                android:id="@+id/lblBMInstructionCurrent" />
+                android:text="You may edit before sending." />
 
             <!--<org.applab.digitizingdata.fontutils.TypefaceTextView-->
-                <!--style="@style/TextAccentColor"-->
-                <!--android:layout_width="fill_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="04 Mar 2013"-->
-                <!--android:id="@+id/lblBMCurrentMeetingDate" />-->
-
+            <!--style="@style/TextAccentColor"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="04 Mar 2013"-->
+            <!--android:id="@+id/lblBMCurrentMeetingDate" />-->
 
 
             <ListView
-                    android:id="@+id/lstBMCurrentMeetings"
-                    style="@style/TextAccentColor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:choiceMode="singleChoice">
-            </ListView>
+                android:id="@+id/lstBMCurrentMeetings"
+                style="@style/RegularTextListItems"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dip"
+                android:layout_marginRight="20dip"
+                android:layout_marginBottom="10dip"
+                android:choiceMode="singleChoice"
+                android:dividerHeight="2dip"></ListView>
 
 
         </LinearLayout>
 
 
-
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
+            android:id="@+id/grpBMPastMeetings"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/grpBMPastMeetings">
+            android:orientation="vertical">
 
             <!--  <TextView style="@style/SubHeading"
                   android:layout_width="fill_parent"
@@ -85,11 +86,11 @@
                   android:id="@+id/lblBMSection2" /> -->
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblBMSection2"
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:text="UNSENT PAST MEETINGS"
-                android:id="@+id/lblBMSection2"/>
+                android:text="UNSENT PAST MEETINGS" />
 
             <!--<TextView style="@style/LedgerLinkSubHeading"
                 android:layout_width="fill_parent"
@@ -104,31 +105,28 @@
                 android:background="#3b5998"
                 />   -->
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
+                android:id="@+id/lblBMInstructionPast"
+                style="@style/RegularTextInstruction"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:text="You may not edit, but you may review before sending."
-                android:id="@+id/lblBMInstructionPast" />
+                android:text="You may not edit, but you may review before sending." />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
+                android:id="@+id/lblBMWarning"
+                style="@style/RegularTextInstruction"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:text="There are several unsent meetings. It is not safe to keep meetings without sending! Please send every week."
-                android:id="@+id/lblBMWarning" />
-
-
+                android:text="There are several unsent meetings. It is not safe to keep meetings without sending! Please send every week." />
 
 
             <ListView
-                    style="@style/List"
-                    android:id="@+id/lstBMPastMeetingList"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:choiceMode="singleChoice"
-                    />
+                android:id="@+id/lstBMPastMeetingList"
+                style="@style/RegularTextListItems"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dip"
+                android:choiceMode="singleChoice"
+                android:dividerHeight="2dip"/>
 
         </LinearLayout>
     </LinearLayout>
