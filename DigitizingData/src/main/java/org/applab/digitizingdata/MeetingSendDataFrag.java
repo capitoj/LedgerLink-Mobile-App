@@ -80,7 +80,13 @@ public class MeetingSendDataFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
         parentActivity = (MeetingActivity) getSherlockActivity();
-        currentMeetingId = parentActivity.getCurrentMeeting().getMeetingId();
+        if(parentActivity.getCurrentMeeting() != null)
+        {
+            currentMeetingId = parentActivity.getCurrentMeeting().getMeetingId();
+        }
+        else {
+            currentMeetingId = 0;
+        }
         refreshFragmentView();
 
     }
