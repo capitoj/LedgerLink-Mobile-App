@@ -107,12 +107,7 @@ public class BeginMeetingActivity extends SherlockActivity {
         StringBuilder sb = null;
         // if(pastMeetings.size() > 0) {
         if (null != pastMeetings) {
-            if (pastMeetings.size() > 1) {
 
-                //Set the title to plural
-                TextView currentMeetingsSectionHeading = (TextView) findViewById(R.id.lblBMSection1);
-                currentMeetingsSectionHeading.setText("CURRENT MEETINGS");
-            }
             if (pastMeetings.size() > 0) {
 
                 //Setup the Instruction
@@ -290,6 +285,11 @@ public class BeginMeetingActivity extends SherlockActivity {
             }
         });
         Utils.setListViewHeightBasedOnChildren(currentMeetingsList);
+        if (currentMeetings.size() > 1) {
+            //Set the title to plural
+            TextView currentMeetingsSectionHeading = (TextView) findViewById(R.id.lblBMSection1);
+            currentMeetingsSectionHeading.setText("CURRENT MEETINGS");
+        }
     }
 
 
