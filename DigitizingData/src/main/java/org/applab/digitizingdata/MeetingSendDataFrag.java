@@ -18,7 +18,6 @@ import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.ConcurrentMeetingsArrayAdapter;
-import org.applab.digitizingdata.helpers.MeetingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.*;
 
@@ -42,7 +41,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
     int currentMeetingId;
     int selectedMeetingId;
     private boolean viewingCurrentMeeting;
-    private ArrayList<Meeting> unsentMeetings;
+    private ArrayList<Meeting> unsentInactiveMeetings;
     private ArrayList<Meeting> activeMeetings;
     private MeetingActivity parentActivity;
     //public FragmentTransaction fragmentTransaction;
@@ -81,6 +80,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
         parentActivity = (MeetingActivity) getSherlockActivity();
+        currentMeetingId = parentActivity.getCurrentMeeting().getMeetingId();
         refreshFragmentView();
 
     }
@@ -196,14 +196,18 @@ public class MeetingSendDataFrag extends SherlockFragment {
 
 
 
-        if(selectedMeeting.isCurrent()) {
+        if(selectedMeeting.getMeetingId() == currentMeetingId) {
             viewingCurrentMeeting = true;
+        } else {
+            viewingCurrentMeeting = false;
         }
        
         activeMeetings = meetingRepo.getAllMeetingsByActiveStatus(true);
 
-        unsentMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
-       numberOfPastUnsentMeetings = unsentMeetings.size();
+        //unsentInactiveMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
+        //Past unsent and inactive
+        unsentInactiveMeetings = meetingRepo.getAllMeetingsByDataSentStatusAndActiveStatus(false, false);
+       numberOfPastUnsentMeetings = unsentInactiveMeetings.size();
 
         Log.i("Unset meeting count ",""+numberOfPastUnsentMeetings);
 
@@ -247,7 +251,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
     //Populate Meetings List
     protected void populateMeetingsList() {
         //Now get the data via the adapter
-        ConcurrentMeetingsArrayAdapter adapter = new ConcurrentMeetingsArrayAdapter(getSherlockActivity().getBaseContext(), unsentMeetings);
+        ConcurrentMeetingsArrayAdapter adapter = new ConcurrentMeetingsArrayAdapter(getSherlockActivity().getBaseContext(), unsentInactiveMeetings);
 
 
         // listening to single list item on click
@@ -257,7 +261,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         membersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Meeting meeting = unsentMeetings.get(position);
+                Meeting meeting = unsentInactiveMeetings.get(position);
                 selectedMeetingId = meeting.getMeetingId();
                 getSherlockActivity().getIntent().putExtra("_meetingId", selectedMeetingId);
                 //make the view read only
