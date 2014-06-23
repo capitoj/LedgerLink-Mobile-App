@@ -6,7 +6,7 @@
     >
        <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
-        android:id="@+id/txtFineType"
+        android:id="@+id/lblFineType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

@@ -240,8 +240,10 @@ public class EndCycleActivity extends SherlockActivity {
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("END CYCLE");
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        // Set to false to remove caret and disable its function; if designer decides otherwise set both to true
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(

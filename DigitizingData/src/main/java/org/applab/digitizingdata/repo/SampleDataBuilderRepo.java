@@ -29,6 +29,8 @@ import java.util.Calendar;
 public class SampleDataBuilderRepo {
     private static Context appContext;
 
+    private static String comment = "Unknown";
+
     public static boolean refreshTrainingData(Context context) {
 
         //Determine whether the refresh flag is ON
@@ -229,8 +231,10 @@ public class SampleDataBuilderRepo {
                             calDateDue.setTime(meeting.getMeetingDate());
                             calDateDue.add(Calendar.MONTH, 1); //since it is on monthly interest.
 
+
+
                             //Issue the Loan
-                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime());
+                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
                         }
                     }
                 }
@@ -336,7 +340,7 @@ public class SampleDataBuilderRepo {
                             calDateDue.add(Calendar.MONTH, 1);
 
                             //Issue the Loan
-                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime());
+                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
                         }
                     }
                 }
@@ -410,7 +414,7 @@ public class SampleDataBuilderRepo {
                         calDateDue.add(Calendar.MONTH, 1);
 
                         //Issue the Loan
-                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime());
+                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
                     }
                 }
                 catch(Exception ex) {
@@ -457,7 +461,7 @@ public class SampleDataBuilderRepo {
                         calDateDue.add(Calendar.MONTH, 1);
 
                         //Issue the Loan
-                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime());
+                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
                     }
                 }
                 catch(Exception ex) {

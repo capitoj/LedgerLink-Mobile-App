@@ -3,21 +3,14 @@ package org.applab.digitizingdata.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockActivity;
-
 import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.FineType;
-import org.applab.digitizingdata.domain.model.Meeting;
-import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
 
 import java.util.ArrayList;
 
@@ -61,7 +54,7 @@ public class FineTypeCustomArrayAdapter extends ArrayAdapter<FineType> {
         tempValues = null;
         tempValues = values.get(position);
 
-        final TextView label = (TextView) row.findViewById(R.id.txtFineType);
+        final TextView label = (TextView) row.findViewById(R.id.lblFineType);
         label.setTypeface(typeface);
         /** if(position==0){
          // Default selected Spinner item

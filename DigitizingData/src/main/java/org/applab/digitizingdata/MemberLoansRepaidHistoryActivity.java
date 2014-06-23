@@ -9,6 +9,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,63 +83,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-
-        // BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
-        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(recentLoan == null) {
-                            //Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                            i.putExtra("_tabToSelect","loansRepaid");
-                            i.putExtra("_meetingDate",meetingDate);
-                            i.putExtra("_meetingId", meetingId);
-                            startActivity(i);
-                            finish();
-                        }
-                        else if(saveMemberLoanRepayment()) {
-                            Toast.makeText(MemberLoansRepaidHistoryActivity.this, "Loan Repayment entered successfully", Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                            i.putExtra("_tabToSelect","loansRepaid");
-                            i.putExtra("_meetingDate",meetingDate);
-                            i.putExtra("_meetingId", meetingId);
-                            startActivity(i);
-                            finish();
-                        }
-
-                    }
-                });
-        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect","loansRepaid");
-                        i.putExtra("_meetingDate",meetingDate);
-                        i.putExtra("_meetingId", meetingId);
-                        startActivity(i);
-                        finish();
-                    }
-                });
-
-
-        actionBar = getSupportActionBar();
-        actionBar.setTitle("Repayments");
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
-        // END_INCLUDE (inflate_set_custom_view)
-
+        inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_loans_repaid_history);
 
@@ -146,9 +91,9 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         meetingDate = getIntent().getStringExtra("_meetingDate");
         lblMeetingDate.setText(meetingDate);
 
-        TextView lblFullNames = (TextView)findViewById(R.id.lblMLRepayHFullNames);
-        String fullNames = getIntent().getStringExtra("_names");
-        lblFullNames.setText(fullNames);
+        TextView lblFullName = (TextView)findViewById(R.id.lblMLRepayHFullNames);
+        String fullName = getIntent().getStringExtra("_names");
+        lblFullName.setText(fullName);
 
         if(getIntent().hasExtra("_meetingId")) {
             meetingId = getIntent().getIntExtra("_meetingId",0);
@@ -405,6 +350,76 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             }
         });
 
+    }
+
+    private void inflateCustomActionBar() {
+        // BEGIN_INCLUDE (inflate_set_custom_view)
+        // Inflate a "Done/Cancel" custom action bar view.
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
+        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(recentLoan == null) {
+                            //Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                            i.putExtra("_tabToSelect","loansRepaid");
+                            i.putExtra("_meetingDate",meetingDate);
+                            i.putExtra("_meetingId", meetingId);
+                            startActivity(i);
+                            finish();
+                        }
+                        else if(saveMemberLoanRepayment()) {
+                            Toast.makeText(MemberLoansRepaidHistoryActivity.this, "Loan Repayment entered successfully", Toast.LENGTH_LONG).show();
+                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                            i.putExtra("_tabToSelect","loansRepaid");
+                            i.putExtra("_meetingDate",meetingDate);
+                            i.putExtra("_meetingId", meetingId);
+                            startActivity(i);
+                            finish();
+                        }
+
+                    }
+                });
+        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                        i.putExtra("_tabToSelect","loansRepaid");
+                        i.putExtra("_meetingDate",meetingDate);
+                        i.putExtra("_meetingId", meetingId);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+
+
+        actionBar = getSupportActionBar();
+        actionBar.setTitle("Repayments");
+
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
+      /**  actionBar.setDisplayOptions(
+                ActionBar.DISPLAY_SHOW_CUSTOM,
+                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_SHOW_TITLE);
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT)); */
+        // END_INCLUDE (inflate_set_custom_view)
     }
 
 

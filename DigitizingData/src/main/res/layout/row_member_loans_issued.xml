@@ -18,8 +18,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLIssuedFullName"
-        android:text="Outstanding: 60,000UGX" />
+        android:text="Outstanding: 60,000UGX"/>
 
+    <!-- Taken out for now
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/txtRMLComment"
@@ -28,6 +29,8 @@
         android:layout_below="@id/txtRMLIssuedOutstanding"
         android:text="To buy chicken feed"
         android:layout_marginBottom="20dip"/>
+
+        -->
 
     <!--
     <org.applab.digitizingdata.fontutils.TypefaceTextView

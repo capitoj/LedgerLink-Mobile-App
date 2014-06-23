@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,54 +48,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-
-        // BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
-        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(saveMemberSaving()) {
-                            Toast.makeText(MemberSavingHistoryActivity.this,"Savings entered successfully",Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                            i.putExtra("_tabToSelect", "savings");
-                            i.putExtra("_meetingDate",meetingDate);
-                            i.putExtra("_meetingId",meetingId);
-                            startActivity(i);
-                            finish();
-                        }
-
-                    }
-                });
-        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect", "savings");
-                        i.putExtra("_meetingDate",meetingDate);
-                        i.putExtra("_meetingId",meetingId);
-                        startActivity(i);
-                        finish();
-                    }
-                });
-
-
-        actionBar = getSupportActionBar();
-        actionBar.setTitle("Savings");
-
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
-        // END_INCLUDE (inflate_set_custom_view)
+        inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_saving_history);
 
@@ -139,6 +93,67 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
 
         TextView txtMSHAmount = (TextView)findViewById(R.id.txtMSHAmount);
         txtMSHAmount.requestFocus();
+    }
+
+    private void inflateCustomActionBar() {
+
+        // Inflate a "Done/Cancel" custom action bar view.
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
+        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(saveMemberSaving()) {
+                            Toast.makeText(MemberSavingHistoryActivity.this, "Savings entered successfully", Toast.LENGTH_LONG).show();
+                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                            i.putExtra("_tabToSelect", "savings");
+                            i.putExtra("_meetingDate",meetingDate);
+                            i.putExtra("_meetingId",meetingId);
+                            startActivity(i);
+                            finish();
+                        }
+
+                    }
+                });
+        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                        i.putExtra("_tabToSelect", "savings");
+                        i.putExtra("_meetingDate",meetingDate);
+                        i.putExtra("_meetingId",meetingId);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setTitle("SAVINGS");
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
+       /** actionBar.setTitle("Savings");
+
+        actionBar.setDisplayOptions(
+                ActionBar.DISPLAY_SHOW_CUSTOM,
+                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_SHOW_TITLE);
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT)); */
     }
 
     private void populateSavingHistory() {

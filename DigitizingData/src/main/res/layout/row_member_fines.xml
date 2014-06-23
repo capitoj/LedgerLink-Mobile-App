@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dip">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/RegularTextListItems"
@@ -18,6 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtFineFullName"
-        android:text="Total Fines: 60,000UGX"/>
+        android:text="Total Fines: 60,000UGX"
+        android:layout_marginBottom="5dip"/>
 
 </RelativeLayout>

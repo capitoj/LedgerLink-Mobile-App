@@ -19,7 +19,7 @@ public class LoanIssueSchema {
     public static final String COL_LI_IS_CLEARED = "IsCleared";
     public static final String COL_LI_DATE_CLEARED = "DateCleared";
     public static final String COL_LI_IS_DEFAULTED = "IsDefaulted";
-    public static final String COL_LI_COMMENTS = "Comments";
+    public static final String COL_LI_COMMENT = "Comments";
     public static final String COL_LI_IS_WRITTEN_OFF = "IsWrittenOff";
 
     public static String getCreateTableScript() {
@@ -41,7 +41,7 @@ public class LoanIssueSchema {
         sb.append(COL_LI_IS_DEFAULTED + " INTEGER ,");
         sb.append(COL_LI_IS_CLEARED + " INTEGER ,");
         sb.append(COL_LI_DATE_CLEARED + " TEXT ,");
-        sb.append(COL_LI_COMMENTS + " TEXT ,");
+        sb.append(COL_LI_COMMENT + " TEXT ,");
         sb.append(COL_LI_IS_WRITTEN_OFF + " INTEGER");
         sb.append(")");
 
@@ -71,7 +71,7 @@ public class LoanIssueSchema {
         sb.append(COL_LI_IS_DEFAULTED + ",");
         sb.append(COL_LI_IS_CLEARED + ",");
         sb.append(COL_LI_DATE_CLEARED + ",");
-        sb.append(COL_LI_COMMENTS + ",");
+        sb.append(COL_LI_COMMENT + ",");
         sb.append(COL_LI_IS_WRITTEN_OFF);
 
         return sb.toString();

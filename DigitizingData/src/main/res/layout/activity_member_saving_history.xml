@@ -20,7 +20,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginLeft="30dip"
             android:text="01-JUL-2013" />
 

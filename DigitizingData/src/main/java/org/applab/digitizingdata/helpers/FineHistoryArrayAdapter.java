@@ -73,7 +73,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
             });
 
             final TextView txtFineMeetingDate = (TextView) rowView.findViewById(R.id.txtFineMeetingDate);
-            final TextView txtFineType = (TextView) rowView.findViewById(R.id.txtFineType);
+            final TextView txtFineType = (TextView) rowView.findViewById(R.id.lblFineType);
             final TextView txtFineAmount = (TextView) rowView.findViewById(R.id.txtMemberFineAmount);
 
             // Set typeface

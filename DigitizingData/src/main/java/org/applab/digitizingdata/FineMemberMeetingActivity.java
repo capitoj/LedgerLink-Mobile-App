@@ -3,6 +3,7 @@ package org.applab.digitizingdata;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,55 +53,8 @@ public class FineMemberMeetingActivity extends SherlockActivity {
         meetingId = getIntent().getIntExtra("_meetingId", 0);
 
         tabToSelect = getIntent().getStringExtra("_tabToSelect");
+        inflateCustomActionBar();
 
-
-        // BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customActionBarView = null;
-        actionBar = getSupportActionBar();
-        //final View
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel, null);
-       /** customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                        return;
-                    }
-                }); */
-
-        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
-
-
-        String title = "";
-       /** switch(Utils._meetingDataViewMode) {
-            case VIEW_MODE_REVIEW:
-                title = "Send Data";
-                break;
-            case VIEW_MODE_READ_ONLY:
-                title = "Sent Data";
-                break;
-            default:
-                title="Meeting";
-                break;
-        } */
-       actionBar.setTitle(title);
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
 
         /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
          meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
@@ -114,6 +68,49 @@ public class FineMemberMeetingActivity extends SherlockActivity {
 
         //Populate the Members
         populateMembersList();
+    }
+
+    private void inflateCustomActionBar() {
+        // BEGIN_INCLUDE (inflate_set_custom_view)
+        // Inflate a "Done/Cancel" custom action bar view.
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customActionBarView = null;
+        //final View
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel, null);
+        /** customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+                 new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         finish();
+                         return;
+                     }
+                 }); */
+
+        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setTitle("FINE MEMBER");
+
+        // Set to false to remove caret and disable its function; if designer decides otherwise set both to true
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
     }
 
     // Populate Members List
@@ -146,7 +143,7 @@ public class FineMemberMeetingActivity extends SherlockActivity {
                     // Pass on data
                     i.putExtra("_meetingDate", meetingDate);
                     i.putExtra("_memberId", selectedMember.getMemberId());
-                    i.putExtra("_names", selectedMember.toString());
+                    i.putExtra("_name", selectedMember.getFullName());
                     i.putExtra("_meetingId", meetingId);
 
                     startActivity(i);

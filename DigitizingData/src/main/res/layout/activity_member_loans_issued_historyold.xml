@@ -4,253 +4,210 @@
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHFullName"
             style="@style/RegularTextListItems"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Moses Oscar Muhahala"
-            android:id="@+id/lblMLRepayHFullNames"/>
+            android:text="Moses Oscar Muhahala" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHMeetingDate"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="01-JUL-2013"
-            android:id="@+id/lblMLRepayHMeetingDate"/>
+            android:text="01-JUL-2013" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHLoanNo"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="Loan Number"
-            android:id="@+id/lblMLRepayHLoanNo" />
+            android:text="Loan Number" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/frmMLRepayHLoanNo"
             android:weightSum="10">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
-                android:id="@+id/txtMLRepayHLoanNo"
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                android:id="@+id/txtMLIssuedHLoanNo"
+                style="@style/NormalEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
-                android:layout_weight="6"
-                android:textAlignment="textEnd"
-                android:text="" />
+                android:layout_weight="4"
+                android:inputType="number"
+                android:text=""
+                android:textAlignment="textEnd" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblMLIssuedHLoanNoSp"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:text=" "
-                android:id="@+id/lblMLRepayHLoanNoSp" />
+                android:text=" " />
         </LinearLayout>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHAmount"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="Amount"
-            android:id="@+id/lblMLRepayHAmount"/>
+            android:text="Loan Amount" />
+
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/frmMLRepayHAmount"
             android:weightSum="10">
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
+                android:id="@+id/txtMLIssuedHAmount"
                 style="@style/NormalEditText"
-                android:id="@+id/txtMLRepayHAmount"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
-                android:layout_weight="5"
+                android:layout_weight="6"
                 android:inputType="number"
-                android:textAlignment="viewEnd"
-                android:text="" />
-
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/InlineTextItem"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:text="UGX"
-                android:id="@+id/lblMLRepayHCurrency" />
-        </LinearLayout>
-
-        <!-- ROLLOVER STUFFF -->
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dip"
-            android:text="New Balance"
-            android:id="@+id/lblMLRepayHBalance" />
-
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/frmMLRepayHBalance"
-            android:weightSum="10">
-
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
-                android:id="@+id/txtMLRepayHBalance"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"
                 android:text=""
-                android:clickable="true" />
+                android:textAlignment="textEnd" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblMLIssuedHCurrency"
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:text="UGX"
-                android:id="@+id/lblMLRepayHLBCurrency" />
+                android:layout_weight="4"
+                android:text="UGX" />
         </LinearLayout>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHInterest"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="New Interest:"
-            android:id="@+id/lblMLRepayHInterest" />
+            android:text="Interest Payable:" />
 
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/frmMLRepayHInterest"
             android:weightSum="10">
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
+                android:id="@+id/txtMLIssuedHInterest"
                 style="@style/NormalEditText"
-                android:id="@+id/txtMLRepayHInterest"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
-                android:layout_weight="5"
+                android:layout_weight="6"
                 android:inputType="number"
-                android:textAlignment="textEnd"
-                android:text="" />
+                android:text=""
+                android:textAlignment="textEnd" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblMLIssuedHCurrencyInt"
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:text="UGX"
-                android:id="@+id/lblMLRepaydHCurrencyInt" />
+                android:layout_weight="4"
+                android:text="UGX" />
         </LinearLayout>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHTotal"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="Rollover Amount:"
-            android:id="@+id/lblMLRepayHTotal"/>
+            android:text="Total Due:" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/frmMLRepayHTotal"
             android:weightSum="10">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMLIssuedHTotal"
                 style="@style/RegularText"
-                android:id="@+id/txtMLRepayHTotal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
-                android:layout_weight="5"
-                android:text=""
-                android:clickable="true" />
+                android:layout_weight="6"
+                android:clickable="true"
+                android:text="" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblMLIssuedHCurrencyTotal"
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:text="UGX"
-                android:id="@+id/lblMLRepayHCurrencyTotal" />
+                android:layout_weight="4"
+                android:text="UGX" />
         </LinearLayout>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHDateDue"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="Next Date Due:"
-            android:id="@+id/lblMLRepayHDateDue"/>
+            android:text="Date Due:" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/TextAccentColor"
-            android:id="@+id/txtMLRepayHDateDue"
-            android:layout_marginLeft="30dip"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="bold"
-            android:clickable="true" />
-
-        <!-- END OF ROLLOVER STUFF -->
-
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/txtMLIssuedHDateDue"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="Comments"
-            android:id="@+id/lblMLRepayHComment"/>
+            android:clickable="true"
+            android:text="01-Jul-2013" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceEditText
-            style="@style/NormalEditText"
-            android:id="@+id/txtMLRepayHComment"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dip"
-            android:inputType="textCapCharacters"
-            android:textAlignment="viewEnd"
-            android:text="" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHSection1"
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
-            android:text="HISTORY"
-            android:id="@+id/lblMLRepayHSection1" />
+            android:text="HISTORY" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+      <!--  <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHOutstandingLoans"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:layout_marginLeft="30dip"
-            android:text="Total Balance:"
-            android:id="@+id/lblMLRepayHOutstandingLoans"/>
+            android:text="Total Balance:" /> -->
+        <!--
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:text="Past Loans"
+                    android:id="@+id/lblMLIssuedHPastLoans"
+                    android:layout_gravity="left"/>
 
+                    -->
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@android:id/empty"
             style="@style/RegularText"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dip"
-            android:text="Repayments"
-            android:id="@+id/lblMLRepayHPastLoans"/>
+            android:text="No Outstanding Balance" />
 
         <ListView
             android:id="@android:id/list"
@@ -259,12 +216,7 @@
             android:layout_height="wrap_content"
             android:choiceMode="singleChoice" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:id="@android:id/empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No History" />
+
 
     </LinearLayout>
 </ScrollView>

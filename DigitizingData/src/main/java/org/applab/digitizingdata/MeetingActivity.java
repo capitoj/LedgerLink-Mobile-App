@@ -169,7 +169,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
             final MenuInflater inflater = getSupportMenuInflater();
             inflater.inflate(R.menu.meeting, menu);
-            if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY){
+            if (Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY){
                 menu.findItem(R.id.mnuMeetingFineMember).setEnabled(false);
             }
             return true;

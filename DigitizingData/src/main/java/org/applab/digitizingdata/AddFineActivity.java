@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,55 +61,21 @@ public class AddFineActivity extends SherlockActivity {
             this.selectedMemberId = getIntent().getIntExtra("_memberId", 0);
         }
 
-        if(getIntent().hasExtra("_meetingId")) {
+        if (getIntent().hasExtra("_meetingId")) {
             this.meetingId = getIntent().getIntExtra("_meetingId", 0);
         }
 
+        String fullName = getIntent().getStringExtra("_name");
 
-        // BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customActionBarView = null;
-        actionBar = getSupportActionBar();
-
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
-        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        selectedFinishButton = true;
-                        saveMemberFine();
-                        finish();
-                    }
-                });
-        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
-
-        actionBar.setTitle("New Fine");
-
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
-        // END_INCLUDE (inflate_set_custom_view)
-        //if in getting started wizard.. use the getting started layout
-        //else use the default layout
-
+        inflateCustomActionBar();
 
         setContentView(R.layout.activity_add_fine_member);
-        TextView txtAmount = (TextView) findViewById(R.id.txtFFineAmount);
+        TextView txtAmount = (TextView) findViewById(R.id.txtFMFineAmount);
 
-        CheckBox chkPaidStatus = (CheckBox) findViewById(R.id.chkFPaidStatus);
+        TextView lblFullName = (TextView) findViewById(R.id.txtFMFullName);
+        lblFullName.setText(fullName);
+
+        CheckBox chkPaidStatus = (CheckBox) findViewById(R.id.chkFMPaidStatus);
 
         chkPaidStatus.setOnClickListener(new View.OnClickListener() {
 
@@ -125,7 +91,7 @@ public class AddFineActivity extends SherlockActivity {
 
 
         //Setup the Spinner Items
-        Spinner cboFineType = (Spinner) findViewById(R.id.cboFineType);
+        Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
         FineTypeCustomArrayAdapter adapter = new FineTypeCustomArrayAdapter(this, android.R.layout.simple_spinner_item,
                 populateFineTypeList(), "fonts/roboto-regular.ttf");
         /**{
@@ -166,6 +132,64 @@ public class AddFineActivity extends SherlockActivity {
         clearDataFields();
     }
 
+    private void inflateCustomActionBar() {
+        // BEGIN_INCLUDE (inflate_set_custom_view)
+        // Inflate a "Done/Cancel" custom action bar view.
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customActionBarView = null;
+
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
+        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        selectedFinishButton = true;
+                        saveMemberFine();
+                        finish();
+                    }
+                }
+        );
+        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                }
+        );
+
+        // actionbar with logo
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setTitle("New Fine");
+
+        // Set to false to remove caret and disable its function; if designer decides otherwise set both to true
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
+        /**actionBar.setTitle("New Fine");
+
+         actionBar.setDisplayOptions(
+         ActionBar.DISPLAY_SHOW_CUSTOM,
+         ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+         | ActionBar.DISPLAY_SHOW_TITLE);
+         actionBar.setCustomView(customActionBarView,
+         new ActionBar.LayoutParams(
+         ViewGroup.LayoutParams.MATCH_PARENT,
+         ViewGroup.LayoutParams.MATCH_PARENT)); */
+        // END_INCLUDE (inflate_set_custom_view)
+        //if in getting started wizard.. use the getting started layout
+        //else use the default layout
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         final MenuInflater inflater = getSupportMenuInflater();
@@ -201,7 +225,6 @@ public class AddFineActivity extends SherlockActivity {
     public boolean saveMemberFine() {
         boolean successFlg = false;
         double theAmount = 0.0;
-        Log.d("AddFineActivity.saveMemberFine", "Save Fine");
 
         //  try {
 
@@ -235,12 +258,10 @@ public class AddFineActivity extends SherlockActivity {
                 fineRepo = new MeetingFineRepo(AddFineActivity.this);
             }
 
-            Log.d("AddFineActivity.saveMemberFine", "Meeting:" + String.valueOf(meetingId)+ " Amount: "+String.valueOf(fine.getAmount()) + " Member: "+String.valueOf(selectedMemberId)+ " FineType: "+String.valueOf(selectedFineType.getFineTypeId())+ " PaymentStatus: "+String.valueOf(paymentStatus));
             successFlg = fineRepo.saveMemberFine(meetingId, selectedMemberId, fine.getAmount(), selectedFineType.getFineTypeId(), paymentStatus);
         } else {
             //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
         }
-        Log.d("AddFineActivity.saveMemberFine", String.valueOf(successFlg));
 
         return successFlg;
     }
@@ -255,11 +276,10 @@ public class AddFineActivity extends SherlockActivity {
             fineRepo = new MeetingFineRepo(getApplicationContext());
 
             //Validate: Fine Type
-            Spinner cboFineType = (Spinner) findViewById(R.id.cboFineType);
+            Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
             selectedFineType = (FineType) cboFineType.getSelectedItem();
             String fineTypeName = selectedFineType.getFineTypeName();
             // cboFineType.getSelectedItem().toString().trim();
-            Log.d("Add Fine", selectedFineType.getFineTypeName());
             if (fineTypeName.equalsIgnoreCase("Please Select FineType")) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The Fine Type is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
 
@@ -271,7 +291,7 @@ public class AddFineActivity extends SherlockActivity {
             }
 
             // Validate: Fine Amount
-            TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFFineAmount);
+            TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFMFineAmount);
             String memberFineAmount = txtMemberFineAmount.getText().toString().trim();
             if (memberFineAmount.length() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The Fine Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
@@ -298,10 +318,10 @@ public class AddFineActivity extends SherlockActivity {
 
     private void clearDataFields() {
         // Clear the Fields
-        TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFFineAmount);
+        TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFMFineAmount);
         txtMemberFineAmount.setText("");
 
-        Spinner cboFineType = (Spinner) findViewById(R.id.cboFineType);
+        Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
         cboFineType.requestFocus();
     }
 

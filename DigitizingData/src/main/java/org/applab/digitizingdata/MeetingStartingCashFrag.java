@@ -206,6 +206,8 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
     private void populateStartingCash() {
         MeetingRepo meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
 
+        MeetingStartingCash openingCash = meetingRepo.getMeetingStartingCash(meetingId);
+
         TextView lblExpectedStartingCash = (TextView) getSherlockActivity().findViewById(R.id.lblExpectedStartingCash);
         TextView lblActualCashInBox = (TextView) getSherlockActivity().findViewById(R.id.lblTotalCashInBox);
         TextView lblCashTakenToBank = (TextView) getSherlockActivity().findViewById(R.id.lblCashTakenToBank);
@@ -282,6 +284,21 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
             txtActualCashInBox.setText("");
             txtActualCashInBoxComment.setText("");
         } */
+
+      /**  if(null != openingCash) {
+            lblExpectedStartingCash.setText(String.format("%.0f", openingCash.getActualStartingCash()));
+            lblCashTakenToBank.setText(String.format("%.0f", openingCash.getCashSavedInBank()));
+            // txtFinesPaid.setText(String.format("%.0f", openingCash.get(MeetingSchema.COL_MT_CASH_FINES)));
+            double cashTotal = 0.0;
+            for(double value : openingCash.values()) {
+                cashTotal += value;
+            }
+            txtCashTotal.setText(String.format("%,.0f UGX",cashTotal));
+        } */
+
+
+
+
         lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", expectedStartingCash));
 
         lblActualCashInBox.setText(String.format("Total Cash in Box %.0f UGX", expectedStartingCash - totalCashToBank));

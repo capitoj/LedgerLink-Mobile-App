@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,40 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+        inflateActionBar();
 
+        setContentView(R.layout.activity_member_fines_history);
+
+        /**    TextView lblMeetingDate = (TextView)findViewById(R.id.lblMSHMeetingDate);
+         meetingDate = getIntent().getStringExtra("_meetingDate");
+         lblMeetingDate.setText(meetingDate); */
+
+        TextView lblFullName = (TextView) findViewById(R.id.lblFineFullName);
+        String fullName = getIntent().getStringExtra("_name");
+        lblFullName.setText(fullName);
+
+        if (getIntent().hasExtra("_meetingId")) {
+            meetingId = getIntent().getIntExtra("_meetingId", 0);
+        }
+
+        if (getIntent().hasExtra("_memberId")) {
+            memberId = getIntent().getIntExtra("_memberId", 0);
+        }
+
+        fineRepo = new MeetingFineRepo(MemberFinesHistoryActivity.this);
+        meetingRepo = new MeetingRepo(MemberFinesHistoryActivity.this);
+        targetMeeting = meetingRepo.getMeetingById(meetingId);
+
+        if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
+            targetCycleId = targetMeeting.getVslaCycle().getCycleId();
+            double totalFines = fineRepo.getMemberTotalFinesInCycle(targetCycleId, memberId);
+        }
+
+        populateFineHistory();
+
+    }
+
+    private void inflateActionBar() {
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
@@ -105,7 +139,19 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         actionBar = getSupportActionBar();
         actionBar.setTitle("Fines");
 
-        actionBar.setDisplayOptions(
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
+
+     /**   actionBar.setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM,
                 ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
                         | ActionBar.DISPLAY_SHOW_TITLE
@@ -114,38 +160,8 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                 new ActionBar.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT)
-        );
+        ); */
         // END_INCLUDE (inflate_set_custom_view)
-
-        setContentView(R.layout.activity_member_fines_history);
-
-        /**    TextView lblMeetingDate = (TextView)findViewById(R.id.lblMSHMeetingDate);
-         meetingDate = getIntent().getStringExtra("_meetingDate");
-         lblMeetingDate.setText(meetingDate); */
-
-        TextView lblFullName = (TextView) findViewById(R.id.lblFineFullName);
-        String fullName = getIntent().getStringExtra("_name");
-        lblFullName.setText(fullName);
-
-        if (getIntent().hasExtra("_meetingId")) {
-            meetingId = getIntent().getIntExtra("_meetingId", 0);
-        }
-
-        if (getIntent().hasExtra("_memberId")) {
-            memberId = getIntent().getIntExtra("_memberId", 0);
-        }
-
-        fineRepo = new MeetingFineRepo(MemberFinesHistoryActivity.this);
-        meetingRepo = new MeetingRepo(MemberFinesHistoryActivity.this);
-        targetMeeting = meetingRepo.getMeetingById(meetingId);
-
-        if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
-            targetCycleId = targetMeeting.getVslaCycle().getCycleId();
-            double totalFines = fineRepo.getMemberTotalFinesInCycle(targetCycleId, memberId);
-        }
-
-        populateFineHistory();
-
     }
 
     private void populateFineHistory() {
@@ -156,6 +172,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
         if (fines == null) {
             fines = new ArrayList<MemberFineRecord>();
+
         }
 
         //Now get the data via the adapter

@@ -42,13 +42,13 @@ public class SelectCycle extends SherlockActivity {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        inflateCustomBar();
-
         setContentView(R.layout.activity_select_cycle);
 
         if (getIntent().hasExtra("_isEndCycleAction")) {
             isEndCycleAction = getIntent().getBooleanExtra("_isEndCycleAction", false);
         }
+
+        inflateCustomBar();
         //Setup the Fields by getting the current Cycle
         VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import org.applab.digitizingdata.R;
 
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
@@ -66,14 +67,14 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
             //Get the Widgets
             final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMLIssuedFullName);
             final TextView txtOutstanding = (TextView)rowView.findViewById(R.id.txtRMLIssuedOutstanding);
-            final TextView txtComment = (TextView)rowView.findViewById(R.id.txtRMLComment);
+          //  final TextView txtComment = (TextView)rowView.findViewById(R.id.txtRMLComment);
 
             // final TextView txtLoanIssuedToday = (TextView)rowView.findViewById(R.id.txtRMLIssuedTodaysLoan);
            // final TextView txtTotalIssued = (TextView)rowView.findViewById(R.id.txtRMLIssuedTotals);
             // final TextView txtTotalSavings = (TextView)rowView.findViewById(R.id.txtRMLIssuedSavings);
 
             // Set Typeface
-            txtComment.setTypeface(typeface);
+           // txtComment.setTypeface(typeface);
             txtFullNames.setTypeface(typeface);
             txtOutstanding.setTypeface(typeface);
 
@@ -88,11 +89,39 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
             //Get the Total
             targetMeeting = meetingRepo.getMeetingById(meetingId);
 
+            ArrayList<MeetingLoanIssued> loansIssued =  new ArrayList<MeetingLoanIssued>();
+
+            String comment = " ";
+
+           // TODO: Change this code when time allows; it's weak!
+
+            StringBuilder aggregate = new StringBuilder();
             double outstandingLoansByMember = 0.0;
             if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {
-                outstandingLoansByMember = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+                //outstandingLoansByMember = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+                //outstandingLoansByMember = loanIssued.getLoanBalance();
+               loansIssued = loansIssuedRepo.getOutstandingLoansListByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
-            txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", outstandingLoansByMember));
+            if (loansIssued == null || loansIssued.size()==0){
+                txtOutstanding.setText("No outstanding loans");
+            }
+            else {
+                for(MeetingLoanIssued loanIssue : loansIssued){
+                    if(loanIssue.getComment()== null || loanIssue.getComment().length()==0){
+                       comment = "N/A";
+                    }
+                    else{
+                        comment = loanIssue.getComment();
+                    }
+                    aggregate.append(String.format("Outstanding loan  %,.0f UGX \n%s \n", loanIssue.getLoanBalance(), comment));
+                }
+
+               txtOutstanding.setText(aggregate.toString());
+                txtOutstanding.setLineSpacing(0.0f, 1.5f);
+               // txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", outstandingLoansByMember));
+
+            }
+
 
           /**  double comment = 0.0;
             if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {

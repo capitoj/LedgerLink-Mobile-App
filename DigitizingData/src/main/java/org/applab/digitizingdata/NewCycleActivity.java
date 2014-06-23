@@ -226,6 +226,11 @@ public class NewCycleActivity extends SherlockActivity {
 
         if (isUpdateCycleAction) {
             customActionBarView.findViewById(R.id.actionbar_next).setVisibility(View.GONE);
+
+            // Set to false to remove caret and disable its function; if designer decides otherwise set both to true
+            actionBar.setHomeButtonEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(false);
+
         } else {
             customActionBarView.findViewById(R.id.actionbar_back).setVisibility(View.GONE);
             customActionBarView.findViewById(R.id.actionbar_done).setVisibility(View.GONE);

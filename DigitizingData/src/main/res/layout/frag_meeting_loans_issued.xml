@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
     <RelativeLayout
         android:id="@+id/frmMLIssuedF_top_control_bar"
@@ -69,7 +70,6 @@
         android:layout_alignParentTop="true"
         android:layout_below="@id/frmMLIssuedF_top_control_bar"
         android:choiceMode="singleChoice">
-
     </ListView>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -78,6 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/frmMLIssuedF_top_control_bar"
-        android:text="@string/empty_members_list" />
+        android:text="@string/empty_members_list"
+        />
 
 </RelativeLayout>

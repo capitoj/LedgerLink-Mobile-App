@@ -17,7 +17,7 @@
         android:focusableInTouchMode="false" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        android:id="@+id/txtFineType"
+        android:id="@+id/lblFineType"
         style="@style/ListSubItemsWithCheckbox"
         android:layout_width="60dip"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         android:layout_width="80dip"
         android:layout_height="wrap_content"
         android:layout_below="@id/lblFineFullName"
-        android:layout_toRightOf="@id/txtFineType"
+        android:layout_toRightOf="@id/lblFineType"
         android:text="XXX UGX" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView

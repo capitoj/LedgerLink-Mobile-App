@@ -16,7 +16,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:text="Review fines. Tap member name to edit fines or mark as paid."
-            android:id="@+id/lblReviewFinesMessage" />
+            android:id="@+id/lblReviewFinesMessage"
+            android:layout_marginBottom="10dip"/>
 
     </RelativeLayout>
 
