@@ -307,27 +307,28 @@ public class BeginMeetingActivity extends SherlockActivity {
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
 
-            final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_begin_send, null);
-            customActionBarView.findViewById(R.id.actionbar_send).setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //send all meeting data
-                            numberOfSentMeetings = 0;
-                            for (Meeting thisMeeting : pastMeetings) {
-                                sendMeetingData(thisMeeting.getMeetingId());
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_begin_send, null);
+        customActionBarView.findViewById(R.id.actionbar_send).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                                //If sending of previous meeting failed, stop this loop
-                                if (!actionSucceeded) {
-                                    break;
-                                }
-                            }
-                            if (numberOfSentMeetings > 0) {
-                                refreshActivityView();
+                        //send all meeting data
+                        numberOfSentMeetings = 0;
+                        for (Meeting thisMeeting : pastMeetings) {
+                            sendMeetingData(thisMeeting.getMeetingId());
+
+                            //If sending of previous meeting failed, stop this loop
+                            if (!actionSucceeded) {
+                                break;
                             }
                         }
+                        if (numberOfSentMeetings > 0) {
+                            refreshActivityView();
+                        }
                     }
-            );
+                }
+        );
 
         customActionBarView.findViewById(R.id.actionbar_begin).setOnClickListener(
                 new View.OnClickListener() {

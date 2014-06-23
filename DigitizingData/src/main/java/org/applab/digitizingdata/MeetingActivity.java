@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -106,6 +107,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         //Do not show the Send Data tab when in READ_ONLY Mode
         if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
             actionBar.addTab(actionBar.newTab().setTag("sendData").setText("Send Data").setTabListener(this));
+
         }
 
 
@@ -162,10 +164,14 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         //If(enableData)
         if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
             final MenuInflater inflater = getSupportMenuInflater();
             inflater.inflate(R.menu.meeting, menu);
+            if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY){
+                menu.findItem(R.id.mnuMeetingFineMember).setEnabled(false);
+            }
             return true;
         } else {
             return false;
@@ -176,11 +182,13 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         if(currentMeeting != null) return currentMeeting;
 
         if(getIntent().hasExtra("_currentMeetingId")) {
+
             //try to load it from db
             MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
             currentMeeting = meetingRepo.getMeetingById(getIntent().getIntExtra("_currentMeetingId", 0)) ;
             return currentMeeting;
         }
+
         //else return null
         return currentMeeting;
     }
