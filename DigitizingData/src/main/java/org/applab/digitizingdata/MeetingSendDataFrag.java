@@ -76,10 +76,11 @@ public class MeetingSendDataFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-                title="Meeting";
+                //title="Meeting";
                 break;
         }
         actionBar.setTitle(title);
+        actionBar.setSubtitle(title);
         parentActivity = (MeetingActivity) getSherlockActivity();
         if(parentActivity.getCurrentMeeting() != null)
         {
@@ -97,7 +98,9 @@ public class MeetingSendDataFrag extends SherlockFragment {
         loadFragmentInformation(selectedMeetingId);
 
         //Set title
-        actionBar.setTitle("MEETING "+Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+       // actionBar.setTitle("MEETING "+Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+        actionBar.setTitle("MEETING");
+        actionBar.setSubtitle(Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
         Log.i("SendDataFrag", "number of unsent meetings is " + numberOfPastUnsentMeetings);
 
         LinearLayout layoutMSDUnsentPastMeetings = (LinearLayout) getSherlockActivity().findViewById(R.id.layoutMSDUnsentPastMeetings);

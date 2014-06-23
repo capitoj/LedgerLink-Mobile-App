@@ -73,7 +73,7 @@ public class MeetingFinesFrag extends SherlockFragment {
         parentActivity = (MeetingActivity) getSherlockActivity();
         actionBar = parentActivity.getSupportActionBar();
         meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
-        String title = String.format("Meeting    %s", meetingDate);
+        String title = String.format("Meeting");
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
@@ -86,6 +86,7 @@ public class MeetingFinesFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
+        actionBar.setSubtitle(meetingDate);
         /** TextView lblMeetingDate = (TextView)parentActivity.findViewById(R.id.lblMSavFMeetingDate);
          meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */

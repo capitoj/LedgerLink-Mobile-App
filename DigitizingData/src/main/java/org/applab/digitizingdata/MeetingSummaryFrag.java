@@ -54,8 +54,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
         actionBar = getSherlockActivity().getSupportActionBar();
         String meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        String title = String.format("Meeting    %s", meetingDate);
-
+        String title = "Meeting";
 
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -68,6 +67,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
+        actionBar.setSubtitle(meetingDate);
         parentActivity = (MeetingActivity) getSherlockActivity();
         //TextView lblMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFMeetingDate);
         // lblMeetingDate.setText(meetingDate);
@@ -83,20 +83,12 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
         TextView lblSectionLastMeeting = (TextView) getSherlockActivity().findViewById(R.id.lblMSFSection2);
 
-        //TextView lblCycleStartDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFCycleStartDate);
-        //TextView lblCycleEndDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFCycleEndDate);
-        // TextView lblIssuedLoans = (TextView) getSherlockActivity().findViewById(R.id.lblMSFIssuedLoans);
-        //TextView lblCashInBank = (TextView)getSherlockActivity().findViewById(R.id.lblMSFCashInBank);
-
-        MeetingFineRepo fineRepo = new MeetingFineRepo(getSherlockActivity().getApplicationContext());
-
         MeetingSavingRepo savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
         MeetingLoanIssuedRepo loansIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
         MeetingLoanRepaymentRepo loansRepaidRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
         double outstandingLoans = 0.0;
         double totalSavings = 0.0;
         double issuedLoans = 0.0;
-        //double cashInBank = 0.0;
         String startDate = "";
         String endDate = "";
 

@@ -2,6 +2,7 @@ package org.applab.digitizingdata;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -9,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,10 +26,8 @@ import org.applab.digitizingdata.domain.model.MeetingFine;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.helpers.CustomFineTypeSpinnerListener;
-import org.applab.digitizingdata.helpers.FineTypeCustomArrayAdapter;
+import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.FineTypeRepo;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
 
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public class AddFineActivity extends SherlockActivity {
     ArrayList<FineType> fineTypes = null;
     private int paymentStatus = 0;
     private AlertDialog alertDialog;
-    FineType selectedFineType;
+    String selectedFineTypeName;
     private MeetingFine fine;
 
     @Override
@@ -89,45 +89,18 @@ public class AddFineActivity extends SherlockActivity {
             }
         });
 
+        buildFineTypeSpinner();
 
-        //Setup the Spinner Items
-        Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
-        FineTypeCustomArrayAdapter adapter = new FineTypeCustomArrayAdapter(this, android.R.layout.simple_spinner_item,
-                populateFineTypeList(), "fonts/roboto-regular.ttf");
-        /**{
-
-         public View getView(int position, View convertView, ViewGroup parent) {
-         View v = super.getView(position, convertView, parent);
-         Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-         ((TextView) v).setTypeface(externalFont);
-         ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-         return v;
-         }
-
-         public View getDropDownView(int position, View convertView, ViewGroup parent) {
-         View v = super.getDropDownView(position, convertView, parent);
-         Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-         ((TextView) v).setTypeface(externalFont);
-         return v;
-         }
-         }; */
+        /** //Setup the Spinner Items
+         Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
+         FineTypeCustomArrayAdapter adapter = new FineTypeCustomArrayAdapter(this, android.R.layout.simple_spinner_item,
+         populateFineTypeList(), "fonts/roboto-regular.ttf");
 
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboFineType.setAdapter(adapter);
+         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+         cboFineType.setAdapter(adapter);
 
-
-        // adapter.setMeetingId(meetingId);
-        //  String[] genderList = new String[]{"Male", "Female"};
-        //ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList)
-
-
-        cboFineType.setOnItemSelectedListener(new CustomFineTypeSpinnerListener());
-
-        //Make the spinner selectable
-        cboFineType.setFocusable(true);
-        cboFineType.setFocusableInTouchMode(true);
-        cboFineType.setClickable(true);
+         */
 
         clearDataFields();
     }
@@ -258,7 +231,8 @@ public class AddFineActivity extends SherlockActivity {
                 fineRepo = new MeetingFineRepo(AddFineActivity.this);
             }
 
-            successFlg = fineRepo.saveMemberFine(meetingId, selectedMemberId, fine.getAmount(), selectedFineType.getFineTypeId(), paymentStatus);
+
+            successFlg = fineRepo.saveMemberFine(meetingId, selectedMemberId, fine.getAmount(), fine.getFineTypeId(), paymentStatus);
         } else {
             //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
         }
@@ -269,26 +243,34 @@ public class AddFineActivity extends SherlockActivity {
 
     protected boolean validateData() {
         try {
-            /** if (null == fine) {
-             return false;
-             }*/
+
             fine = new MeetingFine();
             fineRepo = new MeetingFineRepo(getApplicationContext());
 
             //Validate: Fine Type
             Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
-            selectedFineType = (FineType) cboFineType.getSelectedItem();
-            String fineTypeName = selectedFineType.getFineTypeName();
-            // cboFineType.getSelectedItem().toString().trim();
-            if (fineTypeName.equalsIgnoreCase("Please Select FineType")) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The Fine Type is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-
+            if (cboFineType.getSelectedItemPosition() < 1) {
+                Utils.createAlertDialogOk(this, dlgTitle, "The fine type is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboFineType.requestFocus();
                 return false;
             } else {
-                //  fineType = new FineType((int) fineType(), cboFineType.getSelectedItem().toString().trim());
-                fine.setFineType(selectedFineType);
+                String selectedFineTypeName = cboFineType.getSelectedItem().toString().trim();
+
+                /** To be REMOVED:
+                 * Meantime fix for QA time just because we cant change the DB */
+                if (selectedFineTypeName.equalsIgnoreCase("Other")) {
+                    fine.setFineTypeId(1);
+                } else if (selectedFineTypeName.equalsIgnoreCase("Latecoming")) {
+
+                    fine.setFineTypeId(2);
+                } else if (selectedFineTypeName.equalsIgnoreCase("Disorder")) {
+                    fine.setFineTypeId(3);
+                } else {
+                    fine.setFineTypeId(0);
+                }
+                fine.setFineTypeName(selectedFineTypeName);
             }
+
 
             // Validate: Fine Amount
             TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFMFineAmount);
@@ -309,14 +291,21 @@ public class AddFineActivity extends SherlockActivity {
                 }
             }
             return true;
-        } catch (Exception ex) {
+        } catch (
+                Exception ex
+                )
+
+        {
             ex.printStackTrace();
             return false;
         }
+
     }
 
 
     private void clearDataFields() {
+
+        buildFineTypeSpinner();
         // Clear the Fields
         TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFMFineAmount);
         txtMemberFineAmount.setText("");
@@ -325,21 +314,41 @@ public class AddFineActivity extends SherlockActivity {
         cboFineType.requestFocus();
     }
 
-    private ArrayList<FineType> populateFineTypeList() {
-        //Load the Main Menu
-        FineTypeRepo fineTypeRepo = new FineTypeRepo(getApplicationContext());
-        /**       fineTypes = fineTypeRepo.getAllFineTypes();
-         */
-        if (fineTypes == null) {
-            fineTypes = new ArrayList<FineType>();
-        }
+    /* Populates the Fine Type spinner */
+    protected void buildFineTypeSpinner() {
 
-        // Hardcode for now
-        fineTypes.add(new FineType(0, "Select FineType"));
-        fineTypes.add(new FineType(1, "Other"));
-        fineTypes.add(new FineType(2, "Late Coming"));
-        fineTypes.add(new FineType(3, "Disorder"));
-        return fineTypes;
+        Spinner cboFMFineType = (Spinner) findViewById(R.id.cboFMFineType);
+        String[] fineTypeList = new String[]{"select fine type", "Other", "Latecoming", "Disorder"};
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, fineTypeList) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                return v;
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+        };
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cboFMFineType.setAdapter(adapter);
+        cboFMFineType.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+
+        // Make the spinner selectable
+        cboFMFineType.setFocusable(true);
+        cboFMFineType.setFocusableInTouchMode(true);
+        cboFMFineType.setClickable(true);
     }
 
 }

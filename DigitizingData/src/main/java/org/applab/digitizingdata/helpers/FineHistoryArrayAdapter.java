@@ -16,7 +16,9 @@ import org.applab.digitizingdata.repo.FineTypeRepo;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Moses on 8/2/13.
@@ -31,6 +33,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
     MeetingFineRepo finesRepo;
     VslaCycleRepo cycleRepo;
     VslaCycle currentCycle;
+    String datePaid;
 
     public FineHistoryArrayAdapter(Context context, ArrayList<MemberFineRecord> values, String font) {
         super(context, R.layout.row_fines_history, values);
@@ -66,9 +69,14 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
 
                     if (isChecked) {
                         fineRecord.setStatus(1);
-                    } else fineRecord.setStatus(0);
+                        Date date = new Date();
+                        datePaid = Utils.formatDateToSqlite((date));
+                    } else {
+                        fineRecord.setStatus(0);
+                        datePaid = "";
+                    }
 
-                    finesRepo.updateMemberFineStatus(fineRecord.getFineId(), fineRecord.getStatus());
+                    finesRepo.updateMemberFineStatus(fineRecord.getFineId(), fineRecord.getStatus(), datePaid);
                 }
             });
 
@@ -85,10 +93,22 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
             if (fineRecord != null) {
                 txtFineMeetingDate.setText(String.format(Utils.formatDate(fineRecord.getMeetingDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
                 txtFineAmount.setText(String.format("%,.0fUGX", fineRecord.getAmount()));
-                txtFineType.setText(String.valueOf(fineTypeRepo.getFineTypeName(fineRecord.getFineTypeId())));
+
+                /** To be REMOVED:
+                 * Meantime fix for QA time just because we cant change the DB */
+                switch (fineRecord.getFineTypeId()) {
+                    case 1:
+                        fineRecord.setFineTypeName("Other");
+                    case 2:
+                        fineRecord.setFineTypeName("Latecoming");
+                    case 3:
+                        fineRecord.setFineTypeName("Disorder");
+                    default:
+                        fineRecord.setFineTypeName("Unknown");
+                }
+                txtFineType.setText(fineRecord.getFineTypeName());
                 chkMemberFineStatus.setChecked(fineRecord.getStatus() != 0);
             }
-            Log.d("FineHistoryArrayAdapter.getView", String.valueOf(fineRecord.getAmount()));
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

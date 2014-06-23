@@ -77,7 +77,9 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         actionBar.setDisplayHomeAsUpEnabled(true);
         String meetingDate = getIntent().getStringExtra("_meetingDate");
 
-        String title = String.format("Meeting    %s", meetingDate);
+       // String title = String.format("Meeting    %s", meetingDate);
+        String title = "Meeting";
+
 
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -90,8 +92,8 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 break;
         }
         actionBar.setTitle(title);
+        actionBar.setSubtitle(meetingDate);
 
-        // actionBar.setSubtitle(meetingDate);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         actionBar.addTab(actionBar.newTab().setTag("rollCall").setText("Register").setTabListener(this));

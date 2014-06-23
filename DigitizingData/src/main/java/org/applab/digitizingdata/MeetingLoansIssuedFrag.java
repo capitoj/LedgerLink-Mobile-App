@@ -69,7 +69,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         actionBar = getSherlockActivity().getSupportActionBar();
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        String title = String.format("Meeting    %s", meetingDate);
+        String title = "Meeting";
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
@@ -82,6 +82,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
+        actionBar.setSubtitle(meetingDate);
         /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         lblMeetingDate.setText(meetingDate); */

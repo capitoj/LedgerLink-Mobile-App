@@ -142,6 +142,7 @@ public class MeetingFineRepo {
                 totalFines = cursor.getDouble(cursor.getColumnIndex("TotalFines"));
             }
 
+
             return totalFines;
         } catch (Exception ex) {
             Log.e("MeetingFineRepo.getMemberTotalFinesInCycle", ex.getMessage());
@@ -193,28 +194,31 @@ public class MeetingFineRepo {
         }
     }
 
-    public double getTotalFinesPaidInMeeting(int meetingId) {
+    public double getTotalFinesPaidInThisMeeting(int meetingId, Date meetingDate) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         double totalFinesPaidInMeeting = 0.00;
         int paymentStatus = 1;
 
+        String meetingDateString = Utils.formatDate(meetingDate, "yyyy-MM-dd");
+
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT  SUM(%s) AS TotalFinesPaid FROM %s WHERE %s=%d AND %s=%d",
+            String sumQuery = String.format("SELECT SUM(%s) AS TotalFinesPaid FROM %s WHERE %s=%d AND %s LIKE '%s%%' AND %s=%d",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
                     FineSchema.COL_F_IS_CLEARED, paymentStatus,
+                    FineSchema.COL_F_DATE_CLEARED, meetingDateString,
                     FineSchema.COL_F_MEETING_ID, meetingId);
+
             cursor = db.rawQuery(sumQuery, null);
 
             if (cursor != null && cursor.moveToFirst()) {
                 totalFinesPaidInMeeting = cursor.getDouble(cursor.getColumnIndex("TotalFinesPaid"));
             }
 
-
             return totalFinesPaidInMeeting;
         } catch (Exception ex) {
-            Log.e("MeetingFineRepo.getTotalFinesInMeeting", ex.getMessage());
+            Log.e("MeetingFineRepo.getTotalFinesInThisMeeting", ex.getMessage());
             return 0;
         } finally {
 
@@ -299,15 +303,14 @@ public class MeetingFineRepo {
 
     public boolean saveMemberFine(int meetingId, int memberId, double fineAmount, int fineTypeId, int paymentStatus) {
         SQLiteDatabase db = null;
-        boolean performUpdate = false;
-        int fineId = 0;
-        try {
-            //Check if exists and do an Update
-            //     fineId = getMemberFineId(meetingId, memberId);
-            //   if (fineId > 0) {
-            //     performUpdate = true;
-            // }
+        String datePaid = "";
 
+        if (paymentStatus==1){
+            Date date = new Date();
+            datePaid = Utils.formatDateToSqlite(date);
+        }
+
+        try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
@@ -316,20 +319,12 @@ public class MeetingFineRepo {
             values.put(FineSchema.COL_F_AMOUNT, fineAmount);
             values.put(FineSchema.COL_F_IS_CLEARED, paymentStatus);
             values.put(FineSchema.COL_F_FINE_TYPE_ID, fineTypeId);
+            values.put(FineSchema.COL_F_DATE_CLEARED, datePaid);
 
-//            Log.d("SaveFine", sumQuery);
 
             // Inserting or UpdatingRow
             long retVal = -1;
-            /**  if (performUpdate) {
-             // updating row
-             retVal = db.update(FineSchema.getTableName(), values, FineSchema.COL_F_FINE_ID + " = ?",
-             new String[]{String.valueOf(fineId)});
-             Log.d("MemberFineRepo.saveMemberFine", "DONE!");
-             } else { */
             retVal = db.insert(FineSchema.getTableName(), null, values);
-            Log.d("MemberFineRepo.saveMemberFine", "INSERT DONE!");
-            // }
 
             if (retVal != -1) {
                 return true;
@@ -379,7 +374,7 @@ public class MeetingFineRepo {
                     MemberFineRecord fine = new MemberFineRecord();
                     Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("MeetingDate")));
                     fine.setMeetingDate(meetingDate);
-                    fine.setFineTypeId(cursor.getColumnIndex("FineTypeId"));
+                    fine.setFineTypeId(cursor.getInt(cursor.getColumnIndex("FineTypeId")));
                     fine.setFineId(cursor.getInt(cursor.getColumnIndex("FineId")));
                     fine.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
                     fine.setStatus(cursor.getInt(cursor.getColumnIndex("Status")));
@@ -447,29 +442,27 @@ public class MeetingFineRepo {
     }
 
 
-    public boolean updateMemberFineStatus(int fineId, int paymentStatus) {
-
+    public boolean updateMemberFineStatus(int fineId, int paymentStatus, String datePaid) {
         SQLiteDatabase db = null;
-        boolean performUpdate = false;
         try {
 
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
             values.put(FineSchema.COL_F_IS_CLEARED, paymentStatus);
-
+            values.put(FineSchema.COL_F_DATE_CLEARED, datePaid);
         long retVal = -1;
-         // updating row
+
+         // Updating row
          retVal = db.update(FineSchema.getTableName(), values, FineSchema.COL_F_FINE_ID + " = ?",
          new String[]{String.valueOf(fineId)});
-         Log.d("MemberFineRepo.updateMemberFineStatus", "DONE!");
             if (retVal != -1) {
                 return true;
             } else {
                 return false;
             }
         } catch (Exception ex) {
-            Log.e("MemberFineRepo.saveMemberFine", ex.getMessage());
+            Log.e("MemberFineRepo.updateMemberFine", ex.getMessage());
             return false;
         } finally {
             if (db != null) {

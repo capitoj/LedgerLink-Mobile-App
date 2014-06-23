@@ -67,7 +67,9 @@ public class MeetingRollCallFrag extends SherlockFragment {
         if (meetingId != 0) {
             MeetingRepo meetingRepo = new MeetingRepo(this.parentActivity.getBaseContext());
             selectedMeeting = meetingRepo.getMeetingById(meetingId);
-            title = String.format("Meeting    %s", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+            //title = String.format("Meeting    %s", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+            title = "Meeting";
+
         }
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -81,6 +83,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
                 break;
         }
         actionBar.setTitle(title);
+        actionBar.setSubtitle(Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
         //TextView lblMeetingDate = (TextView)parentActivity.findViewById(R.id.lblMRCFMeetingDate);
         //meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
         //TODO: Get the Meeting Id from meetingRepo.getCurrentMeeting();

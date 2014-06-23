@@ -40,7 +40,7 @@ public class MeetingLoanRepaymentRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT  SUM(%s) AS TotalRepayments FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
+            String sumQuery = String.format("SELECT SUM(%s) AS TotalRepayments FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
                     LoanRepaymentSchema.COL_LR_AMOUNT, LoanRepaymentSchema.getTableName(),
                     LoanRepaymentSchema.COL_LR_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID,cycleId);

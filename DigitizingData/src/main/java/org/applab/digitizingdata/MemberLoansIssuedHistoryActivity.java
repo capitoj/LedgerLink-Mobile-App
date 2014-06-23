@@ -333,8 +333,12 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         loansIssued = loanIssuedRepo.getLoansIssuedToMemberInCycle(targetCycleId, memberId);
 
         if (loansIssued == null) {
-            pastLoansHeading.setVisibility(View.GONE);
+
             loansIssued = new ArrayList<MemberLoanIssueRecord>();
+        }
+
+        if (loansIssued.isEmpty()){
+            pastLoansHeading.setVisibility(View.GONE);
         }
 
         //Now get the data via the adapter
