@@ -254,7 +254,7 @@ public class MeetingLoanRepaymentRepo {
         boolean performUpdate = false;
         int repaymentId = 0;
         try {
-            //Check if exists and do an Update:
+            // Check if exists and do an Update:
             repaymentId = getMemberRepaymentId(meetingId, memberId);
             if(repaymentId > 0) {
                 performUpdate = true;
@@ -266,7 +266,7 @@ public class MeetingLoanRepaymentRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            //The Last Date Due
+            // The Last Date Due
             Date dtLastDateDue = lastDateDue;
             if(dtLastDateDue == null) {
                 Calendar cal = Calendar.getInstance();

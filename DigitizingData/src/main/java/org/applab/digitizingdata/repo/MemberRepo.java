@@ -178,7 +178,7 @@ public class MemberRepo {
         if(loanIssuedToMemberInMeeting == null) {
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued not found, so create new record");
         if(member.getOutstandingLoanOnSetup() <= 0) {
-            Log.d(context.getPackageName(), "Saving of loan on setup skipped because loan amount is "+member.getOutstandingLoanOnSetup());
+            Log.d(context.getPackageName(), "Saving of loan on setup skipped because loan amount is " + member.getOutstandingLoanOnSetup());
             return true;
         }
         meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);

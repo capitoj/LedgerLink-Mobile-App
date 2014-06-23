@@ -580,7 +580,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
         super.clearDataFields();
 
-        //Clear GSW values
+        // Clear GSW values
         TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
         txtSavingsSoFar.setText(null);
         TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);

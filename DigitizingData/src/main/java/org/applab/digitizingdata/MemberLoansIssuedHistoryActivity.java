@@ -449,8 +449,9 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 theComment = comment;
             }
 
-            /**  //Interest Amount
-             String interestAmount = txtInterestAmount.getText().toString().trim();
+             //Interest Amount
+             theInterestAmount = (interestRate * 0.01 * theAmount);
+            /** String interestAmount = txtInterestAmount.getText().toString().trim();
              if (interestAmount.length() < 1) {
              //Not sure whether there would be more to do
              theInterestAmount = 0.0;
