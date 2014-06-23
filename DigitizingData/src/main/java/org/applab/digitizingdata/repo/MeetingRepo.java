@@ -1382,13 +1382,9 @@ public class MeetingRepo {
                     MeetingSchema.COL_MT_MEETING_ID, meetingId);
             cursor = db.rawQuery(sumQuery, null);
 
-
-
-
             if (cursor != null && cursor.moveToFirst()) {
                 totalCashToBank = cursor.getDouble(cursor.getColumnIndex("cashToBank"));
-                Log.d("MeetingRepo.getCashTakenToBankInPreviousMeeting", String.valueOf(totalCashToBank));
-            }
+              }
 
             return totalCashToBank;
         } catch (Exception ex) {
