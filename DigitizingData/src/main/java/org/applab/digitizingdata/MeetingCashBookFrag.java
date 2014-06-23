@@ -200,7 +200,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
             txtCashToBankAmount = (EditText) getSherlockActivity().findViewById(R.id.txtCashToBank);
             cashToBank = Double.valueOf(txtCashToBankAmount.getText().toString());
 
-            cashToBox = totalCashInBox - cashToBank;
+            //cashToBox = totalCashInBox - cashToBank;
 
             // double cashSavedInBank = startingCashDetails.getCashSavedInBank();
             // cashToBank = cashToBank + cashSavedInBank;
