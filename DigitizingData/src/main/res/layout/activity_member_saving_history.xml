@@ -4,75 +4,69 @@
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="Moses Oscar Muhahala"
             android:id="@+id/lblMSHFullNames"
-            android:layout_gravity="center" />
-
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
+            style="@style/RegularTextListItems"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="01-JUL-2013"
+            android:text="Moses Oscar Muhahala" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMSHMeetingDate"
-            android:layout_gravity="center" />
-
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Amount"
-            android:id="@+id/lblMSHAmount" />
+            android:layout_marginLeft="30dip"
+            android:text="01-JUL-2013" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMSHAmount"
+            style="@style/RegularText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:text="Amount" />
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="10">
+            android:layout_height="wrap_content">
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
-                style="@style/NormalEditText"
                 android:id="@+id/txtMSHAmount"
-                android:layout_width="fill_parent"
+                style="@style/NormalEditText"
+                android:layout_width="150dip"
                 android:layout_height="wrap_content"
-                android:layout_weight="6"
-                android:inputType="number"
-                android:textAlignment="viewEnd"
+                android:layout_marginLeft="30dip"
                 android:imeOptions="actionDone"
-                android:text="" />
+                android:inputType="number"
+                android:text=""
+                android:textAlignment="viewEnd" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
+                android:id="@+id/lblMSHCurrency"
+                style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:text="UGX"
-                android:id="@+id/lblMSHCurrency" />
+                android:text="UGX" />
         </LinearLayout>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMSHSection1"
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
-            android:paddingLeft="5dp"
-            android:text="HISTORY"
-            android:id="@+id/lblMSHSection1"/>
+            android:text="HISTORY" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMSHTotalSavings"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="Total Savings: 15,000 UGX"
-            android:id="@+id/lblMSHTotalSavings"/>
+            android:text="Total Savings: 15,000 UGX" />
 
         <ListView
             android:id="@android:id/list"
@@ -81,8 +75,8 @@
             android:choiceMode="singleChoice" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
             android:id="@android:id/empty"
+            style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No History" />

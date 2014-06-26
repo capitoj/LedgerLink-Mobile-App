@@ -1,6 +1,5 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -8,10 +7,8 @@ import android.support.v4.app.TaskStackBuilder;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -23,6 +20,7 @@ import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
@@ -42,13 +40,11 @@ public class NewCyclePg2Activity extends SherlockListActivity {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_new_cycle_pg2);
+        inflateCustombar();
 
         if(getIntent().hasExtra("_isUpdateCycleAction")) {
             isUpdateCycleAction = getIntent().getBooleanExtra("_isUpdateCycleAction",false);
         }
-
-        actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
         if(isUpdateCycleAction) {
             actionBar.setTitle("Edit Cycle");
@@ -58,13 +54,94 @@ public class NewCyclePg2Activity extends SherlockListActivity {
         }
 
         //Populate the Members
-        populateMembersList();
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(runnable, "Please wait...", "Loading member list...", NewCyclePg2Activity.this );
+
+    }
+
+    /* inflates custom menu bar for review members */
+    public void inflateCustombar() {
+
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        View customActionBarView = null;
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_exit_enternext_done, null);
+        customActionBarView.findViewById(R.id.actionbar_exit).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
+                        //startActivity(i);
+                        finish();
+                        System.exit(0);
+                    }
+                }
+        );
+
+        customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isUpdateCycleAction) {
+                            Utils._membersAccessedFromEditCycle = true;
+                        }
+                        else {
+                            Utils._membersAccessedFromNewCycle = true;
+                        }
+                        Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
+                        startActivity(i);
+                    }
+                }
+        );
+
+
+        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(isUpdateCycleAction) {
+                            Toast toast = Toast.makeText(getBaseContext(), "You have successfully edited cycle", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.LEFT,0,0);
+                            toast.show();
+                        }
+                        else {
+                            Toast toast = Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.LEFT,0,0);
+                            toast.show();
+                        }
+
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(i);
+                    }
+                }
+        );
+
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle("NEW CYCLE");
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
-        inflater.inflate(R.menu.new_cycle_pg2, menu);
         return true;
     }
 
@@ -130,10 +207,19 @@ public class NewCyclePg2Activity extends SherlockListActivity {
         }
 
         // Get the data via the adapter; Pass on font type as well - Hard coded for now
-        MembersCustomArrayAdapter adapter = new MembersCustomArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersCustomArrayAdapter adapter = new MembersCustomArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
-        setListAdapter(adapter);
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                setListAdapter(adapter);
+            }
+        };
+        runOnUiThread(runnable);
+
 
         // listening to single list item on click
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -147,7 +233,7 @@ public class NewCyclePg2Activity extends SherlockListActivity {
                 // Pass on data
                 Bundle b = new Bundle();
                 b.putInt("_id", selectedMember.getMemberId());
-                b.putString("_names", selectedMember.getFullNames());
+                b.putString("_names", selectedMember.getFullName());
 
                 viewMember.putExtras(b);
                 viewMember.putExtra("_caller","newCyclePg2");

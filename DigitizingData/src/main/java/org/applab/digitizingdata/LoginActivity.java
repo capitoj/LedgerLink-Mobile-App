@@ -29,12 +29,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.VslaInfo;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.SampleDataBuilderRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +42,7 @@ import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+//import android.view.Menu;
 
 public class LoginActivity extends SherlockActivity {
     VslaInfoRepo vslaInfoRepo = null;
@@ -73,13 +74,23 @@ public class LoginActivity extends SherlockActivity {
         Utils.configureDefaultApplicationPreferences(getApplicationContext());
 
         //Load Sample Trainng Data: Testing
-        SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+        Runnable dataLoader = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+            }
+        };
+        //Load this as long running task
+        LongTaskRunner.runLongTask(dataLoader, "Please wait...", "Please wait as LedgerLink refreshes the test training data...", LoginActivity.this);
 
-      //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblSISwitchMode);
 
-        ImageView imgVALogo = (ImageView)findViewById(R.id.imgVALogo);
+        //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblSISwitchMode);
+
+        ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
         imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
-        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int)this.getResources().getDimension(R.dimen.logo_width), (int)this.getResources().getDimension(R.dimen.logo_height)));
+        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.logo_width), (int) this.getResources().getDimension(R.dimen.logo_height)));
 
 
         //If we are in training mode then show it using a custom View with distinguishable background
@@ -139,10 +150,10 @@ public class LoginActivity extends SherlockActivity {
             if(!vslaInfo.isActivated()) {
                 if(vslaInfo.isOffline()) {
                     if(wasCalledFromActivation) {
-                        notActivatedStatusMessage = "We were unable to send your registration because of a network problem. We've saved it and will try to send it later.";
+                        notActivatedStatusMessage = "We weren't able to send your registration because of a network problem. We've saved it and will try to send it later.";
                     }
                     else {
-                        notActivatedStatusMessage = "We were unable to send your registration last time because of a network problem. We've saved it and will try to send it when you sign in now.";
+                        notActivatedStatusMessage = "We weren't able to send your registration last time because of a network problem. We've saved it and will try to send it when you sign in now.";
                     }
                 }
                 else {
@@ -166,17 +177,25 @@ public class LoginActivity extends SherlockActivity {
             finish();
         }
 
-        TextView txtVslaName = (TextView) findViewById(R.id.lbl_vsla_name);
-        String vslaName = notActivatedStatusMessage;
-        if(vslaInfo != null && vslaInfo.isActivated()) {
-            vslaName = vslaInfo.getVslaName();
-        }
-        else {
-            //Change font size
-            txtVslaName.setTextSize(18);
-        }
-        txtVslaName.setText(vslaName);
+        // Pass key Label
+        TextView lblPasskey = (TextView) findViewById(R.id.lblPassKeyPrompt);
 
+        // VSLA name placeholder
+        TextView txtVslaName = (TextView) findViewById(R.id.lbl_vsla_name);
+        String vslaName = "";
+
+        // Activation Information placeholder
+        TextView activationLoginMsg = (TextView) findViewById(R.id.lblActivationLoginMsg);
+
+        if (vslaInfo != null && vslaInfo.isActivated()) {
+            vslaName = vslaInfo.getVslaName();
+            txtVslaName.setText(vslaName);
+            activationLoginMsg.setVisibility(View.GONE);
+        } else {
+            txtVslaName.setVisibility(View.INVISIBLE);
+            activationLoginMsg.setText(notActivatedStatusMessage);
+            lblPasskey.setVisibility(View.INVISIBLE);
+        }
 
         // ---Button view---
         Button btnLogin = (Button)findViewById(R.id.btnLogin);
@@ -239,9 +258,13 @@ public class LoginActivity extends SherlockActivity {
             showGettingStartedWizard = true;
         }
 
-        Intent mainMenu = null;
+        Intent mainMenu;
         if(showGettingStartedWizard) {
-            mainMenu = new Intent(getBaseContext(), GettingStartedWizardPageOne.class);
+            mainMenu = new Intent(getBaseContext(), Utils.resolveGettingStartedWizardStage(vslaInfo.getGettingStartedWizardStage()));
+            if(vslaInfo.getGettingStartedWizardStage() == Utils.GETTING_STARTED_PAGE_REVIEW_CYCLE) {
+                //we are in review cycle mode
+                mainMenu.putExtra("_isFromReviewMembers", true);
+            }
         }
         else {
             mainMenu = new Intent(getBaseContext(), MainActivity.class);

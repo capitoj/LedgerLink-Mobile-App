@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHFullName"
+            style="@style/RegularTextListItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Moses Oscar Muhahala" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHMeetingDate"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:text="01-JUL-2013" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHLoanNo"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:text="Loan Number" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10">
+
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                android:id="@+id/txtMLIssuedHLoanNo"
+                style="@style/NormalEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:layout_weight="4"
+                android:inputType="number"
+                android:text=""
+                android:textAlignment="textEnd" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblMLIssuedHLoanNoSp"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text=" " />
+        </LinearLayout>
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHAmount"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:text="Loan Amount" />
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10">
+
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                android:id="@+id/txtMLIssuedHAmount"
+                style="@style/NormalEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:layout_weight="6"
+                android:inputType="number"
+                android:text=""
+                android:textAlignment="textEnd" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblMLIssuedHCurrency"
+                style="@style/InlineTextItem"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="UGX" />
+        </LinearLayout>
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHInterest"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:text="Interest Payable:" />
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10">
+
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                android:id="@+id/txtMLIssuedHInterest"
+                style="@style/NormalEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:layout_weight="6"
+                android:inputType="number"
+                android:text=""
+                android:textAlignment="textEnd" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblMLIssuedHCurrencyInt"
+                style="@style/InlineTextItem"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="UGX" />
+        </LinearLayout>
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHTotal"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:text="Total Due:" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="10">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMLIssuedHTotal"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:layout_weight="6"
+                android:clickable="true"
+                android:text="" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblMLIssuedHCurrencyTotal"
+                style="@style/InlineTextItem"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:text="UGX" />
+        </LinearLayout>
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHDateDue"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:text="Date Due:" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/txtMLIssuedHDateDue"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:clickable="true"
+            android:text="01-Jul-2013" />
+
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHSection1"
+            style="@style/SubHeading"
+            android:layout_width="fill_parent"
+            android:layout_height="25dip"
+            android:text="HISTORY" />
+
+      <!--  <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedHOutstandingLoans"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="30dip"
+            android:text="Total Balance:" /> -->
+        <!--
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:text="Past Loans"
+                    android:id="@+id/lblMLIssuedHPastLoans"
+                    android:layout_gravity="left"/>
+
+                    -->
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@android:id/empty"
+            style="@style/RegularText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Outstanding Balance" />
+
+        <ListView
+            android:id="@android:id/list"
+            style="@style/List"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:choiceMode="singleChoice" />
+
+
+
+    </LinearLayout>
+</ScrollView>

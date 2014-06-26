@@ -6,17 +6,14 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -29,20 +26,11 @@ import org.applab.digitizingdata.domain.model.MeetingFine;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.helpers.CustomFineTypeSpinnerListener;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
-import org.applab.digitizingdata.helpers.FineTypeCustomArrayAdapter;
-import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
-import org.applab.digitizingdata.helpers.MembersFinesArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.FineTypeRepo;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
-import org.applab.digitizingdata.repo.MemberRepo;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by Moses on 7/15/13.
@@ -58,9 +46,9 @@ public class AddFineActivity extends SherlockActivity {
     MeetingFineRepo fineRepo;
     private boolean isEditAction;
     ArrayList<FineType> fineTypes = null;
-    private boolean paymentStatus = false;
+    private int paymentStatus = 0;
     private AlertDialog alertDialog;
-    FineType selectedFineType;
+    String selectedFineTypeName;
     private MeetingFine fine;
 
     @Override
@@ -73,18 +61,58 @@ public class AddFineActivity extends SherlockActivity {
             this.selectedMemberId = getIntent().getIntExtra("_memberId", 0);
         }
 
-        if(getIntent().hasExtra("_meetingId")) {
+        if (getIntent().hasExtra("_meetingId")) {
             this.meetingId = getIntent().getIntExtra("_meetingId", 0);
         }
 
+        String fullName = getIntent().getStringExtra("_name");
+
+        inflateCustomActionBar();
+
+        setContentView(R.layout.activity_add_fine_member);
+        TextView txtAmount = (TextView) findViewById(R.id.txtFMFineAmount);
+
+        TextView lblFullName = (TextView) findViewById(R.id.txtFMFullName);
+        lblFullName.setText(fullName);
+
+        CheckBox chkPaidStatus = (CheckBox) findViewById(R.id.chkFMPaidStatus);
+
+        chkPaidStatus.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (((CheckBox) v).isChecked()) {
+                    paymentStatus = 1;
+                } else {
+                    paymentStatus = 0;
+                }
+            }
+        });
+
+        buildFineTypeSpinner();
+
+        /** //Setup the Spinner Items
+         Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
+         FineTypeCustomArrayAdapter adapter = new FineTypeCustomArrayAdapter(this, android.R.layout.simple_spinner_item,
+         populateFineTypeList(), "fonts/roboto-regular.ttf");
+
+
+         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+         cboFineType.setAdapter(adapter);
+
+         */
+
+        clearDataFields();
+    }
+
+    private void inflateCustomActionBar() {
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
-        actionBar = getSupportActionBar();
 
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_cancel, null);
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -93,88 +121,46 @@ public class AddFineActivity extends SherlockActivity {
                         saveMemberFine();
                         finish();
                     }
-                });
+                }
+        );
         customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         finish();
                     }
-                });
+                }
+        );
 
+        // actionbar with logo
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setTitle("New Fine");
 
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
+        // Set to false to remove caret and disable its function; if designer decides otherwise set both to true
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
+        /**actionBar.setTitle("New Fine");
+
+         actionBar.setDisplayOptions(
+         ActionBar.DISPLAY_SHOW_CUSTOM,
+         ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+         | ActionBar.DISPLAY_SHOW_TITLE);
+         actionBar.setCustomView(customActionBarView,
+         new ActionBar.LayoutParams(
+         ViewGroup.LayoutParams.MATCH_PARENT,
+         ViewGroup.LayoutParams.MATCH_PARENT)); */
         // END_INCLUDE (inflate_set_custom_view)
         //if in getting started wizard.. use the getting started layout
         //else use the default layout
-
-
-        setContentView(R.layout.activity_add_fine_member);
-        TextView txtAmount = (TextView) findViewById(R.id.txtFFineAmount);
-
-        CheckBox chkPaidStatus = (CheckBox) findViewById(R.id.chkFPaidStatus);
-
-        chkPaidStatus.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
-                    paymentStatus = true;
-                } else {
-                    paymentStatus = false;
-                }
-            }
-        });
-
-
-        //Setup the Spinner Items
-        Spinner cboFineType = (Spinner) findViewById(R.id.cboFineType);
-        FineTypeCustomArrayAdapter adapter = new FineTypeCustomArrayAdapter(this, android.R.layout.simple_spinner_item,
-                populateFineTypeList(), "fonts/roboto-regular.ttf");
-        /**{
-
-         public View getView(int position, View convertView, ViewGroup parent) {
-         View v = super.getView(position, convertView, parent);
-         Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-         ((TextView) v).setTypeface(externalFont);
-         ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-         return v;
-         }
-
-         public View getDropDownView(int position, View convertView, ViewGroup parent) {
-         View v = super.getDropDownView(position, convertView, parent);
-         Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-         ((TextView) v).setTypeface(externalFont);
-         return v;
-         }
-         }; */
-
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboFineType.setAdapter(adapter);
-
-
-        // adapter.setMeetingId(meetingId);
-        //  String[] genderList = new String[]{"Male", "Female"};
-        //ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList)
-
-
-        cboFineType.setOnItemSelectedListener(new CustomFineTypeSpinnerListener());
-
-        //Make the spinner selectable
-        cboFineType.setFocusable(true);
-        cboFineType.setFocusableInTouchMode(true);
-        cboFineType.setClickable(true);
-
-        clearDataFields();
     }
 
     @Override
@@ -212,7 +198,6 @@ public class AddFineActivity extends SherlockActivity {
     public boolean saveMemberFine() {
         boolean successFlg = false;
         double theAmount = 0.0;
-        Log.d("AddFineActivity.saveMemberFine", "Save Fine");
 
         //  try {
 
@@ -246,11 +231,11 @@ public class AddFineActivity extends SherlockActivity {
                 fineRepo = new MeetingFineRepo(AddFineActivity.this);
             }
 
-            successFlg = fineRepo.saveMemberFine(meetingId, selectedMemberId, fine.getAmount(), selectedFineType.getFineTypeId(), paymentStatus);
+
+            successFlg = fineRepo.saveMemberFine(meetingId, selectedMemberId, fine.getAmount(), fine.getFineTypeId(), paymentStatus);
         } else {
             //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
         }
-        Log.d("AddFineActivity.saveMemberFine", String.valueOf(successFlg));
 
         return successFlg;
     }
@@ -258,30 +243,37 @@ public class AddFineActivity extends SherlockActivity {
 
     protected boolean validateData() {
         try {
-            /** if (null == fine) {
-             return false;
-             }*/
+
             fine = new MeetingFine();
             fineRepo = new MeetingFineRepo(getApplicationContext());
 
             //Validate: Fine Type
-            Spinner cboFineType = (Spinner) findViewById(R.id.cboFineType);
-            selectedFineType = (FineType) cboFineType.getSelectedItem();
-            String fineTypeName = selectedFineType.getFineTypeName();
-            // cboFineType.getSelectedItem().toString().trim();
-            Log.d("Add Fine", selectedFineType.getFineTypeName());
-            if (fineTypeName.equalsIgnoreCase("Please Select FineType")) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The Fine Type is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-
+            Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
+            if (cboFineType.getSelectedItemPosition() < 1) {
+                Utils.createAlertDialogOk(this, dlgTitle, "The fine type is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboFineType.requestFocus();
                 return false;
             } else {
-                //  fineType = new FineType((int) fineType(), cboFineType.getSelectedItem().toString().trim());
-                fine.setFineType(selectedFineType);
+                String selectedFineTypeName = cboFineType.getSelectedItem().toString().trim();
+
+                /** To be REMOVED:
+                 * Meantime fix for QA time just because we cant change the DB */
+                if (selectedFineTypeName.equalsIgnoreCase("Other")) {
+                    fine.setFineTypeId(1);
+                } else if (selectedFineTypeName.equalsIgnoreCase("Latecoming")) {
+
+                    fine.setFineTypeId(2);
+                } else if (selectedFineTypeName.equalsIgnoreCase("Disorder")) {
+                    fine.setFineTypeId(3);
+                } else {
+                    fine.setFineTypeId(0);
+                }
+                fine.setFineTypeName(selectedFineTypeName);
             }
 
+
             // Validate: Fine Amount
-            TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFFineAmount);
+            TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFMFineAmount);
             String memberFineAmount = txtMemberFineAmount.getText().toString().trim();
             if (memberFineAmount.length() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The Fine Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
@@ -299,36 +291,64 @@ public class AddFineActivity extends SherlockActivity {
                 }
             }
             return true;
-        } catch (Exception ex) {
+        } catch (
+                Exception ex
+                )
+
+        {
             ex.printStackTrace();
             return false;
         }
+
     }
 
 
     private void clearDataFields() {
+
+        buildFineTypeSpinner();
         // Clear the Fields
-        TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFFineAmount);
+        TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFMFineAmount);
         txtMemberFineAmount.setText("");
 
-        Spinner cboFineType = (Spinner) findViewById(R.id.cboFineType);
+        Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
         cboFineType.requestFocus();
     }
 
-    private ArrayList<FineType> populateFineTypeList() {
-        //Load the Main Menu
-        FineTypeRepo fineTypeRepo = new FineTypeRepo(getApplicationContext());
-        /**       fineTypes = fineTypeRepo.getAllFineTypes();
-         */
-        if (fineTypes == null) {
-            fineTypes = new ArrayList<FineType>();
-        }
+    /* Populates the Fine Type spinner */
+    protected void buildFineTypeSpinner() {
 
-        // Hardcode for now
-        fineTypes.add(new FineType(1, "Others"));
-        fineTypes.add(new FineType(2, "Late coming"));
-        fineTypes.add(new FineType(3, "Disorder"));
-        return fineTypes;
+        Spinner cboFMFineType = (Spinner) findViewById(R.id.cboFMFineType);
+        String[] fineTypeList = new String[]{"select fine type", "Other", "Latecoming", "Disorder"};
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, fineTypeList) {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+
+                return v;
+            }
+
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v = super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+        };
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cboFMFineType.setAdapter(adapter);
+        cboFMFineType.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+
+        // Make the spinner selectable
+        cboFMFineType.setFocusable(true);
+        cboFMFineType.setFocusableInTouchMode(true);
+        cboFMFineType.setClickable(true);
     }
 
 }

@@ -4,22 +4,41 @@
     android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
-        android:id="@+id/txtRMLIssuedFullNames"
-        android:layout_width="fill_parent"
+        style="@style/RegularTextListItems"
+        android:id="@+id/txtRMLIssuedFullName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:padding="5dp"
-        android:text="FULL NAMES" />
+        android:text="0. FULL NAME" />
 
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtRMLIssuedOutstanding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRMLIssuedFullName"
+        android:text="Outstanding: 60,000UGX"/>
+
+    <!-- Taken out for now
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtRMLComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRMLIssuedOutstanding"
+        android:text="To buy chicken feed"
+        android:layout_marginBottom="20dip"/>
+
+        -->
+
+    <!--
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSubItems"
         android:id="@+id/txtRMLIssuedTodaysLoan"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtRMLIssuedFullNames"
-        android:paddingLeft="5dp"
+        android:layout_below="@id/txtRMLIssuedFullName"
         android:text="Today: 5,000UGX" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -28,17 +47,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLIssuedTodaysLoan"
-        android:paddingLeft="5dp"
         android:text="Total: 60,000UGX" />
-
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
-        android:id="@+id/txtRMLIssuedOutstanding"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtRMLIssuedTotals"
-        android:paddingLeft="5dp"
-        android:text="Outstanding: 60,000UGX" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSubItems"
@@ -46,8 +55,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLIssuedOutstanding"
-        android:paddingLeft="5dp"
         android:text="Total Savings: 60,000UGX" />
-
+-->
 
 </RelativeLayout>

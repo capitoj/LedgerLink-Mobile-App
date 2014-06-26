@@ -31,11 +31,11 @@ public class Member {
 
     @Override
     public String toString() {
-        return String.format("%s. %s, %s", memberNo, surname, otherNames);
+        return String.format("%s. %s %s", memberNo, surname, otherNames);
     }
 
-    public String getFullNames() {
-        return String.format("%s, %s", surname, otherNames);
+    public String getFullName() {
+        return String.format("%s %s", surname, otherNames);
     }
 
     public int getMemberId() {

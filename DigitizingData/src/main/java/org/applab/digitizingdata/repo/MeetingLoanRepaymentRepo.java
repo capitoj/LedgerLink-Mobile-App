@@ -44,7 +44,7 @@ public class MeetingLoanRepaymentRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT  SUM(%s) AS TotalRepayments FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
+            String sumQuery = String.format("SELECT SUM(%s) AS TotalRepayments FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
                     LoanRepaymentSchema.COL_LR_AMOUNT, LoanRepaymentSchema.getTableName(),
                     LoanRepaymentSchema.COL_LR_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID,cycleId);
@@ -258,7 +258,7 @@ public class MeetingLoanRepaymentRepo {
         boolean performUpdate = false;
         int repaymentId = 0;
         try {
-            //Check if exists and do an Update:
+            // Check if exists and do an Update:
             repaymentId = getMemberRepaymentId(meetingId, memberId);
             if(repaymentId > 0) {
                 performUpdate = true;
@@ -270,7 +270,7 @@ public class MeetingLoanRepaymentRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            //The Last Date Due
+            // The Last Date Due
             Date dtLastDateDue = lastDateDue;
             if(dtLastDateDue == null) {
                 Calendar cal = Calendar.getInstance();

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/frmMLRepayF_top_control_bar">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+       <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
             android:paddingLeft="5dp"
             android:text="01-JUL-2013"
             android:id="@+id/lblMLRepayFMeetingDate"
-            android:layout_gravity="center" />
+            android:layout_gravity="center" /> -->
 
     </RelativeLayout>
 
@@ -36,7 +36,6 @@
         android:id="@+id/txtMLRepayFEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
         android:text="@string/empty_members_list"
         android:layout_below="@id/frmMLRepayF_top_control_bar" />
 

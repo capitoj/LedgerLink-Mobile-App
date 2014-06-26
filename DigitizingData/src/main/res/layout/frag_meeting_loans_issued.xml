@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:orientation="vertical">
-    <RelativeLayout android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/frmMLIssuedF_top_control_bar">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:paddingLeft="5dp"
-                android:text="01-JUL-2013"
-                android:id="@+id/lblMLIssuedFMeetingDate"
-                android:layout_gravity="center"/>
+    <RelativeLayout
+        android:id="@+id/frmMLIssuedF_top_control_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
         <!--
         <TextView
@@ -68,22 +61,24 @@
 
     </RelativeLayout>
 
-    <ListView android:id="@+id/lvwMLIssuedFMembers"
-              android:layout_width="fill_parent"
-              android:layout_height="wrap_content"
-              android:choiceMode="singleChoice"
-              android:layout_below="@id/frmMLIssuedF_top_control_bar" >
-
+    <ListView
+        android:id="@+id/lvwMLIssuedFMembers"
+        style="@style/RegularTextListItems"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_below="@id/frmMLIssuedF_top_control_bar"
+        android:choiceMode="singleChoice">
     </ListView>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
         android:id="@+id/txtMLIssuedFEmpty"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:paddingLeft="5dp"
-              android:text="@string/empty_members_list"
-              android:layout_below="@id/frmMLIssuedF_top_control_bar"
-            />
+        style="@style/RegularText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/frmMLIssuedF_top_control_bar"
+        android:text="@string/empty_members_list"
+        />
 
 </RelativeLayout>

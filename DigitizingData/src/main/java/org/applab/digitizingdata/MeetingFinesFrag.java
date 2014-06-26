@@ -1,14 +1,12 @@
 package org.applab.digitizingdata;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -16,6 +14,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersFinesArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
@@ -31,6 +30,8 @@ public class MeetingFinesFrag extends SherlockFragment {
     ArrayList<Member> members;
     String meetingDate;
     int meetingId;
+    private MeetingActivity parentActivity;
+    private RelativeLayout fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,17 +46,35 @@ public class MeetingFinesFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        return (RelativeLayout)inflater.inflate(R.layout.frag_meeting_fines, container, false);
+        fragmentView = (RelativeLayout) inflater.inflate(R.layout.frag_meeting_fines, container, false);
+        initializeFragment();
+        return fragmentView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        actionBar = getSherlockActivity().getSupportActionBar();
-        String title = "Meeting";
-        switch(Utils._meetingDataViewMode) {
+    }
+
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+
+    }
+
+    private void initializeFragment()
+    {
+
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+        parentActivity = (MeetingActivity) getSherlockActivity();
+        actionBar = parentActivity.getSupportActionBar();
+        meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
+        String title = String.format("Meeting");
+        switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
                 break;
@@ -63,55 +82,80 @@ public class MeetingFinesFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-                title="Meeting";
+                // title="Meeting";
                 break;
         }
         actionBar.setTitle(title);
-
-       /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate); */
-        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-
-        //Populate the Members
-        populateMembersList();
+        actionBar.setSubtitle(meetingDate);
+        /** TextView lblMeetingDate = (TextView)parentActivity.findViewById(R.id.lblMSavFMeetingDate);
+         meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
+         lblMeetingDate.setText(meetingDate); */
+        meetingId = parentActivity.getIntent().getIntExtra("_meetingId", 0);
+        //Wrap and run long task
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //Populate the Members
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(runnable, "Please wait", "Loading list of fines...", parentActivity);
     }
+
 
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(getSherlockActivity().getApplicationContext());
+        MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(parentActivity.getBaseContext(), members, "fonts/roboto-regular.ttf");
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
-        //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMFineMembers);
-        TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMFineEmpty);
+        final ListView lvwMembers = (ListView) fragmentView.findViewById(R.id.lvwMFineMembers);
+        final TextView txtEmpty = (TextView) fragmentView.findViewById(R.id.txtMFineEmpty);
 
-        lvwMembers.setEmptyView(txtEmpty);
-        lvwMembers.setAdapter(adapter);
+        Runnable runOnUiThread = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                lvwMembers.setEmptyView(txtEmpty);
+                lvwMembers.setAdapter(adapter);
+            }
+        };
+        parentActivity.runOnUiThread(runOnUiThread);
+
+
 
         // listening to single list item on click
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 //Do not invoke the event when in Read only Mode
-                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
-                    Member selectedMember = (Member) members.get(position);
+                if(parentActivity.isViewOnly()) {
+                    Toast.makeText(parentActivity.getBaseContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                    Member selectedMember = members.get(position);
                     Intent i = new Intent(view.getContext(), MemberFinesHistoryActivity.class);
 
                     // Pass on data
-                    i.putExtra("_meetingDate",meetingDate);
+                    i.putExtra("_meetingDate", meetingDate);
                     i.putExtra("_memberId", selectedMember.getMemberId());
-                    i.putExtra("_names", selectedMember.toString());
-                    i.putExtra("_meetingId",meetingId);
+                    i.putExtra("_name", selectedMember.toString());
+                    i.putExtra("_meetingId", meetingId);
 
                     startActivity(i);
+
+                    //parentActivity.finish();
+
                 }
             }
         });

@@ -3,6 +3,7 @@ package org.applab.digitizingdata;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -33,10 +34,42 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     ActionBar actionBar;
     int selectedMemberId = -1;
     String selectedMemberNames = "VSLA Member";
+    MemberRepo repo;
+    private Member selectedMember;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+
+       inflateCustomActionBar();
+
+
+        setContentView(R.layout.activity_member_details_view);
+        // Check for Extras in case this call was to edit a pledge
+        Bundle b = getIntent().getExtras();
+
+
+        if (b != null) {
+
+            selectedMemberId = b.getInt("_id", 5);
+
+            if(b.containsKey("_names")) {
+                //getString(key, defValue) was added in API 12. Use getString(key), as this will return null if the key doesn't exist.
+                String value =  b.getString("_names");
+                selectedMemberNames = (null != value)? value : "Unknown Member";
+            }
+            //Toast.makeText(getBaseContext(),String.format("Member Names: %s",selectedMemberNames),Toast.LENGTH_LONG).show();
+            actionBar.setTitle(selectedMemberNames);
+        }
+
+
+        repo = new MemberRepo(getApplicationContext());
+        selectedMember = repo.getMemberById(selectedMemberId);
+        populateDataFields(selectedMember);
+
+    }
+
+    private void inflateCustomActionBar(){
 
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
@@ -78,30 +111,6 @@ public class MemberDetailsViewActivity extends SherlockActivity {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
         // END_INCLUDE (inflate_set_custom_view)
-
-
-        setContentView(R.layout.activity_member_details_view);
-        // Check for Extras in case this call was to edit a pledge
-        Bundle b = getIntent().getExtras();
-
-
-        if (b != null) {
-
-            selectedMemberId = b.getInt("_id", 5);
-
-            if(b.containsKey("_names")) {
-                //getString(key, defValue) was added in API 12. Use getString(key), as this will return null if the key doesn't exist.
-                String value =  b.getString("_names");
-                selectedMemberNames = (null != value)? value : "Unknown Member";
-            }
-            //Toast.makeText(getBaseContext(),String.format("Member Names: %s",selectedMemberNames),Toast.LENGTH_LONG).show();
-            actionBar.setTitle(selectedMemberNames);
-        }
-
-
-        MemberRepo repo = new MemberRepo(getApplicationContext());
-        Member selectedMember = repo.getMemberById(selectedMemberId);
-        populateDataFields(selectedMember);
 
     }
 

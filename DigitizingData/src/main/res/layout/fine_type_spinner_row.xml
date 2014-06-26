@@ -5,8 +5,8 @@
     android:orientation="vertical"
     >
        <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
-        android:id="@+id/txtFineType"
+        style="@style/ListSmallSubItems"
+        android:id="@+id/lblFineType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

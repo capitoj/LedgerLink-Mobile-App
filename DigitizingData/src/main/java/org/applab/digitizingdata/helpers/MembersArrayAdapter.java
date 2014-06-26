@@ -48,7 +48,7 @@ public class MembersArrayAdapter extends ArrayAdapter<Member> {
             View rowView = inflater.inflate(R.layout.row_members_main_list, parent, false);
 
             //Get the Widgets
-            final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtMListFullNames);
+            final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtMListFullName);
             final TextView txtSavings = (TextView)rowView.findViewById(R.id.txtMListTotalSavings);
             //final TextView txtLoans = (TextView)rowView.findViewById(R.id.txtMListTotalLoans);
 

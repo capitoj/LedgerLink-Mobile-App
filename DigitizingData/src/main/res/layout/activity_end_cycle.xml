@@ -7,82 +7,102 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".EndCycleActivity">
 
+        <!--  android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        -->
+
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
+            android:id="@+id/lblECInstruction"
+            style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="If your cycle has ended, enter the share out date."
-            android:id="@+id/lblECInstruction"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
+            android:text="If your cycle has ended, enter the share out date."
+            android:layout_marginBottom="20dip"/>
 
+        <requestFocus />
 
-        <RadioGroup
-            android:id="@+id/grpECExistingCycles"
-            android:layout_below="@id/lblECInstruction"
+       <!-- <ListView
+            android:id="@+id/lstCyclesToEnd"
+            style="@style/RegularTextDateListItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp">
+            android:layout_marginBottom="10dip"
+            android:choiceMode="singleChoice"
+            android:dividerHeight="2dip">
 
-        </RadioGroup>
+
+        </ListView> -->
+
+
+        <!--   <RadioGroup
+               android:id="@+id/grpECExistingCycles"
+               style="@style/RegularText"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_below="@id/lblECInstruction"
+               android:layout_marginBottom="10dip"
+               android:layout_marginTop="10dip"
+               android:orientation="vertical"></RadioGroup>
+        -->
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Share Out Date"
             android:id="@+id/lblECShareOutDate"
-            android:layout_below="@id/grpECExistingCycles"
-            android:layout_alignParentLeft="true" />
-
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="02-JUL-2013"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/lblECInstruction"
+            android:text="Share Out Date" />
+
+        <org.applab.digitizingdata.fontutils.TypefaceEditText
             android:id="@+id/txtECShareOutDate"
+            style="@style/NormalEditText"
+            android:layout_width="150dip"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
             android:layout_below="@id/lblECShareOutDate"
-            android:layout_alignParentLeft="true" />
+            android:layout_marginBottom="10dip"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="30-Jun-2013" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblECShareOutAmount"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Share Out Amount"
-            android:id="@+id/lblECShareOutAmount"
+            android:layout_alignParentLeft="true"
             android:layout_below="@id/txtECShareOutDate"
-            android:layout_alignParentLeft="true" />
+            android:text="Share Out Amount" />
 
         <LinearLayout
+            android:id="@+id/frmECShareOutAmount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/frmECShareOutAmount"
             android:layout_below="@id/lblECShareOutAmount"
-            android:weightSum="10">
+            android:layout_marginBottom="20dip"
+            android:weightSum="4">
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
-                style="@style/NormalEditText"
                 android:id="@+id/txtECShareOutAmount"
-                android:layout_width="fill_parent"
+                style="@style/NormalEditText"
+                android:layout_width="200dip"
                 android:layout_height="fill_parent"
-                android:layout_weight="4"
                 android:inputType="number"
                 android:text="" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
+                android:id="@+id/lblECCurrency"
+                style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="6"
-                android:text="UGX"
-                android:id="@+id/lblECCurrency" />
+                android:text="UGX" />
+
         </LinearLayout>
 
     </RelativeLayout>

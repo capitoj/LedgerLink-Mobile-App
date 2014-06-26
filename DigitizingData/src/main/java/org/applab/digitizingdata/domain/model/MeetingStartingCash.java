@@ -9,9 +9,11 @@ public class MeetingStartingCash {
     private int startingCashId;
     private Meeting meeting;
     private double actualStartingCash;
+    private double cashSavedInBank;
     private String comment;
     private double amount;
     private Date dateSent;
+    private double expectedStartingCash;
 
     public int getStartingCashId() {
         return startingCashId;
@@ -45,6 +47,14 @@ public class MeetingStartingCash {
         this.actualStartingCash = actualStartingCash;
     }
 
+    public double getExpectedStartingCash() {
+        return expectedStartingCash;
+    }
+
+    public void setExpectedStartingCash(double expectedStartingCash) {
+        this.expectedStartingCash = expectedStartingCash;
+    }
+
     public Date getDateSent() {
         return dateSent;
     }
@@ -59,5 +69,13 @@ public class MeetingStartingCash {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public double getCashSavedInBank() {
+        return cashSavedInBank;
+    }
+
+    public void setCashSavedInBank(double cashSavedInBank){
+        this.cashSavedInBank = cashSavedInBank;
     }
 }

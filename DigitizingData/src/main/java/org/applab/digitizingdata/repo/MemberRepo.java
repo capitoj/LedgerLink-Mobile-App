@@ -6,12 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import android.widget.EditText;
-import android.widget.TextView;
-import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.*;
 import org.applab.digitizingdata.domain.schema.MemberSchema;
-import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 
@@ -182,7 +178,7 @@ public class MemberRepo {
         if(loanIssuedToMemberInMeeting == null) {
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued not found, so create new record");
         if(member.getOutstandingLoanOnSetup() <= 0) {
-            Log.d(context.getPackageName(), "Saving of loan on setup skipped because loan amount is "+member.getOutstandingLoanOnSetup());
+            Log.d(context.getPackageName(), "Saving of loan on setup skipped because loan amount is " + member.getOutstandingLoanOnSetup());
             return true;
         }
         meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
@@ -191,8 +187,10 @@ public class MemberRepo {
         //First get the Interest Rate for the Current Cycle
         double interest = 0.0;
 
+        String comment = "Unknown";
+
         //Save the loan
-        boolean loanSaveResult = meetingLoanIssuedRepo.saveMemberLoanIssue(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), loanId, member.getOutstandingLoanOnSetup(),interest, c.getTime());
+        boolean loanSaveResult = meetingLoanIssuedRepo.saveMemberLoanIssue(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), loanId, member.getOutstandingLoanOnSetup(),interest, c.getTime(), comment);
 
         Log.d(context.getPackageName(), "updateMemberLoanOnSetup: Create record for loan on setup, Result:"+loanSaveResult);
 
@@ -275,7 +273,7 @@ public class MemberRepo {
         }
     }
 
-    //Loads the saavings at setup and loans at setup for the member
+    // Loads the savings at setup and loans at setup for the member
      public boolean loadMemberGettingStartedWizardValues(Member member) {
          MeetingRepo meetingRepo = new MeetingRepo(context);
          Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
@@ -330,7 +328,7 @@ public class MemberRepo {
                     member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
 
                     if(! loadMemberGettingStartedWizardValues(member)) {
-                        Log.d(context.getPackageName(), "Failed to load Loan at setup and saving at setup for member "+member.getFullNames());
+                        Log.d(context.getPackageName(), "Failed to load Loan at setup and saving at setup for member "+member.getFullName());
                     }
                     if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
                         member.setDateOfBirth(new Date());
@@ -355,7 +353,7 @@ public class MemberRepo {
         }
         catch (Exception ex) {
             ex.printStackTrace();
-            Log.e("MemberRepo.getAllMembers", ex.getMessage());
+            //Log.e("MemberRepo.getAllMembers", ex.getMessage());
             return new ArrayList<Member>();
         }
         finally {
@@ -368,6 +366,53 @@ public class MemberRepo {
             }
         }
     }
+
+
+
+    //Counts members
+    public int countMembers() {
+
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            members = new ArrayList<Member>();
+            String columnList = MemberSchema.getColumnList();
+
+            // Select All Query
+            String selectQuery = String.format("SELECT %s FROM %s ORDER BY %s", columnList, MemberSchema.getTableName(),
+                    MemberSchema.COL_M_MEMBER_NO);
+
+            cursor = db.rawQuery(selectQuery, null);
+
+            if(cursor == null){
+                return 0;
+            }
+
+            return cursor.getCount();
+
+
+
+
+
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return 0;
+        }
+        finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
 
     public Member getMemberById(int memberId) {
         Member member = null;
@@ -598,6 +643,19 @@ public class MemberRepo {
                 db.close();
             }
         }
+    }
+
+
+    /*Returns a list of available member numbers that can be used */
+    public ArrayList<String> getListOfAvailableMemberNumbers(int count) {
+        ArrayList<String> memberNumbers = new ArrayList<String>();
+
+        for(int i=1; memberNumbers.size()<count; i++) {
+            if(isMemberNoAvailable(i, 0)) {
+                memberNumbers.add(i+"");
+            }
+        }
+        return memberNumbers;
     }
 
 

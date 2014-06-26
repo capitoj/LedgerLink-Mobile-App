@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.AbsListView.LayoutParams;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -27,11 +22,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 
 import org.applab.digitizingdata.domain.model.VslaInfo;
-import org.applab.digitizingdata.helpers.MenuCustomArrayAdapter;
 import org.applab.digitizingdata.helpers.MenuItem;
-import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MemberRepo;
-import org.applab.digitizingdata.repo.SampleDataBuilderRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.ArrayList;
@@ -54,6 +45,7 @@ public class MainActivity extends SherlockActivity {
         setContentView(R.layout.main_menu);
 
         actionBar = getSupportActionBar();
+        actionBar.setTitle("Ledger Link");
 
         //Retrieve VSLA Information
         vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
@@ -96,7 +88,6 @@ public class MainActivity extends SherlockActivity {
          }  */
 
         gridView = (GridView) findViewById(R.id.grid);
-        Log.d("HERE", String.valueOf(mainMenuItemsGridArray.size()));
 
         customGridAdapter = new CustomGridViewAdapter(this, R.layout.mainmenurowgrid, mainMenuItemsGridArray);
         gridView.setAdapter(customGridAdapter);
@@ -117,11 +108,16 @@ public class MainActivity extends SherlockActivity {
                     Intent i = new Intent(getApplicationContext(), ViewSentDataActivity.class);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("updateCycle")) {
-                    Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
-                    i.putExtra("_isUpdateCycleAction", true);
+                    //Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+                    //i.putExtra("_isUpdateCycleAction", true);
+                    //For multiple active cycles, show activity to allow selecting
+                    Intent i = new Intent(getApplicationContext(), SelectCycle.class);
+                    i.putExtra("_isEndCycleAction", false);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("endCycle")) {
-                    Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+                    //Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+                    Intent i = new Intent(getApplicationContext(), SelectCycle.class);
+                    i.putExtra("_isEndCycleAction", true);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("beginCycle")) {
                     Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);

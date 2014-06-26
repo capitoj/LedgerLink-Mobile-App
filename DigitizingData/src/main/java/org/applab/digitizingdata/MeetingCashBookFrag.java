@@ -1,24 +1,23 @@
 package org.applab.digitizingdata;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.app.Activity;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.ExtractedTextRequest;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingFine;
+import org.applab.digitizingdata.domain.model.MeetingStartingCash;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingFineRepo;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
@@ -29,7 +28,17 @@ public class MeetingCashBookFrag extends SherlockFragment {
     ActionBar actionBar = null;
     String meetingDate = null;
     int meetingId = 0;
-
+    double cashToBank = 0.0;
+    double cashToBox = 0.0;
+    double totalCashInBox = 0.0;
+    MeetingRepo meetingRepo = null;
+    MeetingSavingRepo savingRepo = null;
+    MeetingLoanRepaymentRepo repaymentRepo = null;
+    MeetingLoanIssuedRepo loanIssuedRepo = null;
+    MeetingFineRepo fineRepo = null;
+    MeetingStartingCash startingCashDetails = null;
+    private MeetingActivity parentActivity; //to access parent meeting activity
+    EditText txtCashToBankAmount;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +61,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
         super.onActivityCreated(savedInstanceState);
 
         actionBar = getSherlockActivity().getSupportActionBar();
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         String title = "Meeting";
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -61,16 +71,27 @@ public class MeetingCashBookFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-                title = "Meeting";
+                //  title = "Meeting";
                 break;
         }
+
+        meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
+        savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
+        loanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
+        repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
+        fineRepo = new MeetingFineRepo(getSherlockActivity().getApplicationContext());
+
+
         actionBar.setTitle(title);
+        actionBar.setSubtitle(meetingDate);
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-        TextView lblMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMCBFMeetingDate);
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate);
+
+        /**    TextView lblMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMCBFMeetingDate);
+         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+         lblMeetingDate.setText(meetingDate); */
 
         populateCashBookFields();
+        parentActivity = (MeetingActivity) getSherlockActivity();
     }
 
     @Override
@@ -85,11 +106,18 @@ public class MeetingCashBookFrag extends SherlockFragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 return false;
-            case R.id.mnuSMDSend:
-                return false;
-            case R.id.mnuSMDCancel:
-                return false;
+            /**  case R.id.mnuSMDSend:
+             return false;
+             case R.id.mnuSMDCancel:
+             return false; */
             case R.id.mnuMCBFSave:
+                //If readonly mode, don't save balances but show message
+                if (parentActivity.isViewOnly()) {
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+
+                updateCashBook();
                 Toast.makeText(getSherlockActivity().getApplicationContext(), "The Cashbook balances have been saved successfully.", Toast.LENGTH_LONG).show();
                 return true;
             default:
@@ -98,20 +126,10 @@ public class MeetingCashBookFrag extends SherlockFragment {
     }
 
     private void populateCashBookFields() {
-        MeetingRepo meetingRepo = null;
-        MeetingSavingRepo savingRepo = null;
-        MeetingLoanRepaymentRepo repaymentRepo = null;
-        MeetingLoanIssuedRepo loanIssuedRepo = null;
+
 
         try {
-            meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
-            savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
-            repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
-            loanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
-
-            TextView lblTotalCashInBox = (TextView) getSherlockActivity().findViewById(R.id.lblExpectedStartingCash);
-
-
+            TextView lblTotalCashInBox = (TextView) getSherlockActivity().findViewById(R.id.lblTotalCashInBox);
             TextView lblExpectedStartingCash = (TextView) getSherlockActivity().findViewById(R.id.lblExpectedStartingCash);
             TextView lblActualStartingCash = (TextView) getSherlockActivity().findViewById(R.id.lblActualStartingCash);
             TextView lblCashDifference = (TextView) getSherlockActivity().findViewById(R.id.lblCashDifference);
@@ -121,56 +139,97 @@ public class MeetingCashBookFrag extends SherlockFragment {
             TextView lblLoanRepayments = (TextView) getSherlockActivity().findViewById(R.id.lblLoanRepayments);
             TextView lblFines = (TextView) getSherlockActivity().findViewById(R.id.lblFines);
             TextView lblNewLoans = (TextView) getSherlockActivity().findViewById(R.id.lblNewLoans);
+            EditText txtCashToBankAmount = (EditText) getSherlockActivity().findViewById(R.id.txtCashToBank);
 
 
-            /**       TextView lblTotalCash = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFTotalCashIn);
-             TextView lblOpeningCash = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFOpeningCash);
-             TextView lblTotalSavings = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFSavings);
-             TextView lblTotalLoansRepaid = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFLoansRepaid);
-             TextView lblTotalLoansIssued = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFLoansIssued);
-             TextView lblTotalCashOut = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFTotalCashOut);
-             TextView lblTotalCashBalance = (TextView)getSherlockActivity().findViewById(R.id.lblMCBFBalBd);
-             */
-            double openingCash = meetingRepo.getMeetingTotalOpeningCash(meetingId);
+            //Get the Cycle that contains this meeting
+            Meeting currentMeeting = meetingRepo.getMeetingById(meetingId);
+
+            // Get the Cycle that contains previous meeting inorder to get the expected starting Cash
+            Meeting previousMeeting = null;
+            if (null != meetingRepo) {
+                previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId());
+            }
+
+
+
+            startingCashDetails = meetingRepo.getMeetingActualStartingCashDetails(meetingId);
+            double expectedStartingCash = 0.0;
 
             double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
             double totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
-            double actualStartingCash = 0.0;
-            double totalFines = 0.0;
+            double totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId, Utils.getDateFromSqlite(meetingDate));
+
+            double actualStartingCash = startingCashDetails.getActualStartingCash();
+            expectedStartingCash = startingCashDetails.getExpectedStartingCash();
+            cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());
+
             double totalCashOut = totalLoansIssued;
-            double totalCashIn = openingCash + totalSavings + totalLoansRepaid;
-            double cashBalanceInBox = totalCashIn - totalCashOut;
-            String comment = "Change This Comment";
-
-            lblTotalCashInBox.setText(String.format("Total Cash In Box %,.0f UGX", cashBalanceInBox));
+            double totalCashIn = actualStartingCash + totalSavings + totalLoansRepaid + totalFines;
+            totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines - cashToBank;
 
 
-            lblExpectedStartingCash.setText(String.format("Expected Starting Cash %,.0f UGX", openingCash));
+
+            String comment = startingCashDetails.getComment();
+
+            lblTotalCashInBox.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
+            lblExpectedStartingCash.setText(String.format("Expected Starting Cash %,.0f UGX", expectedStartingCash));
             lblActualStartingCash.setText(String.format("Actual Starting Cash %,.0f UGX", actualStartingCash));
-            lblCashDifference.setText(String.format("Difference %,.0f UGX", openingCash-actualStartingCash));
-            lblCashBookComment.setText(String.format("Comment ", comment));
+            lblCashDifference.setText(String.format("Difference %,.0f UGX", expectedStartingCash - actualStartingCash));
+            lblCashBookComment.setText(String.format("Comment %s", comment));
 
             lblSavings.setText(String.format("Savings %,.0f UGX", totalSavings));
             lblLoanRepayments.setText(String.format("Loan Repayment %,.0f UGX", totalLoansRepaid));
             lblFines.setText(String.format("Fines %,.0f UGX", totalFines));
             lblNewLoans.setText(String.format("New Loans %,.0f UGX", totalLoansIssued));
 
-
-            /**       lblTotalCash.setText(String.format("Total Collected: %,.0fUGX", totalCashIn));
-             lblOpeningCash.setText(String.format("Starting Cash: %,.0fUGX", openingCash));
-             lblTotalSavings.setText(String.format("Savings: %,.0fUGX", totalSavings));
-             lblTotalLoansRepaid.setText(String.format("Loans Repaid: %,.0fUGX", totalLoansRepaid));
-             lblTotalLoansIssued.setText(String.format("Loans Issued: %,.0fUGX", totalLoansIssued));
-             lblTotalCashOut.setText(String.format("Total Issued: %,.0fUGX", totalCashOut));
-             lblTotalCashBalance.setText(String.format("Cash Balance: %,.0fUGX", cashBalance));
-             */
+            txtCashToBankAmount.setText(String.valueOf(cashToBank));
         } catch (Exception ex) {
 
         } finally {
             meetingRepo = null;
             savingRepo = null;
             repaymentRepo = null;
+        }
+    }
+
+    private void updateCashBook() {
+
+        if (validate()) {
+            txtCashToBankAmount = (EditText) getSherlockActivity().findViewById(R.id.txtCashToBank);
+            cashToBank = Double.valueOf(txtCashToBankAmount.getText().toString());
+
+            //cashToBox = totalCashInBox - cashToBank;
+
+            // double cashSavedInBank = startingCashDetails.getCashSavedInBank();
+            // cashToBank = cashToBank + cashSavedInBank;
+            if(meetingRepo== null){
+                meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
+            }
+            meetingRepo.updateCashBook(meetingId, cashToBox, cashToBank);
+        }
+    }
+
+    private boolean validate() {
+
+        // Validate: Fine Amount
+        txtCashToBankAmount = (EditText) getSherlockActivity().findViewById(R.id.txtCashToBank);
+        String cashBook = txtCashToBankAmount.getText().toString().trim();
+        if (cashBook.length() < 1) {
+            Utils.createAlertDialogOk(getSherlockActivity().getBaseContext(), "Meeting", "The value for Cash Book is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            txtCashToBankAmount.requestFocus();
+            return false;
+        } else {
+            double theCashToBank = Double.parseDouble(cashBook);
+            if (theCashToBank <= 0) {
+                Utils.createAlertDialogOk(getSherlockActivity().getBaseContext(), "Meeting", "The value for Cash Book Box must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtCashToBankAmount.requestFocus();
+                return false;
+
+            } else {
+                return true;
+            }
         }
     }
 }

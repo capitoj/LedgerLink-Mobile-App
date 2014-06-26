@@ -6,11 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -19,6 +15,7 @@ import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersLoansIssuedArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
@@ -38,6 +35,8 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     ArrayList<Member> members;
     String meetingDate;
     int meetingId;
+    private MeetingActivity parentActivity;
+    private View fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,15 +51,24 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        return inflater.inflate(R.layout.frag_meeting_loans_issued, container, false);
+        fragmentView = inflater.inflate(R.layout.frag_meeting_loans_issued, container, false);
+        initializeFragmentView();
+        return fragmentView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
+
+    }
+
+    private void initializeFragmentView()
+    {
+
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         actionBar = getSherlockActivity().getSupportActionBar();
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         String title = "Meeting";
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -70,24 +78,30 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-                title="Meeting";
+              //  title="Meeting";
                 break;
         }
         actionBar.setTitle(title);
-
-        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
+        actionBar.setSubtitle(meetingDate);
+        /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate);
-
+        lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-
         //Populate the Cash Available
         //populateCashBookFields();
-
         //Populate the Members
-        populateMembersList();
-
-
+        parentActivity = (MeetingActivity) getSherlockActivity();
+        //Wrap and run long task
+        Runnable runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //Populate the Members
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(runnable, "Please wait", "Loading list of loans issued...", parentActivity);
     }
 
     //Populate Members List
@@ -97,17 +111,25 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        MembersLoansIssuedArrayAdapter adapter = new MembersLoansIssuedArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersLoansIssuedArrayAdapter adapter = new MembersLoansIssuedArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMLIssuedFMembers);
-        TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMLIssuedFEmpty);
+        final ListView lvwMembers = (ListView)fragmentView.findViewById(R.id.lvwMLIssuedFMembers);
+        final TextView txtEmpty = (TextView)fragmentView.findViewById(R.id.txtMLIssuedFEmpty);
 
-        lvwMembers.setEmptyView(txtEmpty);
-        lvwMembers.setAdapter(adapter);
+        Runnable runOnUi = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                lvwMembers.setEmptyView(txtEmpty);
+                lvwMembers.setAdapter(adapter);
+            }
+        };
+        parentActivity.runOnUiThread(runOnUi);
 
         // listening to single list item on click
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -115,6 +137,10 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
                                     int position, long id) {
 
                 //Do not invoke the event when in Read only Mode
+                if(parentActivity.isViewOnly()) {
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = members.get(position);
                     Intent viewHistory = new Intent(view.getContext(), MemberLoansIssuedHistoryActivity.class);
@@ -133,9 +159,9 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
 
         //Hack to ensure all Items in the List View are visible
         //Utils.setListViewHeightBasedOnChildren(lvwMembers);
-        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
-        lblMeetingDate.setFocusable(true);
-        lblMeetingDate.requestFocus();
+       // TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
+        //lblMeetingDate.setFocusable(true);
+        //lblMeetingDate.requestFocus();
 
     }
 
@@ -156,7 +182,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
             TextView lblTotalSavings = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFSavings);
             TextView lblTotalLoansRepaid = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFLoansRepaid);
 
-            double openingCash = meetingRepo.getMeetingTotalOpeningCash(meetingId);
+            double openingCash = meetingRepo.getMeetingTotalExpectedStartingCash(meetingId);
             double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
 

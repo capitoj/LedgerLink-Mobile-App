@@ -5,8 +5,8 @@
               android:orientation="horizontal"
               android:divider="?android:attr/dividerVertical"
               android:showDividers="middle"
-              android:dividerPadding="5dp">
+              android:dividerPadding="12dip"
+              android:gravity="right">
 
-    <include layout="@layout/include_cancel_button" />
-    <include layout="@layout/include_done_button" />
-</LinearLayout>
+    <include layout="@layout/include_back_button" />
+ </LinearLayout>

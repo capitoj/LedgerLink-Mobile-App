@@ -1,24 +1,22 @@
 package org.applab.digitizingdata;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersRollCallArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
@@ -34,6 +32,8 @@ public class MeetingSavingsFrag extends SherlockFragment {
     ArrayList<Member> members;
     String meetingDate;
     int meetingId;
+    private MeetingActivity parentActivity;
+    private RelativeLayout fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,15 +48,25 @@ public class MeetingSavingsFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        return (RelativeLayout)inflater.inflate(R.layout.frag_meeting_savings, container, false);
+        fragmentView =  (RelativeLayout)inflater.inflate(R.layout.frag_meeting_savings, container, false);
+        initializeFragment();
+        return fragmentView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
+
+
+    }
+
+    private void initializeFragment()
+    {
+
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         actionBar = getSherlockActivity().getSupportActionBar();
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         String title = "Meeting";
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -66,19 +76,29 @@ public class MeetingSavingsFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-                title="Meeting";
+                //title="Meeting";
                 break;
         }
         actionBar.setTitle(title);
-
-        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
+        actionBar.setSubtitle(meetingDate);
+        /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate);
+        lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-
-        //Populate the Members
-        populateMembersList();
+        parentActivity = (MeetingActivity) getSherlockActivity();
+        //Wrap long task in runnable an run asynchronously
+        Runnable populateRunnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //Populate the Members
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(populateRunnable, "Please wait", "Loading savings information", parentActivity);
     }
+
 
     //Populate Members List
     private void populateMembersList() {
@@ -87,23 +107,36 @@ public class MeetingSavingsFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        MembersSavingsArrayAdapter adapter = new MembersSavingsArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersSavingsArrayAdapter adapter = new MembersSavingsArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMSavFMembers);
-        TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMSavFEmpty);
+        final ListView lvwMembers = (ListView)fragmentView.findViewById(R.id.lvwMSavFMembers);
+        final TextView txtEmpty = (TextView)fragmentView.findViewById(R.id.txtMSavFEmpty);
 
-        lvwMembers.setEmptyView(txtEmpty);
-        lvwMembers.setAdapter(adapter);
+        parentActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+
+                lvwMembers.setEmptyView(txtEmpty);
+                lvwMembers.setAdapter(adapter);
+            }
+        });
+
 
         // listening to single list item on click
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 //Do not invoke the event when in Read only Mode
+                if(parentActivity.isViewOnly()) {
+                    Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = (Member) members.get(position);
                     Intent i = new Intent(view.getContext(), MemberSavingHistoryActivity.class);

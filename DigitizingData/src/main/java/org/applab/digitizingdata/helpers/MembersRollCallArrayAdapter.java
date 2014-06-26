@@ -1,11 +1,7 @@
 package org.applab.digitizingdata.helpers;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +11,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import org.applab.digitizingdata.MemberDetailsViewActivity;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.VslaCycle;
@@ -35,6 +30,7 @@ public class MembersRollCallArrayAdapter extends ArrayAdapter<Member> {
     VslaCycle currentCycle;
     private int meetingId;
     private boolean isFromCode = false;
+    public boolean viewOnly = false;
 Typeface typeface;
     //Use Class variable to hold state as it will be lost on scrolling
     private final boolean[] mCheckedState;
@@ -66,10 +62,10 @@ Typeface typeface;
             View rowView = inflater.inflate(R.layout.row_member_roll_call_2, parent, false);
 
             //Get the Widgets
-            //final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMRCFullNames);
+            //final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMRCFullName);
             //final CheckBox chkAttendance = (CheckBox)rowView.findViewById(R.id.chkRMRCAttendance);
             final CheckBox chkAttendance = (CheckBox)rowView.findViewById(R.id.chkRMRCallAttendance);
-            final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMRCallFullNames);
+            final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMRCallFullName);
             final TextView txtAttendance = (TextView)rowView.findViewById(R.id.txtRMRCallAttendance);
 
             // Set typeface
@@ -91,7 +87,7 @@ Typeface typeface;
             txtAttendance.setText(String.format("Attended %d. Missed %d",attended, missed));
 
             //Do not invoke the event when in Read only Mode
-            if(Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+            if(Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY || viewOnly) {
                 chkAttendance.setClickable(false);
             }
 

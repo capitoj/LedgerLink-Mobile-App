@@ -1,1 +1,1 @@
-include ':DigitizingData',':libraries:ActionBarSherlock-4.3.1'
+include ':DigitizingData', ':libraries:ActionBarSherlock-4.3.1', ':swipelistview'

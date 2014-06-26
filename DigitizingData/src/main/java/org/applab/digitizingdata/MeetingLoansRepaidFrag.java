@@ -2,15 +2,10 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.*;
 
 
 import com.actionbarsherlock.app.ActionBar;
@@ -19,6 +14,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersLoansRepaidArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
@@ -33,6 +29,8 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
     ArrayList<Member> members;
     String meetingDate;
     int meetingId;
+    private MeetingActivity parentActivity;
+    private RelativeLayout fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,14 +45,22 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        return (RelativeLayout)inflater.inflate(R.layout.frag_meeting_loans_repaid, container, false);
+        fragmentView = (RelativeLayout) inflater.inflate(R.layout.frag_meeting_loans_repaid, container, false);
+        initializeFragment();
+        return fragmentView;
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
+    }
+
+    private void initializeFragment()
+    {
+
+        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         actionBar = getSherlockActivity().getSupportActionBar();
+        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         String title = "Meeting";
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -64,39 +70,56 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-                title="Meeting";
+                //title="Meeting";
                 break;
         }
         actionBar.setTitle(title);
-
-        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLRepayFMeetingDate);
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate);
-
+        actionBar.setSubtitle(meetingDate);
+        /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLRepayFMeetingDate);
+         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+         lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-
-        //Populate the Members
-        populateMembersList();
+        parentActivity = (MeetingActivity) getSherlockActivity();
+        //Wrap and run long task
+        Runnable populatorRunnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                //Populate the Members
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(populatorRunnable, "Please wait...", "Loading list of loans repaid...", parentActivity);
     }
 
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(getSherlockActivity().getApplicationContext());
+        MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(parentActivity.getBaseContext(), members, "fonts/roboto-regular.ttf");
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        ListView lvwMembers = (ListView)getSherlockActivity().findViewById(R.id.lvwMLRepayFMembers);
-        TextView txtEmpty = (TextView)getSherlockActivity().findViewById(R.id.txtMLRepayFEmpty);
+        final ListView lvwMembers = (ListView)fragmentView.findViewById(R.id.lvwMLRepayFMembers);
+        final TextView txtEmpty = (TextView)fragmentView.findViewById(R.id.txtMLRepayFEmpty);
 
-        lvwMembers.setEmptyView(txtEmpty);
-        lvwMembers.setAdapter(adapter);
+        Runnable runOnUiRunnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                lvwMembers.setEmptyView(txtEmpty);
+                lvwMembers.setAdapter(adapter);
+            }
+        };
+        parentActivity.runOnUiThread(runOnUiRunnable);
+
 
         // listening to single list item on click
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -104,13 +127,17 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                                     int position, long id) {
 
                 //Do not invoke the event when in Read only Mode
+                if(parentActivity.isViewOnly()) {
+                    Toast.makeText(parentActivity.getBaseContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = members.get(position);
                     Intent viewHistory = new Intent(view.getContext(), MemberLoansRepaidHistoryActivity.class);
 
                     // Pass on data
                     viewHistory.putExtra("_memberId", selectedMember.getMemberId());
-                    viewHistory.putExtra("_names", selectedMember.getFullNames());
+                    viewHistory.putExtra("_names", selectedMember.getFullName());
                     viewHistory.putExtra("_meetingDate",meetingDate);
                     viewHistory.putExtra("_meetingId", meetingId);
 

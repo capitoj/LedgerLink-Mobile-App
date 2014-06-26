@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -16,6 +18,7 @@ import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
 
+import android.widget.Spinner;
 import org.applab.digitizingdata.*;
 
 /**
@@ -26,6 +29,7 @@ public class Utils {
     ** DATE UTILS
      */
     public static final String DATE_FIELD_FORMAT = "dd-MMM-yyyy";
+    public static final String OTHER_DATE_FIELD_FORMAT = "dd MMM yyyy";
     public static final String REAL_FIELD_FORMAT = "#0";
     public static final String INTEGER_FIELD_FORMAT = "#0";
 
@@ -61,9 +65,15 @@ public class Utils {
     private static String phoneImei;
 
     //A Defination of Getting started wizard stage indicators
-    public static final int GETTING_STARTED_PAGE_NEW_CYCLE = 1;
-    public static final int GETTING_STARTED_PAGE_ADD_MEMBER = 2;
-    public static final int GETTING_STARTED_PAGE_REVIEW_MEMBERS = 3;
+    public static final int GETTING_STARTED_PAGE_ONE = 1;
+    public static final int GETTING_STARTED_PAGE_PIN = 2;
+    public static final int GETTING_STARTED_PAGE_NEW_CYCLE = 3;
+    public static final int GETTING_STARTED_PAGE_ADD_MEMBER = 4;
+    public static final int GETTING_STARTED_PAGE_REVIEW_MEMBERS = 5;
+    public static final int GETTING_STARTED_PAGE_REVIEW_CYCLE = 6;
+    public static final int GETTING_STARTED_PAGE_CONFIRMATION = 7;
+
+
 
 
     //TODO: will create an enum of CURRENT_VIEW_MODE
@@ -233,6 +243,7 @@ public class Utils {
         }
     }
 
+
     //Given a GSW stage, returns the Activity class to launch
     public static Class resolveGettingStartedWizardStage(int stage) {
        switch(stage) {
@@ -242,8 +253,16 @@ public class Utils {
                return GettingStartedWizardAddMemberActivity.class;
            case GETTING_STARTED_PAGE_REVIEW_MEMBERS:
                return GettingStartedWizardReviewMembersActivity.class;
-           default:
+           case GETTING_STARTED_PAGE_REVIEW_CYCLE:
                return GettingsStartedWizardNewCycleActivity.class;
+           case GETTING_STARTED_PAGE_ONE:
+               return GettingStartedWizardPageOne.class;
+           case GETTING_STARTED_PAGE_PIN:
+               return GettingStartedWizardPageTwo.class;
+           case GETTING_STARTED_PAGE_CONFIRMATION:
+               return GettingStartedConfirmationPage.class;
+           default:
+               return GettingStartedWizardPageOne.class;
         }
     }
 
@@ -289,6 +308,12 @@ public class Utils {
 
     }
 
+
+    public static boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isAvailable() && cm.getActiveNetworkInfo().isConnected());
+    }
+
     /**
      * Creates an alert dialog with an OK button
      * Will later see how to do a real Dialog Box with standard buttons
@@ -326,6 +351,16 @@ public class Utils {
 
         return alertDialog;
     }
+
+
+    /** This method sets the selected option of a spinner from a given value **/
+    public static void setSpinnerSelection(String value, Spinner spinner) {
+        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+        int spinnerPosition = adapter.getPosition(value);
+
+        spinner.setSelection(spinnerPosition);
+    }
+
 
     /**
      * This method is a hack helps align a ListView within a scrolling screen

@@ -9,7 +9,8 @@ public class MeetingFine {
     private int fineId;
     private Meeting meeting;
     private Member member;
-    private FineType fineType;
+    private String fineTypeName;
+    private int fineTypeId;
     private double amount;
     private Date expectedDate;
     private boolean isCleared;
@@ -39,12 +40,20 @@ public class MeetingFine {
         this.member = member;
     }
 
-    public FineType getFineType() {
-        return fineType;
+    public String getFineTypeName() {
+        return fineTypeName;
     }
 
-    public void setFineType(FineType fineType) {
-        this.fineType = fineType;
+    public void setFineTypeName(String fineTypeName) {
+        this.fineTypeName = fineTypeName;
+    }
+
+    public int getFineTypeId() {
+        return fineTypeId;
+    }
+
+    public void setFineTypeId(int fineTypeId) {
+        this.fineTypeId = fineTypeId;
     }
 
     public double getAmount() {

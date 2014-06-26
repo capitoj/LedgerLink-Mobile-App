@@ -4,31 +4,28 @@
     android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
+        style="@style/RegularTextListItems"
         android:id="@+id/txtRMSavFullName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:padding="5dp"
-        android:text="FULL NAMES"/>
+        android:text="0. FULL NAME"/>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtRMSavTodaysSavings"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMSavFullName"
-        android:paddingLeft="5dp"
         android:text="Today: 5,000UGX"/>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtRMSavTotals"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMSavTodaysSavings"
-        android:paddingLeft="5dp"
         android:text="Total Savings: 60,000UGX"/>
 
 </RelativeLayout>

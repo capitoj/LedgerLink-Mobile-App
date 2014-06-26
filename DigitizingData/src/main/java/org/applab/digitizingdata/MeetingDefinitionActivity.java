@@ -17,12 +17,10 @@ import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
@@ -35,15 +33,10 @@ import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
-import org.applab.digitizingdata.R;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * Created by Moses on 7/4/13.
@@ -71,62 +64,8 @@ public class MeetingDefinitionActivity extends SherlockActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+        inflateCustomBar();
 
-        // BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_next_cancel, null);
-        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //If Save Operation was successful, get the currently saved meeting
-                        //TODO: I can avoid the trip to the database by making the new meeting variable be module-level
-                        boolean retSetupMeeting = false;
-                        if(saveMeetingDate()) {
-                            //Get the Current Meeting ID
-                            if(repo == null) {
-                                repo = new MeetingRepo(MeetingDefinitionActivity.this);
-                            }
-                            Meeting currentMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
-
-                            retSetupMeeting = setupCurrentMeeting(currentMeeting);
-
-                        }
-                        //Otherwise check whether the date entered was actually for an existing meeting whose data has not yet been sent
-                        else if(null != meetingOfSameDate) {
-                            reloadedExistingMeeting = true;
-                            retSetupMeeting = setupCurrentMeeting(meetingOfSameDate);
-
-                        }
-                        else{
-                            return;
-                        }
-
-                    }
-                });
-        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                        return;
-                    }
-                });
-
-
-        actionBar = getSupportActionBar();
-        actionBar.setTitle("Meeting");
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
-        // END_INCLUDE (inflate_set_custom_view)
 
 
         setContentView(R.layout.activity_meeting_definition);
@@ -152,7 +91,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 radCycle.setId(cycle.getCycleId());
                 //radCycle.setTextColor();
                 radCycle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                radCycle.setTypeface(radCycle.getTypeface(), Typeface.BOLD);
+                //radCycle.setTypeface(radCycle.getTypeface(), Typeface.BOLD);
                 //radCycle.setPadding(10,0,0,0);
                 radCycle.setTag(cycle); //Store the VslaCycle object in the Tag property of the radio button
                 //radCycle.setTextColor(txtMeetingDate.getTextColors());
@@ -249,6 +188,65 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
     }
 
+    private void inflateCustomBar()
+    {
+        // BEGIN_INCLUDE (inflate_set_custom_view)
+        // Inflate a "Done/Cancel" custom action bar view.
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+                .getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_next, null);
+        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        //If Save Operation was successful, get the currently saved meeting
+                        //TODO: See how to avoid the trip to the database by making the new meeting variable module-level
+                        boolean retSetupMeeting = false;
+                        if(saveMeetingDate()) {
+                            //Get the Current Meeting ID
+                            if(repo == null) {
+                                repo = new MeetingRepo(MeetingDefinitionActivity.this);
+                            }
+                            Meeting currentMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
+
+                            retSetupMeeting = setupCurrentMeeting(currentMeeting);
+
+                        }
+                        //Otherwise check whether the date entered was actually for an existing meeting whose data has not yet been sent
+                        else if(null != meetingOfSameDate) {
+                            reloadedExistingMeeting = true;
+                            retSetupMeeting = setupCurrentMeeting(meetingOfSameDate);
+
+                        }
+                        else{
+                            return;
+                        }
+
+                    }
+                });
+        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                        return;
+                    }
+                });
+        actionBar = getSupportActionBar();
+        actionBar.setTitle("Meeting");
+
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+                        | ActionBar.DISPLAY_SHOW_TITLE
+        );
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT)
+        );
+    }
+
     //Event that is raised when the date has been set
     private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -294,8 +292,9 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
-        inflater.inflate(R.menu.meeting_definition, menu);
+        //final MenuInflater inflater = getSupportMenuInflater();
+        //inflater.inflate(R.menu.meeting_definition, menu);
+        //To use custom menu view
         return true;
     }
 
@@ -371,6 +370,8 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             i = new Intent(getApplicationContext(), MeetingActivity.class);
             i.putExtra("_meetingDate",Utils.formatDate(currentMeeting.getMeetingDate(), "dd-MMM-yyyy"));
             i.putExtra("_meetingId",currentMeeting.getMeetingId());
+            i.putExtra("_currentMeetingId",currentMeeting.getMeetingId());
+            i.putExtra("_viewOnly", false);
 
             int previousMeetingId = 0;
             if(null != previousMeeting) {

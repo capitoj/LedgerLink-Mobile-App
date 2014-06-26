@@ -10,6 +10,7 @@ import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingSaving;
 import org.applab.digitizingdata.domain.schema.AttendanceSchema;
+import org.applab.digitizingdata.domain.schema.LoanRepaymentSchema;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
 import org.applab.digitizingdata.domain.schema.SavingSchema;
 import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
@@ -154,6 +155,7 @@ public class MeetingSavingRepo {
             return totalSavings;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MeetingSavingRepo.getTotalSavingsInMeeting", ex.getMessage());
             return 0;
         }
@@ -176,10 +178,11 @@ public class MeetingSavingRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT  SUM(%s) AS TotalSavings FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
+            String sumQuery = String.format("SELECT SUM(%s) AS TotalSavings FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
                     SavingSchema.COL_S_AMOUNT, SavingSchema.getTableName(),
-                    SavingSchema.COL_S_MEETING_ID,MeetingSchema.COL_MT_MEETING_ID,
-                    MeetingSchema.getTableName(),MeetingSchema.COL_MT_CYCLE_ID,cycleId);
+                    SavingSchema.COL_S_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
+                    MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID, cycleId);
+
             cursor = db.rawQuery(sumQuery, null);
 
             if (cursor != null && cursor.moveToFirst()) {
@@ -189,7 +192,44 @@ public class MeetingSavingRepo {
             return totalSavings;
         }
         catch (Exception ex) {
-            Log.e("MeetingSavingRepo.getTotalSavingsInCycle", ex.getMessage());
+            Log.e("MeetingSavingRepo.getTotalSavingsInCycle", "HERE" +ex.getMessage());
+            return 0;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public double getTotalSavingsInCycleForPreviousMeeting(int cycleId, int meetingId){
+         SQLiteDatabase db = null;
+        Cursor cursor = null;
+        double totalSavings = 0.00;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sumQuery = String.format("SELECT  SUM(%s) AS TotalSavings FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d) AND %s!=%d",
+                    SavingSchema.COL_S_AMOUNT, SavingSchema.getTableName(),
+                    SavingSchema.COL_S_MEETING_ID,MeetingSchema.COL_MT_MEETING_ID,
+                    MeetingSchema.getTableName(),MeetingSchema.COL_MT_CYCLE_ID,cycleId,
+                    SavingSchema.COL_S_MEETING_ID, meetingId);
+
+            cursor = db.rawQuery(sumQuery, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                totalSavings = cursor.getDouble(cursor.getColumnIndex("TotalSavings"));
+            }
+
+            return totalSavings;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingSavingRepo.getTotalSavingsInCycleForPreviousMeeting", ex.getMessage());
             return 0;
         }
         finally {

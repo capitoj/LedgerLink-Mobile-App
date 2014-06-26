@@ -52,6 +52,11 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.applab.digitizingdata.MainActivity" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="org.applab.digitizingdata.EndCycleActivity"
@@ -149,16 +154,21 @@
         </activity>
         <activity
             android:name="org.applab.digitizingdata.GettingsStartedWizardNewCycleActivity"
-            android:label="@string/title_activity_gettings_started_wizard_add_cycle" >
+            android:label="@string/title_activity_gettings_started_wizard_add_cycle"
+            android:parentActivityName="org.applab.digitizingdata.GettingStartedWizardPageOne" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="Introduction" />
         </activity>
         <activity
             android:name="org.applab.digitizingdata.GettingStartedWizardPageOne"
             android:label="@string/title_activity_gettings_started_wizard_page_1" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name="org.applab.digitizingdata.GettingStartedWizardPageTwo"
@@ -169,11 +179,20 @@
                 android:label="Confirmation" >
         </activity>
         <activity
+                android:name=".SelectCycle"
+                android:label="Select Cycle" >
+        </activity>
+        <activity
             android:name="org.applab.digitizingdata.DataMigrationActivity"
             android:label="Data Migration" />
         <activity
             android:name="org.applab.digitizingdata.BeginMeetingActivity"
             android:label="@string/title_activity_begin_meeting" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="org.applab.digitizingdata.SettingsActivity"

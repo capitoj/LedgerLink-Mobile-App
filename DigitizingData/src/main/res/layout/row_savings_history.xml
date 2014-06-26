@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtRSHMeetingDate"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -14,7 +14,7 @@
         android:text="Meeting Date" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
+        style="@style/ListSmallSubItems"
         android:id="@+id/txtRSHAmount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

@@ -11,26 +11,29 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularTextBold"
+                style="@style/RegularText"
                 android:id="@+id/lblMDVMemberNo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Member No:" />
+                android:text="Member Number" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtMDVMemberNo" />
+                android:id="@+id/txtMDVMemberNo"
+                android:text="100"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -50,7 +53,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -71,21 +75,20 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblMDVGender"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Gender" />
+                android:text="Sex (M/F)" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 android:text="Male"
                 android:id="@+id/txtMDVGender" />
         </LinearLayout>
@@ -93,7 +96,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -113,14 +117,15 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblMDVOccupation"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Occupation" />
+                android:text="What does this member do to make money?" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -133,14 +138,15 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblMDVPhone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Phone Number" />
+                android:text="Phone number" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -153,14 +159,15 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dip">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblMDVCyclesCompleted"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Number of cycles completed" />
+                android:text="Number of cycles member completed" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"

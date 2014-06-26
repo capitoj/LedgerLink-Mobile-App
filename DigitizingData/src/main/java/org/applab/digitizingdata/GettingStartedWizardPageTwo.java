@@ -31,7 +31,8 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
         setContentView(R.layout.activity_getting_started_wizard_passcode_validation);
 
         actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
 
         actionBar.setTitle("Get Started");
 
@@ -39,7 +40,17 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
         vslaInfo = vslaInfoRepo.getVslaInfo();
 
         savingsGroupName = (TextView)findViewById(R.id.txtNCP_header);
-        savingsGroupName.setText(vslaInfo.getVslaName());
+        if(!vslaInfo.isActivated()) {
+            //If not activated, show message to avoid displaying "Offline Mode" as vsla name
+            savingsGroupName.setText("(not yet activated)");
+        }
+        else {
+
+            savingsGroupName.setText(vslaInfo.getVslaName());
+        }
+
+
+        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_PIN);
 
     }
 
@@ -49,12 +60,17 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
         switch(item.getItemId()) {
-
-            case R.id.mnuNCNext:
+            case R.id.mnuAMCancel:
+                //Go back to GSW start page
+                i =  new Intent(getApplicationContext(), GettingStartedWizardPageOne.class);
+                startActivity(i);
+                finish();
+                break;
+            case R.id.mnuAMNext:
                 //First Save the Cycle Dates
                 //If successful move to next activity
                 //validate passkey
-                ValidPassKey();
+                validatePassKey();
 
         }
         return true;
@@ -63,7 +79,7 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
 
 
 
-    public void ValidPassKey()
+    public void validatePassKey()
     {
         TextView txtPassKey = null;
         try {
@@ -73,9 +89,10 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
 
             if(passKey.equalsIgnoreCase(vslaInfo.getPassKey())) {
                 //Decide which activity to launch, from the current Getting started wizard stage
-                Intent stage = new Intent(getBaseContext(), Utils.resolveGettingStartedWizardStage(vslaInfo.getGettingStartedWizardStage()));
-
+                //Intent stage = new Intent(getBaseContext(), Utils.resolveGettingStartedWizardStage(vslaInfo.getGettingStartedWizardStage()));
+                Intent stage = new Intent(getBaseContext(), GettingsStartedWizardNewCycleActivity.class);
                 startActivity(stage);
+                finish();
             }
             else {
                 Utils.createAlertDialogOk(this, "Security", "The Pass Key is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
@@ -84,7 +101,9 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
         }
         catch(Exception ex) {
             Utils.createAlertDialogOk(this, "Security", "The Pass Key could not be validated.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-            txtPassKey.requestFocus();
+            if (txtPassKey != null) {
+                txtPassKey.requestFocus();
+            }
         }
     }
 
@@ -92,7 +111,9 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         final MenuInflater inflater = getSupportMenuInflater();
-        inflater.inflate(R.menu.new_cycle, menu);
+        inflater.inflate(R.menu.cancel_next, menu);
+
+        //menu.findItem(R.id.mnuNCCancel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS, MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         return true;
 
     }

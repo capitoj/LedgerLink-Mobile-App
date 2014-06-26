@@ -18,7 +18,7 @@ public class MeetingLoanIssued {
     private boolean isDefaulted;
     private boolean isCleared;
     private Date dateCleared;
-    private String comments;
+    private String comment;
     private boolean isWrittenOff;
 
     public double getInterestAmount() {
@@ -117,12 +117,12 @@ public class MeetingLoanIssued {
         this.dateCleared = dateCleared;
     }
 
-    public String getComments() {
-        return comments;
+    public String getComment() {
+        return comment;
     }
 
-    public void setComments(String comments) {
-        this.comments = comments;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public boolean isWrittenOff() {

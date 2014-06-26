@@ -9,30 +9,28 @@
         android:layout_height="match_parent">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/InTextHeader"
+            style="@style/RegularTextInstructionBold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:text="FINES"
             android:id="@+id/lblMemberFinesHeader" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
+            style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:text="Check box to indicate paid. Swipe to delete."
             android:id="@+id/lblFMessage"
-            android:layout_gravity="center" />
+            android:layout_marginBottom="10dip"/>
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:weightSum="10">
-
+            >
+<!--android:weightSum="10" -->
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularTextBold"
+                style="@style/RegularTextListItems"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Moses Oscar Muhahala"
@@ -82,17 +80,39 @@
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
+          <!-- <org.applab.digitizingdata.helpers.SwipeListView
+                xmlns:swipe="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/list"
+                android:listSelector="#00000000"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                swipe:swipeFrontView="@+id/front"
+                swipe:swipeBackView="@+id/back"
+                swipe:swipeDrawableChecked="@drawable/choice_selected"
+                swipe:swipeDrawableUnchecked="@drawable/choice_unselected"
+                swipe:swipeCloseAllItemsWhenMoveList="true"
+                android:choiceMode="singleChoice"
+                swipe:swipeMode="left"
+                /> -->
+
             <ListView
                 android:id="@android:id/list"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:choiceMode="singleChoice" />
 
+          <!--  <de.timroes.android.listview.EnhancedListView
+                android:id="@android:id/list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice" /> -->
+
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@android:id/empty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
                 android:text="No History" />
         </LinearLayout>
     </LinearLayout>

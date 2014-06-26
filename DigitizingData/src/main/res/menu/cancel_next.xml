@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mnuAMCancel"
+          android:title="cancel"
+          android:label="cancel"
+          android:orderInCategory="0"
+          android:showAsAction="always|withText"
+          android:icon="@drawable/ic_navigation_cancel"
+            />
+    <item android:id="@+id/mnuAMNext"
+          android:title="next"
+          android:label="next"
+          android:orderInCategory="1"
+          android:showAsAction="always|withText"
+          android:icon="@drawable/ic_navigation_forward"
+            />
+</menu>

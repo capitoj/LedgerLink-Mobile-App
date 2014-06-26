@@ -1,14 +1,11 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
@@ -19,8 +16,8 @@ import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersArrayAdapter;
-import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
 import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
@@ -45,7 +42,18 @@ public class MembersListActivity extends SherlockListActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Populate the Members
-        populateMembersList();
+        //Run this as long running task
+
+        Runnable populateMembers = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                populateMembersList();
+            }
+        };
+        LongTaskRunner.runLongTask(populateMembers, "Please wait...", "Loading member list...", MembersListActivity.this);
+
 
     }
 
@@ -76,7 +84,7 @@ public class MembersListActivity extends SherlockListActivity {
                 startActivity(i);
                 return true;
             case R.id.mnuMListAdd:
-                i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+                i = new Intent(getApplicationContext(), AddMemberActivity.class);
                 startActivity(i);
                 return true;
         }
@@ -94,10 +102,18 @@ public class MembersListActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        MembersArrayAdapter adapter = new MembersArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersArrayAdapter adapter = new MembersArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
-        setListAdapter(adapter);
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                setListAdapter(adapter);
+            }
+        });
+
 
         // listening to single list item on click
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -111,7 +127,7 @@ public class MembersListActivity extends SherlockListActivity {
                 // Pass on data
                 Bundle b = new Bundle();
                 b.putInt("_id", selectedMember.getMemberId());
-                b.putString("_names", selectedMember.getFullNames());
+                b.putString("_names", selectedMember.getFullName());
                 viewMember.putExtras(b);
                 viewMember.putExtra("_caller","reviewMembers");
                 viewMember.putExtra("_isEditAction",true);

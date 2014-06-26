@@ -1,6 +1,7 @@
 package org.applab.digitizingdata.helpers;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,7 @@ import android.widget.TextView;
 import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
-import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
-import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ public class GettingStartedWizardMembersArrayAdapter extends MembersArrayAdapter
         super(context, values,R.layout.row_members_getting_started_wizard_list);
         this.context = context;
         this.values = values;
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
     }
 
 
@@ -42,26 +42,31 @@ public class GettingStartedWizardMembersArrayAdapter extends MembersArrayAdapter
 
             View rowView = inflater.inflate(R.layout.row_members_getting_started_wizard_list, parent, false);
 
-            //Get the Widgets
-            final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtMListFullNames);
+            // Get the Widgets
+            final TextView txtFullName = (TextView)rowView.findViewById(R.id.txtMListFullName);
             final TextView txtSavings = (TextView)rowView.findViewById(R.id.txtMListTotalSavings);
             final TextView txtLoans = (TextView)rowView.findViewById(R.id.txtMListTotalLoans);
 
-            //Assign Values to the Widgets
-            Member memb = values.get(position);
+            // Set Typeface
+            txtFullName.setTypeface(typeface);
+            txtSavings.setTypeface(typeface);
+            txtLoans.setTypeface(typeface);
+
+            // Assign Values to the Widgets
+            Member member = values.get(position);
             NumberFormat numberFormat = NumberFormat.getInstance();
 
             VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(context);
             VslaCycle mostRecentCycle = vslaCycleRepo.getMostRecentCycle();
 
-            double numberOfStars = Math.floor(memb.getSavingsOnSetup() / mostRecentCycle.getSharePrice());
-            if(memb != null) {
-                txtFullNames.setText(memb.toString());
-                txtSavings.setText(String.format("Savings %s UGX - %.0f Star", numberFormat.format(memb.getSavingsOnSetup()) , numberOfStars) + (numberOfStars>=2 ? "s" : ""));
-                txtLoans.setText(String.format("Outstanding Loan %s UGX",numberFormat.format(memb.getOutstandingLoanOnSetup())));
+            double numberOfStars = Math.floor(member.getSavingsOnSetup() / mostRecentCycle.getSharePrice());
+            if(member != null) {
+                txtFullName.setText(member.toString());
+                txtSavings.setText(String.format("Savings %s UGX - %.0f Star", numberFormat.format(member.getSavingsOnSetup()) , numberOfStars) + (numberOfStars>=2 ? "s" : ""));
+                txtLoans.setText(String.format("Outstanding Loan %s UGX",numberFormat.format(member.getOutstandingLoanOnSetup())));
             }
             else {
-                txtFullNames.setText("");
+                txtFullName.setText("");
                 txtSavings.setText("");
                 txtLoans.setText("");
             }

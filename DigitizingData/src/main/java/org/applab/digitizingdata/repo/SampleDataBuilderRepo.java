@@ -29,6 +29,8 @@ import java.util.Calendar;
 public class SampleDataBuilderRepo {
     private static Context appContext;
 
+    private static String comment = "Unknown";
+
     public static boolean refreshTrainingData(Context context) {
 
         //Determine whether the refresh flag is ON
@@ -139,8 +141,11 @@ public class SampleDataBuilderRepo {
             cycle.setInterestRate(10);
             cycle.setMaxStartShare(100000);
 
+
             VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(appContext);
             vslaCycleRepo.addCycle(cycle);
+
+
 
             //Retrieve the new Cycle. Need to declare an add method in the repo that returns an object
             cycle = vslaCycleRepo.getMostRecentCycle();
@@ -172,12 +177,18 @@ public class SampleDataBuilderRepo {
             addMember(24,"Wandera", "Agnes","Female",31,"Fish-monger", 2);
             addMember(25,"Wesonga", "Grace","Female",23,"Businesswoman", 2);
 
+            //Create GSW meeting
+            vslaCycleRepo.createGettingStartedDummyMeeting(cycle);
+
+            MeetingRepo meetingRepo = new MeetingRepo(appContext);
+            meetingRepo.deactivateMeeting(meetingRepo.getDummyGettingStartedWizardMeeting());
+
+
             //FIRST MEETING
             //Add First Meeting: on First Day of the Cycle
             Meeting meeting = new Meeting();
             meeting.setMeetingDate(cycle.getStartDate());
             meeting.setVslaCycle(cycle);
-            MeetingRepo meetingRepo = new MeetingRepo(appContext);
             meetingRepo.addMeeting(meeting);
 
             //Retrieve that first meeting
@@ -224,8 +235,10 @@ public class SampleDataBuilderRepo {
                             calDateDue.setTime(meeting.getMeetingDate());
                             calDateDue.add(Calendar.MONTH, 1); //since it is on monthly interest.
 
+
+
                             //Issue the Loan
-                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime());
+                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
                         }
                     }
                 }
@@ -331,7 +344,7 @@ public class SampleDataBuilderRepo {
                             calDateDue.add(Calendar.MONTH, 1);
 
                             //Issue the Loan
-                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime());
+                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
                         }
                     }
                 }
@@ -405,7 +418,7 @@ public class SampleDataBuilderRepo {
                         calDateDue.add(Calendar.MONTH, 1);
 
                         //Issue the Loan
-                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime());
+                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
                     }
                 }
                 catch(Exception ex) {
@@ -452,7 +465,7 @@ public class SampleDataBuilderRepo {
                         calDateDue.add(Calendar.MONTH, 1);
 
                         //Issue the Loan
-                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime());
+                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
                     }
                 }
                 catch(Exception ex) {

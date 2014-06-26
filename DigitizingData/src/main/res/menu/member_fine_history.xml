@@ -8,10 +8,10 @@
           android:icon="@drawable/ic_navigation_back"
             />
 
-    <item android:id="@+id/mnuMSHSave"
+   <!-- <item android:id="@+id/mnuMSHSave"
           android:title="Save"
           android:orderInCategory="11"
           android:showAsAction="never"
           android:icon="@drawable/ic_navigation_accept"
-            />
+            /> -->
 </menu>

@@ -8,22 +8,14 @@
         android:layout_height="match_parent"
         >
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
-            android:text="01-JUL-2013"
-            android:id="@+id/lblMCBFMeetingDate"
-           />
-
         <!-- Cash in Box in currently running meeting -->
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:id="@+id/lblTotalCashInBox"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lblMCBFMeetingDate"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:text="Total Cash In Box 1,000,000 UGX" />
 
 
@@ -31,33 +23,33 @@
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
-            android:text="Cash Collected"
+            android:text="Starting Cash"
             android:id="@+id/lblCashCollected"
             android:layout_gravity="left" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/ListSubItems"
+            style="@style/ListSmallSubItems"
             android:id="@+id/lblExpectedStartingCash"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblCashCollected"
             android:text="Expected Starting Cash XX UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/ListSubItems"
+            style="@style/ListSmallSubItems"
             android:id="@+id/lblActualStartingCash"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblExpectedStartingCash"
             android:text="Actual Starting Cash XX UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/ListSubItems"
+            style="@style/ListSmallSubItems"
             android:id="@+id/lblCashDifference"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblActualStartingCash"
             android:text="Difference XX UGX (Between actual amount and expected amount)" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/ListSubItems"
+            style="@style/ListSmallSubItems"
             android:id="@+id/lblCashBookComment"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -73,28 +65,28 @@
             android:layout_gravity="left" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/ListSubItems"
+            style="@style/ListSmallSubItems"
             android:id="@+id/lblSavings"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblSavings"
             android:text="Savings XX UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/ListSubItems"
+            style="@style/ListSmallSubItems"
             android:id="@+id/lblLoanRepayments"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblSavings"
             android:text="Loan Repayments XX UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/ListSubItems"
+            style="@style/ListSmallSubItems"
             android:id="@+id/lblFines"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblLoanRepayments"
             android:text="Fines XX UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/ListSubItems"
+            style="@style/ListSmallSubItems"
             android:id="@+id/lblNewLoans"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
