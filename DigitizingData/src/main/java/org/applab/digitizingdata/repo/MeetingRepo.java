@@ -1177,6 +1177,40 @@ public class MeetingRepo {
         }
     }
 
+    /* Marks a meeting for Deletion. If marked meetings are not UNDONE then they will be deleted when the app ends or starts.*/
+    public boolean markMeetingForDeletion(int meetingId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(MeetingSchema.COL_MT_IS_MARKED_FOR_DELETION, 1);
+
+            //TODO: At this same time, if this meeting was the Current Meeting, then appoint another meeting ->Previous Sibling
+            int retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                    new String[]{String.valueOf(meetingId)});
+            if (retVal > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (Exception ex) {
+            Log.e("MeetingRepo.markMeetingForDeletion", ex.getMessage());
+            return false;
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     /**
      * This will deactivate all other meetings and activate the one passed to make it the current meeting.
      *

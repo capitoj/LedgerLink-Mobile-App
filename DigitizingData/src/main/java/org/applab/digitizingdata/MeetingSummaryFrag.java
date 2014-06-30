@@ -80,7 +80,6 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
         TextView lblTotalSavings = (TextView) getSherlockActivity().findViewById(R.id.lblMSFTotalSavings);
         TextView lblOutstandingLoans = (TextView) getSherlockActivity().findViewById(R.id.lblMSFOutstandingLoans);
-
         TextView lblSectionLastMeeting = (TextView) getSherlockActivity().findViewById(R.id.lblMSFSection2);
 
         MeetingSavingRepo savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
