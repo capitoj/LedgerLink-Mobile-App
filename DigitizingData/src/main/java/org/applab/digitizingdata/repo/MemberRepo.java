@@ -58,7 +58,8 @@ public class MemberRepo {
             // Inserting Row
             long retVal = db.insert(MemberSchema.getTableName(), null, values);
             if (retVal != -1) {
-                return true;
+                member.setMemberId(Integer.parseInt(retVal+""));
+                return saveMiddleCycleValues(member); //New: save middle cycle values too
             }
             else {
                 return false;
@@ -110,36 +111,8 @@ public class MemberRepo {
                 Log.d(context.getPackageName(), "GSW member added "+member.getSurname()+" - ret val is "+retVal);
                 //set the members id now
                 member.setMemberId((int) retVal);
-                MeetingSavingRepo repo = new MeetingSavingRepo(context);
 
-                MeetingRepo meetingRepo = new MeetingRepo(context);
-                Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
-                boolean savingResult = repo.saveMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), (int) retVal, member.getSavingsOnSetup());
-
-                if( ! savingResult) {
-                    Log.d(context.getPackageName(), "Savings to date could not be added for member "+member.getSurname());
-                    System.out.println("Savings to date could not be added for member "+member.getSurname());
-                    return false;
-                }
-                else {
-                    Log.d(context.getPackageName(), "Savings to date added for member "+member.getSurname());
-                    //Save loan IFF loan amount on setup is greater than zero
-                    if(member.getOutstandingLoanOnSetup() <= 0) {
-                        Log.d(context.getPackageName(), "Saving of loan on setup skipped because loan amount is "+member.getOutstandingLoanOnSetup());
-                       return savingResult;
-                    }
-
-
-                    //Save the loan
-                    boolean loanSaveResult = updateMemberLoanOnSetup(member);
-                    if( ! loanSaveResult ) {
-                        Log.d(context.getPackageName(), "Failed to save GSW loan on setup"+member.getSurname());
-                    }
-                }
-
-
-
-                return true;
+                return saveMiddleCycleValues(member);
             }
             else {
                 Log.d(context.getPackageName(), "GSW member not added "+member.getSurname());
