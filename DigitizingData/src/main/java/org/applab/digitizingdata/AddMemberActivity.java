@@ -11,10 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -53,6 +50,7 @@ public class AddMemberActivity extends SherlockActivity {
     Meeting targetMeeting;
     private boolean isEditAction;
     public Spinner cboAMMemberNo;
+    protected boolean isGettingStartedMode = false; //flags whether we are in wizard mode
 
 
 
@@ -62,6 +60,8 @@ public class AddMemberActivity extends SherlockActivity {
         initializeActivity();
     }
 
+    //This method initialized this activity
+    //It is overiden in GSW Add member activity so as to load the relevant layout
     protected void initializeActivity()
     {
 
@@ -125,6 +125,38 @@ public class AddMemberActivity extends SherlockActivity {
             selectedMember = repo.getMemberById(selectedMemberId);
             populateDataFields(selectedMember);
         }
+
+        //For Middle start details, only show if in edit mode
+        LinearLayout layoutAMMiddleCycleStartDetails = (LinearLayout) findViewById(R.id.layoutAMMiddleCycleStartDetails);
+        layoutAMMiddleCycleStartDetails.setVisibility(isEditAction ? View.VISIBLE : View.GONE);
+    }
+
+
+    protected void showMiddleStartCycleValues(Member member) {
+        //loads the Middle start cycle values for this member
+
+        if(isGettingStartedMode) return; //this code shouldnt run in GSW mode hence this check
+
+        //Load the middle start values
+        TextView lblAMMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblAMMiddleCycleInformationHeading);
+        TextView lblAMMiddleCycleSavings = (TextView) findViewById(R.id.lblAMMiddleCycleSavings);
+        TextView lblAMMiddleCycleLoans = (TextView) findViewById(R.id.lblAMMiddleCycleLoans);
+
+        lblAMMiddleCycleSavings.setText(String.format("%,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
+        lblAMMiddleCycleLoans.setText(String.format("%,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
+
+        //Show the heading
+        //Get the date of the dummy GSW meeting
+        MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
+
+        String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her":"his";
+        lblAMMiddleCycleInformationHeading.setText("This member’s information was added after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+
+        Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+        if(dummyGSWMeeting != null) {
+            lblAMMiddleCycleInformationHeading.setText("This member’s information was added on " + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+        }
+
     }
 
     private void inflateCustomActionBar(){
@@ -486,7 +518,7 @@ public class AddMemberActivity extends SherlockActivity {
                 c.add(Calendar.YEAR, -theCycles);
                 member.setDateOfAdmission(c.getTime());
             }
-
+            validateMiddleCycleValues(member);
             //Final Verifications
             //TODO: Trying to use Application context to ensure dialog box does not disappear
             if(!repo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId())) {
@@ -500,6 +532,26 @@ public class AddMemberActivity extends SherlockActivity {
         catch (Exception ex){
             ex.printStackTrace();
             return false;
+        }
+    }
+
+    private void validateMiddleCycleValues(Member member)
+    {
+        //If edit mode and not GSW, validate middle cycle start values
+        if(isEditAction && !isGettingStartedMode) {
+          //if there are correctionss, set them
+          //TODO: process comments as well
+          TextView txtAMMiddleCycleSavingsCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
+          TextView txtAMMiddleCycleLoansCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
+
+          if(txtAMMiddleCycleSavingsCorrection.getText().length()>0) {
+              member.setSavingsOnSetup(Double.parseDouble(txtAMMiddleCycleSavingsCorrection.getText().toString()));
+          }
+
+           if(txtAMMiddleCycleLoansCorrection.getText().length()>0) {
+             member.setOutstandingLoanOnSetup(Double.parseDouble(txtAMMiddleCycleLoansCorrection.getText().toString()));
+            }
+
         }
     }
 
@@ -574,12 +626,16 @@ public class AddMemberActivity extends SherlockActivity {
                 }
             });
 
-
-
+            //Load GSW values
+            if(!isGettingStartedMode) {
+                showMiddleStartCycleValues(member);
+            }
         }
         finally {
 
         }
+
+
 
     }
 

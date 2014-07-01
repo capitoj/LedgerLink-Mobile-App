@@ -197,5 +197,113 @@
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown" />
         </LinearLayout>
+
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dip"
+                android:id="@+id/layoutAMMiddleCycleStartDetails">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/SubHeading"
+                    android:id="@+id/lblAMMiddleCycleStartHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="MIDDLE CYCLE START" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblAMMiddleCycleInformationHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="This member’s information was added on 3 Mar 2013 after the cycle started. Here are his total savings and outstanding loans on that day." />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblAMMiddleCycleSavingsLabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total amount this member has saved during current cycle so far" />
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblAMMiddleCycleSavings"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0 UGX" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblAMMiddleCycleSavingsCorrectionLabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Actual amount if the original total savings was incorrect (you may enter a correction once)" />
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    style="@style/NormalEditText"
+                    android:id="@+id/txtAMMiddleCycleSavingsCorrection"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="" />
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblAMMiddleCycleSavingCorrectionCommentLabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comment" />
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    style="@style/NormalEditText"
+                    android:id="@+id/txtAMMiddleCycleSavingsCorrectionComment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="" />
+
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblAMMiddleCycleLoansLabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total amount of this member’s regular loan outstanding" />
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblAMMiddleCycleLoans"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0 UGX" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblAMMiddleCycleLoansCorrectionLabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Actual amount if the original was incorrect (you may enter a correction once)" />
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    style="@style/NormalEditText"
+                    android:id="@+id/txtAMMiddleCycleLoansCorrection"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblAMMiddleCycleLoansCorrectionCommentLabel"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comment" />
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    style="@style/NormalEditText"
+                    android:id="@+id/txtAMMiddleCycleLoansCorrectionComment"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="" />
+
+
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
