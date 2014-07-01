@@ -43,13 +43,12 @@ public class DeleteMeetingActivity extends SherlockActivity {
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_next, null);
-        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
+        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        boolean deletedSuccessful = false;
                         boolean cannotBeDeleted = false;
 
                         Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
@@ -78,6 +77,8 @@ public class DeleteMeetingActivity extends SherlockActivity {
                             cannotBeDeleted = true;
                         }
 
+                        //TODO: Should we allow deletion of a meeting whose data has already been sent?
+
                         //Only allow deletion if the meeting is the most recent or it is a past meeting without data
                         //Check whether this meeting is the most recent meeting in the current cycle
                         //If not, then don't allow deleting coz it will mess up loans
@@ -88,7 +89,6 @@ public class DeleteMeetingActivity extends SherlockActivity {
                                 cannotBeDeleted = false;
                             }
                             else {
-                                cannotBeDeleted = true;
                                 Toast.makeText(getApplicationContext(),String.format("Sorry, first delete the most recent meeting in this cycle dated: %s.", Utils.formatDate(mostRecent.getMeetingDate())),Toast.LENGTH_LONG).show();
                                 return;
                             }

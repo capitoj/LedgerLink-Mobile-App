@@ -30,6 +30,11 @@ import java.util.Set;
 public class MeetingRepo {
     private Context context;
 
+    public enum MeetingOrderByEnum {
+        ORDER_BY_MEETING_ID,
+        ORDER_BY_MEETING_DATE
+    };
+
     public MeetingRepo() {
 
     }
@@ -182,6 +187,35 @@ public class MeetingRepo {
         }
     }
 
+    public boolean updateMeetingDate(int meetingId, Date meetingDate) {
+        SQLiteDatabase db = null;
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            if (meetingDate == null) {
+                meetingDate = new Date();
+            }
+            values.put(MeetingSchema.COL_MT_MEETING_DATE, Utils.formatDateToSqlite(meetingDate));
+
+            long retVal = -1;
+            retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                    new String[]{String.valueOf(meetingId)});
+            if (retVal != -1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            Log.e("MeetingRepo.updateMeetingDate", ex.getMessage());
+            return false;
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     public ArrayList<Meeting> getAllMeetings() {
         ArrayList<Meeting> meetings = null;
         SQLiteDatabase db = null;
@@ -241,6 +275,10 @@ public class MeetingRepo {
     }
 
     public ArrayList<Meeting> getAllMeetingsOfCycle(int targetCycleId) {
+        return getAllMeetingsOfCycle(targetCycleId, MeetingOrderByEnum.ORDER_BY_MEETING_ID);
+    }
+
+    public ArrayList<Meeting> getAllMeetingsOfCycle(int targetCycleId, MeetingOrderByEnum orderByColumnName) {
         ArrayList<Meeting> meetings = null;
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -252,9 +290,12 @@ public class MeetingRepo {
             meetings = new ArrayList<Meeting>();
             String columnList = MeetingSchema.getColumnList();
 
+            //If Ordering by a date, prepare the column properly
+            //TODO: Did this in a hurry. Should be refactored
+            String orderByClauseColumn = (orderByColumnName == MeetingOrderByEnum.ORDER_BY_MEETING_DATE) ? String.format("datetime(%s)",MeetingSchema.COL_MT_MEETING_DATE) :  MeetingSchema.COL_MT_MEETING_ID ;
             // Select All Query
             String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC", columnList, MeetingSchema.getTableName(),
-                    MeetingSchema.COL_MT_CYCLE_ID, targetCycleId, MeetingSchema.COL_MT_MEETING_ID);
+                    MeetingSchema.COL_MT_CYCLE_ID, targetCycleId, orderByClauseColumn);
             cursor = db.rawQuery(selectQuery, null);
 
             // Looping through all rows and adding to list
