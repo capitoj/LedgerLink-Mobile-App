@@ -126,9 +126,42 @@ public class AddMemberActivity extends SherlockActivity {
             populateDataFields(selectedMember);
         }
 
-        //For Middle start details, only show if in edit mode
-        LinearLayout layoutAMMiddleCycleStartDetails = (LinearLayout) findViewById(R.id.layoutAMMiddleCycleStartDetails);
-        layoutAMMiddleCycleStartDetails.setVisibility(isEditAction ? View.VISIBLE : View.GONE);
+        //For Middle start details
+        if(! isEditAction) {
+            //Hide comments & set heading
+            TextView lblAMMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblAMMiddleCycleInformationHeading);
+            lblAMMiddleCycleInformationHeading.setText("If cycle has started, and your group has held one or more meetings already, enter current totals for member so far.");
+
+            TextView lblAMMiddleCycleSavingsCorrectionLabel = (TextView) findViewById(R.id.lblAMMiddleCycleSavingsCorrectionLabel);
+            lblAMMiddleCycleSavingsCorrectionLabel.setVisibility(View.GONE);
+
+            TextView lblAMMiddleCycleSavings = (TextView) findViewById(R.id.lblAMMiddleCycleSavings);
+            lblAMMiddleCycleSavings.setVisibility(View.GONE);
+//            EditText txtAMMiddleCycleSavingsCorrection = (EditText) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
+//            txtAMMiddleCycleSavingsCorrection.setVisibility(View.GONE);
+
+            TextView lblAMMiddleCycleSavingCorrectionCommentLabel = (TextView) findViewById(R.id.lblAMMiddleCycleSavingCorrectionCommentLabel);
+            lblAMMiddleCycleSavingCorrectionCommentLabel.setVisibility(View.GONE);
+
+            EditText txtAMMiddleCycleSavingsCorrectionComment = (EditText) findViewById(R.id.txtAMMiddleCycleSavingsCorrectionComment);
+            txtAMMiddleCycleSavingsCorrectionComment.setVisibility(View.GONE);
+
+            TextView lblAMMiddleCycleLoansCorrectionLabel = (TextView) findViewById(R.id.lblAMMiddleCycleLoansCorrectionLabel);
+            lblAMMiddleCycleLoansCorrectionLabel.setVisibility(View.GONE);
+
+            EditText txtAMMiddleCycleLoansCorrectionComment = (EditText) findViewById(R.id.txtAMMiddleCycleLoansCorrectionComment);
+            txtAMMiddleCycleLoansCorrectionComment.setVisibility(View.GONE);
+
+            TextView lblAMMiddleCycleLoansCorrectionCommentLabel = (TextView) findViewById(R.id.lblAMMiddleCycleLoansCorrectionCommentLabel);
+            lblAMMiddleCycleLoansCorrectionCommentLabel.setVisibility(View.GONE);
+
+            TextView lblAMMiddleCycleLoans = (TextView) findViewById(R.id.lblAMMiddleCycleLoans);
+            lblAMMiddleCycleLoans.setVisibility(View.GONE);
+
+
+
+        }
+
     }
 
 
@@ -538,7 +571,7 @@ public class AddMemberActivity extends SherlockActivity {
     private void validateMiddleCycleValues(Member member)
     {
         //If edit mode and not GSW, validate middle cycle start values
-        if(isEditAction && !isGettingStartedMode) {
+        if(!isGettingStartedMode) {
           //if there are correctionss, set them
           //TODO: process comments as well
           TextView txtAMMiddleCycleSavingsCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
