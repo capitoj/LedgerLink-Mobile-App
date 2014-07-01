@@ -10,21 +10,26 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:layout_marginRight="8dip"
         android:text="53. 01-JUL-2013" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRAHAttendance"
         style="@style/RegularText"
-        android:layout_width="wrap_content"
+        android:layout_width="60dip"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/txtRAHMeetingDate"
+        android:layout_marginLeft="8dip"
+        android:layout_marginRight="8dip"
         android:text="Present" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRAHComments"
         style="@style/RegularText"
-        android:layout_width="fill_parent"
+        android:layout_width="150dip"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dip"
+        android:layout_marginRight="5dip"
         android:layout_toRightOf="@id/txtRAHAttendance"
         android:text="Apologized" />
 </RelativeLayout>
