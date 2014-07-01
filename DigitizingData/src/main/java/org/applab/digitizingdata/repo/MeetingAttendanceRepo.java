@@ -271,6 +271,63 @@ public class MeetingAttendanceRepo {
         }
     }
 
+    public ArrayList<AttendanceRecord> getMemberAbsenceHistoryInCycle(int cycleId, int memberId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        ArrayList<AttendanceRecord> attendances;
+        int attendanceStatus = 0;
+
+        try {
+            attendances = new ArrayList<AttendanceRecord>();
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            //TODO: I don't think I need the Sub-Query: can do Meetings.CycleId = xx
+            String query = String.format("SELECT  %s.%s AS AttendanceId, %s.%s AS MeetingDate, %s.%s AS IsPresent, %s.%s AS Comments " +
+                            " FROM %s INNER JOIN %s ON %s.%s=%s.%s WHERE %s.%s=%d AND %s.%s=%d AND %s.%s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY %s.%s DESC",
+                    AttendanceSchema.getTableName(),AttendanceSchema.COL_A_ATTENDANCE_ID,
+                    MeetingSchema.getTableName(),MeetingSchema.COL_MT_MEETING_DATE,
+                    AttendanceSchema.getTableName(), AttendanceSchema.COL_A_IS_PRESENT,
+                    AttendanceSchema.getTableName(), AttendanceSchema.COL_A_COMMENTS,
+                    AttendanceSchema.getTableName(), MeetingSchema.getTableName(),
+                    AttendanceSchema.getTableName(), AttendanceSchema.COL_A_MEETING_ID,
+                    MeetingSchema.getTableName(),MeetingSchema.COL_MT_MEETING_ID,
+                    AttendanceSchema.getTableName(), AttendanceSchema.COL_A_MEMBER_ID, memberId,
+                    AttendanceSchema.getTableName(), AttendanceSchema.COL_A_IS_PRESENT, attendanceStatus,
+                    AttendanceSchema.getTableName(), AttendanceSchema.COL_A_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID, MeetingSchema.getTableName(),
+                    MeetingSchema.COL_MT_CYCLE_ID, cycleId, AttendanceSchema.getTableName(),AttendanceSchema.COL_A_ATTENDANCE_ID);
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    AttendanceRecord attendance = new AttendanceRecord();
+                    Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("MeetingDate")));
+                    attendance.setMeetingDate(meetingDate);
+                    attendance.setAttendanceId(cursor.getInt(cursor.getColumnIndex("AttendanceId")));
+                    attendance.setPresent(cursor.getInt(cursor.getColumnIndex("IsPresent")));
+                    attendance.setComment(cursor.getString(cursor.getColumnIndex("Comments")));
+
+                    attendances.add(attendance);
+
+                } while (cursor.moveToNext());
+            }
+            return attendances;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingRollCallRepo.getMemberAttendanceCountInCycle", ex.getMessage());
+            return null;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     public ArrayList<AttendanceDataTransferRecord> getMeetingAttendanceForAllMembers(int meetingId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;

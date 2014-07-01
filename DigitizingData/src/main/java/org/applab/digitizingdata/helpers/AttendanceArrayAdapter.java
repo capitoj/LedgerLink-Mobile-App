@@ -39,7 +39,7 @@ public class AttendanceArrayAdapter extends ArrayAdapter<AttendanceRecord> {
 
             rowView = inflater.inflate(R.layout.row_attendance_history, parent, false);
 
-            //Get the Widgets
+            // Get the Widgets
             TextView txtMeetingDate = (TextView)rowView.findViewById(R.id.txtRAHMeetingDate);
             TextView txtAttendance = (TextView)rowView.findViewById(R.id.txtRAHAttendance);
             TextView txtComments = (TextView)rowView.findViewById(R.id.txtRAHComments);
@@ -49,12 +49,15 @@ public class AttendanceArrayAdapter extends ArrayAdapter<AttendanceRecord> {
             txtComments.setTypeface(typeface);
             txtAttendance.setTypeface(typeface);
 
-            //Assign Values to the Widgets
+            // Assign Values to the Widgets
             AttendanceRecord attendanceRecord = values.get(position);
             if(attendanceRecord != null) {
-                txtComments.setText(attendanceRecord.getComment());
-                txtMeetingDate.setText(Utils.formatDate(attendanceRecord.getMeetingDate(),Utils.DATE_FIELD_FORMAT));
-                txtAttendance.setText((attendanceRecord.getPresent() == 1)? "Present" : "Absent");
+                if (attendanceRecord.getPresent()==0) {
+                    txtComments.setText(attendanceRecord.getComment());
+                    txtMeetingDate.setText(position + 1 + ". " + Utils.formatDate(attendanceRecord.getMeetingDate(), Utils.DATE_FIELD_FORMAT));
+                    txtAttendance.setText("Absent");
+                    // txtAttendance.setText((attendanceRecord.getPresent() == 1) ? "Present" : "Absent");
+                }
             }
 
             return rowView;

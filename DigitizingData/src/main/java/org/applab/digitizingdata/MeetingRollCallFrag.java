@@ -162,7 +162,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
                     if (selectedMeeting != null)
                         i.putExtra("_meetingDate", selectedMeeting.getMeetingDate());
                     i.putExtra("_memberId", selectedMember.getMemberId());
-                    i.putExtra("_names", selectedMember.toString());
+                    i.putExtra("_name", selectedMember.toString());
                     i.putExtra("_meetingId", meetingId);
                     startActivity(i);
                     parentActivity.finish();
