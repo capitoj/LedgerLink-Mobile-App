@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,8 +52,66 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+        inflateCustomActionBar();
 
-        // BEGIN_INCLUDE (inflate_set_custom_view)
+        setContentView(R.layout.activity_member_attendance_history);
+        cycleRepo = new VslaCycleRepo(getApplicationContext());
+        attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
+
+        if (getIntent().hasExtra("_cycleId")) {
+            this.cycleId = getIntent().getIntExtra("_cycleId", 0);
+        } else {
+            currentCycle = cycleRepo.getCurrentCycle();
+            if (null != currentCycle) {
+                this.cycleId = currentCycle.getCycleId();
+            }
+        }
+        if (getIntent().hasExtra("_memberId")) {
+            this.memberId = getIntent().getIntExtra("_memberId", 0);
+        }
+
+        if (getIntent().hasExtra("_meetingId")) {
+            this.meetingId = getIntent().getIntExtra("_meetingId", 0);
+        }
+
+        if (getIntent().hasExtra("_meetingDate")) {
+            this.meetingDate = getIntent().getStringExtra("_meetingDate");
+        }
+
+        if (getIntent().hasExtra("_name")) {
+            this.fullName = getIntent().getStringExtra("_name");
+        }
+
+        if (getIntent().hasExtra("_isPresent")) {
+            this.isPresent = getIntent().getIntExtra("_isPresent", 0);
+        }
+
+        // Setup the TextViews
+        TextView txtFullName = (TextView) findViewById(R.id.txtMAHFullName);
+
+        // TextView txtMeetingDate = (TextView)findViewById(R.id.txtMAHMeetingDate);
+        CheckBox chkAttendance = (CheckBox) findViewById(R.id.chkMAHAttendance);
+        TextView txtComments = (TextView) findViewById(R.id.txtMAHComment);
+
+        chkAttendance.setChecked(attendanceRepo.getMemberAttendance(meetingId, memberId));
+        txtComments.setText(attendanceRepo.getMemberAttendanceComment(meetingId, memberId));
+
+        fullName = fullName.substring(fullName.lastIndexOf(".")+1).trim();
+        txtFullName.setText(fullName);
+
+        // txtMeetingDate.setText(meetingDate);
+
+        // Populate the Attendance History
+        populateAttendanceData();
+
+        chkAttendance.requestFocus();
+        txtComments.requestFocus();
+
+    }
+
+    private void inflateCustomActionBar() {
+
+// BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -94,8 +153,16 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         actionBar.setTitle("Roll Call");
         actionBar.setHomeButtonEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayUseLogoEnabled(false);
-        actionBar.setDisplayOptions(
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
+
+       /** actionBar.setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM,
                 ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
                         | ActionBar.DISPLAY_SHOW_TITLE
@@ -104,62 +171,8 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
                 new ActionBar.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT)
-        );
+        ); */
         // END_INCLUDE (inflate_set_custom_view)
-
-        setContentView(R.layout.activity_member_attendance_history);
-        cycleRepo = new VslaCycleRepo(getApplicationContext());
-        attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
-
-        //TODO: I will get the Cycle in which the Meeting belongs to
-        if (getIntent().hasExtra("_cycleId")) {
-            this.cycleId = getIntent().getIntExtra("_cycleId", 0);
-        } else {
-            currentCycle = cycleRepo.getCurrentCycle();
-            if (null != currentCycle) {
-                this.cycleId = currentCycle.getCycleId();
-            }
-        }
-        if (getIntent().hasExtra("_memberId")) {
-            this.memberId = getIntent().getIntExtra("_memberId", 0);
-        }
-
-        if (getIntent().hasExtra("_meetingId")) {
-            this.meetingId = getIntent().getIntExtra("_meetingId", 0);
-        }
-
-        if (getIntent().hasExtra("_meetingDate")) {
-            this.meetingDate = getIntent().getStringExtra("_meetingDate");
-        }
-
-        if (getIntent().hasExtra("_name")) {
-            this.fullName = getIntent().getStringExtra("_name");
-        }
-
-        if (getIntent().hasExtra("_isPresent")) {
-            this.isPresent = getIntent().getIntExtra("_isPresent", 0);
-        }
-
-        // Setup the TextViews
-        TextView txtFullName = (TextView) findViewById(R.id.txtMAHFullName);
-        // TextView txtMeetingDate = (TextView)findViewById(R.id.txtMAHMeetingDate);
-        CheckBox chkAttendance = (CheckBox) findViewById(R.id.chkMAHAttendance);
-        TextView txtComments = (TextView) findViewById(R.id.txtMAHComment);
-
-        chkAttendance.setChecked(attendanceRepo.getMemberAttendance(meetingId, memberId));
-        txtComments.setText(attendanceRepo.getMemberAttendanceComment(meetingId, memberId));
-
-        fullName = fullName.substring(fullName.lastIndexOf(".")+1).trim();
-        txtFullName.setText(fullName);
-
-        // txtMeetingDate.setText(meetingDate);
-
-        // Populate the Attendance History
-        populateAttendanceData();
-
-        chkAttendance.requestFocus();
-        txtComments.requestFocus();
-
     }
 
     private void populateAttendanceData() {

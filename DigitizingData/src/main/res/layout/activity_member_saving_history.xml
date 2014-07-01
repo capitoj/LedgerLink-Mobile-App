@@ -15,13 +15,13 @@
             android:layout_height="wrap_content"
             android:text="Moses Oscar Muhahala" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+       <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMSHMeetingDate"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="01-JUL-2013" />
+            android:text="01-JUL-2013" /> -->
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMSHAmount"
@@ -66,7 +66,7 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Total Savings: 15,000 UGX" />
+            android:text="Total Savings 15,000 UGX" />
 
         <ListView
             android:id="@android:id/list"
