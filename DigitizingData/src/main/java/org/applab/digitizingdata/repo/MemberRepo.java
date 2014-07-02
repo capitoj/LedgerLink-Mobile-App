@@ -58,7 +58,8 @@ public class MemberRepo {
             // Inserting Row
             long retVal = db.insert(MemberSchema.getTableName(), null, values);
             if (retVal != -1) {
-                return true;
+                member.setMemberId((int) retVal);
+                return saveMiddleCycleValues(member); //New: save middle cycle values too
             }
             else {
                 return false;
@@ -110,36 +111,8 @@ public class MemberRepo {
                 Log.d(context.getPackageName(), "GSW member added "+member.getSurname()+" - ret val is "+retVal);
                 //set the members id now
                 member.setMemberId((int) retVal);
-                MeetingSavingRepo repo = new MeetingSavingRepo(context);
 
-                MeetingRepo meetingRepo = new MeetingRepo(context);
-                Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
-                boolean savingResult = repo.saveMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), (int) retVal, member.getSavingsOnSetup());
-
-                if( ! savingResult) {
-                    Log.d(context.getPackageName(), "Savings to date could not be added for member "+member.getSurname());
-                    System.out.println("Savings to date could not be added for member "+member.getSurname());
-                    return false;
-                }
-                else {
-                    Log.d(context.getPackageName(), "Savings to date added for member "+member.getSurname());
-                    //Save loan IFF loan amount on setup is greater than zero
-                    if(member.getOutstandingLoanOnSetup() <= 0) {
-                        Log.d(context.getPackageName(), "Saving of loan on setup skipped because loan amount is "+member.getOutstandingLoanOnSetup());
-                       return savingResult;
-                    }
-
-
-                    //Save the loan
-                    boolean loanSaveResult = updateMemberLoanOnSetup(member);
-                    if( ! loanSaveResult ) {
-                        Log.d(context.getPackageName(), "Failed to save GSW loan on setup"+member.getSurname());
-                    }
-                }
-
-
-
-                return true;
+                return saveMiddleCycleValues(member);
             }
             else {
                 Log.d(context.getPackageName(), "GSW member not added "+member.getSurname());
@@ -236,26 +209,8 @@ public class MemberRepo {
                     new String[] { String.valueOf(member.getMemberId()) });
 
             if (retVal > 0) {
-                //Update savings at setup
-                MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
-                MeetingRepo meetingRepo = new MeetingRepo(context);
-                boolean updateReturnValue = meetingSavingRepo.saveMemberSaving(meetingRepo.getDummyGettingStartedWizardMeeting().getMeetingId(), member.getMemberId(), member.getSavingsOnSetup());
+                return saveMiddleCycleValues(member);
 
-                if(updateReturnValue) {
-                    Log.d(context.getPackageName(), "Savings to date saved for member "+member.getSurname());
-
-
-
-                    //Save the loan
-                    boolean loanSaveResult = updateMemberLoanOnSetup(member);
-                    if( ! loanSaveResult ) {
-                        Log.d(context.getPackageName(), "Failed to save GSW loan on setup"+member.getSurname());
-                    }
-                }
-
-                //TODO: Update loans
-
-                return true;
             }
             else {
                 return false;
@@ -271,6 +226,32 @@ public class MemberRepo {
                 db.close();
             }
         }
+    }
+
+    protected boolean saveMiddleCycleValues(Member member)
+    {
+        //Update savings at setup
+        MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
+        MeetingRepo meetingRepo = new MeetingRepo(context);
+        Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+        if(dummyGettingStartedWizardMeeting == null) {
+            //No GSW wizard meeting? probably training mode... either way, be optimistic and return now
+            return true;
+        }
+        boolean updateReturnValue = meetingSavingRepo.saveMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), member.getSavingsOnSetup());
+        if(updateReturnValue) {
+            Log.d(context.getPackageName(), "Savings to date saved for member " + member.getSurname());
+
+
+
+            //Save the loan
+            boolean loanSaveResult = updateMemberLoanOnSetup(member);
+            if( ! loanSaveResult ) {
+                Log.d(context.getPackageName(), "Failed to save GSW loan on setup"+member.getSurname());
+            }
+        }
+
+        return true;
     }
 
     // Loads the savings at setup and loans at setup for the member
@@ -565,7 +546,7 @@ public class MemberRepo {
                     new String[] { String.valueOf(member.getMemberId()) });
 
             if (retVal > 0) {
-                return true;
+                return saveMiddleCycleValues(member);
             }
             else {
                 return false;

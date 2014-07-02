@@ -4,22 +4,22 @@
     android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSmallSubItems"
         android:id="@+id/txtRSHMeetingDate"
-        android:layout_width="fill_parent"
+        style="@style/RegularText"
+        android:layout_width="120dip"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:paddingLeft="5dp"
-        android:text="Meeting Date" />
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dip"
+        android:text="01-JUL-2013" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSmallSubItems"
         android:id="@+id/txtRSHAmount"
-        android:layout_width="fill_parent"
+        style="@style/RegularText"
+        android:layout_width="150dip"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtRSHMeetingDate"
-        android:paddingLeft="5dp"
+        android:layout_toRightOf="@id/txtRSHMeetingDate"
+        android:layout_marginLeft="10dip"
         android:text="Saved: 0UGX" />
 
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,14 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
@@ -102,15 +106,17 @@ public class MemberDetailsViewActivity extends SherlockActivity {
 
         actionBar = getSupportActionBar();
 
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
+
+
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
-        // END_INCLUDE (inflate_set_custom_view)
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+        actionBar.setDisplayShowCustomEnabled(true);
 
     }
 
@@ -197,6 +203,28 @@ public class MemberDetailsViewActivity extends SherlockActivity {
             calDbCycles.setTime(member.getDateOfAdmission());
             int cycles = calToday.get(Calendar.YEAR) - calDbCycles.get(Calendar.YEAR);
             txtCyclesCompleted.setText(String.format("%d", cycles));
+
+            //Load the middle start values
+            TextView lblMDMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblMDMiddleCycleInformationHeading);
+            TextView lblMDMiddleCycleSavings = (TextView) findViewById(R.id.lblMDMiddleCycleSavings);
+            TextView lblMDMiddleCycleLoansOutstanding = (TextView) findViewById(R.id.lblMDMiddleCycleLoansOutstanding);
+
+            lblMDMiddleCycleSavings.setText(String.format("Total Savings %,.0f %s", member.getSavingsOnSetup(),getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleLoansOutstanding.setText(String.format("Loans Outstanding %,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
+
+            //Show the heading
+            //Get the date of the dummy GSW meeting
+            MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
+
+            String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her":"his";
+            lblMDMiddleCycleInformationHeading.setText("This member’s information was added after the cycle started. Here are "+pronoun+" total savings and outstanding loans on that day.");
+
+            Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+            if(dummyGSWMeeting != null) {
+                lblMDMiddleCycleInformationHeading.setText("This member’s information was added on "+Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy")+" after the cycle started. Here are "+pronoun+" total savings and outstanding loans on that day.");
+            }
+
+
 
         }
         finally {

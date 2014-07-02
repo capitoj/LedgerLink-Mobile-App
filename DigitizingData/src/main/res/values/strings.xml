@@ -36,4 +36,5 @@
     <string name="title_activity_change_meeting_date">ChangeMeetingDate</string>
     <string name="change_meeting_date_instruction_2">You have issued loans for this meeting. Due dates are calculated based on the date loans were issued. All due dates for these loans will be changed if you change the meeting date.</string>
 
+    <string name="operating_currency">UGX</string>
 </resources>

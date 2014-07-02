@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
     private int cycleId = 0;
     private VslaCycle currentCycle;
     private String meetingDate;
-    private String fullNames;
+    private String fullName;
     private int isPresent;
     private int meetingId = 0;
 
@@ -51,8 +52,66 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+        inflateCustomActionBar();
 
-        // BEGIN_INCLUDE (inflate_set_custom_view)
+        setContentView(R.layout.activity_member_attendance_history);
+        cycleRepo = new VslaCycleRepo(getApplicationContext());
+        attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
+
+        if (getIntent().hasExtra("_cycleId")) {
+            this.cycleId = getIntent().getIntExtra("_cycleId", 0);
+        } else {
+            currentCycle = cycleRepo.getCurrentCycle();
+            if (null != currentCycle) {
+                this.cycleId = currentCycle.getCycleId();
+            }
+        }
+        if (getIntent().hasExtra("_memberId")) {
+            this.memberId = getIntent().getIntExtra("_memberId", 0);
+        }
+
+        if (getIntent().hasExtra("_meetingId")) {
+            this.meetingId = getIntent().getIntExtra("_meetingId", 0);
+        }
+
+        if (getIntent().hasExtra("_meetingDate")) {
+            this.meetingDate = getIntent().getStringExtra("_meetingDate");
+        }
+
+        if (getIntent().hasExtra("_name")) {
+            this.fullName = getIntent().getStringExtra("_name");
+        }
+
+        if (getIntent().hasExtra("_isPresent")) {
+            this.isPresent = getIntent().getIntExtra("_isPresent", 0);
+        }
+
+        // Setup the TextViews
+        TextView txtFullName = (TextView) findViewById(R.id.txtMAHFullName);
+
+        // TextView txtMeetingDate = (TextView)findViewById(R.id.txtMAHMeetingDate);
+        CheckBox chkAttendance = (CheckBox) findViewById(R.id.chkMAHAttendance);
+        TextView txtComments = (TextView) findViewById(R.id.txtMAHComment);
+
+        chkAttendance.setChecked(attendanceRepo.getMemberAttendance(meetingId, memberId));
+        txtComments.setText(attendanceRepo.getMemberAttendanceComment(meetingId, memberId));
+
+        fullName = fullName.substring(fullName.lastIndexOf(".")+1).trim();
+        txtFullName.setText(fullName);
+
+        // txtMeetingDate.setText(meetingDate);
+
+        // Populate the Attendance History
+        populateAttendanceData();
+
+        chkAttendance.requestFocus();
+        txtComments.requestFocus();
+
+    }
+
+    private void inflateCustomActionBar() {
+
+// BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -61,30 +120,32 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(saveAttendanceComment()) {
+                        if (saveAttendanceComment()) {
                             Toast.makeText(MemberAttendanceHistoryActivity.this, "Comment entered successfully", Toast.LENGTH_LONG).show();
                             Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                             i.putExtra("_tabToSelect", "rollCall");
-                            i.putExtra("_meetingDate",meetingDate);
-                            i.putExtra("_meetingId",meetingId);
+                            i.putExtra("_meetingDate", meetingDate);
+                            i.putExtra("_meetingId", meetingId);
                             startActivity(i);
                             finish();
                         }
 
                     }
-                });
+                }
+        );
         customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                         i.putExtra("_tabToSelect", "rollCall");
-                        i.putExtra("_meetingDate",meetingDate);
-                        i.putExtra("_meetingId",meetingId);
+                        i.putExtra("_meetingDate", meetingDate);
+                        i.putExtra("_meetingId", meetingId);
                         startActivity(i);
                         finish();
                     }
-                });
+                }
+        );
 
 
         actionBar = getSupportActionBar();
@@ -92,77 +153,34 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         actionBar.setTitle("Roll Call");
         actionBar.setHomeButtonEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setDisplayUseLogoEnabled(false);
-        actionBar.setDisplayOptions(
+
+        actionBar.setCustomView(customActionBarView,
+                new ActionBar.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
+
+       /** actionBar.setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM,
                 ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
+                        | ActionBar.DISPLAY_SHOW_TITLE
+        );
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.MATCH_PARENT)
+        ); */
         // END_INCLUDE (inflate_set_custom_view)
-
-        setContentView(R.layout.activity_member_attendance_history);
-        cycleRepo = new VslaCycleRepo(getApplicationContext());
-        attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
-
-        //TODO: I will get the Cycle in which the Meeting belongs to
-        if(getIntent().hasExtra("_cycleId")) {
-            this.cycleId = getIntent().getIntExtra("_cycleId", 0);
-        }
-        else {
-            currentCycle = cycleRepo.getCurrentCycle();
-            if(null!= currentCycle) {
-                this.cycleId = currentCycle.getCycleId();
-            }
-        }
-        if(getIntent().hasExtra("_memberId")) {
-            this.memberId = getIntent().getIntExtra("_memberId", 0);
-        }
-
-        if(getIntent().hasExtra("_meetingId")) {
-            this.meetingId = getIntent().getIntExtra("_meetingId", 0);
-        }
-
-        if(getIntent().hasExtra("_meetingDate")) {
-            this.meetingDate = getIntent().getStringExtra("_meetingDate");
-        }
-
-        if(getIntent().hasExtra("_names")) {
-            this.fullNames = getIntent().getStringExtra("_names");
-        }
-
-        if(getIntent().hasExtra("_isPresent")) {
-            this.isPresent = getIntent().getIntExtra("_isPresent", 0);
-        }
-
-        //Setup the TextViews
-        TextView txtFullNames = (TextView)findViewById(R.id.txtMAHFullName);
-        TextView txtMeetingDate = (TextView)findViewById(R.id.txtMAHMeetingDate);
-        CheckBox chkAttendance = (CheckBox)findViewById(R.id.chkMAHAttendance);
-        TextView txtComments = (TextView)findViewById(R.id.txtMAHComment);
-
-        chkAttendance.setChecked(attendanceRepo.getMemberAttendance(meetingId, memberId));
-        txtComments.setText(attendanceRepo.getMemberAttendanceComment(meetingId,memberId));
-
-        txtFullNames.setText(fullNames);
-        txtMeetingDate.setText(meetingDate);
-
-        //Populate the Attendance History
-        populateAttendanceData();
-
-        chkAttendance.requestFocus();
-        txtComments.requestFocus();
-
     }
 
     private void populateAttendanceData() {
         //Load the Main Menu
         MeetingAttendanceRepo repo = new MeetingAttendanceRepo(getApplicationContext());
-        attendances = repo.getMemberAttendanceHistoryInCycle(cycleId, memberId);
+        attendances = repo.getMemberAbsenceHistoryInCycle(cycleId, memberId);
 
-        if(attendances == null) {
+        if (attendances == null) {
             attendances = new ArrayList<AttendanceRecord>();
         }
 
@@ -186,12 +204,12 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MeetingActivity.class);
                 upIntent.putExtra("_tabToSelect", "rollCall");
-                upIntent.putExtra("_meetingDate",meetingDate);
-                upIntent.putExtra("_meetingId",meetingId);
+                upIntent.putExtra("_meetingDate", meetingDate);
+                upIntent.putExtra("_meetingId", meetingId);
 
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
                     // This activity is not part of the application's task, so
@@ -211,18 +229,18 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
             case R.id.mnuMAHCancel:
                 i = new Intent(MemberAttendanceHistoryActivity.this, MeetingActivity.class);
                 i.putExtra("_tabToSelect", "rollCall");
-                i.putExtra("_meetingDate",meetingDate);
-                i.putExtra("_meetingId",meetingId);
+                i.putExtra("_meetingDate", meetingDate);
+                i.putExtra("_meetingId", meetingId);
                 startActivity(i);
                 return true;
             case R.id.mnuMAHSave:
                 //First Save the Cycle Dates
                 //If successful move to next activity
-                if(saveAttendanceComment()) {
+                if (saveAttendanceComment()) {
                     i = new Intent(MemberAttendanceHistoryActivity.this, MeetingActivity.class);
                     i.putExtra("_tabToSelect", "rollCall");
-                    i.putExtra("_meetingDate",meetingDate);
-                    i.putExtra("_meetingId",meetingId);
+                    i.putExtra("_meetingDate", meetingDate);
+                    i.putExtra("_meetingId", meetingId);
                     startActivity(i);
                 }
         }
@@ -230,27 +248,25 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
 
     }
 
-    public boolean saveAttendanceComment(){
+    public boolean saveAttendanceComment() {
         boolean successFlg = false;
         String comment = null;
 
-        try{
-            TextView txtComment = (TextView)findViewById(R.id.txtMAHComment);
+        try {
+            TextView txtComment = (TextView) findViewById(R.id.txtMAHComment);
             comment = txtComment.getText().toString().trim();
-            if(comment.length() > 0) {
-                if(attendanceRepo == null) {
+            if (comment.length() > 0) {
+                if (attendanceRepo == null) {
                     attendanceRepo = new MeetingAttendanceRepo(MemberAttendanceHistoryActivity.this);
                 }
-                successFlg = attendanceRepo.saveMemberAttendanceComment(meetingId, memberId,comment);
-            }
-            else {
-                Utils.createAlertDialogOk(MemberAttendanceHistoryActivity.this,"Roll Call", "You have not entered the Comments", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                successFlg = attendanceRepo.saveMemberAttendanceComment(meetingId, memberId, comment);
+            } else {
+                Utils.createAlertDialogOk(MemberAttendanceHistoryActivity.this, "Roll Call", "You have not entered the Comments", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtComment.requestFocus();
                 successFlg = false;
             }
             return successFlg;
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             Log.e("MemberAttendanceHistory.saveMemberAttendanceComment", ex.getMessage());
             return successFlg;
         }

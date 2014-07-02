@@ -15,13 +15,15 @@
             android:id="@+id/frmMAH_top_control_bar">
 
             <CheckBox
-                android:layout_width="wrap_content"
+                android:layout_width="25dip"
                 android:layout_height="wrap_content"
                 android:text=""
                 android:id="@+id/chkMAHAttendance"
+                android:layout_marginLeft="15dip"
+                android:layout_marginTop="5dip"
                 android:clickable="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true" />
 
@@ -30,27 +32,25 @@
                 android:id="@+id/txtMAHFullName"
                 android:layout_width="wrap_content"
                 android:layout_toRightOf="@id/chkMAHAttendance"
-                android:padding="5dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dip"
                 android:text="Member Name" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+          <!--  <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/txtMAHMeetingDate"
                 android:layout_width="wrap_content"
-                android:padding="5dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/chkMAHAttendance"
-                android:text="01-JUL-2013" />
+                android:text="01-JUL-2013" /> -->
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblMAHComment"
                 android:layout_width="wrap_content"
-                android:padding="5dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txtMAHMeetingDate"
-                android:text="Comment" />
+                android:layout_below="@id/txtMAHFullName"
+                android:text="Comment"/>
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/NormalEditText"
@@ -58,17 +58,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapSentences"
-                android:padding="5dp"
                 android:layout_below="@id/lblMAHComment"
                 android:imeOptions="actionDone"
-                android:text="OK" />
+                android:text="OK"
+                android:layout_marginBottom="20dip"/>
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:paddingLeft="5dp"
-                android:text="HISTORY"
+                android:text="Absences"
                 android:id="@+id/lblMAHSection1"
                 android:layout_below="@id/txtMAHComment" />
         </RelativeLayout>
@@ -78,6 +77,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:dividerHeight="0dp"
             android:layout_below="@id/frmMAH_top_control_bar" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView

@@ -61,7 +61,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     @Override
     protected void initializeActivity()
     {
-
+        isGettingStartedMode = true;
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         if (getIntent().hasExtra("_isEditAction")) {
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction", false);

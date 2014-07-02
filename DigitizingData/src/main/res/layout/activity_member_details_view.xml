@@ -162,19 +162,74 @@
             android:orientation="vertical"
             android:layout_marginBottom="20dip">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/lblMDVCyclesCompleted"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Number of cycles member completed" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="3"
                 android:id="@+id/txtMDVCyclesCompleted" />
+    </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dip">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/SubHeading"
+                    android:id="@+id/lblMDCurrentCycleHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="CURRENT CYCLE" />
+
+            <!--list view of meeting details-->
         </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dip"
+                android:id="@+id/layoutMDMiddleCycleStartDetails">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularHeading"
+                    android:id="@+id/lblMDMiddleCycleStartHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="MIDDLE CYCLE START" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblMDMiddleCycleInformationHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="---" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblMDMiddleCycleSavings"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total Savings 0 UGX" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    style="@style/RegularText"
+                    android:id="@+id/lblMDMiddleCycleLoansOutstanding"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Loans Outstanding 0 UGX" />
+
+
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
