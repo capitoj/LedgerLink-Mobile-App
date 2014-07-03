@@ -58,7 +58,7 @@ public class MemberRepo {
             // Inserting Row
             long retVal = db.insert(MemberSchema.getTableName(), null, values);
             if (retVal != -1) {
-                member.setMemberId(Integer.parseInt(retVal+""));
+                member.setMemberId((int) retVal);
                 return saveMiddleCycleValues(member); //New: save middle cycle values too
             }
             else {

@@ -240,12 +240,17 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 Intent intent = new Intent(getApplicationContext(), DeleteMeetingActivity.class);
                 intent.putExtra("_meetingId", targetMeetingId);
                 startActivity(intent);
-                return false;
+                return true;
+            case R.id.mnuMeetingChangeDate:
+                Intent changeMeetingDate = new Intent(getApplicationContext(), ChangeMeetingDateActivity.class);
+                changeMeetingDate.putExtra("_meetingId", targetMeetingId);
+                startActivity(changeMeetingDate);
+                return true;
             case R.id.mnuMeetingFineMember:
                 Intent fineMemberIntent = new Intent(getApplicationContext(), FineMemberMeetingActivity.class);
                 fineMemberIntent.putExtra("_meetingId", getIntent().getIntExtra("_meetingId", 0));
                 startActivity(fineMemberIntent);
-                return false;
+                return true;
             default:
                 return false;
         }

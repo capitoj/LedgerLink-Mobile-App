@@ -412,10 +412,6 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 return false;
             }
 
-            //Set the Cycle
-            //VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
-            //VslaCycle cycle = cycleRepo.getCurrentCycle();
-
             //Set Cycle to the selected one
             if(null != selectedCycle) {
                 meeting.setVslaCycle(selectedCycle);

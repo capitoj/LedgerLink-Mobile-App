@@ -52,6 +52,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.applab.digitizingdata.MainActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -92,7 +93,6 @@
         <activity
             android:name="org.applab.digitizingdata.AddFineActivity"
             android:label="Fine Member" />
-
         <activity android:name="org.applab.digitizingdata.MemberLoansIssuedHistoryActivity" />
         <activity android:name="org.applab.digitizingdata.MemberLoansRepaidHistoryActivity" />
         <activity
@@ -149,8 +149,8 @@
             android:label="@string/title_activity_gettings_started_wizard_add_member" >
         </activity>
         <activity
-                android:name="org.applab.digitizingdata.GettingStartedWizardReviewMembersActivity"
-                android:label="@string/title_activity_gettings_started_wizard_review_members" >
+            android:name="org.applab.digitizingdata.GettingStartedWizardReviewMembersActivity"
+            android:label="@string/title_activity_gettings_started_wizard_review_members" >
         </activity>
         <activity
             android:name="org.applab.digitizingdata.GettingsStartedWizardNewCycleActivity"
@@ -163,24 +163,23 @@
         <activity
             android:name="org.applab.digitizingdata.GettingStartedWizardPageOne"
             android:label="@string/title_activity_gettings_started_wizard_page_1" >
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name="org.applab.digitizingdata.GettingStartedWizardPageTwo"
             android:label="@string/title_activity_gettings_started_wizard_page_2" >
         </activity>
         <activity
-                android:name="org.applab.digitizingdata.GettingStartedConfirmationPage"
-                android:label="Confirmation" >
+            android:name="org.applab.digitizingdata.GettingStartedConfirmationPage"
+            android:label="Confirmation" >
         </activity>
         <activity
-                android:name=".SelectCycle"
-                android:label="Select Cycle" >
+            android:name="org.applab.digitizingdata.SelectCycle"
+            android:label="Select Cycle" >
         </activity>
         <activity
             android:name="org.applab.digitizingdata.DataMigrationActivity"
@@ -201,6 +200,10 @@
         <activity
             android:name="org.applab.digitizingdata.DeleteMeetingActivity"
             android:label="@string/title_activity_delete_meeting" >
+        </activity>
+        <activity
+            android:name="org.applab.digitizingdata.ChangeMeetingDateActivity"
+            android:label="@string/title_activity_change_meeting_date" >
         </activity>
     </application>
 
