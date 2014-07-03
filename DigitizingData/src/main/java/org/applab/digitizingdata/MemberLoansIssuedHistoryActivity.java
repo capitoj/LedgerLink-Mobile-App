@@ -338,7 +338,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         }
 
         if (loansIssued.isEmpty()){
-            pastLoansHeading.setVisibility(View.GONE);
+            pastLoansHeading.setVisibility(View.INVISIBLE);
         }
 
         //Now get the data via the adapter

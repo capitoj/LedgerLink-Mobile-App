@@ -63,7 +63,8 @@
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMSHTotalSavings"
-            style="@style/RegularText"
+            style="@style/RegularTextBold"
+            android:textSize="17sp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Total Savings 15,000 UGX" />
@@ -72,7 +73,10 @@
             android:id="@android:id/list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:choiceMode="singleChoice" />
+            android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@android:id/empty"
