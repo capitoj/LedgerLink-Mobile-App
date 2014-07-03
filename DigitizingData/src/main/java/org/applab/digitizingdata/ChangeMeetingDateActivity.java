@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,54 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_change_meeting_date);
+        inflateCustomActionBar();
 
+
+        if(getIntent().hasExtra("_meetingId")) {
+            this.meetingId = getIntent().getIntExtra("_meetingId", 0);
+        }
+
+        //Initialize the Repositories
+        meetingRepo = new MeetingRepo(getApplicationContext());
+        repaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
+        loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
+        fineRepo = new MeetingFineRepo(getApplicationContext());
+
+        //Retrieve the target Meeting
+        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
+
+        //Manage Dates
+        txtMeetingDate = (TextView)findViewById(R.id.txtCMDMeetingDate);
+        viewClicked = txtMeetingDate;
+
+        //Set onClick Listeners to load the DateDialog for MeetingDate
+        txtMeetingDate.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //I want the Event Handler to handle both startDate and endDate
+                viewClicked = (TextView)view;
+                DatePickerDialog datePickerDialog = new DatePickerDialog( ChangeMeetingDateActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                //TODO: Enable this feature in API 11 and above
+                //datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
+                datePickerDialog.show();
+            }
+        });
+
+        //Setup the Default Date to be the current meeting date
+        final Calendar c = Calendar.getInstance();
+        if (null != targetMeeting) {
+            //txtMeetingDate.setText(String.format("%s", Utils.formatDate(targetMeeting.getMeetingDate())));
+            c.setTime(targetMeeting.getMeetingDate());
+        }
+
+        //Set the date parts
+        mYear = c.get(Calendar.YEAR);
+        mMonth = c.get(Calendar.MONTH);
+        mDay = c.get(Calendar.DAY_OF_MONTH);
+        updateDisplay();
+    }
+
+    private void inflateCustomActionBar() {
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
@@ -135,58 +183,20 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setTitle("Change Meeting Date");
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
+
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
+
         // END_INCLUDE (inflate_set_custom_view)
-
-        if(getIntent().hasExtra("_meetingId")) {
-            this.meetingId = getIntent().getIntExtra("_meetingId", 0);
-        }
-
-        //Initialize the Repositories
-        meetingRepo = new MeetingRepo(getApplicationContext());
-        repaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
-        loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-        fineRepo = new MeetingFineRepo(getApplicationContext());
-
-        //Retrieve the target Meeting
-        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
-
-        //Manage Dates
-        txtMeetingDate = (TextView)findViewById(R.id.txtCMDMeetingDate);
-        viewClicked = txtMeetingDate;
-
-        //Set onClick Listeners to load the DateDialog for MeetingDate
-        txtMeetingDate.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //I want the Event Handler to handle both startDate and endDate
-                viewClicked = (TextView)view;
-                DatePickerDialog datePickerDialog = new DatePickerDialog( ChangeMeetingDateActivity.this, mDateSetListener, mYear, mMonth, mDay);
-                //TODO: Enable this feature in API 11 and above
-                //datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
-                datePickerDialog.show();
-            }
-        });
-
-        //Setup the Default Date to be the current meeting date
-        final Calendar c = Calendar.getInstance();
-        if (null != targetMeeting) {
-            //txtMeetingDate.setText(String.format("%s", Utils.formatDate(targetMeeting.getMeetingDate())));
-            c.setTime(targetMeeting.getMeetingDate());
-        }
-
-        //Set the date parts
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-        updateDisplay();
     }
 
     //Event that is raised when the date has been set

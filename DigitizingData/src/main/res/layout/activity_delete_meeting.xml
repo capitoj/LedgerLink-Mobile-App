@@ -20,7 +20,7 @@
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Are you sure you want to delete this meeting? If so, tap [Done]. The following information will be deleted:."
+            android:text="Are you sure you want to delete this meeting? If so, tap [Done]. The following information will be deleted:"
             android:id="@+id/lblDMInstructions" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView

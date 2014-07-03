@@ -2,6 +2,8 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +40,79 @@ public class DeleteMeetingActivity extends SherlockActivity {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_delete_meeting);
+        inflateCustomActionBar();
 
+
+        if(getIntent().hasExtra("_meetingId")) {
+            this.meetingId = getIntent().getIntExtra("_meetingId", 0);
+        }
+
+        //Initialize the Repositories
+        meetingRepo = new MeetingRepo(getApplicationContext());
+        savingRepo = new MeetingSavingRepo(getApplicationContext());
+        attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
+        repaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
+        loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
+        fineRepo = new MeetingFineRepo(getApplicationContext());
+
+        //Set the values for the meeting details
+        TextView txtMeetingDate = (TextView) findViewById(R.id.lblDMMeetingDate);
+        TextView txtAttendedCount = (TextView) findViewById(R.id.lblDMAttended);
+        TextView txtFines = (TextView) findViewById(R.id.lblDMFines);
+        TextView txtSavings = (TextView) findViewById(R.id.lblDMSavings);
+        TextView txtLoanRepayments = (TextView) findViewById(R.id.lblDMLoansRepaid);
+        TextView txtLoanIssues = (TextView) findViewById(R.id.lblDMLoansIssued);
+
+
+
+        TextView lblDMInstructions = (TextView) findViewById(R.id.lblDMInstructions);
+
+        StringBuilder sb = new StringBuilder("Are you sure you want to delete this meeting? If so, tap <b>Done</b>. The following information will be deleted:");
+        lblDMInstructions.setText(Html.fromHtml(sb.toString()));
+
+        //Retrieve the target Meeting
+        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
+
+        if (null != targetMeeting) {
+            txtMeetingDate.setText(String.format("%s", Utils.formatDate(targetMeeting.getMeetingDate())));
+
+            if (null == attendanceRepo) {
+                attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
+            }
+            if (null != attendanceRepo) {
+                txtAttendedCount.setText(String.format("Members Present: %d", attendanceRepo.getAttendanceCountByMeetingId(meetingId, 1)));
+            }
+
+            if (null == savingRepo) {
+                savingRepo = new MeetingSavingRepo(getApplicationContext());
+            }
+            double totalMeetingSavings = 0.0;
+            double totalFinesCollected = 0.0;
+            double totalLoansIssuedInMeeting = 0.0;
+            double totalLoansRepaidInMeeting = 0.0;
+
+            totalMeetingSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
+            txtSavings.setText(String.format("Savings: %,.0f UGX", totalMeetingSavings));
+
+            totalLoansRepaidInMeeting = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
+            txtLoanRepayments.setText(String.format("Loans repaid: %,.0f UGX", totalLoansRepaidInMeeting));
+
+            totalFinesCollected = fineRepo.getTotalFinesInMeeting(meetingId);
+            txtFines.setText(String.format("Fines: %,.0f UGX", totalFinesCollected));
+
+            totalLoansIssuedInMeeting = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
+            txtLoanIssues.setText(String.format("Loans issued: %,.0f UGX", totalLoansIssuedInMeeting));
+        }
+        else {
+            txtAttendedCount.setText("");
+            txtFines.setText("");
+            txtSavings.setText("");
+            txtLoanRepayments.setText("");
+            txtLoanIssues.setText("");
+        }
+    }
+
+    private void inflateCustomActionBar() {
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
@@ -89,7 +163,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
                                 cannotBeDeleted = false;
                             }
                             else {
-                                Toast.makeText(getApplicationContext(),String.format("Sorry, first delete the most recent meeting in this cycle dated: %s.", Utils.formatDate(mostRecent.getMeetingDate())),Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), String.format("Sorry, first delete the most recent meeting in this cycle dated: %s.", Utils.formatDate(mostRecent.getMeetingDate())), Toast.LENGTH_LONG).show();
                                 return;
                             }
                         }
@@ -135,76 +209,19 @@ public class DeleteMeetingActivity extends SherlockActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setTitle("Delete Meeting");
-        actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE);
+
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT));
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+        );
+
+        actionBar.setDisplayShowCustomEnabled(true);
         // END_INCLUDE (inflate_set_custom_view)
-
-        if(getIntent().hasExtra("_meetingId")) {
-            this.meetingId = getIntent().getIntExtra("_meetingId", 0);
-        }
-
-        //Initialize the Repositories
-        meetingRepo = new MeetingRepo(getApplicationContext());
-        savingRepo = new MeetingSavingRepo(getApplicationContext());
-        attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
-        repaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
-        loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-        fineRepo = new MeetingFineRepo(getApplicationContext());
-
-        //Set the values for the meeting details
-        TextView txtMeetingDate = (TextView) findViewById(R.id.lblDMMeetingDate);
-        TextView txtAttendedCount = (TextView) findViewById(R.id.lblDMAttended);
-        TextView txtFines = (TextView) findViewById(R.id.lblDMFines);
-        TextView txtSavings = (TextView) findViewById(R.id.lblDMSavings);
-        TextView txtLoanRepayments = (TextView) findViewById(R.id.lblDMLoansRepaid);
-        TextView txtLoanIssues = (TextView) findViewById(R.id.lblDMLoansIssued);
-
-        //Retrieve the target Meeting
-        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
-
-        if (null != targetMeeting) {
-            txtMeetingDate.setText(String.format("%s", Utils.formatDate(targetMeeting.getMeetingDate())));
-
-            if (null == attendanceRepo) {
-                attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
-            }
-            if (null != attendanceRepo) {
-                txtAttendedCount.setText(String.format("Members Present: %d", attendanceRepo.getAttendanceCountByMeetingId(meetingId, 1)));
-            }
-
-            if (null == savingRepo) {
-                savingRepo = new MeetingSavingRepo(getApplicationContext());
-            }
-            double totalMeetingSavings = 0.0;
-            double totalFinesCollected = 0.0;
-            double totalLoansIssuedInMeeting = 0.0;
-            double totalLoansRepaidInMeeting = 0.0;
-
-            totalMeetingSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
-            txtSavings.setText(String.format("Savings: %,.0f UGX", totalMeetingSavings));
-
-            totalLoansRepaidInMeeting = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
-            txtLoanRepayments.setText(String.format("Loans repaid: %,.0f UGX", totalLoansRepaidInMeeting));
-
-            totalFinesCollected = fineRepo.getTotalFinesInMeeting(meetingId);
-            txtFines.setText(String.format("Fines: %,.0f UGX", totalFinesCollected));
-
-            totalLoansIssuedInMeeting = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
-            txtLoanIssues.setText(String.format("Loans issued: %,.0f UGX", totalLoansIssuedInMeeting));
-        }
-        else {
-            txtAttendedCount.setText("");
-            txtFines.setText("");
-            txtSavings.setText("");
-            txtLoanRepayments.setText("");
-            txtLoanIssues.setText("");
-        }
     }
 
 

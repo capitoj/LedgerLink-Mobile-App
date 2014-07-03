@@ -31,7 +31,6 @@
             android:label="Ledger Link" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -52,12 +51,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.applab.digitizingdata.MainActivity" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="org.applab.digitizingdata.EndCycleActivity"
@@ -163,11 +156,6 @@
         <activity
             android:name="org.applab.digitizingdata.GettingStartedWizardPageOne"
             android:label="@string/title_activity_gettings_started_wizard_page_1" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="org.applab.digitizingdata.GettingStartedWizardPageTwo"
@@ -187,11 +175,6 @@
         <activity
             android:name="org.applab.digitizingdata.BeginMeetingActivity"
             android:label="@string/title_activity_begin_meeting" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="org.applab.digitizingdata.SettingsActivity"
