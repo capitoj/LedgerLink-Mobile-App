@@ -86,7 +86,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         String fullNames = getIntent().getStringExtra("_names");
         lblFullNames.setText(fullNames);
 
-        pastLoansHeading = (TextView)findViewById(R.id.txtRLIHPastLoanSummary);
+        pastLoansHeading = (TextView) findViewById(R.id.lblMLIssuedPastLoans);
 
         if (getIntent().hasExtra("_meetingId")) {
             meetingId = getIntent().getIntExtra("_meetingId", 0);
@@ -333,12 +333,11 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         loansIssued = loanIssuedRepo.getLoansIssuedToMemberInCycle(targetCycleId, memberId);
 
         if (loansIssued == null) {
-
             loansIssued = new ArrayList<MemberLoanIssueRecord>();
         }
 
         if (loansIssued.isEmpty()){
-            pastLoansHeading.setVisibility(View.INVISIBLE);
+           pastLoansHeading.setVisibility(View.INVISIBLE);
         }
 
         //Now get the data via the adapter

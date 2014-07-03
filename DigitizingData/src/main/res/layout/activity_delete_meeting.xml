@@ -10,18 +10,16 @@
         android:layout_height="match_parent">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
+            style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:text="DELETE MEETING"
             android:id="@+id/lblDMTitle" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
+            style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:text="Are you sure you want to delete this meeting? If so, tap [Done]. The following information will be deleted:."
             android:id="@+id/lblDMInstructions" />
 
@@ -29,7 +27,6 @@
             style="@style/TextAccentColor"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:text="01 Mar 2014"
             android:id="@+id/lblDMMeetingDate"/>
 
@@ -37,7 +34,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="5dp"
             android:text="Members Present: 28"
             android:id="@+id/lblDMAttended"/>
 
