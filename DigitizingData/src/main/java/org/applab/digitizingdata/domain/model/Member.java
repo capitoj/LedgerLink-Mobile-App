@@ -29,6 +29,10 @@ public class Member {
     private double savingsOnSetup;
     private double outstandingLoanOnSetup;
 
+    //This is the date of next repayment of middle start loan
+    //TODO: ideally this shouldnt be apart of member defination but what to do?
+    private Date dateOfFirstRepayment;
+
     @Override
     public String toString() {
         return String.format("%s. %s %s", memberNo, surname, otherNames);
@@ -228,5 +232,17 @@ public class Member {
 
     public void setOutstandingLoanOnSetup(double outstandingLoanOnSetup) {
         this.outstandingLoanOnSetup = outstandingLoanOnSetup;
+    }
+
+    public Date getDateOfFirstRepayment()
+    {
+
+        return dateOfFirstRepayment;
+    }
+
+    public void setDateOfFirstRepayment(Date dateOfFirstRepayment)
+    {
+
+        this.dateOfFirstRepayment = dateOfFirstRepayment;
     }
 }

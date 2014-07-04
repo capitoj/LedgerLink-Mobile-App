@@ -266,12 +266,30 @@
                     android:inputType="number"/>
 
                 <org.applab.digitizingdata.fontutils.TypefaceTextView
-                    android:id="@+id/lblNCCurrency"
+                    android:id="@+id/lblNCCurrency2"
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:text="UGX" />
             </LinearLayout>
+
+
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCGSWLoanNextRepaymentDate"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="When is the next repayment expected for this loan" />
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    android:id="@+id/txtNCGSWLoanNextRepaymentDate"
+                    style="@style/NormalEditText"
+                    android:layout_width="150dip"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:editable="false"
+                    android:text="" />
         </LinearLayout>
 
     </LinearLayout>
