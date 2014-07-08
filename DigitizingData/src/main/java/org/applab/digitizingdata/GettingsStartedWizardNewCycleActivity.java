@@ -40,6 +40,10 @@ import org.applab.digitizingdata.repo.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+
+
+
 
 /**
  * Created by Moses on 6/27/13.
@@ -47,6 +51,7 @@ import java.util.Calendar;
 public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
     protected boolean _isFromReviewMembers = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,6 +112,9 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                     }
             );
         }
+
+
+
 
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle("GET STARTED");
@@ -211,16 +219,6 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
     }
 
 
-    //Event that is raised when the date has been set
-    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            mYear = year;
-            mMonth = monthOfYear;
-            mDay = dayOfMonth;
-            updateDisplay();
-        }
-    };
-
     @Override
     @Deprecated
     protected void onPrepareDialog(int id, Dialog dialog) {
@@ -231,6 +229,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         dialog.setTitle("Set cycle date");
 
     }
+
 
 
     @Override

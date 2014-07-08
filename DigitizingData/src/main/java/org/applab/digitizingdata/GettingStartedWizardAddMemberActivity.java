@@ -1,6 +1,7 @@
 package org.applab.digitizingdata;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -13,10 +14,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -35,6 +33,9 @@ import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+
+
 
 
 /**
@@ -49,6 +50,23 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     private String dlgTitle = "Add Member";
     protected AlertDialog alertDialog = null;
     private boolean isEditAction;
+
+    TextView viewClicked;
+    protected int mYear;
+    protected int mMonth;
+    protected int mDay;
+
+    TextView txtNCGSWLoanNextRepaymentDate;
+
+    //Event that is raised when the date has been set
+    protected DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            mYear = year;
+            mMonth = monthOfYear;
+            mDay = dayOfMonth;
+            updateDisplay();
+        }
+    };
 
 //    @Override
 //    public void onCreate(Bundle savedInstanceState) {
@@ -154,6 +172,37 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     }
                 }
         );
+
+        txtNCGSWLoanNextRepaymentDate =  (TextView) findViewById(R.id.txtNCGSWLoanNextRepaymentDate);
+
+        //Default next repayment date to a month from now
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, 1);
+        txtNCGSWLoanNextRepaymentDate.setText(Utils.formatDate(cal.getTime(), "dd-MMM-yyyy"));
+
+        mYear = cal.get(Calendar.YEAR);
+        mMonth = cal.get(Calendar.MONTH);
+        mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+
+        txtNCGSWLoanNextRepaymentDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //I want the Event Handler to handle both startDate and endDate
+
+                Date nextRepaymentDate = Utils.stringToDate(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy");
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(nextRepaymentDate);
+                mYear = cal.get(Calendar.YEAR);
+                mMonth = cal.get(Calendar.MONTH);
+                mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+                viewClicked = (TextView) view;
+                DatePickerDialog datePickerDialog = new DatePickerDialog(GettingStartedWizardAddMemberActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                datePickerDialog.setTitle("Set the next repayment date");
+                datePickerDialog.show();
+            }
+        });
         // actionBar.setTitle("New Member");
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -180,6 +229,25 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_ADD_MEMBER);
         }
     }
+
+
+
+
+    protected void updateDisplay() {
+        if (viewClicked != null)
+        {
+            viewClicked.setText(new StringBuilder()
+                    // Month is 0 based so add 1
+                    .append(String.format("%02d", mDay))
+                    .append("-")
+                    .append(Utils.getMonthNameAbbrev(mMonth + 1))
+                    .append("-")
+                    .append(mYear)
+                    .toString());
+        }
+    }
+
+
 
     private void buildGenderSpinner() {
 
@@ -497,6 +565,17 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     return false;
                 } else {
                     member.setOutstandingLoanOnSetup(outstandingLoan);
+                    //set the date of next repayment
+                    if(outstandingLoan > 0 && txtNCGSWLoanNextRepaymentDate.getText().length()==0)
+                    {
+                        displayMessageBox(dlgTitle, "The next repayment date is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
+                        txtNCGSWLoanNextRepaymentDate.requestFocus();
+                        return false;
+
+                    }
+                    else {
+                        member.setDateOfFirstRepayment(Utils.getDateFromString(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy"));
+                    }
                 }
             }
 
@@ -572,6 +651,14 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         txtSavingsSoFar.setText(String.format("%.0f", member.getSavingsOnSetup()));
         TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
         txtLoanAmount.setText(String.format("%.0f", member.getOutstandingLoanOnSetup()));
+
+        //populate the next repayment date
+        if(member.getDateOfFirstRepayment() != null) {
+            txtNCGSWLoanNextRepaymentDate.setText(Utils.formatDate(member.getDateOfFirstRepayment(), "dd-MMM-yyyy"));
+        }
+        else {
+            txtNCGSWLoanNextRepaymentDate.setText(null);
+        }
 
     }
 

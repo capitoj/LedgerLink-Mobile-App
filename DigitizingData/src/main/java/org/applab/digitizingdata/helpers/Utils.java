@@ -13,10 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.NumberFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import android.widget.Spinner;
 import org.applab.digitizingdata.*;
@@ -73,7 +75,19 @@ public class Utils {
     public static final int GETTING_STARTED_PAGE_REVIEW_CYCLE = 6;
     public static final int GETTING_STARTED_PAGE_CONFIRMATION = 7;
 
+    public static Date stringToDate(String dateString, String dateFormat)
+    {
 
+        try
+        {
+            return new SimpleDateFormat(dateFormat, Locale.ENGLISH).parse(dateString);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+            return new Date();
+
+        }
+    }
 
 
     //TODO: will create an enum of CURRENT_VIEW_MODE

@@ -144,10 +144,11 @@ public class MemberRepo {
         MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
         MeetingLoanIssued loanIssuedToMemberInMeeting = meetingLoanIssuedRepo.getLoanIssuedToMemberInMeeting(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
 
-        final Calendar c = Calendar.getInstance();
-        c.setTime(dummyGettingStartedWizardMeeting.getMeetingDate());
-        //c.add(Calendar.MONTH, 1);
-        c.add(Calendar.WEEK_OF_YEAR,4);
+//        final Calendar c = Calendar.getInstance();
+//        c.setTime(dummyGettingStartedWizardMeeting.getMeetingDate());
+//        c.add(Calendar.MONTH, 1);
+//        Date dueDate = c.getTime();
+
 
         if(loanIssuedToMemberInMeeting == null) {
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued not found, so create new record");
@@ -164,7 +165,7 @@ public class MemberRepo {
         String comment = "Unknown";
 
         //Save the loan
-        boolean loanSaveResult = meetingLoanIssuedRepo.saveMemberLoanIssue(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), loanId, member.getOutstandingLoanOnSetup(),interest, c.getTime(), comment);
+        boolean loanSaveResult = meetingLoanIssuedRepo.saveMemberLoanIssue(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), loanId, member.getOutstandingLoanOnSetup(),interest, member.getDateOfFirstRepayment(), comment);
 
         Log.d(context.getPackageName(), "updateMemberLoanOnSetup: Create record for loan on setup, Result:"+loanSaveResult);
 
@@ -175,7 +176,7 @@ public class MemberRepo {
             //Update loan balances
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued record found, update it");
             meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
-            return meetingLoanIssuedRepo.updateMemberLoanBalances(loanIssuedToMemberInMeeting.getLoanId(),0,member.getOutstandingLoanOnSetup(),loanIssuedToMemberInMeeting.getDateDue()) ;
+            return meetingLoanIssuedRepo.updateMemberLoanBalances(loanIssuedToMemberInMeeting.getLoanId(),0,member.getOutstandingLoanOnSetup(),member.getDateOfFirstRepayment()) ;
         }
     }
 
@@ -266,7 +267,13 @@ public class MemberRepo {
 
          //If loan object is null, set the loan on setup as 0
          Log.d(context.getPackageName(), "Loan Issued To Member object is "+loanIssuedToMemberInMeeting);
-         member.setOutstandingLoanOnSetup(loanIssuedToMemberInMeeting == null ? 0 : loanIssuedToMemberInMeeting.getLoanBalance());
+         if(loanIssuedToMemberInMeeting == null) {
+             member.setOutstandingLoanOnSetup(0);
+         } else {
+             member.setOutstandingLoanOnSetup(loanIssuedToMemberInMeeting.getLoanBalance());
+             member.setDateOfFirstRepayment(loanIssuedToMemberInMeeting.getDateDue());
+         }
+
 
          MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
          double memberSaving = meetingSavingRepo.getMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
