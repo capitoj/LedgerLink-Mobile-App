@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-        >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLRHLoanNo"
         style="@style/RegularText"
-            android:id="@+id/txtRLRHLoanNo"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:paddingTop="2dp"
-            android:text="Loan No "/>
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="25dip"
+        android:paddingTop="2dp"
+        android:text="Loan No " />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLRHMeetingDate"
         style="@style/ListSmallSubItems"
-            android:id="@+id/txtRLRHMeetingDate"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtRLRHLoanNo"
-            android:text="Date " />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRLRHLoanNo"
+        android:text="Date " />
 
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLRHAmount"
         style="@style/ListSmallSubItems"
-            android:id="@+id/txtRLRHAmount"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtRLRHMeetingDate"
-            android:text="Amount "/>
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRLRHMeetingDate"
+        android:text="Amount " />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLRHRollover"
         style="@style/ListSmallSubItems"
-            android:id="@+id/txtRLRHRollover"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtRLRHAmount"
-            android:text="Rollover " />
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRLRHAmount"
+        android:text="Rollover " />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLRHComments"
         style="@style/ListSmallSubItems"
-            android:id="@+id/txtRLRHComments"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtRLRHRollover"
-            android:text="Comments "/>
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRLRHRollover"
+        android:text="Comments " />
 </RelativeLayout>

@@ -146,7 +146,8 @@ public class MemberRepo {
 
         final Calendar c = Calendar.getInstance();
         c.setTime(dummyGettingStartedWizardMeeting.getMeetingDate());
-        c.add(Calendar.MONTH, 1);
+        //c.add(Calendar.MONTH, 1);
+        c.add(Calendar.WEEK_OF_YEAR,4);
 
         if(loanIssuedToMemberInMeeting == null) {
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued not found, so create new record");

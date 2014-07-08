@@ -551,7 +551,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             if (null != targetMeeting) {
                 c.setTime(targetMeeting.getMeetingDate());
             }
-            c.add(Calendar.MONTH, 1);
+            c.add(Calendar.WEEK_OF_YEAR, 4);
             dateString = Utils.formatDate(c.getTime());
             viewClicked.setText(dateString);
         }

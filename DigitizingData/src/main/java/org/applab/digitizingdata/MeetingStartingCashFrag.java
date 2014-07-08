@@ -194,6 +194,9 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
         /** If no previous meeting; i.e. fresh Start expected starting Cash = 0;
          *If GSW has recorded cash then the recorded cash should be shown here as a net
          */
+        Log.d("MeetingStartingCashFragTryNet", String.valueOf(netCashThisMeeting));
+        Log.d("MeetingStartingCashFragTryIn", String.valueOf(totalCashInThisCycle));
+        Log.d("MeetingStartingCashFragTryOut", String.valueOf(totalCashOutThisCycle));
         netCashThisMeeting = savingRepo.getTotalSavingsInMeeting(meetingId) + loanRepaymentRepo.getTotalLoansRepaidInMeeting(meetingId) + fineRepo.getTotalFinesInMeeting(meetingId) - loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
         expectedStartingCash = totalCashInThisCycle - totalCashOutThisCycle - netCashThisMeeting;
 
@@ -207,12 +210,12 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
 
         } */
 
-// If starting cash is already saved then prepopulate
+        // If starting cash is already saved then prepopulate
         startingCash = meetingRepo.getMeetingStartingCash(meetingId);
         if (null != startingCash) {
             // lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", (startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BOX) - startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BANK))));
             //expectedStartingCash = startingCash.get(MeetingSchema.COL_MT_CASH_SAVED_BOX);
-            expectedStartingCash = startingCash.getExpectedStartingCash();
+           // expectedStartingCash = startingCash.getExpectedStartingCash();
 
             if ((int) (startingCash.getActualStartingCash()) > 0) {
                 txtActualCashInBox.setText(String.valueOf(startingCash.getActualStartingCash()));
@@ -221,9 +224,9 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
 
         }
 
-        lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", expectedStartingCash));
-        lblActualCashInBox.setText(String.format("Total Cash in Box %.0f UGX", startingCash.getActualStartingCash()));
-        lblCashTakenToBank.setText(String.format("Cash Taken to Bank %.0f UGX", cashTakenToBank));
+        lblExpectedStartingCash.setText(String.format("Expected Starting: Cash %,.0f UGX", expectedStartingCash));
+        lblActualCashInBox.setText(String.format("Total Cash in Box: %,.0f UGX", startingCash.getActualStartingCash()));
+        lblCashTakenToBank.setText(String.format("Cash Taken to Bank: %,.0f UGX", cashTakenToBank));
 
     }
 
@@ -277,7 +280,7 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
     @Override
     public void onTabChanged(String tabId) {
 
-        Log.d("MSC", "onTabChanged(): tabId=" + tabId);
+
 
 
     }

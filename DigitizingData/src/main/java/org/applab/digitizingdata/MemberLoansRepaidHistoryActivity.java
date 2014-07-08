@@ -225,7 +225,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 if(null != targetMeeting) {
                     c.setTime(targetMeeting.getMeetingDate());
                 }
-                c.add(Calendar.MONTH, 1);
+                c.add(Calendar.WEEK_OF_YEAR, 4);
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
@@ -554,7 +554,8 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             Date today = cal.getTime();
 
             Calendar calNext = Calendar.getInstance();
-            calNext.add(Calendar.MONTH,1);
+            //calNext.add(Calendar.MONTH,1);
+            calNext.add(Calendar.WEEK_OF_YEAR,4);
             Date theDateDue = calNext.getTime();
 
             //Check the date against the Meeting Date, not calendar date
@@ -694,7 +695,8 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             if(null != targetMeeting) {
                 c.setTime(targetMeeting.getMeetingDate());
             }
-            c.add(Calendar.MONTH,1);
+            // c.add(Calendar.MONTH,1);
+            c.add(Calendar.WEEK_OF_YEAR,4);
             dateString = Utils.formatDate(c.getTime());
             viewClicked.setText(dateString);
         }

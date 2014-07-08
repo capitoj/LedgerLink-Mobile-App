@@ -217,7 +217,8 @@ public class MeetingLoanRepaymentRepo {
             Date dtNextDateDue = nextDateDue;
             if(dtNextDateDue == null) {
                 Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.MONTH,1);
+                //cal.add(Calendar.MONTH,1);
+                cal.add(Calendar.WEEK_OF_YEAR,4);
                 dtNextDateDue = cal.getTime();
             }
             values.put(LoanRepaymentSchema.COL_LR_NEXT_DATE_DUE, Utils.formatDateToSqlite(dtNextDateDue));
@@ -282,7 +283,8 @@ public class MeetingLoanRepaymentRepo {
             Date dtNextDateDue = nextDateDue;
             if(dtNextDateDue == null) {
                 Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.MONTH,1);
+                // cal.add(Calendar.MONTH,1);
+                cal.add(Calendar.WEEK_OF_YEAR,4);
                 dtNextDateDue = cal.getTime();
             }
             values.put(LoanRepaymentSchema.COL_LR_NEXT_DATE_DUE, Utils.formatDateToSqlite(dtNextDateDue));

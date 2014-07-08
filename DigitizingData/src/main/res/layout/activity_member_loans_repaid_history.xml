@@ -111,7 +111,10 @@
                 android:id="@+id/txtMLRepayHBalance"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
                 android:layout_weight="5"
+                android:inputType="number"
+                android:textAlignment="textEnd"
                 android:text=""
                 android:clickable="true" />
 
@@ -257,7 +260,10 @@
             style="@style/List"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:choiceMode="singleChoice" />
+            android:layout_marginTop="5dip"
+            android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:dividerHeight="0dp"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"

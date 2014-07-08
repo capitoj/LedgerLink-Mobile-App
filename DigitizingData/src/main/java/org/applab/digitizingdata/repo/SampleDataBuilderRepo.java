@@ -233,8 +233,8 @@ public class SampleDataBuilderRepo {
                             //Get Date Due for loans issued today
                             Calendar calDateDue = Calendar.getInstance();
                             calDateDue.setTime(meeting.getMeetingDate());
-                            calDateDue.add(Calendar.MONTH, 1); //since it is on monthly interest.
-
+                            //calDateDue.add(Calendar.MONTH, 1); //since it is on monthly interest.
+                            calDateDue.add(Calendar.WEEK_OF_YEAR, 4);
 
 
                             //Issue the Loan
@@ -341,7 +341,8 @@ public class SampleDataBuilderRepo {
                             //Get Date Due for loans issued today
                             Calendar calDateDue = Calendar.getInstance();
                             calDateDue.setTime(meeting.getMeetingDate());
-                            calDateDue.add(Calendar.MONTH, 1);
+                            //calDateDue.add(Calendar.MONTH, 1);
+                            calDateDue.add(Calendar.WEEK_OF_YEAR, 4);
 
                             //Issue the Loan
                             loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
@@ -394,7 +395,8 @@ public class SampleDataBuilderRepo {
                             double rolloverBalance = balanceAfter + interestAmount;
                             Calendar nextDueDate = Calendar.getInstance();
                             nextDueDate.setTime(meeting.getMeetingDate());
-                            nextDueDate.add(Calendar.MONTH, 1);
+                            //nextDueDate.add(Calendar.MONTH, 1);
+                            nextDueDate.add(Calendar.WEEK_OF_YEAR, 4);
 
                             loanRepaymentSucceeded = repaymentRepo.saveMemberLoanRepayment(meeting.getMeetingId(),memb.getMemberId(), theLoan.getLoanId(),repayAmount,balanceBefore,"ROLLOVER",balanceAfter,interestAmount,rolloverBalance,theLoan.getDateDue(),nextDueDate.getTime());
                             if(loanRepaymentSucceeded) {
@@ -415,7 +417,8 @@ public class SampleDataBuilderRepo {
                         //Get Date Due for loans issued today
                         Calendar calDateDue = Calendar.getInstance();
                         calDateDue.setTime(meeting.getMeetingDate());
-                        calDateDue.add(Calendar.MONTH, 1);
+                        //calDateDue.add(Calendar.MONTH, 1);
+                        calDateDue.add(Calendar.WEEK_OF_YEAR, 4);
 
                         //Issue the Loan
                         loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
@@ -462,8 +465,8 @@ public class SampleDataBuilderRepo {
                         //Get Date Due for loans issued today
                         Calendar calDateDue = Calendar.getInstance();
                         calDateDue.setTime(meeting.getMeetingDate());
-                        calDateDue.add(Calendar.MONTH, 1);
-
+                       // calDateDue.add(Calendar.MONTH, 1);
+                        calDateDue.add(Calendar.WEEK_OF_YEAR, 4);
                         //Issue the Loan
                         loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
                     }
