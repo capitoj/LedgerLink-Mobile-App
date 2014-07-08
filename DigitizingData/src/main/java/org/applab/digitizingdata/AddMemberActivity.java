@@ -6,6 +6,10 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -162,6 +166,9 @@ public class AddMemberActivity extends SherlockActivity {
 
         }
 
+        //To provide formatting for phone numbers
+        final EditText txtAMPhoneNo = (EditText) findViewById(R.id.txtAMPhoneNo);
+        Utils.setAsPhoneNumberInput(txtAMPhoneNo);
     }
 
 
@@ -529,7 +536,7 @@ public class AddMemberActivity extends SherlockActivity {
                 member.setPhoneNumber(null);
             }
             else {
-                member.setPhoneNumber(phoneNo);
+                member.setPhoneNumber(phoneNo.replaceAll(" ", "")); //remove smart formattings
             }
 
             // Validate: Cycles Completed
@@ -621,7 +628,7 @@ public class AddMemberActivity extends SherlockActivity {
             }
             TextView txtPhone = (TextView)findViewById(R.id.txtAMPhoneNo);
             if (member.getPhoneNumber() != null) {
-                txtPhone.setText(member.getPhoneNumber());
+                txtPhone.setText(Utils.splitPhoneNumber(member.getPhoneNumber()));
             }
 
             // Set the age
@@ -825,7 +832,7 @@ public class AddMemberActivity extends SherlockActivity {
         repo = new MemberRepo(getApplicationContext());
         ArrayList<String> ageArrayList = new ArrayList<String>();
         ageArrayList.add("select age");
-        for (int i = 16; i <= 80; i++) {
+        for (int i = 12; i <= 80; i++) {
             ageArrayList.add(i + "");
         }
         String[] ageList = ageArrayList.toArray(new String[ageArrayList.size()]);

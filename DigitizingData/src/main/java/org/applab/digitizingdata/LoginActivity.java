@@ -79,7 +79,10 @@ public class LoginActivity extends SherlockActivity {
             @Override
             public void run()
             {
-                SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+                if(Utils.isExecutingInTrainingMode())
+                {
+                    SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+                }
             }
         };
         //Load this as long running task

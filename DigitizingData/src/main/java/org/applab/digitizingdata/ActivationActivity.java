@@ -175,6 +175,13 @@ public class ActivationActivity extends SherlockActivity {
                 return false;
             }
 
+            //As per requirements, set the passkey length
+            if(passKey.length()<=Integer.parseInt(getResources().getString(R.string.minimum_passkey_length))) {
+                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The passkey should be atleast 5 digits long", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtPassKey.requestFocus();
+                return false;
+            }
+
             if(!passKey.equalsIgnoreCase(confirmPassKey)) {
                 Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The Pass Keys do not match.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
@@ -206,6 +213,13 @@ public class ActivationActivity extends SherlockActivity {
 
             if(passKey.length()<=0) {
                 Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtPassKey.requestFocus();
+                return;
+            }
+
+            //As per requirements, set the passkey length
+            if(passKey.length()<Integer.parseInt(getResources().getString(R.string.minimum_passkey_length))) {
+                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The passkey should be atleast "+getResources().getString(R.string.minimum_passkey_length)+" digits long", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return;
             }
