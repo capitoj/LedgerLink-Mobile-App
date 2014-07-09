@@ -93,6 +93,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             this.selectedMemberId = getIntent().getIntExtra("_id", 0);
         }
         setContentView(R.layout.activity_member_details_view_gettings_started_wizard);
+
         // Set instructions
         TypefaceTextView lblAMInstruction = (TypefaceTextView) findViewById(R.id.lblAMInstruction);
         SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
@@ -100,9 +101,9 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         plusText.setSpan(new StyleSpan(Typeface.BOLD), 0, plusText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         SpannableStringBuilder nextText = new SpannableStringBuilder("done");
         nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        headingInstruction.append("Enter each member. Save and add another member by tapping ");
+        headingInstruction.append("Enter each member. Save and add another member by pressing ");
         headingInstruction.append(plusText);
-        headingInstruction.append("and when you have entered all members, press ");
+        headingInstruction.append("or press ");
         headingInstruction.append(nextText);
         headingInstruction.append(" if you have entered all members.");
         // BEGIN_INCLUDE (inflate_set_custom_view)
