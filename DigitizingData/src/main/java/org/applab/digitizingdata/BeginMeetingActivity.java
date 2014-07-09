@@ -111,7 +111,7 @@ public class BeginMeetingActivity extends SherlockActivity {
             if (pastMeetings.size() > 0) {
 
                 //Setup the Instruction
-                sb = new StringBuilder("Tap <b>Send</b> to send all data for all existing meetings or <b>Begin</b> to begin a new meeting.");
+                sb = new StringBuilder("Press <b>Send</b> to send all data for all existing meetings or <b>Begin</b> to begin a new meeting.");
                 sb.append("You will not be able to edit the current meeting after beginning a new meeting.");
                 tvInstructionsHeader.setText(Html.fromHtml(sb.toString()));
 
@@ -191,7 +191,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                 grpCurrentMeeting.setVisibility(View.GONE);
 
                 // Display the default Instructions
-                sb = new StringBuilder("Tap <b>Begin</b> to begin a new meeting.");
+                sb = new StringBuilder("Press <b>Begin</b> to begin a new meeting.");
 
             }
         }
@@ -207,7 +207,7 @@ public class BeginMeetingActivity extends SherlockActivity {
             grpCurrentMeeting.setVisibility(View.GONE);
 
             //Display the default Instructions
-            sb = new StringBuilder("Tap <b>Begin</b> to begin a new meeting.");
+            sb = new StringBuilder("Press <b>Begin</b> to begin a new meeting.");
 
         }
 
