@@ -205,9 +205,10 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
                 setListAdapter(adapter);
                 Utils.setListViewHeightBasedOnChildren(getListView());
+                getListView().setDivider(null);
             }
         });
-        getListView().setDivider(null);
+
         // listening to single list item on click
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,

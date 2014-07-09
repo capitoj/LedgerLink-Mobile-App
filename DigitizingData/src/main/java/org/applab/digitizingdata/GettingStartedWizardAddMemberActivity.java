@@ -6,8 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.telephony.PhoneNumberUtils;
+import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
@@ -94,12 +98,13 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
         SpannableStringBuilder plusText = new SpannableStringBuilder("+ ");
         plusText.setSpan(new StyleSpan(Typeface.BOLD), 0, plusText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder nextText = new SpannableStringBuilder("next.");
+        SpannableStringBuilder nextText = new SpannableStringBuilder("done");
         nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         headingInstruction.append("Enter each member. Save and add another member by tapping ");
         headingInstruction.append(plusText);
-        headingInstruction.append("and when you have entered all members, tap ");
+        headingInstruction.append("and when you have entered all members, press ");
         headingInstruction.append(nextText);
+        headingInstruction.append(" if you have entered all members.");
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
@@ -228,6 +233,13 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
             vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_ADD_MEMBER);
         }
+
+        //To provide formatting for phone numbers
+        final EditText txtAMPhoneNo = (EditText) findViewById(R.id.txtAMPhoneNo);
+        Utils.setAsPhoneNumberInput(txtAMPhoneNo);
+        //PhoneNumberFormattingTextWatcher phoneNumberFormattingTextWatcher = new PhoneNumberFormattingTextWatcher();
+        //txtAMPhoneNo.addTextChangedListener(phoneNumberFormattingTextWatcher);
+
     }
 
 
@@ -499,7 +511,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 //return false;
                 member.setPhoneNumber(null);
             } else {
-                member.setPhoneNumber(phoneNo);
+                member.setPhoneNumber(phoneNo.replaceAll(" ", "")); //remove smart formattings
             }
 
             // Validate: Cycles Completed
@@ -536,9 +548,10 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
             String savings = txtSavingsSoFar.getText().toString().trim();
             if (savings.length() < 1) {
-                displayMessageBox(dlgTitle, "Total Amount this Member has Saved in Current Cycle so far is Required", Utils.MSGBOX_ICON_EXCLAMATION);
-                txtSavingsSoFar.requestFocus();
-                return false;
+//                displayMessageBox(dlgTitle, "Total Amount this Member has Saved in Current Cycle so far is Required", Utils.MSGBOX_ICON_EXCLAMATION);
+//                txtSavingsSoFar.requestFocus();
+//                return false;
+                member.setSavingsOnSetup(0);
             } else {
                 double amountSavedSoFar = Double.parseDouble(savings);
                 if (amountSavedSoFar < 0.00) {
@@ -554,9 +567,10 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
             String loanAmount = txtLoanAmount.getText().toString().trim();
             if (loanAmount.length() < 1) {
-                displayMessageBox(dlgTitle, "Total Amount of this Member's Regular Loan Outstanding is Required", Utils.MSGBOX_ICON_EXCLAMATION);
-                txtLoanAmount.requestFocus();
-                return false;
+//                displayMessageBox(dlgTitle, "Total Amount of this Member's Regular Loan Outstanding is Required", Utils.MSGBOX_ICON_EXCLAMATION);
+//                txtLoanAmount.requestFocus();
+//                return false;
+                member.setOutstandingLoanOnSetup(0);
             } else {
                 double outstandingLoan = Double.parseDouble(loanAmount);
                 if (outstandingLoan < 0.00) {
@@ -672,6 +686,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         txtSavingsSoFar.setText(null);
         TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
         txtLoanAmount.setText(null);
+
 
     }
 

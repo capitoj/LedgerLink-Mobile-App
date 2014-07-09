@@ -166,7 +166,10 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         headingInstruction.append(nextText);
         headerText.setText(headingInstruction);
 
-
+        //The heading
+        TextView lblNewCycleHeading = (TextView) findViewById(R.id.lblNewCycleHeading);
+        //this should only be shown in review action
+        lblNewCycleHeading.setVisibility(_isFromReviewMembers ? View.VISIBLE : View.GONE);
 
         if (isUpdateCycleAction) {
             //Setup the Fields by getting the current Cycle
@@ -175,7 +178,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             if (_isFromReviewMembers) {
                 //TextView heading = (TextView) findViewById(R.id.lblNewCycleHeading);
                 //heading.setText("Review Cycle Information");
-
+                lblNewCycleHeading.setText("Review Cycle information");
                 headerText = (TypefaceTextView) findViewById(R.id.lblNCHeading);
                 headerText.setText("Review and confirm that all information is correct. Correct any errors.");
             }
@@ -374,9 +377,10 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             TextView txtInterestCollected = (TextView) findViewById(R.id.txtNCInterestCollectedSoFar);
             String interestCollected = txtInterestCollected.getText().toString().trim();
             if (interestCollected.length() < 1) {
-                displayMessageBox(dialogTitle, "The Interest Collected Is Required", Utils.MSGBOX_ICON_EXCLAMATION);
-                txtInterestCollected.requestFocus();
-                return false;
+                //displayMessageBox(dialogTitle, "The Interest Collected Is Required", Utils.MSGBOX_ICON_EXCLAMATION);
+                //txtInterestCollected.requestFocus();
+                //return false;
+                cycle.setInterestAtSetup(0);
             } else {
                 double theInterestCollected = Double.parseDouble(interestCollected);
                 if (theInterestCollected < 0.00) {
@@ -393,9 +397,10 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             TextView txtFinesCollected = (TextView) findViewById(R.id.txtNCFinesCollectedSoFar);
             String finesCollected = txtFinesCollected.getText().toString().trim();
             if (finesCollected.length() < 1) {
-                displayMessageBox(dialogTitle, "The Fines Collected Field Is Required", Utils.MSGBOX_ICON_EXCLAMATION);
-                txtFinesCollected.requestFocus();
-                return false;
+//                displayMessageBox(dialogTitle, "The Fines Collected Field Is Required", Utils.MSGBOX_ICON_EXCLAMATION);
+//                txtFinesCollected.requestFocus();
+//                return false;
+                cycle.setFinesAtSetup(0);
             } else {
                 double theFinesCollected = Double.parseDouble(finesCollected);
                 if (theFinesCollected < 0.00) {

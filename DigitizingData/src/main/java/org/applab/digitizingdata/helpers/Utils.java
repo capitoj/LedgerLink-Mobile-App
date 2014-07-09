@@ -7,11 +7,11 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+import android.widget.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +20,6 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import android.widget.Spinner;
 import org.applab.digitizingdata.*;
 
 /**
@@ -87,6 +86,58 @@ public class Utils {
             return new Date();
 
         }
+    }
+
+    public static void setAsPhoneNumberInput(final EditText editText) {
+        editText.addTextChangedListener(new TextWatcher() {
+            int len=0;
+            @Override
+            public void afterTextChanged(Editable s) {
+                String str = editText.getText().toString().replaceAll(" ", "");
+                int s1 = str.length()%4;
+                if(str.length()%4==0 && len <str.length()){//len check for backspace
+                    editText.append(" ");
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+
+                String str = editText.getText().toString().replaceAll(" ", "");;
+                len = str.length();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+
+        });
+    }
+
+    public static String splitPhoneNumber(String phone) {
+        return insertPeriodically(phone, " ", 4);
+    }
+
+    public static String insertPeriodically(
+            String text, String insert, int period)
+    {
+        StringBuilder builder = new StringBuilder(
+                text.length() + insert.length() * (text.length()/period)+1);
+
+        int index = 0;
+        String prefix = "";
+        while (index < text.length())
+        {
+            // Don't put the insert in the very first iteration.
+            // This is easier than appending it *after* each substring
+            builder.append(prefix);
+            prefix = insert;
+            builder.append(text.substring(index,
+                    Math.min(index + period, text.length())));
+            index += period;
+        }
+        return builder.toString();
     }
 
 
