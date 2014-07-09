@@ -51,6 +51,9 @@ public class NewCycleActivity extends SherlockActivity {
     protected int mYear;
     protected int mMonth;
     protected int mDay;
+    protected int mEndYear;
+    protected int mEndMonth;
+    protected int mEndDay;
     protected String dialogTitle = "New Cycle";
     protected AlertDialog alertDialog = null;
     protected boolean successAlertDialogShown = false;
@@ -89,7 +92,7 @@ public class NewCycleActivity extends SherlockActivity {
         txtStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //I want the Event Handler to handle both startDate and endDate
+                // I want the Event Handler to handle both startDate and endDate
                 viewClicked = (TextView) view;
                 settingStartDate = true;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(NewCycleActivity.this, mDateSetListener, mYear, mMonth, mDay);
@@ -104,7 +107,7 @@ public class NewCycleActivity extends SherlockActivity {
             public void onClick(View view) {
                 viewClicked = (TextView) view;
                 settingStartDate = false;
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NewCycleActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(NewCycleActivity.this, mDateSetListener, mEndYear, mEndMonth, mEndDay);
                 datePickerDialog.setTitle("Set cycle end date");
                 datePickerDialog.show();
             }
@@ -139,6 +142,11 @@ public class NewCycleActivity extends SherlockActivity {
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                c.setTime(selectedCycle.getEndDate());
+                mEndYear = c.get(Calendar.YEAR);
+                mEndMonth = c.get(Calendar.MONTH);
+                mEndDay = c.get(Calendar.DAY_OF_MONTH);
             } else {
                 TextView txtInstructions = (TextView) findViewById(R.id.lblNCHeader);
                 txtInstructions.setText(new StringBuilder()
@@ -258,10 +266,10 @@ public class NewCycleActivity extends SherlockActivity {
         c.add(Calendar.YEAR, 1);
         //deduct 1 day
         c.add(Calendar.DATE, -1);
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-        updateDisplay(txtEndDate, mYear, mMonth + 1, mDay);
+        mEndYear = c.get(Calendar.YEAR);
+        mEndMonth = c.get(Calendar.MONTH);
+        mEndDay = c.get(Calendar.DAY_OF_MONTH);
+        updateDisplay(txtEndDate, mEndYear, mEndMonth + 1, mEndDay);
     }
 
     //Event that is raised when the date has been set
