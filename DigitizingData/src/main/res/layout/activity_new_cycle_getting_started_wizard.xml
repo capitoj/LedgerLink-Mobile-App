@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="-10dip"
                 android:focusable="true"
-                android:lineSpacingMultiplier="0.8"
+                android:lineSpacingMultiplier="1.0"
                 android:text="Review Cycle Information "
                 android:textStyle="bold" />
             <requestFocus />
