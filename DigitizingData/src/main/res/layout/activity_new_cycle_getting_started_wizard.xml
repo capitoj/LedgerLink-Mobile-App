@@ -15,11 +15,17 @@
             android:layout_marginTop="10dip"
             android:orientation="vertical">
 
-               <org.applab.digitizingdata.fontutils.TypefaceTextView
-                   android:id="@+id/lblNewCycleHeading"
-                   style="@style/RegularHeading"
-                   android:layout_width="fill_parent"
-                   android:layout_height="wrap_content" />
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblNewCycleHeading"
+                style="@style/RegularHeading"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="-10dip"
+                android:focusable="true"
+                android:lineSpacingMultiplier="0.8"
+                android:text="Review Cycle Information "
+                android:textStyle="bold" />
+            <requestFocus />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblNCHeading"
