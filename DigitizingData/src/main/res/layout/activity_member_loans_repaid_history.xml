@@ -228,7 +228,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:inputType="textCapCharacters"
+            android:inputType="text"
             android:textAlignment="viewEnd"
             android:text="" />
 
