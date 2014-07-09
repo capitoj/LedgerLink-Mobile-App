@@ -77,12 +77,16 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         //Set savings in GSW meeting
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getBaseContext());
         TextView lblRvwMembersTotalSavings = (TextView) findViewById(R.id.lblRvwMembersTotalSavings);
-        lblRvwMembersTotalSavings.setText(String.format("Total savings this cycle %,.0f UGX", meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId())));
+        lblRvwMembersTotalSavings.setText(String.format("Total savings this cycle %,.0f %s",
+                                            meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId()),
+                                            getResources().getString(R.string.operating_currency)));
 
         //Set loans issued in GSW meeting
         MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(getBaseContext());
         TextView lblRvwMembersTotalLoan = (TextView) findViewById(R.id.lblRvwMembersTotalLoan);
-        lblRvwMembersTotalLoan.setText(String.format("Total loans outstanding %,.0f UGX", meetingLoanIssuedRepo.getTotalLoansIssuedInMeeting(dummyGettingStartedWizardMeeting.getMeetingId())));
+        lblRvwMembersTotalLoan.setText(String.format("Total loans outstanding %,.0f %s",
+                meetingLoanIssuedRepo.getTotalLoansIssuedInMeeting(dummyGettingStartedWizardMeeting.getMeetingId()),
+                getResources().getString(R.string.operating_currency)));
 
 
 

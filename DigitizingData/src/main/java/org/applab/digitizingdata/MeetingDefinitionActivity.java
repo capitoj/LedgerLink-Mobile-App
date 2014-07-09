@@ -75,6 +75,9 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         //Setup the Fields by getting the current Cycle
         VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
 
+        //The multiple cycle text view
+        TextView lblMDMultipleCycles = (TextView) findViewById(R.id.lblMDMultipleCycles);
+
         //Deal with the radio buttons
         RadioGroup grpCycleDates = (RadioGroup)findViewById(R.id.grpMDExistingCycles);
 
@@ -108,6 +111,12 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             if(activeCycles.size() == 1) {
                 if(selectedCycle == null) {
                     selectedCycle = activeCycles.get(0);
+
+                    //Since only one cycle is active, hide radio group and multiple cycles text
+                    grpCycleDates.setVisibility(View.GONE);
+
+                    lblMDMultipleCycles.setVisibility(View.GONE);
+
                 }
 
 //                txtInstructions.setText(new StringBuilder()
@@ -157,7 +166,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         //sb.append("To return to the main menu without starting a new meeting, select <b><i>cancel</i></b>. ");
         //sb.append("If necessary, tap date to select a date in the past. You may not select a date in the future.");
 
-        StringBuilder sb = new StringBuilder("View the date below and tap it to change if it is not the correct meeting date. (You may not select a date in the future.) Tap the arrow above to begin the meeting.");
+        StringBuilder sb = new StringBuilder("View the date below and tap it to change if it is not the correct meeting date. (You may not select a date in the future.) Press next to begin the meeting.");
 
         TextView txtInstructions = (TextView)findViewById(R.id.lblMDHeader);
         txtInstructions.setText(Html.fromHtml(sb.toString()));
@@ -245,6 +254,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT)
         );
+        actionBar.setDisplayHomeAsUpEnabled(true); //enable caret on icon
     }
 
     //Event that is raised when the date has been set

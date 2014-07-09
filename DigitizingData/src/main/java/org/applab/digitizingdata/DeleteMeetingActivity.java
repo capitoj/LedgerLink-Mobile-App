@@ -92,16 +92,16 @@ public class DeleteMeetingActivity extends SherlockActivity {
             double totalLoansRepaidInMeeting = 0.0;
 
             totalMeetingSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
-            txtSavings.setText(String.format("Savings: %,.0f UGX", totalMeetingSavings));
+            txtSavings.setText(String.format("Savings: %,.0f %s", totalMeetingSavings, getResources().getString(R.string.operating_currency)));
 
             totalLoansRepaidInMeeting = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
-            txtLoanRepayments.setText(String.format("Loans repaid: %,.0f UGX", totalLoansRepaidInMeeting));
+            txtLoanRepayments.setText(String.format("Loans repaid: %,.0f %s", totalLoansRepaidInMeeting, getResources().getString(R.string.operating_currency)));
 
             totalFinesCollected = fineRepo.getTotalFinesInMeeting(meetingId);
-            txtFines.setText(String.format("Fines: %,.0f UGX", totalFinesCollected));
+            txtFines.setText(String.format("Fines: %,.0f %s", totalFinesCollected, getResources().getString(R.string.operating_currency)));
 
             totalLoansIssuedInMeeting = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
-            txtLoanIssues.setText(String.format("Loans issued: %,.0f UGX", totalLoansIssuedInMeeting));
+            txtLoanIssues.setText(String.format("Loans issued: %,.0f %s", totalLoansIssuedInMeeting, getResources().getString(R.string.operating_currency)));
         }
         else {
             txtAttendedCount.setText("");
