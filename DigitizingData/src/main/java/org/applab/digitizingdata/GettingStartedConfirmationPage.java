@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -40,28 +41,30 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getting_started_wizard_is_everything_correct);
+
         inflateCustombar();
-        actionBar = getSupportActionBar();
+
+      /**  actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false); //Please leave this as false, it will be enabled on confirmation
         actionBar.setTitle("GET STARTED");
-
+*/
         // Set instructions
         TypefaceTextView lblConfirmationText = (TypefaceTextView) findViewById(R.id.lblConfirmationText);
 
-        SpannableString doneText = new SpannableString("done ");
-        doneText.setSpan(new StyleSpan(Typeface.BOLD), 0, doneText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString doneText = new SpannableString("done");
+        // doneText.setSpan(new StyleSpan(Typeface.BOLD), 0, doneText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        SpannableString cancelText = new SpannableString("cancel ");
-        cancelText.setSpan(new StyleSpan(Typeface.BOLD), 0, cancelText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableString backText = new SpannableString("back");
+        // backText.setSpan(new StyleSpan(Typeface.BOLD), 0, backText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         SpannableStringBuilder instruction = new SpannableStringBuilder();
-        instruction.append("If you are satisfied that all information is correct, please tap ");
+        instruction.append("If you are satisfied that all information is correct, please press <b> ");
         instruction.append(doneText);
-        instruction.append("otherwise tap ");
-        instruction.append(cancelText);
-        instruction.append(" to revise information.");
+        instruction.append("</b> otherwise press <b>");
+        instruction.append(backText);
+        instruction.append("</b> to revise information.");
 
-        lblConfirmationText.setText(instruction);
+        lblConfirmationText.setText(Html.fromHtml(instruction.toString()));
 
         VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
         vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_CONFIRMATION);
@@ -104,7 +107,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         if (updateStatus) {
             //Update text
             TextView heading = (TextView) findViewById(R.id.lblConfirmationHeading);
-            heading.setText("Thank You!");
+            heading.setText("Thank you!");
 
             TextView content = (TextView) findViewById(R.id.lblConfirmationText);
             content.setText("You have entered all information about your savings group and the current cycle. You may now use the phone at every meeting to enter savings and loan activity.");
@@ -114,8 +117,8 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
 
 
-            //TODO: hide cancel menu button
-            customActionBarView.findViewById(R.id.actionbar_cancel).setVisibility(View.GONE);
+            //TODO: hide back menu button
+            customActionBarView.findViewById(R.id.actionbar_back).setVisibility(View.GONE);
             customActionBarView.findViewById(R.id.actionbar_done).setVisibility(View.GONE);
 
 
@@ -130,7 +133,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back_done, null);
 
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                 new View.OnClickListener() {
@@ -141,7 +144,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
                 }
         );
 
-        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+        customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

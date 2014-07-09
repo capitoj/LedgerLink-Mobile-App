@@ -13,7 +13,7 @@
             style="@style/RegularHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Is Everything Correct?"
+            android:text="Is everything correct?"
             android:layout_marginBottom="20dip"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -21,7 +21,7 @@
             style="@style/RegularTextInstruction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="If you are satisfied that all information is correct, please tap done, otherwise tap cancel to revise information"
+            android:text="If you are satisfied that all information is correct, please press done, otherwise press back to revise information"
 
             />
 
