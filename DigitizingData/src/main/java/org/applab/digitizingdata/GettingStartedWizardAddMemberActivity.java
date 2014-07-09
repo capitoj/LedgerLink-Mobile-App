@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
+import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextWatcher;
@@ -98,14 +99,19 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         TypefaceTextView lblAMInstruction = (TypefaceTextView) findViewById(R.id.lblAMInstruction);
         SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
         SpannableStringBuilder plusText = new SpannableStringBuilder("+ ");
-        plusText.setSpan(new StyleSpan(Typeface.BOLD), 0, plusText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+       // plusText.setSpan(new StyleSpan(Typeface.BOLD), 0, plusText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         SpannableStringBuilder nextText = new SpannableStringBuilder("done");
-        nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        headingInstruction.append("Enter each member. Save and add another member by pressing ");
+        //nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        headingInstruction.append("Enter each member. Save and add another member by pressing <b>");
         headingInstruction.append(plusText);
-        headingInstruction.append("or press ");
+        headingInstruction.append("</b> or press <b>");
         headingInstruction.append(nextText);
-        headingInstruction.append(" if you have entered all members.");
+        headingInstruction.append("</b> if you have entered all members.");
+
+      //  sb = new StringBuilder("Enter each member. Save and add another member by pressing <b>Send</b> to send all data for all existing meetings or <b>Begin</b> to begin a new meeting.");
+        //sb.append("You will not be able to edit the current meeting after beginning a new meeting.");
+       // tvInstructionsHeader.setText(Html.fromHtml(headingInstruction.toString()));
+
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
@@ -222,7 +228,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
         actionBar.setDisplayShowCustomEnabled(true);
 
-        lblAMInstruction.setText(headingInstruction);
+        lblAMInstruction.setText(Html.fromHtml(headingInstruction.toString()));
         cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         clearDataFields();
         if (isEditAction) {
