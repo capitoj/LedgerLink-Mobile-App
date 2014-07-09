@@ -152,14 +152,14 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             public void onClick(View view) {
                 viewClicked = (TextView) view;
                 settingStartDate = false;
-                DatePickerDialog datePickerDialog = new DatePickerDialog(GettingsStartedWizardNewCycleActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(GettingsStartedWizardNewCycleActivity.this, mDateSetListener, mEndYear, mEndMonth, mEndDay);
                 datePickerDialog.setTitle("Set cycle end date");
                 datePickerDialog.show();
             }
         });
 
         TypefaceTextView headerText = (TypefaceTextView) findViewById(R.id.lblNCHeading);
-        SpannableStringBuilder headingInstruction = new SpannableStringBuilder("Enter all cycle information then tap ");
+        SpannableStringBuilder headingInstruction = new SpannableStringBuilder("Enter all cycle information then press ");
         SpannableString nextText = new SpannableString("next.");
         nextText.setSpan(new StyleSpan(Typeface.BOLD), 0,nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -190,12 +190,16 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                 populateDataFields(selectedCycle);
 
                 //Set the fields required by the DatePicker
-                //TODO: Will find a way of setting defaults for both dates accordingly
                 final Calendar c = Calendar.getInstance();
                 c.setTime(selectedCycle.getStartDate());
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                c.setTime(selectedCycle.getEndDate());
+                mEndYear = c.get(Calendar.YEAR);
+                mEndMonth = c.get(Calendar.MONTH);
+                mEndDay = c.get(Calendar.DAY_OF_MONTH);
 
                 //Set current GSW stage
                 VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
