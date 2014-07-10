@@ -64,7 +64,7 @@ public class AddMemberActivity extends SherlockActivity {
         initializeActivity();
     }
 
-    //This method initialized this activity
+    //This method initializes this activity
     //It is overiden in GSW Add member activity so as to load the relevant layout
     protected void initializeActivity()
     {
@@ -628,7 +628,7 @@ public class AddMemberActivity extends SherlockActivity {
             }
             TextView txtPhone = (TextView)findViewById(R.id.txtAMPhoneNo);
             if (member.getPhoneNumber() != null) {
-                txtPhone.setText(Utils.splitPhoneNumber(member.getPhoneNumber()));
+                txtPhone.setText(Utils.formatAsPhoneNumber(member.getPhoneNumber()));
             }
 
             // Set the age

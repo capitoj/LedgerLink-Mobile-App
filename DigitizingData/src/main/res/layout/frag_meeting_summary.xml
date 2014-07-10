@@ -32,6 +32,10 @@
 
 
         <!-- <View style="@style/Divider"/> -->
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:id="@+id/lblMSFPastmeetingSection">
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMSFSection2"
             style="@style/SubHeading"
@@ -132,6 +136,7 @@
                 android:id="@+id/lblMSFCashToBank"
                 android:layout_gravity="left"/>
       -->
+        </LinearLayout>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMSFSection1"

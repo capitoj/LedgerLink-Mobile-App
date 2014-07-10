@@ -859,7 +859,7 @@ public class MeetingRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             String columnList = MeetingSchema.getColumnList();
 
-            // Select All Query
+            // Select All Query,
             String selectQuery = String.format("SELECT %s FROM %s WHERE date(%s)='%s' AND %s=%d ORDER BY %s DESC LIMIT 1", columnList, MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_MEETING_DATE, Utils.formatDate(theMeetingDate, "yyyy-MM-dd"),
                     MeetingSchema.COL_MT_CYCLE_ID, vslaCycleId,

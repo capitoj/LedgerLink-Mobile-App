@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -30,6 +31,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
     private int previousMeetingId = 0;
     MeetingRepo meetingRepo;
     private MeetingActivity parentActivity;
+    ScrollView fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +46,8 @@ public class MeetingSummaryFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        return inflater.inflate(R.layout.frag_meeting_summary, container, false);
+        fragmentView = (ScrollView)  inflater.inflate(R.layout.frag_meeting_summary, container, false);
+        return fragmentView;
     }
 
     @Override
@@ -186,6 +189,10 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
 
         } else {
+            //Hide the view altogether
+
+            LinearLayout lblMSFPastmeetingSection = (LinearLayout) fragmentView.findViewById(R.id.lblMSFPastmeetingSection);
+            lblMSFPastmeetingSection.setVisibility(View.GONE);
             txtAttendedCount.setText("");
             txtDataSent.setText("");
             txtTotalCollections.setText("");

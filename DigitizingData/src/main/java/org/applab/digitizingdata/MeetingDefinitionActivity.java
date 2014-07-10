@@ -455,9 +455,14 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             Meeting mostRecent = repo.getMostRecentMeetingInCycle(selectedCycle.getCycleId());
 
             //First: Check whether a meeting with this date exists in the given vsla cycle
+            //Only dont proceed if a meeting on this date is found, and is non GSW
             meetingOfSameDate = null;
             meetingOfSameDate = repo.getMeetingByDate(meeting.getMeetingDate(), selectedCycle.getCycleId());
             if(null != meetingOfSameDate) {
+                if(meetingOfSameDate.isGettingStarted()) {
+                    //return true to force creating of this new meeting
+                    return true;
+                }
                 //Pull the Meeting and display it instead of saving a new meeting
                 //cancel the save operation
                return false;
