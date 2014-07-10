@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.applab.digitizingdata.MemberLoansIssuedHistoryActivity;
 import org.applab.digitizingdata.R;
+import org.applab.digitizingdata.repo.MeetingFineRepo;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 
@@ -34,6 +36,8 @@ public class LoansIssuedHistoryArrayAdapter extends ArrayAdapter<MemberLoanIssue
         this.context = context;
         this.values = values;
         this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+
+        loanRepaymentRepo = new MeetingLoanRepaymentRepo(getContext());
     }
 
     @Override
@@ -46,7 +50,6 @@ public class LoansIssuedHistoryArrayAdapter extends ArrayAdapter<MemberLoanIssue
             rowView = inflater.inflate(R.layout.row_loans_issued_history, parent, false);
 
             //Get the Widgets
-
             TextView txtPastLoanSummary = (TextView) rowView.findViewById(R.id.txtRLIHPastLoanSummary);
 
             // TextView txtAmount = (TextView)rowView.findViewById(R.id.txtRLIHAmount);
@@ -60,15 +63,6 @@ public class LoansIssuedHistoryArrayAdapter extends ArrayAdapter<MemberLoanIssue
             // txtComment.setTypeface(typeface);
             // txtDateCleared.setTypeface(typeface); */
 
-            /**
-             * TODO: Add code to get the loan repayment comment for now we'll use "GOOD"
-             if (loanRepaymentRepo == null) {
-             loanRepaymentRepo = new MeetingLoanRepaymentRepo(MemberLoansIssuedHistoryActivity.this);
-             }
-             loansIssued = loanIssuedRepo.getMemberMostRecentLoanRepayment(targetCycleId, memberId);
-             */
-            loanRepaymentProgressComment = "GOOD";
-
             StringBuilder summary = new StringBuilder("");
 
             //Assign Values to the Widgets
@@ -77,20 +71,13 @@ public class LoansIssuedHistoryArrayAdapter extends ArrayAdapter<MemberLoanIssue
                 // txtMeetingDate.setText(String.format("Issued On: %s",Utils.formatDate(loanRecord.getMeetingDate(),Utils.DATE_FIELD_FORMAT)));
                 // txtLoanNo.setText(String.format("Loan No: %d", loanRecord.getLoanNo()));
                 // txtAmount.setText(String.format("%,.0fUGX  ", loanRecord.getPrincipalAmount()));
-                if (loanRecord.isCleared()) {
-                    loanRepaymentProgressComment = "Excellent";
-                    // dateCleared = txtComment.setText(String.format("Loan paid"));
-                    // txtDateCleared.setText(String.format("paid %s ", Utils.formatDate(loanRecord.getDateCleared(),Utils.DATE_FIELD_FORMAT)));
-                    txtPastLoanSummary.setText(String.format("%,.0fUGX  paid %s  %s", loanRecord.getPrincipalAmount(), Utils.formatDate(loanRecord.getDateCleared(), Utils.DATE_FIELD_FORMAT), loanRepaymentProgressComment));
-                } else {
-                    // txtComment.setText(loanRepaymentProgressComment);
-                    //TODO: Confirm whether we capture Due Date for Loans and use it here
-                    // txtDateCleared.setText(String.format("due %s ", Utils.formatDate(loanRecord.getDateDue(),Utils.DATE_FIELD_FORMAT)));                }
-                    txtPastLoanSummary.setText(String.format("%,.0fUGX  due %s  %s", loanRecord.getPrincipalAmount(), Utils.formatDate(loanRecord.getDateDue(), Utils.DATE_FIELD_FORMAT), loanRepaymentProgressComment));
+                loanRepaymentProgressComment = loanRepaymentRepo.getMemberRepaymentCommentByLoanId(loanRecord.getLoanId());
 
+                if (!loanRecord.getLastRepaymentComment().isEmpty()) {
+                    loanRepaymentProgressComment = loanRecord.getLastRepaymentComment();
                 }
+                txtPastLoanSummary.setText(String.format("%,.0fUGX  paid %s  %s", loanRecord.getPrincipalAmount(), Utils.formatDate(loanRecord.getDateCleared(), Utils.DATE_FIELD_FORMAT), loanRepaymentProgressComment));
             }
-
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

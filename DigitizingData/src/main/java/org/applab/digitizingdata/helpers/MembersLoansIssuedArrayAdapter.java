@@ -107,13 +107,14 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
             }
             else {
                 for(MeetingLoanIssued loanIssue : loansIssued){
-                    if(loanIssue.getComment()== null || loanIssue.getComment().length()==0){
-                       comment = "N/A";
+                    if(loanIssue.getComment()== null || loanIssue.getComment().trim().length()==0){
+                        aggregate.append(String.format("Outstanding loan  %,.0f UGX", loanIssue.getLoanBalance()));
                     }
                     else{
                         comment = loanIssue.getComment();
+                        aggregate.append(String.format("Outstanding loan  %,.0f UGX \n%s", loanIssue.getLoanBalance(), comment));
                     }
-                    aggregate.append(String.format("Outstanding loan  %,.0f UGX \n%s \n", loanIssue.getLoanBalance(), comment));
+
                 }
 
                txtOutstanding.setText(aggregate.toString());
@@ -147,8 +148,6 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member>  {
                 totalSavingsByMember = savingRepo.getMemberTotalSavingsInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
           //  txtTotalSavings.setText(String.format("Total Savings: %,.0fUGX", totalSavingsByMember));
-
-
 
             return rowView;
         }

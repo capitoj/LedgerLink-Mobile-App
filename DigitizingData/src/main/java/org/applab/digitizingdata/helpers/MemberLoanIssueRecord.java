@@ -16,6 +16,7 @@ public class MemberLoanIssueRecord {
     boolean isCleared;
     Date dateCleared;
     Date dateDue;
+    private String lastRepaymentComment;
 
     public double getInterestAmount() {
         return interestAmount;
@@ -96,4 +97,14 @@ public class MemberLoanIssueRecord {
     public void setDateCleared(Date dateCleared) {
         this.dateCleared = dateCleared;
     }
+
+    public String getLastRepaymentComment() {
+        return lastRepaymentComment;
+    }
+
+    public void setLastRepaymentComment(String lastRepaymentComment) {
+        this.lastRepaymentComment = lastRepaymentComment;
+    }
+
+
 }

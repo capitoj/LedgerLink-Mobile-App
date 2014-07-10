@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -78,7 +79,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
         setContentView(R.layout.activity_member_loans_issued_history);
 
-       // TextView lblMeetingDate = (TextView) findViewById(R.id.lblMLIssuedHMeetingDate);
+        // TextView lblMeetingDate = (TextView) findViewById(R.id.lblMLIssuedHMeetingDate);
         meetingDate = getIntent().getStringExtra("_meetingDate");
         //lblMeetingDate.setText(meetingDate);
 
@@ -336,8 +337,8 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             loansIssued = new ArrayList<MemberLoanIssueRecord>();
         }
 
-        if (loansIssued.isEmpty()){
-           pastLoansHeading.setVisibility(View.INVISIBLE);
+        if (loansIssued.isEmpty()) {
+            pastLoansHeading.setVisibility(View.INVISIBLE);
         }
 
         //Now get the data via the adapter
@@ -444,16 +445,13 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
             String comment = txtComment.getText().toString().trim();
             if (comment.length() < 1) {
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Comment is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtComment.requestFocus();
-                return false;
-            }
-            else{
+                theComment = "";
+            } else {
                 theComment = comment;
             }
 
-             //Interest Amount
-             theInterestAmount = (interestRate * 0.01 * theAmount);
+            //Interest Amount
+            theInterestAmount = (interestRate * 0.01 * theAmount);
             /** String interestAmount = txtInterestAmount.getText().toString().trim();
              if (interestAmount.length() < 1) {
              //Not sure whether there would be more to do

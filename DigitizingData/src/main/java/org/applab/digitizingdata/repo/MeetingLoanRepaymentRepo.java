@@ -142,6 +142,40 @@ public class MeetingLoanRepaymentRepo {
         }
     }
 
+    public String getMemberRepaymentCommentByLoanId(int loanId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        String repaymentComment = "";
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
+                    LoanRepaymentSchema.COL_LR_COMMENTS, LoanRepaymentSchema.getTableName(),
+                    LoanRepaymentSchema.COL_LR_MEETING_ID, loanId,
+                    LoanRepaymentSchema.COL_LR_REPAYMENT_ID);
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                repaymentComment = cursor.getString(cursor.getColumnIndex(LoanRepaymentSchema.COL_LR_COMMENTS));
+            }
+            return repaymentComment;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingLoanRepaymentRepo.getMemberRepaymentId", ex.getMessage());
+            return repaymentComment;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     public int getMemberRepaymentId(int meetingId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;

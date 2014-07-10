@@ -11,6 +11,7 @@ import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.schema.LoanIssueSchema;
+import org.applab.digitizingdata.domain.schema.LoanRepaymentSchema;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.MemberLoanIssueRecord;
@@ -153,12 +154,53 @@ public class MeetingLoanIssuedRepo {
 
             if (cursor != null && cursor.moveToFirst()) {
                 loanBalance = cursor.getDouble(cursor.getColumnIndex("LoanBalance"));
+
             }
 
             return loanBalance;
         } catch (Exception ex) {
             Log.e("MeetingLoanIssuedRepo.getTotalOutstandingLoansByMemberInCycle", ex.getMessage());
             return 0;
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public MeetingLoanIssued getOutstandingLoansByMemberInCycle(int cycleId, int memberId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        MeetingLoanIssued loanIssued = new MeetingLoanIssued();
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sumQuery = String.format("SELECT SUM(%s) AS LoanBalance, %s AS Interest, %s AS Principle FROM %s WHERE %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY %s DESC ",
+                    LoanIssueSchema.COL_LI_BALANCE,
+                    LoanIssueSchema.COL_LI_INTEREST_AMOUNT,
+                    LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT,
+                    LoanIssueSchema.getTableName(),
+                    LoanIssueSchema.COL_LI_MEMBER_ID, memberId,
+                    LoanIssueSchema.COL_LI_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
+                    MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID, cycleId, LoanIssueSchema.COL_LI_MEETING_ID);
+            cursor = db.rawQuery(sumQuery, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                loanIssued.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("LoanBalance")));
+                loanIssued.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("Interest")));
+                loanIssued.setPrincipalAmount(cursor.getDouble(cursor.getColumnIndex("Principle")));
+
+            }
+
+            return loanIssued;
+        } catch (Exception ex) {
+            Log.e("MeetingLoanIssuedRepo.getTotalOutstandingLoansByMemberInCycle", ex.getMessage());
+            return loanIssued;
         } finally {
 
             if (cursor != null) {
@@ -529,6 +571,7 @@ public class MeetingLoanIssuedRepo {
     public ArrayList<MemberLoanIssueRecord> getLoansIssuedToMemberInCycle(int cycleId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
+        int _isCleared = 1;
         ArrayList<MemberLoanIssueRecord> loansIssued;
 
         try {
@@ -536,13 +579,18 @@ public class MeetingLoanIssuedRepo {
 
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             String query = String.format("SELECT  L.%s AS LoanId, M.%s AS MeetingDate, L.%s AS PrincipalAmount, " +
-                            "L.%s AS LoanNo, L.%s AS Balance, L.%s AS IsCleared, L.%s AS DateCleared, L.%s AS DateDue, L.%s AS InterestAmount " +
-                            " FROM %s AS L INNER JOIN %s AS M ON L.%s=M.%s WHERE L.%s=%d AND L.%s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY L.%s DESC",
+                            "L.%s AS LoanNo, L.%s AS Balance, L.%s AS IsCleared, L.%s AS DateCleared, L.%s AS DateDue, L.%s AS InterestAmount, " +
+                            "(SELECT R.%s FROM %s AS R WHERE R.%s=L.%s ORDER BY R.%s DESC LIMIT 1) AS LastRepaymentComment " +
+                            " FROM %s AS L INNER JOIN %s AS M ON L.%s=M.%s WHERE L.%s=%d AND L.%s=%d AND L.%s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY L.%s DESC",
                     LoanIssueSchema.COL_LI_LOAN_ID, MeetingSchema.COL_MT_MEETING_DATE, LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT,
                     LoanIssueSchema.COL_LI_LOAN_NO, LoanIssueSchema.COL_LI_BALANCE, LoanIssueSchema.COL_LI_IS_CLEARED, LoanIssueSchema.COL_LI_DATE_CLEARED,
                     LoanIssueSchema.COL_LI_DATE_DUE, LoanIssueSchema.COL_LI_INTEREST_AMOUNT,
-                    LoanIssueSchema.getTableName(), MeetingSchema.getTableName(), LoanIssueSchema.COL_LI_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
+                    LoanRepaymentSchema.COL_LR_COMMENTS, LoanRepaymentSchema.getTableName(),
+                    LoanRepaymentSchema.COL_LR_LOAN_ID, LoanIssueSchema.COL_LI_LOAN_ID, LoanRepaymentSchema.COL_LR_REPAYMENT_ID,
+                    LoanIssueSchema.getTableName(), MeetingSchema.getTableName(),
+                    LoanIssueSchema.COL_LI_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
                     LoanIssueSchema.COL_LI_MEMBER_ID, memberId,
+                    LoanIssueSchema.COL_LI_IS_CLEARED, _isCleared,
                     LoanIssueSchema.COL_LI_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID, MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID, cycleId,
                     LoanIssueSchema.COL_LI_LOAN_ID
             );
@@ -570,8 +618,9 @@ public class MeetingLoanIssuedRepo {
                     }
                     loanRecord.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("InterestAmount")));
 
-                    loansIssued.add(loanRecord);
+                    loanRecord.setLastRepaymentComment(cursor.getString(cursor.getColumnIndex("LastRepaymentComment")));
 
+                    loansIssued.add(loanRecord);
                 } while (cursor.moveToNext());
             }
             return loansIssued;
@@ -795,14 +844,14 @@ public class MeetingLoanIssuedRepo {
 
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             String query = String.format("SELECT  L.%s AS LoanId, L.%s AS MeetingId, L.%s AS MemberId, L.%s AS PrincipalAmount, L.%s AS InterestAmount, " +
-                    "L.%s AS LoanNo, L.%s AS Balance, L.%s AS TotalRepaid, L.%s AS IsCleared, L.%s AS DateCleared, L.%s AS DateDue " +
-                    " FROM %s AS L WHERE L.%s=%d AND (L.%s IS NULL OR L.%s = 0) LIMIT 1",
-                    LoanIssueSchema.COL_LI_LOAN_ID,LoanIssueSchema.COL_LI_MEETING_ID, LoanIssueSchema.COL_LI_MEMBER_ID,
+                            "L.%s AS LoanNo, L.%s AS Balance, L.%s AS TotalRepaid, L.%s AS IsCleared, L.%s AS DateCleared, L.%s AS DateDue " +
+                            " FROM %s AS L WHERE L.%s=%d AND (L.%s IS NULL OR L.%s = 0) LIMIT 1",
+                    LoanIssueSchema.COL_LI_LOAN_ID, LoanIssueSchema.COL_LI_MEETING_ID, LoanIssueSchema.COL_LI_MEMBER_ID,
                     LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, LoanIssueSchema.COL_LI_INTEREST_AMOUNT,
                     LoanIssueSchema.COL_LI_LOAN_NO, LoanIssueSchema.COL_LI_BALANCE, LoanIssueSchema.COL_LI_TOTAL_REPAID,
                     LoanIssueSchema.COL_LI_IS_CLEARED, LoanIssueSchema.COL_LI_DATE_CLEARED, LoanIssueSchema.COL_LI_DATE_DUE,
-                    LoanIssueSchema.getTableName(),LoanIssueSchema.COL_LI_LOAN_ID, loanId,
-                    LoanIssueSchema.COL_LI_IS_CLEARED,LoanIssueSchema.COL_LI_IS_CLEARED
+                    LoanIssueSchema.getTableName(), LoanIssueSchema.COL_LI_LOAN_ID, loanId,
+                    LoanIssueSchema.COL_LI_IS_CLEARED, LoanIssueSchema.COL_LI_IS_CLEARED
             );
             cursor = db.rawQuery(query, null);
 
@@ -819,11 +868,11 @@ public class MeetingLoanIssuedRepo {
                 loan.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
                 loan.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
                 loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
-                if(cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
+                if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
                     Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
                     loan.setDateCleared(dateCleared);
                 }
-                if(cursor.getString(cursor.getColumnIndex("DateDue")) != null) {
+                if (cursor.getString(cursor.getColumnIndex("DateDue")) != null) {
                     Date dateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateDue")));
                     loan.setDateDue(dateDue);
                 }
@@ -835,12 +884,10 @@ public class MeetingLoanIssuedRepo {
 
             }
             return loan;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.e("MeetingLoanIssuedRepo.getLoanIssuedByLoanId", ex.getMessage());
             return null;
-        }
-        finally {
+        } finally {
 
             if (cursor != null) {
                 cursor.close();

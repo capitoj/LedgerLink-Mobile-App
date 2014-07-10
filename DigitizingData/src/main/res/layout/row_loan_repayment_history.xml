@@ -4,6 +4,15 @@
     android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLRHPaymentListing"
+        style="@style/RegularText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Payment \t\t Listing " />
+
+   <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHLoanNo"
         style="@style/RegularText"
         android:layout_width="fill_parent"
@@ -17,9 +26,10 @@
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHMeetingDate"
         style="@style/ListSmallSubItems"
-        android:layout_width="fill_parent"
+        android:layout_width="100dip"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtRLRHLoanNo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:text="Date " />
 
 
@@ -28,10 +38,10 @@
         style="@style/ListSmallSubItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtRLRHMeetingDate"
+        android:layout_toRightOf="@id/txtRLRHMeetingDate"
         android:text="Amount " />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+   <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHRollover"
         style="@style/ListSmallSubItems"
         android:layout_width="fill_parent"
@@ -45,5 +55,5 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRLRHRollover"
-        android:text="Comments " />
+        android:text="Comments " /> -->
 </RelativeLayout>

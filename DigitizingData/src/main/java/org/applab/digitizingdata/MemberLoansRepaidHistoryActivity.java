@@ -58,6 +58,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
     //Flags for Edit Operation
     boolean isEditOperation = false;
+
     //This is the repayment that is being edited
     MemberLoanRepaymentRecord repaymentBeingEdited = null;
 
@@ -87,9 +88,9 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
         setContentView(R.layout.activity_member_loans_repaid_history);
 
-        TextView lblMeetingDate = (TextView)findViewById(R.id.lblMLRepayHMeetingDate);
+       /** TextView lblMeetingDate = (TextView)findViewById(R.id.lblMLRepayHMeetingDate);
         meetingDate = getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate);
+        lblMeetingDate.setText(meetingDate); */
 
         TextView lblFullName = (TextView)findViewById(R.id.lblMLRepayHFullNames);
         String fullName = getIntent().getStringExtra("_names");
@@ -211,6 +212,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     //I want the Event Handler to handle both startDate and endDate
                     viewClicked = (TextView)view;
                     DatePickerDialog datePickerDialog = new DatePickerDialog( MemberLoansRepaidHistoryActivity.this, mDateSetListener, mYear, mMonth, mDay);
+
                     //TODO: Enable this feature in API 11 and above
                     //datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                     datePickerDialog.show();
@@ -235,13 +237,21 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         }
 
         TextView txtOutstandingLoans = (TextView)findViewById(R.id.lblMLRepayHOutstandingLoans);
+        TextView txtPrinciple = (TextView)findViewById(R.id.lblMLRepayHPrinciple);
+        TextView txtInterestOnLoan = (TextView)findViewById(R.id.lblMLRepayHInterestOnLoan);
 
         double outstandingLoans = 0.0;
+        MeetingLoanIssued loanIssue = new MeetingLoanIssued();
         if(targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
             outstandingLoans = loanIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetCycleId, memberId);
+            loanIssue = loanIssuedRepo.getOutstandingLoansByMemberInCycle(targetCycleId, memberId);
         }
-        txtOutstandingLoans.setText(String.format("Total Balance: %,.0f UGX", outstandingLoans));
+        txtOutstandingLoans.setText(String.format("Outstanding \t %,.0f UGX", outstandingLoans));
+        if(loanIssue != null) {
+            txtPrinciple.setText(String.format("Principle \t\t %,.0f UGX", loanIssue.getPrincipalAmount()));
+            txtInterestOnLoan.setText(String.format("Interest \t\t %,.0f UGX", loanIssue.getInterestAmount()));
+        }
 
         //Populate the History
         populateLoanRepaymentHistory();

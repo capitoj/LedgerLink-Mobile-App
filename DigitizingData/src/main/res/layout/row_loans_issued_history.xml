@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListRegularSubItems"
+        style="@style/RegularText"
         android:id="@+id/txtRLIHPastLoanSummary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="28dip"
         android:text="Summary "/>
 
-   <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
+   <!--
+   <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListRegularSubItems"
         android:id="@+id/txtRLIHAmount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="4"
-        android:text="Amount"/>
+        android:text="Amount" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+   <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/txtRLIHDateCleared"
         android:layout_width="wrap_content"
@@ -27,13 +27,13 @@
         android:layout_weight="4"
         android:text="Paid" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+   <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/txtRLIHComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:text="Comment"/> -->
+        android:text="Comment"/>
+   -->
 
-
-</LinearLayout>
+</RelativeLayout>

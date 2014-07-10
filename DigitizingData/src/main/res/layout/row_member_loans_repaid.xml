@@ -12,29 +12,29 @@
         android:layout_alignParentTop="true"
         android:text="0. FULL NAME" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+   <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRMLRepayTodaysRepay"
         style="@style/ListSmallSubItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLRepayFullName"
-        android:text="Paid Today: 5,000UGX" />
+        android:text="Paid Today: 5,000UGX" />-->
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRMLRepayBalance"
         style="@style/ListSmallSubItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtRMLRepayTodaysRepay"
+        android:layout_below="@id/txtRMLRepayFullName"
         android:text="Loan Balance: 60,000UGX" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+  <!--  <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRMLRepayDateDue"
         style="@style/ListSmallSubItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLRepayBalance"
         android:text="Date Due: 01-Jan-2013"
-        android:layout_marginBottom="20dip"/>
+        android:layout_marginBottom="20dip"/> -->
 
 </RelativeLayout>

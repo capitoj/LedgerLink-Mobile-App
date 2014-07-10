@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
             android:inputType="number"
-            android:text=""
+            android:text="43"
             android:textAlignment="textEnd" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -53,7 +53,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
-                android:layout_weight="6"
+                android:layout_weight="5"
                 android:inputType="number"
                 android:text=""
                 android:textAlignment="textEnd" />
@@ -63,7 +63,7 @@
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
+                android:layout_weight="5"
                 android:text="UGX" />
         </LinearLayout>
 
@@ -116,20 +116,13 @@
                     android:layout_gravity="left"/>
 
                     -->
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            android:id="@android:id/empty"
-            style="@style/RegularText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="29dip"
-            android:text="No Outstanding Balance" />
+
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedPastLoans"
             style="@style/RegularTextBold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dip"
             android:text="Past Loans" />
 
         <ListView
@@ -137,10 +130,20 @@
             style="@style/List"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="0dip"
+            android:layout_marginTop="5dip"
+            android:layout_marginBottom="5dip"
             android:choiceMode="singleChoice"
-            android:layout_marginBottom="20dip"
             android:divider="@null"
             android:dividerHeight="0dp"/>
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@android:id/empty"
+            style="@style/RegularText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:text="No outstanding loans" />
 
     </LinearLayout>
 </ScrollView>

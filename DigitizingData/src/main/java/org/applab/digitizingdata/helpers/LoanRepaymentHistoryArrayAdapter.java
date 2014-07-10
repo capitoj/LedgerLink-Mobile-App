@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
 import org.applab.digitizingdata.R;
 
 import java.util.ArrayList;
@@ -33,38 +34,42 @@ public class LoanRepaymentHistoryArrayAdapter extends ArrayAdapter<MemberLoanRep
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = null;
         try {
-            LayoutInflater inflater = (LayoutInflater)context
+            LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             rowView = inflater.inflate(R.layout.row_loan_repayment_history, parent, false);
 
             //Get the Widgets
-            TextView txtMeetingDate = (TextView)rowView.findViewById(R.id.txtRLRHMeetingDate);
-            TextView txtLoanNo = (TextView)rowView.findViewById(R.id.txtRLRHLoanNo);
-            TextView txtAmount = (TextView)rowView.findViewById(R.id.txtRLRHAmount);
-            TextView txtRollover = (TextView)rowView.findViewById(R.id.txtRLRHRollover);
-            TextView txtComments = (TextView)rowView.findViewById(R.id.txtRLRHComments);
+            TextView txtPaymentListing = (TextView) rowView.findViewById(R.id.txtRLRHPaymentListing);
+
+            /** TextView txtMeetingDate = (TextView)rowView.findViewById(R.id.txtRLRHMeetingDate);
+             TextView txtLoanNo = (TextView)rowView.findViewById(R.id.txtRLRHLoanNo);
+             TextView txtAmount = (TextView)rowView.findViewById(R.id.txtRLRHAmount);
+             TextView txtRollover = (TextView)rowView.findViewById(R.id.txtRLRHRollover);
+             TextView txtComments = (TextView)rowView.findViewById(R.id.txtRLRHComments); */
 
             // Set typeface
-            txtMeetingDate.setTypeface(typeface);
-            txtLoanNo.setTypeface(typeface);
-            txtAmount.setTypeface(typeface);
-            txtRollover.setTypeface(typeface);
-            txtComments.setTypeface(typeface);
+            txtPaymentListing.setTypeface(typeface);
+            /** txtMeetingDate.setTypeface(typeface);
+             txtLoanNo.setTypeface(typeface);
+             txtAmount.setTypeface(typeface);
+             txtRollover.setTypeface(typeface);
+             txtComments.setTypeface(typeface); */
 
             //Assign Values to the Widgets
             MemberLoanRepaymentRecord repaymentRecord = values.get(position);
-            if(repaymentRecord != null) {
-                txtMeetingDate.setText(String.format("Date: %s",Utils.formatDate(repaymentRecord.getMeetingDate(),Utils.DATE_FIELD_FORMAT)));
-                txtLoanNo.setText(String.format("Loan No: %d", repaymentRecord.getLoanNo()));
-                txtAmount.setText(String.format("Amount: %,.0f UGX", repaymentRecord.getAmount()));
-                txtRollover.setText(String.format("Rollover: %,.0f UGX", repaymentRecord.getRolloverAmount()));
-                txtComments.setText(String.format("Comments: %s", repaymentRecord.getComments()));
+            if (repaymentRecord != null) {
+                txtPaymentListing.setText(String.format("%s\t %,.0f UGX", Utils.formatDate(repaymentRecord.getMeetingDate(), Utils.DATE_FIELD_FORMAT), repaymentRecord.getAmount()));
+
+                /** txtMeetingDate.setText(String.format("Date: %s",Utils.formatDate(repaymentRecord.getMeetingDate(),Utils.DATE_FIELD_FORMAT)));
+                 txtLoanNo.setText(String.format("Loan No: %d", repaymentRecord.getLoanNo()));
+                 txtAmount.setText(String.format("Amount: %,.0f UGX", repaymentRecord.getAmount()));
+                 txtRollover.setText(String.format("Rollover: %,.0f UGX", repaymentRecord.getRolloverAmount()));
+                 txtComments.setText(String.format("Comments: %s", repaymentRecord.getComments())); */
             }
 
             return rowView;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));
             return rowView;
         }

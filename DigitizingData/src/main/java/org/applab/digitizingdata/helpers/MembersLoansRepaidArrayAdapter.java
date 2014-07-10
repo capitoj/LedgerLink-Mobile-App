@@ -72,15 +72,15 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
 
             //Get the Widgets
             final TextView txtFullName = (TextView) rowView.findViewById(R.id.txtRMLRepayFullName);
-            final TextView txtRepaidToday = (TextView) rowView.findViewById(R.id.txtRMLRepayTodaysRepay);
             final TextView txtBalance = (TextView) rowView.findViewById(R.id.txtRMLRepayBalance);
-            final TextView txtDateDue = (TextView) rowView.findViewById(R.id.txtRMLRepayDateDue);
+            /**final TextView txtRepaidToday = (TextView) rowView.findViewById(R.id.txtRMLRepayTodaysRepay);
+             final TextView txtDateDue = (TextView) rowView.findViewById(R.id.txtRMLRepayDateDue); */
 
             // Set Typeface
             txtFullName.setTypeface(typeface);
-            txtRepaidToday.setTypeface(typeface);
             txtBalance.setTypeface(typeface);
-            txtDateDue.setTypeface(typeface);
+            /**txtRepaidToday.setTypeface(typeface);
+             txtDateDue.setTypeface(typeface); */
 
             //Assign Values to the Widgets
             Member selectedMember = values.get(position);
@@ -94,7 +94,7 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             if (null != targetMeeting) {
                 repaymentInMeeting = loansRepaidRepo.getTotalRepaymentByMemberInMeeting(targetMeeting.getMeetingId(), selectedMember.getMemberId());
             }
-            txtRepaidToday.setText(String.format("Paid Today: %,.0f UGX", repaymentInMeeting));
+            // txtRepaidToday.setText(String.format("Paid Today: %,.0f UGX", repaymentInMeeting));
 
             //Get the Outstanding Loans in Cycle
             //TODO: In case multiple loans will be allowed, then we shall need to pass the LoanId or LoanNo
@@ -102,16 +102,20 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
                 outstandingLoan = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), selectedMember.getMemberId());
             }
-            txtBalance.setText(String.format("Loan Balance: %,.0f UGX", outstandingLoan));
 
-            //Date Due
-            txtDateDue.setText("Date Due: -");
-            if (null != targetMeeting) {
-                MeetingLoanIssued recentLoan = loansIssuedRepo.getMostRecentLoanIssuedToMember(selectedMember.getMemberId());
-                if (null != recentLoan) {
-                    txtDateDue.setText(String.format("Date Due: %s", Utils.formatDate(recentLoan.getDateDue())));
-                }
+            if (outstandingLoan == 0.0) {
+                txtBalance.setText("No outstanding loans");
+            } else {
+                txtBalance.setText(String.format("Outstanding loan %,.0f UGX", outstandingLoan));
             }
+            //Date Due
+            /** txtDateDue.setText("Date Due: -");
+             if (null != targetMeeting) {
+             MeetingLoanIssued recentLoan = loansIssuedRepo.getMostRecentLoanIssuedToMember(selectedMember.getMemberId());
+             if (null != recentLoan) {
+             txtDateDue.setText(String.format("Date Due: %s", Utils.formatDate(recentLoan.getDateDue())));
+             }
+             }*/
 
             return rowView;
         } catch (Exception ex) {

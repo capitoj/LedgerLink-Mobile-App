@@ -68,6 +68,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         android:layout_below="@id/frmMLIssuedF_top_control_bar"
         android:choiceMode="singleChoice">
     </ListView>
