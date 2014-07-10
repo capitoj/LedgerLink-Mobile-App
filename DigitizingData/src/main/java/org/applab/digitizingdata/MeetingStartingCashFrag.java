@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -52,6 +53,7 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
     MeetingFineRepo fineRepo;
     MeetingLoanIssuedRepo loanIssuedRepo;
     MeetingLoanRepaymentRepo loanRepaymentRepo;
+    ScrollView fragmentView;
 
 
     @Override
@@ -61,8 +63,10 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
             return null;
         }
         setHasOptionsMenu(true);
-        return inflater.inflate(R.layout.frag_meeting_starting_cash, container, false);
+        fragmentView = (ScrollView) inflater.inflate(R.layout.frag_meeting_starting_cash, container, false);
+        return fragmentView;
     }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -97,6 +101,13 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
         menu.clear();
         getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_starting_cash, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPause() {
+        //super.onDetach();
+
+        saveStartingCash();
     }
 
     @Override
