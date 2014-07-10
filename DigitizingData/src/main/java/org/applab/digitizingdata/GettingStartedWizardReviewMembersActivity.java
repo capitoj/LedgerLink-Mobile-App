@@ -172,15 +172,15 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 Intent upIntent = new Intent(this, GettingStartedWizardAddMemberActivity.class);
                 NavUtils.navigateUpTo(this, upIntent);
                 return true;
-            case R.id.mnuMListDone:
+          /**  case R.id.mnuMListDone:
                 //Go to GSW cycle review page
                 //which is infact the new cycle activity in update mode
                 Intent i = new Intent(getApplicationContext(), GettingsStartedWizardNewCycleActivity.class);
                 i.putExtra("_isUpdateCycleAction", true);
                 startActivity(i);
-                return true;
+                return true; */
             case R.id.mnuMListAdd:
-                i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+                Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
                 startActivity(i);
                 return true;
         }

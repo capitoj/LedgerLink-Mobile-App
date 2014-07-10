@@ -1,16 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/mnuMListAdd"
-          android:title="Add"
-          android:orderInCategory="1"
-          android:showAsAction="ifRoom|withText"
-          android:icon="@drawable/ic_social_add_person"
-            />
+    <item
+        android:id="@+id/mnuMListAdd"
+        android:icon="@drawable/ic_social_add_person"
+        android:orderInCategory="1"
+        android:showAsAction="ifRoom|withText"
+        android:title="Add" />
 
-    <item android:id="@+id/mnuMListDone"
-          android:title="Done"
-          android:orderInCategory="2"
-          android:showAsAction="ifRoom|withText"
-          android:icon="@drawable/ic_navigation_accept"
-            />
+ <!--   <item
+        android:id="@+id/mnuMListDone"
+        android:icon="@drawable/ic_navigation_accept"
+        android:orderInCategory="2"
+        android:showAsAction="ifRoom|withText"
+        android:title="Done" /> -->
 </menu>

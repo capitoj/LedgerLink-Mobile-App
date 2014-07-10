@@ -79,12 +79,12 @@ public class MembersListActivity extends SherlockListActivity {
                     NavUtils.navigateUpTo(this, upIntent);
                 }
                 return true;
-            case R.id.mnuMListDone:
+           /** case R.id.mnuMListDone:
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
-                return true;
+                return true; */
             case R.id.mnuMListAdd:
-                i = new Intent(getApplicationContext(), AddMemberActivity.class);
+                Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
                 startActivity(i);
                 return true;
         }
