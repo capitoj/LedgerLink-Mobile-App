@@ -145,7 +145,9 @@ public class VslaCycleRepo {
         meeting.setGettingStarted(true);
         meeting.setIsCurrent(true);
         meeting.setVslaCycle(currentCycle);
-        meeting.setMeetingDate(currentCycle.getStartDate());
+        //meeting.setMeetingDate(currentCycle.getStartDate());
+        //GSW meeting date changed to current date
+        meeting.setMeetingDate(new Date());
         MeetingRepo repo = new MeetingRepo(context);
         return repo.addMeeting(meeting);
 

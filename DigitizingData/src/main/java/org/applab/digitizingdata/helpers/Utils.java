@@ -6,9 +6,12 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -88,35 +91,45 @@ public class Utils {
         }
     }
 
+    public static String formatAsPhoneNumber(String phoneNumber) {
+        //Formats phone number as #### ### ###
+        phoneNumber = phoneNumber.replaceAll(" ", ""); //first collapse all spaces
+        if(phoneNumber.length()<=4) {
+            return phoneNumber;
+        }
+        if(phoneNumber.length()>4 && phoneNumber.length()<=7) {
+            return insertPeriodically(phoneNumber, " ", 4);
+        }
+
+        //length is greater than 7!
+        phoneNumber = phoneNumber.substring(0,4) + " " + insertPeriodically(phoneNumber.substring(4), " ", 3);
+        return phoneNumber;
+    }
+
+    //Calling this ensures that a phone number input is always formatted as a phone number
     public static void setAsPhoneNumberInput(final EditText editText) {
-        editText.addTextChangedListener(new TextWatcher() {
-            int len=0;
+            TextWatcher phoneNumberTextWatcher = new TextWatcher() {
+            String phoneText = "";
             @Override
             public void afterTextChanged(Editable s) {
-                String str = editText.getText().toString().replaceAll(" ", "");
-                int s1 = str.length()%4;
-                if(str.length()%4==0 && len <str.length()){//len check for backspace
-                    editText.append(" ");
-                }
+                    editText.removeTextChangedListener(this); //remove it to prevent Stackover flow
+                    phoneText = formatAsPhoneNumber(editText.getText().toString());
+                    editText.setText("");
+                    editText.append(phoneText);
+                    editText.addTextChangedListener(this);
+
             }
 
             @Override
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-
-                String str = editText.getText().toString().replaceAll(" ", "");;
-                len = str.length();
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+        };
+        editText.addTextChangedListener(phoneNumberTextWatcher);
 
-
-        });
-    }
-
-    public static String splitPhoneNumber(String phone) {
-        return insertPeriodically(phone, " ", 4);
     }
 
     public static String insertPeriodically(
