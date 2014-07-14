@@ -43,6 +43,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         EditTextPreference prefServerUrl = (EditTextPreference) findPreference("prefServerUrl");
         prefServerUrl.setSummary("Set Internet address for the server that will receive data\n"+prefServerUrl.getText());
 
+        EditTextPreference prefHelpLine = (EditTextPreference) findPreference("prefHelpLine");
+        prefServerUrl.setSummary("Set telephone number to call for support\n"+prefHelpLine.getText());
+
         //If the user is in Production Mode and switches to Training Mode then update the title and summary accordingly
         ListPreference runInTrainingModePref = (ListPreference) findPreference(PREF_KEY_EXECUTION_MODE);
 

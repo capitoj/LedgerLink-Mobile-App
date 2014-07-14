@@ -316,10 +316,16 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     theCurLoanBalanceAmount = recentLoan.getLoanBalance() - theRepayAmount;
                 }
                 txtLoanBalance.setText(String.format("%,.0f",theCurLoanBalanceAmount));
-
-                double interestAmount = (interestRate * 0.01 * theCurLoanBalanceAmount);
-                editTextInterestRate.setText(String.format("%.0f",interestAmount));
-
+                double interestAmount = 0;
+                //If meeting date is before loan due date then default interest to 0
+                if(targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
+                    editTextInterestRate.setText("0");
+                }
+                else
+                {
+                    interestAmount = (interestRate * 0.01 * theCurLoanBalanceAmount);
+                    editTextInterestRate.setText(String.format("%.0f", interestAmount));
+                }
                 double rolloverAmount = theCurLoanBalanceAmount + interestAmount;
                 txtRolloverAmount.setText(String.format("%,.0f",rolloverAmount));
 
