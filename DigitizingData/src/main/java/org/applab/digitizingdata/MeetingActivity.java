@@ -63,9 +63,11 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     private static int targetMeetingId = 0;
     private static int currentDataItemPosition = 0;
     private static String serverUri = "";
+    public LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_meeting);

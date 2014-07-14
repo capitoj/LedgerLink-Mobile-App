@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        android:title="SETTINGS">
 
         <EditTextPreference
             android:title="Server URL"
-            android:summary="Internet link address to the server where to send data"
+            android:summary="Set Internet address for the server that will receive data"
             android:key="prefServerUrl"
             android:defaultValue="http://74.208.213.214:9905/DigitizingDataRestfulService.svc"/>
         <EditTextPreference
@@ -20,7 +21,7 @@
         android:summary="You are currently working on Actual VSLA Data. Switch to Training Data to learn how to use the application without destroying members' records."
         android:entryValues="@array/executionModeValues"
         android:defaultValue="1"
-        android:title="Switch to Training Mode" />
+        android:title="Select Mode" />
 
     <!-- Default to TRAINING MODE -->
     <!-- <ListPreference

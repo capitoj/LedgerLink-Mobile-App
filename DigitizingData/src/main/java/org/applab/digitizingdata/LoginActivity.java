@@ -103,7 +103,6 @@ public class LoginActivity extends SherlockActivity {
             actionBar.setCustomView(R.layout.activity_main_training_mode);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
-
             //Set the label of the link
    //         tvSwitchMode.setText("Switch To Actual VSLA Data");
      //       tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}

@@ -18,6 +18,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Meeting;
@@ -26,6 +27,7 @@ import org.applab.digitizingdata.helpers.SavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MeetingSavingRepo;
+import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 
@@ -241,18 +243,34 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             TextView txtSaving = (TextView)findViewById(R.id.txtMSHAmount);
             String amount = txtSaving.getText().toString().trim();
             if (amount.length() < 1) {
-                Utils.createAlertDialogOk(MemberSavingHistoryActivity.this, "Savings","The Savings Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtSaving.requestFocus();
-                return false;
+                //Utils.createAlertDialogOk(MemberSavingHistoryActivity.this, "Savings","The Savings Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                //txtSaving.requestFocus();
+                //return false;
+                //if savings is blank, default to 0
+                txtSaving.setText("0");
+                amount = "0";
             }
-            else {
+
+
                 theAmount = Double.parseDouble(amount);
-                if (theAmount < 0.0) {
+
+
+            if (theAmount < 0.0) {
                     Utils.createAlertDialogOk(MemberSavingHistoryActivity.this, "Savings","The Savings Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtSaving.requestFocus();
                     return false;
                 }
+            else if(theAmount>0 && theAmount < targetMeeting.getVslaCycle().getSharePrice()) {
+                //Check if saving amount is less than price of a single star (share)
+                Utils.createAlertDialogOk(MemberSavingHistoryActivity.this,
+                        "Savings","The amount entered "+Utils.formatNumber(theAmount)+" is less than one star, please enter atleast "+
+                        Utils.formatNumber(targetMeeting.getVslaCycle().getSharePrice())+" "+ getResources().getString(R.string.operating_currency),
+                        Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtSaving.requestFocus();
+                return false;
             }
+
+
 
             /*//Validate that the savings is within the range of Shares
             if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {

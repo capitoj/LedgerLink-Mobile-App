@@ -436,7 +436,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                 if (meetingActivityWeakReference.get() != null && !meetingActivityWeakReference.get().isFinishing()) {
                     if (null == progressDialog) {
                         progressDialog = new ProgressDialog(meetingActivityWeakReference.get());
-                        progressDialog.setTitle("Sending Meeting Data..." + currentMeeting.getMeetingId());
+                        progressDialog.setTitle("Sending Data for Meeting " + Utils.formatDate(currentMeeting.getMeetingDate(), "dd MMM yyyy"));
 
                         message = SendDataRepo.progressDialogMessages.get(currentDataItemPosition);
                         if (message == null) {

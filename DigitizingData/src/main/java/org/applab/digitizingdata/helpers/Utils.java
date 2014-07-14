@@ -354,6 +354,10 @@ public class Utils {
         }
     }
 
+    public static String formatNumber(double number) {
+        return String.format("%,.0f", number);
+    }
+
     /**
      * Creates an alert dialog without buttons
      * @param context

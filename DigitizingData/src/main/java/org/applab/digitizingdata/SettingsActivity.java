@@ -6,6 +6,8 @@ package org.applab.digitizingdata;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 
@@ -32,26 +34,38 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         addPreferencesFromResource(R.xml.preferences);
+        refreshView();
+    }
+
+    //refreshes the view
+    public void refreshView() {
+
+        EditTextPreference prefServerUrl = (EditTextPreference) findPreference("prefServerUrl");
+        prefServerUrl.setSummary("Set Internet address for the server that will receive data\n"+prefServerUrl.getText());
+
+        //If the user is in Production Mode and switches to Training Mode then update the title and summary accordingly
+        ListPreference runInTrainingModePref = (ListPreference) findPreference(PREF_KEY_EXECUTION_MODE);
+
+        String currentValue = runInTrainingModePref.getValue();
+        if(currentValue.equalsIgnoreCase(PREF_VALUE_EXECUTION_MODE_PROD)) {
+            runInTrainingModePref.setTitle(TITLE_EXECUTION_MODE_PROD);
+            //runInTrainingModePref.setSummary("You are currently working on Actual VSLA Data. Switch to Training Data to learn how to use the application without destroying members' records.");
+            runInTrainingModePref.setSummary("You are currently NOT in Training Mode. \nBecause you are not in Training Mode, any cycle or meeting information you record will affect the data for your group members. \nTraining Mode is a way to safely practice and explore Ledger Link without affecting your group's data. \nTap to switch to Training Mode to use practice data without affecting your group's data.");
+        }
+        else {
+            runInTrainingModePref.setTitle(TITLE_EXECUTION_MODE_TRAINING);
+            runInTrainingModePref.setSummary("You are in Training Mode using practice data. \nAny data you enter will not affect your group's data");
+        }
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        refreshView();
         if (key.equals(PREF_KEY_REFRESH_TRAINING_DATA)) {
             //If the user is in Training Mode then Refresh the data immediately if value is TRUE
 
         }
         else if (key.equals(PREF_KEY_EXECUTION_MODE)) {
-            //If the user is in Production Mode and switches to Training Mode then update the title and summary accordingly
-            Preference runInTrainingModePref = findPreference(key);
 
-            String currentValue = sharedPreferences.getString(key, "0");
-            if(currentValue.equalsIgnoreCase(PREF_VALUE_EXECUTION_MODE_PROD)) {
-                runInTrainingModePref.setTitle(TITLE_EXECUTION_MODE_PROD);
-                runInTrainingModePref.setSummary("You are currently working on Actual VSLA Data. Switch to Training Data to learn how to use the application without destroying members' records.");
-            }
-            else {
-                runInTrainingModePref.setTitle(TITLE_EXECUTION_MODE_TRAINING);
-                runInTrainingModePref.setSummary("You are currently working on Training Data. Be sure to switch back to Actual VSLA Data to continue capturing meeting data.");
-            }
             restartApplication();
 
         }

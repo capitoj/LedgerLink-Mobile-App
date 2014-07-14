@@ -12,6 +12,8 @@
       <!--  <item name="android:windowContentOverlay">@null</item> -->
     </style>
 
+
+
     <style name="LedgerLinkActionBarStyle" parent="Widget.Sherlock.Light.ActionBar">
         <item name="android:background">@color/ledger_link_dark_blue</item>
         <item name="titleTextStyle">@style/LedgerLinkActionBarTextAppearance</item>

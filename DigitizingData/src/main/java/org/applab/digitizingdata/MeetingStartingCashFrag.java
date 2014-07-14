@@ -105,8 +105,7 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
 
     @Override
     public void onPause() {
-        //super.onDetach();
-
+        super.onPause();
         saveStartingCash();
     }
 
