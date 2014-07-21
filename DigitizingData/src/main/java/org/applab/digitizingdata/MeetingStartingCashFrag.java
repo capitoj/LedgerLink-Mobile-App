@@ -30,7 +30,7 @@ import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 import java.util.HashMap;
 
-public class MeetingStartingCashFrag extends SherlockFragment implements TabHost.OnTabChangeListener {
+ public class MeetingStartingCashFrag extends SherlockFragment {
 
     ActionBar actionBar = null;
     String meetingDate = null;
@@ -99,13 +99,17 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
     @Override
     public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
         menu.clear();
-        getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_starting_cash, menu);
+       // getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_starting_cash, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        //Save only if not in view only
+        if (parentActivity.isViewOnly()) {
+            Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+        }
         saveStartingCash();
     }
 
@@ -120,28 +124,6 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
              return false; */
             case R.id.mnuMCBFSave:
                 return false;
-            case R.id.mnuMOCFSave:
-                //Save only if not in view only
-                if (parentActivity.isViewOnly()) {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
-                    return true;
-                }
-                saveStartingCash();
-                /**  // TextView txtTotalCash = (TextView)getSherlockActivity().findViewById(R.id.txtMOCTotal);
-                 TextView txtTotalCash = (TextView)getSherlockActivity().findViewById(R.id.txtActualStartingCash);
-                 if(saveStartingCash()) {
-                 Toast.makeText(getSherlockActivity().getApplicationContext(), "Starting Cash has been saved", Toast.LENGTH_LONG).show();
-
-                 // txtTotalCash.setText(String.format("%,.0f UGX",totalCash));
-                 txtTotalCash.setText(String.format("4 Mar 2014 Total Cash In Box %,.0f UGX", totalCash));
-                 }
-                 else {
-                 Toast.makeText(getSherlockActivity().getApplicationContext(), "Starting Cash not saved", Toast.LENGTH_LONG).show();
-
-                 //txtTotalCash.setText(String.format("%,.0f UGX",0));
-                 txtTotalCash.setText(String.format("4 Mar 2014 Total Cash In Box %,.0f UGX", 0));
-                 } */
-                return true;
             default:
                 return false;
         }
@@ -210,28 +192,26 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
         netCashThisMeeting = savingRepo.getTotalSavingsInMeeting(meetingId) + loanRepaymentRepo.getTotalLoansRepaidInMeeting(meetingId) + fineRepo.getTotalFinesInMeeting(meetingId) - loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
         expectedStartingCash = totalCashInThisCycle - totalCashOutThisCycle - netCashThisMeeting;
 
-      /**  try {
-            // successFlg = meetingRepo.updateStartingCash(meetingId, theCashFromBox, expectedStartingCash, theCashFromBank, theFinesPaid, comment);
-            Log.d("MeetingStartingCashFragTry", String.valueOf(startingCash.getExpectedStartingCash()));
-            Log.d("MeetingStartingCashFragTry", String.valueOf(startingCash.getActualStartingCash()));
+        /**  try {
+         // successFlg = meetingRepo.updateStartingCash(meetingId, theCashFromBox, expectedStartingCash, theCashFromBank, theFinesPaid, comment);
+         Log.d("MeetingStartingCashFragTry", String.valueOf(startingCash.getExpectedStartingCash()));
+         Log.d("MeetingStartingCashFragTry", String.valueOf(startingCash.getActualStartingCash()));
 
-        } catch (Exception ex) {
-            Log.e("Meeting.populateStartingCash", ex.getMessage());
+         } catch (Exception ex) {
+         Log.e("Meeting.populateStartingCash", ex.getMessage());
 
-        } */
+         } */
 
         // If starting cash is already saved then prepopulate
         startingCash = meetingRepo.getMeetingStartingCash(meetingId);
         if (null != startingCash) {
             // lblExpectedStartingCash.setText(String.format("Expected Starting Cash %.0f UGX", (startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BOX) - startingCash.get(MeetingSchema.COL_MT_CASH_FROM_BANK))));
             //expectedStartingCash = startingCash.get(MeetingSchema.COL_MT_CASH_SAVED_BOX);
-           // expectedStartingCash = startingCash.getExpectedStartingCash();
-
+            // expectedStartingCash = startingCash.getExpectedStartingCash();
             if ((int) (startingCash.getActualStartingCash()) > 0) {
-                txtActualCashInBox.setText(String.valueOf(startingCash.getActualStartingCash()));
-                txtActualCashInBoxComment.setText(String.valueOf(startingCash.getComment()));
+                txtActualCashInBox.setText(String.format("%.0f", Double.valueOf(startingCash.getActualStartingCash())));
+                txtActualCashInBoxComment.setText(String.format("%s", startingCash.getComment()));
             }
-
         }
 
         lblExpectedStartingCash.setText(String.format("Expected Starting: Cash %,.0f UGX", expectedStartingCash));
@@ -286,13 +266,4 @@ public class MeetingStartingCashFrag extends SherlockFragment implements TabHost
             return successFlg;
         }
     }
-
-    @Override
-    public void onTabChanged(String tabId) {
-
-
-
-
-    }
-
 }
