@@ -30,7 +30,7 @@ import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 import java.util.HashMap;
 
- public class MeetingStartingCashFrag extends SherlockFragment {
+public class MeetingStartingCashFrag extends SherlockFragment {
 
     ActionBar actionBar = null;
     String meetingDate = null;
@@ -99,7 +99,7 @@ import java.util.HashMap;
     @Override
     public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
         menu.clear();
-       // getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_starting_cash, menu);
+        // getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_starting_cash, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -234,6 +234,7 @@ import java.util.HashMap;
                 theCashFromBox = Double.parseDouble(amountBox);
                 if (theCashFromBox < 0.00) {
                     Utils.createAlertDialogOk(getSherlockActivity().getBaseContext(), "Meeting", "The value for Cash from Box is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    // Utils.createAlertDialogOk(this, "Meeting", "The member number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show());
                     txtActualCashInBox.requestFocus();
                     return false;
                 }

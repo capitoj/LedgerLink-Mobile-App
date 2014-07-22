@@ -95,38 +95,18 @@ public class MeetingCashBookFrag extends SherlockFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
-        menu.clear();
-        getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_cash_book, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                return false;
-            /**  case R.id.mnuSMDSend:
-             return false;
-             case R.id.mnuSMDCancel:
-             return false; */
-            case R.id.mnuMCBFSave:
-                //If readonly mode, don't save balances but show message
-                if (parentActivity.isViewOnly()) {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-
-                updateCashBook();
-                Toast.makeText(getSherlockActivity().getApplicationContext(), "The Cashbook balances have been saved successfully.", Toast.LENGTH_LONG).show();
-                return true;
-            default:
-                return false;
+    public void onPause() {
+        super.onPause();
+        //Save only if not in view only
+        if (parentActivity.isViewOnly()) {
+            Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
         }
+
+        updateCashBook();
+        Toast.makeText(getSherlockActivity().getApplicationContext(), "The Cashbook balances have been saved successfully.", Toast.LENGTH_LONG).show();
     }
 
     private void populateCashBookFields() {
-
 
         try {
             TextView lblTotalCashInBox = (TextView) getSherlockActivity().findViewById(R.id.lblTotalCashInBox);
@@ -152,7 +132,6 @@ public class MeetingCashBookFrag extends SherlockFragment {
             }
 
 
-
             startingCashDetails = meetingRepo.getMeetingActualStartingCashDetails(meetingId);
             double expectedStartingCash = 0.0;
 
@@ -170,7 +149,6 @@ public class MeetingCashBookFrag extends SherlockFragment {
             totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines - cashToBank;
 
 
-
             String comment = startingCashDetails.getComment();
 
             lblTotalCashInBox.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
@@ -184,7 +162,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
             lblFines.setText(String.format("Fines %,.0f UGX", totalFines));
             lblNewLoans.setText(String.format("New Loans %,.0f UGX", totalLoansIssued));
 
-            txtCashToBankAmount.setText(String.valueOf(cashToBank));
+            txtCashToBankAmount.setText(String.format("%.0f", cashToBank));
         } catch (Exception ex) {
 
         } finally {
@@ -204,7 +182,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
 
             // double cashSavedInBank = startingCashDetails.getCashSavedInBank();
             // cashToBank = cashToBank + cashSavedInBank;
-            if(meetingRepo== null){
+            if (meetingRepo == null) {
                 meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
             }
             meetingRepo.updateCashBook(meetingId, cashToBox, cashToBank);
@@ -212,17 +190,15 @@ public class MeetingCashBookFrag extends SherlockFragment {
     }
 
     private boolean validate() {
-
+        double theCashToBank = 0.0;
         // Validate: Fine Amount
         txtCashToBankAmount = (EditText) getSherlockActivity().findViewById(R.id.txtCashToBank);
         String cashBook = txtCashToBankAmount.getText().toString().trim();
         if (cashBook.length() < 1) {
-            Utils.createAlertDialogOk(getSherlockActivity().getBaseContext(), "Meeting", "The value for Cash Book is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-            txtCashToBankAmount.requestFocus();
-            return false;
+            return true;
         } else {
-            double theCashToBank = Double.parseDouble(cashBook);
-            if (theCashToBank <= 0) {
+            theCashToBank = Double.parseDouble(cashBook);
+            if (theCashToBank < 0) {
                 Utils.createAlertDialogOk(getSherlockActivity().getBaseContext(), "Meeting", "The value for Cash Book Box must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtCashToBankAmount.requestFocus();
                 return false;
