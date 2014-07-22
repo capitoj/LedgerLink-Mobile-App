@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-   <!-- <item android:id="@+id/mnuSMDSend"
-          android:title="Send"
-          android:menuCategory="system"
-          android:orderInCategory="20"
-          android:showAsAction="ifRoom|withText"
-          android:icon="@drawable/ic_social_send_now"
-            />
-    <item android:id="@+id/mnuSMDCancel"
-          android:title="cancel"
-          android:menuCategory="system"
-          android:orderInCategory="11"
-          android:showAsAction="ifRoom|withText"
-          android:icon="@drawable/ic_navigation_cancel"
-            /> -->
-    <item android:id="@+id/mnuMeetingFineMember"
-        android:title="Fine Member"
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- <item android:id="@+id/mnuSMDSend"
+           android:title="Send"
+           android:menuCategory="system"
+           android:orderInCategory="20"
+           android:showAsAction="ifRoom|withText"
+           android:icon="@drawable/ic_social_send_now"
+             />
+     <item android:id="@+id/mnuSMDCancel"
+           android:title="cancel"
+           android:menuCategory="system"
+           android:orderInCategory="11"
+           android:showAsAction="ifRoom|withText"
+           android:icon="@drawable/ic_navigation_cancel"
+             /> -->
+    <item
+        android:id="@+id/mnuMeetingFineMember"
         android:menuCategory="system"
         android:orderInCategory="31"
         android:showAsAction="never"
-        />
-    <item android:id="@+id/mnuMeetingChangeDate"
-        android:title="Change Meeting Date"
+        android:title="Fine Member" />
+    <item
+        android:id="@+id/mnuMeetingChangeDate"
         android:menuCategory="system"
         android:orderInCategory="32"
         android:showAsAction="never"
-        />
-    <item android:id="@+id/mnuMeetingDelete"
-        android:title="Delete Meeting"
+        android:title="Change Meeting Date" />
+    <item
+        android:id="@+id/mnuMeetingDelete"
         android:menuCategory="system"
         android:orderInCategory="33"
         android:showAsAction="never"
-        />
+        android:title="Delete Meeting" />
 
-    <item android:id="@+id/mnuSettings"
-        android:title="Settings"
+    <item
+        android:id="@+id/mnuSettings"
         android:menuCategory="system"
         android:orderInCategory="34"
         android:showAsAction="never"
-        />
+        android:title="@string/action_settings" />
 </menu>
