@@ -149,7 +149,10 @@ public class MeetingCashBookFrag extends SherlockFragment {
             totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines - cashToBank;
 
 
-            String comment = startingCashDetails.getComment();
+            String comment = "";
+            if (null != startingCashDetails.getComment()) {
+                comment = startingCashDetails.getComment();
+            }
 
             lblTotalCashInBox.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
             lblExpectedStartingCash.setText(String.format("Expected Starting Cash %,.0f UGX", expectedStartingCash));
