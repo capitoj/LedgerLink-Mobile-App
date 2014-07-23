@@ -5,35 +5,35 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/frmSMD_top_control_bar"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/frmSMD_top_control_bar">
+        android:layout_height="wrap_content">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
             android:id="@+id/txtSMD_header"
+            style="@style/RegularTextInstruction"
             android:layout_width="wrap_content"
-            android:padding="5dp"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:text="Select the Meeting whose data you want to send." />
     </RelativeLayout>
 
     <ListView
-        style="@style/List"
         android:id="@android:id/list"
+        style="@style/List"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:choiceMode="singleChoice"
-        android:layout_below="@id/frmSMD_top_control_bar">
+        android:layout_below="@id/frmSMD_top_control_bar"
+        android:choiceMode="singleChoice">
 
     </ListView>
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
+   <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@android:id/empty"
+        style="@style/RegularText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="All Meeting Data has been Sent"
-        android:layout_below="@id/frmSMD_top_control_bar" />
+        android:layout_below="@id/frmSMD_top_control_bar"
+        android:text=" " /> -->
 
 </RelativeLayout>

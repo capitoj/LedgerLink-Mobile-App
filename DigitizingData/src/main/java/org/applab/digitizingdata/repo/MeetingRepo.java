@@ -33,7 +33,9 @@ public class MeetingRepo {
     public enum MeetingOrderByEnum {
         ORDER_BY_MEETING_ID,
         ORDER_BY_MEETING_DATE
-    };
+    }
+
+    ;
 
     public MeetingRepo() {
 
@@ -292,7 +294,7 @@ public class MeetingRepo {
 
             //If Ordering by a date, prepare the column properly
             //TODO: Did this in a hurry. Should be refactored
-            String orderByClauseColumn = (orderByColumnName == MeetingOrderByEnum.ORDER_BY_MEETING_DATE) ? String.format("datetime(%s)",MeetingSchema.COL_MT_MEETING_DATE) :  MeetingSchema.COL_MT_MEETING_ID ;
+            String orderByClauseColumn = (orderByColumnName == MeetingOrderByEnum.ORDER_BY_MEETING_DATE) ? String.format("datetime(%s)", MeetingSchema.COL_MT_MEETING_DATE) : MeetingSchema.COL_MT_MEETING_ID;
             // Select All Query
             String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC", columnList, MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_CYCLE_ID, targetCycleId, orderByClauseColumn);
@@ -420,7 +422,8 @@ public class MeetingRepo {
             cycleRepo = new VslaCycleRepo(context);
 
             // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s WHERE COALESCE(%s,0)=%d ORDER BY %s DESC", columnList, MeetingSchema.getTableName(),
+            String selectQuery = String.format("SELECT %s FROM %s WHERE COALESCE(%s,0)=%d ORDER BY %s DESC",
+                    columnList, MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_IS_DATA_SENT, dataSentFlag, MeetingSchema.COL_MT_MEETING_ID);
             cursor = db.rawQuery(selectQuery, null);
 
@@ -607,7 +610,7 @@ public class MeetingRepo {
     public MeetingStartingCash getMeetingStartingCash(int meetingId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
-       // HashMap<String, Double> startingCash = new HashMap<String, Double>();
+        // HashMap<String, Double> startingCash = new HashMap<String, Double>();
         MeetingStartingCash startingCash = new MeetingStartingCash();
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
@@ -628,7 +631,7 @@ public class MeetingRepo {
                 startingCash.setCashSavedInBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
                 startingCash.setActualStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
                 startingCash.setComment(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT)));
-               // startingCash.setActualStartingCash(MeetingSchema.COL_MT_CASH_FINES, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FINES)));
+                // startingCash.setActualStartingCash(MeetingSchema.COL_MT_CASH_FINES, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FINES)));
                 startingCash.setExpectedStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
                 /**  startingCash.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
                  startingCash.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
@@ -1459,7 +1462,7 @@ public class MeetingRepo {
 
             if (cursor != null && cursor.moveToFirst()) {
                 totalCashToBank = cursor.getDouble(cursor.getColumnIndex("cashToBank"));
-              }
+            }
 
             return totalCashToBank;
         } catch (Exception ex) {

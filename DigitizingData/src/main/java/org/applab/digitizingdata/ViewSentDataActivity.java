@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.R;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
@@ -29,6 +31,8 @@ import java.util.ArrayList;
 public class ViewSentDataActivity extends SherlockListActivity {
     private ActionBar actionBar;
     private ArrayList<Meeting> meetings;
+    private ArrayList<Meeting> unsentMeetings;
+    TextView txtHeader;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +47,7 @@ public class ViewSentDataActivity extends SherlockListActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Set the appropriate Header Instructional Text
-        TextView txtHeader = (TextView)findViewById(R.id.txtSMD_header);
+        txtHeader = (TextView) findViewById(R.id.txtSMD_header);
         txtHeader.setText("Select the Meeting whose data you want to view.");
 
         //Populate the Meetings
@@ -56,8 +60,18 @@ public class ViewSentDataActivity extends SherlockListActivity {
         MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
         meetings = meetingRepo.getAllMeetingsByDataSentStatus(true);
 
-        if(meetings == null) {
+        unsentMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
+
+        if (meetings.isEmpty()) {
             meetings = new ArrayList<Meeting>();
+            txtHeader.setText("All meeting data has been sent");
+            if (!unsentMeetings.isEmpty()) {
+                txtHeader.setText("You haven't sent any data yet. " +
+                        "After sending data, you will be able to review each meeting here. " +
+                        "Be sure to send data after each meeting so you do not lose it.");
+            }else{
+                txtHeader.setText("No meetings yet");
+            }
         }
 
         //Now get the data via the adapter
@@ -76,7 +90,7 @@ public class ViewSentDataActivity extends SherlockListActivity {
                 Intent i = new Intent(view.getContext(), MeetingActivity.class);
 
                 i.putExtra("_meetingDate", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd-MMM-yyyy"));
-                i.putExtra("_meetingId",selectedMeeting.getMeetingId());
+                i.putExtra("_meetingId", selectedMeeting.getMeetingId());
                 i.putExtra("_enableSendData", false);
 
                 //Indicate that current data view mode is READ_ONLY
@@ -90,7 +104,7 @@ public class ViewSentDataActivity extends SherlockListActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MainActivity.class);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
