@@ -8,10 +8,11 @@
         android:key="prefServerUrl"
         android:summary="Set Internet address for the server that will receive data"
         android:title="Server URL" />
+
     <EditTextPreference
         android:defaultValue="0777178178"
         android:key="prefHelpLine"
-        android:summary="Telephone number to call for support"
+        android:summary="Set telephone number to call for support"
         android:title="Help Line Number" />
 
     <!-- Default to ACTUAL MODE -->
