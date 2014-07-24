@@ -271,7 +271,7 @@ public class MeetingAttendanceRepo {
         }
     }
 
-    public ArrayList<AttendanceRecord> getMemberAbsenceHistoryInCycle(int cycleId, int memberId) {
+    public ArrayList<AttendanceRecord> getMemberAbsenceHistoryInCycle(int cycleId, int memberId, int meetingId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         ArrayList<AttendanceRecord> attendances;
@@ -283,7 +283,7 @@ public class MeetingAttendanceRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             //TODO: I don't think I need the Sub-Query: can do Meetings.CycleId = xx
             String query = String.format("SELECT  %s.%s AS AttendanceId, %s.%s AS MeetingDate, %s.%s AS IsPresent, %s.%s AS Comments " +
-                            " FROM %s INNER JOIN %s ON %s.%s=%s.%s WHERE %s.%s=%d AND %s.%s=%d AND %s.%s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY %s.%s DESC",
+                            " FROM %s INNER JOIN %s ON %s.%s=%s.%s WHERE %s.%s=%d AND %s.%s=%d AND %s.%s IN (SELECT %s FROM %s WHERE %s=%d AND %s NOT %d) ORDER BY %s.%s DESC",
                     AttendanceSchema.getTableName(),AttendanceSchema.COL_A_ATTENDANCE_ID,
                     MeetingSchema.getTableName(),MeetingSchema.COL_MT_MEETING_DATE,
                     AttendanceSchema.getTableName(), AttendanceSchema.COL_A_IS_PRESENT,
@@ -294,7 +294,7 @@ public class MeetingAttendanceRepo {
                     AttendanceSchema.getTableName(), AttendanceSchema.COL_A_MEMBER_ID, memberId,
                     AttendanceSchema.getTableName(), AttendanceSchema.COL_A_IS_PRESENT, attendanceStatus,
                     AttendanceSchema.getTableName(), AttendanceSchema.COL_A_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID, MeetingSchema.getTableName(),
-                    MeetingSchema.COL_MT_CYCLE_ID, cycleId, AttendanceSchema.getTableName(),AttendanceSchema.COL_A_ATTENDANCE_ID);
+                    MeetingSchema.COL_MT_CYCLE_ID, cycleId, MeetingSchema.COL_MT_MEETING_ID, meetingId, AttendanceSchema.getTableName(),AttendanceSchema.COL_A_ATTENDANCE_ID);
             cursor = db.rawQuery(query, null);
 
             if (cursor != null && cursor.moveToFirst()) {

@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/frmMAH_top_control_bar"
-            android:text="No History"
+            android:text="None"
 
             />
 

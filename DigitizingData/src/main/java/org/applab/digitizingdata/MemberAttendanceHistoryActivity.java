@@ -206,9 +206,9 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
     }
 
     private void populateAttendanceData() {
-        //Load the Main Menu
+
         MeetingAttendanceRepo repo = new MeetingAttendanceRepo(getApplicationContext());
-        attendances = repo.getMemberAbsenceHistoryInCycle(cycleId, memberId);
+        attendances = repo.getMemberAbsenceHistoryInCycle(cycleId, memberId, meetingId);
 
         if (attendances == null) {
             attendances = new ArrayList<AttendanceRecord>();
