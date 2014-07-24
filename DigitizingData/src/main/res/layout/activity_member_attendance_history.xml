@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/frmMAH_top_control_bar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/frmMAH_top_control_bar">
+    android:layout_height="wrap_content">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
@@ -10,84 +10,82 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/frmMAH_top_control_bar"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/frmMAH_top_control_bar">
+            android:layout_height="wrap_content">
 
-            <CheckBox
-                android:layout_width="25dip"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:id="@+id/chkMAHAttendance"
-                android:layout_marginLeft="15dip"
-                android:layout_marginTop="5dip"
-                android:clickable="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true" />
+            <RelativeLayout
+                android:id="@+id/frmMAH_check"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
-                android:id="@+id/txtMAHFullName"
-                android:layout_width="wrap_content"
-                android:layout_toRightOf="@id/chkMAHAttendance"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dip"
-                android:text="Member Name" />
+                <CheckBox
+                    android:id="@+id/chkMAHAttendance"
+                    android:layout_width="25dip"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="15dip"
+                    android:layout_marginTop="5dip"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="" />
 
-          <!--  <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
-                android:id="@+id/txtMAHMeetingDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/chkMAHAttendance"
-                android:text="01-JUL-2013" /> -->
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/txtMAHFullName"
+                    style="@style/RegularText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dip"
+                    android:layout_toRightOf="@id/chkMAHAttendance"
+                    android:text="Member Name" />
+            </RelativeLayout>
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
                 android:id="@+id/lblMAHComment"
+                style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txtMAHFullName"
-                android:text="Comment"/>
+                android:layout_below="@id/frmMAH_check"
+                android:text="Comment" />
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
-                style="@style/NormalEditText"
                 android:id="@+id/txtMAHComment"
+                style="@style/NormalEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textCapSentences"
                 android:layout_below="@id/lblMAHComment"
+                android:layout_marginBottom="20dip"
                 android:imeOptions="actionDone"
-                android:text="OK"
-                android:layout_marginBottom="20dip"/>
+                android:inputType="textCapSentences"
+                android:text="OK" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblMAHSection1"
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:text="Absences"
-                android:id="@+id/lblMAHSection1"
-                android:layout_below="@id/txtMAHComment" />
+                android:layout_below="@id/txtMAHComment"
+                android:text="Absences" />
         </RelativeLayout>
 
         <ListView
             android:id="@android:id/list"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/frmMAH_top_control_bar"
             android:choiceMode="singleChoice"
             android:divider="@null"
-            android:dividerHeight="0dp"
-            android:layout_below="@id/frmMAH_top_control_bar" />
+            android:dividerHeight="0dp" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
             android:id="@android:id/empty"
+            style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No History"
             android:layout_below="@id/frmMAH_top_control_bar"
+            android:text="No History"
 
             />
 

@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,8 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
 
     private VslaCycleRepo cycleRepo;
     private MeetingAttendanceRepo attendanceRepo;
+
+    CheckBox chkAttendance;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,13 +94,39 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         TextView txtFullName = (TextView) findViewById(R.id.txtMAHFullName);
 
         // TextView txtMeetingDate = (TextView)findViewById(R.id.txtMAHMeetingDate);
-        CheckBox chkAttendance = (CheckBox) findViewById(R.id.chkMAHAttendance);
-        TextView txtComments = (TextView) findViewById(R.id.txtMAHComment);
+        chkAttendance = (CheckBox) findViewById(R.id.chkMAHAttendance);
+
 
         chkAttendance.setChecked(attendanceRepo.getMemberAttendance(meetingId, memberId));
+
+        RelativeLayout r = (RelativeLayout) chkAttendance.getParent();
+
+        //chkAttendance.setOnClickListener(new View.OnClickListener() {
+        r.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                  chkAttendance.toggle();
+            }
+        });
+
+        chkAttendance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+
+                if (isChecked) {
+                    isPresent = 1;
+                } else {
+                    isPresent = 0;
+                }
+            }
+        });
+
+        TextView txtComments = (TextView) findViewById(R.id.txtMAHComment);
         txtComments.setText(attendanceRepo.getMemberAttendanceComment(meetingId, memberId));
 
-        fullName = fullName.substring(fullName.lastIndexOf(".")+1).trim();
+        fullName = fullName.substring(fullName.lastIndexOf(".") + 1).trim();
         txtFullName.setText(fullName);
 
         // txtMeetingDate.setText(meetingDate);
@@ -162,16 +192,16 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
 
         actionBar.setDisplayShowCustomEnabled(true);
 
-       /** actionBar.setDisplayOptions(
-                ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-                        | ActionBar.DISPLAY_SHOW_TITLE
-        );
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT)
-        ); */
+        /** actionBar.setDisplayOptions(
+         ActionBar.DISPLAY_SHOW_CUSTOM,
+         ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+         | ActionBar.DISPLAY_SHOW_TITLE
+         );
+         actionBar.setCustomView(customActionBarView,
+         new ActionBar.LayoutParams(
+         ViewGroup.LayoutParams.MATCH_PARENT,
+         ViewGroup.LayoutParams.MATCH_PARENT)
+         ); */
         // END_INCLUDE (inflate_set_custom_view)
     }
 
@@ -259,7 +289,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
                 if (attendanceRepo == null) {
                     attendanceRepo = new MeetingAttendanceRepo(MemberAttendanceHistoryActivity.this);
                 }
-                successFlg = attendanceRepo.saveMemberAttendanceComment(meetingId, memberId, comment);
+                successFlg = attendanceRepo.saveMemberAttendanceWithComment(meetingId, memberId, comment, isPresent);
             } else {
                 Utils.createAlertDialogOk(MemberAttendanceHistoryActivity.this, "Roll Call", "You have not entered the Comments", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtComment.requestFocus();
@@ -267,7 +297,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
             }
             return successFlg;
         } catch (Exception ex) {
-            Log.e("MemberAttendanceHistory.saveMemberAttendanceComment", ex.getMessage());
+            Log.e("MemberAttendanceHistory.saveMemberAttendanceWithComment", ex.getMessage());
             return successFlg;
         }
     }

@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -75,13 +78,23 @@ public class AddFineActivity extends SherlockActivity {
         TextView lblFullName = (TextView) findViewById(R.id.txtFMFullName);
         lblFullName.setText(fullName);
 
-        CheckBox chkPaidStatus = (CheckBox) findViewById(R.id.chkFMPaidStatus);
+        final CheckBox chkPaidStatus = (CheckBox) findViewById(R.id.chkFMPaidStatus);
 
-        chkPaidStatus.setOnClickListener(new View.OnClickListener() {
-
+        LinearLayout parentLayout = (LinearLayout) chkPaidStatus.getParent();
+        parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
+                chkPaidStatus.toggle();
+            }
+        });
+
+        chkPaidStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,
+                                         boolean isChecked) {
+
+                if (isChecked) {
                     paymentStatus = 1;
                 } else {
                     paymentStatus = 0;

@@ -422,7 +422,7 @@ public class MeetingAttendanceRepo {
         }
     }
 
-    public boolean saveMemberAttendanceComment(int meetingId, int memberId, String comment) {
+    public boolean saveMemberAttendanceWithComment(int meetingId, int memberId, String comment, int attendance) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int attendanceId = 0;
@@ -439,6 +439,7 @@ public class MeetingAttendanceRepo {
             values.put(AttendanceSchema.COL_A_MEETING_ID, meetingId);
             values.put(AttendanceSchema.COL_A_MEMBER_ID, memberId);
             values.put(AttendanceSchema.COL_A_COMMENTS, comment);
+            values.put(AttendanceSchema.COL_A_IS_PRESENT, attendance);
 
             // Inserting or UpdatingRow
             long retVal = -1;
@@ -459,7 +460,7 @@ public class MeetingAttendanceRepo {
             }
         }
         catch (Exception ex) {
-            Log.e("MeetingAttendanceRepo.saveMemberAttendanceComment", ex.getMessage());
+            Log.e("MeetingAttendanceRepo.saveMemberAttendanceWithComment", ex.getMessage());
             return false;
         }
         finally {

@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.applab.digitizingdata.R;
@@ -62,23 +65,33 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
 
             final CheckBox chkMemberFineStatus = (CheckBox) rowView.findViewById(R.id.chkMemberFine);
 
-            chkMemberFineStatus.setOnClickListener(new View.OnClickListener() {
+            RelativeLayout parentLayout = (RelativeLayout) chkMemberFineStatus.getParent();
+            parentLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View arg0) {
-                    final boolean isChecked = chkMemberFineStatus.isChecked();
-
-                    if (isChecked) {
-                        fineRecord.setStatus(1);
-                        Date date = new Date();
-                        datePaid = Utils.formatDateToSqlite((date));
-                    } else {
-                        fineRecord.setStatus(0);
-                        datePaid = "";
-                    }
-
-                    finesRepo.updateMemberFineStatus(fineRecord.getFineId(), fineRecord.getStatus(), datePaid);
+                public void onClick(View v) {
+                    chkMemberFineStatus.toggle();
                 }
             });
+
+            chkMemberFineStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                                                               @Override
+                                                               public void onCheckedChanged(CompoundButton buttonView,
+                                                                                            boolean isChecked) {
+
+                                                                   if (isChecked) {
+                                                                       fineRecord.setStatus(1);
+                                                                       Date date = new Date();
+                                                                       datePaid = Utils.formatDateToSqlite((date));
+                                                                   } else {
+                                                                       fineRecord.setStatus(0);
+                                                                       datePaid = "";
+                                                                   }
+
+                                                                   finesRepo.updateMemberFineStatus(fineRecord.getFineId(), fineRecord.getStatus(), datePaid);
+                                                               }
+                                                           }
+            );
 
             final TextView txtFineMeetingDate = (TextView) rowView.findViewById(R.id.txtFineMeetingDate);
             final TextView txtFineType = (TextView) rowView.findViewById(R.id.lblFineType);
@@ -90,7 +103,9 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
             txtFineType.setTypeface(typeface);
 
 
-            if (fineRecord != null) {
+            if (fineRecord != null)
+
+            {
                 txtFineMeetingDate.setText(String.format(Utils.formatDate(fineRecord.getMeetingDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
                 txtFineAmount.setText(String.format("%,.0fUGX", fineRecord.getAmount()));
 
@@ -109,6 +124,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
                 txtFineType.setText(fineRecord.getFineTypeName());
                 chkMemberFineStatus.setChecked(fineRecord.getStatus() != 0);
             }
+
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));
