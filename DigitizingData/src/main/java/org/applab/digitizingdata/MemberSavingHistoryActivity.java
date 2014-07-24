@@ -79,7 +79,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         if(targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
             double totalSavings = savingRepo.getMemberTotalSavingsInCycle(targetCycleId, memberId);
-            txtTotalSavings.setText(String.format("Total Savings \t\t%,.0f UGX", totalSavings));
+            txtTotalSavings.setText(String.format("Total Savings  %,.0f UGX\n", totalSavings));
         }
 
         //Fill-out the Savings Amount in case it exists
