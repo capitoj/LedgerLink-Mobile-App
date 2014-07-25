@@ -132,7 +132,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         final TextView txtNewInterest = (TextView) findViewById(R.id.txtMLRepayHInterest);
         TextView txtTotal = (TextView) findViewById(R.id.txtMLRepayHTotal);
         final TextView txtNewDateDue = (TextView) findViewById(R.id.txtMLRepayHDateDue);
-        TextView lblInstruction = (TextView)findViewById(R.id.lblMLRepayHInstruction);
+        TextView lblInstruction = (TextView) findViewById(R.id.lblMLRepayHInstruction);
 
 
         recentLoan = loanIssuedRepo.getMostRecentLoanIssuedToMember(memberId);
@@ -219,11 +219,11 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             //TextView lblMLRepayHCycleSpan = (TextView) findViewById(R.id.lblMLRepayHCycleSpan);
             //parent.removeView(lblMLRepayHCycleSpan);
 
-
         }
 
         //Handle the Date stuff only when the fields are visible
         if (null != recentLoan) {
+
             //Date stuff
             txtDateDue = (TextView) findViewById(R.id.txtMLRepayHDateDue);
             viewClicked = txtDateDue;
@@ -231,6 +231,14 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             //If it is not an edit operation then initialize the date. Otherwise, retain the date pulled from db
             if (!isEditOperation) {
                 initializeDate();
+            } else {
+                final Calendar c = Calendar.getInstance();
+                String dtNextDateDue = txtDateDue.getText().toString().trim();
+                Date nextDateDue = Utils.getDateFromString(dtNextDateDue, Utils.DATE_FIELD_FORMAT);
+                c.setTime(nextDateDue);
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
             }
 
             //Set onClick Listeners to load the DateDialog for MeetingDate
@@ -247,7 +255,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 }
             });
 
-            //Setup the Default Date. Not sure whether I should block this off when editing a loan repayment
+            // Setup the Default Date. Not sure whether I should block this off when editing a loan repayment
             if (!isEditOperation) {
 
                 //TODO: Set the default Date to be MeetingDate + 1Month, instead of using today's date
@@ -264,25 +272,25 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             //end of date stuff
         }
 
-      //  TextView txtOutstandingLoans = (TextView) findViewById(R.id.lblMLRepayHOutstandingLoans);
-       // TextView txtPrinciple = (TextView) findViewById(R.id.lblMLRepayHPrinciple);
-       // final TextView txtInterestOnLoan = (TextView) findViewById(R.id.lblMLRepayHInterestOnLoan);
+        //  TextView txtOutstandingLoans = (TextView) findViewById(R.id.lblMLRepayHOutstandingLoans);
+        // TextView txtPrinciple = (TextView) findViewById(R.id.lblMLRepayHPrinciple);
+        // final TextView txtInterestOnLoan = (TextView) findViewById(R.id.lblMLRepayHInterestOnLoan);
 
         TextView txtCycleSpan = (TextView) findViewById(R.id.lblMLRepayHCycleSpan);
 
         double outstandingLoans = 0.0;
         MeetingLoanIssued loanIssue = new MeetingLoanIssued();
-        if ((recentLoan!=null)&&(targetMeeting != null && targetMeeting.getVslaCycle() != null)) {
+        if ((recentLoan != null) && (targetMeeting != null && targetMeeting.getVslaCycle() != null)) {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
             cycle = vslaCycleRepo.getCycle(targetCycleId);
             txtCycleSpan.setText(String.format("Cycle %s to %s", Utils.formatDate(cycle.getStartDate(), Utils.DATE_FIELD_FORMAT), Utils.formatDate(cycle.getEndDate(), Utils.DATE_FIELD_FORMAT)));
-           // outstandingLoans = loanIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetCycleId, memberId);
-           // loanIssue = loanIssuedRepo.getOutstandingLoansByMemberInCycle(targetCycleId, memberId);
+            // outstandingLoans = loanIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetCycleId, memberId);
+            // loanIssue = loanIssuedRepo.getOutstandingLoansByMemberInCycle(targetCycleId, memberId);
         }
-       // txtOutstandingLoans.setText(String.format("Outstanding \t %,.0f UGX", outstandingLoans));
-      //  if (loanIssue != null) {
-         //   txtPrinciple.setText(String.format("Principle \t\t %,.0f UGX", loanIssue.getPrincipalAmount()));
-           // txtInterestOnLoan.setText(String.format("Interest \t\t %,.0f UGX", loanIssue.getInterestAmount()));
+        // txtOutstandingLoans.setText(String.format("Outstanding \t %,.0f UGX", outstandingLoans));
+        //  if (loanIssue != null) {
+        //   txtPrinciple.setText(String.format("Principle \t\t %,.0f UGX", loanIssue.getPrincipalAmount()));
+        // txtInterestOnLoan.setText(String.format("Interest \t\t %,.0f UGX", loanIssue.getInterestAmount()));
         //}
 
         //Populate the History
@@ -747,6 +755,9 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             }
             // c.add(Calendar.MONTH,1);
             c.add(Calendar.WEEK_OF_YEAR, 4);
+            /** mYear = c.get(Calendar.YEAR);
+             mMonth = c.get(Calendar.MONTH);
+             mDay = c.get(Calendar.DAY_OF_MONTH); */
             dateString = Utils.formatDate(c.getTime());
             viewClicked.setText(dateString);
         }
