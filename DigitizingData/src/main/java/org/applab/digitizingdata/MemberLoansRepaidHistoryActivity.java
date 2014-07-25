@@ -133,11 +133,14 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         TextView txtTotal = (TextView) findViewById(R.id.txtMLRepayHTotal);
         final TextView txtNewDateDue = (TextView) findViewById(R.id.txtMLRepayHDateDue);
         TextView lblInstruction = (TextView) findViewById(R.id.lblMLRepayHInstruction);
-
+        final TextView lblMLRepayHLBCurrency = (TextView) findViewById(R.id.lblMLRepayHLBCurrency);
+        final TextView lblMLRepayHCurrencyTotal = (TextView) findViewById(R.id.lblMLRepayHCurrencyTotal);
 
         recentLoan = loanIssuedRepo.getMostRecentLoanIssuedToMember(memberId);
         StringBuilder sb = null;
         if (null != recentLoan) {
+            lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
+            lblMLRepayHLBCurrency.setVisibility(View.GONE);
             txtLoanNumber.setText(String.format("%d", recentLoan.getLoanNo()));
 
             //Setup the Instruction
@@ -153,9 +156,9 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
                 //Add the rest of the fields
                 txtNewDateDue.setText(Utils.formatDate(repaymentBeingEdited.getNextDateDue()));
-                txtBalance.setText(String.format("%.0f", repaymentBeingEdited.getBalanceAfter()));
+                txtBalance.setText(String.format("%.0f UGX", repaymentBeingEdited.getBalanceAfter()));
                 txtNewInterest.setText(String.format("%.0f", repaymentBeingEdited.getInterestAmount()));
-                txtTotal.setText(String.format("%.0f", repaymentBeingEdited.getRolloverAmount()));
+                txtTotal.setText(String.format("%.0f UGX", repaymentBeingEdited.getRolloverAmount()));
             }
         } else {
             txtLoanNumber.setText(null);
@@ -352,7 +355,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 } else {
                     theCurLoanBalanceAmount = recentLoan.getLoanBalance() - theRepayAmount;
                 }
-                txtLoanBalance.setText(String.format("%,.0f", theCurLoanBalanceAmount));
+                txtLoanBalance.setText(String.format("%,.0f UGX", theCurLoanBalanceAmount));
                 double interestAmount = 0;
                 //If meeting date is before loan due date then default interest to 0
                 if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
@@ -362,7 +365,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     editTextInterestRate.setText(String.format("%.0f", interestAmount));
                 }
                 double rolloverAmount = theCurLoanBalanceAmount + interestAmount;
-                txtRolloverAmount.setText(String.format("%,.0f", rolloverAmount));
+                txtRolloverAmount.setText(String.format("%,.0f UGX", rolloverAmount));
 
                 // If balance = 0, then next due date field should be blank
                 if (theCurLoanBalanceAmount == 0) {
@@ -375,6 +378,14 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     }
                     txtDateDue.setEnabled(false);//setVisibility(View.INVISIBLE);
                     editTextInterestRate.setEnabled(false);
+                }
+                if (theCurLoanBalanceAmount < 0) {
+                    double zeroInterest = 0.0;
+                    double zeroLoanBalance = 0.0;
+                    editTextInterestRate.setText(String.format("%.0f", zeroInterest));
+                    txtRolloverAmount.setText(String.format("%,.0f UGX overpayment", Math.abs(theCurLoanBalanceAmount)));
+                    txtLoanBalance.setText(String.format("%,.0f UGX", zeroLoanBalance));
+                    txtDateDue.setText("none");
                 }
                 //Have this value redundantly stored for future use
                 theCurLoanRepayAmount = theRepayAmount;
@@ -408,7 +419,11 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 }
 
                 double rolloverAmount = theInterestAmount + theCurLoanBalanceAmount;
-                txtRolloverAmount.setText(String.format("%,.0f", rolloverAmount));
+                txtRolloverAmount.setText(String.format("%,.0fUGX", rolloverAmount));
+                if (rolloverAmount < 0) {
+                    txtRolloverAmount.setText(String.format("%,.0f UGX overpayment", rolloverAmount));
+                    txtDateDue.setText("none");
+                }
             }
         });
 
@@ -665,7 +680,8 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
             //Check Over-Payments
             if (theAmount > balanceBefore) {
-                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The repayment amount is more than the remaining loan balance.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                double overPayment = theAmount - balanceBefore;
+                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Overpayment", "Overpayment of "+ String.valueOf(overPayment) + " UGX. Payment made must not exceed "+ String.valueOf(balanceBefore) + " UGX.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 return false;
             }
 
