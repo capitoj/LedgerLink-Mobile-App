@@ -108,16 +108,19 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
             } else {
                 for (MeetingLoanIssued loanIssue : loansIssued) {
                     if (loanIssue.getComment() == null || loanIssue.getComment().trim().length() == 0) {
-                        //aggregate.append(String.format("Outstanding loan  %,.0f UGX", loanIssue.getLoanBalance()));
                         txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", loanIssue.getLoanBalance()));
                     } else {
 
                         comment = loanIssue.getComment();
-                        // aggregate.append(String.format("Outstanding loan  %,.0f UGX \n%s", loanIssue.getLoanBalance(), comment));
                         txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", loanIssue.getLoanBalance()));
                     }
+
+                    // Show comment if any
                     if (comment.trim().isEmpty()){
                         txtComment.setVisibility(View.GONE);
+                    }
+                    else{
+                        txtComment.setText(comment);
                     }
 
                     txtOutstanding.setLineSpacing(0.0f, 1.5f);
