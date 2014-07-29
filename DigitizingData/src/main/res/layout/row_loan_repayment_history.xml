@@ -1,16 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+   <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHPaymentListing"
         style="@style/RegularText"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Payment \t\t Listing " />
+        android:layout_marginLeft="10dip"
+        android:text="Payment \t\t Listing " /> -->
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLRHLoanNo"
+        style="@style/RegularText"
+        android:layout_width="45dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dip"
+        android:layout_marginLeft="10dip"
+        android:text="Loan No " />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLRHAmount"
+        style="@style/RegularText"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dip"
+        android:layout_marginLeft="5dip"
+        android:layout_toRightOf="@id/txtRLRHLoanNo"
+        android:text="Amount " />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLRHMeetingDate"
+        style="@style/RegularText"
+        android:layout_width="200dip"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dip"
+        android:layout_marginLeft="5dip"
+        android:layout_toRightOf="@id/txtRLRHAmount"
+        android:text="Date " />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLRHComments"
+        style="@style/RegularText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="2dip"
+        android:paddingBottom="5dip"
+        android:layout_below="@id/txtRLRHLoanNo"
+        android:text="Comments " />
 
    <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHLoanNo"
@@ -49,11 +92,5 @@
         android:layout_below="@id/txtRLRHAmount"
         android:text="Rollover " />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-        android:id="@+id/txtRLRHComments"
-        style="@style/ListSmallSubItems"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtRLRHRollover"
-        android:text="Comments " /> -->
+     -->
 </RelativeLayout>
