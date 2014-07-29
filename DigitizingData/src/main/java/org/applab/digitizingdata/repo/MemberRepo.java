@@ -162,7 +162,7 @@ public class MemberRepo {
         //First get the Interest Rate for the Current Cycle
         double interest = 0.0;
 
-        String comment = "Unknown";
+        String comment = "";
 
         //Save the loan
         boolean loanSaveResult = meetingLoanIssuedRepo.saveMemberLoanIssue(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), loanId, member.getOutstandingLoanOnSetup(),interest, member.getDateOfFirstRepayment(), comment);

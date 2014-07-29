@@ -29,7 +29,7 @@ import java.util.Calendar;
 public class SampleDataBuilderRepo {
     private static Context appContext;
 
-    private static String comment = "Unknown";
+    private static String comment = "";
 
     public static boolean refreshTrainingData(Context context) {
 
