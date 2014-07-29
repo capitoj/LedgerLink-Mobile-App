@@ -3,6 +3,7 @@ package org.applab.digitizingdata;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
+import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingStartingCash;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
@@ -19,6 +22,8 @@ import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersLoansIssuedArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingFineRepo;
+import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MeetingSavingRepo;
@@ -37,6 +42,18 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     int meetingId;
     private MeetingActivity parentActivity;
     private View fragmentView;
+    MeetingRepo meetingRepo = null;
+    MeetingSavingRepo savingRepo = null;
+    MeetingLoanRepaymentRepo repaymentRepo = null;
+    MeetingLoanIssuedRepo loanIssuedRepo = null;
+    MeetingFineRepo fineRepo = null;
+    double cashToBank = 0.0;
+    Meeting currentMeeting = null;
+    double totalCashInBox = 0.0;
+
+    TextView lblTotalCash;
+
+    MeetingStartingCash startingCashDetails = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +69,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
             return null;
         }
         fragmentView = inflater.inflate(R.layout.frag_meeting_loans_issued, container, false);
+
         initializeFragmentView();
         return fragmentView;
     }
@@ -59,18 +77,25 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        lblTotalCash = (TextView) getSherlockActivity().findViewById(R.id.lblMLIssuedFTotalCash);
+        populateTotalCash();
+        Log.d("MLIF", String.valueOf(totalCashInBox));
+        //lblTotalCash = (TextView) getSherlockActivity().findViewById(R.id.lblMLIssuedFTotalCash);
+        if(null!=lblTotalCash) {
+            Log.d("MLIF2", String.valueOf(totalCashInBox));
+            lblTotalCash.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
+        }
+        Log.d("MLIF3", String.valueOf(totalCashInBox));
 
     }
 
-    private void initializeFragmentView()
-    {
+    private void initializeFragmentView() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         actionBar = getSherlockActivity().getSupportActionBar();
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         String title = "Meeting";
-        switch(Utils._meetingDataViewMode) {
+        switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
                 title = "Send Data";
                 break;
@@ -78,25 +103,37 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
                 title = "Sent Data";
                 break;
             default:
-              //  title="Meeting";
+                //  title="Meeting";
                 break;
         }
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
+
+        meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
+        savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
+        loanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
+        repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
+        fineRepo = new MeetingFineRepo(getSherlockActivity().getApplicationContext());
+
         /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        lblMeetingDate.setText(meetingDate); */
+         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+         lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+
+        //Get the Cycle that contains this meeting
+        if (null == currentMeeting) {
+            currentMeeting = meetingRepo.getMeetingById(meetingId);
+        }
+
         //Populate the Cash Available
-        //populateCashBookFields();
-        //Populate the Members
         parentActivity = (MeetingActivity) getSherlockActivity();
+
+        // Populate members list
         //Wrap and run long task
-        Runnable runnable = new Runnable()
-        {
+        Runnable runnable = new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
+
                 //Populate the Members
                 populateMembersList();
             }
@@ -117,14 +154,12 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         //Assign Adapter to ListView
         //OMM: Since I was unable to do a SherlockListFragment to work
         //setListAdapter(adapter);
-        final ListView lvwMembers = (ListView)fragmentView.findViewById(R.id.lvwMLIssuedFMembers);
-        final TextView txtEmpty = (TextView)fragmentView.findViewById(R.id.txtMLIssuedFEmpty);
+        final ListView lvwMembers = (ListView) fragmentView.findViewById(R.id.lvwMLIssuedFMembers);
+        final TextView txtEmpty = (TextView) fragmentView.findViewById(R.id.txtMLIssuedFEmpty);
 
-        Runnable runOnUi = new Runnable()
-        {
+        Runnable runOnUi = new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 lvwMembers.setEmptyView(txtEmpty);
                 lvwMembers.setAdapter(adapter);
             }
@@ -137,18 +172,18 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
                                     int position, long id) {
 
                 //Do not invoke the event when in Read only Mode
-                if(parentActivity.isViewOnly()) {
+                if (parentActivity.isViewOnly()) {
                     Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = members.get(position);
                     Intent viewHistory = new Intent(view.getContext(), MemberLoansIssuedHistoryActivity.class);
 
                     // Pass on data
                     viewHistory.putExtra("_memberId", selectedMember.getMemberId());
                     viewHistory.putExtra("_names", selectedMember.toString());
-                    viewHistory.putExtra("_meetingDate",meetingDate);
+                    viewHistory.putExtra("_meetingDate", meetingDate);
                     viewHistory.putExtra("_meetingId", meetingId);
 
                     startActivity(viewHistory);
@@ -159,49 +194,39 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
 
         //Hack to ensure all Items in the List View are visible
         //Utils.setListViewHeightBasedOnChildren(lvwMembers);
-       // TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
+        // TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
         //lblMeetingDate.setFocusable(true);
         //lblMeetingDate.requestFocus();
 
     }
 
-    /*
-    private void populateCashBookFields() {
-        MeetingRepo meetingRepo = null;
-        MeetingSavingRepo savingRepo = null;
-        MeetingLoanRepaymentRepo repaymentRepo = null;
+    private void populateTotalCash() {
 
         try {
             meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
             savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
             repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
 
+            startingCashDetails = meetingRepo.getMeetingActualStartingCashDetails(meetingId);
+            double expectedStartingCash = 0.0;
 
-            TextView lblTotalCash = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFTotalCash);
-            TextView lblOpeningCash = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFOpeningCash);
-            TextView lblTotalSavings = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFSavings);
-            TextView lblTotalLoansRepaid = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFLoansRepaid);
-
-            double openingCash = meetingRepo.getMeetingTotalExpectedStartingCash(meetingId);
             double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
+            double totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
+            double totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId, Utils.getDateFromSqlite(meetingDate));
 
-            double totalCash = openingCash + totalSavings + totalLoansRepaid;
+            double actualStartingCash = startingCashDetails.getActualStartingCash();
+            cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());
 
-            lblTotalCash.setText(String.format("Total Cash: %,.0fUGX", totalCash));
-            lblOpeningCash.setText(String.format("Starting Cash: %,.0fUGX", openingCash));
-            lblTotalSavings.setText(String.format("Savings: %,.0fUGX", totalSavings));
-            lblTotalLoansRepaid.setText(String.format("Loans Repaid: %,.0fUGX", totalLoansRepaid));
+            totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines - cashToBank;
 
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
 
-        }
-        finally {
+        } finally {
             meetingRepo = null;
             savingRepo = null;
             repaymentRepo = null;
         }
     }
-    */
+
 }

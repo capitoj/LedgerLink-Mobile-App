@@ -2,62 +2,57 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/frmMLIssuedF_top_control_bar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <!--
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_below="@id/lblMLIssuedFMeetingDate"
-                android:paddingLeft="5dp"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:text="Total Cash: 0 UGX"
-                android:id="@+id/lblMLIssuedFTotalCash"
-                android:layout_gravity="center"/>
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_below="@id/lblMLIssuedFTotalCash"
-                android:paddingLeft="10dp"
-                android:textStyle="normal"
-                android:textSize="14sp"
-                android:text="Starting Cash: 0 UGX"
-                android:id="@+id/lblMLIssuedFOpeningCash"
-                android:layout_gravity="center"/>
-        <TextView
-            android:layout_width="fill_parent"
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLIssuedFTotalCash"
+            style="@style/RegularText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_below="@id/lblMLIssuedFOpeningCash"
-            android:paddingLeft="10dp"
-            android:textStyle="normal"
-            android:textSize="14sp"
-            android:text="Savings: 0 UGX"
-            android:id="@+id/lblMLIssuedFSavings"
-            android:layout_gravity="center"/>
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="Total Cash 0 UGX" />
+        <!-- <TextView
+                 android:layout_width="fill_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="5dp"
+                 android:layout_below="@id/lblMLIssuedFTotalCash"
+                 android:paddingLeft="10dp"
+                 android:textStyle="normal"
+                 android:textSize="14sp"
+                 android:text="Starting Cash: 0 UGX"
+                 android:id="@+id/lblMLIssuedFOpeningCash"
+                 android:layout_gravity="center"/>
+         <TextView
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="5dp"
+             android:layout_below="@id/lblMLIssuedFOpeningCash"
+             android:paddingLeft="10dp"
+             android:textStyle="normal"
+             android:textSize="14sp"
+             android:text="Savings: 0 UGX"
+             android:id="@+id/lblMLIssuedFSavings"
+             android:layout_gravity="center"/>
 
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                android:layout_below="@id/lblMLIssuedFSavings"
-                android:paddingLeft="10dp"
-                android:textStyle="normal"
-                android:textSize="14sp"
-                android:text="Loans Repaid: 0 UGX"
-                android:id="@+id/lblMLIssuedFLoansRepaid"
-                android:layout_gravity="center"/>
-        -->
+         <TextView
+                 android:layout_width="fill_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="5dp"
+                 android:layout_marginBottom="10dp"
+                 android:layout_below="@id/lblMLIssuedFSavings"
+                 android:paddingLeft="10dp"
+                 android:textStyle="normal"
+                 android:textSize="14sp"
+                 android:text="Loans Repaid: 0 UGX"
+                 android:id="@+id/lblMLIssuedFLoansRepaid"
+                 android:layout_gravity="center"/>
+         -->
 
     </RelativeLayout>
 
@@ -67,12 +62,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:divider="@null"
-        android:dividerHeight="0dp"
         android:layout_below="@id/frmMLIssuedF_top_control_bar"
-        android:choiceMode="singleChoice">
-    </ListView>
+        android:choiceMode="singleChoice"
+        android:divider="@null"
+        android:dividerHeight="0dp"></ListView>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtMLIssuedFEmpty"
@@ -80,7 +73,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/frmMLIssuedF_top_control_bar"
-        android:text="@string/empty_members_list"
-        />
+        android:text="@string/empty_members_list" />
 
 </RelativeLayout>
