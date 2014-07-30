@@ -53,9 +53,9 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     MeetingLoanIssuedRepo loanIssuedRepo = null;
     MeetingLoanRepaymentRepo loanRepaymentRepo = null;
     ArrayList<MemberLoanIssueRecord> loansIssued;
+    EditText txtInterestAmount;
     int targetCycleId = 0;
     double interestRate = 0.0;
-    EditText editTextInterestRate;
     TextView txtTotalLoanAmount;
     double theCurLoanAmount = 0.0;
     int currentLoanId = 0;
@@ -173,7 +173,8 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //Compute the Interest
+
+                // Compute the Interest
                 double theAmount = 0.0;
                 try {
                     if (s.toString().length() <= 0) {
@@ -185,7 +186,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 }
 
                 double interestAmount = (interestRate * 0.01 * theAmount);
-                // editTextInterestRate.setText(String.format("%.0f",interestAmount));
+                txtInterestAmount.setText(String.format("%.0f",interestAmount));
 
                 double totalAmount = theAmount + interestAmount;
                 // txtTotalLoanAmount.setText(String.format("%,.0f", totalAmount));
@@ -230,9 +231,8 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         TextView txtLoanNo = (TextView) findViewById(R.id.txtMLIssuedHLoanNo);
         TextView txtLoanAmount = (TextView) findViewById(R.id.txtMLIssuedHAmount);
         TextView txtComment = (TextView) findViewById(R.id.txtMLIssuedHComment);
-
-        /**TextView txtInterestAmount = (TextView)findViewById(R.id.txtMLIssuedHInterest);
-         TextView txtTotalAmount = (TextView)findViewById(R.id.txtMLIssuedHTotal);
+        txtInterestAmount = (EditText) findViewById(R.id.txtMLIssuedHInterest);
+        /**TextView txtTotalAmount = (TextView)findViewById(R.id.txtMLIssuedHTotal);
          TextView txtDateDue = (TextView)findViewById(R.id.txtMLIssuedHDateDue); */
 
         if (null == loanIssuedRepo) {
@@ -240,12 +240,13 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         }
         MeetingLoanIssued memberLoan = loanIssuedRepo.getLoanIssuedToMemberInMeeting(meetingId, memberId);
         if (null != memberLoan) {
+
             currentLoanId = memberLoan.getLoanId();
             txtLoanNo.setText(String.format("%d", memberLoan.getLoanNo()));
             txtLoanAmount.setText(String.format("%.0f", memberLoan.getPrincipalAmount()));
             txtComment.setText(String.format("%s", memberLoan.getComment()));
-            /** txtInterestAmount.setText(String.format("%.0f",memberLoan.getInterestAmount()));
-             txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(),"dd-MMM-yyyy"));
+            txtInterestAmount.setText(String.format("%.0f",memberLoan.getInterestAmount()));
+            /** txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(),"dd-MMM-yyyy"));
 
              //May consider just recomputing the total amount afresh
              txtTotalAmount.setText(String.format("%.0f",memberLoan.getLoanBalance())); */
@@ -411,7 +412,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             TextView txtLoanNo = (TextView) findViewById(R.id.txtMLIssuedHLoanNo);
             TextView txtLoanAmount = (TextView) findViewById(R.id.txtMLIssuedHAmount);
             TextView txtComment = (TextView) findViewById(R.id.txtMLIssuedHComment);
-            // TextView txtInterestAmount = (TextView)findViewById(R.id.txtMLIssuedHInterest);
+            TextView txtInterestAmount = (TextView) findViewById(R.id.txtMLIssuedHInterest);
             // TextView txtDateDue = (TextView)findViewById(R.id.txtMLIssuedHDateDue);
 
             String amount = txtLoanAmount.getText().toString().trim();
@@ -450,47 +451,46 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 theComment = comment;
             }
 
-            //Interest Amount
+            // Interest Amount
             theInterestAmount = (interestRate * 0.01 * theAmount);
-            /** String interestAmount = txtInterestAmount.getText().toString().trim();
-             if (interestAmount.length() < 1) {
-             //Not sure whether there would be more to do
-             theInterestAmount = 0.0;
-             }
-             else {
-             theInterestAmount = Double.parseDouble(interestAmount);
-             if (theInterestAmount < 0.00) {
-             Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue","The Interest Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-             txtLoanNo.requestFocus();
-             return false;
-             }
-             }
+            String interestAmount = txtInterestAmount.getText().toString().trim();
+            if (interestAmount.length() < 1) {
 
-             //Date Due: Check it against the meeting date, not calendar date
-             //TODO: I will try using Date.CompareTo(date2)
-             Date today = Calendar.getInstance().getTime();
-             String dateDue = txtDateDue.getText().toString().trim();
-             Date dtDateDue = Utils.getDateFromString(dateDue,Utils.DATE_FIELD_FORMAT);
-             if (dtDateDue.before(targetMeeting.getMeetingDate())) {
-             Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue","The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-             txtDateDue.requestFocus();
-             return false;
-             }
-             else {
-             theDateDue = dtDateDue;
-             }
+                // Not sure whether there would be more to do
+                theInterestAmount = 0.0;
+            } else {
+                theInterestAmount = Double.parseDouble(interestAmount);
+                if (theInterestAmount < 0.00) {
+                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue", "The Interest Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtInterestAmount.requestFocus();
+                    return false;
+                }
+            }
+/**
+            //Date Due: Check it against the meeting date, not calendar date
+            Date today = Calendar.getInstance().getTime();
+            String dateDue = txtDateDue.getText().toString().trim();
+            Date dtDateDue = Utils.getDateFromString(dateDue, Utils.DATE_FIELD_FORMAT);
+            if (dtDateDue.before(targetMeeting.getMeetingDate())) {
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue", "The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtDateDue.requestFocus();
+                return false;
+            } else {
+                theDateDue = dtDateDue;
+            }
 
-             //Now Save the data
-             if(null == loanIssuedRepo){
-             loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
-             }
-             */
+            //Now Save the data
+            if (null == loanIssuedRepo) {
+                loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
+            }
+            */
+            /** Commented out because designer says too; uncomment if designer decides otherwise
             //Further Validation of Uniqueness of the Loan Number
             if (!loanIssuedRepo.validateLoanNumber(theLoanNo, meetingId, memberId)) {
                 Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Number is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanNo.requestFocus();
                 return false;
-            }
+            } */
 
             //Determine whether to delete this current loan i.e. in case it is being edited and the amount is set to zero
             if (currentLoanId > 0 && theAmount <= 0) {

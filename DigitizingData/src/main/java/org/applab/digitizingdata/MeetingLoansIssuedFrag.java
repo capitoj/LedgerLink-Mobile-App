@@ -78,14 +78,11 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         lblTotalCash = (TextView) getSherlockActivity().findViewById(R.id.lblMLIssuedFTotalCash);
+
         populateTotalCash();
-        Log.d("MLIF", String.valueOf(totalCashInBox));
-        //lblTotalCash = (TextView) getSherlockActivity().findViewById(R.id.lblMLIssuedFTotalCash);
         if(null!=lblTotalCash) {
-            Log.d("MLIF2", String.valueOf(totalCashInBox));
             lblTotalCash.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
         }
-        Log.d("MLIF3", String.valueOf(totalCashInBox));
 
     }
 
@@ -208,7 +205,6 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
             repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
 
             startingCashDetails = meetingRepo.getMeetingActualStartingCashDetails(meetingId);
-            double expectedStartingCash = 0.0;
 
             double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
