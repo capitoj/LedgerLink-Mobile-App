@@ -90,7 +90,7 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
             if(passKey.equalsIgnoreCase(vslaInfo.getPassKey())) {
                 //Decide which activity to launch, from the current Getting started wizard stage
                 //Intent stage = new Intent(getBaseContext(), Utils.resolveGettingStartedWizardStage(vslaInfo.getGettingStartedWizardStage()));
-                Intent stage = new Intent(getBaseContext(), GettingsStartedWizardNewCycleActivity.class);
+                Intent stage = new Intent(getBaseContext(), GettingStartedWizardNewCycleActivity.class);
                 startActivity(stage);
                 finish();
             }

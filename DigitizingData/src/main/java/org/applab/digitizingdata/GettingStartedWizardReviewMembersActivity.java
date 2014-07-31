@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -23,7 +22,6 @@ import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.fontutils.TypefaceTextView;
@@ -134,7 +132,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), GettingsStartedWizardNewCycleActivity.class);
+                        Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
                         i.putExtra("_isUpdateCycleAction", true);
                         i.putExtra("_isFromReviewMembers", true);
                         startActivity(i);
@@ -175,7 +173,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
           /**  case R.id.mnuMListDone:
                 //Go to GSW cycle review page
                 //which is infact the new cycle activity in update mode
-                Intent i = new Intent(getApplicationContext(), GettingsStartedWizardNewCycleActivity.class);
+                Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
                 i.putExtra("_isUpdateCycleAction", true);
                 startActivity(i);
                 return true; */

@@ -147,7 +147,7 @@
             android:label="@string/title_activity_gettings_started_wizard_review_members" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.GettingsStartedWizardNewCycleActivity"
+            android:name=".GettingStartedWizardNewCycleActivity"
             android:label="@string/title_activity_gettings_started_wizard_add_cycle"
             android:parentActivityName="org.applab.digitizingdata.GettingStartedWizardPageOne" >
             <meta-data

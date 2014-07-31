@@ -54,7 +54,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent stage = new Intent(getBaseContext(), GettingsStartedWizardNewCycleActivity.class);
+                        Intent stage = new Intent(getBaseContext(), GettingStartedWizardNewCycleActivity.class);
                         stage.putExtra("_isFromReviewMembers", false);
                         startActivity(stage);
                         finish();

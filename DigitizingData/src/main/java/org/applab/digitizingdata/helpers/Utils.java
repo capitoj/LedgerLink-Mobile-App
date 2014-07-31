@@ -6,12 +6,9 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
-import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
-import android.text.Selection;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
@@ -326,13 +323,13 @@ public class Utils {
     public static Class resolveGettingStartedWizardStage(int stage) {
        switch(stage) {
            case GETTING_STARTED_PAGE_NEW_CYCLE:
-               return GettingsStartedWizardNewCycleActivity.class;
+               return GettingStartedWizardNewCycleActivity.class;
            case GETTING_STARTED_PAGE_ADD_MEMBER:
                return GettingStartedWizardAddMemberActivity.class;
            case GETTING_STARTED_PAGE_REVIEW_MEMBERS:
                return GettingStartedWizardReviewMembersActivity.class;
            case GETTING_STARTED_PAGE_REVIEW_CYCLE:
-               return GettingsStartedWizardNewCycleActivity.class;
+               return GettingStartedWizardNewCycleActivity.class;
            case GETTING_STARTED_PAGE_ONE:
                return GettingStartedWizardPageOne.class;
            case GETTING_STARTED_PAGE_PIN:

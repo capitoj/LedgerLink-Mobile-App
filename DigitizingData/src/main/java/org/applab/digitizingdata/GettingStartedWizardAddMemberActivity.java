@@ -5,15 +5,8 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Bundle;
-import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.telephony.PhoneNumberUtils;
-import android.text.Editable;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextWatcher;
-import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.*;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -36,7 +28,6 @@ import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -153,7 +144,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                         @Override
                         public void onClick(View v) {
 
-                            Intent i = new Intent(getApplicationContext(), GettingsStartedWizardNewCycleActivity.class);
+                            Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
                             i.putExtra("_isFromReviewMembers", false);
                             startActivity(i);
                             finish();
@@ -321,7 +312,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
      Intent i;
          switch(item.getItemId()) {
              case android.R.id.home:
-                 Intent upIntent = new Intent(this, GettingsStartedWizardNewCycleActivity.class);
+                 Intent upIntent = new Intent(this, GettingStartedWizardNewCycleActivity.class);
                  upIntent.putExtra("_isFromReviewMembers", false);
                  startActivity(upIntent);
                  finish();

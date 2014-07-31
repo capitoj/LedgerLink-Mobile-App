@@ -3,26 +3,20 @@ package org.applab.digitizingdata;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,21 +28,16 @@ import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.TypefaceTextView;
-import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.*;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
-
 
 
 /**
  * Created by Moses on 6/27/13.
  */
-public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
+public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
     protected boolean _isFromReviewMembers = false;
 
@@ -140,7 +129,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
                 //I want the Event Handler to handle both startDate and endDate
                 viewClicked = (TextView) view;
                 settingStartDate = true;
-                DatePickerDialog datePickerDialog = new DatePickerDialog(GettingsStartedWizardNewCycleActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(GettingStartedWizardNewCycleActivity.this, mDateSetListener, mYear, mMonth, mDay);
                 datePickerDialog.setTitle("Set cycle start date");
                 datePickerDialog.show();
             }
@@ -152,7 +141,7 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
             public void onClick(View view) {
                 viewClicked = (TextView) view;
                 settingStartDate = false;
-                DatePickerDialog datePickerDialog = new DatePickerDialog(GettingsStartedWizardNewCycleActivity.this, mDateSetListener, mEndYear, mEndMonth, mEndDay);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(GettingStartedWizardNewCycleActivity.this, mDateSetListener, mEndYear, mEndMonth, mEndDay);
                 datePickerDialog.setTitle("Set cycle end date");
                 datePickerDialog.show();
             }
@@ -435,11 +424,11 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
 
         try {
             // Now populate specific to Getting started wizard
-            EditText txtInterestCollecteSoFar = (EditText) findViewById(R.id.txtNCInterestCollectedSoFar);
+            EditText txtInterestCollectedSoFar = (EditText) findViewById(R.id.txtNCInterestCollectedSoFar);
             EditText txtFinesCollectedSoFar = (EditText) findViewById(R.id.txtNCFinesCollectedSoFar);
 
-            //TODO: Set the interest and fines for the middle start cycle
-            txtInterestCollecteSoFar.setText(Utils.formatRealNumber(cycle.getInterestAtSetup()));
+            // TODO: Set the interest and fines for the middle start cycle
+            txtInterestCollectedSoFar.setText(Utils.formatRealNumber(cycle.getInterestAtSetup()));
             txtFinesCollectedSoFar.setText(Utils.formatRealNumber(cycle.getFinesAtSetup()));
 
         } catch (Exception ex) {
@@ -451,59 +440,16 @@ public class GettingsStartedWizardNewCycleActivity extends NewCycleActivity {
         super.clearDataFields();
         buildMaxSharesSpinner();
         try {
+
             //Now Clear fields specific to GSWizard
-            EditText txtInterestCollecteSoFar = (EditText) findViewById(R.id.txtNCInterestCollectedSoFar);
+            EditText txtInterestCollectedSoFar = (EditText) findViewById(R.id.txtNCInterestCollectedSoFar);
             EditText txtFinesCollectedSoFar = (EditText) findViewById(R.id.txtNCFinesCollectedSoFar);
 
-            txtInterestCollecteSoFar.setText("");
+            txtInterestCollectedSoFar.setText("");
             txtFinesCollectedSoFar.setText("");
         } catch (Exception ex) {
 
         }
 
     }
-
-    /* Populates the max shares spinner  */
-    /**private void buildMaxSharesSpinner() {
-
-        Spinner cboNCMaxShares = (Spinner) findViewById(R.id.cboNCMaxShares);
-        ArrayList<String> maxSharesArrayList = new ArrayList<String>();
-        maxSharesArrayList.add("select number");
-        for (int i = 1; i <= 100; i++) {
-            maxSharesArrayList.add(i + "");
-        }
-        String[] maxSharesList = maxSharesArrayList.toArray(new String[maxSharesArrayList.size()]);
-        maxSharesArrayList.toArray(maxSharesList);
-        ArrayAdapter<CharSequence> maxSharesAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, maxSharesList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-                ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-
-                return v;
-            }
-
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                return v;
-            }
-        };
-
-        maxSharesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboNCMaxShares.setAdapter(maxSharesAdapter);
-        cboNCMaxShares.setOnItemSelectedListener(new CustomGenderSpinnerListener());
-
-        // Make the spinner selectable
-        cboNCMaxShares.setFocusable(true);
-        cboNCMaxShares.setFocusableInTouchMode(true);
-        cboNCMaxShares.setClickable(true);
-    } */
-
 }
