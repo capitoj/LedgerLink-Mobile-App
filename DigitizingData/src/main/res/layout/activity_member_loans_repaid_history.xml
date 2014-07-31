@@ -71,7 +71,7 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Payment Made" />
+            android:text="Amount paid" />
 
         <LinearLayout
             android:id="@+id/frmMLRepayHAmount"
@@ -132,7 +132,7 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Outstanding After Payment" />
+            android:text="Rollover" />
 
 
         <LinearLayout
@@ -176,7 +176,6 @@
             android:layout_marginTop="0dip"
             android:text="at 10% every 30 days" />
 
-
         <LinearLayout
             android:id="@+id/frmMLRepayHInterest"
             android:layout_width="fill_parent"
@@ -207,7 +206,7 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="New Balance (with Interest)" />
+            android:text="Outstanding balance" />
 
         <LinearLayout
             android:id="@+id/frmMLRepayHTotal"
@@ -238,7 +237,7 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Next Payment Date" />
+            android:text="Next payment date" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/txtMLRepayHDateDue"
