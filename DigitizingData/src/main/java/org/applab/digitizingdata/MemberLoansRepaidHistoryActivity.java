@@ -123,7 +123,15 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             isEditOperation = true;
         }
 
-        //Get Loan Number of currently running loan
+        // Get current cycle interest rate
+        TextView lblInterestDesc = (TextView) findViewById(R.id.lblMLRepayHInterestDesc);
+        if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
+            targetCycleId = targetMeeting.getVslaCycle().getCycleId();
+            cycle = vslaCycleRepo.getCycle(targetCycleId);
+            lblInterestDesc.setText(String.format("at %.0f%% every 30 days", cycle.getInterestRate()));
+        }
+
+        // Get Loan Number of currently running loan
         TextView lblLoanNo = (TextView) findViewById(R.id.lblMLRepayHLoanNo);
         TextView txtLoanNumber = (TextView) findViewById(R.id.txtMLRepayHLoanNo);
         TextView txtLoanAmountFld = (TextView) findViewById(R.id.txtMLRepayHAmount);
@@ -147,14 +155,14 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             sb = new StringBuilder("If a payment is NOT due and no payment is made, press <b>cancel</b>. If a payment is due but not made enter 0 (zero) for payment amount. After entering payment, review new balance.");
             lblInstruction.setText(Html.fromHtml(sb.toString()));
 
-            //Now in case this is an edit operation populate the fields with the Repayment being edited
+            // Now in case this is an edit operation populate the fields with the Repayment being edited
             if (null != repaymentBeingEdited && isEditOperation) {
-                //populate the fields
+                // Populate the fields
                 txtLoanAmountFld.setText(String.format("%.0f", repaymentBeingEdited.getAmount()));
                 txtComment.setText(repaymentBeingEdited.getComments());
-                //txtLoanNumber.setText(String.format("%d", repaymentBeingEdited.getLoanNo()));
+                // txtLoanNumber.setText(String.format("%d", repaymentBeingEdited.getLoanNo()));
 
-                //Add the rest of the fields
+                // Add the rest of the fields
                 txtNewDateDue.setText(Utils.formatDate(repaymentBeingEdited.getNextDateDue()));
                 txtBalance.setText(String.format("%.0f UGX", repaymentBeingEdited.getBalanceAfter()));
                 txtNewInterest.setText(String.format("%.0f", repaymentBeingEdited.getInterestAmount()));
@@ -163,23 +171,23 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         } else {
             txtLoanNumber.setText(null);
 
-            //Show that Member has No Loan
+            // Show that Member has No Loan
             lblInstruction.setText("Member does not have an outstanding loan.");
 
-            //Remove the widgets for capturing Loans
+            // Remove the widgets for capturing Loans
             LinearLayout parent = (LinearLayout) lblInstruction.getParent();
 
-            //Remove LoanNo
+            // Remove LoanNo
             LinearLayout frmLoanNo = (LinearLayout) findViewById(R.id.frmMLRepayHLoanNo);
             parent.removeView(frmLoanNo);
 
-            //Remove Amount
+            // Remove Amount
             TextView lblAmount = (TextView) findViewById(R.id.lblMLRepayHAmount);
             parent.removeView(lblAmount);
             LinearLayout frmAmount = (LinearLayout) findViewById(R.id.frmMLRepayHAmount);
             parent.removeView(frmAmount);
 
-            //Remove Balance
+            // Remove Balance
             TextView lblBalanceSection = (TextView) findViewById(R.id.lblMLRepayHSection1);
             parent.removeView(lblBalanceSection);
             TextView lblBalance = (TextView) findViewById(R.id.lblMLRepayHBalance);
@@ -191,29 +199,31 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             TextView lblInstruction2 = (TextView) findViewById(R.id.lblMLRepayHInstruction2);
             parent.removeView(lblInstruction2);
 
-            //Remove Interest
+            // Remove Interest
             TextView lblInterest = (TextView) findViewById(R.id.lblMLRepayHInterest);
             parent.removeView(lblInterest);
+            TextView lblInterestDescription = (TextView) findViewById(R.id.lblMLRepayHInterestDesc);
+            parent.removeView(lblInterestDescription);
             LinearLayout frmInterest = (LinearLayout) findViewById(R.id.frmMLRepayHInterest);
             parent.removeView(frmInterest);
 
-            //Remove Total
+            // Remove Total
             TextView lblTotal = (TextView) findViewById(R.id.lblMLRepayHTotal);
             parent.removeView(lblTotal);
             LinearLayout frmTotal = (LinearLayout) findViewById(R.id.frmMLRepayHTotal);
             parent.removeView(frmTotal);
 
-            //Remove Comment
+            // Remove Comment
             TextView lblComment = (TextView) findViewById(R.id.lblMLRepayHComment);
             parent.removeView(lblComment);
             parent.removeView(txtComment);
 
-            //Remove Date Due
+            // Remove Date Due
             TextView lblNewDateDue = (TextView) findViewById(R.id.lblMLRepayHDateDue);
             parent.removeView(lblNewDateDue);
             parent.removeView(txtNewDateDue);
 
-            //Remove History Section
+            // Remove History Section
             LinearLayout frmHistory = (LinearLayout) findViewById(R.id.frmMLRepayHHistory);
             parent.removeView(frmHistory);
 
@@ -221,7 +231,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             //parent.removeView(lblHistorySection);
             //TextView lblMLRepayHCycleSpan = (TextView) findViewById(R.id.lblMLRepayHCycleSpan);
             //parent.removeView(lblMLRepayHCycleSpan);
-
         }
 
         //Handle the Date stuff only when the fields are visible

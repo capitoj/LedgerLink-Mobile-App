@@ -3,19 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-   <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
-        android:id="@+id/txtRLRHPaymentListing"
-        style="@style/RegularText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dip"
-        android:text="Payment \t\t Listing " /> -->
-
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHLoanNo"
-        style="@style/RegularText"
+        style="@style/RegularTextBold"
         android:layout_width="45dip"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

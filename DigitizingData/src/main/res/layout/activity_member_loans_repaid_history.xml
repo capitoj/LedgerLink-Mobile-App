@@ -168,6 +168,14 @@
             android:layout_height="wrap_content"
             android:text="Interest Added" />
 
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/lblMLRepayHInterestDesc"
+            style="@style/RegularTextSmall"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dip"
+            android:text="at 10% every 30 days" />
+
 
         <LinearLayout
             android:id="@+id/frmMLRepayHInterest"

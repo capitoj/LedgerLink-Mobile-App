@@ -45,6 +45,7 @@ public class LoanRepaymentHistoryArrayAdapter extends ArrayAdapter<MemberLoanRep
             TextView txtMeetingDate = (TextView) rowView.findViewById(R.id.txtRLRHMeetingDate);
             TextView txtLoanNo = (TextView) rowView.findViewById(R.id.txtRLRHLoanNo);
             TextView txtAmount = (TextView) rowView.findViewById(R.id.txtRLRHAmount);
+
             // TextView txtRollover = (TextView)rowView.findViewById(R.id.txtRLRHRollover);
             TextView txtComments = (TextView) rowView.findViewById(R.id.txtRLRHComments);
 
