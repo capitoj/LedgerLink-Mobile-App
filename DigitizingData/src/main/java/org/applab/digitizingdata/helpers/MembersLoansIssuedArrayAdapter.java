@@ -94,7 +94,6 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
 
             String comment = "";
 
-            // TODO: Change this code when time allows; it's weak!
             StringBuilder aggregate = new StringBuilder();
             double outstandingLoansByMember = 0.0;
             if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
@@ -107,6 +106,10 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
 
             } else {
                 for (MeetingLoanIssued loanIssue : loansIssued) {
+                    if (loanIssue.getLoanBalance() == 0.0) {
+                        txtOutstanding.setText("No outstanding loans");
+                    }
+
                     if (loanIssue.getComment() == null || loanIssue.getComment().trim().length() == 0) {
                         txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", loanIssue.getLoanBalance()));
                     } else {

@@ -9,11 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.applab.digitizingdata.MemberLoansIssuedHistoryActivity;
 import org.applab.digitizingdata.R;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
+import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
+import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 
@@ -25,19 +24,27 @@ public class LoansIssuedHistoryArrayAdapter extends ArrayAdapter<MemberLoanIssue
     ArrayList<MemberLoanIssueRecord> values;
     String loanRepaymentProgressComment = "";
     int position;
-    Typeface typeface;
+    Typeface typefaceRegular;
+    Typeface typefaceBold;
     String amount = "";
     String comment = "";
     String dateCleared = "";
     MeetingLoanRepaymentRepo loanRepaymentRepo;
+    VslaCycleRepo vslaCycleRepo = null;
+    VslaCycle cycle = null;
+    VslaCycle cycle_j = null;
 
     public LoansIssuedHistoryArrayAdapter(Context context, ArrayList<MemberLoanIssueRecord> values, String font) {
         super(context, R.layout.row_loans_issued_history, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typefaceRegular = Typeface.createFromAsset(context.getAssets(), font);
+        this.typefaceBold = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-bold.ttf");
 
         loanRepaymentRepo = new MeetingLoanRepaymentRepo(getContext());
+        vslaCycleRepo = new VslaCycleRepo(getContext());
+        cycle = new VslaCycle();
+        cycle_j = new VslaCycle();
     }
 
     @Override
@@ -49,35 +56,54 @@ public class LoansIssuedHistoryArrayAdapter extends ArrayAdapter<MemberLoanIssue
 
             rowView = inflater.inflate(R.layout.row_loans_issued_history, parent, false);
 
-            //Get the Widgets
-            TextView txtPastLoanSummary = (TextView) rowView.findViewById(R.id.txtRLIHPastLoanSummary);
 
-            // TextView txtAmount = (TextView)rowView.findViewById(R.id.txtRLIHAmount);
-            // TextView txtComment = (TextView)rowView.findViewById(R.id.txtRLIHComment);
-            // TextView txtDateCleared = (TextView)rowView.findViewById(R.id.txtRLIHDateCleared);
+            //Get the Widgets
+            //TextView txtPastLoanSummary = (TextView) rowView.findViewById(R.id.txtRLIHPastLoanSummary);
+
+            TextView txtCycleSpan = (TextView) rowView.findViewById(R.id.txtRLIHCycleSpan);
+            TextView txtLoanNo = (TextView) rowView.findViewById(R.id.txtRLIHLoanNo);
+            TextView txtAmount = (TextView) rowView.findViewById(R.id.txtRLIHAmount);
+            TextView txtComment = (TextView) rowView.findViewById(R.id.txtRLIHComment);
+            TextView txtDateTaken = (TextView) rowView.findViewById(R.id.txtRLIHDateTaken);
 
             // Set Typeface
-            txtPastLoanSummary.setTypeface(typeface);
+            //txtPastLoanSummary.setTypeface(typeface);
 
-            // txtAmount.setTypeface(typeface);
-            // txtComment.setTypeface(typeface);
-            // txtDateCleared.setTypeface(typeface); */
+            txtCycleSpan.setTypeface(typefaceBold);
+            txtLoanNo.setTypeface(typefaceBold);
+            txtAmount.setTypeface(typefaceRegular);
+            txtComment.setTypeface(typefaceRegular);
+            txtDateTaken.setTypeface(typefaceRegular);
 
             StringBuilder summary = new StringBuilder("");
 
-            //Assign Values to the Widgets
+            // Assign Values to the Widgets
             MemberLoanIssueRecord loanRecord = values.get(position);
             if (loanRecord != null) {
-                // txtMeetingDate.setText(String.format("Issued On: %s",Utils.formatDate(loanRecord.getMeetingDate(),Utils.DATE_FIELD_FORMAT)));
-                // txtLoanNo.setText(String.format("Loan No: %d", loanRecord.getLoanNo()));
-                // txtAmount.setText(String.format("%,.0fUGX  ", loanRecord.getPrincipalAmount()));
-                loanRepaymentProgressComment = loanRepaymentRepo.getMemberRepaymentCommentByLoanId(loanRecord.getLoanId());
-
-                if (!loanRecord.getLastRepaymentComment().isEmpty()) {
-                    loanRepaymentProgressComment = loanRecord.getLastRepaymentComment();
+                Log.d("LIHAA", String.valueOf(cycle_j.getCycleId()));
+                cycle = vslaCycleRepo.getCycleByDate(loanRecord.getMeetingDate());
+                if (cycle != null) {
+                    txtCycleSpan.setText(String.format("Cycle %s to %s", Utils.formatDate(cycle.getStartDate(), Utils.DATE_FIELD_FORMAT), Utils.formatDate(cycle.getEndDate(), Utils.DATE_FIELD_FORMAT)));
                 }
-                txtPastLoanSummary.setText(String.format("%,.0fUGX  paid %s  %s", loanRecord.getPrincipalAmount(), Utils.formatDate(loanRecord.getDateCleared(), Utils.DATE_FIELD_FORMAT), loanRepaymentProgressComment));
+
+                Log.d("LIHAA2", String.valueOf(cycle.getCycleId()));
+                // Only show for first
+                if (cycle_j.getCycleId() == cycle.getCycleId()){
+                    txtCycleSpan.setVisibility(View.GONE);
+                }
+                cycle_j = cycle;
+                txtDateTaken.setText(String.format("%s", Utils.formatDate(loanRecord.getMeetingDate(), Utils.DATE_FIELD_FORMAT)));
+                txtLoanNo.setText(String.format("%d", loanRecord.getLoanNo()));
+                txtAmount.setText(String.format("%,.0fUGX", loanRecord.getPrincipalAmount()));
+
+                if (loanRecord.isCleared()) {
+                    txtComment.setText(String.format("%s", "Cleared"));
+                } else {
+                    txtComment.setText(String.format("%s", "Not cleared"));
+                }
+
             }
+            cycle_j = cycle;
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

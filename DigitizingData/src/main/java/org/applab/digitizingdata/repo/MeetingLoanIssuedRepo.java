@@ -639,6 +639,77 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
+    public ArrayList<MemberLoanIssueRecord> getAllLoansIssuedToMember(int memberId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        int _isCleared = 1;
+        ArrayList<MemberLoanIssueRecord> loansIssued;
+
+        try {
+            loansIssued = new ArrayList<MemberLoanIssueRecord>();
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  L.%s AS LoanId, M.%s AS MeetingDate, L.%s AS PrincipalAmount, " +
+                            "L.%s AS LoanNo, L.%s AS Balance, L.%s AS IsCleared, L.%s AS DateCleared, L.%s AS DateDue, L.%s AS InterestAmount, " +
+                            "(SELECT R.%s FROM %s AS R WHERE R.%s=L.%s ORDER BY R.%s DESC LIMIT 1) AS LastRepaymentComment " +
+                            " FROM %s AS L INNER JOIN %s AS M ON L.%s=M.%s WHERE L.%s=%d ORDER BY L.%s DESC",
+                    LoanIssueSchema.COL_LI_LOAN_ID, MeetingSchema.COL_MT_MEETING_DATE, LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT,
+                    LoanIssueSchema.COL_LI_LOAN_NO, LoanIssueSchema.COL_LI_BALANCE, LoanIssueSchema.COL_LI_IS_CLEARED, LoanIssueSchema.COL_LI_DATE_CLEARED,
+                    LoanIssueSchema.COL_LI_DATE_DUE, LoanIssueSchema.COL_LI_INTEREST_AMOUNT,
+                    LoanRepaymentSchema.COL_LR_COMMENTS, LoanRepaymentSchema.getTableName(),
+                    LoanRepaymentSchema.COL_LR_LOAN_ID, LoanIssueSchema.COL_LI_LOAN_ID, LoanRepaymentSchema.COL_LR_REPAYMENT_ID,
+                    LoanIssueSchema.getTableName(), MeetingSchema.getTableName(),
+                    LoanIssueSchema.COL_LI_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
+                    LoanIssueSchema.COL_LI_MEMBER_ID, memberId,
+                    LoanIssueSchema.COL_LI_LOAN_ID
+            );
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    MemberLoanIssueRecord loanRecord = new MemberLoanIssueRecord();
+                    if (cursor.getString(cursor.getColumnIndex("DateDue")) != null) {
+                        Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("MeetingDate")));
+                        loanRecord.setMeetingDate(meetingDate);
+                    }
+                    loanRecord.setLoanId(cursor.getInt(cursor.getColumnIndex("LoanId")));
+                    loanRecord.setPrincipalAmount(cursor.getDouble(cursor.getColumnIndex("PrincipalAmount")));
+                    loanRecord.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
+                    loanRecord.setBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
+                    loanRecord.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                    if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
+                        Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
+                        loanRecord.setDateCleared(dateCleared);
+                    }
+                    if (cursor.getString(cursor.getColumnIndex("DateDue")) != null) {
+                        Date dateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateDue")));
+                        loanRecord.setDateDue(dateDue);
+                    }
+                    loanRecord.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("InterestAmount")));
+
+                    loanRecord.setLastRepaymentComment(cursor.getString(cursor.getColumnIndex("LastRepaymentComment")));
+
+                    loansIssued.add(loanRecord);
+
+                    Log.d("MLIR", "HERE" +loansIssued.size());
+                } while (cursor.moveToNext());
+            }
+            return loansIssued;
+        } catch (Exception ex) {
+            Log.e("MeetingLoanIssuedRepo.getLoansIssuedToMemberInCycle", ex.getMessage());
+            return null;
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     public ArrayList<LoanDataTransferRecord> getMeetingLoansForAllMembers(int meetingId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
