@@ -66,7 +66,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     double theCurLoanAmount = 0.0;
     int currentLoanId = 0;
     boolean loanWasDeleted = false;
-    LinearLayout issuedHHistorySection;
+    LinearLayout issuedHistorySection;
 
     //Date stuff
     TextView txtDateDue;
@@ -93,7 +93,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         String fullNames = getIntent().getStringExtra("_names");
         lblFullNames.setText(fullNames);
 
-        issuedHHistorySection = (LinearLayout) findViewById(R.id.frmMLIssuedHHistory);
+        issuedHistorySection = (LinearLayout) findViewById(R.id.frmMLIssuedHHistory);
 
         if (getIntent().hasExtra("_meetingId")) {
             meetingId = getIntent().getIntExtra("_meetingId", 0);
@@ -362,7 +362,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         }
 
         if (loansIssued.isEmpty()) {
-            issuedHHistorySection.setVisibility(View.GONE);
+            issuedHistorySection.setVisibility(View.GONE);
         }
 
         // Now get the data via the adapter
