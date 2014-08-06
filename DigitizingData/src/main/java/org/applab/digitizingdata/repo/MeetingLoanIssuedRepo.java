@@ -691,7 +691,6 @@ public class MeetingLoanIssuedRepo {
 
                     loansIssued.add(loanRecord);
 
-                    Log.d("MLIR", "HERE" +loansIssued.size());
                 } while (cursor.moveToNext());
             }
             return loansIssued;
@@ -893,6 +892,71 @@ public class MeetingLoanIssuedRepo {
         } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MeetingLoanIssuedRepo.getMostRecentLoanIssuedToMember", ex.getMessage());
+            return null;
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public MeetingLoanIssued getUnclearedLoanIssuedToMember(int memberId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        MeetingLoanIssued loan = null;
+
+        try {
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  L.%s AS LoanId, L.%s AS MeetingId, L.%s AS PrincipalAmount, L.%s AS InterestAmount, " +
+                            "L.%s AS LoanNo, L.%s AS Balance, L.%s AS TotalRepaid, L.%s AS Comment, L.%s AS IsCleared, L.%s AS DateCleared, L.%s AS DateDue " +
+                            " FROM %s AS L WHERE L.%s=%d AND (L.%s IS NULL OR L.%s = 0) ORDER BY L.%s DESC LIMIT 1",
+                    LoanIssueSchema.COL_LI_LOAN_ID, LoanIssueSchema.COL_LI_MEETING_ID, LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, LoanIssueSchema.COL_LI_INTEREST_AMOUNT,
+                    LoanIssueSchema.COL_LI_LOAN_NO, LoanIssueSchema.COL_LI_BALANCE, LoanIssueSchema.COL_LI_TOTAL_REPAID,
+                    LoanIssueSchema.COL_LI_COMMENT, LoanIssueSchema.COL_LI_IS_CLEARED, LoanIssueSchema.COL_LI_DATE_CLEARED, LoanIssueSchema.COL_LI_DATE_DUE,
+                    LoanIssueSchema.getTableName(),
+                    LoanIssueSchema.COL_LI_MEMBER_ID, memberId, LoanIssueSchema.COL_LI_IS_CLEARED, LoanIssueSchema.COL_LI_IS_CLEARED,
+                    LoanIssueSchema.COL_LI_LOAN_ID
+            );
+
+            cursor = db.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+
+                loan = new MeetingLoanIssued();
+
+                loan.setLoanId(cursor.getInt(cursor.getColumnIndex("LoanId")));
+                Meeting meeting = new Meeting();
+                meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex("MeetingId")));
+                loan.setMeeting(meeting);
+                loan.setPrincipalAmount(cursor.getDouble(cursor.getColumnIndex("PrincipalAmount")));
+                loan.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
+                loan.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
+                loan.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
+                loan.setComment(cursor.getString(cursor.getColumnIndex("Comment")));
+                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
+                    Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
+                    loan.setDateCleared(dateCleared);
+                }
+                if (cursor.getString(cursor.getColumnIndex("DateDue")) != null) {
+                    Date dateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateDue")));
+                    loan.setDateDue(dateDue);
+                }
+                loan.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("InterestAmount")));
+
+                Member member = new Member();
+                member.setMemberId(memberId);
+                loan.setMember(member);
+            }
+            return loan;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Log.e("MeetingLoanIssuedRepo.getUnclearedLoanIssuedToMember", ex.getMessage());
             return null;
         } finally {
 

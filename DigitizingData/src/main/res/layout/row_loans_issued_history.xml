@@ -4,36 +4,89 @@
     android:layout_height="wrap_content">
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
-        android:id="@+id/txtRLIHPastLoanSummary"
-        android:layout_width="wrap_content"
+        android:id="@+id/txtRLIHCycleSpan"
+        style="@style/RegularTextBold"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Summary "/>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dip"
+        android:layout_marginLeft="10dip"
+        android:fontFamily="bold"
+        android:text=" " />
 
-   <!--
-   <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListRegularSubItems"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/txtRLIHCycleSpan">
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLIHLoanNo"
+        style="@style/RegularTextBold"
+        android:layout_width="45dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dip"
+        android:layout_marginLeft="10dip"
+        android:text="Loan No " />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLIHAmount"
-        android:layout_width="wrap_content"
+        style="@style/RegularText"
+        android:layout_width="120dip"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
-        android:text="Amount" />
+        android:layout_marginRight="5dip"
+        android:layout_marginLeft="5dip"
+        android:layout_toRightOf="@id/txtRLIHLoanNo"
+        android:text="Amount " />
 
-   <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSmallSubItems"
-        android:id="@+id/txtRLIHDateCleared"
-        android:layout_width="wrap_content"
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+        android:id="@+id/txtRLIHDateTaken"
+        style="@style/RegularText"
+        android:layout_width="200dip"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
-        android:text="Paid" />
+        android:layout_marginRight="10dip"
+        android:layout_marginLeft="5dip"
+        android:layout_toRightOf="@id/txtRLIHAmount"
+        android:text="Date " />
 
-   <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSmallSubItems"
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLIHComment"
-        android:layout_width="wrap_content"
+        style="@style/RegularText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="Comment"/>
-   -->
+        android:layout_marginLeft="10dip"
+        android:layout_marginTop="2dip"
+        android:paddingBottom="5dip"
+        android:layout_below="@id/txtRLIHLoanNo"
+        android:text="Comments " />
+    </RelativeLayout>
+
+
+    <!--
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+         style="@style/ListRegularSubItems"
+         android:id="@+id/txtRLIHAmount"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_weight="4"
+         android:text="Amount" />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+         style="@style/ListSmallSubItems"
+         android:id="@+id/txtRLIHDateCleared"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_weight="4"
+         android:text="Paid" />
+
+    <org.applab.digitizingdata.fontutils.TypefaceTextView
+         style="@style/ListSmallSubItems"
+         android:id="@+id/txtRLIHComment"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_weight="2"
+         android:text="Comment"/>
+    -->
 
 </RelativeLayout>
