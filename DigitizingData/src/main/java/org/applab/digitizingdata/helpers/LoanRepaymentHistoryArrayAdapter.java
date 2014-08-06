@@ -40,7 +40,7 @@ public class LoanRepaymentHistoryArrayAdapter extends ArrayAdapter<MemberLoanRep
             rowView = inflater.inflate(R.layout.row_loan_repayment_history, parent, false);
 
             //Get the Widgets
-           // TextView txtPaymentListing = (TextView) rowView.findViewById(R.id.txtRLRHPaymentListing);
+            // TextView txtPaymentListing = (TextView) rowView.findViewById(R.id.txtRLRHPaymentListing);
 
             TextView txtMeetingDate = (TextView) rowView.findViewById(R.id.txtRLRHMeetingDate);
             TextView txtLoanNo = (TextView) rowView.findViewById(R.id.txtRLRHLoanNo);
@@ -61,6 +61,9 @@ public class LoanRepaymentHistoryArrayAdapter extends ArrayAdapter<MemberLoanRep
             MemberLoanRepaymentRecord repaymentRecord = values.get(position);
             if (repaymentRecord != null) {
                 //txtPaymentListing.setText(String.format("%d\t %,.0f UGX\t %s\t",repaymentRecord.getLoanNo(), repaymentRecord.getAmount(), Utils.formatDate(repaymentRecord.getMeetingDate(), Utils.DATE_FIELD_FORMAT)));
+                if (repaymentRecord.getComments().isEmpty() || repaymentRecord.getComments() == null) {
+                    txtComments.setVisibility(View.GONE);
+                }
                 txtComments.setText(String.format("%s", repaymentRecord.getComments()));
                 txtMeetingDate.setText(String.format("%s", Utils.formatDate(repaymentRecord.getMeetingDate(), Utils.DATE_FIELD_FORMAT)));
                 txtLoanNo.setText(String.format("%d", repaymentRecord.getLoanNo()));
@@ -69,7 +72,11 @@ public class LoanRepaymentHistoryArrayAdapter extends ArrayAdapter<MemberLoanRep
             }
 
             return rowView;
-        } catch (Exception ex) {
+        } catch (
+                Exception ex
+                )
+
+        {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));
             return rowView;
         }

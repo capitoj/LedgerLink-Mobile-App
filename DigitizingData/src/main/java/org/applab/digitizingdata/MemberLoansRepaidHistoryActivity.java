@@ -62,6 +62,8 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     ArrayList<MemberLoanRepaymentRecord> loanRepayments;
     MeetingLoanIssued recentLoan = null;
 
+    LinearLayout repaymentHistorySection;
+
     //Flags for Edit Operation
     boolean isEditOperation = false;
 
@@ -143,12 +145,13 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         TextView lblInstruction = (TextView) findViewById(R.id.lblMLRepayHInstruction);
         final TextView lblMLRepayHLBCurrency = (TextView) findViewById(R.id.lblMLRepayHLBCurrency);
         final TextView lblMLRepayHCurrencyTotal = (TextView) findViewById(R.id.lblMLRepayHCurrencyTotal);
+        repaymentHistorySection = (LinearLayout) findViewById(R.id.frmMLRepayHHistory);
 
         recentLoan = loanIssuedRepo.getMostRecentLoanIssuedToMember(memberId);
         StringBuilder sb = null;
         if (null != recentLoan) {
-            lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
-            lblMLRepayHLBCurrency.setVisibility(View.GONE);
+            //lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
+            //lblMLRepayHLBCurrency.setVisibility(View.GONE);
             txtLoanNumber.setText(String.format("%d", recentLoan.getLoanNo()));
 
             //Setup the Instruction
@@ -305,10 +308,10 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         // txtInterestOnLoan.setText(String.format("Interest \t\t %,.0f UGX", loanIssue.getInterestAmount()));
         //}
 
-        //Populate the History
+        // Populate the History
         populateLoanRepaymentHistory();
 
-        //TODO: Check this
+        // TODO: Check this
         if (null != recentLoan) {
             TextView txtLRAmount = (TextView) findViewById(R.id.txtMLRepayHAmount);
             txtLRAmount.requestFocus();
@@ -319,16 +322,16 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             }
         }
 
-        //Handle the Auto-calculation of Rollover Amount. If recentLoan is NULL means fields are hidden
+        // Handle the Auto-calculation of Rollover Amount. If recentLoan is NULL means fields are hidden
         if (null == recentLoan) {
             return;
         }
-        //Handle the Loan Interest Computation
+        // Handle the Loan Interest Computation
         editTextInterestRate = (EditText) findViewById(R.id.txtMLRepayHInterest);
         txtRolloverAmount = (TextView) findViewById(R.id.txtMLRepayHTotal);
         txtLoanBalance = (TextView) findViewById(R.id.txtMLRepayHBalance);
 
-        //First get the Interest Rate for the Current Cycle
+        // First get the Interest Rate for the Current Cycle
         if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             interestRate = targetMeeting.getVslaCycle().getInterestRate();
         }
@@ -347,10 +350,15 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //Compute the Interest
+
+                // Compute the Interest
                 double theRepayAmount = 0.0;
                 try {
                     if (s.toString().length() <= 0) {
+                        lblMLRepayHCurrencyTotal.setVisibility(View.VISIBLE);
+                        lblMLRepayHLBCurrency.setVisibility(View.VISIBLE);
+                        txtLoanBalance.setText("");
+                        txtRolloverAmount.setText("");
                         return;
                     }
                     theRepayAmount = Double.parseDouble(s.toString());
@@ -366,7 +374,8 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 }
                 txtLoanBalance.setText(String.format("%,.0f UGX", theCurLoanBalanceAmount));
                 double interestAmount = 0;
-                //If meeting date is before loan due date then default interest to 0
+
+                // If meeting date is before loan due date then default interest to 0
                 if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
                     editTextInterestRate.setText("0");
                 } else {
@@ -385,23 +394,31 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     } else {
                         txtDateDue.setText("");
                     }
-                    txtDateDue.setEnabled(false);//setVisibility(View.INVISIBLE);
+                    lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
+                    lblMLRepayHLBCurrency.setVisibility(View.GONE);
+                    txtDateDue.setEnabled(false);
                     editTextInterestRate.setEnabled(false);
-                }
-                if (theCurLoanBalanceAmount < 0) {
+                } else if (theCurLoanBalanceAmount < 0) {
                     double zeroInterest = 0.0;
                     double zeroLoanBalance = 0.0;
                     editTextInterestRate.setText(String.format("%.0f", zeroInterest));
                     txtRolloverAmount.setText(String.format("%,.0f UGX overpayment", Math.abs(theCurLoanBalanceAmount)));
                     txtLoanBalance.setText(String.format("%,.0f UGX", zeroLoanBalance));
                     txtDateDue.setText("none");
+                    lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
+                    lblMLRepayHLBCurrency.setVisibility(View.GONE);
+                }else if (theCurLoanBalanceAmount > 0){
+                    lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
+                    lblMLRepayHLBCurrency.setVisibility(View.GONE);
+                    txtDateDue.setText("there there");
+                   updateDisplay();
                 }
-                //Have this value redundantly stored for future use
+                // Have this value redundantly stored for future use
                 theCurLoanRepayAmount = theRepayAmount;
             }
         });
 
-        //Now deal with Loan Interest Manual Changes
+        // Now deal with Loan Interest Manual Changes
         EditText txtNewInterestAmount = (EditText) findViewById(R.id.txtMLRepayHInterest);
         txtNewInterestAmount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -416,7 +433,8 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //Compute the Interest
+
+                // Compute the Interest
                 double theInterestAmount = 0.0;
                 try {
                     if (s.toString().length() <= 0) {
@@ -428,7 +446,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 }
 
                 double rolloverAmount = theInterestAmount + theCurLoanBalanceAmount;
-                txtRolloverAmount.setText(String.format("%,.0fUGX", rolloverAmount));
+                txtRolloverAmount.setText(String.format("%,.0f UGX", rolloverAmount));
                 if (rolloverAmount < 0) {
                     txtRolloverAmount.setText(String.format("%,.0f UGX overpayment", rolloverAmount));
                     txtDateDue.setText("none");
@@ -571,6 +589,9 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             loanRepayments = new ArrayList<MemberLoanRepaymentRecord>();
         }
 
+        if (loanRepayments.isEmpty()) {
+            repaymentHistorySection.setVisibility(View.GONE);
+        }
         //Now get the data via the adapter
         LoanRepaymentHistoryArrayAdapter adapter = new LoanRepaymentHistoryArrayAdapter(MemberLoansRepaidHistoryActivity.this, loanRepayments, "fonts/roboto-regular.ttf");
 
@@ -678,7 +699,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     dtLastDateDue = repaymentBeingEdited.getLastDateDue();
                 } else {
                     balanceBefore = recentLoan.getLoanBalance();
-                    //Last Date Due for Transaction Tracking purposes. Get it from the recent Loan
+                    // Last Date Due for Transaction Tracking purposes. Get it from the recent Loan
                     dtLastDateDue = recentLoan.getDateDue();
                 }
             } else {
@@ -690,7 +711,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             //Check Over-Payments
             if (theAmount > balanceBefore) {
                 double overPayment = theAmount - balanceBefore;
-                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Overpayment", "Overpayment of "+ String.valueOf(overPayment) + " UGX. Payment made must not exceed "+ String.valueOf(balanceBefore) + " UGX.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Overpayment", "Overpayment of " + String.valueOf(overPayment) + " UGX. Payment made must not exceed " + String.valueOf(balanceBefore) + " UGX.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 return false;
             }
 
