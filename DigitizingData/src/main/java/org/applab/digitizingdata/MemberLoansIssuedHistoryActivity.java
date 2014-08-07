@@ -170,7 +170,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         txtInterestAmount = (EditText) findViewById(R.id.txtMLIssuedHInterest);
         txtTotalLoanAmount = (TextView) findViewById(R.id.txtMLIssuedHTotal);
 
-        //First get tfhe Interest Rate for the Current Cycle
+        //First get the Interest Rate for the Current Cycle
         if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             interestRate = targetMeeting.getVslaCycle().getInterestRate();
         }

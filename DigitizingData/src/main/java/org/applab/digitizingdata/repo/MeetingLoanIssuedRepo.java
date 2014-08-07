@@ -856,9 +856,7 @@ public class MeetingLoanIssuedRepo {
                     LoanIssueSchema.COL_LI_LOAN_ID
             );
 
-            Log.d(context.getPackageName(), query);
             cursor = db.rawQuery(query, null);
-            Log.d(context.getPackageName(), "Row count is " + cursor.getCount());
             if (cursor != null && cursor.moveToFirst()) {
 
                 loan = new MeetingLoanIssued();
@@ -980,16 +978,14 @@ public class MeetingLoanIssuedRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             String query = String.format("SELECT  L.%s AS LoanId, L.%s AS MeetingId, L.%s AS MemberId, L.%s AS PrincipalAmount, L.%s AS InterestAmount, " +
                             "L.%s AS LoanNo, L.%s AS Balance, L.%s AS TotalRepaid, L.%s AS IsCleared, L.%s AS DateCleared, L.%s AS DateDue " +
-                            " FROM %s AS L WHERE L.%s=%d AND (L.%s IS NULL OR L.%s = 0) LIMIT 1",
+                            " FROM %s AS L WHERE L.%s=%d LIMIT 1",
                     LoanIssueSchema.COL_LI_LOAN_ID, LoanIssueSchema.COL_LI_MEETING_ID, LoanIssueSchema.COL_LI_MEMBER_ID,
                     LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, LoanIssueSchema.COL_LI_INTEREST_AMOUNT,
                     LoanIssueSchema.COL_LI_LOAN_NO, LoanIssueSchema.COL_LI_BALANCE, LoanIssueSchema.COL_LI_TOTAL_REPAID,
                     LoanIssueSchema.COL_LI_IS_CLEARED, LoanIssueSchema.COL_LI_DATE_CLEARED, LoanIssueSchema.COL_LI_DATE_DUE,
-                    LoanIssueSchema.getTableName(), LoanIssueSchema.COL_LI_LOAN_ID, loanId,
-                    LoanIssueSchema.COL_LI_IS_CLEARED, LoanIssueSchema.COL_LI_IS_CLEARED
+                    LoanIssueSchema.getTableName(), LoanIssueSchema.COL_LI_LOAN_ID, loanId
             );
             cursor = db.rawQuery(query, null);
-
             if (cursor != null && cursor.moveToFirst()) {
 
                 loan = new MeetingLoanIssued();
@@ -1016,7 +1012,6 @@ public class MeetingLoanIssuedRepo {
                 Member member = new Member();
                 member.setMemberId(cursor.getInt(cursor.getColumnIndex("MemberId")));
                 loan.setMember(member);
-
             }
             return loan;
         } catch (Exception ex) {

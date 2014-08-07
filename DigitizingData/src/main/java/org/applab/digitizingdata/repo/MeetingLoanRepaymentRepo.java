@@ -414,9 +414,9 @@ public class MeetingLoanRepaymentRepo {
             repayments = new ArrayList<MemberLoanRepaymentRecord>();
 
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT  L.%s AS RepaymentId, M.%s AS MeetingDate, L.%s AS Amount, " +
+            String query = String.format("SELECT L.%s AS RepaymentId, M.%s AS MeetingDate, L.%s AS Amount, " +
                     "L.%s AS LoanId, L.%s AS RolloverAmount, L.%s AS Comments, LI.%s AS LoanNo" +
-                    " FROM %s AS L INNER JOIN %s AS M ON L.%s=M.%s INNER JOIN %s AS LI ON L.%s=LI.%s " +
+                    " FROM %s AS L INNER JOIN %s AS M ON L.%s=M.%s INNER JOIN %s AS LI ON L.%s=LI.%s "+
                     " WHERE L.%s=%d ORDER BY L.%s DESC",
                     LoanRepaymentSchema.COL_LR_REPAYMENT_ID,MeetingSchema.COL_MT_MEETING_DATE, LoanRepaymentSchema.COL_LR_AMOUNT,
                     LoanRepaymentSchema.COL_LR_LOAN_ID, LoanRepaymentSchema.COL_LR_ROLLOVER_AMOUNT, LoanRepaymentSchema.COL_LR_COMMENTS,
@@ -425,7 +425,6 @@ public class MeetingLoanRepaymentRepo {
                     LoanRepaymentSchema.COL_LR_REPAYMENT_ID
             );
             cursor = db.rawQuery(query, null);
-
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     MemberLoanRepaymentRecord repaymentRecord = new MemberLoanRepaymentRecord();
@@ -684,24 +683,21 @@ public class MeetingLoanRepaymentRepo {
             //Reverse the Repayment: First Retrieve the Loan then
             //1. Add the repayment amount to the loan balance
             int targetLoanId = repaymentRecord.getLoanId();
-
             MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(DatabaseHandler.databaseContext);
             MeetingLoanIssued targetLoan = loanIssuedRepo.getLoanIssuedByLoanId(targetLoanId);
 
             if(null == targetLoan) {
                 return false;
             }
-
             double revertedLoanBalance = targetLoan.getLoanBalance() + repaymentRecord.getAmount();
             double revertedTotalPaid = targetLoan.getTotalRepaid() - repaymentRecord.getAmount();
             Date revertedDateDue = repaymentRecord.getLastDateDue();
             boolean revertedBalancesSuccessfully = loanIssuedRepo.updateMemberLoanBalances(targetLoanId, revertedTotalPaid, revertedLoanBalance, revertedDateDue);
-
             if(!revertedBalancesSuccessfully) {
                 return false;
             }
 
-            //Delete the Loan Repayment
+            // Delete the Loan Repayment
             affectedRows = db.delete(LoanRepaymentSchema.getTableName(), LoanRepaymentSchema.COL_LR_REPAYMENT_ID + " = ?",
                     new String[] {String.valueOf(repaymentId)});
 
@@ -714,7 +710,7 @@ public class MeetingLoanRepaymentRepo {
 
         }
         catch (Exception ex) {
-            Log.e("MeetingLoanRepaymentRepo.reverseLoanRepayment", ex.getMessage());
+            ex.printStackTrace();
             return false;
         }
         finally {
@@ -752,7 +748,7 @@ public class MeetingLoanRepaymentRepo {
             return true;
         }
         catch (Exception ex) {
-            Log.e("MeetingLoanRepaymentRepo.reverseLoanRepaymentsForMeeting", ex.getMessage());
+            ex.printStackTrace();
             return false;
         }
         finally {

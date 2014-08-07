@@ -639,8 +639,6 @@ public class MeetingRepo {
                  startingCash.put(MeetingSchema.COL_MT_CASH_FINES, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FINES)));
                  startingCash.put(MeetingSchema.COL_MT_CASH_SAVED_BOX, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
                  */
-                Log.d("Meeting Repo", String.valueOf(startingCash.getExpectedStartingCash()));
-                Log.d("Meeting Repo", String.valueOf(startingCash.getActualStartingCash()));
 
                 return startingCash;
             } else {
@@ -682,7 +680,6 @@ public class MeetingRepo {
                 startingCash.setActualStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
                 startingCash.setComment(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT)));
                 startingCash.setExpectedStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
-                Log.d("Meeting Repo", String.valueOf(startingCash.getExpectedStartingCash()));
                 startingCash.setCashSavedInBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
 
             }
@@ -1344,15 +1341,19 @@ public class MeetingRepo {
             //Attendance
             String meetingAttendanceJson = SendDataRepo.getMeetingAttendanceJson(meeting.getMeetingId());
             if (meetingAttendanceJson != null) {
+
                 //Add to Map
                 meetingData.put(SendDataRepo.ATTENDANCE_ITEM_KEY, meetingAttendanceJson);
             }
+
             //Savings
             String meetingSavingsJson = SendDataRepo.getMeetingSavingsJson(meeting.getMeetingId());
             if (meetingSavingsJson != null) {
+
                 //Add to Map
                 meetingData.put(SendDataRepo.SAVINGS_ITEM_KEY, meetingSavingsJson);
             }
+
             /**   // Opening Cash
              String meetingOpeningCashJson = SendDataRepo.getMeetingOpeningCashJson(meeting.getMeetingId());
              if(meetingOpeningCashJson != null) {
@@ -1373,18 +1374,23 @@ public class MeetingRepo {
             // Fine
             String meetingFineJson = SendDataRepo.getMeetingFinesJson(meeting.getMeetingId());
             if (meetingFineJson != null) {
+
                 //Add to Map
                 meetingData.put(SendDataRepo.FINES_ITEM_KEY, meetingFineJson);
             }
+
             //Repayments
             String meetingRepaymentsJson = SendDataRepo.getMeetingRepaymentsJson(meeting.getMeetingId());
             if (meetingRepaymentsJson != null) {
+
                 //Add to Map
                 meetingData.put(SendDataRepo.REPAYMENTS_ITEM_KEY, meetingRepaymentsJson);
             }
+
             //Loan Issued
             String meetingLoansJson = SendDataRepo.getMeetingLoanIssuesJson(meeting.getMeetingId());
             if (meetingLoansJson != null) {
+
                 //Add to Map
                 meetingData.put(SendDataRepo.LOANS_ITEM_KEY, meetingLoansJson);
             }
@@ -1394,17 +1400,23 @@ public class MeetingRepo {
     }
 
     // Deleting single entity
-    public void deleteMeeting(int meetingId) {
+    public boolean deleteMeeting(int meetingId) {
         SQLiteDatabase db = null;
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
 
-            // To remove all rows and get a count pass "1" as the whereClause.
-            db.delete(MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_ID + " = ?",
+          // To remove all rows and get a count pass "1" as the whereClause.
+          int rowCount = db.delete(MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_ID + " = ?",
                     new String[]{String.valueOf(meetingId)});
+
+            if (rowCount >= 1) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception ex) {
             Log.e("MeetingRepo.deleteMeeting", ex.getMessage());
-            return;
+            return false;
         } finally {
             if (db != null) {
                 db.close();

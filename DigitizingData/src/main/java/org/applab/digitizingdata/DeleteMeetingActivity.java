@@ -3,6 +3,7 @@ package org.applab.digitizingdata;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,7 +135,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
                             return;
                         }
 
-                        //Check whether there are savings attached to the target meeting
+                        // Check whether there are savings attached to the target meeting
                         if(savingRepo.getTotalSavingsInMeeting(meetingId) > 0.0D) {
                             cannotBeDeleted = true;
                         }
@@ -185,8 +186,9 @@ public class DeleteMeetingActivity extends SherlockActivity {
                             //TODO: Implement the UNDO feature, instead of directly deleting the meeting
                             //TODO: Cascade the deletion to clear meeting items and avoid orphaned records
                             //TODO: What if the meeting's data has been sent, what happens?
+                                repaymentRepo.reverseLoanRepaymentsForMeeting(meetingId);
                             meetingRepo.deleteMeeting(meetingId);
-                            Toast.makeText(getApplicationContext(),"The meeting has been deleted.",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),"The meeting has been deleted.",Toast.LENGTH_LONG).show();
 
 
                             //Now refresh the Begin Meeting screen
