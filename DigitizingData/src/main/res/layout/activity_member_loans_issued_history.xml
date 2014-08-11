@@ -144,7 +144,7 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Outstanding balance" />
+            android:text="Outstanding balance(with interest)" />
 
         <LinearLayout
             android:id="@+id/frmMLIssuedHTotal"
