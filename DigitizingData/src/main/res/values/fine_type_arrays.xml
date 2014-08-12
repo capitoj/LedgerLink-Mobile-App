@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fine Types -->
+    <string-array name="fineTypeName">
+        <item name="0">@string/finetype_select_fine_type</item>
+        <item name="1">@string/finetype_other</item>
+        <item name="2">@string/finetype_latecoming</item>
+        <item name="3">@string/finetype_disorder</item>
+    </string-array>
+    <string-array name="fineTypeId">
+        <item name="0">0</item>
+        <item name="1">1</item>
+        <item name="2">2</item>
+        <item name="3">3</item>
+    </string-array>
+</resources>

@@ -48,6 +48,7 @@
             android:spinnerMode="dropdown"
             android:layout_below="@id/lblFineType"
             android:prompt="@string/select_member_fine_type_prompt"
+            android:entries="@array/fineTypeName"
              />
 
 

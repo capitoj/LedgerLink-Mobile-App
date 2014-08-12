@@ -109,15 +109,18 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
                 txtFineMeetingDate.setText(String.format(Utils.formatDate(fineRecord.getMeetingDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
                 txtFineAmount.setText(String.format("%,.0fUGX", fineRecord.getAmount()));
 
-                /** To be REMOVED:
-                 * Meantime fix for QA time just because we cant change the DB */
+                /** TODO: REMOVE and find a better way how
+                 * Meantime fix for QA time */
                 switch (fineRecord.getFineTypeId()) {
                     case 1:
-                        fineRecord.setFineTypeName("Other");
+                        fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_other));
+                        break;
                     case 2:
-                        fineRecord.setFineTypeName("Latecoming");
+                        fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_latecoming));
+                        break;
                     case 3:
-                        fineRecord.setFineTypeName("Disorder");
+                        fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_disorder));
+                        break;
                     default:
                         fineRecord.setFineTypeName("Unknown");
                 }
