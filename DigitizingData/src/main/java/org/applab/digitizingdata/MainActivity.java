@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.AbsListView.LayoutParams;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -71,10 +72,10 @@ public class MainActivity extends SherlockActivity {
         //set grid view item
         mainMenuItemsGridArray.add(new MenuItem("beginMeeting", "MEETING", R.drawable.meeting));
         mainMenuItemsGridArray.add(new MenuItem("viewSentData", "SENT DATA", R.drawable.sent_data));
-        mainMenuItemsGridArray.add(new MenuItem("reviewMembers", "REVIEW & EDIT MEMBERS", R.drawable.review_members));
-        mainMenuItemsGridArray.add(new MenuItem("updateCycle", "REVIEW & EDIT CYCLE", R.drawable.edit_cycle));
+        mainMenuItemsGridArray.add(new MenuItem("reviewMembers", "EDIT MEMBERS", R.drawable.members));
+        mainMenuItemsGridArray.add(new MenuItem("updateCycle", "EDIT CYCLE", R.drawable.edit_cycle));
         mainMenuItemsGridArray.add(new MenuItem("endCycle", "END CYCLE", R.drawable.end_cycle));
-        mainMenuItemsGridArray.add(new MenuItem("beginCycle", "BEGIN NEW CYCLE", R.drawable.begin_new_cycle));
+        mainMenuItemsGridArray.add(new MenuItem("beginCycle", "BEGIN NEW CYCLE", R.drawable.new_cycle));
 
 
         //Display the Data Migration Menu if data has not yet been migrated
@@ -165,8 +166,8 @@ public class MainActivity extends SherlockActivity {
                 row.setLayoutParams(new LayoutParams((int)((Activity)context).getResources().getDimension(R.dimen.view_width), (int) ((Activity)context).getResources().getDimension(R.dimen.view_height)));
 
                 holder = new MenuItemHolder();
+                holder.textDescription = (TextView)row.findViewById(R.id.menu_item_desc);
                 holder.imageItem = (ImageView) row.findViewById(R.id.item_image);
-
 
                 row.setTag(holder);
 
@@ -178,6 +179,7 @@ public class MainActivity extends SherlockActivity {
             MenuItem item = data.get(position);
             try {
                 holder.imageItem.setImageBitmap(convertToBitMap(item.getMenuImage()));
+                holder.textDescription.setText(item.getMenuCaption());
                 if(item.getMenuName().equalsIgnoreCase("beginMeeting")){
                     row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_top_left));
                 }
@@ -205,6 +207,7 @@ public class MainActivity extends SherlockActivity {
 
         class MenuItemHolder {
             ImageView imageItem;
+            TextView textDescription;
 
         }
 
