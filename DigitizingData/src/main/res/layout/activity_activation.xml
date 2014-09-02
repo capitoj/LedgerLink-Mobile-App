@@ -19,13 +19,12 @@
             android:paddingTop="@dimen/activity_vertical_margin">
 
             <ImageView
-                style="@style/Logo"
+                style="@style/ActivationPageLogo"
                 android:id="@+id/imgVALogo"
                 android:layout_width="100dip"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/image_content_desc"
-                android:textAlignment="center" />
-
+                android:textAlignment="center"/>
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblVAHeader"
@@ -35,7 +34,12 @@
                 android:layout_below="@+id/imgVALogo"
                 android:text="@string/register"
                 android:layout_alignLeft="@+id/lblVAVslaCode"
-                android:layout_alignRight="@+id/lblVAVslaCode" />
+                android:layout_alignRight="@+id/lblVAVslaCode"
+                android:layout_marginTop="1dip"
+                android:paddingBottom="0dp"
+                android:paddingTop="0dp"
+                android:layout_marginBottom="2dip"
+                />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularTextLogin"
@@ -45,7 +49,9 @@
                 android:layout_below="@id/lblVAHeader"
                 android:text="VSLA Number"
                 android:layout_alignLeft="@+id/txtVAVslaCode"
-                android:layout_alignRight="@+id/txtVAVslaCode" />
+                android:layout_alignRight="@+id/txtVAVslaCode"
+                android:paddingTop="2dip"
+                android:layout_marginBottom="3dip"/>
 
             <org.applab.digitizingdata.fontutils.TypefaceEditText
                 style="@style/EditTextLogin"
@@ -120,14 +126,15 @@
                 android:layout_alignLeft="@id/btnVAActivate"/>
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtVersionInfo"
                 style="@style/SmallerRegularText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/txtHelpInfo"
-                android:text="version number"
-                android:layout_marginTop="70dip"
-                android:layout_marginLeft="2dip"
-                />
+                android:layout_marginLeft="1dip"
+                android:layout_marginTop="2dip"
+                android:layout_marginBottom="1dip"
+                android:text="version number" />
 
         </RelativeLayout>
 

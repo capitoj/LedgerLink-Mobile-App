@@ -1,75 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin">
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <ImageView
-            style="@style/Logo"
             android:id="@+id/imgVALogo"
+            style="@style/Logo"
             android:layout_width="100dip"
             android:layout_height="match_parent"
             android:contentDescription="@string/image_content_desc"
             android:textAlignment="center" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/InTextHeader"
             android:id="@+id/lbl_vsla_name"
+            style="@style/InTextHeader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="VSLA NAME "
-            android:layout_below="@+id/imgVALogo"
             android:layout_alignLeft="@+id/edt_passkey"
-            android:layout_alignRight="@+id/edt_passkey"  />
+            android:layout_alignRight="@+id/edt_passkey"
+            android:layout_below="@+id/imgVALogo"
+            android:text="VSLA NAME " />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularTextActivationLoginMsg"
             android:id="@+id/lblActivationLoginMsg"
+            style="@style/RegularTextActivationLoginMsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Activation Message"
-            android:layout_marginTop="50dip"
-            android:paddingTop="40dip"
-            android:paddingBottom="-5dip"
             android:layout_above="@+id/edt_passkey"
             android:layout_alignLeft="@+id/lbl_vsla_name"
-            android:layout_alignRight="@+id/lbl_vsla_name" />
+            android:layout_alignRight="@+id/lbl_vsla_name"
+            android:paddingTop="15dip"
+            android:layout_marginBottom="3dip"
+            android:text="Activation Message" />
+        <!--
+        android:paddingBottom="-5dip"
+        android:layout_marginTop="40dip"
+        android:paddingTop="25dip" -->
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularTextLogin"
             android:id="@+id/lblPassKeyPrompt"
+            style="@style/RegularTextLogin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Passkey"
-            android:layout_below="@+id/lbl_vsla_name"
             android:layout_alignLeft="@+id/edt_passkey"
-            android:layout_alignRight="@+id/edt_passkey"/>
+            android:layout_alignRight="@+id/edt_passkey"
+            android:layout_below="@+id/lbl_vsla_name"
+            android:text="Passkey" />
 
         <org.applab.digitizingdata.fontutils.TypefaceEditText
-            style="@style/EditTextLogin"
             android:id="@+id/edt_passkey"
+            style="@style/EditTextLogin"
             android:layout_width="265dip"
             android:layout_height="wrap_content"
-            android:inputType="numberPassword"
-            android:hint="Enter Pass Key Here"
-            android:layout_below="@+id/lblPassKeyPrompt"
             android:layout_alignLeft="@+id/btnLogin"
+            android:layout_below="@+id/lblPassKeyPrompt"
+            android:hint="Enter Pass Key Here"
+            android:inputType="numberPassword"
             android:textAlignment="center" />
 
         <requestFocus />
 
 
         <org.applab.digitizingdata.fontutils.TypefaceButton
-            style="@style/LoginButton"
             android:id="@+id/btnLogin"
+            style="@style/LoginButton"
             android:layout_width="265dip"
             android:layout_height="wrap_content"
             android:layout_below="@id/edt_passkey"
@@ -80,10 +84,11 @@
             style="@style/RegularTextActivationLoginMsg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignLeft="@id/btnLogin"
             android:layout_below="@id/btnLogin"
-            android:textSize="14sp"
+            android:layout_marginTop="2dp"
             android:text="Forgot your pass key: \nPlease call 078000000"
-            android:layout_alignLeft="@id/btnLogin"/>
+            android:textSize="14sp" />
         <!--  <TextView
               android:id="@+id/lblSISwitchMode"
               android:layout_width="fill_parent"
@@ -98,14 +103,14 @@
               android:text="Switch to Training Mode" /> -->
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/txtVersionInfo"
             style="@style/SmallerRegularText"
-android:id="@+id/txtVersionInfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/txtHelpInfo"
-            android:text="version number"
-            android:layout_marginTop="70dip"
-            android:layout_marginLeft="2dip"
-            />
+            android:layout_marginLeft="1dip"
+            android:layout_marginTop="2dip"
+            android:layout_marginBottom="1dip"
+            android:text="version number" />
     </RelativeLayout>
 </ScrollView>
