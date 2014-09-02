@@ -33,6 +33,7 @@ import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+
 import com.actionbarsherlock.app.ActionBar;
 
 public class ActivationActivity extends SherlockActivity {
@@ -51,59 +52,60 @@ public class ActivationActivity extends SherlockActivity {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_activation);
 
+        TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
+        versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
+
         actionBar = getSupportActionBar();
 
-      //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblVASwitchMode);
+        //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblVASwitchMode);
 
-        ImageView imgVALogo = (ImageView)findViewById(R.id.imgVALogo);
+        ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
         imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
-        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int)this.getResources().getDimension(R.dimen.logo_width), (int)this.getResources().getDimension(R.dimen.logo_height)));
+        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.logo_width), (int) this.getResources().getDimension(R.dimen.logo_height)));
         //If we are in training mode then show it using a custom View with distinguishable background
         //Assumed that the preferences have been set by now
-        if(Utils.isExecutingInTrainingMode()) {
+        if (Utils.isExecutingInTrainingMode()) {
             actionBar.setTitle("TRAINING MODE");
             actionBar.setCustomView(R.layout.activity_main_training_mode);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
 
             //Set the label of the link
-          //  tvSwitchMode.setText("Switch To Actual VSLA Data");
-           // tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
-        }
-        else {
+            //  tvSwitchMode.setText("Switch To Actual VSLA Data");
+            // tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
+        } else {
             actionBar.hide();
             //Set the label of the link
-          //  tvSwitchMode.setText("Switch To Training Mode");
-           // tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
+            //  tvSwitchMode.setText("Switch To Training Mode");
+            // tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
         }
 
         //Set the textview to be underline
         // tvSwitchMode.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 
-      /**  tvSwitchMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences appPrefs = Utils.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor prefEditor = appPrefs.edit();
-                if (Utils.isExecutingInTrainingMode()) {
-                    prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_PROD);
-                    Toast.makeText(getApplicationContext(), "Execution switched to Actual VSLA Data. Please start the app again.", Toast.LENGTH_LONG).show();
-                } else {
-                    prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING);
-                    Toast.makeText(getApplicationContext(), "Execution switched to Training Mode. Please start the app again.", Toast.LENGTH_LONG).show();
-                }
+        /**  tvSwitchMode.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+        SharedPreferences appPrefs = Utils.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor prefEditor = appPrefs.edit();
+        if (Utils.isExecutingInTrainingMode()) {
+        prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_PROD);
+        Toast.makeText(getApplicationContext(), "Execution switched to Actual VSLA Data. Please start the app again.", Toast.LENGTH_LONG).show();
+        } else {
+        prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING);
+        Toast.makeText(getApplicationContext(), "Execution switched to Training Mode. Please start the app again.", Toast.LENGTH_LONG).show();
+        }
 
-                //Save the values
-                //Can use apply() but would require API 9
-                prefEditor.commit();
+        //Save the values
+        //Can use apply() but would require API 9
+        prefEditor.commit();
 
-                finish();
-            }
+        finish();
+        }
         }); */
 
         vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
         // ---Button view---
-        Button btnActivate = (Button)findViewById(R.id.btnVAActivate);
+        Button btnActivate = (Button) findViewById(R.id.btnVAActivate);
         btnActivate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 saveActivatedVslaInfo();
@@ -125,9 +127,8 @@ public class ActivationActivity extends SherlockActivity {
         super.onBackPressed();
     }
 
-    private void activateVlsaUsingPostAsync(String request)
-    {
-        String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL,"vslas","activate");
+    private void activateVlsaUsingPostAsync(String request) {
+        String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
         new PostTask(this).execute(uri, request);
 
         //Do the other stuff in the Async Task
@@ -154,7 +155,7 @@ public class ActivationActivity extends SherlockActivity {
     }
 
     private boolean saveOfflineVslaInfo() {
-        try{
+        try {
             TextView txtVslaCode = (TextView) findViewById(R.id.txtVAVslaCode);
             TextView txtPassKey = (TextView) findViewById(R.id.txtVAPassKey);
             TextView txtConfirmPassKey = (TextView) findViewById(R.id.txtVAConfirmPassKey);
@@ -163,40 +164,39 @@ public class ActivationActivity extends SherlockActivity {
             String passKey = txtPassKey.getText().toString().trim();
             String confirmPassKey = txtConfirmPassKey.getText().toString().trim();
 
-            if(vslaCode.length()<=0) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The VSLA Code is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            if (vslaCode.length() <= 0) {
+                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The VSLA Code is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtVslaCode.requestFocus();
                 return false;
             }
 
-            if(passKey.length()<=0) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            if (passKey.length() <= 0) {
+                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return false;
             }
 
             //As per requirements, set the passkey length
-            if(passKey.length()<=Integer.parseInt(getResources().getString(R.string.minimum_passkey_length))) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The passkey should be atleast 5 digits long", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            if (passKey.length() <= Integer.parseInt(getResources().getString(R.string.minimum_passkey_length))) {
+                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The passkey should be atleast 5 digits long", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return false;
             }
 
-            if(!passKey.equalsIgnoreCase(confirmPassKey)) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The Pass Keys do not match.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            if (!passKey.equalsIgnoreCase(confirmPassKey)) {
+                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The Pass Keys do not match.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return false;
             }
 
-            return vslaInfoRepo.saveOfflineVslaInfo(vslaCode,passKey);
-        }
-        catch(Exception ex) {
+            return vslaInfoRepo.saveOfflineVslaInfo(vslaCode, passKey);
+        } catch (Exception ex) {
             return false;
         }
     }
 
     private void saveActivatedVslaInfo() {
-        try{
+        try {
             TextView txtVslaCode = (TextView) findViewById(R.id.txtVAVslaCode);
             TextView txtPassKey = (TextView) findViewById(R.id.txtVAPassKey);
             TextView txtConfirmPassKey = (TextView) findViewById(R.id.txtVAConfirmPassKey);
@@ -205,27 +205,27 @@ public class ActivationActivity extends SherlockActivity {
             String passKey = txtPassKey.getText().toString().trim();
             String confirmPassKey = txtConfirmPassKey.getText().toString().trim();
 
-            if(vslaCode.length()<=0) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The VSLA Code is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            if (vslaCode.length() <= 0) {
+                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The VSLA Code is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtVslaCode.requestFocus();
                 return;
             }
 
-            if(passKey.length()<=0) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            if (passKey.length() <= 0) {
+                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return;
             }
 
             //As per requirements, set the passkey length
-            if(passKey.length()<Integer.parseInt(getResources().getString(R.string.minimum_passkey_length))) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The passkey should be atleast "+getResources().getString(R.string.minimum_passkey_length)+" digits long", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            if (passKey.length() < Integer.parseInt(getResources().getString(R.string.minimum_passkey_length))) {
+                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The passkey should be atleast " + getResources().getString(R.string.minimum_passkey_length) + " digits long", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return;
             }
 
-            if(!passKey.equalsIgnoreCase(confirmPassKey)) {
-                Utils.createAlertDialogOk(ActivationActivity.this,"Registration","The Pass Keys do not match.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            if (!passKey.equalsIgnoreCase(confirmPassKey)) {
+                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The Pass Keys do not match.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return;
             }
@@ -246,11 +246,11 @@ public class ActivationActivity extends SherlockActivity {
             String simOperatorName = null;
             String msisdn = null;
 
-            TelephonyManager tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
+            TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
             imei = tm.getDeviceId();
 
             //if there is a SIM Card then get details
-            if(tm.getSimState() == TelephonyManager.SIM_STATE_READY) {
+            if (tm.getSimState() == TelephonyManager.SIM_STATE_READY) {
                 imsi = tm.getSubscriberId();
                 simSerialNo = tm.getSimSerialNumber();
                 simOperatorName = tm.getSimOperatorName();
@@ -258,31 +258,23 @@ public class ActivationActivity extends SherlockActivity {
                 networkOperator = tm.getNetworkOperator();
                 msisdn = tm.getLine1Number();
 
-                if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE){
+                if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE) {
                     networkType = "EDGE";
-                }
-                else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_GPRS){
+                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_GPRS) {
                     networkType = "GPRS";
-                }
-                else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA){
+                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA) {
                     networkType = "HSDPA";
-                }
-                else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA){
+                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA) {
                     networkType = "HSPA";
-                }
-                else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPAP){
+                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPAP) {
                     networkType = "HSPAP";
-                }
-                else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA){
+                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA) {
                     networkType = "HSUPA";
-                }
-                else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS){
+                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS) {
                     networkType = "UMTS";
-                }
-                else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE){
+                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE) {
                     networkType = "LTE";
-                }
-                else {
+                } else {
                     networkType = "UNKNOWN";
                 }
             }
@@ -290,24 +282,23 @@ public class ActivationActivity extends SherlockActivity {
             //Build JSON input string
             JSONStringer js = new JSONStringer();
             String jsonRequest = js
-                .object()
+                    .object()
                     .key("PhoneImei").value(imei)
                     .key("SimImsi").value(imsi)
                     .key("SimSerialNo").value(simSerialNo)
-                    //.key("simOperatorName").value(simOperatorName)
+                            //.key("simOperatorName").value(simOperatorName)
                     .key("NetworkOperatorName").value(networkOperatorName)
-                    //.key("networkOperator").value(networkOperator)
+                            //.key("networkOperator").value(networkOperator)
                     .key("NetworkType").value(networkType)
-                    //.key("msisdn").value(msisdn)
+                            //.key("msisdn").value(msisdn)
                     .key("VslaCode").value(vslaCode)
                     .key("PassKey").value(passKey)
-                .endObject()
-                .toString();
+                    .endObject()
+                    .toString();
 
 
             activateVlsaUsingPostAsync(jsonRequest);
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             return;
         }
     }
@@ -329,7 +320,7 @@ public class ActivationActivity extends SherlockActivity {
             super.onPreExecute();
             try {
                 if (activationActivityWeakReference.get() != null && !activationActivityWeakReference.get().isFinishing()) {
-                    if(null == progressDialog) {
+                    if (null == progressDialog) {
                         progressDialog = new ProgressDialog(activationActivityWeakReference.get());
                         progressDialog.setTitle("Registration");
                         progressDialog.setMessage("Sending registration");
@@ -340,8 +331,7 @@ public class ActivationActivity extends SherlockActivity {
                         progressDialog.show();
                     }
                 }
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 progressDialog.setMessage(ex.getMessage());
             }
         }
@@ -388,23 +378,19 @@ public class ActivationActivity extends SherlockActivity {
                 // close the connection
                 httpClient.getConnectionManager().shutdown();
 
-                if(httpStatusCode == 200) //sucess
+                if (httpStatusCode == 200) //sucess
                 {
                     result = new JSONObject(responseString);
                 }
 
                 return result;
-            }
-            catch(ClientProtocolException exClient) {
+            } catch (ClientProtocolException exClient) {
                 return null;
-            }
-            catch(IOException exIo) {
+            } catch (IOException exIo) {
                 return null;
-            }
-            catch(JSONException exJson) {
+            } catch (JSONException exJson) {
                 return null;
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 return null;
             }
         }
@@ -424,14 +410,14 @@ public class ActivationActivity extends SherlockActivity {
             boolean retrievedVslaNameSavedSuccessfully = false; //Indicates that activation succeeded and vslaName retrieved was saved
 
             try {
-                if(result != null) {
+                if (result != null) {
                     activationSuccessful = result.getBoolean("IsActivated");
                     vslaName = result.getString("VslaName");
                     passKey = result.getString("PassKey");
                 }
-                if(activationSuccessful && null != vslaName) {
-                    retrievedVslaNameSavedSuccessfully = vslaInfoRepo.saveVslaInfo(targetVslaCode,vslaName, passKey);
-                    if(retrievedVslaNameSavedSuccessfully) {
+                if (activationSuccessful && null != vslaName) {
+                    retrievedVslaNameSavedSuccessfully = vslaInfoRepo.saveVslaInfo(targetVslaCode, vslaName, passKey);
+                    if (retrievedVslaNameSavedSuccessfully) {
                         Toast.makeText(ActivationActivity.this, "Congratulations! Registration Completed Successfully.", Toast.LENGTH_LONG).show();
                         dismissProgressDialog();
                         Intent i = new Intent(getBaseContext(), LoginActivity.class);
@@ -439,22 +425,20 @@ public class ActivationActivity extends SherlockActivity {
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
                         finish();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(ActivationActivity.this, "Registration failed while writing retrieved VSLA Name on the local database. Try again later.", Toast.LENGTH_LONG).show();
                         dismissProgressDialog();
                     }
-                }
-                else {
+                } else {
                     //Process failed
-                    Toast.makeText(getApplicationContext(), "Registration failed due to internet connection problems. Try again later.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Registration failed due to internet connection problems. Try again later.", Toast.LENGTH_LONG).show();
                     dismissProgressDialog();
                 }
 
                 //In case activation failed
-                if(!retrievedVslaNameSavedSuccessfully) {
+                if (!retrievedVslaNameSavedSuccessfully) {
                     //Save the record offline
-                    vslaInfoRepo.saveOfflineVslaInfo(targetVslaCode,securityPasskey);
+                    vslaInfoRepo.saveOfflineVslaInfo(targetVslaCode, securityPasskey);
 
                     //Then call the login activity
                     Intent i = new Intent(getBaseContext(), LoginActivity.class);
@@ -463,27 +447,25 @@ public class ActivationActivity extends SherlockActivity {
                     startActivity(i);
                     finish();
                 }
-            }
-            catch(JSONException exJson) {
+            } catch (JSONException exJson) {
                 //Process failed
-                Toast.makeText(getApplicationContext(), "Registration failed due to invalid Data Format. Try again later.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Registration failed due to invalid Data Format. Try again later.", Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
-            }
-            catch(Exception ex) {
+            } catch (Exception ex) {
                 //Process failed
-                Toast.makeText(getApplicationContext(), "Registration failed. Try again later.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Registration failed. Try again later.", Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
             }
         }
 
         //Dismisses the currently showing progress dialog
         private void dismissProgressDialog() {
-            if(progressDialog != null) {
+            if (progressDialog != null) {
                 progressDialog.dismiss();
                 //set it to null
                 progressDialog = null;
             }
         }
     }
-    
+
 }

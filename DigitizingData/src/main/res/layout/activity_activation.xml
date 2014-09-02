@@ -110,6 +110,7 @@
                 />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtHelpInfo"
                 style="@style/RegularTextActivationLoginMsg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -118,6 +119,17 @@
                 android:text="Need help? Please call 078000000"
                 android:layout_alignLeft="@id/btnVAActivate"/>
 
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/SmallerRegularText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/txtHelpInfo"
+                android:text="version number"
+                android:layout_marginTop="70dip"
+                android:layout_marginLeft="2dip"
+                />
+
         </RelativeLayout>
+
   <!--  </RelativeLayout> -->
 </ScrollView>
