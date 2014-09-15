@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,7 +19,6 @@ import org.applab.digitizingdata.repo.FineTypeRepo;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -37,6 +36,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
     VslaCycleRepo cycleRepo;
     VslaCycle currentCycle;
     String datePaid;
+    private View viewContainer;
 
     public FineHistoryArrayAdapter(Context context, ArrayList<MemberFineRecord> values, String font) {
         super(context, R.layout.row_fines_history, values);
@@ -59,6 +59,8 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             rowView = inflater.inflate(R.layout.row_fines_history, parent, false);
+
+            viewContainer = rowView.findViewById(R.id.undobar);
 
             //Assign Values to the Widgets
             final MemberFineRecord fineRecord = values.get(position);
@@ -88,7 +90,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
                                                                        datePaid = "";
                                                                    }
 
-                                                                   finesRepo.updateMemberFineStatus(fineRecord.getFineId(), fineRecord.getStatus(), datePaid);
+                                                                   // finesRepo.updateMemberFineStatus(ineRecord.getFineId(), fineRecord.getStatus(), datePaid);
                                                                }
                                                            }
             );
@@ -104,7 +106,6 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
 
 
             if (fineRecord != null)
-
             {
                 txtFineMeetingDate.setText(String.format(Utils.formatDate(fineRecord.getMeetingDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
                 txtFineAmount.setText(String.format("%,.0fUGX", fineRecord.getAmount()));
@@ -127,6 +128,26 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
                 txtFineType.setText(fineRecord.getFineTypeName());
                 chkMemberFineStatus.setChecked(fineRecord.getStatus() != 0);
             }
+            // Find the textview and the button defined in the layout
+           //TextView textView = (TextView) rowView.findViewById(R.id.textView);
+            Button button = (Button) rowView.findViewById(R.id.undobar_button);
+           /** button.setOnClickListener(
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(context, "Deletion undone", Toast.LENGTH_LONG).show();
+                           viewContainer.setVisibility(View.GONE);
+                                // Return the item at its previous position again
+                                //mAdapter.insert(itemToDelete, position);
+                        }
+                    }); */
+            //showUndo(viewContainer);
+
+/** Get the item from the array
+            String country = countries[position];
+
+// Set the country as the textview label
+            textView.setText(country); */
 
             return rowView;
         } catch (Exception ex) {
@@ -134,4 +155,19 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
             return rowView;
         }
     }
+
+
+
+    /** public static void showUndo(final View viewContainer) {
+        viewContainer.setVisibility(View.VISIBLE);
+        viewContainer.setAlpha(1);
+       /** viewContainer.animate().alpha(0.4f).setDuration(5000)
+                .withEndAction(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        viewContainer.setVisibility(View.GONE);
+                    }
+                }); */
+
 }

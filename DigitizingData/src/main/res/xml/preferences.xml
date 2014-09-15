@@ -57,5 +57,12 @@
             android:key="prefTrainingPassword"
             android:summary="A second password that you would enter to sign-in to Training Mode. Leave it blank if it is not required"
             android:title="Training Password" />
+
+
     </PreferenceScreen>
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="prefRestoreData"
+        android:summary="Switch to restore data"
+        android:title="Restore Data" />
 </PreferenceScreen>

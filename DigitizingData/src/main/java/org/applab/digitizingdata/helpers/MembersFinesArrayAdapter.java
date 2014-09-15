@@ -75,12 +75,12 @@ public class MembersFinesArrayAdapter extends ArrayAdapter<Member> {
 
             //Get the Total SavingSchema
             targetMeeting = meetingRepo.getMeetingById(meetingId);
-            double totalFines = 0.0;
+            double outstandingFines = 0.0;
             if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {
-                totalFines  = fineRepo.getMemberTotalFinesInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+                outstandingFines  = fineRepo.getMemberTotalFinesOutstandingInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
 
-            txtTotalFines.setText(String.format("Total Fines: %,.0f UGX", totalFines));
+            txtTotalFines.setText(String.format("Outstanding Fines: %,.0f UGX", outstandingFines));
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

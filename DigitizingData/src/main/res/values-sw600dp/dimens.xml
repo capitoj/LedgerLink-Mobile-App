@@ -3,4 +3,7 @@
     <dimen name="view_height">100dip</dimen>
     <dimen name="logo_width">100dip</dimen>
     <dimen name="logo_height">70dip</dimen>
+    <dimen name="activity_horizontal_margin">30dp</dimen>
+    <dimen name="activity_vertical_margin">30dp</dimen>
+
 </resources>

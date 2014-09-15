@@ -12,6 +12,7 @@ public class MemberFineRecord {
     private String fineTypeName;
     private int fineTypeId;
     private int status;
+    private int paidInMeetingId;
 
     public int getFineId() {
         return fineId;
@@ -60,5 +61,12 @@ public class MemberFineRecord {
     public void setStatus(int status) {
         this.status = status;
     }
-}
 
+    public int getPaidInMeetingId() {
+        return paidInMeetingId;
+    }
+
+    public void setPaidInMeetingId(int paidInMeetingId) {
+        this.paidInMeetingId = paidInMeetingId;
+    }
+}

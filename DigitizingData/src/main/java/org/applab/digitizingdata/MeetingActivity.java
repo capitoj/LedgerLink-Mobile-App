@@ -1,6 +1,5 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +8,15 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
+
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,9 +26,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
@@ -31,14 +36,6 @@ import org.applab.digitizingdata.repo.SendDataRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -79,7 +76,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         actionBar.setDisplayHomeAsUpEnabled(true);
         String meetingDate = getIntent().getStringExtra("_meetingDate");
 
-       // String title = String.format("Meeting    %s", meetingDate);
+        // String title = String.format("Meeting    %s", meetingDate);
         String title = "Meeting";
 
 
@@ -147,15 +144,15 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             targetMeetingId = getIntent().getIntExtra("_meetingId", 0);
         }
 
-        if(targetMeetingId == 0) {
-        //If target meeting id is 0, then load it as current meeting id
-        VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getBaseContext());
+        if (targetMeetingId == 0) {
+            //If target meeting id is 0, then load it as current meeting id
+            VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getBaseContext());
 
-        MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
-        targetMeetingId = meetingRepo.getCurrentMeeting(vslaCycleRepo.getCurrentCycle().getCycleId()).getMeetingId();
+            MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
+            targetMeetingId = meetingRepo.getCurrentMeeting(vslaCycleRepo.getCurrentCycle().getCycleId()).getMeetingId();
 
-        //Define the meeting id to be accessed by all tab fragments
-        getIntent().putExtra("_meetingId", targetMeetingId);
+            //Define the meeting id to be accessed by all tab fragments
+            getIntent().putExtra("_meetingId", targetMeetingId);
         }
     }
 
@@ -168,14 +165,13 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        //If(enableData)
+        final MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.meeting, menu);
+        if (Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+            menu.findItem(R.id.mnuMeetingFineMember).setEnabled(false);
+            return false;
+        }
         if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
-            final MenuInflater inflater = getSupportMenuInflater();
-            inflater.inflate(R.menu.meeting, menu);
-            if (Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY){
-                menu.findItem(R.id.mnuMeetingFineMember).setEnabled(false);
-            }
             return true;
         } else {
             return false;
@@ -183,21 +179,19 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     }
 
     public Meeting getCurrentMeeting() {
-        if(currentMeeting != null) return currentMeeting;
+        if (currentMeeting != null) return currentMeeting;
 
-        if(getIntent().hasExtra("_currentMeetingId")) {
+        if (getIntent().hasExtra("_currentMeetingId")) {
 
             //try to load it from db
             MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
-            currentMeeting = meetingRepo.getMeetingById(getIntent().getIntExtra("_currentMeetingId", 0)) ;
+            currentMeeting = meetingRepo.getMeetingById(getIntent().getIntExtra("_currentMeetingId", 0));
             return currentMeeting;
         }
 
         //else return null
         return currentMeeting;
     }
-
-
 
 
     @Override
@@ -221,11 +215,11 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 }
                 return true;
             /** This event has been set from the send data fragment
-            case R.id.mnuMSDFSend:
-                //For the Send Data Fragment in case data is sent during the meeting
-                sendMeetingData();
-                return true;
-            /** case R.id.mnuSMDSend:
+             case R.id.mnuMSDFSend:
+             //For the Send Data Fragment in case data is sent during the meeting
+             sendMeetingData();
+             return true;
+             /** case R.id.mnuSMDSend:
              //Send Meeting Data: Build JSON String and send it
              sendMeetingData();
              //                Intent i = new Intent(getApplicationContext(), MainActivity.class);
@@ -249,6 +243,11 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 startActivity(changeMeetingDate);
                 return true;
             case R.id.mnuMeetingFineMember:
+                // Do not invoke the event when in Read only Mode
+                if (this.isViewOnly()) {
+                    Toast.makeText(this.getBaseContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+                    return false;
+                }
                 Intent fineMemberIntent = new Intent(getApplicationContext(), FineMemberMeetingActivity.class);
                 fineMemberIntent.putExtra("_meetingId", getIntent().getIntExtra("_meetingId", 0));
                 startActivity(fineMemberIntent);
@@ -316,8 +315,8 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         if (getIntent().hasExtra("_viewOnly")) {
             return getIntent().getBooleanExtra("_viewOnly", false);
         }
-        if(getCurrentMeeting() != null) {
-            return ! getCurrentMeeting().isCurrent();
+        if (getCurrentMeeting() != null) {
+            return !getCurrentMeeting().isCurrent();
         }
         return false;
     }

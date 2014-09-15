@@ -9,7 +9,6 @@ import android.util.Log;
 import org.applab.digitizingdata.datatransformation.FinesDataTransferRecord;
 import org.applab.digitizingdata.domain.schema.FineSchema;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
-import org.applab.digitizingdata.domain.schema.SavingSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.MemberFineRecord;
 import org.applab.digitizingdata.helpers.Utils;
@@ -124,6 +123,7 @@ public class MeetingFineRepo {
         }
     }
 
+    // Picks sum of all fines issued to member regardless of whether they are paid or not
     public double getMemberTotalFinesInCycle(int cycleId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -159,6 +159,41 @@ public class MeetingFineRepo {
         }
     }
 
+    // Picks sum of all fines outstanding for a member
+    public double getMemberTotalFinesOutstandingInCycle(int cycleId, int memberId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        double totalFines = 0.00;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sumQuery = String.format("SELECT  SUM(%s) AS TotalFines FROM %s WHERE %s=%d AND %s!=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d )",
+                    FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
+                    FineSchema.COL_F_MEMBER_ID, memberId, FineSchema.COL_F_IS_CLEARED, 1,
+                    FineSchema.COL_F_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
+                    MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID, cycleId);
+
+            cursor = db.rawQuery(sumQuery, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                totalFines = cursor.getDouble(cursor.getColumnIndex("TotalFines"));
+            }
+
+
+            return totalFines;
+        } catch (Exception ex) {
+            Log.e("MeetingFineRepo.getMemberTotalFinesInCycle", ex.getMessage());
+            return 0.0;
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
 
     public double getTotalFinesInMeeting(int meetingId) {
@@ -204,11 +239,17 @@ public class MeetingFineRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT SUM(%s) AS TotalFinesPaid FROM %s WHERE %s=%d AND %s LIKE '%s%%' AND %s=%d",
+            /** String sumQuery = String.format("SELECT SUM(%s) AS TotalFinesPaid FROM %s WHERE %s=%d AND %s LIKE '%s%%' AND %s=%d",
+             FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
+             FineSchema.COL_F_IS_CLEARED, paymentStatus,
+             FineSchema.COL_F_DATE_CLEARED, meetingDateString,
+             FineSchema.COL_F_PAID_IN_MEETING_ID, meetingId); */
+
+            String sumQuery = String.format("SELECT SUM(%s) AS TotalFinesPaid FROM %s WHERE %s=%d AND %s=%d",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
                     FineSchema.COL_F_IS_CLEARED, paymentStatus,
-                    FineSchema.COL_F_DATE_CLEARED, meetingDateString,
-                    FineSchema.COL_F_MEETING_ID, meetingId);
+                    FineSchema.COL_F_PAID_IN_MEETING_ID, meetingId);
+
 
             cursor = db.rawQuery(sumQuery, null);
 
@@ -304,11 +345,7 @@ public class MeetingFineRepo {
     public boolean saveMemberFine(int meetingId, int memberId, double fineAmount, int fineTypeId, int paymentStatus) {
         SQLiteDatabase db = null;
         String datePaid = "";
-
-        if (paymentStatus==1){
-            Date date = new Date();
-            datePaid = Utils.formatDateToSqlite(date);
-        }
+        int paidMeetingId;
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
@@ -319,10 +356,18 @@ public class MeetingFineRepo {
             values.put(FineSchema.COL_F_AMOUNT, fineAmount);
             values.put(FineSchema.COL_F_IS_CLEARED, paymentStatus);
             values.put(FineSchema.COL_F_FINE_TYPE_ID, fineTypeId);
-            values.put(FineSchema.COL_F_DATE_CLEARED, datePaid);
 
 
-            // Inserting or UpdatingRow
+            if (paymentStatus == 1) {
+                Date date = new Date();
+                datePaid = Utils.formatDateToSqlite(date);
+                values.put(FineSchema.COL_F_DATE_CLEARED, datePaid);
+
+                // If paid on same day as meeting paidMeetingId is the current meetingId
+                values.put(FineSchema.COL_F_PAID_IN_MEETING_ID, meetingId);
+            }
+
+            // Inserting Row
             long retVal = -1;
             retVal = db.insert(FineSchema.getTableName(), null, values);
 
@@ -350,14 +395,15 @@ public class MeetingFineRepo {
             fines = new ArrayList<MemberFineRecord>();
 
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            //TODO: I don't think I need the Sub-Query: can do Meetings.CycleId = xx
-            String query = String.format("SELECT  %s.%s AS FineId, %s.%s AS FineTypeId, %s.%s AS MeetingDate, %s.%s AS Amount, %s.%s AS Status " +
+
+            String query = String.format("SELECT  %s.%s AS FineId, %s.%s AS FineTypeId, %s.%s AS MeetingDate, %s.%s AS Amount, %s.%s AS Status, %s.%s AS PaidInMeetingId " +
                             " FROM %s INNER JOIN %s ON %s.%s=%s.%s WHERE %s.%s=%d AND %s.%s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY %s.%s DESC",
                     FineSchema.getTableName(), FineSchema.COL_F_FINE_ID,
                     FineSchema.getTableName(), FineSchema.COL_F_FINE_TYPE_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_DATE,
                     FineSchema.getTableName(), FineSchema.COL_F_AMOUNT,
                     FineSchema.getTableName(), FineSchema.COL_F_IS_CLEARED,
+                    FineSchema.getTableName(), FineSchema.COL_F_PAID_IN_MEETING_ID,
                     FineSchema.getTableName(), MeetingSchema.getTableName(),
                     FineSchema.getTableName(), FineSchema.COL_F_MEETING_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_ID,
@@ -378,6 +424,7 @@ public class MeetingFineRepo {
                     fine.setFineId(cursor.getInt(cursor.getColumnIndex("FineId")));
                     fine.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
                     fine.setStatus(cursor.getInt(cursor.getColumnIndex("Status")));
+                    fine.setPaidInMeetingId(cursor.getInt(cursor.getColumnIndex("PaidInMeetingId")));
                     fines.add(fine);
                 } while (cursor.moveToNext());
             }
@@ -442,7 +489,7 @@ public class MeetingFineRepo {
     }
 
 
-    public boolean updateMemberFineStatus(int fineId, int paymentStatus, String datePaid) {
+    public boolean updateMemberFineStatus(int paidInMeetingId, int fineId, int paymentStatus, String datePaid) {
         SQLiteDatabase db = null;
         try {
 
@@ -450,12 +497,21 @@ public class MeetingFineRepo {
             ContentValues values = new ContentValues();
 
             values.put(FineSchema.COL_F_IS_CLEARED, paymentStatus);
-            values.put(FineSchema.COL_F_DATE_CLEARED, datePaid);
-        long retVal = -1;
+            if (paymentStatus == 1) {
 
-         // Updating row
-         retVal = db.update(FineSchema.getTableName(), values, FineSchema.COL_F_FINE_ID + " = ?",
-         new String[]{String.valueOf(fineId)});
+                values.put(FineSchema.COL_F_PAID_IN_MEETING_ID, paidInMeetingId);
+            } else {
+                values.put(FineSchema.COL_F_PAID_IN_MEETING_ID, 0);
+            }
+
+            values.put(FineSchema.COL_F_DATE_CLEARED, datePaid);
+            long retVal = -1;
+
+            Log.d("MFR", String.valueOf(fineId) + " " + paidInMeetingId + String.valueOf(datePaid) );
+
+            // Updating row
+            retVal = db.update(FineSchema.getTableName(), values, FineSchema.COL_F_FINE_ID + " = ?",
+                    new String[]{String.valueOf(fineId)});
             if (retVal != -1) {
                 return true;
             } else {

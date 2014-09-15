@@ -48,7 +48,6 @@ public class LongTaskRunner  extends AsyncTask<Runnable, Void, Void>
             progressDialog.setCancelable(false);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progressDialog.show();
-            Log.d("onpre", "on pre end");
         }
 
 

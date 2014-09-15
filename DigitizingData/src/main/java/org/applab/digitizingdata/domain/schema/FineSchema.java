@@ -15,6 +15,7 @@ public class FineSchema {
     public static final String COL_F_EXPECTED_DATE = "ExpectedDate";
     public static final String COL_F_IS_CLEARED = "IsCleared";
     public static final String COL_F_DATE_CLEARED = "DateCleared";
+    public static final String COL_F_PAID_IN_MEETING_ID = "PaidInMeetingId";
 
     public static String getCreateTableScript() {
         StringBuffer sb = null;
@@ -30,7 +31,8 @@ public class FineSchema {
         sb.append(COL_F_AMOUNT + " NUMERIC ,");
         sb.append(COL_F_EXPECTED_DATE + " TEXT ,");
         sb.append(COL_F_IS_CLEARED + " INTEGER ,");
-        sb.append(COL_F_DATE_CLEARED + " TEXT");
+        sb.append(COL_F_DATE_CLEARED + " TEXT ,");
+        sb.append(COL_F_PAID_IN_MEETING_ID + " INTEGER");
         sb.append(")");
 
         return sb.toString();
@@ -54,7 +56,8 @@ public class FineSchema {
         sb.append(COL_F_AMOUNT + ",");
         sb.append(COL_F_EXPECTED_DATE + ",");
         sb.append(COL_F_IS_CLEARED + ",");
-        sb.append(COL_F_DATE_CLEARED);
+        sb.append(COL_F_DATE_CLEARED + ",");
+        sb.append(COL_F_PAID_IN_MEETING_ID);
 
         return sb.toString();
     }

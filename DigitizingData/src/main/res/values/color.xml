@@ -11,6 +11,7 @@
     <color name="ledger_link_black">#000000</color>
     <color name="ledger_link_red"> #FF0000</color>
     <color name="ledger_link_grey">#ffb6b6b6</color>
+    <color name="ledger_link_swipe_grey">#e5455555</color>
 
 
     <!--  Light Blues Used for Main Menu-->
@@ -26,5 +27,14 @@
     <!-- Light Blues **Not Used-->
     <color name="mid_light_blue">#57B6DE</color>
     <color name="end_light_blue">#9BCCE0</color>
+
+<!-- Enhanced Listview -->
+    <color name="elv_btn_pressed">#ff33b5e5</color>
+    <color name="elv_btn_focused">#ff0099cc</color>
+    <color name="elv_btn_normal">#00000000</color>
+
+    <color name="elv_popup_bg_color">#EE666666</color>
+    <color name="elv_separator_color">#BBBBBB</color>
+    <color name="elv_popup_text_color">#FFFFFF</color>
 
 </resources>

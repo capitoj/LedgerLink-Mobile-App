@@ -3,12 +3,20 @@ package org.applab.digitizingdata.helpers;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import android.os.Environment;
 import android.util.Log;
+
 import org.applab.digitizingdata.SettingsActivity;
-import org.applab.digitizingdata.domain.model.FineType;
-import org.applab.digitizingdata.domain.schema.*;
+import org.applab.digitizingdata.domain.schema.AttendanceSchema;
+import org.applab.digitizingdata.domain.schema.FineSchema;
+import org.applab.digitizingdata.domain.schema.FineTypeSchema;
+import org.applab.digitizingdata.domain.schema.LoanIssueSchema;
+import org.applab.digitizingdata.domain.schema.LoanRepaymentSchema;
+import org.applab.digitizingdata.domain.schema.MeetingSchema;
+import org.applab.digitizingdata.domain.schema.MemberSchema;
+import org.applab.digitizingdata.domain.schema.SavingSchema;
+import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
+import org.applab.digitizingdata.domain.schema.VslaInfoSchema;
 
 import java.io.File;
 
@@ -16,7 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DATABASE_NAME = "ledgerlinkdb";
-    public static final int DATABASE_VERSION = 24;
+    public static final int DATABASE_VERSION = 25;
     public static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
     public static final String DATA_FOLDER = "LedgerLink";
 

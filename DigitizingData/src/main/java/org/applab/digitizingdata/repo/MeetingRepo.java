@@ -8,21 +8,13 @@ import android.util.Log;
 
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingStartingCash;
-import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
-import org.applab.digitizingdata.domain.schema.MemberSchema;
-import org.applab.digitizingdata.domain.schema.SavingSchema;
-import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Moses on 7/4/13.
@@ -520,7 +512,6 @@ public class MeetingRepo {
                     }
 
                     meetings.add(meeting);
-
                 } while (cursor.moveToNext());
             }
 

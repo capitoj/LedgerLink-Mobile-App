@@ -15,6 +15,7 @@ public class MeetingFine {
     private Date expectedDate;
     private boolean isCleared;
     private Date dateCleared;
+    private Meeting paidInMeeting;
 
     public int getFineId() {
         return fineId;
@@ -30,6 +31,14 @@ public class MeetingFine {
 
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
+    }
+
+    public Meeting getPaidInMeeting() {
+        return paidInMeeting;
+    }
+
+    public void setPaidInMeeting(Meeting paidInMeeting) {
+        this.paidInMeeting = paidInMeeting;
     }
 
     public Member getMember() {
@@ -87,4 +96,6 @@ public class MeetingFine {
     public void setDateCleared(Date dateCleared) {
         this.dateCleared = dateCleared;
     }
+
+
 }

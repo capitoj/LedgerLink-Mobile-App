@@ -27,6 +27,7 @@
         android:label="@string/app_name"
         android:theme="@style/LedgerLinkTheme"
         android:name="org.applab.digitizingdata.LedgerLinkApplication">
+        <!--android:debuggable="false"> -->
         <activity
             android:name="org.applab.digitizingdata.LoginActivity"
             android:label="Ledger Link" >

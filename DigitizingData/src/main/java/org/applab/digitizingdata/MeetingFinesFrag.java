@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
@@ -16,7 +20,6 @@ import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersFinesArrayAdapter;
-import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 
@@ -137,7 +140,8 @@ public class MeetingFinesFrag extends SherlockFragment {
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                //Do not invoke the event when in Read only Mode
+
+                // Do not invoke the event when in Read only Mode
                 if(parentActivity.isViewOnly()) {
                     Toast.makeText(parentActivity.getBaseContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return;
