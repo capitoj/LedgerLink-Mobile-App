@@ -444,21 +444,70 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
-    public boolean saveMemberLoanIssue(int meetingId, int memberId, int loanNo, double amount, double interest, Date dateDue, String comment) {
+    /**
+     * Important when Updating a Record on the Loan Issue History Screen
+     *
+     *
+     * @param memberId
+     * @return
+     */
+    public int getMemberLoanId(int memberId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        int loanId = 0;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC LIMIT 1",
+                    LoanIssueSchema.COL_LI_LOAN_ID, LoanIssueSchema.getTableName(),
+                    LoanIssueSchema.COL_LI_MEMBER_ID, memberId,
+                    LoanIssueSchema.COL_LI_LOAN_ID);
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                loanId = cursor.getInt(cursor.getColumnIndex(LoanIssueSchema.COL_LI_LOAN_ID));
+            }
+            return loanId;
+        } catch (Exception ex) {
+            Log.e("MeetingLoanIssuedRepo.getMemberLoanId", ex.getMessage());
+            return loanId;
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public boolean saveMemberLoanIssue(int meetingId, int memberId, int loanNo, double amount, double interest, double theBalance, Date dateDue, String comment, boolean isUpdate) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int loanId = 0;
         try {
-            //Check if exists and do an Update
-            loanId = getMemberLoanId(meetingId, memberId);
-            if (loanId > 0) {
-                performUpdate = true;
-            }
+            // Check if exists and do an Update
+            loanId = getMemberLoanId(memberId);
+           // if (loanId > 0) {
 
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            values.put(LoanIssueSchema.COL_LI_MEETING_ID, meetingId);
+            if(isUpdate){
+                Log.d("MLIR", "Loan Id is" + loanId + " " + amount + " " + interest);
+                values.put(LoanIssueSchema.COL_LI_BALANCE, meetingId);
+                performUpdate = true;
+            } else {
+                values.put(LoanIssueSchema.COL_LI_MEETING_ID, meetingId);
+                //Get the total Loan Amount
+                double totalLoan = amount + interest;
+
+                //Set Balance to be Principal Amount + Interest Amount
+                values.put(LoanIssueSchema.COL_LI_BALANCE, totalLoan);
+            }
+
             values.put(LoanIssueSchema.COL_LI_MEMBER_ID, memberId);
             values.put(LoanIssueSchema.COL_LI_LOAN_NO, loanNo);
             values.put(LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, amount);
@@ -474,21 +523,18 @@ public class MeetingLoanIssuedRepo {
             }
             values.put(LoanIssueSchema.COL_LI_DATE_DUE, Utils.formatDateToSqlite(dtDateDue));
 
-            //Get the total Loan Amount
-            double totalLoan = amount + interest;
-            //Set Balance to be Principal Amount + Interest Amount
-            values.put(LoanIssueSchema.COL_LI_BALANCE, totalLoan);
-
             //Ensure Total Repaid is Zero.
             values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, 0);
 
             // Inserting or UpdatingRow
             long retVal = -1;
             if (performUpdate) {
+                Log.d("MLIR", "performing update");
                 // updating row
                 retVal = db.update(LoanIssueSchema.getTableName(), values, LoanIssueSchema.COL_LI_LOAN_ID + " = ?",
                         new String[]{String.valueOf(loanId)});
             } else {
+                Log.d("MLIR", "performing insert");
                 retVal = db.insert(LoanIssueSchema.getTableName(), null, values);
             }
 

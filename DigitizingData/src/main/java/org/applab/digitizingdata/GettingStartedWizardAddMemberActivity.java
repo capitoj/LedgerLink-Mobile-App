@@ -53,6 +53,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     protected int mDay;
 
     TextView txtNCGSWLoanNextRepaymentDate;
+    TextView txtNCGSWLoanNumber;
 
     //Event that is raised when the date has been set
     protected DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -177,6 +178,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         );
 
         txtNCGSWLoanNextRepaymentDate =  (TextView) findViewById(R.id.txtNCGSWLoanNextRepaymentDate);
+        txtNCGSWLoanNumber =  (TextView) findViewById(R.id.txtNCGSWOutstandingLoanNumber);
 
         //Default next repayment date to a month from now
         Calendar cal = Calendar.getInstance();
@@ -577,6 +579,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     return false;
                 } else {
                     member.setOutstandingLoanOnSetup(outstandingLoan);
+
                     //set the date of next repayment
                     if(outstandingLoan > 0 && txtNCGSWLoanNextRepaymentDate.getText().length()==0)
                     {
@@ -588,6 +591,18 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     else {
                         member.setDateOfFirstRepayment(Utils.getDateFromString(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy"));
                     }
+
+                    //set the loan number
+                    if(outstandingLoan > 0 && txtNCGSWLoanNumber.getText().length()==0)
+                    {
+                        displayMessageBox(dlgTitle, "The loan number is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
+                        txtNCGSWLoanNumber.requestFocus();
+                        return false;
+                    }
+                    else {
+                        member.setOutstandingLoanNumberOnSetup(Integer.valueOf(txtNCGSWLoanNumber.getText().toString().trim()));
+                    }
+
                 }
             }
 
@@ -663,6 +678,9 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         txtSavingsSoFar.setText(String.format("%.0f", member.getSavingsOnSetup()));
         TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
         txtLoanAmount.setText(String.format("%.0f", member.getOutstandingLoanOnSetup()));
+        TextView txtLoanNumber = (TextView) findViewById(R.id.txtNCGSWOutstandingLoanNumber);
+        txtLoanNumber.setText(String.format("%.0f", member.getOutstandingLoanNumberOnSetup()));
+
 
         //populate the next repayment date
         if(member.getDateOfFirstRepayment() != null) {
@@ -684,7 +702,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         txtSavingsSoFar.setText(null);
         TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
         txtLoanAmount.setText(null);
-
+        TextView txtLoanNumber = (TextView) findViewById(R.id.txtNCGSWOutstandingLoanNumber);
+        txtLoanNumber.setText(null);
 
     }
 

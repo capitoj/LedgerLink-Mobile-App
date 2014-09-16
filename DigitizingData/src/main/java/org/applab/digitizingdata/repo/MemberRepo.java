@@ -6,13 +6,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import org.applab.digitizingdata.domain.model.*;
+import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
+import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.schema.MemberSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -42,17 +43,15 @@ public class MemberRepo {
             values.put(MemberSchema.COL_M_OCCUPATION, member.getOccupation());
             values.put(MemberSchema.COL_M_GENDER, member.getGender());
 
-            if(member.getDateOfBirth() == null) {
+            if (member.getDateOfBirth() == null) {
                 member.setDateOfBirth(new Date());
             }
             values.put(MemberSchema.COL_M_DATE_OF_BIRTH, Utils.formatDateToSqlite(member.getDateOfBirth()));
             values.put(MemberSchema.COL_M_PHONE_NO, member.getPhoneNumber());
-            if(member.getDateOfAdmission() == null) {
+            if (member.getDateOfAdmission() == null) {
                 member.setDateOfAdmission(new Date());
             }
             values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
-
-
 
 
             // Inserting Row
@@ -60,26 +59,19 @@ public class MemberRepo {
             if (retVal != -1) {
                 member.setMemberId((int) retVal);
                 return saveMiddleCycleValues(member); //New: save middle cycle values too
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MemberRepo.addMember", ex.getMessage());
             return false;
-        }
-        finally {
+        } finally {
             if (db != null) {
                 db.close();
             }
         }
     }
-
-
-
-
 
 
     // Inserts the new member, and updates the members loans and savings in the dummy meeting
@@ -95,12 +87,12 @@ public class MemberRepo {
             values.put(MemberSchema.COL_M_OCCUPATION, member.getOccupation());
             values.put(MemberSchema.COL_M_GENDER, member.getGender());
 
-            if(member.getDateOfBirth() == null) {
+            if (member.getDateOfBirth() == null) {
                 member.setDateOfBirth(new Date());
             }
             values.put(MemberSchema.COL_M_DATE_OF_BIRTH, Utils.formatDateToSqlite(member.getDateOfBirth()));
             values.put(MemberSchema.COL_M_PHONE_NO, member.getPhoneNumber());
-            if(member.getDateOfAdmission() == null) {
+            if (member.getDateOfAdmission() == null) {
                 member.setDateOfAdmission(new Date());
             }
             values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
@@ -108,23 +100,20 @@ public class MemberRepo {
             // Inserting Row
             long retVal = db.insert(MemberSchema.getTableName(), null, values);
             if (retVal != -1) {
-                Log.d(context.getPackageName(), "GSW member added "+member.getSurname()+" - ret val is "+retVal);
+                Log.d(context.getPackageName(), "GSW member added " + member.getSurname() + " - ret val is " + retVal);
                 //set the members id now
                 member.setMemberId((int) retVal);
 
                 return saveMiddleCycleValues(member);
-            }
-            else {
-                Log.d(context.getPackageName(), "GSW member not added "+member.getSurname());
+            } else {
+                Log.d(context.getPackageName(), "GSW member not added " + member.getSurname());
                 return false;
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
-       //     Log.e("MemberRepo.addMember", ex.getMessage().toString());
+            //     Log.e("MemberRepo.addMember", ex.getMessage().toString());
             return false;
-        }
-        finally {
+        } finally {
             if (db != null) {
                 db.close();
             }
@@ -133,7 +122,7 @@ public class MemberRepo {
 
 
     public boolean updateMemberLoanOnSetup(Member member) {
-        Log.d(context.getPackageName(), "Metrod entry updateMemberLoanOnSetup");
+        Log.d(context.getPackageName(), "Method entry updateMemberLoanOnSetup");
         boolean savingResult = false;
         MeetingRepo meetingRepo = new MeetingRepo(context);
 
@@ -150,42 +139,43 @@ public class MemberRepo {
 //        Date dueDate = c.getTime();
 
 
-        if(loanIssuedToMemberInMeeting == null) {
+        if (loanIssuedToMemberInMeeting == null) {
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued not found, so create new record");
-        if(member.getOutstandingLoanOnSetup() <= 0) {
-            Log.d(context.getPackageName(), "Saving of loan on setup skipped because loan amount is " + member.getOutstandingLoanOnSetup());
-            return true;
-        }
-        meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
-        int loanId = meetingLoanIssuedRepo.getMemberLoanId(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
+            if (member.getOutstandingLoanOnSetup() <= 0) {
+                Log.d(context.getPackageName(), "Saving of loan on setup skipped because loan amount is " + member.getOutstandingLoanOnSetup());
+                return true;
+            }
+            meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
+            int loanId = meetingLoanIssuedRepo.getMemberLoanId(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
 
-        //First get the Interest Rate for the Current Cycle
-        double interest = 0.0;
+            //First get the Interest Rate for the Current Cycle
+            double interest = 0.0;
+            double balance = 0.0;
 
-        String comment = "";
+            String comment = "";
+            boolean isUpdate = false;
 
-        //Save the loan
-        boolean loanSaveResult = meetingLoanIssuedRepo.saveMemberLoanIssue(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), loanId, member.getOutstandingLoanOnSetup(),interest, member.getDateOfFirstRepayment(), comment);
+            // Save the loan
+            boolean loanSaveResult = meetingLoanIssuedRepo.saveMemberLoanIssue(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), member.getOutstandingLoanNumberOnSetup(), member.getOutstandingLoanOnSetup(), interest, balance, member.getDateOfFirstRepayment(), comment, isUpdate);
 
-        Log.d(context.getPackageName(), "updateMemberLoanOnSetup: Create record for loan on setup, Result:"+loanSaveResult);
+            Log.d(context.getPackageName(), "updateMemberLoanOnSetup: Create record for loan on setup, Result:" + loanSaveResult);
 
 
-        return loanSaveResult;
-        }
-        else {
-            //Update loan balances
+            return loanSaveResult;
+        } else {
+            // Update loan balances
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued record found, update it");
             meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
-            return meetingLoanIssuedRepo.updateMemberLoanBalances(loanIssuedToMemberInMeeting.getLoanId(),0,member.getOutstandingLoanOnSetup(),member.getDateOfFirstRepayment()) ;
+            return meetingLoanIssuedRepo.updateMemberLoanBalances(loanIssuedToMemberInMeeting.getLoanId(), 0, member.getOutstandingLoanOnSetup(), member.getDateOfFirstRepayment());
         }
     }
 
 
-    public boolean updateGettingStartedWizardMember(Member member){
+    public boolean updateGettingStartedWizardMember(Member member) {
         SQLiteDatabase db = null;
 
         try {
-            if(member == null){
+            if (member == null) {
                 return false;
             }
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
@@ -195,12 +185,12 @@ public class MemberRepo {
             values.put(MemberSchema.COL_M_OTHER_NAMES, member.getOtherNames());
             values.put(MemberSchema.COL_M_OCCUPATION, member.getOccupation());
             values.put(MemberSchema.COL_M_GENDER, member.getGender());
-            if(member.getDateOfBirth() == null) {
+            if (member.getDateOfBirth() == null) {
                 member.setDateOfBirth(new Date());
             }
             values.put(MemberSchema.COL_M_DATE_OF_BIRTH, Utils.formatDateToSqlite(member.getDateOfBirth()));
             values.put(MemberSchema.COL_M_PHONE_NO, member.getPhoneNumber());
-            if(member.getDateOfAdmission() == null) {
+            if (member.getDateOfAdmission() == null) {
                 member.setDateOfAdmission(new Date());
             }
             values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
@@ -208,48 +198,44 @@ public class MemberRepo {
 
             // updating row
             int retVal = db.update(MemberSchema.getTableName(), values, MemberSchema.COL_M_MEMBER_ID + " = ?",
-                    new String[] { String.valueOf(member.getMemberId()) });
+                    new String[]{String.valueOf(member.getMemberId())});
 
             if (retVal > 0) {
                 return saveMiddleCycleValues(member);
 
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MemberRepo.updateGettingStartedMember", ex.getMessage());
             return false;
-        }
-        finally {
+        } finally {
             if (db != null) {
                 db.close();
             }
         }
     }
 
-    protected boolean saveMiddleCycleValues(Member member)
-    {
-        //Update savings at setup
+    protected boolean saveMiddleCycleValues(Member member) {
+
+        // Update savings at setup
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
         MeetingRepo meetingRepo = new MeetingRepo(context);
         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
-        if(dummyGettingStartedWizardMeeting == null) {
-            //No GSW wizard meeting? probably training mode... either way, be optimistic and return now
+        if (dummyGettingStartedWizardMeeting == null) {
+            // No GSW wizard meeting? probably training mode... either way, be optimistic and return now
             return true;
         }
         boolean updateReturnValue = meetingSavingRepo.saveMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), member.getSavingsOnSetup());
-        if(updateReturnValue) {
+        if (updateReturnValue) {
             Log.d(context.getPackageName(), "Savings to date saved for member " + member.getSurname());
-
 
 
             //Save the loan
             boolean loanSaveResult = updateMemberLoanOnSetup(member);
-            if( ! loanSaveResult ) {
-                Log.d(context.getPackageName(), "Failed to save GSW loan on setup"+member.getSurname());
+            if (!loanSaveResult) {
+                Log.d(context.getPackageName(), "Failed to save GSW loan on setup" + member.getSurname());
             }
         }
 
@@ -257,30 +243,29 @@ public class MemberRepo {
     }
 
     // Loads the savings at setup and loans at setup for the member
-     public boolean loadMemberGettingStartedWizardValues(Member member) {
-         MeetingRepo meetingRepo = new MeetingRepo(context);
-         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+    public boolean loadMemberGettingStartedWizardValues(Member member) {
+        MeetingRepo meetingRepo = new MeetingRepo(context);
+        Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
 
-         MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
-         Log.d(context.getPackageName(), "Member id is "+member.getMemberId());
-         MeetingLoanIssued loanIssuedToMemberInMeeting = meetingLoanIssuedRepo.getLoanIssuedToMemberInMeeting(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
+        MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
+        Log.d(context.getPackageName(), "Member id is " + member.getMemberId());
+        MeetingLoanIssued loanIssuedToMemberInMeeting = meetingLoanIssuedRepo.getLoanIssuedToMemberInMeeting(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
 
-         //If loan object is null, set the loan on setup as 0
-         Log.d(context.getPackageName(), "Loan Issued To Member object is "+loanIssuedToMemberInMeeting);
-         if(loanIssuedToMemberInMeeting == null) {
-             member.setOutstandingLoanOnSetup(0);
-         } else {
-             member.setOutstandingLoanOnSetup(loanIssuedToMemberInMeeting.getLoanBalance());
-             member.setDateOfFirstRepayment(loanIssuedToMemberInMeeting.getDateDue());
-         }
+        //If loan object is null, set the loan on setup as 0
+        Log.d(context.getPackageName(), "Loan Issued To Member object is " + loanIssuedToMemberInMeeting);
+        if (loanIssuedToMemberInMeeting == null) {
+            member.setOutstandingLoanOnSetup(0);
+        } else {
+            member.setOutstandingLoanOnSetup(loanIssuedToMemberInMeeting.getLoanBalance());
+            member.setDateOfFirstRepayment(loanIssuedToMemberInMeeting.getDateDue());
+        }
 
 
-         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
-         double memberSaving = meetingSavingRepo.getMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
-         member.setSavingsOnSetup(memberSaving);
-         return true;
-     }
-
+        MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
+        double memberSaving = meetingSavingRepo.getMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
+        member.setSavingsOnSetup(memberSaving);
+        return true;
+    }
 
 
     public ArrayList<Member> getAllMembers() {
@@ -300,7 +285,7 @@ public class MemberRepo {
 
             cursor = db.rawQuery(selectQuery, null);
 
-            if(cursor == null){
+            if (cursor == null) {
                 return new ArrayList<Member>();
             }
 
@@ -316,19 +301,17 @@ public class MemberRepo {
                     member.setOccupation(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_OCCUPATION)));
                     member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
 
-                    if(! loadMemberGettingStartedWizardValues(member)) {
-                        Log.d(context.getPackageName(), "Failed to load Loan at setup and saving at setup for member "+member.getFullName());
+                    if (!loadMemberGettingStartedWizardValues(member)) {
+                        Log.d(context.getPackageName(), "Failed to load Loan at setup and saving at setup for member " + member.getFullName());
                     }
-                    if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
+                    if (cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
                         member.setDateOfBirth(new Date());
-                    }
-                    else {
+                    } else {
                         member.setDateOfBirth(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))));
                     }
-                    if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))) {
+                    if (cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))) {
                         member.setDateOfAdmission(new Date());
-                    }
-                    else {
+                    } else {
                         member.setDateOfAdmission(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))));
                     }
 
@@ -339,13 +322,11 @@ public class MemberRepo {
 
             // return the list
             return members;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             //Log.e("MemberRepo.getAllMembers", ex.getMessage());
             return new ArrayList<Member>();
-        }
-        finally {
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -355,7 +336,6 @@ public class MemberRepo {
             }
         }
     }
-
 
 
     //Counts members
@@ -376,22 +356,17 @@ public class MemberRepo {
 
             cursor = db.rawQuery(selectQuery, null);
 
-            if(cursor == null){
+            if (cursor == null) {
                 return 0;
             }
 
             return cursor.getCount();
 
 
-
-
-
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return 0;
-        }
-        finally {
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -414,14 +389,14 @@ public class MemberRepo {
 
             cursor = db.query(MemberSchema.getTableName(), MemberSchema.getColumnListArray(),
                     MemberSchema.COL_M_MEMBER_ID + "=?",
-                    new String[] { String.valueOf(memberId) }, null, null, null, null);
+                    new String[]{String.valueOf(memberId)}, null, null, null, null);
 
-            if(cursor == null){
+            if (cursor == null) {
                 return null;
             }
 
             if (!cursor.moveToFirst()) {
-               return null;
+                return null;
             }
             member = new Member();
             member.setMemberId(cursor.getInt(cursor.getColumnIndex(MemberSchema.COL_M_MEMBER_ID)));
@@ -433,28 +408,24 @@ public class MemberRepo {
             member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
             loadMemberGettingStartedWizardValues(member);
 
-            if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
+            if (cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
                 member.setDateOfBirth(new Date());
-            }
-            else {
+            } else {
                 member.setDateOfBirth(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))));
             }
-            if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))) {
+            if (cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))) {
                 member.setDateOfAdmission(new Date());
-            }
-            else {
+            } else {
                 member.setDateOfAdmission(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))));
             }
 
             // return the entity
             return member;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MemberRepo.getMemberById", ex.getMessage());
             return null;
-        }
-        finally {
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -475,9 +446,9 @@ public class MemberRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             cursor = db.query(MemberSchema.getTableName(), MemberSchema.getColumnListArray(),
                     MemberSchema.COL_M_MEMBER_NO + "=?",
-                    new String[] { String.valueOf(memberNo) }, null, null, null, null);
+                    new String[]{String.valueOf(memberNo)}, null, null, null, null);
 
-            if(cursor == null){
+            if (cursor == null) {
                 return null;
             }
 
@@ -493,27 +464,23 @@ public class MemberRepo {
             member.setOccupation(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_OCCUPATION)));
             member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
 
-            if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
+            if (cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
                 member.setDateOfBirth(new Date());
-            }
-            else {
+            } else {
                 member.setDateOfBirth(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))));
             }
-            if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))) {
+            if (cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))) {
                 member.setDateOfAdmission(new Date());
-            }
-            else {
+            } else {
                 member.setDateOfAdmission(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))));
             }
             // return the entity
             return member;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MemberRepo.getMemberByMemberNo", ex.getMessage());
             return null;
-        }
-        finally {
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -524,11 +491,11 @@ public class MemberRepo {
         }
     }
 
-    public boolean updateMember(Member member){
+    public boolean updateMember(Member member) {
         SQLiteDatabase db = null;
 
         try {
-            if(member == null){
+            if (member == null) {
                 return false;
             }
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
@@ -538,12 +505,12 @@ public class MemberRepo {
             values.put(MemberSchema.COL_M_OTHER_NAMES, member.getOtherNames());
             values.put(MemberSchema.COL_M_OCCUPATION, member.getOccupation());
             values.put(MemberSchema.COL_M_GENDER, member.getGender());
-            if(member.getDateOfBirth() == null) {
+            if (member.getDateOfBirth() == null) {
                 member.setDateOfBirth(new Date());
             }
             values.put(MemberSchema.COL_M_DATE_OF_BIRTH, Utils.formatDateToSqlite(member.getDateOfBirth()));
             values.put(MemberSchema.COL_M_PHONE_NO, member.getPhoneNumber());
-            if(member.getDateOfAdmission() == null) {
+            if (member.getDateOfAdmission() == null) {
                 member.setDateOfAdmission(new Date());
             }
             values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
@@ -551,21 +518,18 @@ public class MemberRepo {
 
             // updating row
             int retVal = db.update(MemberSchema.getTableName(), values, MemberSchema.COL_M_MEMBER_ID + " = ?",
-                    new String[] { String.valueOf(member.getMemberId()) });
+                    new String[]{String.valueOf(member.getMemberId())});
 
             if (retVal > 0) {
                 return saveMiddleCycleValues(member);
-            }
-            else {
+            } else {
                 return false;
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MemberRepo.updateMember", ex.getMessage());
             return false;
-        }
-        finally {
+        } finally {
             if (db != null) {
                 db.close();
             }
@@ -576,21 +540,19 @@ public class MemberRepo {
     public void deleteMember(Member member) {
         SQLiteDatabase db = null;
         try {
-            if(member == null){
+            if (member == null) {
                 return;
             }
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
 
             // To remove all rows and get a count pass "1" as the whereClause.
             db.delete(MemberSchema.getTableName(), MemberSchema.COL_M_MEMBER_ID + " = ?",
-                    new String[] { String.valueOf(member.getMemberId()) });
-        }
-        catch (Exception ex) {
+                    new String[]{String.valueOf(member.getMemberId())});
+        } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MemberRepo.deleteMember", ex.getMessage());
             return;
-        }
-        finally {
+        } finally {
             if (db != null) {
                 db.close();
             }
@@ -607,7 +569,7 @@ public class MemberRepo {
                     MemberSchema.COL_M_MEMBER_ID + "<>? and " + MemberSchema.COL_M_MEMBER_NO + "=?",
                     new String[]{String.valueOf(memberId), String.valueOf(memberNo)}, null, null, null, null);
 
-            if(cursor == null){
+            if (cursor == null) {
                 return true;
             }
 
@@ -617,13 +579,11 @@ public class MemberRepo {
 
             // return
             return false;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MemberRepo.isMemberNoAvailable", ex.getMessage());
             return false;
-        }
-        finally {
+        } finally {
             if (cursor != null) {
                 cursor.close();
             }
@@ -639,9 +599,9 @@ public class MemberRepo {
     public ArrayList<String> getListOfAvailableMemberNumbers(int count) {
         ArrayList<String> memberNumbers = new ArrayList<String>();
 
-        for(int i=1; memberNumbers.size()<count; i++) {
-            if(isMemberNoAvailable(i, 0)) {
-                memberNumbers.add(i+"");
+        for (int i = 1; memberNumbers.size() < count; i++) {
+            if (isMemberNoAvailable(i, 0)) {
+                memberNumbers.add(i + "");
             }
         }
         return memberNumbers;

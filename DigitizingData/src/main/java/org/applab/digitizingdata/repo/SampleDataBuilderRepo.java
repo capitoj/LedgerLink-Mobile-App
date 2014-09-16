@@ -30,6 +30,7 @@ public class SampleDataBuilderRepo {
     private static Context appContext;
 
     private static String comment = "";
+    private static boolean isUpdate = false;
 
     public static boolean refreshTrainingData(Context context) {
 
@@ -236,9 +237,10 @@ public class SampleDataBuilderRepo {
                             //calDateDue.add(Calendar.MONTH, 1); //since it is on monthly interest.
                             calDateDue.add(Calendar.WEEK_OF_YEAR, 4);
 
+                            double balance = 0.0;
 
                             //Issue the Loan
-                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
+                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, balance, calDateDue.getTime(), comment, isUpdate);
                         }
                     }
                 }
@@ -344,8 +346,10 @@ public class SampleDataBuilderRepo {
                             //calDateDue.add(Calendar.MONTH, 1);
                             calDateDue.add(Calendar.WEEK_OF_YEAR, 4);
 
+                            double balance = 0.0;
+
                             //Issue the Loan
-                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
+                            loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, balance, calDateDue.getTime(), comment, isUpdate);
                         }
                     }
                 }
@@ -420,8 +424,10 @@ public class SampleDataBuilderRepo {
                         //calDateDue.add(Calendar.MONTH, 1);
                         calDateDue.add(Calendar.WEEK_OF_YEAR, 4);
 
+                        double balance = 0.0;
+
                         //Issue the Loan
-                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
+                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, balance, calDateDue.getTime(), comment, isUpdate);
                     }
                 }
                 catch(Exception ex) {
@@ -467,8 +473,11 @@ public class SampleDataBuilderRepo {
                         calDateDue.setTime(meeting.getMeetingDate());
                        // calDateDue.add(Calendar.MONTH, 1);
                         calDateDue.add(Calendar.WEEK_OF_YEAR, 4);
+
+                        double balance = 0.0;
+
                         //Issue the Loan
-                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, calDateDue.getTime(), comment);
+                        loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, balance, calDateDue.getTime(), comment, isUpdate);
                     }
                 }
                 catch(Exception ex) {
