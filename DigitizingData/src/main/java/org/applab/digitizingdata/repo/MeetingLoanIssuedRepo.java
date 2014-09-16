@@ -137,15 +137,18 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
-    public double getTotalOutstandingLoansByMemberInCycle(int cycleId, int memberId) {
+    public MeetingLoanIssued getTotalOutstandingLoansByMemberInCycle(int cycleId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         double loanBalance = 0.00;
+        MeetingLoanIssued loan = null;
+
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT SUM(%s) AS LoanBalance FROM %s WHERE %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d)",
+            String sumQuery = String.format("SELECT SUM(%s) AS LoanBalance, %s AS NextDueDate FROM %s WHERE %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d)",
                     LoanIssueSchema.COL_LI_BALANCE,
+                    LoanIssueSchema.COL_LI_DATE_DUE,
                     LoanIssueSchema.getTableName(),
                     LoanIssueSchema.COL_LI_MEMBER_ID, memberId,
                     LoanIssueSchema.COL_LI_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
@@ -153,14 +156,21 @@ public class MeetingLoanIssuedRepo {
             cursor = db.rawQuery(sumQuery, null);
 
             if (cursor != null && cursor.moveToFirst()) {
-                loanBalance = cursor.getDouble(cursor.getColumnIndex("LoanBalance"));
+                loan = new MeetingLoanIssued();
+                loan.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("LoanBalance")));
+                if (cursor.getString(cursor.getColumnIndex("NextDueDate")) != null) {
+                    Date dateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("NextDueDate")));
+                    loan.setDateDue(dateDue);
+                }
 
             }
 
-            return loanBalance;
+            return loan;
+
+            //return loanBalance;
         } catch (Exception ex) {
             Log.e("MeetingLoanIssuedRepo.getTotalOutstandingLoansByMemberInCycle", ex.getMessage());
-            return 0;
+            return null;
         } finally {
 
             if (cursor != null) {
@@ -447,7 +457,6 @@ public class MeetingLoanIssuedRepo {
     /**
      * Important when Updating a Record on the Loan Issue History Screen
      *
-     *
      * @param memberId
      * @return
      */
@@ -483,25 +492,31 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
-    public boolean saveMemberLoanIssue(int meetingId, int memberId, int loanNo, double amount, double interest, double theBalance, Date dateDue, String comment, boolean isUpdate) {
+    public boolean saveMemberLoanIssue(int meetingId, int memberId, int loanNo, double amount, double interest, double balance, Date dateDue, String comment, boolean isUpdate) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int loanId = 0;
         try {
             // Check if exists and do an Update
             loanId = getMemberLoanId(memberId);
-           // if (loanId > 0) {
+            // if (loanId > 0) {
 
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            if(isUpdate){
-                Log.d("MLIR", "Loan Id is" + loanId + " " + amount + " " + interest);
-                values.put(LoanIssueSchema.COL_LI_BALANCE, meetingId);
+            if (isUpdate) {
+                values.put(LoanIssueSchema.COL_LI_BALANCE, balance);
+
+                // Ensure Total Repaid is not zero.
+                values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, getLoanIssuedByLoanId(loanId).getTotalRepaid());
                 performUpdate = true;
             } else {
                 values.put(LoanIssueSchema.COL_LI_MEETING_ID, meetingId);
-                //Get the total Loan Amount
+
+                // Ensure Total Repaid is Zero.
+                values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, 0);
+
+                // Get the total Loan Amount
                 double totalLoan = amount + interest;
 
                 //Set Balance to be Principal Amount + Interest Amount
@@ -523,8 +538,6 @@ public class MeetingLoanIssuedRepo {
             }
             values.put(LoanIssueSchema.COL_LI_DATE_DUE, Utils.formatDateToSqlite(dtDateDue));
 
-            //Ensure Total Repaid is Zero.
-            values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, 0);
 
             // Inserting or UpdatingRow
             long retVal = -1;

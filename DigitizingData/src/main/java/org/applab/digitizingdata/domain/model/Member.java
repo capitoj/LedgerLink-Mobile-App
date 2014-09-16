@@ -27,6 +27,7 @@ public class Member {
 
     //Values for Getting started wizard
     private double savingsOnSetup;
+    private int outstandingLoanNumberOnSetup;
     private double outstandingLoanOnSetup;
 
     //This is the date of next repayment of middle start loan
@@ -224,6 +225,14 @@ public class Member {
 
     public void setSavingsOnSetup(double savingsOnSetup) {
         this.savingsOnSetup = savingsOnSetup;
+    }
+
+    public int getOutstandingLoanNumberOnSetup() {
+        return outstandingLoanNumberOnSetup;
+    }
+
+    public void setOutstandingLoanNumberOnSetup(int outstandingLoanNumberOnSetup) {
+        this.outstandingLoanNumberOnSetup = outstandingLoanNumberOnSetup;
     }
 
     public double getOutstandingLoanOnSetup() {

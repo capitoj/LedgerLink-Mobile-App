@@ -9,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
@@ -73,14 +73,14 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             //Get the Widgets
             final TextView txtFullName = (TextView) rowView.findViewById(R.id.txtRMLRepayFullName);
             final TextView txtBalance = (TextView) rowView.findViewById(R.id.txtRMLRepayBalance);
-            /**final TextView txtRepaidToday = (TextView) rowView.findViewById(R.id.txtRMLRepayTodaysRepay);
-             final TextView txtDateDue = (TextView) rowView.findViewById(R.id.txtRMLRepayDateDue); */
+            /**final TextView txtRepaidToday = (TextView) rowView.findViewById(R.id.txtRMLRepayTodaysRepay); */
+            final TextView txtDateDue = (TextView) rowView.findViewById(R.id.txtRMLRepayDateDue);
 
             // Set Typeface
             txtFullName.setTypeface(typeface);
             txtBalance.setTypeface(typeface);
-            /**txtRepaidToday.setTypeface(typeface);
-             txtDateDue.setTypeface(typeface); */
+            /**txtRepaidToday.setTypeface(typeface); */
+            txtDateDue.setTypeface(typeface);
 
             //Assign Values to the Widgets
             Member selectedMember = values.get(position);
@@ -98,15 +98,22 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
 
             //Get the Outstanding Loans in Cycle
             //TODO: In case multiple loans will be allowed, then we shall need to pass the LoanId or LoanNo
-            double outstandingLoan = 0.0;
+            // double outstandingLoan = 0.0;
+            MeetingLoanIssued recentLoan = null;
             if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
-                outstandingLoan = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), selectedMember.getMemberId());
+                //  outstandingLoan = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), selectedMember.getMemberId());
+                recentLoan = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), selectedMember.getMemberId());
             }
 
-            if (outstandingLoan == 0.0) {
+            // if (outstandingLoan == 0.0) {
+
+            if (recentLoan == null || recentLoan.getLoanBalance() == 0.0) {
                 txtBalance.setText("No outstanding loans");
+                txtDateDue.setVisibility(View.GONE);
             } else {
-                txtBalance.setText(String.format("Outstanding loan %,.0f UGX", outstandingLoan));
+                //txtBalance.setText(String.format("Outstanding loan %,.0f UGX", outstandingLoan));
+                txtBalance.setText(String.format("Outstanding loan %,.0f UGX", recentLoan.getLoanBalance()));
+                txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(recentLoan.getDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
             }
             //Date Due
             /** txtDateDue.setText("Date Due: -");

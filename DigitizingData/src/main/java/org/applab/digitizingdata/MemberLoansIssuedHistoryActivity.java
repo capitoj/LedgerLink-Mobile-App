@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +24,11 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Meeting;
-import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.helpers.LoansIssuedHistoryArrayAdapter;
 import org.applab.digitizingdata.helpers.MemberLoanIssueRecord;
 import org.applab.digitizingdata.helpers.Utils;
@@ -36,8 +36,6 @@ import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
-
-import android.text.Editable;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,6 +65,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     int currentLoanId = 0;
     boolean loanWasDeleted = false;
     LinearLayout issuedHistorySection;
+    private boolean isUpdateAction = false;
 
     //Date stuff
     TextView txtDateDue;
@@ -111,7 +110,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
         //TextView txtOutstandingLoans = (TextView)findViewById(R.id.lblMLIssuedHOutstandingLoans);
 
-        double outstandingLoans = 0.0;
+        MeetingLoanIssued outstandingLoans = null;
         TextView lblInterestDesc = (TextView) findViewById(R.id.lblMLIssuedHInterestDesc);
         if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
@@ -214,7 +213,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 txtInterestAmount.setText(String.format("%.0f", interestAmount));
 
                 double totalAmount = theAmount + interestAmount;
-                txtTotalLoanAmount.setText(String.format("%,.0f UGX", totalAmount));
+                txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
 
 
                 //Have this value redundantly stored for future use
@@ -251,7 +250,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 }
 
                 double totalAmount = theInterestAmount + theCurLoanAmount;
-                txtTotalLoanAmount.setText(String.format("%,.0f UGX", totalAmount));
+                txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
             }
         });
 
@@ -271,6 +270,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         MeetingLoanIssued memberLoan = loanIssuedRepo.getUnclearedLoanIssuedToMember(memberId);
 
         if (null != memberLoan) {
+            isUpdateAction = true;
             lblCurrency.setVisibility(View.GONE);
             currentLoanId = memberLoan.getLoanId();
             txtLoanNo.setText(String.format("%d", memberLoan.getLoanNo()));
@@ -430,6 +430,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         double theInterestAmount = 0.0;
         String theComment = "";
         Date theDateDue = null;
+        double theBalance = 0.0;
 
         try {
             TextView txtLoanNo = (TextView) findViewById(R.id.txtMLIssuedHLoanNo);
@@ -494,7 +495,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             Date today = Calendar.getInstance().getTime();
             String dateDue = txtDateDue.getText().toString().trim();
             Date dtDateDue = Utils.getDateFromString(dateDue, Utils.DATE_FIELD_FORMAT);
-            if (dtDateDue.before(targetMeeting.getMeetingDate())) {
+            if (dtDateDue.before(targetMeeting.getMeetingDate()) || dtDateDue.equals(targetMeeting.getMeetingDate())) {
                 Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue", "The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtDateDue.requestFocus();
                 return false;
@@ -507,6 +508,13 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
             }
 
+            if (isUpdateAction){
+                theBalance = Double.valueOf(txtTotalLoanAmount.getText().toString().trim().split(" ")[0]);
+            }
+
+            else {
+                theBalance = theInterestAmount + theAmount;
+            }
             /** Commented out because designer says too; uncomment if designer decides otherwise
              //Further Validation of Uniqueness of the Loan Number
              if (!loanIssuedRepo.validateLoanNumber(theLoanNo, meetingId, memberId)) {
@@ -515,14 +523,14 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
              return false;
              } */
 
-            //Determine whether to delete this current loan i.e. in case it is being edited and the amount is set to zero
+            // Determine whether to delete this current loan i.e. in case it is being edited and the amount is set to zero
             if (currentLoanId > 0 && theAmount <= 0) {
                 //Mark flag to indicate that the loan was deleted
                 loanWasDeleted = true;
                 return loanIssuedRepo.deleteLoan(currentLoanId);
             }
 
-            return loanIssuedRepo.saveMemberLoanIssue(meetingId, memberId, theLoanNo, theAmount, theInterestAmount, theDateDue, theComment);
+            return loanIssuedRepo.saveMemberLoanIssue(meetingId, memberId, theLoanNo, theAmount, theInterestAmount, theBalance, theDateDue, theComment, isUpdateAction);
 
         } catch (Exception ex) {
             ex.printStackTrace();

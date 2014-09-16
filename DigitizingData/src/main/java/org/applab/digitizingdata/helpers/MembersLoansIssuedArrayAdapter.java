@@ -97,7 +97,7 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
             StringBuilder aggregate = new StringBuilder();
             double outstandingLoansByMember = 0.0;
             if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
-                //outstandingLoansByMember = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+               // outstandingLoansByMember = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
                 //outstandingLoansByMember = loanIssued.getLoanBalance();
                 loansIssued = loansIssuedRepo.getOutstandingLoansListByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
@@ -108,23 +108,19 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
                 for (MeetingLoanIssued loanIssue : loansIssued) {
                     if (loanIssue.getLoanBalance() == 0.0) {
                         txtOutstanding.setText("No outstanding loans");
+                        continue;
                     }
 
-                    if (loanIssue.getComment() == null || loanIssue.getComment().trim().length() == 0) {
+                    if (loanIssue.getComment() == null || loanIssue.getComment().trim().isEmpty()) {
                         txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", loanIssue.getLoanBalance()));
+                        txtComment.setVisibility(View.GONE);
                     } else {
 
                         comment = loanIssue.getComment();
                         txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", loanIssue.getLoanBalance()));
-                    }
-
-                    // Show comment if any
-                    if (comment.trim().isEmpty()){
-                        txtComment.setVisibility(View.GONE);
-                    }
-                    else{
                         txtComment.setText(comment);
                     }
+
 
                     txtOutstanding.setLineSpacing(0.0f, 1.5f);
 

@@ -73,82 +73,6 @@ public class MeetingRepo {
         }
     }
 
-    public boolean updateStartingCash(int meetingId, double cashFromBox, double cashTakenToBox, double cashFromBank, double finesPaid, String actualStartingCashComment) {
-        SQLiteDatabase db = null;
-        boolean performUpdate = false;
-        try {
-
-            //Check if exists and do an Update
-            Meeting meeting = getMeetingById(meetingId);
-            if (meeting != null) {
-                performUpdate = true;
-            }
-
-            db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            ContentValues values = new ContentValues();
-
-            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cashFromBox);
-            values.put(MeetingSchema.COL_MT_CASH_SAVED_BOX, cashTakenToBox);
-            //values.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cashFromBank);
-            // values.put(MeetingSchema.COL_MT_CASH_FINES, finesPaid);
-            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT, actualStartingCashComment);
-
-            // Inserting or UpdatingRow
-            long retVal = -1;
-            if (performUpdate) {
-                retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
-                        new String[]{String.valueOf(meetingId)});
-            } else {
-                retVal = db.insert(MeetingSchema.getTableName(), null, values);
-            }
-
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
-        } catch (Exception ex) {
-            Log.e("MeetingRepo.updateStartingCash", ex.getMessage());
-            return false;
-        } finally {
-            if (db != null) {
-                db.close();
-            }
-        }
-    }
-
-    public boolean updateCashBook(int meetingId, double cashSavedBox, double cashSavedBank) {
-        SQLiteDatabase db = null;
-
-        try {
-            db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            ContentValues values = new ContentValues();
-
-            /**
-             * Comment out for now
-             *
-             values.put(MeetingSchema.COL_MT_CASH_WELFARE, cashWelfare);
-             values.put(MeetingSchema.COL_MT_CASH_EXPENSES, cashExpenses); */
-            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cashSavedBox);
-            values.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cashSavedBank);
-            long retVal = -1;
-            retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
-                    new String[]{String.valueOf(meetingId)});
-            if (retVal != -1) {
-                return true;
-
-            } else {
-                return false;
-            }
-        } catch (Exception ex) {
-            return false;
-        } finally {
-            if (db != null) {
-                db.close();
-            }
-        }
-    }
-
     public boolean updateDataSentFlag(int meetingId, boolean isDataSent, Date dateSent) {
         SQLiteDatabase db = null;
         try {
@@ -666,13 +590,13 @@ public class MeetingRepo {
                     MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_MEETING_ID, meetingId);
             cursor = db.rawQuery(selectQuery, null);
+
             // looping through all rows and adding to list
             if (cursor != null && cursor.moveToFirst()) {
                 startingCash.setActualStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
                 startingCash.setComment(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT)));
                 startingCash.setExpectedStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
                 startingCash.setCashSavedInBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
-
             }
         } catch (Exception ex) {
             Log.e("MeetingRepo.getMeetingActualStartingCashDetails", ex.getMessage());
@@ -718,6 +642,82 @@ public class MeetingRepo {
                 cursor.close();
             }
 
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public boolean updateStartingCash(int meetingId, double cashFromBox, double cashTakenToBox, double cashFromBank, double finesPaid, String actualStartingCashComment) {
+        SQLiteDatabase db = null;
+        boolean performUpdate = false;
+        try {
+
+            // Check if exists and do an Update
+            Meeting meeting = getMeetingById(meetingId);
+            if (meeting != null) {
+                performUpdate = true;
+            }
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cashFromBox);
+            values.put(MeetingSchema.COL_MT_CASH_SAVED_BOX, cashTakenToBox);
+            //values.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cashFromBank);
+            // values.put(MeetingSchema.COL_MT_CASH_FINES, finesPaid);
+            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT, actualStartingCashComment);
+
+            // Inserting or UpdatingRow
+            long retVal = -1;
+            if (performUpdate) {
+                retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                        new String[]{String.valueOf(meetingId)});
+            } else {
+                retVal = db.insert(MeetingSchema.getTableName(), null, values);
+            }
+
+            if (retVal != -1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            Log.e("MeetingRepo.updateStartingCash", ex.getMessage());
+            return false;
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public boolean updateCashBook(int meetingId, double cashSavedBox, double cashSavedBank) {
+        SQLiteDatabase db = null;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            /**
+             * Comment out for now
+             *
+             values.put(MeetingSchema.COL_MT_CASH_WELFARE, cashWelfare);
+             values.put(MeetingSchema.COL_MT_CASH_EXPENSES, cashExpenses); */
+            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cashSavedBox);
+            values.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cashSavedBank);
+            long retVal = -1;
+            retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
+                    new String[]{String.valueOf(meetingId)});
+            if (retVal != -1) {
+                return true;
+
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            return false;
+        } finally {
             if (db != null) {
                 db.close();
             }
@@ -1184,8 +1184,8 @@ public class MeetingRepo {
             ContentValues values = new ContentValues();
 
             values.put(MeetingSchema.COL_MT_IS_CURRENT, 0);
-            //Update the specific one to InActive
 
+            // Update the specific one to InActive
             values.put(MeetingSchema.COL_MT_IS_CURRENT, 0);
             int retVal2 = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                     new String[]{String.valueOf(meeting.getMeetingId())});
@@ -1194,7 +1194,6 @@ public class MeetingRepo {
             } else {
                 return false;
             }
-
         } catch (Exception ex) {
             Log.e("MeetingRepo.activateMeeting", ex.getMessage());
             return false;

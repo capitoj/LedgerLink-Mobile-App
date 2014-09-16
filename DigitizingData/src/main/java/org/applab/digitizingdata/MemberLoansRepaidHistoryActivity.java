@@ -26,11 +26,11 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Meeting;
-import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.helpers.LoanRepaymentHistoryArrayAdapter;
 import org.applab.digitizingdata.helpers.MemberLoanRepaymentRecord;
 import org.applab.digitizingdata.helpers.Utils;
@@ -38,7 +38,6 @@ import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -97,8 +96,9 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         setContentView(R.layout.activity_member_loans_repaid_history);
 
         /** TextView lblMeetingDate = (TextView)findViewById(R.id.lblMLRepayHMeetingDate);
-         meetingDate = getIntent().getStringExtra("_meetingDate");
+
          lblMeetingDate.setText(meetingDate); */
+        meetingDate = getIntent().getStringExtra("_meetingDate");
 
         TextView lblFullName = (TextView) findViewById(R.id.lblMLRepayHFullName);
         String fullName = getIntent().getStringExtra("_names");
@@ -243,17 +243,25 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             txtDateDue = (TextView) findViewById(R.id.txtMLRepayHDateDue);
             viewClicked = txtDateDue;
 
-            //If it is not an edit operation then initialize the date. Otherwise, retain the date pulled from db
+            // If it is not an edit operation then initialize the date. Otherwise, retain the date pulled from db
+            String dtNextDateDue = txtDateDue.getText().toString().trim();
             if (!isEditOperation) {
-                initializeDate();
+                // If loan repayment is due
+                if (recentLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT))) <= 0) {
+                    Log.d("MLRHA2", "dbValue " + recentLoan.getDateDue() + " not Db value " + targetMeeting.getMeetingDate() + " " + recentLoan.getDateDue().compareTo(targetMeeting.getMeetingDate()));
+                    initializeDate();
+                }
+
             } else {
+                // String dtNextDateDue = txtDateDue.getText().toString().trim();
+
                 final Calendar c = Calendar.getInstance();
-                String dtNextDateDue = txtDateDue.getText().toString().trim();
                 Date nextDateDue = Utils.getDateFromString(dtNextDateDue, Utils.DATE_FIELD_FORMAT);
                 c.setTime(nextDateDue);
                 mYear = c.get(Calendar.YEAR);
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
+
             }
 
             //Set onClick Listeners to load the DateDialog for MeetingDate
@@ -272,17 +280,23 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
             // Setup the Default Date. Not sure whether I should block this off when editing a loan repayment
             if (!isEditOperation) {
+                if (recentLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT))) <= 0) {
+                    Log.d("MLRHA1", "dbValue " + recentLoan.getDateDue() + " not Db value " + targetMeeting.getMeetingDate() + " " + recentLoan.getDateDue().compareTo(targetMeeting.getMeetingDate()));
 
-                //TODO: Set the default Date to be MeetingDate + 1Month, instead of using today's date
-                final Calendar c = Calendar.getInstance();
-                if (null != targetMeeting) {
-                    c.setTime(targetMeeting.getMeetingDate());
+                    //TODO: Set the default Date to be MeetingDate + 1Month, instead of using today's date
+                    final Calendar c = Calendar.getInstance();
+                    if (null != targetMeeting) {
+                        c.setTime(targetMeeting.getMeetingDate());
+                    }
+                    c.add(Calendar.WEEK_OF_YEAR, 4);
+                    mYear = c.get(Calendar.YEAR);
+                    mMonth = c.get(Calendar.MONTH);
+                    mDay = c.get(Calendar.DAY_OF_MONTH);
+                    updateDisplay();
+                } else {
+                    txtNewDateDue.setText(Utils.formatDate(recentLoan.getDateDue()));
+
                 }
-                c.add(Calendar.WEEK_OF_YEAR, 4);
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-                updateDisplay();
             }
             //end of date stuff
         }
@@ -407,11 +421,14 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     txtDateDue.setText("none");
                     lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
                     lblMLRepayHLBCurrency.setVisibility(View.GONE);
-                }else if (theCurLoanBalanceAmount > 0){
+                } else if (theCurLoanBalanceAmount > 0) {
                     lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
                     lblMLRepayHLBCurrency.setVisibility(View.GONE);
-                    txtDateDue.setText("there there");
-                   updateDisplay();
+                    if (recentLoan.getDateDue().after(targetMeeting.getMeetingDate())) {
+                        txtDateDue.setText(Utils.formatDate(recentLoan.getDateDue()));
+                    } else {
+                        initializeDate();
+                    }
                 }
                 // Have this value redundantly stored for future use
                 theCurLoanRepayAmount = theRepayAmount;
@@ -667,7 +684,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             calNext.add(Calendar.WEEK_OF_YEAR, 4);
             Date theDateDue = calNext.getTime();
 
-            //Check the date against the Meeting Date, not calendar date
+            // Check the date against the Meeting Date, not calendar date
             String nextDateDue = txtNextDateDue.getText().toString().trim();
             Date dtNextDateDue = Utils.getDateFromString(nextDateDue, Utils.DATE_FIELD_FORMAT);
             if (dtNextDateDue.before(targetMeeting.getMeetingDate())) {
@@ -703,7 +720,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     dtLastDateDue = recentLoan.getDateDue();
                 }
             } else {
-                //check again: Do not save repayment if there is no existing loan
+                // check again: Do not save repayment if there is no existing loan
                 Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The member has no Outstanding Loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 return false;
             }
@@ -723,10 +740,10 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 }
             }
 
-            //If it is an editing of existing loan repayment, first undo the changes of the former one
+            // If it is an editing of existing loan repayment, first undo the changes of the former one
             boolean undoSucceeded = false;
             if (isEditOperation && repaymentBeingEdited != null) {
-                //Post a Reversal or just edit the figures
+                // Post a Reversal or just edit the figures
                 undoSucceeded = loanIssuedRepo.updateMemberLoanBalances(recentLoan.getLoanId(), recentLoan.getTotalRepaid() - repaymentBeingEdited.getAmount(), repaymentBeingEdited.getBalanceBefore(), repaymentBeingEdited.getLastDateDue());
             }
 
