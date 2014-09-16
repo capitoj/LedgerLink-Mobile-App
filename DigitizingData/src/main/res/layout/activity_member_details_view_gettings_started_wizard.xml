@@ -251,12 +251,25 @@
             </LinearLayout>
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblRvwMembersLoanNumber"
+                style="@style/RegularText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loan number for this member's regular loan outstanding" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                android:id="@+id/txtNCGSWOutstandingLoanNumber"
+                style="@style/NormalEditText"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVOutstandingLoanAmount"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Total amount of this member's regular loan outstanding" />
-
 
             <LinearLayout
                 android:layout_width="fill_parent"
