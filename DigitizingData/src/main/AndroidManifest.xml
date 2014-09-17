@@ -49,10 +49,10 @@
         <activity
             android:name="org.applab.digitizingdata.MeetingActivity"
             android:label="Meeting"
-            android:parentActivityName="org.applab.digitizingdata.MainActivity" >
+            android:parentActivityName="org.applab.digitizingdata.BeginMeetingActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.applab.digitizingdata.MainActivity" />
+                android:value="org.applab.digitizingdata.BeginMeetingActivity" />
         </activity>
         <activity
             android:name="org.applab.digitizingdata.EndCycleActivity"
