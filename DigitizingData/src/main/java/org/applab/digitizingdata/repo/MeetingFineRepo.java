@@ -34,7 +34,7 @@ public class MeetingFineRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT  %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
+            String query = String.format("SELECT %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
                     FineSchema.COL_F_FINE_ID, FineSchema.getTableName(),
                     FineSchema.COL_F_MEETING_ID, meetingId,
                     FineSchema.COL_F_MEMBER_ID, memberId, FineSchema.COL_F_FINE_ID);
@@ -65,7 +65,7 @@ public class MeetingFineRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT  %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
+            String query = String.format("SELECT %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
                     FineSchema.COL_F_MEETING_ID, meetingId,
                     FineSchema.COL_F_MEMBER_ID, memberId, FineSchema.COL_F_FINE_ID);
@@ -131,7 +131,7 @@ public class MeetingFineRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT  SUM(%s) AS TotalFines FROM %s WHERE %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d)",
+            String sumQuery = String.format("SELECT IFNULL(SUM(%s),0) AS TotalFines FROM %s WHERE %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d)",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
                     FineSchema.COL_F_MEMBER_ID, memberId,
                     FineSchema.COL_F_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
@@ -167,7 +167,7 @@ public class MeetingFineRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT  SUM(%s) AS TotalFines FROM %s WHERE %s=%d AND %s!=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d )",
+            String sumQuery = String.format("SELECT IFNULL(SUM(%s),0) AS TotalFines FROM %s WHERE %s=%d AND %s!=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d )",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
                     FineSchema.COL_F_MEMBER_ID, memberId, FineSchema.COL_F_IS_CLEARED, 1,
                     FineSchema.COL_F_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
@@ -203,7 +203,7 @@ public class MeetingFineRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT  SUM(%s) AS TotalFines FROM %s WHERE %s=%d",
+            String sumQuery = String.format("SELECT IFNULL(SUM(%s),0) AS TotalFines FROM %s WHERE %s=%d",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
                     FineSchema.COL_F_MEETING_ID, meetingId);
             cursor = db.rawQuery(sumQuery, null);
@@ -229,13 +229,13 @@ public class MeetingFineRepo {
         }
     }
 
-    public double getTotalFinesPaidInThisMeeting(int meetingId, Date meetingDate) {
+    public double getTotalFinesPaidInThisMeeting(int meetingId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         double totalFinesPaidInMeeting = 0.00;
         int paymentStatus = 1;
 
-        String meetingDateString = Utils.formatDate(meetingDate, "yyyy-MM-dd");
+       // String meetingDateString = Utils.formatDate(meetingDate, "yyyy-MM-dd");
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
@@ -245,7 +245,7 @@ public class MeetingFineRepo {
              FineSchema.COL_F_DATE_CLEARED, meetingDateString,
              FineSchema.COL_F_PAID_IN_MEETING_ID, meetingId); */
 
-            String sumQuery = String.format("SELECT SUM(%s) AS TotalFinesPaid FROM %s WHERE %s=%d AND %s=%d",
+            String sumQuery = String.format("SELECT IFNULL(SUM(%s),0) AS TotalFinesPaid FROM %s WHERE %s=%d AND %s=%d",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
                     FineSchema.COL_F_IS_CLEARED, paymentStatus,
                     FineSchema.COL_F_PAID_IN_MEETING_ID, meetingId);
@@ -280,7 +280,7 @@ public class MeetingFineRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT  SUM(%s) AS TotalFines FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
+            String sumQuery = String.format("SELECT IFNULL(SUM(%s),0) AS TotalFines FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
                     FineSchema.COL_F_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID, cycleId);
@@ -314,7 +314,7 @@ public class MeetingFineRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT  SUM(%s) AS TotalFinesPaidInCycle FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d) AND %s=%d",
+            String sumQuery = String.format("SELECT IFNULL(SUM(%s),0) AS TotalFinesPaidInCycle FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d) AND %s=%d",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
                     FineSchema.COL_F_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID, cycleId,
@@ -453,7 +453,7 @@ public class MeetingFineRepo {
             fines = new ArrayList<FinesDataTransferRecord>();
 
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT  %s AS FineId, %s AS MemberId, %s AS Amount " +
+            String query = String.format("SELECT %s AS FineId, %s AS MemberId, %s AS Amount " +
                             " FROM %s WHERE %s=%d ORDER BY %s",
                     FineSchema.COL_F_FINE_ID, FineSchema.COL_F_MEMBER_ID, FineSchema.COL_F_AMOUNT,
                     FineSchema.getTableName(), FineSchema.COL_F_MEETING_ID, meetingId, FineSchema.COL_F_FINE_ID

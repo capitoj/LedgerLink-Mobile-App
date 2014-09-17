@@ -2,25 +2,24 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingStartingCash;
+import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.domain.schema.MeetingSchema;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersLoansIssuedArrayAdapter;
-import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
@@ -30,7 +29,6 @@ import org.applab.digitizingdata.repo.MeetingSavingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Moses on 6/25/13.
@@ -209,7 +207,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
             double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
             double totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
-            double totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId, Utils.getDateFromSqlite(meetingDate));
+            double totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId);
 
             double actualStartingCash = startingCashDetails.getActualStartingCash();
             cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());

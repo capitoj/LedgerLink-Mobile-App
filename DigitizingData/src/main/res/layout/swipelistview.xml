@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:tag="back">
+
+        <org.applab.digitizingdata.fontutils.TypefaceButton
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/ledger_link_grey"
+            android:text="Delete" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/front"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="left|center_vertical"
+        android:background="@color/ledger_link_white">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/chkMemberFine"
+                style="@style/Checkbox"
+                android:layout_width="25dip"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_below="@id/lblFineFullName"
+                android:layout_marginLeft="15dip"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="false" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblFineType"
+                style="@style/ListSubItemsWithCheckbox"
+                android:layout_width="60dip"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lblFineFullName"
+                android:layout_marginLeft="1dip"
+                android:layout_toRightOf="@id/chkMemberFine"
+                android:text="Latecoming" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMemberFineAmount"
+                style="@style/ListSubItemsWithCheckbox"
+                android:layout_width="80dip"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lblFineFullName"
+                android:layout_toRightOf="@id/lblFineType"
+                android:text="XXX UGX" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtFineMeetingDate"
+                style="@style/ListSubItemsWithCheckbox"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lblFineFullName"
+                android:layout_toRightOf="@id/txtMemberFineAmount"
+                android:text=" XXX " />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</FrameLayout>

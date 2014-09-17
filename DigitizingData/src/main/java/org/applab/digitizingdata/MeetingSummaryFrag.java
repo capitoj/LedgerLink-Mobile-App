@@ -11,12 +11,11 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
@@ -136,11 +135,11 @@ public class MeetingSummaryFrag extends SherlockFragment {
         }
 
         //TODO: May be I should retrieve the previous meeting from the previousMeetingId that was sent here by the MeetingDefinitionActivity
-        //Challenge is how to get the same is case this activity was called from a different activity
+        //Challenge is how to get the same in case this activity was called from a different activity
         //Possible Solution: Store the value of Previous Meeting in database->Meetings table
         Meeting previousMeeting = null;
         if (null != meetingRepo) {
-            previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId());
+            previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), currentMeeting.getMeetingId());
         }
 
         //Force view to be of current meeting if in Data Review mode

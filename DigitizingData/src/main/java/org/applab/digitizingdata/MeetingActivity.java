@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -31,7 +32,11 @@ import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingFineRepo;
+import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
+import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
+import org.applab.digitizingdata.repo.MeetingSavingRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 import org.json.JSONException;
@@ -50,7 +55,11 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     private ActionBar actionBar;
     boolean enableSendData = false;
     Meeting currentMeeting;
-
+    MeetingRepo meetingRepo;
+    MeetingSavingRepo savingRepo;
+    MeetingFineRepo fineRepo;
+    MeetingLoanIssuedRepo loanIssuedRepo;
+    MeetingLoanRepaymentRepo loanRepaymentRepo;
 
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
@@ -145,15 +154,19 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         }
 
         if (targetMeetingId == 0) {
-            //If target meeting id is 0, then load it as current meeting id
+            // If target meeting id is 0, then load it as current meeting id
             VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getBaseContext());
 
-            MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
+            meetingRepo = new MeetingRepo(getBaseContext());
             targetMeetingId = meetingRepo.getCurrentMeeting(vslaCycleRepo.getCurrentCycle().getCycleId()).getMeetingId();
 
-            //Define the meeting id to be accessed by all tab fragments
+            // Define the meeting id to be accessed by all tab fragments
             getIntent().putExtra("_meetingId", targetMeetingId);
         }
+
+        // Update Starting Cash
+        updateStartingCash(targetMeetingId);
+
     }
 
 
@@ -556,5 +569,60 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 progressDialog = null;
             }
         }
+    }
+
+    // Update starting cash
+    private void updateStartingCash(int targetMeetingId) {
+
+        // Initialize contributing metrics
+        double totalSavings = 0.0;
+        double totalLoansRepaid = 0.0;
+        double totalLoansIssued = 0.0;
+        double totalFines = 0.0;
+        double actualStartingCash = 0.0;
+        double expectedStartingCash = 0.0;
+        double cashTakenToBank = 0.0;
+        String comment = "Closing";
+        boolean successFlg = false;
+        Meeting previousMeeting = null;
+        int meetingId = -1;
+
+        meetingRepo = new MeetingRepo(getApplicationContext());
+        savingRepo = new MeetingSavingRepo(getApplicationContext());
+        fineRepo = new MeetingFineRepo(getApplicationContext());
+        loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
+        loanRepaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
+
+        previousMeeting = meetingRepo.getPreviousMeeting(meetingRepo.getMeetingById(targetMeetingId).getVslaCycle().getCycleId(), targetMeetingId);
+
+        if (previousMeeting != null) {
+            meetingId = previousMeeting.getMeetingId();
+
+            totalSavings = savingRepo.getTotalSavingsInMeeting(previousMeeting.getMeetingId());
+            totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(previousMeeting.getMeetingId());
+            totalLoansRepaid = loanRepaymentRepo.getTotalLoansRepaidInMeeting(previousMeeting.getMeetingId());
+            totalFines = fineRepo.getTotalFinesPaidInThisMeeting(previousMeeting.getMeetingId());
+            expectedStartingCash = totalSavings + totalLoansRepaid + totalFines - totalLoansIssued;
+
+            if (previousMeeting.isGettingStarted()) {
+                expectedStartingCash = previousMeeting.getVslaCycle().getFinesAtSetup() + previousMeeting.getVslaCycle().getInterestAtSetup() + totalSavings;
+                Log.d("MA exCah", String.valueOf(expectedStartingCash));
+            }
+        } else {
+
+            /** If no previous meeting; i.e. fresh Start expected starting Cash = 0;
+             *If GSW has recorded cash then the recorded cash should be shown here as a net
+             */
+            meetingId = targetMeetingId;
+            if (meetingRepo.getMeetingById(targetMeetingId).isGettingStarted()) {
+                totalSavings = savingRepo.getTotalSavingsInMeeting(meetingRepo.getMeetingById(targetMeetingId).getMeetingId());
+                expectedStartingCash = meetingRepo.getMeetingById(targetMeetingId).getVslaCycle().getFinesAtSetup() + meetingRepo.getMeetingById(targetMeetingId).getVslaCycle().getInterestAtSetup() + totalSavings;
+                Log.d("MA exCahgsw", String.valueOf(expectedStartingCash));
+            }
+        }
+
+        Log.d("MA exCah3", String.valueOf(meetingId) + String.valueOf(expectedStartingCash));
+        // Save Starting cash values as closing balance for previous meeting
+        successFlg = meetingRepo.updateExpectedStartingCash(meetingId, expectedStartingCash);
     }
 }

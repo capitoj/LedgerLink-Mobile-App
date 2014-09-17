@@ -2,22 +2,21 @@ package org.applab.digitizingdata;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuInflater;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -27,13 +26,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
-import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.ConcurrentMeetingsArrayAdapter;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
-import org.applab.digitizingdata.helpers.MeetingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
@@ -45,7 +43,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
 
@@ -88,7 +85,8 @@ public class BeginMeetingActivity extends SherlockActivity {
         pastMeetings = meetingRepo.getAllMeetingsByDataSentStatusAndActiveStatus(false, false);
 
         // Check fore fresh start; no meetings other than GSW
-        if (meetingRepo.getAllNonGSWMeetings().isEmpty()) {
+        // if (meetingRepo.getAllNonGSWMeetings().isEmpty()) {
+        if (meetingRepo.getAllMeetings().isEmpty()) {
             noPriorMeetings = true;
         }
 
@@ -128,7 +126,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                 //TextView tvMostRecentUnsentMeeting = (TextView) findViewById(R.id.lblBMCurrentMeetingDate);
                 //tvMostRecentUnsentMeeting.setText(Utils.formatDate(mostRecentUnsentMeeting.getMeetingDate(), "dd MMM yyyy"));
 
-                //Set onclick event for the current meeting
+                // Set onclick event for the current meeting
                 final Meeting finalMostRecentUnsentMeeting = mostRecentUnsentMeeting;
 //                tvMostRecentUnsentMeeting.setOnClickListener(new View.OnClickListener()
 //                {
@@ -147,10 +145,21 @@ public class BeginMeetingActivity extends SherlockActivity {
 //                    }
 //                });
 
-                if (pastMeetings.size() > 1) {
+                // If the Past Meetings are less than 4 i.e. 3 displayed in unsent past meetings  then hide the warning message
+                if (pastMeetings.size() < 4) {
+                    TextView tvWarning = (TextView) findViewById(R.id.lblBMWarning);
+                    grpPastMeetings.removeView(tvWarning);
+                }
+
+                // If only the GSW meeting exists then hide the current meeting section
+                if ((pastMeetings.size() == 1) && (pastMeetings.get(0).isGettingStarted()) && currentMeetings.isEmpty()) {
+
+                    // Hide the Section for Current Meeting
+                    grpCurrentMeeting.setVisibility(View.GONE);
+                } else if (pastMeetings.size() > 1) {
                     for (Meeting meeting : pastMeetings) {
 
-                        //Skip the Current meeting i.e. mostRecentUnsentMeeting coz it is already displayed
+                        // Skip the Current meeting i.e. mostRecentUnsentMeeting coz it is already displayed
                         if (meeting.getMeetingId() == mostRecentUnsentMeeting.getMeetingId()) {
                             continue;
                         }
@@ -169,18 +178,15 @@ public class BeginMeetingActivity extends SherlockActivity {
                           */
                     }
 
-                    //If the Past Meetings are less than 4 i.e. 3 displayed in unsent past meetings  then hide the warning message
-                    if (pastMeetings.size() < 4) {
-                        TextView tvWarning = (TextView) findViewById(R.id.lblBMWarning);
-                        grpPastMeetings.removeView(tvWarning);
-                    }
-                } else {
-
-                    //Hide the Section for Past Meetings
-                    LinearLayout parent = (LinearLayout) grpPastMeetings.getParent();
-                    parent.removeView(grpPastMeetings);
 
                 }
+                /**else {
+
+                 //Hide the Section for Past Meetings
+                 LinearLayout parent = (LinearLayout) grpPastMeetings.getParent();
+                 parent.removeView(grpPastMeetings);
+
+                 } */
             } else {
 
                 // Hide the Section for Past Meetings
@@ -230,9 +236,9 @@ public class BeginMeetingActivity extends SherlockActivity {
                 pastMeetings.remove(i);
             }
         }
-        //Now get the data via the adapter
-        ConcurrentMeetingsArrayAdapter adapter = new ConcurrentMeetingsArrayAdapter(getBaseContext(), pastMeetings);
 
+        // Now get the data via the adapter
+        ConcurrentMeetingsArrayAdapter adapter = new ConcurrentMeetingsArrayAdapter(getBaseContext(), pastMeetings);
 
         // listening to single list item on click
         ListView membersListView = (ListView) findViewById(R.id.lstBMPastMeetingList);
@@ -260,9 +266,9 @@ public class BeginMeetingActivity extends SherlockActivity {
     protected void populateCurrentMeetingsList() {
         //to populate the current meetings
         //Now get the data via the adapter
+
         currentMeetings = meetingRepo.getAllMeetingsByActiveStatus(true);
         ConcurrentMeetingsArrayAdapter adapter = new ConcurrentMeetingsArrayAdapter(getBaseContext(), currentMeetings);
-
 
         // listening to single list item on click
         ListView currentMeetingsList = (ListView) findViewById(R.id.lstBMCurrentMeetings);
@@ -342,7 +348,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                 }
         );
 
-        if (noPriorMeetings){
+        if (noPriorMeetings) {
             customActionBarView.findViewById(R.id.actionbar_send).setVisibility(View.GONE);
         }
 

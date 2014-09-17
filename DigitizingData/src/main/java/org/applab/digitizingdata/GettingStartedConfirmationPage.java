@@ -133,7 +133,6 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
     // Update starting cash at end of GSW
     private void updateGSWStartingCash() {
 
-        String comment = "Getting Started";
         MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
 
@@ -142,7 +141,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         expectedStartingCash = dummyGettingStartedWizardMeeting.getVslaCycle().getFinesAtSetup() + dummyGettingStartedWizardMeeting.getVslaCycle().getInterestAtSetup() + totalSavings;
 
         // Save Starting cash values
-        successFlg = meetingRepo.updateStartingCash(dummyGettingStartedWizardMeeting.getMeetingId(), 0, expectedStartingCash, 0, 0, comment);
+        successFlg = meetingRepo.updateExpectedStartingCash(dummyGettingStartedWizardMeeting.getMeetingId(), expectedStartingCash);
     }
 
     /* Inflates custom menu bar for confirmation page */

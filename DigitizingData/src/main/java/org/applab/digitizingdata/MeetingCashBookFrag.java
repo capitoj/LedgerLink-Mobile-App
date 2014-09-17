@@ -1,7 +1,6 @@
 package org.applab.digitizingdata;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,8 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
-import org.applab.digitizingdata.domain.model.MeetingFine;
 import org.applab.digitizingdata.domain.model.MeetingStartingCash;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
@@ -102,7 +99,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
             Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
         }
 
-        updateCashBook();
+        //updateCashBook();
         Toast.makeText(getSherlockActivity().getApplicationContext(), "The Cashbook balances have been saved successfully.", Toast.LENGTH_LONG).show();
     }
 
@@ -125,10 +122,10 @@ public class MeetingCashBookFrag extends SherlockFragment {
             //Get the Cycle that contains this meeting
             Meeting currentMeeting = meetingRepo.getMeetingById(meetingId);
 
-            // Get the Cycle that contains previous meeting inorder to get the expected starting Cash
+            // Get the Cycle that contains previous meeting in order to get the expected starting Cash
             Meeting previousMeeting = null;
             if (null != meetingRepo) {
-                previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId());
+                previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), meetingId);
             }
 
 
@@ -138,7 +135,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
             double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             double totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
             double totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
-            double totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId, Utils.getDateFromSqlite(meetingDate));
+            double totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId);
 
             double actualStartingCash = startingCashDetails.getActualStartingCash();
             expectedStartingCash = startingCashDetails.getExpectedStartingCash();

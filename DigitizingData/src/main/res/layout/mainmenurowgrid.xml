@@ -1,29 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_light_blue"
     android:focusable="false"
-    android:layout_weight="10"
-    >
- <!-- Change padding to adjust size of icons-->
-    <ImageView
-        android:id="@+id/item_image"
-        android:layout_width="100dip"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:contentDescription="@string/image_content_desc"
-        android:layout_weight="10"
-        android:padding="40dip"
-        android:scaleType="centerCrop"/>
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+    <!-- Change padding to adjust size of icons-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/item_image_layout"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:layout_weight=".97">
 
-    <!-- <TextView
-             android:id="@+id/item_text"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:textSize="22sp"
-             android:text=" "
-             android:typeface="sans" /> -->
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="100dip"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/image_content_desc"
+            android:gravity="top"
+            android:scaleType="fitCenter"
+            android:paddingTop="7dip"
+            android:paddingBottom="5dip"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dip"
+        android:layout_below="@+id/item_image_layout"
+        android:layout_weight=".03">
+
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/menu_item_desc"
+            style="@style/RegularTextMainMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SEE"
+            android:textColor="@color/ledger_link_white" />
+    </LinearLayout>
 
 
     <!-- <com.example.TestLLUI.customViews.RobotoTextView

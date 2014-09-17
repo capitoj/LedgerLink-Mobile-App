@@ -3,7 +3,6 @@ package org.applab.digitizingdata;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +13,9 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
@@ -176,7 +175,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
                         }
                         else{
                             //Check whether to make the sibling meeting the current one: Data should not have been sent
-                            Meeting previousMeeting = meetingRepo.getPreviousMeeting(targetMeeting.getVslaCycle().getCycleId());
+                            Meeting previousMeeting = meetingRepo.getPreviousMeeting(targetMeeting.getVslaCycle().getCycleId(), targetMeeting.getMeetingId());
                             if(previousMeeting != null) {   // && targetMeeting.isCurrent()
                                 if(!previousMeeting.isMeetingDataSent()) {
                                     meetingRepo.activateMeeting(previousMeeting);

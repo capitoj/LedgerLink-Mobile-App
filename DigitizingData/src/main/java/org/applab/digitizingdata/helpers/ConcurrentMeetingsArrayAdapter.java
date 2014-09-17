@@ -7,12 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
 import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.Meeting;
 
 import java.util.ArrayList;
-
-
 
 
 /**
@@ -35,17 +34,23 @@ public class ConcurrentMeetingsArrayAdapter extends ArrayAdapter<Meeting> {
         try {
             //Here I populate the ListView Row with data.
             //I will handle the itemClick event in the ListView view on the actual fragment
-            LayoutInflater inflater = (LayoutInflater)context
+            LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View rowView = inflater.inflate(R.layout.row_meeting_with_cycle, parent, false);
 
             //Get the Widgets
-            final TextView txtMeetingDate = (TextView)rowView.findViewById(R.id.txtMeetingDate);
-            final TextView cycleInformationTextView = (TextView)rowView.findViewById(R.id.txtMeetingCycleSummary);
+            final TextView txtMeetingDate = (TextView) rowView.findViewById(R.id.txtMeetingDate);
+            final TextView cycleInformationTextView = (TextView) rowView.findViewById(R.id.txtMeetingCycleSummary);
 
             //Assign Values to the Widgets
-            String meetingDate = String.format("%s", Utils.formatDate(values.get(position).getMeetingDate(), "dd MMM yyyy"));
+            String meetingDate = "";
+            if (values.get(position).isGettingStarted()) {
+                meetingDate = String.format("%s (Migration)", Utils.formatDate(values.get(position).getMeetingDate(), "dd MMM yyyy"));
+
+            } else {
+                meetingDate = String.format("%s ", Utils.formatDate(values.get(position).getMeetingDate(), "dd MMM yyyy"));
+            }
             txtMeetingDate.setText(meetingDate);
 
 
@@ -53,8 +58,7 @@ public class ConcurrentMeetingsArrayAdapter extends ArrayAdapter<Meeting> {
             cycleInformationTextView.setText(cycleSummary);
 
             return rowView;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));
             return null;

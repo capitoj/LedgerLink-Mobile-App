@@ -21,6 +21,7 @@ import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
+import org.applab.digitizingdata.helpers.DbBackupRestore;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String PREF_KEY_SERVER_URL = "prefServerUrl";
@@ -28,6 +29,8 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public static final String PREF_KEY_RUN_IN_TRAINING_MODE = "prefRunInTrainingMode";
     public static final String PREF_KEY_EXECUTION_MODE = "prefExecutionMode";
     public static final String PREF_KEY_REFRESH_TRAINING_DATA = "prefRefreshTrainingData";
+    public static final String PREF_KEY_RESTORE_DATA = "prefRestoreData";
+    public static final String PREF_KEY_BACKUP_DATA = "Backup Data";
     public static final String PREF_KEY_CONFIRM_TRAINING_MODE = "prefConfirmTrainingMode";
     public static final String PREF_KEY_TRAINING_PASSWORD = "prefTrainingPassword";
     public static final String PREF_KEY_TRAINING_OPTIONS_SECTION = "prefTrainingModeOptions";
@@ -36,7 +39,9 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public static final String TITLE_EXECUTION_MODE_PROD = "Switch to Training Mode";
     public static final String TITLE_EXECUTION_MODE_TRAINING = "Switch to Actual VSLA Data";
 
+
     public ActionBar actionBar;
+    public DbBackupRestore dbBackupRestore;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +92,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             restartApplication();
 
         }
+        else if(key.equals(PREF_KEY_RESTORE_DATA)){
+            //dbBackupRestore.exportDb();
+            dbBackupRestore.importDb();
+
+        }
+
     }
 
     @Override
