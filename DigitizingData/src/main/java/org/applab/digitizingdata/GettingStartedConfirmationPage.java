@@ -1,16 +1,10 @@
 package org.applab.digitizingdata;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.text.Html;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.StyleSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +13,14 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.internal.view.menu.ActionMenuItemView;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import org.applab.digitizingdata.domain.model.VslaInfo;
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.TypefaceTextView;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingRepo;
+import org.applab.digitizingdata.repo.MeetingSavingRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 public class GettingStartedConfirmationPage extends SherlockActivity {
@@ -35,6 +29,9 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
     ActionBar actionBar;
     boolean confirmed = false;
     private View customActionBarView;
+    private double totalSavings = 0.0;
+    private double expectedStartingCash = 0.0;
+    boolean successFlg = false;
 
 
     @Override
@@ -44,10 +41,10 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
 
         inflateCustombar();
 
-      /**  actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false); //Please leave this as false, it will be enabled on confirmation
-        actionBar.setTitle("GET STARTED");
-*/
+        /**  actionBar = getSupportActionBar();
+         actionBar.setDisplayHomeAsUpEnabled(false); //Please leave this as false, it will be enabled on confirmation
+         actionBar.setTitle("GET STARTED");
+         */
         // Set instructions
         TypefaceTextView lblConfirmationText = (TypefaceTextView) findViewById(R.id.lblConfirmationText);
 
@@ -93,19 +90,26 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
     }
 
     private boolean progressConfirmation() {
-        //IF already confirmed, load the main activity
+
+        // If already confirmed, load the main activity
         if (confirmed) {
-            Intent mainActivity = new Intent(getBaseContext(), MainActivity.class);
+
+        Intent mainActivity = new Intent(getBaseContext(), MainActivity.class);
             startActivity(mainActivity);
 
             finish();
             return true;
         }
-        //Finished wizard...
+        // Finished wizard...
         VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
         boolean updateStatus = vslaInfoRepo.updateGettingStartedWizardCompleteFlag(true);
+
+        // Update GSW starting cash
+        updateGSWStartingCash();
+
         if (updateStatus) {
-            //Update text
+
+            // Update text
             TextView heading = (TextView) findViewById(R.id.lblConfirmationHeading);
             heading.setText("Thank you!");
 
@@ -113,7 +117,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
             content.setText("You have entered all information about your savings group and the current cycle. You may now use the phone at every meeting to enter savings and loan activity.");
             confirmed = true;
 
-            //Enable home button
+            // Enable home button
             actionBar.setDisplayHomeAsUpEnabled(true);
 
 
@@ -126,13 +130,27 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         return false;
     }
 
+    // Update starting cash at end of GSW
+    private void updateGSWStartingCash() {
 
-    /* inflates custom menu bar for confirmation page */
+        String comment = "Getting Started";
+        MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
+        Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+
+        MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getBaseContext());
+        totalSavings = meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
+        expectedStartingCash = dummyGettingStartedWizardMeeting.getVslaCycle().getFinesAtSetup() + dummyGettingStartedWizardMeeting.getVslaCycle().getInterestAtSetup() + totalSavings;
+
+        // Save Starting cash values
+        successFlg = meetingRepo.updateStartingCash(dummyGettingStartedWizardMeeting.getMeetingId(), 0, expectedStartingCash, 0, 0, comment);
+    }
+
+    /* Inflates custom menu bar for confirmation page */
     public void inflateCustombar() {
 
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-        
+
         customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back_done, null);
 
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(

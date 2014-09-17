@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import android.widget.TextView;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -33,14 +34,13 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-
-
 /**
  * Created by Moses on 7/16/13.
  */
 public class GettingStartedWizardReviewMembersActivity extends MembersListActivity {
     private ActionBar actionBar;
     private ArrayList<Member> members;
+    private double totalSavings = 0.0;
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -53,31 +53,30 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         TypefaceTextView reviewSubHeading = (TypefaceTextView) findViewById(R.id.lblRvwMembersSubHeading);
         SpannableStringBuilder reviewSubHeadingPart = new SpannableStringBuilder("Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may ");
         SpannableString exitText = new SpannableString("exit ");
-        exitText.setSpan(new StyleSpan(Typeface.BOLD), 0, exitText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        exitText.setSpan(new StyleSpan(Typeface.BOLD), 0, exitText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         reviewSubHeadingPart.append(exitText);
         reviewSubHeadingPart.append("and come back later.");
 
         reviewSubHeading.setText(reviewSubHeadingPart);
 
-
         //Load the summary information
         MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
 
-
-
         //Set cycle start date in label
         Date startDate = dummyGettingStartedWizardMeeting.getMeetingDate();
         TextView lblRvwMembersDate = (TextView) findViewById(R.id.lblRvwMembersDate);
-        lblRvwMembersDate.setText("As of "+Utils.formatDate(startDate));
+        lblRvwMembersDate.setText("As of " + Utils.formatDate(startDate));
+
+
 
         //Set savings in GSW meeting
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getBaseContext());
+        totalSavings = meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
         TextView lblRvwMembersTotalSavings = (TextView) findViewById(R.id.lblRvwMembersTotalSavings);
-        lblRvwMembersTotalSavings.setText(String.format("Total savings this cycle %,.0f %s",
-                                            meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId()),
-                                            getResources().getString(R.string.operating_currency)));
+        lblRvwMembersTotalSavings.setText(String.format("Total savings this cycle %,.0f %s", totalSavings,
+                getResources().getString(R.string.operating_currency)));
 
         //Set loans issued in GSW meeting
         MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(getBaseContext());
@@ -86,16 +85,10 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 meetingLoanIssuedRepo.getTotalLoansIssuedInMeeting(dummyGettingStartedWizardMeeting.getMeetingId()),
                 getResources().getString(R.string.operating_currency)));
 
-
-
-
-
         //Populate the Members
         populateMembersList();
         VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
         vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_REVIEW_MEMBERS);
-
-
     }
 
     /* inflates custom menu bar for review members */
@@ -170,13 +163,13 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 Intent upIntent = new Intent(this, GettingStartedWizardAddMemberActivity.class);
                 NavUtils.navigateUpTo(this, upIntent);
                 return true;
-          /**  case R.id.mnuMListDone:
-                //Go to GSW cycle review page
-                //which is infact the new cycle activity in update mode
-                Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
-                i.putExtra("_isUpdateCycleAction", true);
-                startActivity(i);
-                return true; */
+            /**  case R.id.mnuMListDone:
+             //Go to GSW cycle review page
+             //which is infact the new cycle activity in update mode
+             Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+             i.putExtra("_isUpdateCycleAction", true);
+             startActivity(i);
+             return true; */
             case R.id.mnuMListAdd:
                 Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
                 startActivity(i);
@@ -199,11 +192,9 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         Log.d(getBaseContext().getPackageName(), members.size() + " members loaded");
         //Assign Adapter to ListView
         //Assign Adapter to ListView
-        runOnUiThread(new Runnable()
-        {
+        runOnUiThread(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
 
                 setListAdapter(adapter);
                 Utils.setListViewHeightBasedOnChildren(getListView());
@@ -232,6 +223,4 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         });
 
     }
-
-
 }
