@@ -14,6 +14,7 @@ public class MeetingStartingCash {
     private double amount;
     private Date dateSent;
     private double expectedStartingCash;
+    private double loanTopUps;
 
     public int getStartingCashId() {
         return startingCashId;
@@ -45,6 +46,14 @@ public class MeetingStartingCash {
 
     public void setActualStartingCash(double actualStartingCash) {
         this.actualStartingCash = actualStartingCash;
+    }
+
+    public double getLoanTopUps() {
+        return loanTopUps;
+    }
+
+    public void setLoanTopUps(double loanTopUps) {
+        this.loanTopUps = loanTopUps;
     }
 
     public double getExpectedStartingCash() {

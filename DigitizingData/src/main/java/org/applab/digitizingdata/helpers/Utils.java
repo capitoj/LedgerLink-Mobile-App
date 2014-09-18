@@ -11,16 +11,33 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.Spinner;
 
+import org.applab.digitizingdata.GettingStartedConfirmationPage;
+import org.applab.digitizingdata.GettingStartedWizardAddMemberActivity;
+import org.applab.digitizingdata.GettingStartedWizardNewCycleActivity;
+import org.applab.digitizingdata.GettingStartedWizardPageOne;
+import org.applab.digitizingdata.GettingStartedWizardPageTwo;
+import org.applab.digitizingdata.GettingStartedWizardReviewMembersActivity;
+import org.applab.digitizingdata.SettingsActivity;
+import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingStartingCash;
+import org.applab.digitizingdata.repo.MeetingFineRepo;
+import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
+import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
+import org.applab.digitizingdata.repo.MeetingRepo;
+import org.applab.digitizingdata.repo.MeetingSavingRepo;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.text.NumberFormat;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Locale;
-
-import org.applab.digitizingdata.*;
 
 /**
  * Created by Moses on 7/3/13.
@@ -74,14 +91,11 @@ public class Utils {
     public static final int GETTING_STARTED_PAGE_REVIEW_CYCLE = 6;
     public static final int GETTING_STARTED_PAGE_CONFIRMATION = 7;
 
-    public static Date stringToDate(String dateString, String dateFormat)
-    {
+    public static Date stringToDate(String dateString, String dateFormat) {
 
-        try
-        {
+        try {
             return new SimpleDateFormat(dateFormat, Locale.ENGLISH).parse(dateString);
-        } catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
             return new Date();
 
@@ -91,29 +105,30 @@ public class Utils {
     public static String formatAsPhoneNumber(String phoneNumber) {
         //Formats phone number as #### ### ###
         phoneNumber = phoneNumber.replaceAll(" ", ""); //first collapse all spaces
-        if(phoneNumber.length()<=4) {
+        if (phoneNumber.length() <= 4) {
             return phoneNumber;
         }
-        if(phoneNumber.length()>4 && phoneNumber.length()<=7) {
+        if (phoneNumber.length() > 4 && phoneNumber.length() <= 7) {
             return insertPeriodically(phoneNumber, " ", 4);
         }
 
         //length is greater than 7!
-        phoneNumber = phoneNumber.substring(0,4) + " " + insertPeriodically(phoneNumber.substring(4), " ", 3);
+        phoneNumber = phoneNumber.substring(0, 4) + " " + insertPeriodically(phoneNumber.substring(4), " ", 3);
         return phoneNumber;
     }
 
     //Calling this ensures that a phone number input is always formatted as a phone number
     public static void setAsPhoneNumberInput(final EditText editText) {
-            TextWatcher phoneNumberTextWatcher = new TextWatcher() {
+        TextWatcher phoneNumberTextWatcher = new TextWatcher() {
             String phoneText = "";
+
             @Override
             public void afterTextChanged(Editable s) {
-                    editText.removeTextChangedListener(this); //remove it to prevent Stackover flow
-                    phoneText = formatAsPhoneNumber(editText.getText().toString());
-                    editText.setText("");
-                    editText.append(phoneText);
-                    editText.addTextChangedListener(this);
+                editText.removeTextChangedListener(this); //remove it to prevent Stackover flow
+                phoneText = formatAsPhoneNumber(editText.getText().toString());
+                editText.setText("");
+                editText.append(phoneText);
+                editText.addTextChangedListener(this);
 
             }
 
@@ -130,15 +145,13 @@ public class Utils {
     }
 
     public static String insertPeriodically(
-            String text, String insert, int period)
-    {
+            String text, String insert, int period) {
         StringBuilder builder = new StringBuilder(
-                text.length() + insert.length() * (text.length()/period)+1);
+                text.length() + insert.length() * (text.length() / period) + 1);
 
         int index = 0;
         String prefix = "";
-        while (index < text.length())
-        {
+        while (index < text.length()) {
             // Don't put the insert in the very first iteration.
             // This is easier than appending it *after* each substring
             builder.append(prefix);
@@ -156,9 +169,11 @@ public class Utils {
         VIEW_MODE_CAPTURE,
         VIEW_MODE_REVIEW,
         VIEW_MODE_READ_ONLY
-    };
+    }
 
-    public static MeetingDataViewMode  _meetingDataViewMode = MeetingDataViewMode.VIEW_MODE_CAPTURE;
+    ;
+
+    public static MeetingDataViewMode _meetingDataViewMode = MeetingDataViewMode.VIEW_MODE_CAPTURE;
 
     public enum MeetingActiveActionBarMenu {
         MENU_NONE,
@@ -166,16 +181,18 @@ public class Utils {
         MENU_CASH_BOOK_TAB,
         MENU_START_CASH_TAB,
         MENU_SEND_DATA_TAB
-    };
+    }
 
-    public static MeetingActiveActionBarMenu  _meetingActiveActionBarMenu = MeetingActiveActionBarMenu.MENU_NONE;
+    ;
+
+    public static MeetingActiveActionBarMenu _meetingActiveActionBarMenu = MeetingActiveActionBarMenu.MENU_NONE;
 
     public static SharedPreferences getDefaultSharedPreferences(Context context) {
-        if(null == context) {
+        if (null == context) {
             return null;
         }
 
-        if(null == sharedPreferences) {
+        if (null == sharedPreferences) {
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         }
 
@@ -184,21 +201,22 @@ public class Utils {
 
     /**
      * Setup the Defaults from the Shared Preferences
+     *
      * @param context
      */
     public static void configureDefaultApplicationPreferences(Context context) {
-        if(null == context) {
+        if (null == context) {
             return;
         }
 
         SharedPreferences preferences = getDefaultSharedPreferences(context);
-        if(null == preferences){
+        if (null == preferences) {
             return;
         }
 
         //Otherwise if all is ok continue
-        VSLA_SERVER_BASE_URL = preferences.getString(SettingsActivity.PREF_KEY_SERVER_URL,"http://vsla.com/notset");
-        EXECUTING_IN_TRAINING_MODE = Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING);
+        VSLA_SERVER_BASE_URL = preferences.getString(SettingsActivity.PREF_KEY_SERVER_URL, "http://vsla.com/notset");
+        EXECUTING_IN_TRAINING_MODE = Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE, "1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING);
         setRefreshDataFlag(Utils.getDefaultSharedPreferences(context).getBoolean(SettingsActivity.PREF_KEY_REFRESH_TRAINING_DATA, false));
     }
 
@@ -210,23 +228,22 @@ public class Utils {
         return refreshDataFlg;
     }
 
-    public static void setExecutingInTrainingMode(boolean value){
+    public static void setExecutingInTrainingMode(boolean value) {
         EXECUTING_IN_TRAINING_MODE = value;
     }
 
-    public static boolean isExecutingInTrainingMode(){
+    public static boolean isExecutingInTrainingMode() {
         return EXECUTING_IN_TRAINING_MODE;
     }
 
     public static String getPhoneImei() {
         try {
-            if(phoneImei == null || phoneImei.length()<1){
-                TelephonyManager tm = (TelephonyManager)DatabaseHandler.databaseContext.getSystemService(Context.TELEPHONY_SERVICE);
+            if (phoneImei == null || phoneImei.length() < 1) {
+                TelephonyManager tm = (TelephonyManager) DatabaseHandler.databaseContext.getSystemService(Context.TELEPHONY_SERVICE);
                 phoneImei = tm.getDeviceId();
             }
             return phoneImei;
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -269,11 +286,10 @@ public class Utils {
 
     public static Date getDateFromString(String date, String format) {
         try {
-            SimpleDateFormat ft = new SimpleDateFormat (format);
+            SimpleDateFormat ft = new SimpleDateFormat(format);
             Date dt = ft.parse(date);
             return dt;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return new Date();
         }
 
@@ -290,11 +306,10 @@ public class Utils {
 
     public static String formatDate(Date date, String format) {
         try {
-            SimpleDateFormat ft = new SimpleDateFormat (format);
+            SimpleDateFormat ft = new SimpleDateFormat(format);
             String dateString = ft.format(date);
             return dateString;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
@@ -305,15 +320,14 @@ public class Utils {
 
     public static String formatDateToSqlite(Date date) {
         //Formats the Date into format expected by SQLite Database
-        return formatDate(date,"yyyy-MM-dd HH:mm:ss.SSS");
+        return formatDate(date, "yyyy-MM-dd HH:mm:ss.SSS");
     }
 
     public static String formatRealNumber(double number) {
         try {
             NumberFormat nf = new DecimalFormat(REAL_FIELD_FORMAT);
             return nf.format(number);
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -321,23 +335,23 @@ public class Utils {
 
     //Given a GSW stage, returns the Activity class to launch
     public static Class resolveGettingStartedWizardStage(int stage) {
-       switch(stage) {
-           case GETTING_STARTED_PAGE_NEW_CYCLE:
-               return GettingStartedWizardNewCycleActivity.class;
-           case GETTING_STARTED_PAGE_ADD_MEMBER:
-               return GettingStartedWizardAddMemberActivity.class;
-           case GETTING_STARTED_PAGE_REVIEW_MEMBERS:
-               return GettingStartedWizardReviewMembersActivity.class;
-           case GETTING_STARTED_PAGE_REVIEW_CYCLE:
-               return GettingStartedWizardNewCycleActivity.class;
-           case GETTING_STARTED_PAGE_ONE:
-               return GettingStartedWizardPageOne.class;
-           case GETTING_STARTED_PAGE_PIN:
-               return GettingStartedWizardPageTwo.class;
-           case GETTING_STARTED_PAGE_CONFIRMATION:
-               return GettingStartedConfirmationPage.class;
-           default:
-               return GettingStartedWizardPageOne.class;
+        switch (stage) {
+            case GETTING_STARTED_PAGE_NEW_CYCLE:
+                return GettingStartedWizardNewCycleActivity.class;
+            case GETTING_STARTED_PAGE_ADD_MEMBER:
+                return GettingStartedWizardAddMemberActivity.class;
+            case GETTING_STARTED_PAGE_REVIEW_MEMBERS:
+                return GettingStartedWizardReviewMembersActivity.class;
+            case GETTING_STARTED_PAGE_REVIEW_CYCLE:
+                return GettingStartedWizardNewCycleActivity.class;
+            case GETTING_STARTED_PAGE_ONE:
+                return GettingStartedWizardPageOne.class;
+            case GETTING_STARTED_PAGE_PIN:
+                return GettingStartedWizardPageTwo.class;
+            case GETTING_STARTED_PAGE_CONFIRMATION:
+                return GettingStartedConfirmationPage.class;
+            default:
+                return GettingStartedWizardPageOne.class;
         }
     }
 
@@ -345,8 +359,7 @@ public class Utils {
         try {
             NumberFormat nf = new DecimalFormat(INTEGER_FIELD_FORMAT);
             return nf.format(number);
-        }
-        catch(Exception ex){
+        } catch (Exception ex) {
             return null;
         }
     }
@@ -357,6 +370,7 @@ public class Utils {
 
     /**
      * Creates an alert dialog without buttons
+     *
      * @param context
      * @param title
      * @param message
@@ -375,11 +389,9 @@ public class Utils {
         // Setting Icon to Dialog
         if (icon.equalsIgnoreCase(MSGBOX_ICON_EXCLAMATION)) {
             //alertDialog.setIcon(R.drawable.exclamation);
-        }
-        else if (icon.equalsIgnoreCase(MSGBOX_ICON_TICK)) {
+        } else if (icon.equalsIgnoreCase(MSGBOX_ICON_TICK)) {
             //alertDialog.setIcon(R.drawable.tick);
-        }
-        else if (icon.equalsIgnoreCase(MSGBOX_ICON_QUESTION)) {
+        } else if (icon.equalsIgnoreCase(MSGBOX_ICON_QUESTION)) {
             //alertDialog.setIcon(R.drawable.question);
         }
 
@@ -389,13 +401,14 @@ public class Utils {
 
 
     public static boolean isNetworkConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return (cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isAvailable() && cm.getActiveNetworkInfo().isConnected());
     }
 
     /**
      * Creates an alert dialog with an OK button
      * Will later see how to do a real Dialog Box with standard buttons
+     *
      * @param context
      * @param title
      * @param message
@@ -414,11 +427,9 @@ public class Utils {
         // Setting Icon to Dialog
         if (icon.equalsIgnoreCase(MSGBOX_ICON_EXCLAMATION)) {
             //alertDialog.setIcon(R.drawable.exclamation);
-        }
-        else if (icon.equalsIgnoreCase(MSGBOX_ICON_TICK)) {
+        } else if (icon.equalsIgnoreCase(MSGBOX_ICON_TICK)) {
             //alertDialog.setIcon(R.drawable.tick);
-        }
-        else if (icon.equalsIgnoreCase(MSGBOX_ICON_QUESTION)) {
+        } else if (icon.equalsIgnoreCase(MSGBOX_ICON_QUESTION)) {
             //alertDialog.setIcon(R.drawable.question);
         }
 
@@ -432,7 +443,9 @@ public class Utils {
     }
 
 
-    /** This method sets the selected option of a spinner from a given value **/
+    /**
+     * This method sets the selected option of a spinner from a given value *
+     */
     public static void setSpinnerSelection(String value, Spinner spinner) {
         ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
         int spinnerPosition = adapter.getPosition(value);
@@ -444,6 +457,7 @@ public class Utils {
     /**
      * This method is a hack helps align a ListView within a scrolling screen
      * because a Listview cannot be placed inside a scroll view
+     *
      * @param listView
      */
     public static void setListViewHeightBasedOnChildren(ListView listView) {
@@ -466,4 +480,53 @@ public class Utils {
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
+
+    public double getTotalCashInBox(int meetingId, Context context) {
+        double totalSavings = 0.0;
+        double totalLoansRepaid = 0.0;
+        double totalLoansIssued = 0.0;
+        double totalFines = 0.0;
+
+        double loanTopUps = 0.0;
+        double actualStartingCash = 0.0;
+
+        double cashToBank = 0.0;
+
+        Meeting currentMeeting = null;
+
+        MeetingStartingCash startingCashDetails = null;
+
+        MeetingRepo meetingRepo = new MeetingRepo(context);
+        MeetingSavingRepo savingRepo = new MeetingSavingRepo(context);
+        MeetingLoanRepaymentRepo repaymentRepo = new MeetingLoanRepaymentRepo(context);
+        MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(context);
+        MeetingFineRepo fineRepo = new MeetingFineRepo(context);
+
+        try {
+
+
+            startingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
+
+            totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
+            totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
+            totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
+            totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId);
+
+            loanTopUps = startingCashDetails.getLoanTopUps();
+            actualStartingCash = startingCashDetails.getActualStartingCash();
+            cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());
+
+            return actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines + loanTopUps - cashToBank;
+
+        } catch (Exception ex) {
+            return 0.0;
+        } finally {
+            meetingRepo = null;
+            savingRepo = null;
+            repaymentRepo = null;
+            return 0.0;
+        }
+    }
+
+
 }

@@ -229,7 +229,7 @@ public class SampleDataBuilderRepo {
                         //Issue loans to every 6th member
                         if(memb.getMemberNo() % 6 == 0) {
                             //Get Loan Amount
-                            double loanAmount = savingRepo.getMemberTotalSavingsInCycle(cycle.getCycleId(), memb.getMemberId()) * 3;
+                            double loanAmount = savingRepo.getMemberTotalSavingsInCycle(cycle.getCycleId(), memb.getMemberId()) * 2;
                             double interestAmount = loanAmount * (cycle.getInterestRate()*0.01);
                             //Get Date Due for loans issued today
                             Calendar calDateDue = Calendar.getInstance();
@@ -338,7 +338,7 @@ public class SampleDataBuilderRepo {
                         //Issue loans to every 5th member that is present
                         if(memb.getMemberNo() % 5 == 0 ) {
                             //Get Loan Amount
-                            double loanAmount = savingRepo.getMemberTotalSavingsInCycle(cycle.getCycleId(), memb.getMemberId()) * 3;
+                            double loanAmount = savingRepo.getMemberTotalSavingsInCycle(cycle.getCycleId(), memb.getMemberId()) * 1;
                             double interestAmount = loanAmount * (cycle.getInterestRate()*0.01);
                             //Get Date Due for loans issued today
                             Calendar calDateDue = Calendar.getInstance();
@@ -382,7 +382,7 @@ public class SampleDataBuilderRepo {
                 try{
                     //Let all members be present
                     attendanceRepo.saveMemberAttendance(meeting.getMeetingId(),memb.getMemberId(),1);
-                    savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * ((memb.getMemberNo() % 5) + 1));
+                    savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * ((memb.getMemberNo() % 5)));
 
                     //Record loan repayments for the members that received loans in the previous meeting [a month ago]
                     if(memb.getMemberNo() % 5 == 0 && memb.getMemberNo() % 4 != 0) {
@@ -416,7 +416,7 @@ public class SampleDataBuilderRepo {
                     //Issue new Loan to Member 3 and 9
                     if(memb.getMemberNo() == 3 || memb.getMemberNo() == 9) {
                         //Get Loan Amount
-                        double loanAmount = savingRepo.getMemberTotalSavingsInCycle(cycle.getCycleId(), memb.getMemberId()) * 3;
+                        double loanAmount = savingRepo.getMemberTotalSavingsInCycle(cycle.getCycleId(), memb.getMemberId()) * 1;
                         double interestAmount = loanAmount * (cycle.getInterestRate()*0.01);
                         //Get Date Due for loans issued today
                         Calendar calDateDue = Calendar.getInstance();
@@ -466,7 +466,7 @@ public class SampleDataBuilderRepo {
                     //Issue new Loan to Member 2 and 7
                     if(memb.getMemberNo() == 2 || memb.getMemberNo() == 7) {
                         //Get Loan Amount
-                        double loanAmount = savingRepo.getMemberTotalSavingsInCycle(cycle.getCycleId(), memb.getMemberId()) * 3;
+                        double loanAmount = savingRepo.getMemberTotalSavingsInCycle(cycle.getCycleId(), memb.getMemberId()) * 1;
                         double interestAmount = loanAmount * (cycle.getInterestRate()*0.01);
                         //Get Date Due for loans issued today
                         Calendar calDateDue = Calendar.getInstance();

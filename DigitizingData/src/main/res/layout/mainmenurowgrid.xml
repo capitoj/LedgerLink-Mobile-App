@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_light_blue"
     android:focusable="false"
-    android:gravity="center_horizontal"
+    android:isScrollContainer="false"
+    android:scrollbars="none"
+    android:gravity="center"
     android:orientation="vertical">
     <!-- Change padding to adjust size of icons-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/item_image_layout"
-        android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
         android:layout_weight=".97">
 
@@ -23,8 +23,8 @@
             android:contentDescription="@string/image_content_desc"
             android:gravity="top"
             android:scaleType="fitCenter"
-            android:paddingTop="7dip"
-            android:paddingBottom="5dip"
+            android:paddingTop="4dip"
+            android:paddingBottom="4dip"
             android:paddingLeft="15dip"
             android:paddingRight="15dip"/>
     </LinearLayout>
@@ -32,7 +32,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="25dip"
-        android:layout_below="@+id/item_image_layout"
         android:layout_weight=".03">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView

@@ -8,7 +8,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +44,7 @@ import java.util.Date;
 /**
  * Created by Moses on 7/12/13.
  */
-public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
+public class MemberLoansIssuedHistoryActivity2 extends SherlockListActivity {
     ActionBar actionBar;
     String meetingDate;
     int meetingId;
@@ -58,18 +57,15 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     VslaCycleRepo vslaCycleRepo = null;
     ArrayList<MemberLoanIssueRecord> loansIssued;
     EditText txtInterestAmount;
-    TextView txtTotalLoanAmount;
     TextView lblCurrency;
     int targetCycleId = 0;
     double interestRate = 0.0;
+    TextView txtTotalLoanAmount;
     double theCurLoanAmount = 0.0;
-    double thePrincipalLoanAmount = 0.0;
     int currentLoanId = 0;
     boolean loanWasDeleted = false;
     LinearLayout issuedHistorySection;
     private boolean isEditOperation = false;
-    private double loanTopUp = 0.0;
-    private double totalCashInBox = 0.0;
 
     //Date stuff
     TextView txtDateDue;
@@ -106,16 +102,11 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             memberId = getIntent().getIntExtra("_memberId", 0);
         }
 
-        if (getIntent().hasExtra("_totalCashInBox")) {
-            totalCashInBox = getIntent().getDoubleExtra("_totalCashInBox", 0);
-        }
-
-
-        loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
-        meetingRepo = new MeetingRepo(MemberLoansIssuedHistoryActivity.this);
+        loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity2.this);
+        meetingRepo = new MeetingRepo(MemberLoansIssuedHistoryActivity2.this);
         targetMeeting = meetingRepo.getMeetingById(meetingId);
-        loanRepaymentRepo = new MeetingLoanRepaymentRepo((MemberLoansIssuedHistoryActivity.this));
-        vslaCycleRepo = new VslaCycleRepo(MemberLoansIssuedHistoryActivity.this);
+        loanRepaymentRepo = new MeetingLoanRepaymentRepo((MemberLoansIssuedHistoryActivity2.this));
+        vslaCycleRepo = new VslaCycleRepo(MemberLoansIssuedHistoryActivity2.this);
 
         //TextView txtOutstandingLoans = (TextView)findViewById(R.id.lblMLIssuedHOutstandingLoans);
 
@@ -126,7 +117,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         //Determine whether this is top up or edit on an existing Loan Repayment
         // Commented out for now as multiple loans are not yet enabled un comment to allow for issuing of multiple loans
         // MeetingLoanIssued memberLoan = loanIssuedRepo.getLoanIssuedToMemberInMeeting(meetingId, memberId);
-        final MeetingLoanIssued memberLoan = loanIssuedRepo.getUnclearedLoanIssuedToMember(memberId);
+        MeetingLoanIssued memberLoan = loanIssuedRepo.getUnclearedLoanIssuedToMember(memberId);
         if (null != memberLoan) {
             // Flag that this is an edit operation
             isEditOperation = true;
@@ -148,7 +139,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         txtLILoanNo.requestFocus();
 
         lblCurrency = (TextView) findViewById(R.id.lblMLIssuedHCurrencyTotal);
-        final EditText txtLoanAmount = (EditText) findViewById(R.id.txtMLIssuedHAmount);
+        EditText txtLoanAmount = (EditText) findViewById(R.id.txtMLIssuedHAmount);
 
         //TextView txtDateDue = (TextView)findViewById(R.id.txtMLIssuedHDateDue);
 
@@ -164,7 +155,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
                 //I want the Event Handler to handle both startDate and endDate
                 viewClicked = (TextView) view;
-                DatePickerDialog datePickerDialog = new DatePickerDialog(MemberLoansIssuedHistoryActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MemberLoansIssuedHistoryActivity2.this, mDateSetListener, mYear, mMonth, mDay);
                 //TODO: Enable this feature in API 11 and above
                 //datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.show();
@@ -195,114 +186,84 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         }
 
         txtLoanAmount.addTextChangedListener(new TextWatcher() {
-                                                 @Override
-                                                 public void afterTextChanged(Editable s) {
+            @Override
+            public void afterTextChanged(Editable s) {
 
-                                                 }
+            }
 
-                                                 @Override
-                                                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                                 }
+            }
 
-                                                 @Override
-                                                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                                                     // Compute the Interest
-                                                     double theAmount = 0.0;
-                                                     try {
-                                                         if (s.toString().length() <= 0) {
-                                                             lblCurrency.setVisibility(View.VISIBLE);
-                                                             txtTotalLoanAmount.setText("");
-                                                             return;
-                                                         }
-                                                         theAmount = Double.parseDouble(s.toString());
-                                                     } catch (Exception ex) {
-                                                         return;
-                                                     }
+                // Compute the Interest
+                double theAmount = 0.0;
+                try {
+                    if (s.toString().length() <= 0) {
+                        lblCurrency.setVisibility(View.VISIBLE);
+                        txtTotalLoanAmount.setText("");
+                        return;
+                    }
+                    theAmount = Double.parseDouble(s.toString());
+                } catch (Exception ex) {
+                    return;
+                }
 
-                                                     if (theAmount == 0.0) {
-                                                         txtDateDue.setText("none");
-                                                         lblCurrency.setVisibility(View.GONE);
-                                                     } else {
-                                                         lblCurrency.setVisibility(View.GONE);
-                                                         updateDisplay();
-                                                     }
+                if (theAmount == 0.0) {
+                    txtDateDue.setText("none");
+                    lblCurrency.setVisibility(View.GONE);
+                } else {
+                    lblCurrency.setVisibility(View.GONE);
+                    updateDisplay();
+                }
 
-                                                     double interestAmount = (interestRate * 0.01 * theAmount);
-                                                     double totalAmount = theAmount + interestAmount;
-                                                     if (isEditOperation) {
+                double interestAmount = (interestRate * 0.01 * theAmount);
+                txtInterestAmount.setText(String.format("%.0f", interestAmount));
 
-                                                         // Deal with topup
-                                                         if (memberLoan.getMeeting().getMeetingId() != meetingId) {
-                                                             if (theAmount > memberLoan.getPrincipalAmount()) {
-                                                                 Log.d("MLIHA", "Dealing with Top up");
-                                                                 loanTopUp = theAmount - memberLoan.getPrincipalAmount();
-                                                                 interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
-                                                                 /** Roll over?
-                                                                  * if(memberLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT))) <= 0) {
-                                                                  interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
-
-                                                                  } */
-                                                                 totalAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getLoanBalance() + loanTopUp;
-
-                                                             }
-                                                             if (memberLoan.getPrincipalAmount() == theAmount) {
-                                                                 interestAmount = memberLoan.getInterestAmount();
-                                                                 totalAmount = memberLoan.getLoanBalance();
-                                                                 txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
-                                                             }
-                                                         }
+                double totalAmount = theAmount + interestAmount;
+                txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
 
 
-                                                     }
+                //Have this value redundantly stored for future use
+                theCurLoanAmount = theAmount;
 
-                                                     // Set new values
-                                                     txtInterestAmount.setText(String.format("%.0f", interestAmount));
-                                                     txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
-
-                                                     //Have this value redundantly stored for future use
-                                                     theCurLoanAmount = theAmount;
-                                                     // Store for later validation
-                                                     thePrincipalLoanAmount = theAmount;
-                                                 }
-                                             }
-        );
+            }
+        });
 
 
         // Now deal with Loan Interest Manual Changes
-        txtInterestAmount.addTextChangedListener(new
+        txtInterestAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
 
-                                                         TextWatcher() {
-                                                             @Override
-                                                             public void afterTextChanged(Editable s) {
+            }
 
-                                                             }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                                             @Override
-                                                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-                                                             }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                                                             @Override
-                                                             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Compute the Interest
+                double theInterestAmount = 0.0;
+                try {
+                    if (s.toString().length() <= 0) {
+                        return;
+                    }
+                    theInterestAmount = Double.parseDouble(s.toString());
+                } catch (Exception ex) {
+                    return;
+                }
 
-                                                                 // Compute the Interest
-                                                                 double theInterestAmount = 0.0;
-                                                                 try {
-                                                                     if (s.toString().length() <= 0) {
-                                                                         return;
-                                                                     }
-                                                                     theInterestAmount = Double.parseDouble(s.toString());
-                                                                 } catch (Exception ex) {
-                                                                     return;
-                                                                 }
-
-                                                                 double totalAmount = theInterestAmount + theCurLoanAmount;
-                                                                 txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
-                                                             }
-                                                         }
-        );
+                double totalAmount = theInterestAmount + theCurLoanAmount;
+                txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
+            }
+        });
 
 
         // Display Members current loan if any
@@ -340,12 +301,12 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                         if (saveMemberLoan()) {
                             if (currentLoanId > 0) {
                                 if (loanWasDeleted) {
-                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, "The Loan has been cancelled.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MemberLoansIssuedHistoryActivity2.this, "The Loan has been cancelled.", Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, "The Loan has been edited successfully", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MemberLoansIssuedHistoryActivity2.this, "The Loan has been edited successfully", Toast.LENGTH_LONG).show();
                                 }
                             } else {
-                                Toast.makeText(MemberLoansIssuedHistoryActivity.this, "New Loan issued successfully", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MemberLoansIssuedHistoryActivity2.this, "New Loan issued successfully", Toast.LENGTH_LONG).show();
                             }
                             Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                             i.putExtra("_tabToSelect", "loansIssued");
@@ -394,7 +355,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     private void populateLoanIssueHistory() {
 
         if (loanIssuedRepo == null) {
-            loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
+            loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity2.this);
         }
 
         loansIssued = loanIssuedRepo.getAllLoansIssuedToMember(memberId);
@@ -408,7 +369,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         }
 
         // Now get the data via the adapter
-        LoansIssuedHistoryArrayAdapter adapter = new LoansIssuedHistoryArrayAdapter(MemberLoansIssuedHistoryActivity.this, loansIssued, "fonts/roboto-regular.ttf");
+        LoansIssuedHistoryArrayAdapter adapter = new LoansIssuedHistoryArrayAdapter(MemberLoansIssuedHistoryActivity2.this, loansIssued, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
         setListAdapter(adapter);
@@ -446,7 +407,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 }
                 return true;
             case R.id.mnuMLIssuedHCancel:
-                i = new Intent(MemberLoansIssuedHistoryActivity.this, MeetingActivity.class);
+                i = new Intent(MemberLoansIssuedHistoryActivity2.this, MeetingActivity.class);
                 i.putExtra("_tabToSelect", "loansIssued");
                 i.putExtra("_meetingDate", meetingDate);
                 i.putExtra("_meetingId", meetingId);
@@ -455,7 +416,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 return true;
             case R.id.mnuMLIssuedHSave:
                 if (saveMemberLoan()) {
-                    i = new Intent(MemberLoansIssuedHistoryActivity.this, MeetingActivity.class);
+                    i = new Intent(MemberLoansIssuedHistoryActivity2.this, MeetingActivity.class);
                     i.putExtra("_tabToSelect", "loansIssued");
                     i.putExtra("_meetingDate", meetingDate);
                     i.putExtra("_meetingId", meetingId);
@@ -482,47 +443,29 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             TextView txtDateDue = (TextView) findViewById(R.id.txtMLIssuedHDateDue);
 
             String amount = txtLoanAmount.getText().toString().trim();
-
             if (amount.length() < 1) {
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity2.this, "New Loan", "The Loan Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanAmount.requestFocus();
                 return false;
             } else {
                 theAmount = Double.parseDouble(amount);
-
-
                 //Loan Amounts for new loans must be positive
                 if (theAmount < 0.00 && currentLoanId > 0) {
-                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity2.this, "New Loan", "The Loan Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtLoanAmount.requestFocus();
                     return false;
-                } else {
-                    if (isEditOperation) {
-                        if (theAmount < theCurLoanAmount) {
-                            Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The new amount cannot be less than the original amount.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                            txtLoanAmount.requestFocus();
-                            return false;
-                        }
-
-                        if (totalCashInBox > 0) {
-                            if (theAmount > totalCashInBox) {
-                                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "You do not have enough money in the box to meet this loan amount.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                                txtLoanAmount.requestFocus();
-                                return false;
-                            }
-                        }
-                    }
                 }
             }
+
             String loanNo = txtLoanNo.getText().toString().trim();
             if (loanNo.length() < 1) {
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity2.this, "New Loan", "The Loan Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanNo.requestFocus();
                 return false;
             } else {
                 theLoanNo = Integer.parseInt(loanNo);
                 if (theLoanNo <= 0.00) {
-                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Number is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity2.this, "New Loan", "The Loan Number is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtLoanNo.requestFocus();
                     return false;
                 }
@@ -545,7 +488,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             } else {
                 theInterestAmount = Double.parseDouble(interestAmount);
                 if (theInterestAmount < 0.00) {
-                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue", "The Interest Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity2.this, "Loan Issue", "The Interest Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtInterestAmount.requestFocus();
                     return false;
                 }
@@ -556,7 +499,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             String dateDue = txtDateDue.getText().toString().trim();
             Date dtDateDue = Utils.getDateFromString(dateDue, Utils.DATE_FIELD_FORMAT);
             if (dtDateDue.before(targetMeeting.getMeetingDate()) || dtDateDue.equals(targetMeeting.getMeetingDate())) {
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue", "The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity2.this, "Loan Issue", "The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtDateDue.requestFocus();
                 return false;
             } else {
@@ -565,12 +508,14 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
             //Now Save the data
             if (null == loanIssuedRepo) {
-                loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
+                loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity2.this);
             }
 
-            if (isEditOperation) {
+            if (isEditOperation){
                 theBalance = Double.valueOf(txtTotalLoanAmount.getText().toString().trim().split(" ")[0]);
-            } else {
+            }
+
+            else {
                 theBalance = theInterestAmount + theAmount;
             }
             /** Commented out because designer says too; uncomment if designer decides otherwise
@@ -588,16 +533,8 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 return loanIssuedRepo.deleteLoan(currentLoanId);
             }
 
-            if (loanTopUp > 0.0) {
-               boolean success = meetingRepo.updateTopUp(meetingId, loanTopUp);
-                if (success){
-                    Log.d("MLIHA1", String.valueOf(success));
-                } else {
-                    Log.d("MLIHA", String.valueOf(success));
-                }
-            }
-
             return loanIssuedRepo.saveMemberLoanIssue(meetingId, memberId, theLoanNo, theAmount, theInterestAmount, theBalance, theDateDue, theComment, isEditOperation);
+
         } catch (Exception ex) {
             ex.printStackTrace();
             //Log.e("MemberLoansIssuedHistory.saveMemberLoan", ex.getMessage());
@@ -625,7 +562,6 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     }
 
     //Displays the selected Date in the TextView
-
     private void updateDisplay() {
         if (viewClicked != null) {
             dateString = (new StringBuilder()

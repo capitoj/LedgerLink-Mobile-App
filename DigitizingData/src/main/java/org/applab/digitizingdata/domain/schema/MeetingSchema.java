@@ -17,12 +17,13 @@ public class MeetingSchema {
     public static final String COL_MT_CASH_FROM_BOX = "CashFromBox";
     public static final String COL_MT_CASH_FROM_BOX_COMMENT = "CashFromBoxComment";
     public static final String COL_MT_CASH_FROM_BANK = "CashFromBank";
+    public static final String COL_MT_LOAN_TOP_UPS = "LoanTopUps";
     public static final String COL_MT_CASH_FINES = "CashFines";
     public static final String COL_MT_CASH_WELFARE = "CashWelfare";
     public static final String COL_MT_CASH_EXPENSES = "CashExpenses";
     public static final String COL_MT_CASH_SAVED_BOX = "CashSavedBox";
     public static final String COL_MT_CASH_SAVED_BANK = "CashSavedBank";
-    public static final String COL_MT_IS_GETTINGS_STARTED_WIZARD = "IsGettingStartedWizard";
+    public static final String COL_MT_IS_GETTING_STARTED_WIZARD = "IsGettingStartedWizard";
     public static final String COL_MT_IS_MARKED_FOR_DELETION = "IsMarkedForDeletion";
 
     public static String getCreateTableScript() {
@@ -42,12 +43,13 @@ public class MeetingSchema {
         sb.append(COL_MT_CASH_FROM_BOX + " NUMERIC ,");
         sb.append(COL_MT_CASH_FROM_BANK + " NUMERIC ,");
         sb.append(COL_MT_CASH_FROM_BOX_COMMENT + " TEXT ,");
+        sb.append(COL_MT_LOAN_TOP_UPS + " NUMERIC ,");
         sb.append(COL_MT_CASH_FINES + " NUMERIC ,");
         sb.append(COL_MT_CASH_WELFARE + " NUMERIC ,");
         sb.append(COL_MT_CASH_EXPENSES + " NUMERIC ,");
         sb.append(COL_MT_CASH_SAVED_BOX + " NUMERIC ,");
         sb.append(COL_MT_CASH_SAVED_BANK + " NUMERIC ,");
-        sb.append(COL_MT_IS_GETTINGS_STARTED_WIZARD + " INTEGER ,");
+        sb.append(COL_MT_IS_GETTING_STARTED_WIZARD + " INTEGER ,");
         sb.append(COL_MT_IS_MARKED_FOR_DELETION + " INTEGER");
         sb.append(")");
 
@@ -75,12 +77,13 @@ public class MeetingSchema {
         sb.append(COL_MT_CASH_FROM_BOX + ",");
         sb.append(COL_MT_CASH_FROM_BOX_COMMENT + ",");
         sb.append(COL_MT_CASH_FROM_BANK + ",");
+        sb.append(COL_MT_LOAN_TOP_UPS + ",");
         sb.append(COL_MT_CASH_FINES + ",");
         sb.append(COL_MT_CASH_WELFARE + ",");
         sb.append(COL_MT_CASH_EXPENSES + ",");
         sb.append(COL_MT_CASH_SAVED_BOX + ",");
         sb.append(COL_MT_CASH_SAVED_BANK + ",");
-        sb.append(COL_MT_IS_GETTINGS_STARTED_WIZARD);
+        sb.append(COL_MT_IS_GETTING_STARTED_WIZARD);
         //sb.append(COL_MT_IS_MARKED_FOR_DELETION); will enable this later. when implementing UNDO feature
         return sb.toString();
     }

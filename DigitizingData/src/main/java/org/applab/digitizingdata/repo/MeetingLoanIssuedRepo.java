@@ -279,7 +279,7 @@ public class MeetingLoanIssuedRepo {
             if (cursor != null && cursor.moveToFirst()) {
                 loansIssued = cursor.getDouble(cursor.getColumnIndex("TotalIssues"));
             }
-
+            Log.d("MR LI", String.valueOf(loansIssued));
             return loansIssued;
         } catch (Exception ex) {
             Log.e("MeetingLoanIssuedRepo.getTotalLoansIssuedInMeeting", ex.getMessage());
