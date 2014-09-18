@@ -130,6 +130,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         if (null != memberLoan) {
             // Flag that this is an edit operation
             isEditOperation = true;
+            thePrincipalLoanAmount = memberLoan.getPrincipalAmount();
         }
 
         TextView lblInterestDesc = (TextView) findViewById(R.id.lblMLIssuedHInterestDesc);
@@ -264,7 +265,6 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                                                      //Have this value redundantly stored for future use
                                                      theCurLoanAmount = theAmount;
                                                      // Store for later validation
-                                                     thePrincipalLoanAmount = theAmount;
                                                  }
                                              }
         );
@@ -498,8 +498,8 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                     return false;
                 } else {
                     if (isEditOperation) {
-                        if (theAmount < theCurLoanAmount) {
-                            Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The new amount cannot be less than the original amount.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                        if (theAmount < thePrincipalLoanAmount) {
+                            Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The new amount should be more than the original amount.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                             txtLoanAmount.requestFocus();
                             return false;
                         }
@@ -590,11 +590,6 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
             if (loanTopUp > 0.0) {
                boolean success = meetingRepo.updateTopUp(meetingId, loanTopUp);
-                if (success){
-                    Log.d("MLIHA1", String.valueOf(success));
-                } else {
-                    Log.d("MLIHA", String.valueOf(success));
-                }
             }
 
             return loanIssuedRepo.saveMemberLoanIssue(meetingId, memberId, theLoanNo, theAmount, theInterestAmount, theBalance, theDateDue, theComment, isEditOperation);
