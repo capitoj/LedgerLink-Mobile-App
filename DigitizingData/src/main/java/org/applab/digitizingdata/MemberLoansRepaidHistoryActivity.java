@@ -127,10 +127,16 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
         // Get current cycle interest rate
         TextView lblInterestDesc = (TextView) findViewById(R.id.lblMLRepayHInterestDesc);
-        if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
+     /**   if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
             cycle = vslaCycleRepo.getCycle(targetCycleId);
             lblInterestDesc.setText(String.format("at %.0f%% every 30 days", cycle.getInterestRate()));
+        } */
+
+        // Get the Interest Rate for the Current Cycle
+        if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
+            interestRate = targetMeeting.getVslaCycle().getInterestRate();
+            lblInterestDesc.setText(String.format("at %.0f%% every 30 days", interestRate));
         }
 
         // Get Loan Number of currently running loan
@@ -246,9 +252,9 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             // If it is not an edit operation then initialize the date. Otherwise, retain the date pulled from db
             String dtNextDateDue = txtDateDue.getText().toString().trim();
             if (!isEditOperation) {
+
                 // If loan repayment is due
                 if (recentLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT))) <= 0) {
-                    Log.d("MLRHA2", "dbValue " + recentLoan.getDateDue() + " not Db value " + targetMeeting.getMeetingDate() + " " + recentLoan.getDateDue().compareTo(targetMeeting.getMeetingDate()));
                     initializeDate();
                 }
 
@@ -281,7 +287,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             // Setup the Default Date. Not sure whether I should block this off when editing a loan repayment
             if (!isEditOperation) {
                 if (recentLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT))) <= 0) {
-                    Log.d("MLRHA1", "dbValue " + recentLoan.getDateDue() + " not Db value " + targetMeeting.getMeetingDate() + " " + recentLoan.getDateDue().compareTo(targetMeeting.getMeetingDate()));
 
                     //TODO: Set the default Date to be MeetingDate + 1Month, instead of using today's date
                     final Calendar c = Calendar.getInstance();
@@ -344,11 +349,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         editTextInterestRate = (EditText) findViewById(R.id.txtMLRepayHInterest);
         txtRolloverAmount = (TextView) findViewById(R.id.txtMLRepayHTotal);
         txtLoanBalance = (TextView) findViewById(R.id.txtMLRepayHBalance);
-
-        // First get the Interest Rate for the Current Cycle
-        if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
-            interestRate = targetMeeting.getVslaCycle().getInterestRate();
-        }
 
         EditText txtRepaymentAmount = (EditText) findViewById(R.id.txtMLRepayHAmount);
         txtRepaymentAmount.addTextChangedListener(new TextWatcher() {
