@@ -28,6 +28,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.MeetingStartingCash;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
@@ -581,6 +582,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         double totalFines = 0.0;
         double actualStartingCash = 0.0;
         double expectedStartingCash = 0.0;
+        MeetingStartingCash previousMeetingClosure = null;
         double cashTakenToBank = 0.0;
         String comment = "Closing";
         boolean successFlg = false;
@@ -598,11 +600,16 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         if (previousMeeting != null) {
             meetingId = previousMeeting.getMeetingId();
 
+            previousMeetingClosure = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
+
             totalSavings = savingRepo.getTotalSavingsInMeeting(previousMeeting.getMeetingId());
             totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(previousMeeting.getMeetingId());
             totalLoansRepaid = loanRepaymentRepo.getTotalLoansRepaidInMeeting(previousMeeting.getMeetingId());
             totalFines = fineRepo.getTotalFinesPaidInThisMeeting(previousMeeting.getMeetingId());
-            expectedStartingCash = totalSavings + totalLoansRepaid + totalFines - totalLoansIssued;
+            actualStartingCash = previousMeetingClosure.getActualStartingCash();
+            cashTakenToBank = previousMeetingClosure.getCashSavedInBank();
+            expectedStartingCash = actualStartingCash + totalSavings + totalLoansRepaid + totalFines - totalLoansIssued - cashTakenToBank;
+            Log.d("MA exprevnotnull", String.valueOf(expectedStartingCash));
 
             if (previousMeeting.isGettingStarted()) {
                 expectedStartingCash = previousMeeting.getVslaCycle().getFinesAtSetup() + previousMeeting.getVslaCycle().getInterestAtSetup() + totalSavings;

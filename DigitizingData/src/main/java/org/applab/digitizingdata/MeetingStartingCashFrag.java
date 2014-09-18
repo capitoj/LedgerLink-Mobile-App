@@ -142,8 +142,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
         loanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
         loanRepaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
 
-// Lock fields in read-only mode
-
+        // Lock fields in read-only mode
         //Do not invoke the event when in Read only Mode
         if (parentActivity.isViewOnly()) {
             Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
@@ -249,11 +248,13 @@ public class MeetingStartingCashFrag extends SherlockFragment {
     }
 
     public boolean saveStartingCash() {
+        txtActualCashInBox = (TextView) getSherlockActivity().findViewById(R.id.txtActualStartingCash);
         if (parentActivity.isViewOnly()) {
             return false;
         }
+        theCashFromBox = expectedStartingCash;
         try {
-            txtActualCashInBox = (TextView) getSherlockActivity().findViewById(R.id.txtActualStartingCash);
+
             String amountBox = txtActualCashInBox.getText().toString().trim();
             if (amountBox.length() < 1) {
                 //Allow it to be Zero

@@ -549,12 +549,6 @@ public class MeetingRepo {
                 startingCash.setComment(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT)));
                 // startingCash.setActualStartingCash(MeetingSchema.COL_MT_CASH_FINES, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FINES)));
                 startingCash.setExpectedStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
-                /**  startingCash.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
-                 startingCash.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
-                 startingCash.put(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT, cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT)));
-                 startingCash.put(MeetingSchema.COL_MT_CASH_FINES, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FINES)));
-                 startingCash.put(MeetingSchema.COL_MT_CASH_SAVED_BOX, cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
-                 */
 
                 return startingCash;
             } else {
@@ -583,7 +577,7 @@ public class MeetingRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
 
             // Select All Query
-            String selectQuery = String.format("SELECT IFNULL(%s,0) AS %s, %s AS %s, %s AS %s, %s AS %s FROM %s WHERE %s=%d",
+            String selectQuery = String.format("SELECT IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s FROM %s WHERE %s=%d",
                     MeetingSchema.COL_MT_CASH_FROM_BOX, MeetingSchema.COL_MT_CASH_FROM_BOX,
                     MeetingSchema.COL_MT_CASH_SAVED_BOX, MeetingSchema.COL_MT_CASH_SAVED_BOX,
                     MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT, MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT,
@@ -672,9 +666,11 @@ public class MeetingRepo {
             // Inserting or UpdatingRow
             long retVal = -1;
             if (performUpdate) {
+                Log.d("MR", "update");
                 retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                         new String[]{String.valueOf(meetingId)});
             } else {
+                Log.d("MR", "insert");
                 retVal = db.insert(MeetingSchema.getTableName(), null, values);
             }
 
@@ -738,8 +734,8 @@ public class MeetingRepo {
              *
              values.put(MeetingSchema.COL_MT_CASH_WELFARE, cashWelfare);
              values.put(MeetingSchema.COL_MT_CASH_EXPENSES, cashExpenses); */
-            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cashSavedBox);
-            values.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cashSavedBank);
+            values.put(MeetingSchema.COL_MT_CASH_SAVED_BOX, cashSavedBox);
+            values.put(MeetingSchema.COL_MT_CASH_SAVED_BANK, cashSavedBank);
             long retVal = -1;
             retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                     new String[]{String.valueOf(meetingId)});
@@ -940,11 +936,10 @@ public class MeetingRepo {
             String columnList = MeetingSchema.getColumnList();
 
             // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d AND %s<%d AND %s ISNULL OR %s<>%d ORDER BY %s DESC LIMIT 1",
+            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d AND %s<%d AND %s<>%d ORDER BY %s DESC LIMIT 1",
                     columnList, MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_CYCLE_ID, vslaCycleId,
                     MeetingSchema.COL_MT_MEETING_ID, meetingId,
-                    MeetingSchema.COL_MT_IS_MARKED_FOR_DELETION,
                     MeetingSchema.COL_MT_IS_MARKED_FOR_DELETION, 1,
                     MeetingSchema.COL_MT_MEETING_ID);
             cursor = db.rawQuery(selectQuery, null);
@@ -1497,7 +1492,7 @@ Log.d("MR", selectQuery);
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             String sumQuery = String.format("SELECT %s AS cashToBank FROM %s WHERE %s=%d",
-                    MeetingSchema.COL_MT_CASH_FROM_BANK, MeetingSchema.getTableName(),
+                    MeetingSchema.COL_MT_CASH_SAVED_BANK, MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_MEETING_ID, meetingId);
             cursor = db.rawQuery(sumQuery, null);
 
