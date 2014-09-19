@@ -679,7 +679,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
         txtLoanAmount.setText(String.format("%.0f", member.getOutstandingLoanOnSetup()));
         TextView txtLoanNumber = (TextView) findViewById(R.id.txtNCGSWOutstandingLoanNumber);
-        txtLoanNumber.setText(String.format("%.0f", member.getOutstandingLoanNumberOnSetup()));
+        txtLoanNumber.setText(String.valueOf(member.getOutstandingLoanNumberOnSetup()));
 
 
         //populate the next repayment date

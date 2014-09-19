@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingStartingCash;
@@ -50,6 +49,10 @@ public class MeetingStartingCashFrag extends SherlockFragment {
     MeetingLoanRepaymentRepo loanRepaymentRepo;
     ScrollView fragmentView;
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,12 +94,12 @@ public class MeetingStartingCashFrag extends SherlockFragment {
         populateStartingCash();
     }
 
-    @Override
+   /** @Override
     public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
         menu.clear();
         // getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_starting_cash, menu);
         super.onCreateOptionsMenu(menu, inflater);
-    }
+    } */
 
     @Override
     public void onPause() {
@@ -107,22 +110,6 @@ public class MeetingStartingCashFrag extends SherlockFragment {
         }
         if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
             saveStartingCash();
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                return false;
-            /**  case R.id.mnuSMDSend:
-             return false;
-             case R.id.mnuSMDCancel:
-             return false; */
-            case R.id.mnuMCBFSave:
-                return false;
-            default:
-                return false;
         }
     }
 

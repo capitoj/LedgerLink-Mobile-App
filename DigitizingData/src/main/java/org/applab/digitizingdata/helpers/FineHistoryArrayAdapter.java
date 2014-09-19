@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
@@ -128,27 +127,6 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
                 txtFineType.setText(fineRecord.getFineTypeName());
                 chkMemberFineStatus.setChecked(fineRecord.getStatus() != 0);
             }
-            // Find the textview and the button defined in the layout
-           //TextView textView = (TextView) rowView.findViewById(R.id.textView);
-            Button button = (Button) rowView.findViewById(R.id.undobar_button);
-           /** button.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(context, "Deletion undone", Toast.LENGTH_LONG).show();
-                           viewContainer.setVisibility(View.GONE);
-                                // Return the item at its previous position again
-                                //mAdapter.insert(itemToDelete, position);
-                        }
-                    }); */
-            //showUndo(viewContainer);
-
-/** Get the item from the array
-            String country = countries[position];
-
-// Set the country as the textview label
-            textView.setText(country); */
-
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

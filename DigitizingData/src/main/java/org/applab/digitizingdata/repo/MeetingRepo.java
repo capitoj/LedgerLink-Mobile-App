@@ -535,7 +535,7 @@ public class MeetingRepo {
             String selectQuery = String.format("SELECT IFNULL(%s,0) AS %s, %s AS %s, IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s, IFNULL(%s,0) AS %s FROM %s WHERE %s=%d",
                     MeetingSchema.COL_MT_CASH_FROM_BOX, MeetingSchema.COL_MT_CASH_FROM_BOX,
                     MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT, MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT,
-                    MeetingSchema.COL_MT_CASH_FROM_BANK, MeetingSchema.COL_MT_CASH_FROM_BANK,
+                    MeetingSchema.COL_MT_CASH_SAVED_BANK, MeetingSchema.COL_MT_CASH_SAVED_BANK,
                     MeetingSchema.COL_MT_CASH_SAVED_BOX, MeetingSchema.COL_MT_CASH_SAVED_BOX,
                     MeetingSchema.COL_MT_CASH_FINES, MeetingSchema.COL_MT_CASH_FINES,
                     MeetingSchema.COL_MT_LOAN_TOP_UPS, MeetingSchema.COL_MT_LOAN_TOP_UPS,
@@ -545,7 +545,7 @@ public class MeetingRepo {
 
             // looping through all rows and adding to list
             if (cursor != null && cursor.moveToFirst()) {
-                startingCash.setCashSavedInBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
+                startingCash.setCashSavedInBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BANK)));
                 startingCash.setActualStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
                 startingCash.setComment(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT)));
                 startingCash.setExpectedStartingCash(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));

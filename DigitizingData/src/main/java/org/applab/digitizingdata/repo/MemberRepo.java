@@ -256,6 +256,7 @@ public class MemberRepo {
         if (loanIssuedToMemberInMeeting == null) {
             member.setOutstandingLoanOnSetup(0);
         } else {
+            member.setOutstandingLoanNumberOnSetup(loanIssuedToMemberInMeeting.getLoanNo());
             member.setOutstandingLoanOnSetup(loanIssuedToMemberInMeeting.getLoanBalance());
             member.setDateOfFirstRepayment(loanIssuedToMemberInMeeting.getDateDue());
         }

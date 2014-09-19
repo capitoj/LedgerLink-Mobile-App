@@ -111,7 +111,6 @@ public class MeetingCashBookFrag extends SherlockFragment {
 
     private void populateCashBookFields() {
 
-
         TextView lblTotalCashInBox = (TextView) getSherlockActivity().findViewById(R.id.lblTotalCashInBox);
         TextView lblExpectedStartingCash = (TextView) getSherlockActivity().findViewById(R.id.lblExpectedStartingCash);
         TextView lblActualStartingCash = (TextView) getSherlockActivity().findViewById(R.id.lblActualStartingCash);
@@ -191,7 +190,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
             if (!currentStartingCashDetails.getComment().isEmpty()) {
                 comment = currentStartingCashDetails.getComment();
             }
-
+            Log.d("MCB acts", String.valueOf(totalCashInBox));
             lblTotalCashInBox.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
             lblExpectedStartingCash.setText(String.format("Expected Starting Cash %,.0f UGX", expectedStartingCash));
             lblActualStartingCash.setText(String.format("Actual Starting Cash %,.0f UGX", actualStartingCash));
@@ -217,9 +216,10 @@ public class MeetingCashBookFrag extends SherlockFragment {
         if (parentActivity.isViewOnly()) {
             return;
         }
+        double theCashToBank = 0.0;
         if (validate()) {
             txtCashToBankAmount = (EditText) getSherlockActivity().findViewById(R.id.txtCashToBank);
-            double theCashToBank = Double.valueOf(txtCashToBankAmount.getText().toString());
+            theCashToBank = Double.valueOf(txtCashToBankAmount.getText().toString());
 
             Log.d("MCB2 acts", String.valueOf(totalCashInBox));
             Log.d("MCB3 acts", String.valueOf(theCashToBank));

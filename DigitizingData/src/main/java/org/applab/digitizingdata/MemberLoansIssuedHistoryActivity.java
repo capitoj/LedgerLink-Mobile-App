@@ -491,11 +491,19 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 theAmount = Double.parseDouble(amount);
 
 
-                //Loan Amounts for new loans must be positive
+                // Loan Amounts for new loans must be positive
                 if (theAmount < 0.00 && currentLoanId > 0) {
                     Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtLoanAmount.requestFocus();
                     return false;
+                } else if (totalCashInBox > 0) {
+                    Log.d("MLIA TCIB", "Nomoney");
+                    if (theAmount > totalCashInBox) {
+                        Log.d("MLIA TCIB", "Nomoney alert");
+                        Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "You do not have enough money in the box to meet this loan amount.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                        txtLoanAmount.requestFocus();
+                        return false;
+                    }
                 } else {
                     if (isEditOperation) {
                         if (theAmount < thePrincipalLoanAmount) {
@@ -504,13 +512,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                             return false;
                         }
 
-                        if (totalCashInBox > 0) {
-                            if (theAmount > totalCashInBox) {
-                                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "You do not have enough money in the box to meet this loan amount.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                                txtLoanAmount.requestFocus();
-                                return false;
-                            }
-                        }
+
                     }
                 }
             }
@@ -589,7 +591,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             }
 
             if (loanTopUp > 0.0) {
-               boolean success = meetingRepo.updateTopUp(meetingId, loanTopUp);
+                boolean success = meetingRepo.updateTopUp(meetingId, loanTopUp);
             }
 
             return loanIssuedRepo.saveMemberLoanIssue(meetingId, memberId, theLoanNo, theAmount, theInterestAmount, theBalance, theDateDue, theComment, isEditOperation);

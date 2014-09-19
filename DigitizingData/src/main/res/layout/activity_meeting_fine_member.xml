@@ -34,7 +34,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:choiceMode="singleChoice"
-        android:layout_below="@id/frmMFine_top_control_bar">
+        android:layout_below="@id/frmMFine_top_control_bar"
+        android:divider="@null"
+        android:dividerHeight="0dp">
 
     </ListView>
 

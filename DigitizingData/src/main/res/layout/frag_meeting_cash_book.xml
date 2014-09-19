@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="Total Cash In Box 1,000,000 UGX" />
+            android:text="Total Cash In Box 0 UGX" />
 
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -33,28 +33,28 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblCashCollected"
-            android:text="Expected Starting Cash XX UGX" />
+            android:text="Expected Starting Cash 0 UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblActualStartingCash"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblExpectedStartingCash"
-            android:text="Actual Starting Cash XX UGX" />
+            android:text="Actual Starting Cash 0 UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblCashDifference"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblActualStartingCash"
-            android:text="Difference XX UGX (Between actual amount and expected amount)" />
+            android:text="Difference 0 UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblCashBookComment"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblCashDifference"
-            android:text="Picked from comment entered on starting cash page " />
+            android:text="Comment  " />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/SubHeading"
@@ -70,28 +70,28 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblSavings"
-            android:text="Savings XX UGX" />
+            android:text="Savings 0 UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblLoanRepayments"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblSavings"
-            android:text="Loan Repayments XX UGX" />
+            android:text="Loan Repayments 0 UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblFines"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblLoanRepayments"
-            android:text="Fines XX UGX" />
+            android:text="Fines 0 UGX" />
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblNewLoans"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblFines"
-            android:text="New Loans XX UGX " />
+            android:text="New Loans 0 UGX " />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/SubHeading"
@@ -124,7 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/lblCashToBankAmount"
             android:inputType="number"
-            android:text="" />
+            android:text="0" />
     </LinearLayout>
 </ScrollView>
 

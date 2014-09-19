@@ -598,7 +598,8 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         previousMeeting = meetingRepo.getPreviousMeeting(meetingRepo.getMeetingById(targetMeetingId).getVslaCycle().getCycleId(), targetMeetingId);
 
         if (previousMeeting != null) {
-            meetingId = previousMeeting.getMeetingId();
+            //meetingId = previousMeeting.getMeetingId();
+            meetingId = targetMeetingId;
 
             previousMeetingClosure = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
 
@@ -609,7 +610,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             actualStartingCash = previousMeetingClosure.getActualStartingCash();
             cashTakenToBank = previousMeetingClosure.getCashSavedInBank();
             expectedStartingCash = actualStartingCash + totalSavings + totalLoansRepaid + totalFines - totalLoansIssued - cashTakenToBank;
-            Log.d("MA exprevnotnull", String.valueOf(expectedStartingCash));
+            Log.d("MA exprevnotnull", "Meeting Id "+ meetingId +" "+ "actSC "+ actualStartingCash +" "+ "cashTskenToBnk "+ cashTakenToBank +" "+String.valueOf(expectedStartingCash));
 
             if (previousMeeting.isGettingStarted()) {
                 expectedStartingCash = previousMeeting.getVslaCycle().getFinesAtSetup() + previousMeeting.getVslaCycle().getInterestAtSetup() + totalSavings;

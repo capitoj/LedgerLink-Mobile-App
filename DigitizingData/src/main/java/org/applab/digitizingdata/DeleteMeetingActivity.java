@@ -97,7 +97,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
             totalLoansRepaidInMeeting = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
             txtLoanRepayments.setText(String.format("Loans repaid: %,.0f %s", totalLoansRepaidInMeeting, getResources().getString(R.string.operating_currency)));
 
-            totalFinesCollected = fineRepo.getTotalFinesInMeeting(meetingId);
+            totalFinesCollected = fineRepo.getTotalFinesPaidInThisMeeting(meetingId);
             txtFines.setText(String.format("Fines: %,.0f %s", totalFinesCollected, getResources().getString(R.string.operating_currency)));
 
             totalLoansIssuedInMeeting = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);

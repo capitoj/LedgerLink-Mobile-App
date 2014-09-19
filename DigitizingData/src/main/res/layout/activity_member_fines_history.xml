@@ -21,7 +21,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dip"
-            android:text="Check box to indicate paid. Swipe to delete." />
+            android:text="Check box to indicate paid. Swipe to delete."/>
+        <!-- android:text="Check box to indicate paid. Swipe to delete."/> -->
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -121,11 +122,15 @@
                 android:choiceMode="singleChoice" /> -->
 
            <!-- <de.timroes.android.listview.EnhancedListView -->
-            <org.applab.digitizingdata.helpers.EnhancedListView
+          <!--  <org.applab.digitizingdata.helpers.EnhancedListView -->
+            <ListView
                   android:id="@android:id/list"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
-                  android:choiceMode="singleChoice" />
+                  android:choiceMode="singleChoice"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@android:id/empty"

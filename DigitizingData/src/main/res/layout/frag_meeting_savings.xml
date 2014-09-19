@@ -27,7 +27,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:choiceMode="singleChoice"
-        android:layout_below="@id/frmMSavF_top_control_bar">
+        android:layout_below="@id/frmMSavF_top_control_bar"
+        android:divider="@null"
+        android:dividerHeight="0dp">
 
     </ListView>
 
