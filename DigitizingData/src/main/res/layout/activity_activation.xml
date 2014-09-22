@@ -122,7 +122,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/btnVAActivate"
                 android:textSize="14sp"
-                android:text="Need help? Please call 078000000"
+                android:text="@string/help"
                 android:layout_alignLeft="@id/btnVAActivate"/>
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView

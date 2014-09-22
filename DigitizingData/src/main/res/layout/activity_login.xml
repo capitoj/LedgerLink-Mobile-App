@@ -87,7 +87,7 @@
             android:layout_alignLeft="@id/btnLogin"
             android:layout_below="@id/btnLogin"
             android:layout_marginTop="2dp"
-            android:text="Forgot your pass key: \nPlease call 078000000"
+            android:text="@string/help"
             android:textSize="14sp" />
         <!--  <TextView
               android:id="@+id/lblSISwitchMode"
