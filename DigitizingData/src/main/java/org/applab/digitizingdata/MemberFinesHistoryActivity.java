@@ -195,7 +195,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
         swipeListView.setAdapter(swipeViewAdapter); */
         //Now get the data via the adapter
-        FineHistoryArrayAdapter adapter = new FineHistoryArrayAdapter(MemberFinesHistoryActivity.this, fines, "fonts/roboto-regular.ttf");
+        FineHistoryArrayAdapter adapter = new FineHistoryArrayAdapter(MemberFinesHistoryActivity.this, meetingId, fines, "fonts/roboto-regular.ttf");
 
         //Assign Adapter to ListView
         setListAdapter(adapter);

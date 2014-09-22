@@ -36,12 +36,14 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
     VslaCycle currentCycle;
     String datePaid;
     private View viewContainer;
+    int meetingId;
 
-    public FineHistoryArrayAdapter(Context context, ArrayList<MemberFineRecord> values, String font) {
+    public FineHistoryArrayAdapter(Context context, int meetingId, ArrayList<MemberFineRecord> values, String font) {
         super(context, R.layout.row_fines_history, values);
         this.context = context;
         this.values = values;
         this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.meetingId = meetingId;
 
         finesRepo = new MeetingFineRepo(getContext());
         fineTypeRepo = new FineTypeRepo(getContext());
@@ -89,7 +91,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
                                                                        datePaid = "";
                                                                    }
 
-                                                                   // finesRepo.updateMemberFineStatus(ineRecord.getFineId(), fineRecord.getStatus(), datePaid);
+                                                                   finesRepo.updateMemberFineStatus(meetingId, fineRecord.getFineId(), fineRecord.getStatus(), datePaid);
                                                                }
                                                            }
             );
@@ -104,8 +106,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
             txtFineType.setTypeface(typeface);
 
 
-            if (fineRecord != null)
-            {
+            if (fineRecord != null) {
                 txtFineMeetingDate.setText(String.format(Utils.formatDate(fineRecord.getMeetingDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
                 txtFineAmount.setText(String.format("%,.0fUGX", fineRecord.getAmount()));
 
@@ -135,17 +136,15 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
     }
 
 
-
     /** public static void showUndo(final View viewContainer) {
-        viewContainer.setVisibility(View.VISIBLE);
-        viewContainer.setAlpha(1);
-       /** viewContainer.animate().alpha(0.4f).setDuration(5000)
-                .withEndAction(new Runnable() {
+     viewContainer.setVisibility(View.VISIBLE);
+     viewContainer.setAlpha(1);
+     /** viewContainer.animate().alpha(0.4f).setDuration(5000)
+     .withEndAction(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        viewContainer.setVisibility(View.GONE);
-                    }
-                }); */
+    @Override public void run() {
+    viewContainer.setVisibility(View.GONE);
+    }
+    }); */
 
 }
