@@ -39,7 +39,7 @@
     <string name="operating_currency">UGX</string>
     <string name="minimum_passkey_length">5</string>
     <string name="loan_repayment_instruction">If a payment is NOT due and no payment is made, press cancel. If a payment is due but not made enter 0 (zero) for payment amount. After entering payment, review new balance.</string>
-    <string name="loan_repayment_instruction2">Review new balance and edit interest and next payment date if neccessary.</string>
+    <string name="loan_repayment_instruction2">Review new balance and edit interest and next payment date if necessary.</string>
     <string name="loan_issue_instruction">Changing the interest added will change the interest rate for the loan. Changing the date due will change how often payments must be made for the life of the loan.</string>
 
     <!-- Fine Type strings -->
