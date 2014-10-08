@@ -277,6 +277,19 @@
                 android:inputType="text"
                 android:text="" />
 
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblRvwMembersLoanNumber"
+                style="@style/RegularText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loan number for this member's regular loan outstanding" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceEditText
+                android:id="@+id/txtAMMOutstandingLoanNumber"
+                style="@style/NormalEditText"
+                android:layout_width="100dip"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleLoansLabel"
@@ -333,6 +346,23 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
+                android:text="" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblNCAMMLoanNextRepaymentDate"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="When is the next repayment expected for this loan" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtAMMLoanNextRepaymentDate"
+                style="@style/TextAccentColor"
+                android:layout_width="150dip"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="true"
                 android:text="" />
 
 

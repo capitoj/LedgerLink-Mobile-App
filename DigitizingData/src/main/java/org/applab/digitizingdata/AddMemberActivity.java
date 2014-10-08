@@ -1,21 +1,23 @@
 package org.applab.digitizingdata;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.telephony.PhoneNumberUtils;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -24,9 +26,9 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.Utils;
@@ -36,6 +38,7 @@ import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Moses on 7/15/13.
@@ -48,13 +51,31 @@ public class AddMemberActivity extends SherlockActivity {
     private boolean selectedFinishButton = false;
     private String dlgTitle = "Add Member";
     private int meetingId;
-   private MeetingFineRepo fineRepo;
+    private MeetingFineRepo fineRepo;
     private MeetingRepo meetingRepo;
     MemberRepo repo;
     Meeting targetMeeting;
     private boolean isEditAction;
+
+    TextView viewClicked;
+    protected int mYear;
+    protected int mMonth;
+    protected int mDay;
+
     public Spinner cboAMMemberNo;
+    TextView txtAMMLoanNextRepaymentDate;
+    TextView txtAMMLoanNumber;
     protected boolean isGettingStartedMode = false; //flags whether we are in wizard mode
+
+    //Event that is raised when the date has been set
+    protected DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            mYear = year;
+            mMonth = monthOfYear;
+            mDay = dayOfMonth;
+            updateDisplay();
+        }
+    };
 
 
 
@@ -66,19 +87,19 @@ public class AddMemberActivity extends SherlockActivity {
 
     //This method initializes this activity
     //It is overiden in GSW Add member activity so as to load the relevant layout
-    protected void initializeActivity()
-    {
+    protected void initializeActivity() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        if(getIntent().hasExtra("_meetingId")) {
+        if (getIntent().hasExtra("_meetingId")) {
             meetingId = getIntent().getIntExtra("_meetingId", 0);
         }
-        if(getIntent().hasExtra("_id")){
-            this.selectedMemberId = getIntent().getIntExtra("_id",0);
+        if (getIntent().hasExtra("_id")) {
+            this.selectedMemberId = getIntent().getIntExtra("_id", 0);
         }
-        if(getIntent().hasExtra("_isEditAction")){
+        if (getIntent().hasExtra("_isEditAction")) {
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction", false);
         }
+
         meetingRepo = new MeetingRepo(getApplicationContext());
         targetMeeting = meetingRepo.getMeetingById(meetingId);
         inflateCustomActionBar();
@@ -86,8 +107,12 @@ public class AddMemberActivity extends SherlockActivity {
         //if in getting started wizard.. use the getting started layout
         //else use the default layout
         setContentView(R.layout.activity_add_member);
+
+        txtAMMLoanNextRepaymentDate = (TextView) findViewById(R.id.txtAMMLoanNextRepaymentDate);
+        txtAMMLoanNumber = (TextView) findViewById(R.id.txtAMMOutstandingLoanNumber);
+
         //Setup the Spinner Items
-        Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
+        Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
         String[] genderList = new String[]{"Male", "Female"};
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList)
 
@@ -99,7 +124,7 @@ public class AddMemberActivity extends SherlockActivity {
                 Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
                 ((TextView) v).setTypeface(externalFont);
 
-               // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
 
                 return v;
             }
@@ -118,21 +143,23 @@ public class AddMemberActivity extends SherlockActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboGender.setAdapter(adapter);
         cboGender.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+
         //Make the spinner selectable
         cboGender.setFocusable(true);
         cboGender.setFocusableInTouchMode(true);
         cboGender.setClickable(true);
         cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         clearDataFields();
-        if(isEditAction){
+        if (isEditAction) {
             repo = new MemberRepo(getApplicationContext());
             selectedMember = repo.getMemberById(selectedMemberId);
             populateDataFields(selectedMember);
         }
 
-        //For Middle start details
-        if(! isEditAction) {
-            //Hide comments & set heading
+        // For Middle start details
+        if (!isEditAction) {
+
+            // Hide comments & set heading
             TextView lblAMMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblAMMiddleCycleInformationHeading);
             lblAMMiddleCycleInformationHeading.setText("If cycle has started, and your group has held one or more meetings already, enter current totals for member so far.");
 
@@ -162,9 +189,38 @@ public class AddMemberActivity extends SherlockActivity {
             TextView lblAMMiddleCycleLoans = (TextView) findViewById(R.id.lblAMMiddleCycleLoans);
             lblAMMiddleCycleLoans.setVisibility(View.GONE);
 
+            //Default next repayment date to a month from now
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.MONTH, 1);
+            txtAMMLoanNextRepaymentDate.setText(Utils.formatDate(cal.getTime(), "dd-MMM-yyyy"));
+
+            mYear = cal.get(Calendar.YEAR);
+            mMonth = cal.get(Calendar.MONTH);
+            mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+
 
 
         }
+
+        txtAMMLoanNextRepaymentDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // The Event Handler should handle both startDate and endDate
+                Date nextRepaymentDate = Utils.stringToDate(txtAMMLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy");
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(nextRepaymentDate);
+                mYear = cal.get(Calendar.YEAR);
+                mMonth = cal.get(Calendar.MONTH);
+                mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+                viewClicked = (TextView) view;
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddMemberActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                datePickerDialog.setTitle("Set the next repayment date");
+                datePickerDialog.show();
+            }
+        });
 
         //To provide formatting for phone numbers
         final EditText txtAMPhoneNo = (EditText) findViewById(R.id.txtAMPhoneNo);
@@ -175,31 +231,41 @@ public class AddMemberActivity extends SherlockActivity {
     protected void showMiddleStartCycleValues(Member member) {
         //loads the Middle start cycle values for this member
 
-        if(isGettingStartedMode) return; //this code shouldnt run in GSW mode hence this check
+        if (isGettingStartedMode) return; //this code shouldnt run in GSW mode hence this check
 
         //Load the middle start values
         TextView lblAMMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblAMMiddleCycleInformationHeading);
         TextView lblAMMiddleCycleSavings = (TextView) findViewById(R.id.lblAMMiddleCycleSavings);
         TextView lblAMMiddleCycleLoans = (TextView) findViewById(R.id.lblAMMiddleCycleLoans);
+        txtAMMLoanNumber.setText(String.valueOf(member.getOutstandingLoanNumberOnSetup()));
 
         lblAMMiddleCycleSavings.setText(String.format("%,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
         lblAMMiddleCycleLoans.setText(String.format("%,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
+
+        // populate the next repayment date
+        if (member.getDateOfFirstRepayment() != null) {
+            txtAMMLoanNextRepaymentDate.setText(Utils.formatDate(member.getDateOfFirstRepayment(), "dd-MMM-yyyy"));
+        } else {
+            txtAMMLoanNextRepaymentDate.setText("none");
+            txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
+        }
+
 
         //Show the heading
         //Get the date of the dummy GSW meeting
         MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
 
-        String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her":"his";
+        String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her" : "his";
         lblAMMiddleCycleInformationHeading.setText("This member’s information was added after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
 
         Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
-        if(dummyGSWMeeting != null) {
+        if (dummyGSWMeeting != null) {
             lblAMMiddleCycleInformationHeading.setText("This member’s information was added on " + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
         }
 
     }
 
-    private void inflateCustomActionBar(){
+    private void inflateCustomActionBar() {
 
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
@@ -208,30 +274,30 @@ public class AddMemberActivity extends SherlockActivity {
         View customActionBarView = null;
         actionBar = getSupportActionBar();
 
-        if(isEditAction) {
+        if (isEditAction) {
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
             customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             selectedFinishButton = true;
-                            if(saveMemberData())
-                            {
+                            if (saveMemberData()) {
                                 finish();
                             }
                         }
-                    });
+                    }
+            );
             customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             finish();
                         }
-                    });
+                    }
+            );
 
             actionBar.setTitle("Edit Member");
-        }
-        else {
+        } else {
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_next_cancel, null);
             customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                     new View.OnClickListener() {
@@ -241,24 +307,25 @@ public class AddMemberActivity extends SherlockActivity {
                             saveMemberData();
                             finish();
                         }
-                    });
+                    }
+            );
             customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             saveMemberData();
                         }
-                    });
+                    }
+            );
             customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                    new View.OnClickListener()
-                    {
+                    new View.OnClickListener() {
                         @Override
-                        public void onClick(View v)
-                        {
+                        public void onClick(View v) {
 
                             finish();
                         }
-                    });
+                    }
+            );
 
 
             actionBar.setTitle("New Member");
@@ -285,7 +352,7 @@ public class AddMemberActivity extends SherlockActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MainActivity.class);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
@@ -322,8 +389,7 @@ public class AddMemberActivity extends SherlockActivity {
             boolean retVal = false;
             if (member.getMemberId() != 0) {
                 retVal = repo.updateMember(member);
-            }
-            else {
+            } else {
                 retVal = repo.addMember(member);
 
             }
@@ -334,30 +400,27 @@ public class AddMemberActivity extends SherlockActivity {
                     //Otherwise they will assume the value of the selectedMember variable because it is not null
                     selectedMember = member;
 
-                    if(selectedFinishButton) {
-                        Toast toast = Toast.makeText(this,"The new member was added successfully.",Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.LEFT,0,0);
+                    if (selectedFinishButton) {
+                        Toast toast = Toast.makeText(this, "The new member was added successfully.", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.LEFT, 0, 0);
                         toast.show();
-                        if(Utils._membersAccessedFromNewCycle) {
+                        if (Utils._membersAccessedFromNewCycle) {
                             Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
                             i.putExtra("_isUpdateCycleAction", false);
                             startActivity(i);
-                        }
-                        else if(Utils._membersAccessedFromEditCycle) {
+                        } else if (Utils._membersAccessedFromEditCycle) {
                             Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
                             i.putExtra("_isUpdateCycleAction", true);
                             startActivity(i);
-                        }
-                        else {
+                        } else {
                             Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
                             startActivity(i);
                         }
                         Utils._membersAccessedFromNewCycle = false;
                         Utils._membersAccessedFromEditCycle = false;
-                    }
-                    else {
-                        Toast toast = Toast.makeText(this,"The new member was added successfully. Add another member.",Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.LEFT,0,0);
+                    } else {
+                        Toast toast = Toast.makeText(this, "The new member was added successfully. Add another member.", Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.LEFT, 0, 0);
                         toast.show();
                         //Clear the Fields and keep adding new records
                         clearDataFields();
@@ -401,9 +464,8 @@ public class AddMemberActivity extends SherlockActivity {
                     });
                     dlg.show();
                     */
-                }
-                else {
-                    Toast.makeText(this,"The member was updated successfully.",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "The member was updated successfully.", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
                     startActivity(i);
 
@@ -432,13 +494,11 @@ public class AddMemberActivity extends SherlockActivity {
 
                 successFlg = true;
                 //clearDataFields(); //Not needed now
-            }
-            else {
+            } else {
                 dlg = Utils.createAlertDialogOk(AddMemberActivity.this, "Add Member", "A problem occurred while adding the new member.", Utils.MSGBOX_ICON_TICK);
                 dlg.show();
             }
-        }
-        else {
+        } else {
             //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
         }
 
@@ -447,11 +507,11 @@ public class AddMemberActivity extends SherlockActivity {
 
     protected boolean validateData(Member member) {
         try {
-            if(null == member) {
+            if (null == member) {
                 return false;
             }
             repo = new MemberRepo(getApplicationContext());
-            // Validate: MemberNo
+
             // Validate: MemberNo
             Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
             if (cboAMMemberNo.getSelectedItemPosition() < 1) {
@@ -465,26 +525,24 @@ public class AddMemberActivity extends SherlockActivity {
             }
 
             //Validate: Surname
-            TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
+            TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
             String surname = txtSurname.getText().toString().trim();
-            if(surname.length() < 1) {
+            if (surname.length() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtSurname.requestFocus();
                 return false;
-            }
-            else {
+            } else {
                 member.setSurname(surname);
             }
 
             //Validate: OtherNames
-            TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherName);
+            TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
             String otherNames = txtOtherNames.getText().toString().trim();
-            if(otherNames.length() < 1) {
+            if (otherNames.length() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtOtherNames.requestFocus();
                 return false;
-            }
-            else {
+            } else {
                 member.setOtherNames(otherNames);
             }
 
@@ -515,27 +573,25 @@ public class AddMemberActivity extends SherlockActivity {
             }
 
             //Validate: Occupation
-            TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
+            TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
             String occupation = txtOccupation.getText().toString().trim();
-            if(occupation.length() < 1) {
+            if (occupation.length() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtOccupation.requestFocus();
                 return false;
-            }
-            else {
+            } else {
                 member.setOccupation(occupation);
             }
 
             //Validate: PhoneNumber
-            TextView txtPhoneNo = (TextView)findViewById(R.id.txtAMPhoneNo);
+            TextView txtPhoneNo = (TextView) findViewById(R.id.txtAMPhoneNo);
             String phoneNo = txtPhoneNo.getText().toString().trim();
-            if(phoneNo.length() < 1) {
+            if (phoneNo.length() < 1) {
                 //Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Phone Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtPhoneNo.requestFocus();
                 //return false;
                 member.setPhoneNumber(null);
-            }
-            else {
+            } else {
                 member.setPhoneNumber(phoneNo.replaceAll(" ", "")); //remove smart formattings
             }
 
@@ -558,38 +614,108 @@ public class AddMemberActivity extends SherlockActivity {
                 c.add(Calendar.YEAR, -theCycles);
                 member.setDateOfAdmission(c.getTime());
             }
+
+  //          if(!isEditAction) {
+
+                TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
+                String savings = txtSavingsSoFar.getText().toString().trim();
+                if (savings.length() < 1) {
+//                displayMessageBox(dlgTitle, "Total Amount this Member has Saved in Current Cycle so far is Required", Utils.MSGBOX_ICON_EXCLAMATION);
+//                txtSavingsSoFar.requestFocus();
+//                return false;
+
+                    if(isEditAction) {
+                        Log.d("AMA", "isEditAction here " + member.getSavingsOnSetup());
+                        member.setSavingsOnSetup(member.getSavingsOnSetup());
+                    }
+                    else{
+                        member.setSavingsOnSetup(0);
+                    }
+                } else {
+                    double amountSavedSoFar = Double.parseDouble(savings);
+                    if (amountSavedSoFar < 0.00) {
+                        Utils.createAlertDialogOk(this, dlgTitle, "Total Amount this Member has Saved in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                        txtSavingsSoFar.requestFocus();
+                        return false;
+                    } else {
+                        member.setSavingsOnSetup(amountSavedSoFar);
+                    }
+                }
+
+                //Validate Amount of Loan outstanding for this member
+                TextView txtLoanAmount = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
+                String loanAmount = txtLoanAmount.getText().toString().trim();
+                if (loanAmount.length() < 1) {
+//                displayMessageBox(dlgTitle, "Total Amount of this Member's Regular Loan Outstanding is Required", Utils.MSGBOX_ICON_EXCLAMATION);
+//                txtLoanAmount.requestFocus();
+//                return false;
+                    if(isEditAction) {
+                        Log.d("AMA", "isEditAction here Loan");
+                        member.setOutstandingLoanOnSetup(member.getOutstandingLoanOnSetup());
+                    } else{
+                        member.setOutstandingLoanOnSetup(0);
+                    }
+                } else {
+                    double outstandingLoan = Double.parseDouble(loanAmount);
+                    if (outstandingLoan < 0.00) {
+                        Utils.createAlertDialogOk(this, dlgTitle, "Total Amount of this Member's Regular Loan Outstanding should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                        txtLoanAmount.requestFocus();
+                        return false;
+                    } else {
+                        member.setOutstandingLoanOnSetup(outstandingLoan);
+
+                        //set the date of next repayment
+                        if (outstandingLoan > 0 && txtAMMLoanNextRepaymentDate.getText().length() == 0) {
+                            Utils.createAlertDialogOk(this, dlgTitle, "The next repayment date is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
+                            txtAMMLoanNextRepaymentDate.requestFocus();
+                            return false;
+
+                        }
+
+                        //set the loan number
+                        if (outstandingLoan > 0 && txtAMMLoanNumber.getText().length() == 0) {
+                            Utils.createAlertDialogOk(this, dlgTitle, "The loan number is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
+                            txtAMMLoanNumber.requestFocus();
+                            return false;
+                        }
+
+                    }
+
+                }
+                member.setOutstandingLoanNumberOnSetup(Integer.valueOf(txtAMMLoanNumber.getText().toString().trim()));
+                member.setDateOfFirstRepayment(Utils.getDateFromString(txtAMMLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy"));
+
             validateMiddleCycleValues(member);
             //Final Verifications
             //TODO: Trying to use Application context to ensure dialog box does not disappear
-            if(!repo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId())) {
+            if (!repo.isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
                 Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAMMemberNo.requestFocus();
                 return false;
             }
 
             return true;
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
     }
 
-    private void validateMiddleCycleValues(Member member)
-    {
+    private void validateMiddleCycleValues(Member member) {
         //If edit mode and not GSW, validate middle cycle start values
-        if(!isGettingStartedMode) {
-          //if there are correctionss, set them
-          //TODO: process comments as well
-          TextView txtAMMiddleCycleSavingsCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
-          TextView txtAMMiddleCycleLoansCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
+        if (!isGettingStartedMode) {
+            //if there are correctionss, set them
+            //TODO: process comments as well
+            TextView txtAMMiddleCycleSavingsCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
+            TextView txtAMMiddleCycleLoansCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
 
-          if(txtAMMiddleCycleSavingsCorrection.getText().length()>0) {
-              member.setSavingsOnSetup(Double.parseDouble(txtAMMiddleCycleSavingsCorrection.getText().toString()));
-          }
 
-           if(txtAMMiddleCycleLoansCorrection.getText().length()>0) {
-             member.setOutstandingLoanOnSetup(Double.parseDouble(txtAMMiddleCycleLoansCorrection.getText().toString()));
+            if (txtAMMiddleCycleSavingsCorrection.getText().length() > 0) {
+                member.setSavingsOnSetup(Double.parseDouble(txtAMMiddleCycleSavingsCorrection.getText().toString()));
+            }
+
+            if (txtAMMiddleCycleLoansCorrection.getText().length() > 0) {
+                member.setOutstandingLoanOnSetup(Double.parseDouble(txtAMMiddleCycleLoansCorrection.getText().toString()));
             }
 
         }
@@ -603,30 +729,29 @@ public class AddMemberActivity extends SherlockActivity {
                 return;
             }
 
-            TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
+            TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
             if (member.getSurname() != null) {
                 txtSurname.setText(member.getSurname());
             }
-            TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherName);
+            TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
             if (member.getOtherNames() != null) {
                 txtOtherNames.setText(member.getOtherNames());
             }
 
-            Spinner cboGender = (Spinner)findViewById(R.id.cboAMGender);
-            if(member.getGender() != null) {
-                if(member.getGender().startsWith("F") || member.getGender().startsWith("f")){
+            Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
+            if (member.getGender() != null) {
+                if (member.getGender().startsWith("F") || member.getGender().startsWith("f")) {
                     cboGender.setSelection(2);
-                }
-                else if(member.getGender().startsWith("M") || member.getGender().startsWith("m")){
+                } else if (member.getGender().startsWith("M") || member.getGender().startsWith("m")) {
                     cboGender.setSelection(1);
                 }
             }
 
-            TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
+            TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
             if (member.getOccupation() != null) {
                 txtOccupation.setText(member.getOccupation());
             }
-            TextView txtPhone = (TextView)findViewById(R.id.txtAMPhoneNo);
+            TextView txtPhone = (TextView) findViewById(R.id.txtAMPhoneNo);
             if (member.getPhoneNumber() != null) {
                 txtPhone.setText(Utils.formatAsPhoneNumber(member.getPhoneNumber()));
             }
@@ -638,11 +763,9 @@ public class AddMemberActivity extends SherlockActivity {
             calDb.setTime(member.getDateOfBirth());
             final int computedAge = calToday.get(Calendar.YEAR) - calDb.get(Calendar.YEAR);
 
-            cboAMAge.post(new Runnable()
-            {
+            cboAMAge.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
 
                     Utils.setSpinnerSelection(computedAge + "", cboAMAge);
                 }
@@ -656,25 +779,21 @@ public class AddMemberActivity extends SherlockActivity {
             Calendar calDbCycles = Calendar.getInstance();
             calDbCycles.setTime(member.getDateOfAdmission());
             final int cycles = calToday.get(Calendar.YEAR) - calDbCycles.get(Calendar.YEAR);
-            cboAMCycles.post(new Runnable()
-            {
+            cboAMCycles.post(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
 
                     Utils.setSpinnerSelection(cycles + "", cboAMCycles);
                 }
             });
 
             //Load GSW values
-            if(!isGettingStartedMode) {
+            if (!isGettingStartedMode) {
                 showMiddleStartCycleValues(member);
             }
-        }
-        finally {
+        } finally {
 
         }
-
 
 
     }
@@ -684,11 +803,9 @@ public class AddMemberActivity extends SherlockActivity {
         //Spinner items
         buildGenderSpinner();
         //This portion could take long so run it as long task
-        Runnable runnable = new Runnable()
-        {
+        Runnable runnable = new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 buildMemberNoSpinner();
             }
         };
@@ -701,19 +818,37 @@ public class AddMemberActivity extends SherlockActivity {
         // Populate the Fields
         Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
 
-        TextView txtSurname = (TextView)findViewById(R.id.txtAMSurname);
+        TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
         txtSurname.setText(null);
-        TextView txtOtherNames = (TextView)findViewById(R.id.txtAMOtherName);
+        TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
         txtOtherNames.setText(null);
         //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
         //txtGender.setText(null);
-        TextView txtOccupation = (TextView)findViewById(R.id.txtAMOccupation);
+        TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
         txtOccupation.setText(null);
-        TextView txtPhone = (TextView)findViewById(R.id.txtAMPhoneNo);
+        TextView txtPhone = (TextView) findViewById(R.id.txtAMPhoneNo);
         txtPhone.setText(null);
+
+        TextView txtLoanNumber = (TextView) findViewById(R.id.txtAMMOutstandingLoanNumber);
+        txtLoanNumber.setText(null);
 
         cboAMMemberNo.requestFocus();
     }
+
+    protected void updateDisplay() {
+        if (viewClicked != null)
+        {
+            viewClicked.setText(new StringBuilder()
+                    // Month is 0 based so add 1
+                    .append(String.format("%02d", mDay))
+                    .append("-")
+                    .append(Utils.getMonthNameAbbrev(mMonth + 1))
+                    .append("-")
+                    .append(mYear)
+                    .toString());
+        }
+    }
+
 
     private void buildGenderSpinner() {
 
@@ -796,19 +931,15 @@ public class AddMemberActivity extends SherlockActivity {
         };
 
         memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Runnable runnable = new Runnable()
-        {
+        Runnable runnable = new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 cboAMMemberNo.setAdapter(memberNoAdapter);
                 // Populate the Fields
-                if(selectedMember != null) {
-                    cboAMMemberNo.post(new Runnable()
-                    {
+                if (selectedMember != null) {
+                    cboAMMemberNo.post(new Runnable() {
                         @Override
-                        public void run()
-                        {
+                        public void run() {
 
                             Utils.setSpinnerSelection(selectedMember.getMemberNo() + "", cboAMMemberNo);
                         }

@@ -55,7 +55,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     TextView txtNCGSWLoanNextRepaymentDate;
     TextView txtNCGSWLoanNumber;
 
-    //Event that is raised when the date has been set
+    // Event that is raised when the date has been set
     protected DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             mYear = year;
@@ -180,7 +180,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         txtNCGSWLoanNextRepaymentDate =  (TextView) findViewById(R.id.txtNCGSWLoanNextRepaymentDate);
         txtNCGSWLoanNumber =  (TextView) findViewById(R.id.txtNCGSWOutstandingLoanNumber);
 
-        //Default next repayment date to a month from now
+        // Default to the next repayment date to a month from now
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, 1);
         txtNCGSWLoanNextRepaymentDate.setText(Utils.formatDate(cal.getTime(), "dd-MMM-yyyy"));
@@ -193,8 +193,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         txtNCGSWLoanNextRepaymentDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //I want the Event Handler to handle both startDate and endDate
 
+                // The Event Handler to handle both startDate and endDate
                 Date nextRepaymentDate = Utils.stringToDate(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy");
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(nextRepaymentDate);

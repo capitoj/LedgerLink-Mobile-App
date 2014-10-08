@@ -53,6 +53,7 @@
     <string name="elv_undo_all">Undo All</string>
     <string name="elv_item_deleted">Fine Record Deleted</string>
     <string name="elv_n_items_deleted">%1$s fine Records Deleted</string>
+    <string name="help">Forgot your pass key: \nPlease call 0771638070</string>
 
 
 </resources>

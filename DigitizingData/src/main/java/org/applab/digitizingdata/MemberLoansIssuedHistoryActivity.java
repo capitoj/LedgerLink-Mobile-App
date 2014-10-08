@@ -8,7 +8,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -237,7 +236,6 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                                                          // Deal with topup
                                                          if (memberLoan.getMeeting().getMeetingId() != meetingId) {
                                                              if (theAmount > memberLoan.getPrincipalAmount()) {
-                                                                 Log.d("MLIHA", "Dealing with Top up");
                                                                  loanTopUp = theAmount - memberLoan.getPrincipalAmount();
                                                                  interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
                                                                  /** Roll over?
@@ -497,9 +495,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                     txtLoanAmount.requestFocus();
                     return false;
                 } else if (totalCashInBox > 0) {
-                    Log.d("MLIA TCIB", "Nomoney");
                     if (theAmount > totalCashInBox) {
-                        Log.d("MLIA TCIB", "Nomoney alert");
                         Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "You do not have enough money in the box to meet this loan amount.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                         txtLoanAmount.requestFocus();
                         return false;
