@@ -3,231 +3,233 @@
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <!-- I fully qualify the names coz R.id is universal -->
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dip">
+            android:layout_marginBottom="20dip"
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
                 android:id="@+id/lblMDVMemberNo"
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Member Number" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMDVMemberNo"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtMDVMemberNo"
-                android:text="100"/>
+                android:text="100" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dip">
+            android:layout_marginBottom="20dip"
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
                 android:id="@+id/lblMDVSurname"
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Surname" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMDVSurname"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Muhahala"
-                android:id="@+id/txtMDVSurname" />
+                android:text="Muhahala" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dip">
+            android:layout_marginBottom="20dip"
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
                 android:id="@+id/lblMDVOtherNames"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="normal"
-                android:text="Other Names" />
-
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Moses Oscar"
-                android:id="@+id/txtMDVOtherNames" />
+                android:text="Other Names"
+                android:textStyle="normal" />
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMDVOtherNames"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Moses Oscar" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dip">
+            android:layout_marginBottom="20dip"
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
                 android:id="@+id/lblMDVGender"
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Sex (M/F)" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMDVGender"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Male"
-                android:id="@+id/txtMDVGender" />
+                android:text="Male" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dip">
+            android:layout_marginBottom="20dip"
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
                 android:id="@+id/lblMDVAge"
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Age" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMDVAge"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="27"
-                android:id="@+id/txtMDVAge" />
+                android:text="27" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dip">
+            android:layout_marginBottom="20dip"
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
                 android:id="@+id/lblMDVOccupation"
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="What does this member do to make money?" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMDVOccupation"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Application Analyst"
-                android:id="@+id/txtMDVOccupation" />
+                android:text="Application Analyst" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dip">
+            android:layout_marginBottom="20dip"
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
                 android:id="@+id/lblMDVPhone"
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Phone number" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMDVPhone"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="0779881904"
-                android:id="@+id/txtMDVPhone" />
+                android:text="0779881904" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dip">
+            android:layout_marginBottom="20dip"
+            android:orientation="vertical">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-                style="@style/RegularText"
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVCyclesCompleted"
+                style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Number of cycles member completed" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtMDVCyclesCompleted"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="3"
-                android:id="@+id/txtMDVCyclesCompleted" />
-    </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="20dip">
-
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
-                    style="@style/SubHeading"
-                    android:id="@+id/lblMDCurrentCycleHeading"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="CURRENT CYCLE" />
-
-            <!--list view of meeting details-->
+                android:text="3" />
         </LinearLayout>
 
+        <!--list view of meeting details-->
+        <!--  <LinearLayout
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:layout_marginBottom="20dip">
+
+              <org.applab.digitizingdata.fontutils.TypefaceTextView
+                      style="@style/SubHeading"
+                      android:id="@+id/lblMDCurrentCycleHeading"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:text="CURRENT CYCLE" />
+
+
+         </LinearLayout> -->
+
+        <!--list view of meeting details-->
         <LinearLayout
+            android:id="@+id/layoutMDMiddleCycleStartDetails"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/lblMDMiddleCycleStartHeading"
+                style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="20dip"
-                android:id="@+id/layoutMDMiddleCycleStartDetails">
+                android:text="MIDDLE CYCLE START" />
+
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                    style="@style/RegularHeading"
-                    android:id="@+id/lblMDMiddleCycleStartHeading"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="MIDDLE CYCLE START" />
+                android:id="@+id/lblMDMiddleCycleInformationHeading"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="---" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                    style="@style/RegularText"
-                    android:id="@+id/lblMDMiddleCycleInformationHeading"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="---" />
+                android:id="@+id/lblMDMiddleCycleSavings"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Savings 0 UGX" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
-                    style="@style/RegularText"
-                    android:id="@+id/lblMDMiddleCycleSavings"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Total Savings 0 UGX" />
-
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
-                    style="@style/RegularText"
-                    android:id="@+id/lblMDMiddleCycleLoansOutstanding"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Loans Outstanding 0 UGX" />
-
+                android:id="@+id/lblMDMiddleCycleLoansOutstanding"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Loans Outstanding 0 UGX" />
 
         </LinearLayout>
 

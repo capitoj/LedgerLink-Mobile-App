@@ -299,7 +299,7 @@
                 android:layout_height="wrap_content"
                 android:text="When is the next repayment expected for this loan" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/txtNCGSWLoanNextRepaymentDate"
                 style="@style/NormalEditText"
                 android:layout_width="150dip"

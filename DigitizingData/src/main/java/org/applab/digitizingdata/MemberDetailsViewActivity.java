@@ -3,7 +3,6 @@ package org.applab.digitizingdata;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
@@ -21,13 +19,12 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
@@ -274,7 +271,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     }
 
     private void editMember() {
-        Intent i = new Intent(getApplicationContext() ,AddMemberActivity.class);
+        Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
         i.putExtra("_id",selectedMemberId);
         i.putExtra("_isEditAction", true);
         startActivity(i);
