@@ -120,10 +120,9 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:choiceMode="singleChoice" /> -->
-
+            <!--  <ListView -->
            <!-- <de.timroes.android.listview.EnhancedListView -->
-          <!--  <org.applab.digitizingdata.helpers.EnhancedListView -->
-            <ListView
+            <org.applab.digitizingdata.helpers.EnhancedListView
                   android:id="@android:id/list"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"

@@ -167,9 +167,12 @@ public class MeetingFineRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT IFNULL(SUM(%s),0) AS TotalFines FROM %s WHERE %s=%d AND %s!=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d )",
+            String sumQuery = String.format("SELECT IFNULL(SUM(%s),0) AS TotalFines FROM %s WHERE %s=%d AND %s!=%d AND IFNULL(%s,0)!=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d )",
+            // String sumQuery = String.format("SELECT IFNULL(SUM(%s),0) AS TotalFines FROM %s WHERE %s=%d AND %s!=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d )",
                     FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
-                    FineSchema.COL_F_MEMBER_ID, memberId, FineSchema.COL_F_IS_CLEARED, 1,
+                    FineSchema.COL_F_MEMBER_ID, memberId,
+                    FineSchema.COL_F_IS_CLEARED, 1,
+                    FineSchema.COL_F_IS_DELETED, 1,
                     FineSchema.COL_F_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID, cycleId);
 
@@ -235,7 +238,7 @@ public class MeetingFineRepo {
         double totalFinesPaidInMeeting = 0.00;
         int paymentStatus = 1;
 
-       // String meetingDateString = Utils.formatDate(meetingDate, "yyyy-MM-dd");
+        // String meetingDateString = Utils.formatDate(meetingDate, "yyyy-MM-dd");
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
@@ -397,7 +400,10 @@ public class MeetingFineRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
 
             String query = String.format("SELECT  %s.%s AS FineId, %s.%s AS FineTypeId, %s.%s AS MeetingDate, %s.%s AS Amount, %s.%s AS Status, %s.%s AS PaidInMeetingId " +
-                            " FROM %s INNER JOIN %s ON %s.%s=%s.%s WHERE %s.%s=%d AND %s.%s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY %s.%s DESC",
+                            " FROM %s INNER JOIN %s ON %s.%s=%s.%s WHERE IFNULL(%s.%s,0)!=%d AND %s.%s=%d AND %s.%s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY %s.%s DESC",
+
+                    // " FROM %s INNER JOIN %s ON %s.%s=%s.%s WHERE %s.%s=%d AND %s.%s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY %s.%s DESC",
+
                     FineSchema.getTableName(), FineSchema.COL_F_FINE_ID,
                     FineSchema.getTableName(), FineSchema.COL_F_FINE_TYPE_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_DATE,
@@ -407,8 +413,10 @@ public class MeetingFineRepo {
                     FineSchema.getTableName(), MeetingSchema.getTableName(),
                     FineSchema.getTableName(), FineSchema.COL_F_MEETING_ID,
                     MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_ID,
+                    FineSchema.getTableName(), FineSchema.COL_F_IS_DELETED, 1,
                     FineSchema.getTableName(), FineSchema.COL_F_MEMBER_ID, memberId,
-                    FineSchema.getTableName(), FineSchema.COL_F_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID, MeetingSchema.getTableName(),
+                    FineSchema.getTableName(), FineSchema.COL_F_MEETING_ID,
+                    MeetingSchema.COL_MT_MEETING_ID, MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_CYCLE_ID, cycleId,
                     FineSchema.getTableName(), FineSchema.COL_F_FINE_ID
             );
@@ -507,7 +515,35 @@ public class MeetingFineRepo {
             values.put(FineSchema.COL_F_DATE_CLEARED, datePaid);
             long retVal = -1;
 
-            Log.d("MFR", String.valueOf(fineId) + " " + paidInMeetingId + String.valueOf(datePaid) );
+            // Updating row
+            retVal = db.update(FineSchema.getTableName(), values, FineSchema.COL_F_FINE_ID + " = ?",
+                    new String[]{String.valueOf(fineId)});
+            if (retVal != -1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            Log.e("MemberFineRepo.updateMemberFine", ex.getMessage());
+            return false;
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+    public boolean updateMemberFineDeletedFlag(int fineId) {
+        SQLiteDatabase db = null;
+        int deleted = 1;
+        try {
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(FineSchema.COL_F_IS_DELETED, deleted);
+
+            long retVal = -1;
 
             // Updating row
             retVal = db.update(FineSchema.getTableName(), values, FineSchema.COL_F_FINE_ID + " = ?",
