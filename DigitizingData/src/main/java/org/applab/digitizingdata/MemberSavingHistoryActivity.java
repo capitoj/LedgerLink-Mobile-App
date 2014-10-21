@@ -18,16 +18,14 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
-import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.helpers.MemberSavingRecord;
 import org.applab.digitizingdata.helpers.SavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MeetingSavingRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 
@@ -339,7 +337,9 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             if(savingRepo == null) {
                 savingRepo = new MeetingSavingRepo(MemberSavingHistoryActivity.this);
             }
-            successFlg = savingRepo.saveMemberSaving(meetingId, memberId, theAmount);
+
+            String comment = "";
+            successFlg = savingRepo.saveMemberSaving(meetingId, memberId, theAmount, comment);
 
             return successFlg;
         }

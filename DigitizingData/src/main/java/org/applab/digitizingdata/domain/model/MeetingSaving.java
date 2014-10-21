@@ -8,6 +8,7 @@ public class MeetingSaving {
     private Meeting meeting;
     private Member member;
     private double amount;
+    private String comment;
 
     public double getAmount() {
         return amount;
@@ -31,6 +32,14 @@ public class MeetingSaving {
 
     public void setMeeting(Meeting meeting) {
         this.meeting = meeting;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public Member getMember() {

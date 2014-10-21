@@ -75,6 +75,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Log.d("GSWNCA", "done clicked");
                             saveMiddleCycleData();
                         }
                     }
@@ -96,6 +97,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Log.d("GSWNCA", "next clicked");
                             saveMiddleCycleData();
                         }
                     }
@@ -279,7 +281,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
     private boolean saveMiddleCycleData() {
         boolean successFlg = false;
-
+        Log.d("GSWNCA", "saveMiddleCycleData here");
         VslaCycle cycle = new VslaCycle();
         VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
         if (selectedCycle != null) {
@@ -287,11 +289,13 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
         }
 
         if (validateGettingStartedData(cycle)) {
+            Log.d("GSWNCA", "validated MiddleCycleData here");
             boolean retVal = false;
             if (cycle.getCycleId() != 0) {
+                Log.d("GSWNCA", "next clicked to update");
                 retVal = repo.updateCycle(cycle);
             } else {
-
+                Log.d("GSWNCA", "next clicked to add");
                 retVal = repo.addCycle(cycle);
             }
             if (retVal) {
@@ -304,7 +308,6 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
                     //TODO: Create Getting started wizard dummy meeting
                     retVal = repo.createGettingStartedDummyMeeting(selectedCycle);
-
 
                     if (!retVal) {
                         Log.d(getApplicationContext().getPackageName(), "Failed to create the dummy data import meeting");
@@ -359,9 +362,10 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             if (null == cycle) {
                 return false;
             }
-
+            Log.d("GSWNCA", "validateMiddleCycleData here");
             //validate Data common to New Cycle
             if (!validateData(cycle)) {
+                Log.d("GSWNCA", "validated Cycle Data returning false here");
                 return false;
             }
 
@@ -373,14 +377,18 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 //displayMessageBox(dialogTitle, "The Interest Collected Is Required", Utils.MSGBOX_ICON_EXCLAMATION);
                 //txtInterestCollected.requestFocus();
                 //return false;
+                Log.d("GSWNCA", "interestCollected.length() < 1");
                 cycle.setInterestAtSetup(0);
             } else {
                 double theInterestCollected = Double.parseDouble(interestCollected);
                 if (theInterestCollected < 0.00) {
                     displayMessageBox(dialogTitle, "The Interest Collected should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
                     txtInterestCollected.requestFocus();
+                    Log.d("GSWNCA", "theInterestCollected < 0.00");
+
                     return false;
                 } else {
+                    Log.d("GSWNCA", "theInterestCollected > 0.00 Yaay");
                     cycle.setInterestAtSetup(theInterestCollected);
                 }
             }
@@ -393,19 +401,22 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 //                displayMessageBox(dialogTitle, "The Fines Collected Field Is Required", Utils.MSGBOX_ICON_EXCLAMATION);
 //                txtFinesCollected.requestFocus();
 //                return false;
+                Log.d("GSWNCA", "theFinesCollected < 1");
                 cycle.setFinesAtSetup(0);
             } else {
                 double theFinesCollected = Double.parseDouble(finesCollected);
                 if (theFinesCollected < 0.00) {
                     displayMessageBox(dialogTitle, "The Fines Collected should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
                     txtFinesCollected.requestFocus();
+                    Log.d("GSWNCA", "theFinesCollected < 0.00");
                     return false;
                 } else {
+                    Log.d("GSWNCA", "theFinesCollected > 0.00 Yaay");
                     cycle.setFinesAtSetup(theFinesCollected);
                 }
             }
 
-
+            Log.d("GSWNCA", "MCS values validated");
             return true;
         } catch (Exception ex) {
             return false;

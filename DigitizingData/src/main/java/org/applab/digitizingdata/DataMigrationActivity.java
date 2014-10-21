@@ -1,26 +1,21 @@
 package org.applab.digitizingdata;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
-import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
-import org.applab.digitizingdata.domain.model.VslaInfo;
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
@@ -29,14 +24,14 @@ import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
-
-import java.io.*;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 public class DataMigrationActivity extends Activity implements OnClickListener {
 
@@ -254,10 +249,11 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
                             //Now deal with Savings
                             MeetingSavingRepo savingRepo = new MeetingSavingRepo(getApplicationContext());
+                            String comment = "";
 
                             if(totalSavings.length() > 0){
                                 double theSavings = Double.parseDouble(totalSavings);
-                                boolean savingsDone = savingRepo.saveMemberSaving(recentMeeting.getMeetingId(),recentMember.getMemberId(), theSavings);
+                                boolean savingsDone = savingRepo.saveMemberSaving(recentMeeting.getMeetingId(),recentMember.getMemberId(), theSavings, comment);
                             }
 
                             //Loan Issued

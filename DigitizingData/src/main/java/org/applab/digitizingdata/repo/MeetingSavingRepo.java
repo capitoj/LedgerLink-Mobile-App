@@ -7,14 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
-import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingSaving;
-import org.applab.digitizingdata.domain.schema.AttendanceSchema;
-import org.applab.digitizingdata.domain.schema.LoanRepaymentSchema;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
 import org.applab.digitizingdata.domain.schema.SavingSchema;
-import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
-import org.applab.digitizingdata.helpers.AttendanceRecord;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.MemberSavingRecord;
 import org.applab.digitizingdata.helpers.Utils;
@@ -66,13 +61,55 @@ public class MeetingSavingRepo {
         }
     }
 
+    public MeetingSaving getMemberSavingAndComment(int meetingId, int memberId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        MeetingSaving saving = new MeetingSaving();
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT %s, %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
+                    SavingSchema.COL_S_AMOUNT,
+                    SavingSchema.COL_S_SAVINGS_AT_SETUP_CORRECTION_COMMENT,
+                    SavingSchema.getTableName(),
+                    SavingSchema.COL_S_MEETING_ID, meetingId,
+                    SavingSchema.COL_S_MEMBER_ID, memberId, SavingSchema.COL_S_SAVING_ID);
+            cursor = db.rawQuery(query, null);
+
+            Log.d("MSR",query);
+
+            //double saving = 0.0;
+            if (cursor != null && cursor.moveToFirst()) {
+                saving.setAmount(cursor.getDouble(cursor.getColumnIndex(SavingSchema.COL_S_AMOUNT)));
+                saving.setComment(cursor.getString(cursor.getColumnIndex(SavingSchema.COL_S_SAVINGS_AT_SETUP_CORRECTION_COMMENT)));
+            }
+            return saving;
+        }
+        catch (Exception ex) {
+
+            Log.e("MeetingSavingRepo.getMemberSavingAndComment", ex.getMessage());
+            ex.printStackTrace();
+            return saving;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     public double getMemberSaving(int meetingId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT  %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
+            String query = String.format("SELECT %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
                     SavingSchema.COL_S_AMOUNT, SavingSchema.getTableName(),
                     SavingSchema.COL_S_MEETING_ID, meetingId,
                     SavingSchema.COL_S_MEMBER_ID, memberId, SavingSchema.COL_S_SAVING_ID);
@@ -81,8 +118,9 @@ public class MeetingSavingRepo {
             double saving = 0.0;
             if (cursor != null && cursor.moveToFirst()) {
                 saving = cursor.getDouble(cursor.getColumnIndex(SavingSchema.COL_S_AMOUNT));
+
             }
-           return saving;
+            return saving;
         }
         catch (Exception ex) {
             Log.e("MeetingSavingRepo.getMemberSaving", ex.getMessage());
@@ -244,7 +282,7 @@ public class MeetingSavingRepo {
         }
     }
 
-    public boolean saveMemberSaving(int meetingId, int memberId, double amount) {
+    public boolean saveMemberSaving(int meetingId, int memberId, double amount, String comment) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int savingId = 0;
@@ -261,6 +299,7 @@ public class MeetingSavingRepo {
             values.put(SavingSchema.COL_S_MEETING_ID, meetingId);
             values.put(SavingSchema.COL_S_MEMBER_ID, memberId);
             values.put(SavingSchema.COL_S_AMOUNT, amount);
+            values.put(SavingSchema.COL_S_SAVINGS_AT_SETUP_CORRECTION_COMMENT, comment);
 
             // Inserting or UpdatingRow
             long retVal = -1;

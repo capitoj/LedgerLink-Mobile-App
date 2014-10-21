@@ -10,6 +10,7 @@ public class SavingSchema {
     public static final String COL_S_MEETING_ID = "MeetingId";
     public static final String COL_S_MEMBER_ID = "MemberId";
     public static final String COL_S_AMOUNT = "Amount";
+    public static final String COL_S_SAVINGS_AT_SETUP_CORRECTION_COMMENT = "SavingsAtSetupComment";
 
     public static String getCreateTableScript() {
         StringBuffer sb = null;
@@ -20,7 +21,8 @@ public class SavingSchema {
         sb.append(COL_S_SAVING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,");
         sb.append(COL_S_MEETING_ID + " INTEGER ,");
         sb.append(COL_S_MEMBER_ID + " INTEGER ,");
-        sb.append(COL_S_AMOUNT + " NUMERIC");
+        sb.append(COL_S_AMOUNT + " NUMERIC ,");
+        sb.append(COL_S_SAVINGS_AT_SETUP_CORRECTION_COMMENT + " TEXT");
         sb.append(")");
 
         return sb.toString();
@@ -39,7 +41,8 @@ public class SavingSchema {
         sb.append(COL_S_SAVING_ID + ",");
         sb.append(COL_S_MEETING_ID + ",");
         sb.append(COL_S_MEMBER_ID + ",");
-        sb.append(COL_S_AMOUNT);
+        sb.append(COL_S_AMOUNT + ",");
+        sb.append(COL_S_SAVINGS_AT_SETUP_CORRECTION_COMMENT);
 
         return sb.toString();
     }

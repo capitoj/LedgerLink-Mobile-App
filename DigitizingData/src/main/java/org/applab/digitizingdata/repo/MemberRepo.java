@@ -8,6 +8,7 @@ import android.util.Log;
 
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
+import org.applab.digitizingdata.domain.model.MeetingSaving;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.schema.MemberSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
@@ -153,6 +154,11 @@ public class MemberRepo {
             double balance = 0.0;
 
             String comment = "";
+            if (null != member.getOutstandingLoanOnSetupCorrectionComment()) {
+                if (!member.getOutstandingLoanOnSetupCorrectionComment().isEmpty()) {
+                    comment = member.getOutstandingLoanOnSetupCorrectionComment();
+                }
+            }
             boolean isUpdate = false;
 
             // Save the loan
@@ -208,7 +214,6 @@ public class MemberRepo {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            Log.e("MemberRepo.updateGettingStartedMember", ex.getMessage());
             return false;
         } finally {
             if (db != null) {
@@ -222,15 +227,21 @@ public class MemberRepo {
         // Update savings at setup
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
         MeetingRepo meetingRepo = new MeetingRepo(context);
+        String comment = "";
         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
         if (dummyGettingStartedWizardMeeting == null) {
             // No GSW wizard meeting? probably training mode... either way, be optimistic and return now
             return true;
         }
-        boolean updateReturnValue = meetingSavingRepo.saveMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), member.getSavingsOnSetup());
+
+        if (null != member.getSavingsOnSetupCorrectionComment()) {
+            if (!member.getSavingsOnSetupCorrectionComment().isEmpty()) {
+                comment = member.getSavingsOnSetupCorrectionComment();
+            }
+        }
+        boolean updateReturnValue = meetingSavingRepo.saveMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), member.getSavingsOnSetup(), comment);
         if (updateReturnValue) {
             Log.d(context.getPackageName(), "Savings to date saved for member " + member.getSurname());
-
 
             //Save the loan
             boolean loanSaveResult = updateMemberLoanOnSetup(member);
@@ -259,12 +270,13 @@ public class MemberRepo {
             member.setOutstandingLoanNumberOnSetup(loanIssuedToMemberInMeeting.getLoanNo());
             member.setOutstandingLoanOnSetup(loanIssuedToMemberInMeeting.getLoanBalance());
             member.setDateOfFirstRepayment(loanIssuedToMemberInMeeting.getDateDue());
+            member.setOutstandingLoanOnSetupCorrectionComment(loanIssuedToMemberInMeeting.getComment());
         }
 
-
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
-        double memberSaving = meetingSavingRepo.getMemberSaving(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
-        member.setSavingsOnSetup(memberSaving);
+        MeetingSaving memberSaving = meetingSavingRepo.getMemberSavingAndComment(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
+        member.setSavingsOnSetup(memberSaving.getAmount());
+        member.setSavingsOnSetupCorrectionComment(memberSaving.getComment());
         return true;
     }
 

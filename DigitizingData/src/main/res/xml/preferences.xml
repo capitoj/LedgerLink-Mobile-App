@@ -10,7 +10,7 @@
         android:title="Server URL" />
 
     <EditTextPreference
-        android:defaultValue="0777178178"
+        android:defaultValue="@string/helpline"
         android:key="prefHelpLine"
         android:summary="Set telephone number to call for support"
         android:title="Help Line Number" />
@@ -60,9 +60,11 @@
 
 
     </PreferenceScreen>
-    <SwitchPreference
+   <!-- Removed  for now. Could be useful for data restore
+
+   <SwitchPreference
         android:defaultValue="true"
         android:key="prefRestoreData"
         android:summary="Switch to restore data"
-        android:title="Restore Data" />
+        android:title="Restore Data" /> -->
 </PreferenceScreen>

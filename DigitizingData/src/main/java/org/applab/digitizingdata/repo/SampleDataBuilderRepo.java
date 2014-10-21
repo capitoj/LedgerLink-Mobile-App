@@ -209,6 +209,8 @@ public class SampleDataBuilderRepo {
             MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(appContext);
             MeetingLoanRepaymentRepo repaymentRepo = new MeetingLoanRepaymentRepo(appContext);
 
+            String savingsComment = "";
+
             ArrayList<Member> members = memberRepo.getAllMembers();
             double shareValue = 5000D;
             int loanNumber = 0;
@@ -224,7 +226,7 @@ public class SampleDataBuilderRepo {
                         attendanceRepo.saveMemberAttendance(meeting.getMeetingId(),memb.getMemberId(),1);
 
                         //Saving range between 0 star and 5 stars
-                        savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * (memb.getMemberNo() % 5));
+                        savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * (memb.getMemberNo() % 5), savingsComment);
 
                         //Issue loans to every 6th member
                         if(memb.getMemberNo() % 6 == 0) {
@@ -276,7 +278,7 @@ public class SampleDataBuilderRepo {
                 try{
                     //Let all members be present
                     attendanceRepo.saveMemberAttendance(meeting.getMeetingId(),memb.getMemberId(),1);
-                    savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * ((memb.getMemberNo() % 5) + 1));
+                    savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * ((memb.getMemberNo() % 5) + 1),  savingsComment);
 
                     //Record loan repayments for the members that received loans in the previous meeting [a month ago]
                     if(memb.getMemberNo() % 6 == 0) {
@@ -331,7 +333,7 @@ public class SampleDataBuilderRepo {
                     }
                     else{
                         attendanceRepo.saveMemberAttendance(meeting.getMeetingId(),memb.getMemberId(),1);
-                        savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * ((memb.getMemberNo() % 5) + 1));
+                        savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * ((memb.getMemberNo() % 5) + 1), savingsComment);
 
                         //No Loan Repayments
 
@@ -382,7 +384,7 @@ public class SampleDataBuilderRepo {
                 try{
                     //Let all members be present
                     attendanceRepo.saveMemberAttendance(meeting.getMeetingId(),memb.getMemberId(),1);
-                    savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * ((memb.getMemberNo() % 5)));
+                    savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * ((memb.getMemberNo() % 5)), savingsComment);
 
                     //Record loan repayments for the members that received loans in the previous meeting [a month ago]
                     if(memb.getMemberNo() % 5 == 0 && memb.getMemberNo() % 4 != 0) {
@@ -459,7 +461,7 @@ public class SampleDataBuilderRepo {
                 try{
                     //Let all members be present
                     attendanceRepo.saveMemberAttendance(meeting.getMeetingId(),memb.getMemberId(),1);
-                    savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * ((memb.getMemberNo() % 5) + 1));
+                    savingRepo.saveMemberSaving(meeting.getMeetingId(), memb.getMemberId(), shareValue * ((memb.getMemberNo() % 5) + 1), savingsComment);
 
                     //No Repayments made in this meeting
 

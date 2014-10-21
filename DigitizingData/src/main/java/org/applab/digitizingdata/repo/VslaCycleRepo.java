@@ -1,17 +1,18 @@
 package org.applab.digitizingdata.repo;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
-import java.util.ArrayList;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-import android.content.ContentValues;
-import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -204,6 +205,8 @@ public class VslaCycleRepo {
             cycle.setMaxStartShare(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_START_SHARE)));
             cycle.setInterestAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP)));
             cycle.setFinesAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_FINES_AT_SETUP)));
+            cycle.setInterestAtSetupCorrectionComment(cursor.getString(cursor.getColumnIndex(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP_COMMENT)));
+            cycle.setFinesAtSetupCorrectionComment(cursor.getString(cursor.getColumnIndex(VslaCycleSchema.COL_VC_FINES_AT_SETUP_COMMENT)));
             if(cursor.getInt(cursor.getColumnIndex(VslaCycleSchema.COL_VC_IS_ACTIVE)) == 1) {
                 cycle.activate();
             }

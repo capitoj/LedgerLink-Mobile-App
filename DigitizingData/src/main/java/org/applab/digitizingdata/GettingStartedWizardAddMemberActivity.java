@@ -545,7 +545,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
             //Validation specific to getting started wizard
             //Validate Amount of savings for this member
-            TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
+            EditText txtSavingsSoFar = (EditText) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
             String savings = txtSavingsSoFar.getText().toString().trim();
             if (savings.length() < 1) {
 //                displayMessageBox(dlgTitle, "Total Amount this Member has Saved in Current Cycle so far is Required", Utils.MSGBOX_ICON_EXCLAMATION);
@@ -564,7 +564,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             }
 
             //Validate Amount of Loan outstanding for this member
-            TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
+            EditText txtLoanAmount = (EditText) findViewById(R.id.txtMDVOutstandingLoanAmount);
             String loanAmount = txtLoanAmount.getText().toString().trim();
             if (loanAmount.length() < 1) {
 //                displayMessageBox(dlgTitle, "Total Amount of this Member's Regular Loan Outstanding is Required", Utils.MSGBOX_ICON_EXCLAMATION);
@@ -687,7 +687,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             txtNCGSWLoanNextRepaymentDate.setText(Utils.formatDate(member.getDateOfFirstRepayment(), "dd-MMM-yyyy"));
         }
         else {
-            txtNCGSWLoanNextRepaymentDate.setText(null);
+            txtNCGSWLoanNextRepaymentDate.setText("none");
+            txtNCGSWLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
         }
 
     }

@@ -78,7 +78,6 @@ public class AddMemberActivity extends SherlockActivity {
     };
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,8 +198,6 @@ public class AddMemberActivity extends SherlockActivity {
             mDay = cal.get(Calendar.DAY_OF_MONTH);
 
 
-
-
         }
 
         txtAMMLoanNextRepaymentDate.setOnClickListener(new View.OnClickListener() {
@@ -237,6 +234,7 @@ public class AddMemberActivity extends SherlockActivity {
         TextView lblAMMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblAMMiddleCycleInformationHeading);
         TextView lblAMMiddleCycleSavings = (TextView) findViewById(R.id.lblAMMiddleCycleSavings);
         TextView lblAMMiddleCycleLoans = (TextView) findViewById(R.id.lblAMMiddleCycleLoans);
+
         txtAMMLoanNumber.setText(String.valueOf(member.getOutstandingLoanNumberOnSetup()));
 
         lblAMMiddleCycleSavings.setText(String.format("%,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
@@ -250,6 +248,20 @@ public class AddMemberActivity extends SherlockActivity {
             txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
         }
 
+        // Process comments if any
+        EditText txtAMMiddleCycleSavingsComment = (EditText) findViewById(R.id.txtAMMiddleCycleSavingsCorrectionComment);
+        if (null != member.getSavingsOnSetupCorrectionComment()) {
+            if (!member.getSavingsOnSetupCorrectionComment().isEmpty()) {
+                txtAMMiddleCycleSavingsComment.setText(member.getSavingsOnSetupCorrectionComment());
+            }
+        }
+
+        EditText txtAMMiddleCycleLoansComment = (EditText) findViewById(R.id.txtAMMiddleCycleLoansCorrectionComment);
+        if (null != member.getOutstandingLoanOnSetupCorrectionComment()) {
+            if (!member.getOutstandingLoanOnSetupCorrectionComment().isEmpty()) {
+                txtAMMiddleCycleLoansComment.setText(member.getOutstandingLoanOnSetupCorrectionComment());
+            }
+        }
 
         //Show the heading
         //Get the date of the dummy GSW meeting
@@ -615,75 +627,62 @@ public class AddMemberActivity extends SherlockActivity {
                 member.setDateOfAdmission(c.getTime());
             }
 
-  //          if(!isEditAction) {
-
-                TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
-                String savings = txtSavingsSoFar.getText().toString().trim();
-                if (savings.length() < 1) {
-//                displayMessageBox(dlgTitle, "Total Amount this Member has Saved in Current Cycle so far is Required", Utils.MSGBOX_ICON_EXCLAMATION);
-//                txtSavingsSoFar.requestFocus();
-//                return false;
-
-                    if(isEditAction) {
-                        Log.d("AMA", "isEditAction here " + member.getSavingsOnSetup());
-                        member.setSavingsOnSetup(member.getSavingsOnSetup());
-                    }
-                    else{
-                        member.setSavingsOnSetup(0);
-                    }
+            TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
+            String savings = txtSavingsSoFar.getText().toString().trim();
+            if (savings.length() < 1) {
+                if (isEditAction) {
+                    member.setSavingsOnSetup(member.getSavingsOnSetup());
                 } else {
-                    double amountSavedSoFar = Double.parseDouble(savings);
-                    if (amountSavedSoFar < 0.00) {
-                        Utils.createAlertDialogOk(this, dlgTitle, "Total Amount this Member has Saved in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
-                        txtSavingsSoFar.requestFocus();
-                        return false;
-                    } else {
-                        member.setSavingsOnSetup(amountSavedSoFar);
-                    }
+                    member.setSavingsOnSetup(0);
                 }
-
-                //Validate Amount of Loan outstanding for this member
-                TextView txtLoanAmount = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
-                String loanAmount = txtLoanAmount.getText().toString().trim();
-                if (loanAmount.length() < 1) {
-//                displayMessageBox(dlgTitle, "Total Amount of this Member's Regular Loan Outstanding is Required", Utils.MSGBOX_ICON_EXCLAMATION);
-//                txtLoanAmount.requestFocus();
-//                return false;
-                    if(isEditAction) {
-                        Log.d("AMA", "isEditAction here Loan");
-                        member.setOutstandingLoanOnSetup(member.getOutstandingLoanOnSetup());
-                    } else{
-                        member.setOutstandingLoanOnSetup(0);
-                    }
+            } else {
+                double amountSavedSoFar = Double.parseDouble(savings);
+                if (amountSavedSoFar < 0.00) {
+                    Utils.createAlertDialogOk(this, dlgTitle, "Total Amount this Member has Saved in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    txtSavingsSoFar.requestFocus();
+                    return false;
                 } else {
-                    double outstandingLoan = Double.parseDouble(loanAmount);
-                    if (outstandingLoan < 0.00) {
-                        Utils.createAlertDialogOk(this, dlgTitle, "Total Amount of this Member's Regular Loan Outstanding should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
-                        txtLoanAmount.requestFocus();
+                    member.setSavingsOnSetup(amountSavedSoFar);
+                }
+            }
+
+            //Validate Amount of Loan outstanding for this member
+            TextView txtLoanAmount = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
+            String loanAmount = txtLoanAmount.getText().toString().trim();
+            if (loanAmount.length() < 1) {
+                if (isEditAction) {
+                    member.setOutstandingLoanOnSetup(member.getOutstandingLoanOnSetup());
+                } else {
+                    member.setOutstandingLoanOnSetup(0);
+                }
+            } else {
+                double outstandingLoan = Double.parseDouble(loanAmount);
+                if (outstandingLoan < 0.00) {
+                    Utils.createAlertDialogOk(this, dlgTitle, "Total Amount of this Member's Regular Loan Outstanding should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    txtLoanAmount.requestFocus();
+                    return false;
+                } else {
+                    member.setOutstandingLoanOnSetup(outstandingLoan);
+
+                    //set the date of next repayment
+                    if (outstandingLoan > 0 && txtAMMLoanNextRepaymentDate.getText().length() == 0) {
+                        Utils.createAlertDialogOk(this, dlgTitle, "The next repayment date is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
+                        txtAMMLoanNextRepaymentDate.requestFocus();
                         return false;
-                    } else {
-                        member.setOutstandingLoanOnSetup(outstandingLoan);
+                    }
 
-                        //set the date of next repayment
-                        if (outstandingLoan > 0 && txtAMMLoanNextRepaymentDate.getText().length() == 0) {
-                            Utils.createAlertDialogOk(this, dlgTitle, "The next repayment date is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
-                            txtAMMLoanNextRepaymentDate.requestFocus();
-                            return false;
-
-                        }
-
-                        //set the loan number
-                        if (outstandingLoan > 0 && txtAMMLoanNumber.getText().length() == 0) {
-                            Utils.createAlertDialogOk(this, dlgTitle, "The loan number is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
-                            txtAMMLoanNumber.requestFocus();
-                            return false;
-                        }
-
+                    //set the loan number
+                    if (outstandingLoan > 0 && txtAMMLoanNumber.getText().length() == 0) {
+                        Utils.createAlertDialogOk(this, dlgTitle, "The loan number is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
+                        txtAMMLoanNumber.requestFocus();
+                        return false;
                     }
 
                 }
-                member.setOutstandingLoanNumberOnSetup(Integer.valueOf(txtAMMLoanNumber.getText().toString().trim()));
-                member.setDateOfFirstRepayment(Utils.getDateFromString(txtAMMLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy"));
+
+            }
+            member.setOutstandingLoanNumberOnSetup(Integer.valueOf(txtAMMLoanNumber.getText().toString().trim()));
+            member.setDateOfFirstRepayment(Utils.getDateFromString(txtAMMLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy"));
 
             validateMiddleCycleValues(member);
             //Final Verifications
@@ -701,21 +700,31 @@ public class AddMemberActivity extends SherlockActivity {
         }
     }
 
+    // TODO: Resolve Redundancy
     private void validateMiddleCycleValues(Member member) {
         //If edit mode and not GSW, validate middle cycle start values
         if (!isGettingStartedMode) {
-            //if there are correctionss, set them
-            //TODO: process comments as well
+            //if there are corrections, set them
+
             TextView txtAMMiddleCycleSavingsCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
             TextView txtAMMiddleCycleLoansCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
-
+            TextView txtAMMiddleCycleSavingsCorrectionComment = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrectionComment);
+            TextView txtAMMiddleCycleLoansCorrectionComment = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrectionComment);
 
             if (txtAMMiddleCycleSavingsCorrection.getText().length() > 0) {
                 member.setSavingsOnSetup(Double.parseDouble(txtAMMiddleCycleSavingsCorrection.getText().toString()));
             }
 
+            if (txtAMMiddleCycleSavingsCorrectionComment.getText().length() > 0) {
+                member.setSavingsOnSetupCorrectionComment(txtAMMiddleCycleSavingsCorrectionComment.getText().toString());
+            }
+
             if (txtAMMiddleCycleLoansCorrection.getText().length() > 0) {
                 member.setOutstandingLoanOnSetup(Double.parseDouble(txtAMMiddleCycleLoansCorrection.getText().toString()));
+            }
+
+            if (txtAMMiddleCycleLoansCorrectionComment.getText().length() > 0) {
+                member.setOutstandingLoanOnSetupCorrectionComment(txtAMMiddleCycleLoansCorrectionComment.getText().toString());
             }
 
         }
@@ -829,16 +838,16 @@ public class AddMemberActivity extends SherlockActivity {
         TextView txtPhone = (TextView) findViewById(R.id.txtAMPhoneNo);
         txtPhone.setText(null);
 
-        TextView txtLoanNumber = (TextView) findViewById(R.id.txtAMMOutstandingLoanNumber);
-        txtLoanNumber.setText(null);
+        /**TextView txtLoanNumber = (TextView) findViewById(R.id.txtAMMOutstandingLoanNumber);
+         txtLoanNumber.setText(null); */
 
         cboAMMemberNo.requestFocus();
     }
 
     protected void updateDisplay() {
-        if (viewClicked != null)
-        {
+        if (viewClicked != null) {
             viewClicked.setText(new StringBuilder()
+
                     // Month is 0 based so add 1
                     .append(String.format("%02d", mDay))
                     .append("-")

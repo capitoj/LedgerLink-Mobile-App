@@ -87,7 +87,7 @@
             android:layout_alignLeft="@id/btnLogin"
             android:layout_below="@id/btnLogin"
             android:layout_marginTop="2dp"
-            android:text="@string/help"
+            android:text="@string/help_forgot_passkey"
             android:textSize="14sp" />
         <!--  <TextView
               android:id="@+id/lblSISwitchMode"

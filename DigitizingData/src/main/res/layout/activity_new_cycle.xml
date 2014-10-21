@@ -114,8 +114,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="20dip">
+            android:layout_marginBottom="20dip"
+            android:orientation="vertical">
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblNCStartDate"
@@ -190,5 +190,149 @@
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/sectionNCMiddleCycleStart"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:layout_marginTop="50dip"
+            android:orientation="vertical">
+
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                android:id="@+id/txtNCP_header2"
+                style="@style/SubHeadingLowCaps"
+                android:layout_width="match_parent"
+                android:layout_height="25dip"
+                android:text="Middle Cycle Start" />
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="70dip"
+                android:orientation="vertical">
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCMiddleCycleInformationHeading"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="This information was added on 3 Mar 2013 after the cycle started. Here are the interest and fines collected by that day." />
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCMiddleCycleInterestCollectedSoFarLabel"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total amount of interest collected during current cycle so far" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCMiddleCycleInterestCollectedSoFar"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0 UGX" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCInterestCollectedSoFar"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Actual amount of interest collected this cycle so far if the original interest was incorrect (you may enter a correction once)" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dip">
+
+                    <org.applab.digitizingdata.fontutils.TypefaceEditText
+                        android:id="@+id/txtNCInterestCollectedSoFar"
+                        style="@style/NormalEditText"
+                        android:layout_width="200dip"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+
+                    <org.applab.digitizingdata.fontutils.TypefaceTextView
+                        android:id="@+id/lblNCInterestCurrency"
+                        style="@style/InlineTextItem"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:text="UGX" />
+
+                </LinearLayout>
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCMiddleCycleInterestCorrectionCommentLabel"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comment" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    android:id="@+id/txtNCMiddleCycleInterestCorrectionComment"
+                    style="@style/NormalEditText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCMiddleCycleFinesCollectedSoFarLabel"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total amount of fines collected during current cycle so far" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCMiddleCycleFinesCollectedSoFar"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0 UGX" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCFinesCollectedSoFar"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Actual amount of fines collected this cycle so far if the original interest was incorrect (you may enter a correction once)" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dip">
+
+                    <org.applab.digitizingdata.fontutils.TypefaceEditText
+                        android:id="@+id/txtNCFinesCollectedSoFar"
+                        style="@style/NormalEditText"
+                        android:layout_width="200dip"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+
+                    <org.applab.digitizingdata.fontutils.TypefaceTextView
+                        android:id="@+id/lblNCFinesCurrency"
+                        style="@style/InlineTextItem"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:text="UGX" />
+
+                </LinearLayout>
+
+                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCMiddleCycleFinesCorrectionCommentLabel"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comment" />
+
+                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                    android:id="@+id/txtNCMiddleCycleFinesCorrectionComment"
+                    style="@style/NormalEditText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:text="" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

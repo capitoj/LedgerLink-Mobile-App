@@ -21,6 +21,8 @@ public class VslaCycle {
     private double sharedAmount;
     private double interestAtSetup;
     private double finesAtSetup;
+    private String interestAtSetupCorrectionComment;
+    private String finesAtSetupCorrectionComment;
 
     public VslaCycle(){
 
@@ -169,11 +171,27 @@ public class VslaCycle {
         this.interestAtSetup = interestAtSetup;
     }
 
+    public String getInterestAtSetupCorrectionComment() {
+        return interestAtSetupCorrectionComment;
+    }
+
+    public void setInterestAtSetupCorrectionComment(String interestAtSetupCorrectionComment) {
+        this.interestAtSetupCorrectionComment = interestAtSetupCorrectionComment;
+    }
+
     public double getFinesAtSetup() {
         return finesAtSetup;
     }
 
     public void setFinesAtSetup(double finesAtSetup) {
         this.finesAtSetup = finesAtSetup;
+    }
+
+    public String getFinesAtSetupCorrectionComment() {
+        return finesAtSetupCorrectionComment;
+    }
+
+    public void setFinesAtSetupCorrectionComment(String finesAtSetupCorrectionComment) {
+        this.finesAtSetupCorrectionComment = finesAtSetupCorrectionComment;
     }
 }

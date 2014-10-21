@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -23,11 +25,13 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.Utils;
+import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
@@ -59,6 +63,7 @@ public class NewCycleActivity extends SherlockActivity {
     protected boolean successAlertDialogShown = false;
     protected boolean isUpdateCycleAction = false;
     protected boolean multipleCyclesIndicator = false;
+    LinearLayout linearLayout;
 
     protected VslaCycle selectedCycle;
 
@@ -87,6 +92,9 @@ public class NewCycleActivity extends SherlockActivity {
 
         txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
         txtEndDate = (TextView) findViewById(R.id.txtNCEndDate);
+        linearLayout = (LinearLayout) findViewById(R.id.sectionNCMiddleCycleStart);
+        linearLayout.setVisibility(View.GONE);
+
 
         //Set onClick Listeners to load the DateDialog for startDate
         txtStartDate.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +142,53 @@ public class NewCycleActivity extends SherlockActivity {
                 lblNCHeader.setText("Edit the cycle beginning " + Utils.formatDate(selectedCycle.getStartDate(), "dd MMM yyyy") + " and ending " + Utils.formatDate(selectedCycle.getEndDate(), "dd MMM yyyy") + ".");
                 //Populate Fields
                 populateDataFields(selectedCycle);
+
+                // Populate GSW fields
+                // If cycle has no GSW data don't show GSW fields
+                MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
+                Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+                if (dummyGSWMeeting != null) {
+                    if (selectedCycle.getCycleId() != dummyGSWMeeting.getVslaCycle().getCycleId()) {
+                        //linearLayout = (LinearLayout) findViewById(R.id.sectionNCMiddleCycleStart);
+                        linearLayout.setVisibility(View.GONE);
+                    } else if (selectedCycle.getInterestAtSetup() == 0 && selectedCycle.getFinesAtSetup() == 0) {
+                        linearLayout.setVisibility(View.GONE);
+                    } else {
+                        linearLayout.setVisibility(View.VISIBLE);
+                        TextView lblNCMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblNCMiddleCycleInformationHeading);
+
+                        TextView txtInterestCollectedSoFar = (TextView) findViewById(R.id.lblNCMiddleCycleInterestCollectedSoFar);
+                        TextView txtFinesCollectedSoFar = (TextView) findViewById(R.id.lblNCMiddleCycleFinesCollectedSoFar);
+                        txtInterestCollectedSoFar.setText(String.format("%.0f UGX", selectedCycle.getInterestAtSetup()));
+                        txtFinesCollectedSoFar.setText(String.format("%.0f UGX", selectedCycle.getFinesAtSetup()));
+
+                        if (isUpdateCycleAction) {
+                            EditText txtNCInterestCorrectionComment = (EditText) findViewById(R.id.txtNCMiddleCycleInterestCorrectionComment);
+                            if (null != selectedCycle.getInterestAtSetupCorrectionComment()) {
+                                if (!selectedCycle.getInterestAtSetupCorrectionComment().trim().isEmpty()) {
+                                    txtNCInterestCorrectionComment.setText(selectedCycle.getFinesAtSetupCorrectionComment());
+                                }
+                            }
+
+                            EditText txtNCFinesCorrectionComment = (EditText) findViewById(R.id.txtNCMiddleCycleFinesCorrectionComment);
+                            if (null != selectedCycle.getInterestAtSetupCorrectionComment()) {
+                                if (!selectedCycle.getFinesAtSetupCorrectionComment().trim().isEmpty()) {
+                                    txtNCFinesCorrectionComment.setText(selectedCycle.getFinesAtSetupCorrectionComment());
+                                }
+                            }
+                        }
+
+                        lblNCMiddleCycleInformationHeading.setText("This information was added after the cycle started. Here are the interest and fines collected by that day.");
+
+                        if (dummyGSWMeeting != null) {
+                            lblNCMiddleCycleInformationHeading.setText("This information was added on" + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are the interest and fines collected by that day.");
+                        }
+
+                    }
+
+
+                }
+
 
                 //Set the fields required by the DatePicker
                 //TODO: Will find a way of setting defaults for both dates accordingly
@@ -459,7 +514,7 @@ public class NewCycleActivity extends SherlockActivity {
                 return false;
             }
 
-            if(isUpdateCycleAction){
+            if (isUpdateCycleAction) {
                 return true;
             }
 
@@ -484,6 +539,7 @@ public class NewCycleActivity extends SherlockActivity {
     protected boolean validateData(VslaCycle cycle) {
         try {
             if (null == cycle) {
+                Log.d("GSWNCA", "validated Cycle Data returning false here 0");
                 return false;
             }
 
@@ -493,12 +549,14 @@ public class NewCycleActivity extends SherlockActivity {
             if (sharePrice.length() < 1) {
                 displayMessageBox(dialogTitle, "The Share Price is required.", Utils.MSGBOX_ICON_EXCLAMATION);
                 txtSharePrice.requestFocus();
+                Log.d("GSWNCA", "validated Cycle Data returning false here 1");
                 return false;
             } else {
                 double theSharePrice = Double.parseDouble(sharePrice);
                 if (theSharePrice <= 0.00) {
                     displayMessageBox(dialogTitle, "The Share Price must be positive.", Utils.MSGBOX_ICON_EXCLAMATION);
                     txtSharePrice.requestFocus();
+                    Log.d("GSWNCA", "validated Cycle Data returning false here 2");
                     return false;
                 } else {
                     cycle.setSharePrice(theSharePrice);
@@ -518,6 +576,7 @@ public class NewCycleActivity extends SherlockActivity {
             if (cboMaxShareQty.getSelectedItemPosition() == 0) {
                 Utils.createAlertDialogOk(this, dialogTitle, "The Maximum Share Quantity is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboMaxShareQty.requestFocus();
+                Log.d("GSWNCA", "validated Cycle Data returning false here 3");
                 return false;
             } else {
                 String maxShareQty = cboMaxShareQty.getSelectedItem().toString().trim();
@@ -525,6 +584,7 @@ public class NewCycleActivity extends SherlockActivity {
                 if (theMaxShareQty <= 0) {
                     displayMessageBox(dialogTitle, "The Maximum Share Quantity must be positive.", Utils.MSGBOX_ICON_EXCLAMATION);
                     cboMaxShareQty.requestFocus();
+                    Log.d("GSWNCA", "validated Cycle Data returning false here 4");
                     return false;
                 } else {
                     cycle.setMaxSharesQty(theMaxShareQty);
@@ -556,6 +616,7 @@ public class NewCycleActivity extends SherlockActivity {
             if (dtEnd.before(cycle.getStartDate())) {
                 displayMessageBox(dialogTitle, "The End Date must be after the Start Date", Utils.MSGBOX_ICON_EXCLAMATION);
                 txtEndDate.requestFocus();
+                Log.d("GSWNCA", "validated Cycle Data returning false here 5");
                 return false;
             } else {
                 cycle.setEndDate(dtEnd);
@@ -567,12 +628,14 @@ public class NewCycleActivity extends SherlockActivity {
             if (interestRate.length() < 1) {
                 displayMessageBox(dialogTitle, "The Interest Rate is required.", Utils.MSGBOX_ICON_EXCLAMATION);
                 txtInterestRate.requestFocus();
+                Log.d("GSWNCA", "validated Cycle Data returning false here 6");
                 return false;
             } else {
                 double theInterestRate = Double.parseDouble(interestRate);
                 if (theInterestRate < 0.00) {
                     displayMessageBox(dialogTitle, "The Interest Rate should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
                     txtInterestRate.requestFocus();
+                    Log.d("GSWNCA", "validated Cycle Data returning false here 7");
                     return false;
                 } else {
                     cycle.setInterestRate(theInterestRate);
@@ -597,17 +660,91 @@ public class NewCycleActivity extends SherlockActivity {
                             Utils.createAlertDialogOk(NewCycleActivity.this, dialogTitle,
                                     String.format("The start date of this cycle should be after the share-out date of the previous cycle, which was: %s.", Utils.formatDate(mostRecentCycle.getDateEnded())),
                                     Utils.MSGBOX_ICON_EXCLAMATION).show();
+                            Log.d("GSWNCA", "validated Cycle Data returning false here 8");
                             return false;
                         }
                     }
                 }
             }
 
+            //Validation specific to getting started wizard
+            //Validate Amount of interest
+            EditText txtInterestCollectedSoFar = (EditText) findViewById(R.id.txtNCInterestCollectedSoFar);
+            String interest = txtInterestCollectedSoFar.getText().toString().trim();
+            if (interest.length() < 1) {
+                Log.d("GSWNCA", "validated Cycle Data here 1");
+                if (isUpdateCycleAction) {
+                    Log.d("GSWNCA", "validated Cycle Data here 2");
+                    cycle.setInterestAtSetup(cycle.getInterestAtSetup());
+                } else {
+                    Log.d("GSWNCA", "validated Cycle Data here 3");
+                    cycle.setInterestAtSetup(0);
+                }
+            } else {
+                double interestSoFar = Double.parseDouble(interest);
+                if (interestSoFar < 0.00) {
+                    displayMessageBox(dialogTitle, "Total amount of Interest collected in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    txtInterestCollectedSoFar.requestFocus();
+                    Log.d("GSWNCA", "validated Cycle Data returning false here 9");
+                    return false;
+                } else {
+                    Log.d("GSWNCA", "validated Cycle Data here 4");
+                    cycle.setInterestAtSetup(interestSoFar);
+                }
+            }
+
+            //Validate Amount of fines
+            EditText txtFinesCollectedSoFar = (EditText) findViewById(R.id.txtNCFinesCollectedSoFar);
+            String fines = txtFinesCollectedSoFar.getText().toString().trim();
+            if (fines.length() < 1) {
+                Log.d("GSWNCA", "validated Cycle Data here 5");
+                if (isUpdateCycleAction) {
+                    Log.d("GSWNCA", "validated Cycle Data here 6");
+                    cycle.setFinesAtSetup(cycle.getFinesAtSetup());
+                } else {
+                    Log.d("GSWNCA", "validated Cycle Data here 7");
+                    cycle.setFinesAtSetup(0);
+                }
+            } else {
+                double finesSoFar = Double.parseDouble(fines);
+                if (finesSoFar < 0.00) {
+                    displayMessageBox(dialogTitle, "Total amount of Fines collected in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    txtFinesCollectedSoFar.requestFocus();
+                    Log.d("GSWNCA", "validated Cycle Data returning false here 9");
+                    return false;
+                } else {
+                    Log.d("GSWNCA", "validated Cycle Data here 8");
+                    cycle.setFinesAtSetup(finesSoFar);
+                }
+            }
+
+            if (isUpdateCycleAction) {
+                Log.d("GSWNCA", "validated Cycle Data here 9");
+                EditText txtNCInterestCorrectionComment = (EditText) findViewById(R.id.txtNCMiddleCycleInterestCorrectionComment);
+                if (null != txtNCInterestCorrectionComment) {
+                    if (!txtNCInterestCorrectionComment.getText().toString().isEmpty() && txtNCInterestCorrectionComment.isShown()) {
+                        Log.d("GSWNCA", "validated Cycle Data here 10");
+                        cycle.setInterestAtSetupCorrectionComment(txtNCInterestCorrectionComment.getText().toString());
+                    }
+                }
+
+                EditText txtNCFinesCorrectionComment = (EditText) findViewById(R.id.txtNCMiddleCycleFinesCorrectionComment);
+                if (null != txtNCFinesCorrectionComment) {
+                    if (!txtNCFinesCorrectionComment.getText().toString().isEmpty() && txtNCFinesCorrectionComment.isShown()) {
+                        Log.d("GSWNCA", "validated Cycle Data here 11");
+                        cycle.setFinesAtSetupCorrectionComment(txtNCFinesCorrectionComment.getText().toString());
+                    }
+                }
+            }
+
+
             //Set the Cycle as Active
             cycle.activate();
+            Log.d("GSWNCA", "validated Cycle Data here 10");
 
             return true;
         } catch (Exception ex) {
+            ex.printStackTrace();
             return false;
         }
     }

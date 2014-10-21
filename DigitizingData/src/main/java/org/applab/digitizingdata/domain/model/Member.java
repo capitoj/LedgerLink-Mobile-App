@@ -29,6 +29,8 @@ public class Member {
     private double savingsOnSetup;
     private int outstandingLoanNumberOnSetup;
     private double outstandingLoanOnSetup;
+    private String savingsOnSetupCorrectionComment;
+    private String outstandingLoanOnSetupCorrectionComment;
 
     //This is the date of next repayment of middle start loan
     //TODO: ideally this shouldnt be apart of member defination but what to do?
@@ -241,6 +243,21 @@ public class Member {
 
     public void setOutstandingLoanOnSetup(double outstandingLoanOnSetup) {
         this.outstandingLoanOnSetup = outstandingLoanOnSetup;
+    }
+    public String getSavingsOnSetupCorrectionComment() {
+        return savingsOnSetupCorrectionComment;
+    }
+
+    public void setSavingsOnSetupCorrectionComment(String savingsOnSetupCorrectionComment) {
+        this.savingsOnSetupCorrectionComment = savingsOnSetupCorrectionComment;
+    }
+
+    public String getOutstandingLoanOnSetupCorrectionComment() {
+        return outstandingLoanOnSetupCorrectionComment;
+    }
+
+    public void setOutstandingLoanOnSetupCorrectionComment(String outstandingLoanOnSetupCorrectionComment) {
+        this.outstandingLoanOnSetupCorrectionComment = outstandingLoanOnSetupCorrectionComment;
     }
 
     public Date getDateOfFirstRepayment()
