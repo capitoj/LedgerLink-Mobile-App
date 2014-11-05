@@ -109,8 +109,8 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                             Toast.makeText(MemberSavingHistoryActivity.this, "Savings entered successfully", Toast.LENGTH_LONG).show();
                             Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                             i.putExtra("_tabToSelect", "savings");
-                            i.putExtra("_meetingDate",meetingDate);
-                            i.putExtra("_meetingId",meetingId);
+                            i.putExtra("_meetingDate", meetingDate);
+                            i.putExtra("_meetingId", meetingId);
                             startActivity(i);
                             finish();
                         }
@@ -123,8 +123,8 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                     public void onClick(View v) {
                         Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                         i.putExtra("_tabToSelect", "savings");
-                        i.putExtra("_meetingDate",meetingDate);
-                        i.putExtra("_meetingId",meetingId);
+                        i.putExtra("_meetingDate", meetingDate);
+                        i.putExtra("_meetingId", meetingId);
                         startActivity(i);
                         finish();
                     }
@@ -190,8 +190,8 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MeetingActivity.class);
                 upIntent.putExtra("_tabToSelect", "savings");
-                upIntent.putExtra("_meetingDate",meetingDate);
-                upIntent.putExtra("_meetingId",meetingId);
+                upIntent.putExtra("_meetingDate", meetingDate);
+                upIntent.putExtra("_meetingId", meetingId);
 
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
                     // This activity is not part of the application's task, so
@@ -211,8 +211,8 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             case R.id.mnuMSHCancel:
                 i = new Intent(MemberSavingHistoryActivity.this, MeetingActivity.class);
                 i.putExtra("_tabToSelect", "savings");
-                i.putExtra("_meetingDate",meetingDate);
-                i.putExtra("_meetingId",meetingId);
+                i.putExtra("_meetingDate", meetingDate);
+                i.putExtra("_meetingId", meetingId);
                 startActivity(i);
                 return true;
             case R.id.mnuMSHSave:
@@ -221,8 +221,8 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                     Toast.makeText(MemberSavingHistoryActivity.this,"Savings entered successfully",Toast.LENGTH_LONG).show();
                     i = new Intent(MemberSavingHistoryActivity.this, MeetingActivity.class);
                     i.putExtra("_tabToSelect", "savings");
-                    i.putExtra("_meetingDate",meetingDate);
-                    i.putExtra("_meetingId",meetingId);
+                    i.putExtra("_meetingDate", meetingDate);
+                    i.putExtra("_meetingId", meetingId);
                     startActivity(i);
                 }
         }

@@ -37,6 +37,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
     MeetingFineRepo fineRepo = null;
     MeetingStartingCash startingCashDetails = null;
     MeetingStartingCash currentStartingCashDetails = null;
+    MeetingStartingCash previousClosingCash = null;
     private MeetingActivity parentActivity; //to access parent meeting activity
     EditText txtCashToBankAmount;
 
@@ -228,18 +229,34 @@ public class MeetingCashBookFrag extends SherlockFragment {
 
              } */
             startingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
-            if (previousMeeting == null) {
-             currentStartingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
+          /**  if (previousMeeting == null) {
+                currentStartingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
                 expectedStartingCash = currentStartingCashDetails.getExpectedStartingCash();
-               // totalCashInBox = startingCashDetails.getExpectedStartingCash();
-             //expectedStartingCash = totalCashInBox;
-             totalSavings = 0.0;
-             totalLoansIssued = 0.0;
-             totalFines = 0.0;
-             totalLoansRepaid = 0.0;
-             Log.d("MCB acts7", String.valueOf(totalCashInBox));
-             } else { expectedStartingCash = startingCashDetails.getExpectedStartingCash();}
+                // totalCashInBox = startingCashDetails.getExpectedStartingCash();
+                //expectedStartingCash = totalCashInBox;
+                totalSavings = 0.0;
+                totalLoansIssued = 0.0;
+                totalFines = 0.0;
+                totalLoansRepaid = 0.0;
+                Log.d("MCB acts7", String.valueOf(totalCashInBox));
+            } else {
+                expectedStartingCash = startingCashDetails.getExpectedStartingCash();
+            } */
 
+            // If there is a previous meeting get expected starting cash from there
+            if (previousMeeting != null) {
+                //targetMeetingId = previousMeeting.getMeetingId();
+                if (previousMeeting.getMeetingId() != -1) {
+                    previousClosingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
+
+                    if (previousClosingCash != null) {
+                        expectedStartingCash = previousClosingCash.getExpectedStartingCash();
+                    }
+                }
+            } else {
+                expectedStartingCash = startingCashDetails.getExpectedStartingCash();
+            }
+            Log.d("MCB acts now", String.valueOf(expectedStartingCash));
 
             totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
@@ -274,6 +291,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
                 }
             }
             Log.d("MCB acts11", String.valueOf(totalCashInBox));
+            Log.d("MCB acts now2", String.valueOf(expectedStartingCash));
             //}
             lblTotalCashInBox.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
             lblExpectedStartingCash.setText(String.format("Expected Starting Cash %,.0f UGX", expectedStartingCash));
