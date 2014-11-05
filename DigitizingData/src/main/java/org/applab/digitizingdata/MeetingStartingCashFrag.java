@@ -94,12 +94,13 @@ public class MeetingStartingCashFrag extends SherlockFragment {
         populateStartingCash();
     }
 
-   /** @Override
-    public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
-        menu.clear();
-        // getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_starting_cash, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    } */
+    /**
+     * @Override public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
+     * menu.clear();
+     * // getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_starting_cash, menu);
+     * super.onCreateOptionsMenu(menu, inflater);
+     * }
+     */
 
     @Override
     public void onPause() {
@@ -118,7 +119,6 @@ public class MeetingStartingCashFrag extends SherlockFragment {
         lblExpectedStartingCash = (TextView) getSherlockActivity().findViewById(R.id.lblExpectedStartingCash);
         lblActualCashInBox = (TextView) getSherlockActivity().findViewById(R.id.lblTotalCashInBox);
         lblCashTakenToBank = (TextView) getSherlockActivity().findViewById(R.id.lblCashTakenToBank);
-
         txtActualCashInBox = (TextView) getSherlockActivity().findViewById(R.id.txtActualStartingCash);
         txtActualCashInBoxComment = (TextView) getSherlockActivity().findViewById(R.id.txtStartingCashComment);
 
@@ -178,6 +178,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
         actualStartingCash = startingCash.getActualStartingCash();
         cashTakenToBank = startingCash.getCashSavedInBank();
 
+
         if (startingCash.getActualStartingCash() != 0.0) {
             if ((int) (startingCash.getActualStartingCash()) > 0) {
                 txtActualCashInBox.setText(String.format("%.0f", Double.valueOf(actualStartingCash)));
@@ -207,26 +208,25 @@ public class MeetingStartingCashFrag extends SherlockFragment {
                     Log.d("MSC exCah", String.valueOf(expectedStartingCash));
                 }
             }
-
         } else {
             expectedStartingCash = startingCash.getExpectedStartingCash();
         }
 
-            /** If no previous meeting; i.e. fresh Start expected starting Cash = 0;
-             *If GSW has recorded cash then the recorded cash should be shown here as a net
+        /** If no previous meeting; i.e. fresh Start expected starting Cash = 0;
+         *If GSW has recorded cash then the recorded cash should be shown here as a net
 
-            targetMeetingId = currentMeeting.getMeetingId();
+         targetMeetingId = currentMeeting.getMeetingId();
 
-            if (targetMeetingId != -1) {
-                startingCash = meetingRepo.getMeetingStartingCash(targetMeetingId);
+         if (targetMeetingId != -1) {
+         startingCash = meetingRepo.getMeetingStartingCash(targetMeetingId);
 
-                if (startingCash != null) {
+         if (startingCash != null) {
 
-                    expectedStartingCash = startingCash.getExpectedStartingCash();
-                    Log.d("MSC exCah4", String.valueOf(expectedStartingCash));
-                }
-            }
-        }*/
+         expectedStartingCash = startingCash.getExpectedStartingCash();
+         Log.d("MSC exCah4", String.valueOf(expectedStartingCash));
+         }
+         }
+         }*/
 
         lblExpectedStartingCash.setText(String.format("Expected Starting Cash: %,.0f UGX", expectedStartingCash));
         lblActualCashInBox.setText(String.format("Total Cash in Box: %,.0f UGX", actualStartingCash));

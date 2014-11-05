@@ -14,6 +14,7 @@ public class FineSchema {
     public static final String COL_F_AMOUNT = "Amount";
     public static final String COL_F_EXPECTED_DATE = "ExpectedDate";
     public static final String COL_F_IS_CLEARED = "IsCleared";
+    public static final String COL_F_IS_DELETED = "IsDeleted";
     public static final String COL_F_DATE_CLEARED = "DateCleared";
     public static final String COL_F_PAID_IN_MEETING_ID = "PaidInMeetingId";
 
@@ -30,6 +31,7 @@ public class FineSchema {
         sb.append(COL_F_FINE_TYPE_ID + " INTEGER ,");
         sb.append(COL_F_AMOUNT + " NUMERIC ,");
         sb.append(COL_F_EXPECTED_DATE + " TEXT ,");
+        sb.append(COL_F_IS_DELETED + " INTEGER ,");
         sb.append(COL_F_IS_CLEARED + " INTEGER ,");
         sb.append(COL_F_DATE_CLEARED + " TEXT ,");
         sb.append(COL_F_PAID_IN_MEETING_ID + " INTEGER");
@@ -55,6 +57,7 @@ public class FineSchema {
        // sb.append(COL_F_FINE_TYPE_NAME + ",");
         sb.append(COL_F_AMOUNT + ",");
         sb.append(COL_F_EXPECTED_DATE + ",");
+        sb.append(COL_F_IS_DELETED + ",");
         sb.append(COL_F_IS_CLEARED + ",");
         sb.append(COL_F_DATE_CLEARED + ",");
         sb.append(COL_F_PAID_IN_MEETING_ID);

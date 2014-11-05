@@ -13,6 +13,7 @@ public class MeetingFine {
     private int fineTypeId;
     private double amount;
     private Date expectedDate;
+    private boolean isDeleted;
     private boolean isCleared;
     private Date dateCleared;
     private Meeting paidInMeeting;
@@ -79,6 +80,14 @@ public class MeetingFine {
 
     public void setExpectedDate(Date expectedDate) {
         this.expectedDate = expectedDate;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 
     public boolean isCleared() {
