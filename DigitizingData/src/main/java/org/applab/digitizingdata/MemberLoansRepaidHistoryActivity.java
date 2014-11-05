@@ -179,7 +179,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             }
 
             if ((recentLoan.getDateCleared() != null) && (recentLoan.getDateCleared().compareTo((Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT))) < 0)) {
-                Log.d("MLRHA", recentLoan.getDateCleared() + " " + Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT));
                 txtLoanNumber.setText(null);
 
                 // Show that Member has No Loan

@@ -193,19 +193,14 @@ public class MeetingStartingCashFrag extends SherlockFragment {
             previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), meetingId);
         }
 
-        Log.d("MSC exCah1", String.valueOf(expectedStartingCash));
-
         // If there is a previous meeting get expected starting cash from there
         if (previousMeeting != null) {
             targetMeetingId = previousMeeting.getMeetingId();
-            Log.d("MSC exCah2", String.valueOf(expectedStartingCash) + String.valueOf(targetMeetingId));
             if (targetMeetingId != -1) {
                 previousClosingCash = meetingRepo.getMeetingStartingCash(targetMeetingId);
 
                 if (previousClosingCash != null) {
-                    Log.d("MSC exCah3", String.valueOf(expectedStartingCash));
                     expectedStartingCash = previousClosingCash.getExpectedStartingCash();
-                    Log.d("MSC exCah", String.valueOf(expectedStartingCash));
                 }
             }
         } else {
@@ -273,8 +268,6 @@ public class MeetingStartingCashFrag extends SherlockFragment {
                 }
             }
 
-            Log.d("MSC exCah", String.valueOf(expectedStartingCash));
-
             // Now Save
             MeetingRepo meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
             totalCash = theCashFromBox + theCashFromBank + theFinesPaid;
@@ -283,7 +276,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
             populateStartingCash();
             return successFlg;
         } catch (Exception ex) {
-            Log.e("Meeting.saveStartingCash", ex.getMessage());
+            ex.printStackTrace();
             return successFlg;
         }
     }
