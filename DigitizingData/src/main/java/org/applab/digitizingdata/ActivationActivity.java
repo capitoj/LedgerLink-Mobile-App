@@ -3,15 +3,18 @@ package org.applab.digitizingdata;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 
 import org.apache.http.HttpEntity;
@@ -34,8 +37,6 @@ import org.json.JSONStringer;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-import com.actionbarsherlock.app.ActionBar;
-
 public class ActivationActivity extends SherlockActivity {
     VslaInfoRepo vslaInfoRepo = null;
     HttpClient client;
@@ -46,6 +47,7 @@ public class ActivationActivity extends SherlockActivity {
     ProgressDialog progressDialog = null;
     ActionBar actionBar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,13 +57,13 @@ public class ActivationActivity extends SherlockActivity {
         TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
 
-        actionBar = getSupportActionBar();
 
-        //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblVASwitchMode);
+        actionBar = getSupportActionBar();
 
         ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
         imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
         imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.logo_width), (int) this.getResources().getDimension(R.dimen.logo_height)));
+
         //If we are in training mode then show it using a custom View with distinguishable background
         //Assumed that the preferences have been set by now
         if (Utils.isExecutingInTrainingMode()) {
@@ -69,42 +71,21 @@ public class ActivationActivity extends SherlockActivity {
             actionBar.setCustomView(R.layout.activity_main_training_mode);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
-
-            //Set the label of the link
-            //  tvSwitchMode.setText("Switch To Actual VSLA Data");
-            // tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
         } else {
             actionBar.hide();
-            //Set the label of the link
-            //  tvSwitchMode.setText("Switch To Training Mode");
-            // tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
         }
 
-        //Set the textview to be underline
-        // tvSwitchMode.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
-
-        /**  tvSwitchMode.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View view) {
-        SharedPreferences appPrefs = Utils.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor prefEditor = appPrefs.edit();
-        if (Utils.isExecutingInTrainingMode()) {
-        prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_PROD);
-        Toast.makeText(getApplicationContext(), "Execution switched to Actual VSLA Data. Please start the app again.", Toast.LENGTH_LONG).show();
-        } else {
-        prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING);
-        Toast.makeText(getApplicationContext(), "Execution switched to Training Mode. Please start the app again.", Toast.LENGTH_LONG).show();
+        if (Build.VERSION.SDK_INT <= 10) {
+            actionBar.show();
         }
+        if (Build.VERSION.SDK_INT >= 14) {
+            if (ViewConfiguration.get(this).hasPermanentMenuKey()) {
+                actionBar.show();
 
-        //Save the values
-        //Can use apply() but would require API 9
-        prefEditor.commit();
-
-        finish();
+            }
         }
-        }); */
 
         vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
-        // ---Button view---
         Button btnActivate = (Button) findViewById(R.id.btnVAActivate);
         btnActivate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -273,6 +274,22 @@ public class AddMemberActivity extends SherlockActivity {
         Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
         if (dummyGSWMeeting != null) {
             lblAMMiddleCycleInformationHeading.setText("This member’s information was added on " + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+        }
+
+        /** if meeting is after 2nd meeting, disable editing outstanding balance*/
+        if(meetingRepo.getAllNonGSWMeetings().size()>2){
+            TextView lblAMMiddleCycleSavingsCorrectionLabel = (TextView) findViewById(R.id.lblAMMiddleCycleSavingsCorrectionLabel);
+            lblAMMiddleCycleSavingsCorrectionLabel.setVisibility(View.GONE);
+            EditText txtAMMiddleCycleSavingsCorrection = (EditText) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
+            LinearLayout linearLayout = (LinearLayout)txtAMMiddleCycleLoansComment.getParent();
+            linearLayout.setVisibility(View.GONE);
+
+            TextView lblAMMiddleCycleLoansCorrectionLabel = (TextView) findViewById(R.id.lblAMMiddleCycleLoansCorrectionLabel);
+            lblAMMiddleCycleLoansCorrectionLabel.setVisibility(View.GONE);
+            EditText txtAMMiddleCycleLoansCorrection = (EditText) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
+            LinearLayout linearLayout2 = (LinearLayout)txtAMMiddleCycleLoansComment.getParent();
+            linearLayout.setVisibility(View.GONE);
+
         }
 
     }
@@ -715,7 +732,7 @@ public class AddMemberActivity extends SherlockActivity {
                 member.setSavingsOnSetup(Double.parseDouble(txtAMMiddleCycleSavingsCorrection.getText().toString()));
             }
 
-            if (txtAMMiddleCycleSavingsCorrectionComment.getText().length() > 0) {
+            if (!txtAMMiddleCycleSavingsCorrectionComment.getText().toString().isEmpty()) {
                 member.setSavingsOnSetupCorrectionComment(txtAMMiddleCycleSavingsCorrectionComment.getText().toString());
             }
 
@@ -723,7 +740,8 @@ public class AddMemberActivity extends SherlockActivity {
                 member.setOutstandingLoanOnSetup(Double.parseDouble(txtAMMiddleCycleLoansCorrection.getText().toString()));
             }
 
-            if (txtAMMiddleCycleLoansCorrectionComment.getText().length() > 0) {
+            if (!txtAMMiddleCycleLoansCorrectionComment.getText().toString().isEmpty()) {
+                Log.d("AMA", txtAMMiddleCycleLoansCorrectionComment.getText().toString());
                 member.setOutstandingLoanOnSetupCorrectionComment(txtAMMiddleCycleLoansCorrectionComment.getText().toString());
             }
 

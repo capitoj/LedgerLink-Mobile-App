@@ -294,7 +294,7 @@ public class SampleDataBuilderRepo {
                                     loanIssuedRepo = new MeetingLoanIssuedRepo(appContext);
                                 }
                                 //updateMemberLoanBalances(int loanId, double totalRepaid, double balance, Date newDateDue)
-                                loanIssuedRepo.updateMemberLoanBalances(theLoan.getLoanId(),theLoan.getTotalRepaid() + theLoan.getLoanBalance(), 0D, null);
+                                loanIssuedRepo.updateMemberLoanBalancesWithMeetingDate(theLoan.getLoanId(),theLoan.getTotalRepaid() + theLoan.getLoanBalance(), 0D, null, Utils.formatDate(meeting.getMeetingDate()));
                             }
                         }
                     }
@@ -411,7 +411,7 @@ public class SampleDataBuilderRepo {
                                     loanIssuedRepo = new MeetingLoanIssuedRepo(appContext);
                                 }
                                 //updateMemberLoanBalances(int loanId, double totalRepaid, double balance, Date newDateDue)
-                                loanIssuedRepo.updateMemberLoanBalances(theLoan.getLoanId(),theLoan.getTotalRepaid() + repayAmount, rolloverBalance, nextDueDate.getTime());
+                                loanIssuedRepo.updateMemberLoanBalancesWithMeetingDate(theLoan.getLoanId(),theLoan.getTotalRepaid() + repayAmount, rolloverBalance, nextDueDate.getTime(), Utils.formatDate(meeting.getMeetingDate()));
                             }
                         }
                     }

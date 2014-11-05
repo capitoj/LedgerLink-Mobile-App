@@ -3,7 +3,6 @@ package org.applab.digitizingdata;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -23,11 +22,11 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
-import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
@@ -378,7 +377,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             Utils._meetingDataViewMode = Utils.MeetingDataViewMode.VIEW_MODE_CAPTURE;
 
             i = new Intent(getApplicationContext(), MeetingActivity.class);
-            i.putExtra("_meetingDate",Utils.formatDate(currentMeeting.getMeetingDate(), "dd-MMM-yyyy"));
+            i.putExtra("_meetingDate",Utils.formatDate(currentMeeting.getMeetingDate(), "dd MMM yyyy"));
             i.putExtra("_meetingId",currentMeeting.getMeetingId());
             i.putExtra("_currentMeetingId",currentMeeting.getMeetingId());
             i.putExtra("_viewOnly", false);

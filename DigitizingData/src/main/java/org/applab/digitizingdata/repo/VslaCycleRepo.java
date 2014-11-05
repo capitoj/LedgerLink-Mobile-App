@@ -534,6 +534,8 @@ public class VslaCycleRepo {
             values.put(VslaCycleSchema.COL_VC_IS_ENDED, (cycle.isEnded()) ? 1 : 0);
             values.put(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP, cycle.getInterestAtSetup());
             values.put(VslaCycleSchema.COL_VC_FINES_AT_SETUP, cycle.getFinesAtSetup());
+            values.put(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP_COMMENT, cycle.getInterestAtSetupCorrectionComment());
+            values.put(VslaCycleSchema.COL_VC_FINES_AT_SETUP_COMMENT, cycle.getFinesAtSetupCorrectionComment());
 
             //if dateEnded is Null use the current date
             if(cycle.getDateEnded() == null) {

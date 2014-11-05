@@ -666,11 +666,9 @@ public class MeetingRepo {
             // Inserting or UpdatingRow
             long retVal = -1;
             if (performUpdate) {
-                Log.d("MR", "update");
                 retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                         new String[]{String.valueOf(meetingId)});
             } else {
-                Log.d("MR", "insert");
                 retVal = db.insert(MeetingSchema.getTableName(), null, values);
             }
 
@@ -976,8 +974,8 @@ public class MeetingRepo {
                     MeetingSchema.COL_MT_IS_MARKED_FOR_DELETION, 1,
                     MeetingSchema.COL_MT_MEETING_ID);
             cursor = db.rawQuery(selectQuery, null);
-            Log.d("MR", selectQuery);
-            //Get the second row
+
+            // Get the second row
             if (cursor != null && cursor.moveToFirst()) {
                 if (cursor.getCount() < 1) {
                     return null;
@@ -999,7 +997,6 @@ public class MeetingRepo {
                     } else {
                         meeting.setMeetingDataSent(false);
                     }
-                    Log.d("MR2", String.valueOf(meeting.getMeetingId()));
                     return meeting;
                 } else {
                     return null;

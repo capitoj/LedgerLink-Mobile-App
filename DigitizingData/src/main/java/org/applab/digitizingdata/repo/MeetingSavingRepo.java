@@ -76,7 +76,6 @@ public class MeetingSavingRepo {
                     SavingSchema.COL_S_MEMBER_ID, memberId, SavingSchema.COL_S_SAVING_ID);
             cursor = db.rawQuery(query, null);
 
-            Log.d("MSR",query);
 
             //double saving = 0.0;
             if (cursor != null && cursor.moveToFirst()) {

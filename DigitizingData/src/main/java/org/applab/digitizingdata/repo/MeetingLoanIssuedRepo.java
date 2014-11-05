@@ -146,9 +146,11 @@ public class MeetingLoanIssuedRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT SUM(%s) AS LoanBalance, %s AS NextDueDate FROM %s WHERE %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d)",
+            String sumQuery = String.format("SELECT SUM(%s) AS LoanBalance, %s AS NextDueDate, %s AS DateCleared, %s AS IsCleared FROM %s WHERE %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d)",
                     LoanIssueSchema.COL_LI_BALANCE,
                     LoanIssueSchema.COL_LI_DATE_DUE,
+                    LoanIssueSchema.COL_LI_DATE_CLEARED,
+                    LoanIssueSchema.COL_LI_IS_CLEARED,
                     LoanIssueSchema.getTableName(),
                     LoanIssueSchema.COL_LI_MEMBER_ID, memberId,
                     LoanIssueSchema.COL_LI_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
@@ -162,7 +164,11 @@ public class MeetingLoanIssuedRepo {
                     Date dateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("NextDueDate")));
                     loan.setDateDue(dateDue);
                 }
-
+                if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
+                    Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
+                    loan.setDateCleared(dateCleared);
+                }
+                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
             }
 
             return loan;
@@ -271,7 +277,7 @@ public class MeetingLoanIssuedRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT  SUM(%s) AS TotalIssues FROM %s WHERE %s=%d",
+            String sumQuery = String.format("SELECT SUM(%s) AS TotalIssues FROM %s WHERE %s=%d",
                     LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, LoanIssueSchema.getTableName(),
                     LoanIssueSchema.COL_LI_MEETING_ID, meetingId);
             cursor = db.rawQuery(sumQuery, null);
@@ -896,6 +902,68 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
+    public MeetingLoanIssued getAllMostRecentLoanIssuedToMember(int memberId) {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        MeetingLoanIssued loan = null;
+
+        try {
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  L.%s AS LoanId, L.%s AS MeetingId, L.%s AS PrincipalAmount, L.%s AS InterestAmount, " +
+                            "L.%s AS LoanNo, L.%s AS Balance, L.%s AS TotalRepaid, L.%s AS IsCleared, L.%s AS DateCleared, L.%s AS DateDue " +
+                            " FROM %s AS L WHERE L.%s=%d ORDER BY L.%s DESC LIMIT 1",
+                    LoanIssueSchema.COL_LI_LOAN_ID, LoanIssueSchema.COL_LI_MEETING_ID, LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, LoanIssueSchema.COL_LI_INTEREST_AMOUNT,
+                    LoanIssueSchema.COL_LI_LOAN_NO, LoanIssueSchema.COL_LI_BALANCE, LoanIssueSchema.COL_LI_TOTAL_REPAID,
+                    LoanIssueSchema.COL_LI_IS_CLEARED, LoanIssueSchema.COL_LI_DATE_CLEARED, LoanIssueSchema.COL_LI_DATE_DUE,
+                    LoanIssueSchema.getTableName(), LoanIssueSchema.COL_LI_MEMBER_ID, memberId, LoanIssueSchema.COL_LI_LOAN_ID
+            );
+            cursor = db.rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+
+                loan = new MeetingLoanIssued();
+
+                loan.setLoanId(cursor.getInt(cursor.getColumnIndex("LoanId")));
+                Meeting meeting = new Meeting();
+                meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex("MeetingId")));
+                loan.setMeeting(meeting);
+                loan.setPrincipalAmount(cursor.getDouble(cursor.getColumnIndex("PrincipalAmount")));
+                loan.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
+                loan.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
+                loan.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
+                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
+                    Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
+                    loan.setDateCleared(dateCleared);
+                }
+                if (cursor.getString(cursor.getColumnIndex("DateDue")) != null) {
+                    Date dateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateDue")));
+                    loan.setDateDue(dateDue);
+                }
+                loan.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("InterestAmount")));
+
+                Member member = new Member();
+                member.setMemberId(memberId);
+                loan.setMember(member);
+
+            }
+            return loan;
+        } catch (Exception ex) {
+            Log.e("MeetingLoanIssuedRepo.getMostRecentLoanIssuedToMember", ex.getMessage());
+            return null;
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     public MeetingLoanIssued getLoanIssuedToMemberInMeeting(int meetingId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -1088,6 +1156,59 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
+    public boolean updateMemberLoanBalancesWithMeetingDate(int loanId, double totalRepaid, double balance, Date newDateDue, String meetingDate) {
+        SQLiteDatabase db = null;
+        boolean performUpdate = false;
+
+        try {
+            //TODO: Use a direct query to update the balances on the DB
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(LoanIssueSchema.COL_LI_BALANCE, balance);
+            values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, totalRepaid);
+            //If the loan has been cleared, then the newDateDue will be null
+            if (null != newDateDue) {
+                values.put(LoanIssueSchema.COL_LI_DATE_DUE, Utils.formatDateToSqlite(newDateDue));
+            } else {
+                //I use ContentValues.putNull(sKey) but I can just leave this line out
+                values.putNull(LoanIssueSchema.COL_LI_DATE_DUE);
+            }
+
+
+            //Determine whether to flag the loan as cleared
+            if (balance <= 0) {
+                values.put(LoanIssueSchema.COL_LI_IS_CLEARED, 1);
+                values.put(LoanIssueSchema.COL_LI_DATE_CLEARED, Utils.formatDateToSqlite(Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT)));
+                Log.d("MLIR", Utils.formatDateToSqlite(Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT)));
+            } else{
+                values.put(LoanIssueSchema.COL_LI_IS_CLEARED, 0);
+                values.putNull(LoanIssueSchema.COL_LI_DATE_CLEARED);
+
+            }
+
+            // Inserting or UpdatingRow
+            long retVal = -1;
+
+            // updating row
+            retVal = db.update(LoanIssueSchema.getTableName(), values, LoanIssueSchema.COL_LI_LOAN_ID + " = ?",
+                    new String[]{String.valueOf(loanId)});
+
+            if (retVal != -1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            Log.e("MemberLoanIssuedRepo.updateMemberLoanBalances", ex.getMessage());
+            return false;
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
     public boolean updateMemberLoanBalances(int loanId, double totalRepaid, double balance, Date newDateDue) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
@@ -1133,6 +1254,55 @@ public class MeetingLoanIssuedRepo {
             }
         }
     }
+
+
+    public boolean updateMemberLoanBalancesAndComment(int loanId, double totalRepaid, double balance, Date newDateDue, String comment) {
+        SQLiteDatabase db = null;
+        boolean performUpdate = false;
+
+        try {
+            //TODO: Use a direct query to update the balances on the DB
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(LoanIssueSchema.COL_LI_BALANCE, balance);
+            values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, totalRepaid);
+            values.put(LoanIssueSchema.COL_LI_COMMENT, comment);
+            //If the loan has been cleared, then the newDateDue will be null
+            if (null != newDateDue) {
+                values.put(LoanIssueSchema.COL_LI_DATE_DUE, Utils.formatDateToSqlite(newDateDue));
+            } else {
+                //I use ContentValues.putNull(sKey) but I can just leave this line out
+                values.putNull(LoanIssueSchema.COL_LI_DATE_DUE);
+            }
+            //Determine whether to flag the loan as cleared
+            if (balance <= 0) {
+                values.put(LoanIssueSchema.COL_LI_IS_CLEARED, 1);
+                values.put(LoanIssueSchema.COL_LI_DATE_CLEARED, Utils.formatDateToSqlite(new Date()));
+            }
+
+            // Inserting or UpdatingRow
+            long retVal = -1;
+
+            // updating row
+            retVal = db.update(LoanIssueSchema.getTableName(), values, LoanIssueSchema.COL_LI_LOAN_ID + " = ?",
+                    new String[]{String.valueOf(loanId)});
+
+            if (retVal != -1) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            Log.e("MemberLoanIssuedRepo.updateMemberLoanBalances", ex.getMessage());
+            return false;
+        } finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
 
     // Deleting single entity
     public boolean deleteLoan(int loanId) {

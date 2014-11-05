@@ -33,6 +33,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
     MeetingLoanRepaymentRepo repaymentRepo = null;
     MeetingLoanIssuedRepo loanIssuedRepo = null;
     MeetingFineRepo fineRepo = null;
+    String meetingDate = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +44,12 @@ public class DeleteMeetingActivity extends SherlockActivity {
         inflateCustomActionBar();
 
 
-        if(getIntent().hasExtra("_meetingId")) {
+        if (getIntent().hasExtra("_meetingId")) {
             this.meetingId = getIntent().getIntExtra("_meetingId", 0);
+        }
+
+        if (getIntent().hasExtra("_meetingDate")) {
+            this.meetingDate = getIntent().getStringExtra("_meetingDate");
         }
 
         //Initialize the Repositories
@@ -62,7 +67,6 @@ public class DeleteMeetingActivity extends SherlockActivity {
         TextView txtSavings = (TextView) findViewById(R.id.lblDMSavings);
         TextView txtLoanRepayments = (TextView) findViewById(R.id.lblDMLoansRepaid);
         TextView txtLoanIssues = (TextView) findViewById(R.id.lblDMLoansIssued);
-
 
 
         TextView lblDMInstructions = (TextView) findViewById(R.id.lblDMInstructions);
@@ -102,8 +106,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
 
             totalLoansIssuedInMeeting = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
             txtLoanIssues.setText(String.format("Loans issued: %,.0f %s", totalLoansIssuedInMeeting, getResources().getString(R.string.operating_currency)));
-        }
-        else {
+        } else {
             txtAttendedCount.setText("");
             txtFines.setText("");
             txtSavings.setText("");
@@ -126,7 +129,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
                         boolean cannotBeDeleted = false;
 
                         Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
-                        if(null == targetMeeting) {
+                        if (null == targetMeeting) {
                             //The meeting was not retrieved.
                             //TODO: Figure out a better way of handling this.
                             finish();
@@ -135,19 +138,19 @@ public class DeleteMeetingActivity extends SherlockActivity {
                         }
 
                         // Check whether there are savings attached to the target meeting
-                        if(savingRepo.getTotalSavingsInMeeting(meetingId) > 0.0D) {
+                        if (savingRepo.getTotalSavingsInMeeting(meetingId) > 0.0D) {
                             cannotBeDeleted = true;
                         }
 
                         //Check whether there are Repayments attached to the target meeting
                         //will require a look into the repayments
-                        if(repaymentRepo.getTotalLoansRepaidInMeeting(meetingId) > 0.0D) {
+                        if (repaymentRepo.getTotalLoansRepaidInMeeting(meetingId) > 0.0D) {
                             cannotBeDeleted = true;
                         }
 
                         //Check whether there are Loans attached to the target meeting
                         //will require a look into the loans issued
-                        if(loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId) > 0.0D) {
+                        if (loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId) > 0.0D) {
                             cannotBeDeleted = true;
                         }
 
@@ -157,27 +160,25 @@ public class DeleteMeetingActivity extends SherlockActivity {
                         //Check whether this meeting is the most recent meeting in the current cycle
                         //If not, then don't allow deleting coz it will mess up loans
                         //TODO: Figure out how to cascade Loan info when a meet is deleted
-                        if(targetMeeting.getVslaCycle() != null) {
+                        if (targetMeeting.getVslaCycle() != null) {
                             Meeting mostRecent = meetingRepo.getMostRecentMeetingInCycle(targetMeeting.getVslaCycle().getCycleId());
-                            if(mostRecent.getMeetingId() == meetingId) {
+                            if (mostRecent.getMeetingId() == meetingId) {
                                 cannotBeDeleted = false;
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(getApplicationContext(), String.format("Sorry, first delete the most recent meeting in this cycle dated: %s.", Utils.formatDate(mostRecent.getMeetingDate())), Toast.LENGTH_LONG).show();
                                 return;
                             }
                         }
-                        if(cannotBeDeleted) {
-                            Toast.makeText(getApplicationContext(),"The meeting cannot be deleted. It contains meeting data.",Toast.LENGTH_LONG).show();
+                        if (cannotBeDeleted) {
+                            Toast.makeText(getApplicationContext(), "The meeting cannot be deleted. It contains meeting data.", Toast.LENGTH_LONG).show();
                             finish();
                             return;
 
-                        }
-                        else{
+                        } else {
                             //Check whether to make the sibling meeting the current one: Data should not have been sent
                             Meeting previousMeeting = meetingRepo.getPreviousMeeting(targetMeeting.getVslaCycle().getCycleId(), targetMeeting.getMeetingId());
-                            if(previousMeeting != null) {   // && targetMeeting.isCurrent()
-                                if(!previousMeeting.isMeetingDataSent()) {
+                            if (previousMeeting != null) {   // && targetMeeting.isCurrent()
+                                if (!previousMeeting.isMeetingDataSent()) {
                                     meetingRepo.activateMeeting(previousMeeting);
                                 }
                             }
@@ -185,9 +186,10 @@ public class DeleteMeetingActivity extends SherlockActivity {
                             //TODO: Implement the UNDO feature, instead of directly deleting the meeting
                             //TODO: Cascade the deletion to clear meeting items and avoid orphaned records
                             //TODO: What if the meeting's data has been sent, what happens?
-                                repaymentRepo.reverseLoanRepaymentsForMeeting(meetingId);
+                            //repaymentRepo.reverseLoanRepaymentsForMeeting(meetingId);
+                            repaymentRepo.reverseLoanRepaymentsForMeeting(meetingId, meetingDate);
                             meetingRepo.deleteMeeting(meetingId);
-                                Toast.makeText(getApplicationContext(),"The meeting has been deleted.",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "The meeting has been deleted.", Toast.LENGTH_LONG).show();
 
 
                             //Now refresh the Begin Meeting screen
@@ -197,7 +199,8 @@ public class DeleteMeetingActivity extends SherlockActivity {
                             return;
                         }
                     }
-                });
+                }
+        );
         customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -205,7 +208,8 @@ public class DeleteMeetingActivity extends SherlockActivity {
                         finish();
                         return;
                     }
-                });
+                }
+        );
 
 
         actionBar = getSupportActionBar();
@@ -228,7 +232,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-        
+
         // Inflate the menu; this adds items to the action bar if it is present.
         getSupportMenuInflater().inflate(R.menu.delete_meeting, menu);
         return true;

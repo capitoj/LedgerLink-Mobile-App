@@ -290,6 +290,7 @@ public class Utils {
             Date dt = ft.parse(date);
             return dt;
         } catch (Exception e) {
+            e.printStackTrace();
             return new Date();
         }
 

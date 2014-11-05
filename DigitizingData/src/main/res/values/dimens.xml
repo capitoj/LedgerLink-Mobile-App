@@ -6,6 +6,9 @@
     <dimen name="view_height">119dp</dimen>
     <dimen name="logo_width">260dip</dimen>
     <dimen name="logo_height">100dip</dimen>
+    <dimen name="login_margin">2dp</dimen>
+
+    <dimen name="login_ctrl_width">265dip</dimen>
 
     <!-- Enhanced Listview -->
     <!-- The bottom offset the undo popup should have -->

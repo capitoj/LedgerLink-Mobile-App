@@ -2,18 +2,22 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
+import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersLoansRepaidArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
@@ -61,6 +65,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         actionBar = getSherlockActivity().getSupportActionBar();
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        Log.d("MLRF", meetingDate);
         String title = "Meeting";
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -138,7 +143,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                     // Pass on data
                     viewHistory.putExtra("_memberId", selectedMember.getMemberId());
                     viewHistory.putExtra("_names", selectedMember.getFullName());
-                    viewHistory.putExtra("_meetingDate",meetingDate);
+                    viewHistory.putExtra("_meetingDate", meetingDate);
                     viewHistory.putExtra("_meetingId", meetingId);
 
                     startActivity(viewHistory);

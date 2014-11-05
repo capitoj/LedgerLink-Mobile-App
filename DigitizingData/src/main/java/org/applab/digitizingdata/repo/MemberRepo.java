@@ -139,6 +139,13 @@ public class MemberRepo {
 //        c.add(Calendar.MONTH, 1);
 //        Date dueDate = c.getTime();
 
+        String comment = "";
+
+        if (null != member.getOutstandingLoanOnSetupCorrectionComment()) {
+            if (!member.getOutstandingLoanOnSetupCorrectionComment().isEmpty()) {
+                comment = member.getOutstandingLoanOnSetupCorrectionComment();
+            }
+        }
 
         if (loanIssuedToMemberInMeeting == null) {
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued not found, so create new record");
@@ -153,12 +160,6 @@ public class MemberRepo {
             double interest = 0.0;
             double balance = 0.0;
 
-            String comment = "";
-            if (null != member.getOutstandingLoanOnSetupCorrectionComment()) {
-                if (!member.getOutstandingLoanOnSetupCorrectionComment().isEmpty()) {
-                    comment = member.getOutstandingLoanOnSetupCorrectionComment();
-                }
-            }
             boolean isUpdate = false;
 
             // Save the loan
@@ -172,7 +173,7 @@ public class MemberRepo {
             // Update loan balances
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued record found, update it");
             meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
-            return meetingLoanIssuedRepo.updateMemberLoanBalances(loanIssuedToMemberInMeeting.getLoanId(), 0, member.getOutstandingLoanOnSetup(), member.getDateOfFirstRepayment());
+            return meetingLoanIssuedRepo.updateMemberLoanBalancesAndComment(loanIssuedToMemberInMeeting.getLoanId(), 0, member.getOutstandingLoanOnSetup(), member.getDateOfFirstRepayment(), comment);
         }
     }
 

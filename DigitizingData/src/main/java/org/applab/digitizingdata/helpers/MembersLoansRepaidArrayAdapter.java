@@ -107,14 +107,20 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
 
             // if (outstandingLoan == 0.0) {
 
-            if (recentLoan == null || recentLoan.getLoanBalance() == 0.0) {
+            if ((recentLoan == null || recentLoan.getLoanBalance() == 0.0) && (recentLoan.getDateCleared().compareTo(targetMeeting.getMeetingDate()) < 0)) {
                 txtBalance.setText("No outstanding loans");
                 txtDateDue.setVisibility(View.GONE);
             } else {
                 //txtBalance.setText(String.format("Outstanding loan %,.0f UGX", outstandingLoan));
                 txtBalance.setText(String.format("Outstanding loan %,.0f UGX", recentLoan.getLoanBalance()));
-                txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(recentLoan.getDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                if (recentLoan == null || recentLoan.getLoanBalance() == 0.0) {
+                    txtDateDue.setText("");
+                } else {
+                    txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(recentLoan.getDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                }
             }
+
+            //}
             //Date Due
             /** txtDateDue.setText("Date Due: -");
              if (null != targetMeeting) {

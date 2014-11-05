@@ -19,7 +19,7 @@
             android:layout_width="100dip"
             android:layout_height="match_parent"
             android:contentDescription="@string/image_content_desc"
-            android:textAlignment="center" />
+             />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lbl_vsla_name"
@@ -34,13 +34,13 @@
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblActivationLoginMsg"
             style="@style/RegularTextActivationLoginMsg"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/login_ctrl_width"
             android:layout_height="wrap_content"
             android:layout_above="@+id/edt_passkey"
             android:layout_alignLeft="@+id/lbl_vsla_name"
             android:layout_alignRight="@+id/lbl_vsla_name"
             android:paddingTop="15dip"
-            android:layout_marginBottom="3dip"
+            android:layout_marginBottom="@dimen/login_margin"
             android:text="Activation Message" />
         <!--
         android:paddingBottom="-5dip"
@@ -60,7 +60,7 @@
         <org.applab.digitizingdata.fontutils.TypefaceEditText
             android:id="@+id/edt_passkey"
             style="@style/EditTextLogin"
-            android:layout_width="265dip"
+            android:layout_width="@dimen/login_ctrl_width"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/btnLogin"
             android:layout_below="@+id/lblPassKeyPrompt"
@@ -74,7 +74,7 @@
         <org.applab.digitizingdata.fontutils.TypefaceButton
             android:id="@+id/btnLogin"
             style="@style/LoginButton"
-            android:layout_width="265dip"
+            android:layout_width="@dimen/login_ctrl_width"
             android:layout_height="wrap_content"
             android:layout_below="@id/edt_passkey"
             android:text="Sign In" />
@@ -86,7 +86,7 @@
             android:layout_height="match_parent"
             android:layout_alignLeft="@id/btnLogin"
             android:layout_below="@id/btnLogin"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="@dimen/login_margin"
             android:text="@string/help_forgot_passkey"
             android:textSize="14sp" />
         <!--  <TextView
@@ -109,7 +109,7 @@
             android:layout_height="match_parent"
             android:layout_below="@id/txtHelpInfo"
             android:layout_marginLeft="1dip"
-            android:layout_marginTop="2dip"
+            android:layout_marginTop="@dimen/login_margin"
             android:layout_marginBottom="1dip"
             android:text="version number" />
     </RelativeLayout>

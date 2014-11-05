@@ -222,7 +222,10 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
             cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());
 
             totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines + loanTopUps - cashToBank;
+            if(meetingId == meetingRepo.getDummyGettingStartedWizardMeeting().getMeetingId()){
+                totalCashInBox = startingCashDetails.getExpectedStartingCash();
 
+            }
         } catch (Exception ex) {
 
         } finally {

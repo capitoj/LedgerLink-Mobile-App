@@ -362,10 +362,8 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             if (null == cycle) {
                 return false;
             }
-            Log.d("GSWNCA", "validateMiddleCycleData here");
             //validate Data common to New Cycle
             if (!validateData(cycle)) {
-                Log.d("GSWNCA", "validated Cycle Data returning false here");
                 return false;
             }
 
@@ -377,18 +375,14 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 //displayMessageBox(dialogTitle, "The Interest Collected Is Required", Utils.MSGBOX_ICON_EXCLAMATION);
                 //txtInterestCollected.requestFocus();
                 //return false;
-                Log.d("GSWNCA", "interestCollected.length() < 1");
                 cycle.setInterestAtSetup(0);
             } else {
                 double theInterestCollected = Double.parseDouble(interestCollected);
                 if (theInterestCollected < 0.00) {
                     displayMessageBox(dialogTitle, "The Interest Collected should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
                     txtInterestCollected.requestFocus();
-                    Log.d("GSWNCA", "theInterestCollected < 0.00");
-
                     return false;
                 } else {
-                    Log.d("GSWNCA", "theInterestCollected > 0.00 Yaay");
                     cycle.setInterestAtSetup(theInterestCollected);
                 }
             }
@@ -401,22 +395,18 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 //                displayMessageBox(dialogTitle, "The Fines Collected Field Is Required", Utils.MSGBOX_ICON_EXCLAMATION);
 //                txtFinesCollected.requestFocus();
 //                return false;
-                Log.d("GSWNCA", "theFinesCollected < 1");
                 cycle.setFinesAtSetup(0);
             } else {
                 double theFinesCollected = Double.parseDouble(finesCollected);
                 if (theFinesCollected < 0.00) {
                     displayMessageBox(dialogTitle, "The Fines Collected should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
                     txtFinesCollected.requestFocus();
-                    Log.d("GSWNCA", "theFinesCollected < 0.00");
                     return false;
                 } else {
-                    Log.d("GSWNCA", "theFinesCollected > 0.00 Yaay");
                     cycle.setFinesAtSetup(theFinesCollected);
                 }
             }
 
-            Log.d("GSWNCA", "MCS values validated");
             return true;
         } catch (Exception ex) {
             return false;

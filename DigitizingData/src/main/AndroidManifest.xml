@@ -20,6 +20,13 @@
     <!-- to allow access to external storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <supports-screens
+        android:smallScreens="false"
+        android:normalScreens="false"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:requiresSmallestWidthDp="533"/>
+
     <!-- android:theme="@style/AppTheme" -->
     <application
         android:allowBackup="true"

@@ -166,12 +166,12 @@ public class NewCycleActivity extends SherlockActivity {
                             EditText txtNCInterestCorrectionComment = (EditText) findViewById(R.id.txtNCMiddleCycleInterestCorrectionComment);
                             if (null != selectedCycle.getInterestAtSetupCorrectionComment()) {
                                 if (!selectedCycle.getInterestAtSetupCorrectionComment().trim().isEmpty()) {
-                                    txtNCInterestCorrectionComment.setText(selectedCycle.getFinesAtSetupCorrectionComment());
+                                    txtNCInterestCorrectionComment.setText(selectedCycle.getInterestAtSetupCorrectionComment());
                                 }
                             }
 
                             EditText txtNCFinesCorrectionComment = (EditText) findViewById(R.id.txtNCMiddleCycleFinesCorrectionComment);
-                            if (null != selectedCycle.getInterestAtSetupCorrectionComment()) {
+                            if (null != selectedCycle.getFinesAtSetupCorrectionComment()) {
                                 if (!selectedCycle.getFinesAtSetupCorrectionComment().trim().isEmpty()) {
                                     txtNCFinesCorrectionComment.setText(selectedCycle.getFinesAtSetupCorrectionComment());
                                 }
@@ -181,7 +181,7 @@ public class NewCycleActivity extends SherlockActivity {
                         lblNCMiddleCycleInformationHeading.setText("This information was added after the cycle started. Here are the interest and fines collected by that day.");
 
                         if (dummyGSWMeeting != null) {
-                            lblNCMiddleCycleInformationHeading.setText("This information was added on" + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are the interest and fines collected by that day.");
+                            lblNCMiddleCycleInformationHeading.setText("This information was added on " + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are the interest and fines collected by that day.");
                         }
 
                     }
@@ -539,7 +539,6 @@ public class NewCycleActivity extends SherlockActivity {
     protected boolean validateData(VslaCycle cycle) {
         try {
             if (null == cycle) {
-                Log.d("GSWNCA", "validated Cycle Data returning false here 0");
                 return false;
             }
 
@@ -549,14 +548,12 @@ public class NewCycleActivity extends SherlockActivity {
             if (sharePrice.length() < 1) {
                 displayMessageBox(dialogTitle, "The Share Price is required.", Utils.MSGBOX_ICON_EXCLAMATION);
                 txtSharePrice.requestFocus();
-                Log.d("GSWNCA", "validated Cycle Data returning false here 1");
                 return false;
             } else {
                 double theSharePrice = Double.parseDouble(sharePrice);
                 if (theSharePrice <= 0.00) {
                     displayMessageBox(dialogTitle, "The Share Price must be positive.", Utils.MSGBOX_ICON_EXCLAMATION);
                     txtSharePrice.requestFocus();
-                    Log.d("GSWNCA", "validated Cycle Data returning false here 2");
                     return false;
                 } else {
                     cycle.setSharePrice(theSharePrice);
@@ -576,7 +573,6 @@ public class NewCycleActivity extends SherlockActivity {
             if (cboMaxShareQty.getSelectedItemPosition() == 0) {
                 Utils.createAlertDialogOk(this, dialogTitle, "The Maximum Share Quantity is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboMaxShareQty.requestFocus();
-                Log.d("GSWNCA", "validated Cycle Data returning false here 3");
                 return false;
             } else {
                 String maxShareQty = cboMaxShareQty.getSelectedItem().toString().trim();
@@ -584,7 +580,6 @@ public class NewCycleActivity extends SherlockActivity {
                 if (theMaxShareQty <= 0) {
                     displayMessageBox(dialogTitle, "The Maximum Share Quantity must be positive.", Utils.MSGBOX_ICON_EXCLAMATION);
                     cboMaxShareQty.requestFocus();
-                    Log.d("GSWNCA", "validated Cycle Data returning false here 4");
                     return false;
                 } else {
                     cycle.setMaxSharesQty(theMaxShareQty);
@@ -616,7 +611,6 @@ public class NewCycleActivity extends SherlockActivity {
             if (dtEnd.before(cycle.getStartDate())) {
                 displayMessageBox(dialogTitle, "The End Date must be after the Start Date", Utils.MSGBOX_ICON_EXCLAMATION);
                 txtEndDate.requestFocus();
-                Log.d("GSWNCA", "validated Cycle Data returning false here 5");
                 return false;
             } else {
                 cycle.setEndDate(dtEnd);
@@ -628,14 +622,12 @@ public class NewCycleActivity extends SherlockActivity {
             if (interestRate.length() < 1) {
                 displayMessageBox(dialogTitle, "The Interest Rate is required.", Utils.MSGBOX_ICON_EXCLAMATION);
                 txtInterestRate.requestFocus();
-                Log.d("GSWNCA", "validated Cycle Data returning false here 6");
                 return false;
             } else {
                 double theInterestRate = Double.parseDouble(interestRate);
                 if (theInterestRate < 0.00) {
                     displayMessageBox(dialogTitle, "The Interest Rate should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
                     txtInterestRate.requestFocus();
-                    Log.d("GSWNCA", "validated Cycle Data returning false here 7");
                     return false;
                 } else {
                     cycle.setInterestRate(theInterestRate);
@@ -660,7 +652,6 @@ public class NewCycleActivity extends SherlockActivity {
                             Utils.createAlertDialogOk(NewCycleActivity.this, dialogTitle,
                                     String.format("The start date of this cycle should be after the share-out date of the previous cycle, which was: %s.", Utils.formatDate(mostRecentCycle.getDateEnded())),
                                     Utils.MSGBOX_ICON_EXCLAMATION).show();
-                            Log.d("GSWNCA", "validated Cycle Data returning false here 8");
                             return false;
                         }
                     }
@@ -672,12 +663,9 @@ public class NewCycleActivity extends SherlockActivity {
             EditText txtInterestCollectedSoFar = (EditText) findViewById(R.id.txtNCInterestCollectedSoFar);
             String interest = txtInterestCollectedSoFar.getText().toString().trim();
             if (interest.length() < 1) {
-                Log.d("GSWNCA", "validated Cycle Data here 1");
                 if (isUpdateCycleAction) {
-                    Log.d("GSWNCA", "validated Cycle Data here 2");
                     cycle.setInterestAtSetup(cycle.getInterestAtSetup());
                 } else {
-                    Log.d("GSWNCA", "validated Cycle Data here 3");
                     cycle.setInterestAtSetup(0);
                 }
             } else {
@@ -685,10 +673,8 @@ public class NewCycleActivity extends SherlockActivity {
                 if (interestSoFar < 0.00) {
                     displayMessageBox(dialogTitle, "Total amount of Interest collected in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
                     txtInterestCollectedSoFar.requestFocus();
-                    Log.d("GSWNCA", "validated Cycle Data returning false here 9");
                     return false;
                 } else {
-                    Log.d("GSWNCA", "validated Cycle Data here 4");
                     cycle.setInterestAtSetup(interestSoFar);
                 }
             }
@@ -697,12 +683,9 @@ public class NewCycleActivity extends SherlockActivity {
             EditText txtFinesCollectedSoFar = (EditText) findViewById(R.id.txtNCFinesCollectedSoFar);
             String fines = txtFinesCollectedSoFar.getText().toString().trim();
             if (fines.length() < 1) {
-                Log.d("GSWNCA", "validated Cycle Data here 5");
                 if (isUpdateCycleAction) {
-                    Log.d("GSWNCA", "validated Cycle Data here 6");
                     cycle.setFinesAtSetup(cycle.getFinesAtSetup());
                 } else {
-                    Log.d("GSWNCA", "validated Cycle Data here 7");
                     cycle.setFinesAtSetup(0);
                 }
             } else {
@@ -710,20 +693,16 @@ public class NewCycleActivity extends SherlockActivity {
                 if (finesSoFar < 0.00) {
                     displayMessageBox(dialogTitle, "Total amount of Fines collected in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
                     txtFinesCollectedSoFar.requestFocus();
-                    Log.d("GSWNCA", "validated Cycle Data returning false here 9");
                     return false;
                 } else {
-                    Log.d("GSWNCA", "validated Cycle Data here 8");
                     cycle.setFinesAtSetup(finesSoFar);
                 }
             }
 
             if (isUpdateCycleAction) {
-                Log.d("GSWNCA", "validated Cycle Data here 9");
                 EditText txtNCInterestCorrectionComment = (EditText) findViewById(R.id.txtNCMiddleCycleInterestCorrectionComment);
                 if (null != txtNCInterestCorrectionComment) {
                     if (!txtNCInterestCorrectionComment.getText().toString().isEmpty() && txtNCInterestCorrectionComment.isShown()) {
-                        Log.d("GSWNCA", "validated Cycle Data here 10");
                         cycle.setInterestAtSetupCorrectionComment(txtNCInterestCorrectionComment.getText().toString());
                     }
                 }
@@ -731,7 +710,6 @@ public class NewCycleActivity extends SherlockActivity {
                 EditText txtNCFinesCorrectionComment = (EditText) findViewById(R.id.txtNCMiddleCycleFinesCorrectionComment);
                 if (null != txtNCFinesCorrectionComment) {
                     if (!txtNCFinesCorrectionComment.getText().toString().isEmpty() && txtNCFinesCorrectionComment.isShown()) {
-                        Log.d("GSWNCA", "validated Cycle Data here 11");
                         cycle.setFinesAtSetupCorrectionComment(txtNCFinesCorrectionComment.getText().toString());
                     }
                 }
@@ -740,7 +718,6 @@ public class NewCycleActivity extends SherlockActivity {
 
             //Set the Cycle as Active
             cycle.activate();
-            Log.d("GSWNCA", "validated Cycle Data here 10");
 
             return true;
         } catch (Exception ex) {

@@ -7,15 +7,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.applab.digitizingdata.datatransformation.RepaymentDataTransferRecord;
-import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
 import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
-import org.applab.digitizingdata.domain.model.MeetingLoanRepayment;
-import org.applab.digitizingdata.domain.schema.AttendanceSchema;
-import org.applab.digitizingdata.domain.schema.FineSchema;
 import org.applab.digitizingdata.domain.schema.LoanIssueSchema;
 import org.applab.digitizingdata.domain.schema.LoanRepaymentSchema;
 import org.applab.digitizingdata.domain.schema.MeetingSchema;
-import org.applab.digitizingdata.domain.schema.SavingSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.MemberLoanRepaymentRecord;
 import org.applab.digitizingdata.helpers.Utils;
@@ -665,7 +660,7 @@ public class MeetingLoanRepaymentRepo {
      * @param repaymentId
      * @return
      */
-    public boolean reverseLoanRepayment(int repaymentId) {
+    public boolean reverseLoanRepayment(int repaymentId, String meetingDate) {
 
         SQLiteDatabase db = null;
         try {
@@ -692,7 +687,9 @@ public class MeetingLoanRepaymentRepo {
             double revertedLoanBalance = targetLoan.getLoanBalance() + repaymentRecord.getAmount();
             double revertedTotalPaid = targetLoan.getTotalRepaid() - repaymentRecord.getAmount();
             Date revertedDateDue = repaymentRecord.getLastDateDue();
-            boolean revertedBalancesSuccessfully = loanIssuedRepo.updateMemberLoanBalances(targetLoanId, revertedTotalPaid, revertedLoanBalance, revertedDateDue);
+            //boolean revertedBalancesSuccessfully = loanIssuedRepo.updateMemberLoanBalances(targetLoanId, revertedTotalPaid, revertedLoanBalance, revertedDateDue, meetingDate);
+            boolean revertedBalancesSuccessfully = loanIssuedRepo.updateMemberLoanBalancesWithMeetingDate(targetLoanId, revertedTotalPaid, revertedLoanBalance, revertedDateDue, meetingDate);
+
             if(!revertedBalancesSuccessfully) {
                 return false;
             }
@@ -725,7 +722,7 @@ public class MeetingLoanRepaymentRepo {
      * @param meetingId
      * @return
      */
-    public boolean reverseLoanRepaymentsForMeeting(int meetingId) {
+    public boolean reverseLoanRepaymentsForMeeting(int meetingId, String meetingDate) {
 
         SQLiteDatabase db = null;
         try {
@@ -742,7 +739,7 @@ public class MeetingLoanRepaymentRepo {
             //Loop through all the repayments and reverse each individual repayment.
             //TODO: This can be done better by overloading the method to use the repaymentrecord instead of repaymentid
             for(MemberLoanRepaymentRecord repaymentRecord : repayments){
-                reverseLoanRepayment(repaymentRecord.getRepaymentId());
+                reverseLoanRepayment(repaymentRecord.getRepaymentId(), meetingDate);
             }
 
             return true;

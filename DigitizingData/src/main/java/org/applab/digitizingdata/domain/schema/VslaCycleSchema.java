@@ -55,6 +55,17 @@ public class VslaCycleSchema {
         return "DROP TABLE IF EXISTS " + TBL_VSLA_CYCLES;
     }
 
+    public static String getAlterTableScript() {
+        StringBuffer sbAlter = null;
+
+        // Create Table: VslaInfo
+        sbAlter = new StringBuffer();
+        sbAlter.append("ALTER TABLE " + TBL_VSLA_CYCLES + " ");
+        //sbAlter.append("ADD COLUMN " + COL_VC_FINES_AT_SETUP_COMMENT + " TEXT AFTER " + COL_VC_FINES_AT_SETUP + ", ");
+      //  sbAlter.append("ADD IF NOT EXISTS COLUMN " + COL_VC_NARA_AT_SETUP_COMMENT + " TEXT AFTER " + COL_VC_INTEREST_AT_SETUP_COMMENT + ";" );
+        return sbAlter.toString();
+    }
+
     public static String getTableName() {
         return TBL_VSLA_CYCLES;
     }
@@ -85,5 +96,7 @@ public class VslaCycleSchema {
         String[] columns = getColumnList().split(",");
         return columns;
     }
+
+
 }
 
