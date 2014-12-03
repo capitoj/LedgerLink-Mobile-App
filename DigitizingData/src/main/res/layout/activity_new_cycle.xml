@@ -295,7 +295,7 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Actual amount of fines collected this cycle so far if the original interest was incorrect (you may enter a correction once)" />
+                    android:text="Actual amount of fines collected this cycle so far if the original fines amount was incorrect (you may enter a correction once)" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
