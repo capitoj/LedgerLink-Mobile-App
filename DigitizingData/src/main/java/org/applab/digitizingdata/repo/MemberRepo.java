@@ -260,11 +260,9 @@ public class MemberRepo {
         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
 
         MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
-        Log.d(context.getPackageName(), "Member id is " + member.getMemberId());
         MeetingLoanIssued loanIssuedToMemberInMeeting = meetingLoanIssuedRepo.getLoanIssuedToMemberInMeeting(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
 
         //If loan object is null, set the loan on setup as 0
-        Log.d(context.getPackageName(), "Loan Issued To Member object is " + loanIssuedToMemberInMeeting);
         if (loanIssuedToMemberInMeeting == null) {
             member.setOutstandingLoanOnSetup(0);
         } else {
