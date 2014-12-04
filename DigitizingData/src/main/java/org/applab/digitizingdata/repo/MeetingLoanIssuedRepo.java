@@ -285,7 +285,6 @@ public class MeetingLoanIssuedRepo {
             if (cursor != null && cursor.moveToFirst()) {
                 loansIssued = cursor.getDouble(cursor.getColumnIndex("TotalIssues"));
             }
-            Log.d("MR LI", String.valueOf(loansIssued));
             return loansIssued;
         } catch (Exception ex) {
             Log.e("MeetingLoanIssuedRepo.getTotalLoansIssuedInMeeting", ex.getMessage());
@@ -1264,7 +1263,7 @@ public class MeetingLoanIssuedRepo {
             //TODO: Use a direct query to update the balances on the DB
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
-
+            values.put(LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, balance);
             values.put(LoanIssueSchema.COL_LI_BALANCE, balance);
             values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, totalRepaid);
             values.put(LoanIssueSchema.COL_LI_COMMENT, comment);
