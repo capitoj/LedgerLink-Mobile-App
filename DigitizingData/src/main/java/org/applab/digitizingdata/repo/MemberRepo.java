@@ -560,6 +560,9 @@ public class MemberRepo {
             // To remove all rows and get a count pass "1" as the whereClause.
             db.delete(MemberSchema.getTableName(), MemberSchema.COL_M_MEMBER_ID + " = ?",
                     new String[]{String.valueOf(member.getMemberId())});
+
+            // TODO: Delete savings and outstanding loans and un paid fines too? Is it assumed that the person cashed out an paid all money due?
+
         } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MemberRepo.deleteMember", ex.getMessage());

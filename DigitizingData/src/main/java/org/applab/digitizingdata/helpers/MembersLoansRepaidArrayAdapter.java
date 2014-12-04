@@ -89,6 +89,9 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             //Get the Total
             targetMeeting = meetingRepo.getMeetingById(meetingId);
 
+
+
+
             //Get the Repayments in selected Meeting
             double repaymentInMeeting = 0.0;
             if (null != targetMeeting) {
@@ -106,17 +109,25 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             }
 
             // if (outstandingLoan == 0.0) {
+// MemberLoanRepaid
+            MemberLoanRepaymentRecord memberLoan = null;
 
             if ((recentLoan == null || recentLoan.getLoanBalance() == 0.0) && (recentLoan.getDateCleared().compareTo(targetMeeting.getMeetingDate()) < 0)) {
                 txtBalance.setText("No outstanding loans");
                 txtDateDue.setVisibility(View.GONE);
             } else {
+                // Get Member Loan Repayment Details
+
                 //txtBalance.setText(String.format("Outstanding loan %,.0f UGX", outstandingLoan));
                 txtBalance.setText(String.format("Outstanding loan %,.0f UGX", recentLoan.getLoanBalance()));
                 if (recentLoan == null || recentLoan.getLoanBalance() == 0.0) {
                     txtDateDue.setText("");
                 } else {
-                    txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(recentLoan.getDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                    memberLoan = loansRepaidRepo.getMemberLoanRepaymentRecord(selectedMember.getMemberId());
+
+                    txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(memberLoan.getNextDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
+
+                    //    txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(recentLoan.getDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
                 }
             }
 
