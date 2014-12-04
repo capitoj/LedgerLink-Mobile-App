@@ -75,7 +75,6 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Log.d("GSWNCA", "done clicked");
                             saveMiddleCycleData();
                         }
                     }
@@ -97,7 +96,6 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Log.d("GSWNCA", "next clicked");
                             saveMiddleCycleData();
                         }
                     }
@@ -281,7 +279,6 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
     private boolean saveMiddleCycleData() {
         boolean successFlg = false;
-        Log.d("GSWNCA", "saveMiddleCycleData here");
         VslaCycle cycle = new VslaCycle();
         VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
         if (selectedCycle != null) {
@@ -289,13 +286,10 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
         }
 
         if (validateGettingStartedData(cycle)) {
-            Log.d("GSWNCA", "validated MiddleCycleData here");
             boolean retVal = false;
             if (cycle.getCycleId() != 0) {
-                Log.d("GSWNCA", "next clicked to update");
                 retVal = repo.updateCycle(cycle);
             } else {
-                Log.d("GSWNCA", "next clicked to add");
                 retVal = repo.addCycle(cycle);
             }
             if (retVal) {
