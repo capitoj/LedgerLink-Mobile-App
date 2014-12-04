@@ -124,7 +124,7 @@ public class MemberRepo {
 
     public boolean updateMemberLoanOnSetup(Member member) {
         Log.d(context.getPackageName(), "Method entry updateMemberLoanOnSetup");
-        boolean savingResult = false;
+        boolean isGSW = true;
         MeetingRepo meetingRepo = new MeetingRepo(context);
 
 
