@@ -3,6 +3,8 @@ package org.applab.digitizingdata;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +49,13 @@ public class MeetingRollCallFrag extends SherlockFragment {
     }
 
 
+    @Override
+    public void onAttach(Activity activity) {
+
+        super.onAttach(activity);
+
+    }
+
     private void reloadFragmentInfo() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
@@ -88,18 +97,26 @@ public class MeetingRollCallFrag extends SherlockFragment {
         LongTaskRunner.runLongTask(loaderRunnable, "Please wait..", "Loading member list", parentActivity);
     }
 
-    //Populate Members List
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    // Populate Members List
     private void populateMembersList() {
 
-        //Load the Main Menu
+        // Load the Main Menu
         MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
         members = memberRepo.getAllMembers();
 
-        //Now get the data via the adapter
+        // Now get the data via the adapter
         final MembersRollCallArrayAdapter adapter = new MembersRollCallArrayAdapter(parentActivity.getBaseContext(), members);
-        //set whether this adapter is view only, to disable changing roll call in view only mode
+
+        // Set whether this adapter is view only, to disable changing roll call in view only mode
         adapter.viewOnly = parentActivity.isViewOnly();
-        //Pass on the meeting Id to the adapter
+
+        // Pass on the meeting Id to the adapter
         adapter.setMeetingId(meetingId);
         final ListView lvwMembers = (ListView) fragmentView.findViewById(R.id.lvwMRCFMembers);
         final TextView txtEmpty = (TextView) fragmentView.findViewById(R.id.lvwMRCFEmpty);

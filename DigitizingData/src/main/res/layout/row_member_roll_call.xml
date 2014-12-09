@@ -3,44 +3,49 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:id="@+id/layoutRMRCall"
-        android:layout_width="0dip"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="9">
+        android:baselineAligned="false">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            android:id="@+id/txtRMRCallFullName"
-            style="@style/RegularTextListItems"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="0dip"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="0. FULL NAME" />
+            android:layout_weight="9"
+            android:id="@+id/layoutRMRCall">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
-            android:id="@+id/txtRMRCallAttendance"
-            style="@style/ListSmallSubItems"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtRMRCallFullName"
-            android:text="Attended 5 Missed 3" />
-    </RelativeLayout>
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/RegularTextListItems"
+                android:id="@+id/txtRMRCallFullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:text="0. FULL NAME" />
 
+            <org.applab.digitizingdata.fontutils.TypefaceTextView
+                style="@style/ListSmallSubItems"
+                android:id="@+id/txtRMRCallAttendance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtRMRCallFullName"
+                android:text="Attended 5 Missed 3" />
+</RelativeLayout>
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
-
         <CheckBox
-            android:id="@+id/chkRMRCallAttendance"
             android:layout_width="30dip"
             android:layout_height="30dip"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="10dip"
+            android:text=""
+            android:id="@+id/chkRMRCallAttendance"
             android:focusable="false"
+            android:layout_marginTop="10dip"
             android:focusableInTouchMode="false"
-            android:text="" />
-    </RelativeLayout>
+            android:layout_alignParentLeft="true"
+            />
+        </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

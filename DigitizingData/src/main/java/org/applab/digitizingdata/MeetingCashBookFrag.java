@@ -83,10 +83,6 @@ public class MeetingCashBookFrag extends SherlockFragment {
         actionBar.setSubtitle(meetingDate);
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
-        /**    TextView lblMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMCBFMeetingDate);
-         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-         lblMeetingDate.setText(meetingDate); */
-
         parentActivity = (MeetingActivity) getSherlockActivity();
         populateCashBookFields();
 
@@ -95,6 +91,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
     @Override
     public void onPause() {
         super.onPause();
+
         //Save only if not in view only
         if (parentActivity.isViewOnly()) {
             Toast.makeText(getSherlockActivity().getApplicationContext(), "Values for past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
@@ -158,88 +155,20 @@ public class MeetingCashBookFrag extends SherlockFragment {
 
             //Get the Cycle that contains this meeting
             Meeting currentMeeting = meetingRepo.getMeetingById(meetingId);
-            Log.d("MCB expstc", "here");
+
             // Get the Cycle that contains previous meeting in order to get the expected starting Cash
             Meeting previousMeeting = null;
             if (null != meetingRepo) {
                 previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), meetingId);
             }
-            Log.d("MCB expstc", "here4");
+
             // Get expectedStartingCash
             double expectedStartingCash = 0.0;
-            /** if (previousMeeting != null) {
-             startingCashDetails = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
-             Log.d("MCB expstc", "here5");
-             expectedStartingCash = startingCashDetails.getExpectedStartingCash();
-             Log.d("MCB expstc", String.valueOf(expectedStartingCash));
-
-             totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
-             totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
-             totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
-             totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId);
-             Log.d("MCB32 acts", "here8");
-             totalLoanTopUps = startingCashDetails.getLoanTopUps();
-             Log.d("MCB32 acts", "here9");
-             double totalCashOut = totalLoansIssued;
-             double totalCashIn = actualStartingCash + totalSavings + totalLoansRepaid + totalFines;
-             totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines + totalLoanTopUps - cashToBank;
-             Log.d("MCB acts1", String.valueOf(totalCashInBox));
-
-             if (currentStartingCashDetails.getComment() != null) {
-             Log.d("MCB acts4", "not null");
-
-             if (!currentStartingCashDetails.getComment().isEmpty()) {
-             Log.d("MCB acts7", String.valueOf(totalCashInBox));
-
-             comment = currentStartingCashDetails.getComment();
-             Log.d("MCB acts4", String.valueOf(totalCashInBox));
-
-             }
-             }
-             Log.d("MCB acts5", String.valueOf(totalCashInBox));
-
-             } else {
-             Log.d("MCB expstc", "here6");
-             // Get today's actuals
-             //startingCashDetails = meetingRepo.getMeetingActualStartingCashDetails(meetingId);
-             currentStartingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
-             actualStartingCash = currentStartingCashDetails.getActualStartingCash();
-             Log.d("MCB33 acts", String.valueOf(actualStartingCash));
-             // expectedStartingCash = startingCashDetails.getExpectedStartingCash();
-             cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());
-             Log.d("MCB31 acts", String.valueOf(cashToBank));
-
-
-             if (meetingId == meetingRepo.getDummyGettingStartedWizardMeeting().getMeetingId()) {
-             totalCashInBox = currentStartingCashDetails.getExpectedStartingCash();
-             expectedStartingCash = totalCashInBox;
-             totalSavings = 0.0;
-             totalLoansIssued = 0.0;
-             totalFines = 0.0;
-             totalLoansRepaid = 0.0;
-             }
-
-             Log.d("MCB acts2", String.valueOf(totalCashInBox));
-
-             } */
             MeetingStartingCash startingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
-          /**  if (previousMeeting == null) {
-                currentStartingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
-                expectedStartingCash = currentStartingCashDetails.getExpectedStartingCash();
-                // totalCashInBox = startingCashDetails.getExpectedStartingCash();
-                //expectedStartingCash = totalCashInBox;
-                totalSavings = 0.0;
-                totalLoansIssued = 0.0;
-                totalFines = 0.0;
-                totalLoansRepaid = 0.0;
-                Log.d("MCB acts7", String.valueOf(totalCashInBox));
-            } else {
-                expectedStartingCash = startingCashDetails.getExpectedStartingCash();
-            } */
 
             // If there is a previous meeting get expected starting cash from there
             if (previousMeeting != null) {
-                //targetMeetingId = previousMeeting.getMeetingId();
+
                 if (previousMeeting.getMeetingId() != -1) {
                     MeetingStartingCash previousClosingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
 
@@ -250,7 +179,6 @@ public class MeetingCashBookFrag extends SherlockFragment {
             } else {
                 expectedStartingCash = startingCashDetails.getExpectedStartingCash();
             }
-            Log.d("MCB acts now", String.valueOf(expectedStartingCash));
 
             totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
@@ -264,29 +192,21 @@ public class MeetingCashBookFrag extends SherlockFragment {
             totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines + totalLoanTopUps - cashToBank;
 
             if (meetingId == meetingRepo.getDummyGettingStartedWizardMeeting().getMeetingId()) {
-                Log.d("MCB acts7", "here8");
                 totalCashInBox = startingCashDetails.getExpectedStartingCash();
                 expectedStartingCash = totalCashInBox;
-                Log.d("MCB acts7", String.valueOf(totalCashInBox));
                 totalSavings = 0.0;
                 totalLoansIssued = 0.0;
                 totalFines = 0.0;
                 totalLoansRepaid = 0.0;
-
             }
 
             if (null != startingCashDetails.getComment()) {
                 if (!startingCashDetails.getComment().isEmpty()) {
-                    Log.d("MCB acts9", String.valueOf(totalCashInBox));
 
                     comment = startingCashDetails.getComment();
-                    Log.d("MCB acts4", String.valueOf(totalCashInBox));
-
                 }
             }
-            Log.d("MCB acts11", String.valueOf(totalCashInBox));
-            Log.d("MCB acts now2", String.valueOf(expectedStartingCash));
-            //}
+
             lblTotalCashInBox.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
             lblExpectedStartingCash.setText(String.format("Expected Starting Cash %,.0f UGX", expectedStartingCash));
             lblActualStartingCash.setText(String.format("Actual Starting Cash %,.0f UGX", actualStartingCash));
@@ -317,12 +237,6 @@ public class MeetingCashBookFrag extends SherlockFragment {
             txtCashToBankAmount = (EditText) getSherlockActivity().findViewById(R.id.txtCashToBank);
             theCashToBank = Double.valueOf(txtCashToBankAmount.getText().toString());
 
-            Log.d("MCB2 acts", String.valueOf(totalCashInBox));
-            Log.d("MCB3 acts", String.valueOf(theCashToBank));
-            //cashToBox = totalCashInBox - cashToBank;
-
-            // double cashSavedInBank = startingCashDetails.getCashSavedInBank();
-            // cashToBank = cashToBank + cashSavedInBank;
             if (meetingRepo == null) {
                 meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
             }
