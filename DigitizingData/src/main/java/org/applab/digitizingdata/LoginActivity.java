@@ -45,7 +45,6 @@ import java.lang.ref.WeakReference;
 public class LoginActivity extends SherlockActivity {
     private VslaInfoRepo vslaInfoRepo = null;
     private VslaInfo vslaInfo = null;
-    private boolean wasCalledFromActivation = false;
 
     //variables for activating the VSLA
     HttpClient client;
@@ -53,7 +52,6 @@ public class LoginActivity extends SherlockActivity {
     private boolean activationSuccessful = false;
     private String targetVslaCode = null; //fake-fix
     private ProgressDialog progressDialog = null;
-    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +62,7 @@ public class LoginActivity extends SherlockActivity {
         TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         //TODO: Setting of Preferences is done in the first Activity that is launched.
         //Load the default Shared Preferences
@@ -139,7 +137,7 @@ public class LoginActivity extends SherlockActivity {
         vslaInfoRepo = new VslaInfoRepo(LoginActivity.this);
         vslaInfo = vslaInfoRepo.getVslaInfo();
 
-        wasCalledFromActivation = getIntent().getBooleanExtra("_wasCalledFromActivation", false);
+        boolean wasCalledFromActivation = getIntent().getBooleanExtra("_wasCalledFromActivation", false);
 
         //Determine whether to show the not-activated status
         String notActivatedStatusMessage = "";
@@ -381,6 +379,7 @@ public class LoginActivity extends SherlockActivity {
                     }
                 }
             } catch (Exception ex) {
+                assert progressDialog != null;
                 progressDialog.setMessage(ex.getMessage());
             }
         }

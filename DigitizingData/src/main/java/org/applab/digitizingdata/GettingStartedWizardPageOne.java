@@ -22,10 +22,6 @@ import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 public class GettingStartedWizardPageOne  extends SherlockActivity {
-    private VslaInfoRepo vslaInfoRepo = null;
-    private VslaInfo vslaInfo = null;
-    private ActionBar actionBar;
-    private TextView savingsGroupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +35,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
 
         //For test purposes, create vsla info if not exists
@@ -74,9 +70,9 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
 
         actionBar.setDisplayShowCustomEnabled(true);
 
-        vslaInfoRepo = new VslaInfoRepo(this);
-        vslaInfo = vslaInfoRepo.getVslaInfo();
-        savingsGroupName = (TextView)findViewById(R.id.txtNCP_header);
+        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
+        VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
+        TextView savingsGroupName = (TextView) findViewById(R.id.txtNCP_header);
         if(!vslaInfo.isActivated()) {
           //If not activated, show message to avoid displaying "Offline Mode" as vsla name
             savingsGroupName.setText("");

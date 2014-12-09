@@ -29,7 +29,6 @@ import java.util.ArrayList;
  * Created by Moses on 6/25/13.
  */
 public class MeetingFinesFrag extends SherlockFragment {
-    private ActionBar actionBar;
     private ArrayList<Member> members;
     private String meetingDate;
     private int meetingId;
@@ -60,7 +59,7 @@ public class MeetingFinesFrag extends SherlockFragment {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         parentActivity = (MeetingActivity) getSherlockActivity();
-        actionBar = parentActivity.getSupportActionBar();
+        ActionBar actionBar = parentActivity.getSupportActionBar();
         meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
         String title = String.format("Meeting");
         switch (Utils._meetingDataViewMode) {

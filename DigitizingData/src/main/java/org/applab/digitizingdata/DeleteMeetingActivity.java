@@ -25,14 +25,11 @@ import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 public class DeleteMeetingActivity extends SherlockActivity {
-    private ActionBar actionBar;
     private int meetingId = 0;
     private MeetingRepo meetingRepo = null;
     private MeetingSavingRepo savingRepo = null;
-    private MeetingAttendanceRepo attendanceRepo = null;
     private MeetingLoanRepaymentRepo repaymentRepo = null;
     private MeetingLoanIssuedRepo loanIssuedRepo = null;
-    private MeetingFineRepo fineRepo = null;
     private String meetingDate = "";
 
     @Override
@@ -55,10 +52,10 @@ public class DeleteMeetingActivity extends SherlockActivity {
         //Initialize the Repositories
         meetingRepo = new MeetingRepo(getApplicationContext());
         savingRepo = new MeetingSavingRepo(getApplicationContext());
-        attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
+        MeetingAttendanceRepo attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
         repaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
         loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-        fineRepo = new MeetingFineRepo(getApplicationContext());
+        MeetingFineRepo fineRepo = new MeetingFineRepo(getApplicationContext());
 
         //Set the values for the meeting details
         TextView txtMeetingDate = (TextView) findViewById(R.id.lblDMMeetingDate);
@@ -71,8 +68,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
 
         TextView lblDMInstructions = (TextView) findViewById(R.id.lblDMInstructions);
 
-        StringBuilder sb = new StringBuilder("Are you sure you want to delete this meeting? If so, tap <b>Done</b>. The following information will be deleted:");
-        lblDMInstructions.setText(Html.fromHtml(sb.toString()));
+        lblDMInstructions.setText(Html.fromHtml("Are you sure you want to delete this meeting? If so, tap <b>Done</b>. The following information will be deleted:"));
 
         //Retrieve the target Meeting
         Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
@@ -209,7 +205,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
         );
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {

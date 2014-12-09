@@ -657,7 +657,7 @@ public class MeetingLoanIssuedRepo {
                     loanRecord.setPrincipalAmount(cursor.getDouble(cursor.getColumnIndex("PrincipalAmount")));
                     loanRecord.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
                     loanRecord.setBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
-                    loanRecord.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                    loanRecord.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
                     if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
                         Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
                         loanRecord.setDateCleared(dateCleared);
@@ -726,7 +726,7 @@ public class MeetingLoanIssuedRepo {
                     loanRecord.setPrincipalAmount(cursor.getDouble(cursor.getColumnIndex("PrincipalAmount")));
                     loanRecord.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
                     loanRecord.setBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
-                    loanRecord.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                    loanRecord.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
                     if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
                         Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
                         loanRecord.setDateCleared(dateCleared);
@@ -789,7 +789,7 @@ public class MeetingLoanIssuedRepo {
                     loanRecord.setPrincipalAmount(cursor.getDouble(cursor.getColumnIndex("PrincipalAmount")));
                     loanRecord.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
                     loanRecord.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
-                    loanRecord.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                    loanRecord.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
                     if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
                         Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
                         loanRecord.setDateCleared(dateCleared);
@@ -799,8 +799,8 @@ public class MeetingLoanIssuedRepo {
                         loanRecord.setDateDue(dateDue);
                     }
                     loanRecord.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("InterestAmount")));
-                    loanRecord.setDefaulted((cursor.getInt(cursor.getColumnIndex("IsDefaulted")) == 1) ? true : false);
-                    loanRecord.setWrittenOff((cursor.getInt(cursor.getColumnIndex("IsWrittenOff")) == 1) ? true : false);
+                    loanRecord.setDefaulted((cursor.getInt(cursor.getColumnIndex("IsDefaulted")) == 1));
+                    loanRecord.setWrittenOff((cursor.getInt(cursor.getColumnIndex("IsWrittenOff")) == 1));
                     loanRecord.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
                     loanRecord.setComments(cursor.getString(cursor.getColumnIndex("Comments")));
 
@@ -855,7 +855,7 @@ public class MeetingLoanIssuedRepo {
                 loan.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
                 loan.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
                 loan.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
-                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
                 if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
                     Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
                     loan.setDateCleared(dateCleared);
@@ -917,7 +917,7 @@ public class MeetingLoanIssuedRepo {
                 loan.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
                 loan.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
                 loan.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
-                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
                 if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
                     Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
                     loan.setDateCleared(dateCleared);
@@ -982,7 +982,7 @@ public class MeetingLoanIssuedRepo {
                 loan.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
                 loan.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
                 loan.setComment(cursor.getString(cursor.getColumnIndex("Comment")));
-                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
                 if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
                     Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
                     loan.setDateCleared(dateCleared);
@@ -1048,7 +1048,7 @@ public class MeetingLoanIssuedRepo {
                 loan.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
                 loan.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
                 loan.setComment(cursor.getString(cursor.getColumnIndex("Comment")));
-                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
                 if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
                     Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
                     loan.setDateCleared(dateCleared);
@@ -1110,7 +1110,7 @@ public class MeetingLoanIssuedRepo {
                 loan.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
                 loan.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
                 loan.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
-                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
                 if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
                     Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
                     loan.setDateCleared(dateCleared);

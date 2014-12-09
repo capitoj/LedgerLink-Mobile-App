@@ -15,7 +15,8 @@
 -->
 
 <com.actionbarsherlock.internal.nineoldandroids.widget.NineLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/abs__action_mode_close_button"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/abs__action_mode_close_button"
         android:focusable="true"
         android:clickable="true"
         android:paddingLeft="8dip"
@@ -36,5 +37,6 @@
               android:textAppearance="?android:attr/textAppearanceSmall"
               android:textSize="12sp"
               android:textAllCaps="true"
-              android:text="@string/abs__action_mode_done" />
+              android:text="@string/abs__action_mode_done"
+        tools:ignore="UnusedAttribute" />
 </com.actionbarsherlock.internal.nineoldandroids.widget.NineLinearLayout>

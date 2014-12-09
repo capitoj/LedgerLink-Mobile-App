@@ -30,10 +30,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
     private final ArrayList<MemberFineRecord> values;
     int position;
     private final Typeface typeface;
-    private final FineTypeRepo fineTypeRepo;
     private final MeetingFineRepo finesRepo;
-    private final VslaCycleRepo cycleRepo;
-    private final VslaCycle currentCycle;
     private String datePaid;
     private final int meetingId;
 
@@ -45,9 +42,9 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
         this.meetingId = meetingId;
 
         finesRepo = new MeetingFineRepo(getContext());
-        fineTypeRepo = new FineTypeRepo(getContext());
-        cycleRepo = new VslaCycleRepo(getContext());
-        currentCycle = cycleRepo.getCurrentCycle();
+        FineTypeRepo fineTypeRepo = new FineTypeRepo(getContext());
+        VslaCycleRepo cycleRepo = new VslaCycleRepo(getContext());
+        VslaCycle currentCycle = cycleRepo.getCurrentCycle();
     }
 
     @Override

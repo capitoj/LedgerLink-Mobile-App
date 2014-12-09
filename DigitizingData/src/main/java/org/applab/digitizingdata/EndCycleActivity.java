@@ -281,13 +281,7 @@ public class EndCycleActivity extends SherlockActivity {
 
     private void updateDisplay(TextView theField, int theYear, int theMonth, int theDay) {
         if (theField != null) {
-            theField.setText(new StringBuilder()
-                    .append(theDay)
-                    .append("-")
-                    .append(Utils.getMonthNameAbbrev(theMonth))
-                    .append("-")
-                    .append(theYear)
-                    .toString());
+            theField.setText(String.valueOf(theDay) + "-" + Utils.getMonthNameAbbrev(theMonth) + "-" + theYear);
         }
     }
 

@@ -298,7 +298,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
             return successFlg;
         } catch (Exception ex) {
             Log.e("MemberAttendanceHistory.saveMemberAttendanceWithComment", ex.getMessage());
-            return successFlg;
+            return false;
         }
     }
 

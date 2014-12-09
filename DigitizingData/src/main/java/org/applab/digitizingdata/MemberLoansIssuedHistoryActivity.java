@@ -45,7 +45,6 @@ import java.util.Date;
  * Created by Moses on 7/12/13.
  */
 public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
-    private ActionBar actionBar;
     private String meetingDate;
     private int meetingId;
     private int memberId;
@@ -53,9 +52,6 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     VslaCycle cycle = null;
     private MeetingRepo meetingRepo = null;
     private MeetingLoanIssuedRepo loanIssuedRepo = null;
-    private MeetingLoanRepaymentRepo loanRepaymentRepo = null;
-    private VslaCycleRepo vslaCycleRepo = null;
-    private ArrayList<MemberLoanIssueRecord> loansIssued;
     private EditText txtInterestAmount;
     private TextView txtTotalLoanAmount;
     private TextView lblCurrency;
@@ -113,8 +109,8 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
         meetingRepo = new MeetingRepo(MemberLoansIssuedHistoryActivity.this);
         targetMeeting = meetingRepo.getMeetingById(meetingId);
-        loanRepaymentRepo = new MeetingLoanRepaymentRepo((MemberLoansIssuedHistoryActivity.this));
-        vslaCycleRepo = new VslaCycleRepo(MemberLoansIssuedHistoryActivity.this);
+        MeetingLoanRepaymentRepo loanRepaymentRepo = new MeetingLoanRepaymentRepo((MemberLoansIssuedHistoryActivity.this));
+        VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(MemberLoansIssuedHistoryActivity.this);
 
         //TextView txtOutstandingLoans = (TextView)findViewById(R.id.lblMLIssuedHOutstandingLoans);
 
@@ -234,7 +230,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                                                      if (isEditOperation) {
 
                                                          // Deal with topup
-                                                         if (memberLoan.getMeeting().getMeetingId() != meetingId) {
+                                                         if ((memberLoan != null ? memberLoan.getMeeting().getMeetingId() : 0) != meetingId) {
                                                              if (theAmount > memberLoan.getPrincipalAmount()) {
                                                                  loanTopUp = theAmount - memberLoan.getPrincipalAmount();
                                                                  interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
@@ -367,7 +363,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         );
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -397,7 +393,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
         }
 
-        loansIssued = loanIssuedRepo.getAllLoansIssuedToMember(memberId);
+        ArrayList<MemberLoanIssueRecord> loansIssued = loanIssuedRepo.getAllLoansIssuedToMember(memberId);
 
         if (loansIssued == null) {
             loansIssued = new ArrayList<MemberLoanIssueRecord>();

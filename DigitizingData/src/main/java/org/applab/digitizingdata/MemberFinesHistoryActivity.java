@@ -47,14 +47,10 @@ import java.util.Date;
  * Created by Moses on 7/7/13.
  */
 public class MemberFinesHistoryActivity extends SherlockListActivity {
-    private ActionBar actionBar;
     private String meetingDate;
     private int memberId;
     private int meetingId;
     private MeetingFineRepo fineRepo = null;
-    private Meeting targetMeeting = null;
-    private MeetingRepo meetingRepo = null;
-    private ArrayList<MemberFineRecord> fines;
     private int targetCycleId = 0;
     boolean proceedWithSaving = false;
     boolean alertDialogShowing = false;
@@ -116,15 +112,15 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         }
 
         fineRepo = new MeetingFineRepo(MemberFinesHistoryActivity.this);
-        meetingRepo = new MeetingRepo(MemberFinesHistoryActivity.this);
-        targetMeeting = meetingRepo.getMeetingById(meetingId);
+        MeetingRepo meetingRepo = new MeetingRepo(MemberFinesHistoryActivity.this);
+        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
 
         if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
             double totalFines = fineRepo.getMemberTotalFinesInCycle(targetCycleId, memberId);
         }
 
-        mListView.setSwipingLayout(R.id.swiping_layout);
+        mListView.setSwipingLayout();
 
         // Set the callback that handles dismisses.
         mListView.setDismissCallback(new EnhancedListView.OnDismissCallback() {
@@ -200,7 +196,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         );
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -237,7 +233,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         if (fineRepo == null) {
             fineRepo = new MeetingFineRepo(MemberFinesHistoryActivity.this);
         }
-        fines = fineRepo.getMemberFineHistoryInCycle(targetCycleId, memberId);
+        ArrayList<MemberFineRecord> fines = fineRepo.getMemberFineHistoryInCycle(targetCycleId, memberId);
 
         if (fines == null) {
             fines = new ArrayList<MemberFineRecord>();
@@ -540,31 +536,27 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
             holder.position = position;
 
-            if (fineRecord != null)
+            holder.txtFineMeetingDate.setText(String.format(Utils.formatDate(fineRecord.getMeetingDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
+            holder.txtFineAmount.setText(String.format("%,.0fUGX", fineRecord.getAmount()));
 
-            {
-                holder.txtFineMeetingDate.setText(String.format(Utils.formatDate(fineRecord.getMeetingDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
-                holder.txtFineAmount.setText(String.format("%,.0fUGX", fineRecord.getAmount()));
-
-                /** TODO: REMOVE and find a better way how
-                 * Meantime fix for QA time */
-                switch (fineRecord.getFineTypeId()) {
-                    case 1:
-                        fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_other));
-                        break;
-                    case 2:
-                        fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_latecoming));
-                        break;
-                    case 3:
-                        fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_disorder));
-                        break;
-                    default:
-                        fineRecord.setFineTypeName("Unknown");
-                }
-                holder.txtFineType.setText(fineRecord.getFineTypeName());
-                holder.paidStatusCheckBox.setChecked(fineRecord.getStatus() != 0);
-                changedFromCode = false;
+            /** TODO: REMOVE and find a better way how
+             * Meantime fix for QA time */
+            switch (fineRecord.getFineTypeId()) {
+                case 1:
+                    fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_other));
+                    break;
+                case 2:
+                    fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_latecoming));
+                    break;
+                case 3:
+                    fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_disorder));
+                    break;
+                default:
+                    fineRecord.setFineTypeName("Unknown");
             }
+            holder.txtFineType.setText(fineRecord.getFineTypeName());
+            holder.paidStatusCheckBox.setChecked(fineRecord.getStatus() != 0);
+            changedFromCode = false;
 
             return rowView;
         }

@@ -538,11 +538,10 @@ public class EnhancedListView extends ListView {
      * <b>Note:</b> This method requires the <i>Swipe to Dismiss</i> feature enabled. Use
      * {@link #enableSwipeToDismiss()} to enable the feature.
      *
-     * @param swipingLayoutId The id (from R.id) of the view, that should be swiped.
      * @return This {@link org.applab.digitizingdata.helpers.EnhancedListView}
      */
-    public EnhancedListView setSwipingLayout(int swipingLayoutId) {
-        mSwipingLayout = swipingLayoutId;
+    public EnhancedListView setSwipingLayout() {
+        mSwipingLayout = R.id.swiping_layout;
         return this;
     }
 

@@ -22,12 +22,10 @@ import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
+@SuppressWarnings("ALL")
 public class MeetingCashBookFrag extends SherlockFragment {
 
-    private ActionBar actionBar = null;
-    private String meetingDate = null;
     private int meetingId = 0;
-    private double cashToBank = 0.0;
     double cashToBox = 0.0;
     private double totalCashInBox = 0.0;
     private MeetingRepo meetingRepo = null;
@@ -35,9 +33,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
     private MeetingLoanRepaymentRepo repaymentRepo = null;
     private MeetingLoanIssuedRepo loanIssuedRepo = null;
     private MeetingFineRepo fineRepo = null;
-    private MeetingStartingCash startingCashDetails = null;
     MeetingStartingCash currentStartingCashDetails = null;
-    private MeetingStartingCash previousClosingCash = null;
     private MeetingActivity parentActivity; //to access parent meeting activity
     private EditText txtCashToBankAmount;
 
@@ -61,8 +57,8 @@ public class MeetingCashBookFrag extends SherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        actionBar = getSherlockActivity().getSupportActionBar();
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        ActionBar actionBar = getSherlockActivity().getSupportActionBar();
+        String meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         String title = "Meeting";
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
@@ -226,7 +222,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
              Log.d("MCB acts2", String.valueOf(totalCashInBox));
 
              } */
-            startingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
+            MeetingStartingCash startingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
           /**  if (previousMeeting == null) {
                 currentStartingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
                 expectedStartingCash = currentStartingCashDetails.getExpectedStartingCash();
@@ -245,7 +241,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
             if (previousMeeting != null) {
                 //targetMeetingId = previousMeeting.getMeetingId();
                 if (previousMeeting.getMeetingId() != -1) {
-                    previousClosingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
+                    MeetingStartingCash previousClosingCash = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
 
                     if (previousClosingCash != null) {
                         expectedStartingCash = previousClosingCash.getExpectedStartingCash();
@@ -263,7 +259,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
 
             totalLoanTopUps = startingCashDetails.getLoanTopUps();
             actualStartingCash = startingCashDetails.getActualStartingCash();
-            cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());
+            double cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());
 
             totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines + totalLoanTopUps - cashToBank;
 

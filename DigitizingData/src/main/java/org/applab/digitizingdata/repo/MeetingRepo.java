@@ -79,12 +79,10 @@ public class MeetingRepo {
             ContentValues values = new ContentValues();
 
             values.put(MeetingSchema.COL_MT_IS_DATA_SENT, (true) ? 1 : 0);
-            if (true) {
-                if (dateSent == null) {
-                    dateSent = new Date();
-                }
-                values.put(MeetingSchema.COL_MT_DATE_SENT, Utils.formatDateToSqlite(dateSent));
+            if (dateSent == null) {
+                dateSent = new Date();
             }
+            values.put(MeetingSchema.COL_MT_DATE_SENT, Utils.formatDateToSqlite(dateSent));
 
             long retVal = -1;
             retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
@@ -459,9 +457,7 @@ public class MeetingRepo {
             meetings = new ArrayList<Meeting>();
             String columnList = MeetingSchema.getColumnList();
 
-            if (true) {
-                dataSentFlag = 1;
-            }
+            dataSentFlag = 1;
 
             cycleRepo = new VslaCycleRepo(context);
 
@@ -662,11 +658,7 @@ public class MeetingRepo {
                 retVal = db.insert(MeetingSchema.getTableName(), null, values);
             }
 
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MeetingRepo.updateStartingCash", ex.getMessage());
             return false;
@@ -695,11 +687,7 @@ public class MeetingRepo {
             retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                     new String[]{String.valueOf(meetingId)});
 
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MeetingRepo.updateExpectedStartingCash", ex.getMessage());
             return false;
@@ -727,12 +715,7 @@ public class MeetingRepo {
             long retVal = -1;
             retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                     new String[]{String.valueOf(meetingId)});
-            if (retVal != -1) {
-                return true;
-
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             return false;
         } finally {
@@ -761,11 +744,7 @@ public class MeetingRepo {
                     MeetingSchema.COL_MT_MEETING_ID, meetingId), null);
 
             // looping through all rows and adding to list
-            if (cursor != null) {
-                return true;
-            } else {
-                return false;
-            }
+            return cursor != null;
         } catch (Exception ex) {
             return false;
         } finally {
@@ -1243,11 +1222,7 @@ public class MeetingRepo {
             values.put(MeetingSchema.COL_MT_IS_CURRENT, 0);
             int retVal2 = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                     new String[]{String.valueOf(meeting.getMeetingId())});
-            if (retVal2 > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal2 > 0;
         } catch (Exception ex) {
             Log.e("MeetingRepo.activateMeeting", ex.getMessage());
             return false;
@@ -1276,11 +1251,7 @@ public class MeetingRepo {
             //TODO: At this same time, if this meeting was the Current Meeting, then appoint another meeting ->Previous Sibling
             int retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                     new String[]{String.valueOf(meetingId)});
-            if (retVal > 0) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal > 0;
 
         } catch (Exception ex) {
             Log.e("MeetingRepo.markMeetingForDeletion", ex.getMessage());
@@ -1335,11 +1306,7 @@ public class MeetingRepo {
 
                 int retVal2 = db.update(MeetingSchema.getTableName(), values, whereClause,
                         whereArgs);
-                if (retVal2 > 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return retVal2 > 0;
             } else {
                 return false;
             }
@@ -1453,11 +1420,7 @@ public class MeetingRepo {
             int rowCount = db.delete(MeetingSchema.getTableName(), MeetingSchema.COL_MT_MEETING_ID + " = ?",
                     new String[]{String.valueOf(meetingId)});
 
-            if (rowCount >= 1) {
-                return true;
-            } else {
-                return false;
-            }
+            return rowCount >= 1;
         } catch (Exception ex) {
             Log.e("MeetingRepo.deleteMeeting", ex.getMessage());
             return false;

@@ -29,7 +29,6 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
     private ActionBar actionBar;
     private boolean confirmed = false;
     private View customActionBarView;
-    private boolean successFlg = false;
 
 
     @Override
@@ -139,7 +138,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         double expectedStartingCash = dummyGettingStartedWizardMeeting.getVslaCycle().getFinesAtSetup() + dummyGettingStartedWizardMeeting.getVslaCycle().getInterestAtSetup() + totalSavings;
 
         // Save Starting cash values
-        successFlg = meetingRepo.updateExpectedStartingCash(dummyGettingStartedWizardMeeting.getMeetingId(), expectedStartingCash);
+        boolean successFlg = meetingRepo.updateExpectedStartingCash(dummyGettingStartedWizardMeeting.getMeetingId(), expectedStartingCash);
     }
 
     /* Inflates custom menu bar for confirmation page */

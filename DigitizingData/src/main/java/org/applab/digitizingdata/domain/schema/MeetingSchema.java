@@ -70,7 +70,6 @@ public class MeetingSchema {
     }
 
     public static String[] getColumnListArray() {
-        String[] columns = getColumnList().split(",");
-        return columns;
+        return getColumnList().split(",");
     }
 }

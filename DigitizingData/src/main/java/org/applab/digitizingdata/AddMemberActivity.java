@@ -51,7 +51,6 @@ public class AddMemberActivity extends SherlockActivity {
     private boolean selectedFinishButton = false;
     private int meetingId;
     private MemberRepo repo;
-    private Meeting targetMeeting;
     private boolean isEditAction;
 
     private TextView viewClicked;
@@ -97,7 +96,7 @@ public class AddMemberActivity extends SherlockActivity {
         }
 
         MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
-        targetMeeting = meetingRepo.getMeetingById(meetingId);
+        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
         inflateCustomActionBar();
         // END_INCLUDE (inflate_set_custom_view)
         //if in getting started wizard.. use the getting started layout
@@ -276,14 +275,11 @@ public class AddMemberActivity extends SherlockActivity {
         if(meetingRepo.getAllNonGSWMeetings().size()>2){
             TextView lblAMMiddleCycleSavingsCorrectionLabel = (TextView) findViewById(R.id.lblAMMiddleCycleSavingsCorrectionLabel);
             lblAMMiddleCycleSavingsCorrectionLabel.setVisibility(View.GONE);
-            EditText txtAMMiddleCycleSavingsCorrection = (EditText) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
             LinearLayout linearLayout = (LinearLayout)txtAMMiddleCycleLoansComment.getParent();
             linearLayout.setVisibility(View.GONE);
 
             TextView lblAMMiddleCycleLoansCorrectionLabel = (TextView) findViewById(R.id.lblAMMiddleCycleLoansCorrectionLabel);
             lblAMMiddleCycleLoansCorrectionLabel.setVisibility(View.GONE);
-            EditText txtAMMiddleCycleLoansCorrection = (EditText) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
-            LinearLayout linearLayout2 = (LinearLayout)txtAMMiddleCycleLoansComment.getParent();
             linearLayout.setVisibility(View.GONE);
 
         }
@@ -296,7 +292,7 @@ public class AddMemberActivity extends SherlockActivity {
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customActionBarView = null;
+        View customActionBarView;
         ActionBar actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
@@ -407,7 +403,7 @@ public class AddMemberActivity extends SherlockActivity {
 
     boolean saveMemberData() {
         boolean successFlg = false;
-        AlertDialog dlg = null;
+        AlertDialog dlg;
 
         Member member = new Member();
         repo = new MemberRepo(getApplicationContext());
@@ -416,7 +412,7 @@ public class AddMemberActivity extends SherlockActivity {
         }
 
         if (validateData(member)) {
-            boolean retVal = false;
+            boolean retVal;
             if (member.getMemberId() != 0) {
                 retVal = repo.updateMember(member);
             } else {
@@ -866,15 +862,7 @@ public class AddMemberActivity extends SherlockActivity {
 
     void updateDisplay() {
         if (viewClicked != null) {
-            viewClicked.setText(new StringBuilder()
-
-                    // Month is 0 based so add 1
-                    .append(String.format("%02d", mDay))
-                    .append("-")
-                    .append(Utils.getMonthNameAbbrev(mMonth + 1))
-                    .append("-")
-                    .append(mYear)
-                    .toString());
+            viewClicked.setText(String.format("%02d", mDay) + "-" + Utils.getMonthNameAbbrev(mMonth + 1) + "-" + mYear);
         }
     }
 
@@ -986,7 +974,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     /* Populates the member age spinner  */
-    protected void buildAgeSpinner() {
+    void buildAgeSpinner() {
 
         Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
         repo = new MemberRepo(getApplicationContext());
@@ -1028,7 +1016,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     /* Populates the member cycles completed spinner */
-    protected void buildCyclesCompletedSpinner() {
+    void buildCyclesCompletedSpinner() {
 
         Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
         repo = new MemberRepo(getApplicationContext());

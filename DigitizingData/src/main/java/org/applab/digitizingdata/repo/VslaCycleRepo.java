@@ -69,7 +69,7 @@ public class VslaCycleRepo {
         }
     }
 
-    public ArrayList<VslaCycle> getAllCycles() {
+    ArrayList<VslaCycle> getAllCycles() {
 
         ArrayList<VslaCycle> cycles = null;
         SQLiteDatabase db = null;
@@ -574,7 +574,6 @@ public class VslaCycleRepo {
         }
         catch (Exception ex) {
             Log.e("VslaCycleRepo.deleteCycle", ex.getMessage());
-            return;
         }
         finally {
             if (db != null) {

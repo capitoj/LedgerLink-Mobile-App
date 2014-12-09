@@ -152,9 +152,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
             lblSectionLastMeeting.setText(String.format("PAST MEETING: %s", Utils.formatDate(previousMeeting.getMeetingDate())));
 
             MeetingAttendanceRepo attendanceRepo = new MeetingAttendanceRepo(getSherlockActivity().getBaseContext());
-            if (null != attendanceRepo) {
-                txtAttendedCount.setText(String.format("Attended: %d", attendanceRepo.getAttendanceCountByMeetingId(previousMeeting.getMeetingId())));
-            }
+            txtAttendedCount.setText(String.format("Attended: %d", attendanceRepo.getAttendanceCountByMeetingId(previousMeeting.getMeetingId())));
 
             txtDataSent.setText(String.format("Data: %s", (previousMeeting.isMeetingDataSent()) ? "Sent" : "Not Sent"));
 

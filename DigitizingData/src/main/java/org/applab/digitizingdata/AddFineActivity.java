@@ -63,7 +63,6 @@ public class AddFineActivity extends SherlockActivity {
         inflateCustomActionBar();
 
         setContentView(R.layout.activity_add_fine_member);
-        TextView txtAmount = (TextView) findViewById(R.id.txtFMFineAmount);
 
         TextView lblFullName = (TextView) findViewById(R.id.txtFMFullName);
         lblFullName.setText(fullName);
@@ -102,7 +101,7 @@ public class AddFineActivity extends SherlockActivity {
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customActionBarView = null;
+        View customActionBarView;
 
         customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(

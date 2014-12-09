@@ -45,7 +45,6 @@ public class ActivationActivity extends SherlockActivity {
     private String targetVslaCode = null; //fake-fix
     private String securityPasskey = null;
     private ProgressDialog progressDialog = null;
-    private ActionBar actionBar;
 
 
     @Override
@@ -58,7 +57,7 @@ public class ActivationActivity extends SherlockActivity {
         versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
         imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
@@ -312,6 +311,7 @@ public class ActivationActivity extends SherlockActivity {
                     }
                 }
             } catch (Exception ex) {
+                assert progressDialog != null;
                 progressDialog.setMessage(ex.getMessage());
             }
         }

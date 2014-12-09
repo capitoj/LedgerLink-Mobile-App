@@ -30,14 +30,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ChangeMeetingDateActivity extends SherlockActivity {
-    private ActionBar actionBar;
     private int meetingId = 0;
     private MeetingRepo meetingRepo = null;
     private MeetingLoanRepaymentRepo repaymentRepo = null;
     private MeetingLoanIssuedRepo loanIssuedRepo = null;
-    private MeetingFineRepo fineRepo = null;
 
-    private TextView txtMeetingDate;
     private TextView viewClicked;
     public static final int Date_dialog_id = 1;
     // date and time
@@ -63,22 +60,22 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
         meetingRepo = new MeetingRepo(getApplicationContext());
         repaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
         loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-        fineRepo = new MeetingFineRepo(getApplicationContext());
+        MeetingFineRepo fineRepo = new MeetingFineRepo(getApplicationContext());
 
         //Retrieve the target Meeting
         Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
 
         //Manage Dates
-        txtMeetingDate = (TextView)findViewById(R.id.txtCMDMeetingDate);
+        TextView txtMeetingDate = (TextView) findViewById(R.id.txtCMDMeetingDate);
         viewClicked = txtMeetingDate;
 
         //Set onClick Listeners to load the DateDialog for MeetingDate
-        txtMeetingDate.setOnClickListener( new View.OnClickListener() {
+        txtMeetingDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //I want the Event Handler to handle both startDate and endDate
-                viewClicked = (TextView)view;
-                DatePickerDialog datePickerDialog = new DatePickerDialog( ChangeMeetingDateActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                viewClicked = (TextView) view;
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ChangeMeetingDateActivity.this, mDateSetListener, mYear, mMonth, mDay);
                 //TODO: Enable this feature in API 11 and above
                 //datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.show();
@@ -177,7 +174,7 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
                 });
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {

@@ -42,7 +42,6 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     private int selectedMemberId;
     private boolean successAlertDialogShown = false;
     private boolean selectedFinishButton = false;
-    private AlertDialog alertDialog = null;
     private boolean isEditAction;
 
     private TextView viewClicked;
@@ -238,14 +237,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     protected void updateDisplay() {
         if (viewClicked != null)
         {
-            viewClicked.setText(new StringBuilder()
-                    // Month is 0 based so add 1
-                    .append(String.format("%02d", mDay))
-                    .append("-")
-                    .append(Utils.getMonthNameAbbrev(mMonth + 1))
-                    .append("-")
-                    .append(mYear)
-                    .toString());
+            viewClicked.setText(String.format("%02d", mDay) + "-" + Utils.getMonthNameAbbrev(mMonth + 1) + "-" + mYear);
         }
     }
 
@@ -546,7 +538,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             } else {
                 double amountSavedSoFar = Double.parseDouble(savings);
                 if (amountSavedSoFar < 0.00) {
-                    displayMessageBox(dlgTitle, "Total Amount this Member has Saved in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    displayMessageBox(dlgTitle, "Total Amount this Member has Saved in Current Cycle so far should be zero and above.");
                     txtSavingsSoFar.requestFocus();
                     return false;
                 } else {
@@ -565,7 +557,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             } else {
                 double outstandingLoan = Double.parseDouble(loanAmount);
                 if (outstandingLoan < 0.00) {
-                    displayMessageBox(dlgTitle, "Total Amount of this Member's Regular Loan Outstanding should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    displayMessageBox(dlgTitle, "Total Amount of this Member's Regular Loan Outstanding should be zero and above.");
                     txtLoanAmount.requestFocus();
                     return false;
                 } else {
@@ -574,7 +566,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     //set the date of next repayment
                     if(outstandingLoan > 0 && txtNCGSWLoanNextRepaymentDate.getText().length()==0)
                     {
-                        displayMessageBox(dlgTitle, "The next repayment date is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
+                        displayMessageBox(dlgTitle, "The next repayment date is required for the outstanding loan");
                         txtNCGSWLoanNextRepaymentDate.requestFocus();
                         return false;
 
@@ -586,7 +578,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     //set the loan number
                     if(outstandingLoan > 0 && txtNCGSWLoanNumber.getText().length()==0)
                     {
-                        displayMessageBox(dlgTitle, "The loan number is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
+                        displayMessageBox(dlgTitle, "The loan number is required for the outstanding loan");
                         txtNCGSWLoanNumber.requestFocus();
                         return false;
                     }
@@ -622,8 +614,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
     }
 
-    protected void displayMessageBox(String title, String message, String icon) {
-        alertDialog = new AlertDialog.Builder(GettingStartedWizardAddMemberActivity.this).create();
+    protected void displayMessageBox(String title, String message) {
+        AlertDialog alertDialog = new AlertDialog.Builder(GettingStartedWizardAddMemberActivity.this).create();
 
         // Setting Dialog Title
         alertDialog.setTitle(title);
@@ -632,11 +624,11 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         alertDialog.setMessage(message);
 
         // Setting Icon to Dialog
-        if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_EXCLAMATION)) {
+        if (Utils.MSGBOX_ICON_EXCLAMATION.equalsIgnoreCase(Utils.MSGBOX_ICON_EXCLAMATION)) {
             alertDialog.setIcon(R.drawable.phone);
-        } else if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_TICK)) {
+        } else if (Utils.MSGBOX_ICON_EXCLAMATION.equalsIgnoreCase(Utils.MSGBOX_ICON_TICK)) {
             alertDialog.setIcon(R.drawable.phone);
-        } else if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_QUESTION)) {
+        } else if (Utils.MSGBOX_ICON_EXCLAMATION.equalsIgnoreCase(Utils.MSGBOX_ICON_QUESTION)) {
             alertDialog.setIcon(R.drawable.phone);
         }
 

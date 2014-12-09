@@ -81,7 +81,7 @@ public class VslaInfoRepo {
         }
     }
 
-    public boolean vslaInfoExists() {
+    boolean vslaInfoExists() {
         SQLiteDatabase db = null;
         Cursor cursor = null;
 

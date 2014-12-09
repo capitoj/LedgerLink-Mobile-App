@@ -26,7 +26,6 @@ public class LoansIssuedHistoryArrayAdapter extends ArrayAdapter<MemberLoanIssue
     int position;
     private final Typeface typefaceRegular;
     private final Typeface typefaceBold;
-    private final MeetingLoanRepaymentRepo loanRepaymentRepo;
     private VslaCycleRepo vslaCycleRepo = null;
     private VslaCycle cycle = null;
 
@@ -37,7 +36,7 @@ public class LoansIssuedHistoryArrayAdapter extends ArrayAdapter<MemberLoanIssue
         this.typefaceRegular = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
         this.typefaceBold = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-bold.ttf");
 
-        loanRepaymentRepo = new MeetingLoanRepaymentRepo(getContext());
+        MeetingLoanRepaymentRepo loanRepaymentRepo = new MeetingLoanRepaymentRepo(getContext());
         vslaCycleRepo = new VslaCycleRepo(getContext());
         cycle = new VslaCycle();
     }

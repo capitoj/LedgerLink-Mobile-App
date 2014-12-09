@@ -16,11 +16,7 @@ import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 public class GettingStartedWizardPageTwo extends SherlockActivity {
-    private VslaInfoRepo vslaInfoRepo = null;
     private VslaInfo vslaInfo = null;
-    private ActionBar actionBar;
-
-    private TextView savingsGroupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +26,16 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
 
         setContentView(R.layout.activity_getting_started_wizard_passcode_validation);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
 
 
         actionBar.setTitle("Get Started");
 
-        vslaInfoRepo = new VslaInfoRepo(this);
+        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
         vslaInfo = vslaInfoRepo.getVslaInfo();
 
-        savingsGroupName = (TextView)findViewById(R.id.txtNCP_header);
+        TextView savingsGroupName = (TextView) findViewById(R.id.txtNCP_header);
         if(!vslaInfo.isActivated()) {
             //If not activated, show message to avoid displaying "Offline Mode" as vsla name
             savingsGroupName.setText("(not yet activated)");

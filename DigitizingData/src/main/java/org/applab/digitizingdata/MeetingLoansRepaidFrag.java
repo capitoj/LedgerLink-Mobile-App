@@ -29,7 +29,6 @@ import java.util.ArrayList;
  * Created by Moses on 6/25/13.
  */
 public class MeetingLoansRepaidFrag extends SherlockFragment {
-    private ActionBar actionBar;
     private ArrayList<Member> members;
     private String meetingDate;
     private int meetingId;
@@ -58,7 +57,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
     {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        actionBar = getSherlockActivity().getSupportActionBar();
+        ActionBar actionBar = getSherlockActivity().getSupportActionBar();
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         Log.d("MLRF", meetingDate);
         String title = "Meeting";

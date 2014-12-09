@@ -57,8 +57,6 @@ public class SendMeetingDataActivity extends SherlockListActivity {
 
         //TODO: Testing purposes only. Should be removed
         //If the process has finished, then mark the meeting as sent
-        Calendar cal = Calendar.getInstance();
-        //meetingRepo.updateDataSentFlag(1, false, cal.getTime());
 
         //Retrieve the meetings whose data has not been sent
         meetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
@@ -96,7 +94,6 @@ public class SendMeetingDataActivity extends SherlockListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i;
         switch(item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MainActivity.class);

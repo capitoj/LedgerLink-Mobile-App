@@ -557,7 +557,6 @@ public class MemberRepo {
         } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MemberRepo.deleteMember", ex.getMessage());
-            return;
         } finally {
             if (db != null) {
                 db.close();

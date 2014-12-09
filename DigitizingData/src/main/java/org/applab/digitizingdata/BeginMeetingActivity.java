@@ -47,10 +47,8 @@ import java.util.HashMap;
 
 
 public class BeginMeetingActivity extends SherlockActivity {
-    private ActionBar actionBar;
     private MeetingRepo meetingRepo = null;
     private ArrayList<Meeting> pastMeetings = null;
-    private VslaCycle recentCycle = null;
     private VslaCycleRepo cycleRepo = null;
     private static ProgressDialog progressDialog = null;
     private static int targetMeetingId = 0;
@@ -79,7 +77,7 @@ public class BeginMeetingActivity extends SherlockActivity {
 
         if (null == meetingRepo) meetingRepo = new MeetingRepo(getApplicationContext());
 
-        recentCycle = cycleRepo.getMostRecentCycle();
+        VslaCycle recentCycle = cycleRepo.getMostRecentCycle();
         //past meetings should be not active and not sent
         pastMeetings = meetingRepo.getAllMeetingsByDataSentStatusAndActiveStatus();
 
@@ -161,30 +159,9 @@ public class BeginMeetingActivity extends SherlockActivity {
                         // Skip the Current meeting i.e. mostRecentUnsentMeeting coz it is already displayed
                         if (meeting.getMeetingId() == mostRecentUnsentMeeting.getMeetingId()) {
                         }
-                        //We are using a list now
-                        //So this block is obsolete
-                        /*
-                        TextView tv = new TextView(this);
-                        tv.setText(Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
-                        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-                        tv.setTypeface(tv.getTypeface(), Typeface.BOLD);
-                        //tv.setTextColor(Color.parseColor("#0000FF"));
-                        tv.setPadding(10, 2, 2, 2);
-                        tv.setId(meeting.getMeetingId());
-                        tv.setLayoutParams(params);
-                        grpPastMeetings.addView(tv);
-                          */
                     }
-
-
                 }
-                /**else {
 
-                 //Hide the Section for Past Meetings
-                 LinearLayout parent = (LinearLayout) grpPastMeetings.getParent();
-                 parent.removeView(grpPastMeetings);
-
-                 } */
             } else {
 
                 // Hide the Section for Past Meetings
@@ -216,7 +193,7 @@ public class BeginMeetingActivity extends SherlockActivity {
         }
 
         //Show the Instructions
-        tvInstructionsHeader.setText(Html.fromHtml(sb.toString()));
+        tvInstructionsHeader.setText(Html.fromHtml(sb != null ? sb.toString() : null));
     }
 
 
@@ -252,7 +229,6 @@ public class BeginMeetingActivity extends SherlockActivity {
                 i.putExtra("_meetingId", meeting.getMeetingId());
                 i.putExtra("_viewOnly", true);  //viewing past meeetings should be read only
                 startActivity(i);
-                return;
 
             }
         });
@@ -284,7 +260,6 @@ public class BeginMeetingActivity extends SherlockActivity {
                 i.putExtra("_currentMeetingId", meeting.getMeetingId());
                 i.putExtra("_viewOnly", false);  //viewing current meeetings should not be read only
                 startActivity(i);
-                return;
 
             }
         });
@@ -341,7 +316,6 @@ public class BeginMeetingActivity extends SherlockActivity {
                         Intent i = new Intent(getApplicationContext(), MeetingDefinitionActivity.class);
                         startActivity(i);
                         finish();
-                        return;
                     }
                 }
         );
@@ -351,7 +325,7 @@ public class BeginMeetingActivity extends SherlockActivity {
         }
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -460,6 +434,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                     }
                 }
             } catch (Exception ex) {
+                assert progressDialog != null;
                 progressDialog.setMessage(ex.getMessage());
             }
         }
@@ -513,17 +488,11 @@ public class BeginMeetingActivity extends SherlockActivity {
                 httpClient.getConnectionManager().shutdown();
 
                 int httpStatusCode = 0;
-                if (httpStatusCode == 200) //sucess
-                {
-                    result = new JSONObject(responseString);
-                }
 
-                return result;
+                return null;
             } catch (ClientProtocolException exClient) {
                 return null;
             } catch (IOException exIo) {
-                return null;
-            } catch (JSONException exJson) {
                 return null;
             } catch (Exception ex) {
                 return null;

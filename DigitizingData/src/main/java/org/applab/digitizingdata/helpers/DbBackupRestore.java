@@ -142,8 +142,7 @@ public class DbBackupRestore {
         } finally {
             if (inChannel != null)
                 inChannel.close();
-            if (outChannel != null)
-                outChannel.close();
+            outChannel.close();
         }
     }
 

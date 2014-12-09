@@ -52,14 +52,8 @@ import java.util.HashMap;
  * Created by Moses on 6/27/13.
  */
 public class MeetingActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
-    private static Context appContext;
-    private boolean enableSendData = false;
     private Meeting currentMeeting;
     private MeetingRepo meetingRepo;
-    private MeetingSavingRepo savingRepo;
-    private MeetingFineRepo fineRepo;
-    private MeetingLoanIssuedRepo loanIssuedRepo;
-    private MeetingLoanRepaymentRepo loanRepaymentRepo;
 
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
@@ -69,16 +63,15 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     private static int targetMeetingId = 0;
     private static int currentDataItemPosition = 0;
     private static String serverUri = "";
-    private LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
+        LedgerLinkApplication ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_meeting);
 
-        appContext = getApplicationContext();
+        Context appContext = getApplicationContext();
 
         //ActionBar
         ActionBar actionBar = getSupportActionBar();
@@ -146,7 +139,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         }
 
         if (getIntent().hasExtra("_enableSendData")) {
-            enableSendData = getIntent().getBooleanExtra("_enableSendData", false);
+            boolean enableSendData = getIntent().getBooleanExtra("_enableSendData", false);
         }
 
 
@@ -434,6 +427,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                     }
                 }
             } catch (Exception ex) {
+                assert progressDialog != null;
                 progressDialog.setMessage(ex.getMessage());
             }
         }
@@ -517,7 +511,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
             try {
                 if (result != null) {
-                    actionSucceeded = ((result.getInt("StatusCode") == 0) ? true : false);
+                    actionSucceeded = ((result.getInt("StatusCode") == 0));
                 }
                 if (actionSucceeded) {
                     //Record that the piece of info has been submitted
@@ -587,10 +581,10 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         int meetingId = -1;
 
         meetingRepo = new MeetingRepo(getApplicationContext());
-        savingRepo = new MeetingSavingRepo(getApplicationContext());
-        fineRepo = new MeetingFineRepo(getApplicationContext());
-        loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-        loanRepaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
+        MeetingSavingRepo savingRepo = new MeetingSavingRepo(getApplicationContext());
+        MeetingFineRepo fineRepo = new MeetingFineRepo(getApplicationContext());
+        MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
+        MeetingLoanRepaymentRepo loanRepaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
 
         previousMeeting = meetingRepo.getPreviousMeeting(meetingRepo.getMeetingById(targetMeetingId).getVslaCycle().getCycleId(), targetMeetingId);
 

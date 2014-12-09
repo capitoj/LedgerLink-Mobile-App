@@ -31,8 +31,6 @@ import java.util.ArrayList;
  */
 public class SelectCycle extends SherlockActivity {
 
-    private ActionBar actionBar;
-
     private VslaCycle selectedCycle = null;
     private RadioGroup grpCycleDates;
     private boolean isEndCycleAction;
@@ -78,7 +76,6 @@ public class SelectCycle extends SherlockActivity {
 
                 multipleCycles = true;
                 if (isEndCycleAction) {
-                    Log.d("SelectCycle", String.valueOf(multipleCycles));
 
                     Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
                     i.putExtra("_multipleCycles", multipleCycles);
@@ -86,7 +83,6 @@ public class SelectCycle extends SherlockActivity {
                     startActivity(i);
                     finish();
                 } else {
-                    Log.d("SelectCycle", String.valueOf(multipleCycles));
                     Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
                     i.putExtra("_isUpdateCycleAction", true);
                     i.putExtra("_multipleCycles", multipleCycles);
@@ -167,12 +163,12 @@ public class SelectCycle extends SherlockActivity {
         String instructions = "";
         if (!isEndCycleAction) {
             instructions = "Select next to modify the cycle";
-            if (activeCycles.size() > 1) {
+            if ((activeCycles != null ? activeCycles.size() : 0) > 1) {
                 instructions = "There is more than one cycle currently running. Select the cycle to edit.";
             }
         } else {
             instructions = "Select next to end the cycle";
-            if (activeCycles.size() > 1) {
+            if ((activeCycles != null ? activeCycles.size() : 0) > 1) {
                 instructions = "There is more than one unfinished cycle. Select the cycle to end.";
             }
         }
@@ -215,7 +211,7 @@ public class SelectCycle extends SherlockActivity {
 
         customActionBarView.findViewById(R.id.actionbar_next).setVisibility(View.GONE);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -260,7 +256,6 @@ public class SelectCycle extends SherlockActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i;
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MainActivity.class);

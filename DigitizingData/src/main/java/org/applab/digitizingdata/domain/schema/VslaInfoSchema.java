@@ -55,6 +55,7 @@ public class VslaInfoSchema {
         return TBL_VSLA_INFO;
     }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     public static String getColumnList() {
         StringBuffer sb = new StringBuffer();
         sb.append(COL_VI_VSLA_NAME + ",");

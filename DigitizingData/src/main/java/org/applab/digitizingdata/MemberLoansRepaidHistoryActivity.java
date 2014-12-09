@@ -47,22 +47,16 @@ import java.util.Date;
  * Created by Moses on 7/13/13.
  */
 public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
-    private ActionBar actionBar;
     private String meetingDate;
     private int meetingId;
     private int memberId;
     private int targetCycleId = 0;
-    private VslaCycle cycle = null;
     private Meeting targetMeeting = null;
-    private MeetingRepo meetingRepo = null;
     private MeetingLoanIssuedRepo loanIssuedRepo = null;
     private MeetingLoanRepaymentRepo loansRepaidRepo = null;
-    private VslaCycleRepo vslaCycleRepo = null;
-    private ArrayList<MemberLoanRepaymentRecord> loanRepayments;
     private MeetingLoanIssued recentLoan = null;
 
     private LinearLayout repaymentHistorySection;
-    private LinearLayout frmLoanRecord;
 
     //Flags for Edit Operation
     private boolean isEditOperation = false;
@@ -113,11 +107,11 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             memberId = getIntent().getIntExtra("_memberId", 0);
         }
 
-        meetingRepo = new MeetingRepo(MemberLoansRepaidHistoryActivity.this);
+        MeetingRepo meetingRepo = new MeetingRepo(MemberLoansRepaidHistoryActivity.this);
         targetMeeting = meetingRepo.getMeetingById(meetingId);
         loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansRepaidHistoryActivity.this);
         loansRepaidRepo = new MeetingLoanRepaymentRepo(MemberLoansRepaidHistoryActivity.this);
-        vslaCycleRepo = new VslaCycleRepo(MemberLoansRepaidHistoryActivity.this);
+        VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(MemberLoansRepaidHistoryActivity.this);
 
         //Determine whether this is an edit operation on an existing Loan Repayment
         repaymentBeingEdited = loansRepaidRepo.getLoansRepaymentByMemberInMeeting(meetingId, memberId);
@@ -135,7 +129,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             lblInterestDesc.setText(String.format("at %.0f%% every 30 days", interestRate));
         }
 
-        frmLoanRecord = (LinearLayout) findViewById(R.id.frmMLRepayHLoanRecord);
+        LinearLayout frmLoanRecord = (LinearLayout) findViewById(R.id.frmMLRepayHLoanRecord);
         // Get Loan Number of currently running loan
         TextView lblLoanNo = (TextView) findViewById(R.id.lblMLRepayHLoanNo);
         TextView txtLoanNumber = (TextView) findViewById(R.id.txtMLRepayHLoanNo);
@@ -323,7 +317,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
         {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
-            cycle = vslaCycleRepo.getCycle(targetCycleId);
+            VslaCycle cycle = vslaCycleRepo.getCycle(targetCycleId);
             txtCycleSpan.setText(String.format("Cycle %s to %s", Utils.formatDate(cycle.getStartDate(), Utils.DATE_FIELD_FORMAT), Utils.formatDate(cycle.getEndDate(), Utils.DATE_FIELD_FORMAT)));
             // outstandingLoans = loanIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetCycleId, memberId);
             // loanIssue = loanIssuedRepo.getOutstandingLoansByMemberInCycle(targetCycleId, memberId);
@@ -546,7 +540,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         );
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -633,7 +627,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         if (loansRepaidRepo == null) {
             loansRepaidRepo = new MeetingLoanRepaymentRepo(MemberLoansRepaidHistoryActivity.this);
         }
-        loanRepayments = loansRepaidRepo.getLoansRepaymentsByMemberInCycle(targetCycleId, memberId);
+        ArrayList<MemberLoanRepaymentRecord> loanRepayments = loansRepaidRepo.getLoansRepaymentsByMemberInCycle(targetCycleId, memberId);
 
         if (loanRepayments == null) {
             loanRepayments = new ArrayList<MemberLoanRepaymentRecord>();

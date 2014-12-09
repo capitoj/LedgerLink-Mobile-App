@@ -33,16 +33,12 @@ import java.util.ArrayList;
  * Created by Moses on 7/7/13.
  */
 public class MemberSavingHistoryActivity extends SherlockListActivity {
-    private ActionBar actionBar;
     private String meetingDate;
     private int memberId;
     private int meetingId;
     private MeetingSavingRepo savingRepo = null;
     private Meeting targetMeeting = null;
-    private MeetingRepo meetingRepo = null;
-    private ArrayList<MemberSavingRecord> savings;
     private int targetCycleId = 0;
-    private boolean proceedWithSaving = false;
     boolean alertDialogShowing = false;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +65,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         }
 
         savingRepo = new MeetingSavingRepo(MemberSavingHistoryActivity.this);
-        meetingRepo = new MeetingRepo(MemberSavingHistoryActivity.this);
+        MeetingRepo meetingRepo = new MeetingRepo(MemberSavingHistoryActivity.this);
         targetMeeting = meetingRepo.getMeetingById(meetingId);
 
         TextView txtTotalSavings = (TextView)findViewById(R.id.lblMSHTotalSavings);
@@ -132,7 +128,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                 });
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -167,7 +163,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         if(savingRepo == null) {
             savingRepo = new MeetingSavingRepo(MemberSavingHistoryActivity.this);
         }
-        savings = savingRepo.getMemberSavingHistoryInCycle(targetCycleId, memberId);
+        ArrayList<MemberSavingRecord> savings = savingRepo.getMemberSavingHistoryInCycle(targetCycleId, memberId);
 
         if(savings == null) {
             savings = new ArrayList<MemberSavingRecord>();
@@ -237,7 +233,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
     }
 
     private void setProceedWithSavingFlg(boolean value) {
-        proceedWithSaving = value;
+        boolean proceedWithSaving = value;
     }
 
     public boolean saveMemberSaving(){
@@ -352,7 +348,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         }
         catch(Exception ex) {
             Log.e("MemberSavingHistory.saveMemberSaving", ex.getMessage());
-            return successFlg;
+            return false;
         }
     }
 

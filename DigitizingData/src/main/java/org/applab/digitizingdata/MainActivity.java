@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,6 @@ import java.util.ArrayList;
  */
 public class MainActivity extends SherlockActivity {
 
-    private GridView gridView;
     private final ArrayList<MenuItem> mainMenuItemsGridArray = new ArrayList<MenuItem>();
     private CustomGridViewAdapter customGridAdapter;
     ArrayList<MenuItem> mainMenuItems = null;
@@ -56,9 +56,7 @@ public class MainActivity extends SherlockActivity {
 
         //Retrieve VSLA Information
         vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
-        if (vslaInfoRepo != null) {
             vslaInfo = vslaInfoRepo.getVslaInfo();
-        }
 
         //Display the main menu
         displayMainMenu();
@@ -94,7 +92,7 @@ public class MainActivity extends SherlockActivity {
          }
          }  */
 
-        gridView = (GridView) findViewById(R.id.grid);
+        GridView gridView = (GridView) findViewById(R.id.grid);
 
         customGridAdapter = new CustomGridViewAdapter(this, mainMenuItemsGridArray);
         gridView.setAdapter(customGridAdapter);
@@ -205,7 +203,8 @@ public class MainActivity extends SherlockActivity {
                     row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_mid_bottom_right));
                 }
             } catch (Exception ex) {
-                ex.getMessage().toString();
+                Log.e("MainActivity.getView ", ex.getMessage().toString());
+
 
             }
             return row;

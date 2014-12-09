@@ -55,7 +55,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String sqlQuery = null;
-        StringBuffer sb = null;
 
         // Create Table: VslaInfo
         sqlQuery = VslaInfoSchema.getCreateTableScript();

@@ -36,8 +36,6 @@ import au.com.bytecode.opencsv.CSVReader;
 public class DataMigrationActivity extends Activity implements OnClickListener {
 
     private static final String TAG = "MainActivity";
-    // DatabaseHandler dbHelper = null;
-    private File file = null;
     private TextView lblMigrationResult = null;
     private Button btnimport = null;
 
@@ -72,7 +70,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                 exportDir.mkdirs();
             }
 
-            file = new File(exportDir, Utils.VSLA_DATA_MIGRATION_FILENAME);
+           File file = new File(exportDir, Utils.VSLA_DATA_MIGRATION_FILENAME);
             try {
 
                 //If the meeting has not been created start with it
@@ -290,7 +288,6 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                             else {
                                 skippedRows.concat(String.format("%d", dataRowNo));
                             }
-                            continue;
                         }
                     }
 
@@ -312,9 +309,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
                     // Flag that Data has already been Migrated
                     VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
-                    if(vslaInfoRepo != null){
-                        vslaInfoRepo.updateDataMigrationStatusFlag();
-                    }
+                    vslaInfoRepo.updateDataMigrationStatusFlag();
 
                     //TODO: Only do this if there were no records skipped
                     btnimport.setText("Finished");

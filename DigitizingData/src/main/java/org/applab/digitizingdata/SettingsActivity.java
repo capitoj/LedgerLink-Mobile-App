@@ -43,6 +43,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         actionBar = getActionBar();
+        assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         //actionBar.setHomeButtonEnabled(true);
 
@@ -76,6 +77,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         actionBar = getActionBar();
+        assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         //  actionBar.setHomeButtonEnabled(true);
 

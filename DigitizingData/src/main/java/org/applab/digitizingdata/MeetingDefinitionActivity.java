@@ -42,8 +42,6 @@ import java.util.Date;
  */
 public class MeetingDefinitionActivity extends SherlockActivity {
 
-    private ActionBar actionBar;
-    private TextView txtMeetingDate;
     private TextView viewClicked;
     public static final int Date_dialog_id = 1;
     // date and time
@@ -164,22 +162,20 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         //sb.append("To return to the main menu without starting a new meeting, select <b><i>cancel</i></b>. ");
         //sb.append("If necessary, tap date to select a date in the past. You may not select a date in the future.");
 
-        StringBuilder sb = new StringBuilder("View the date below and tap it to change if it is not the correct meeting date. (You may not select a date in the future.) Press next to begin the meeting.");
-
         TextView txtInstructions = (TextView)findViewById(R.id.lblMDHeader);
-        txtInstructions.setText(Html.fromHtml(sb.toString()));
+        txtInstructions.setText(Html.fromHtml("View the date below and tap it to change if it is not the correct meeting date. (You may not select a date in the future.) Press next to begin the meeting."));
 
-        txtMeetingDate = (TextView)findViewById(R.id.txtMDMeetingDate);
+        TextView txtMeetingDate = (TextView) findViewById(R.id.txtMDMeetingDate);
         viewClicked = txtMeetingDate;
         initializeDate();
 
         //Set onClick Listeners to load the DateDialog for MeetingDate
-        txtMeetingDate.setOnClickListener( new View.OnClickListener() {
+        txtMeetingDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //I want the Event Handler to handle both startDate and endDate
-                viewClicked = (TextView)view;
-                DatePickerDialog datePickerDialog = new DatePickerDialog( MeetingDefinitionActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                viewClicked = (TextView) view;
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MeetingDefinitionActivity.this, mDateSetListener, mYear, mMonth, mDay);
                 //TODO: Enable this feature in API 11 and above
                 //datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.show();
@@ -238,7 +234,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                         finish();
                     }
                 });
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -363,16 +359,14 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             //Setup Meeting
             MemberRepo memberRepo = new MemberRepo(MeetingDefinitionActivity.this);
             attendanceRepo = new MeetingAttendanceRepo(MeetingDefinitionActivity.this);
-            if(memberRepo != null && attendanceRepo != null) {
-                //Get the Members
-                members = memberRepo.getAllMembers();
+            //Get the Members
+            members = memberRepo.getAllMembers();
 
-                //Preset Meeting Attendance to Absent if it is a NEW meeting
-                if(!reloadedExistingMeeting) {
-                    presetMeetingAttendance(currentMeeting.getMeetingId());
+            //Preset Meeting Attendance to Absent if it is a NEW meeting
+            if(!reloadedExistingMeeting) {
+                presetMeetingAttendance(currentMeeting.getMeetingId());
 
-                    //TODO: Do the same for Savings, Loans etc
-                }
+                //TODO: Do the same for Savings, Loans etc
             }
 
             //Indicate that current data view mode is CAPTURE

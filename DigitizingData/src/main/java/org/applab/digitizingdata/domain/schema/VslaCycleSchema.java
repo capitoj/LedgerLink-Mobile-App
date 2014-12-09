@@ -6,9 +6,9 @@ package org.applab.digitizingdata.domain.schema;
 
 public class VslaCycleSchema {
     // Table: VslaCycles
-    public static final String TBL_VSLA_CYCLES = "VslaCycles";
+    private static final String TBL_VSLA_CYCLES = "VslaCycles";
     public static final String COL_VC_CYCLE_ID = "_id";
-    public static final String COL_VC_CYCLE_CODE = "CycleCode";
+    private static final String COL_VC_CYCLE_CODE = "CycleCode";
     public static final String COL_VC_START_DATE = "StartDate";
     public static final String COL_VC_END_DATE = "EndDate";
     public static final String COL_VC_SHARE_PRICE = "SharePrice";
@@ -76,8 +76,7 @@ public class VslaCycleSchema {
     }
 
     public static String[] getColumnListArray() {
-        String[] columns = getColumnList().split(",");
-        return columns;
+        return getColumnList().split(",");
     }
 
 

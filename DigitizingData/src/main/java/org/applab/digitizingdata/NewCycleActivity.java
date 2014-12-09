@@ -59,11 +59,9 @@ public class NewCycleActivity extends SherlockActivity {
     int mEndMonth;
     int mEndDay;
     final String dialogTitle = "New Cycle";
-    private AlertDialog alertDialog = null;
     private boolean successAlertDialogShown = false;
     boolean isUpdateCycleAction = false;
     private boolean multipleCyclesIndicator = false;
-    private LinearLayout linearLayout;
 
     VslaCycle selectedCycle;
 
@@ -92,7 +90,7 @@ public class NewCycleActivity extends SherlockActivity {
 
         txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
         txtEndDate = (TextView) findViewById(R.id.txtNCEndDate);
-        linearLayout = (LinearLayout) findViewById(R.id.sectionNCMiddleCycleStart);
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.sectionNCMiddleCycleStart);
         linearLayout.setVisibility(View.GONE);
 
 
@@ -204,9 +202,7 @@ public class NewCycleActivity extends SherlockActivity {
                 mEndDay = c.get(Calendar.DAY_OF_MONTH);
             } else {
                 TextView txtInstructions = (TextView) findViewById(R.id.lblNCHeader);
-                txtInstructions.setText(new StringBuilder()
-                                .append("There is no cycle that is currently running. A New Cycle will be created.")
-                                .toString()
+                txtInstructions.setText("There is no cycle that is currently running. A New Cycle will be created."
                 );
 
                 //setup default dates
@@ -358,27 +354,13 @@ public class NewCycleActivity extends SherlockActivity {
     //Displays the selected Date in the TextView
     void updateDisplay() {
         if (viewClicked != null) {
-            viewClicked.setText(new StringBuilder()
-                    // Month is 0 based so add 1
-                    .append(String.format("%02d", mDay))
-                    .append("-")
-                    .append(Utils.getMonthNameAbbrev(mMonth + 1))
-                    .append("-")
-                    .append(mYear)
-                    .toString());
+            viewClicked.setText(String.format("%02d", mDay) + "-" + Utils.getMonthNameAbbrev(mMonth + 1) + "-" + mYear);
 
             //Default the End Date to StartDate + 52 weeks
             if (settingStartDate && txtEndDate != null) {
                 settingStartDate = false;
 
-                String endDateString = new StringBuilder()
-                        // Month is 0 based so add 1
-                        .append(String.format("%02d", mDay))
-                        .append("-")
-                        .append(Utils.getMonthNameAbbrev(mMonth + 1))
-                        .append("-")
-                        .append(mYear + 1)
-                        .toString();
+                String endDateString = String.format("%02d", mDay) + "-" + Utils.getMonthNameAbbrev(mMonth + 1) + "-" + (mYear + 1);
                 Date endDate = Utils.getDateFromString(endDateString, "dd-MMM-yyyy");
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(endDate);
@@ -397,26 +379,13 @@ public class NewCycleActivity extends SherlockActivity {
 
     protected void updateDisplay(TextView theField) {
         if (theField != null) {
-            theField.setText(new StringBuilder()
-                    // Month is 0 based so add 1
-                    .append(String.format("%02d", mDay))
-                    .append("-")
-                    .append(Utils.getMonthNameAbbrev(mMonth + 1))
-                    .append("-")
-                    .append(mYear)
-                    .toString());
+            theField.setText(String.format("%02d", mDay) + "-" + Utils.getMonthNameAbbrev(mMonth + 1) + "-" + mYear);
         }
     }
 
     void updateDisplay(TextView theField, int theYear, int theMonth, int theDay) {
         if (theField != null) {
-            theField.setText(new StringBuilder()
-                    .append(String.format("%02d", theDay))
-                    .append("-")
-                    .append(Utils.getMonthNameAbbrev(theMonth))
-                    .append("-")
-                    .append(theYear)
-                    .toString());
+            theField.setText(String.format("%02d", theDay) + "-" + Utils.getMonthNameAbbrev(theMonth) + "-" + theYear);
         }
     }
 
@@ -430,7 +399,6 @@ public class NewCycleActivity extends SherlockActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i;
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MainActivity.class);
@@ -464,7 +432,6 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     boolean saveCycleData() {
-        boolean successFlg = false;
 
         VslaCycle cycle = new VslaCycle();
 
@@ -733,7 +700,7 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     protected void displayMessageBox(String title, String message) {
-        alertDialog = new AlertDialog.Builder(NewCycleActivity.this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(NewCycleActivity.this).create();
 
         // Setting Dialog Title
         alertDialog.setTitle(title);

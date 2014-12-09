@@ -35,7 +35,6 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     private ActionBar actionBar;
     private int selectedMemberId = -1;
     private String selectedMemberNames = "VSLA Member";
-    private MemberRepo repo;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +62,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
         }
 
 
-        repo = new MemberRepo(getApplicationContext());
+        MemberRepo repo = new MemberRepo(getApplicationContext());
         Member selectedMember = repo.getMemberById(selectedMemberId);
         populateDataFields(selectedMember);
 

@@ -26,7 +26,6 @@ public class MembersRollCallArrayAdapter extends ArrayAdapter<Member> {
     private final Context context;
     private final ArrayList<Member> values;
     private MeetingAttendanceRepo attendanceRepo ;
-    private final VslaCycleRepo cycleRepo;
     private final VslaCycle currentCycle;
     private int meetingId;
     private boolean isFromCode = false;
@@ -45,7 +44,7 @@ private final Typeface typeface;
         this.mCheckedState = new boolean[values.size()];
 
         attendanceRepo = new MeetingAttendanceRepo(getContext());
-        cycleRepo = new VslaCycleRepo(getContext());
+        VslaCycleRepo cycleRepo = new VslaCycleRepo(getContext());
         currentCycle = cycleRepo.getCurrentCycle();
 
     }

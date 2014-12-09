@@ -48,8 +48,8 @@ public class Utils {
      */
     public static final String DATE_FIELD_FORMAT = "dd-MMM-yyyy";
     public static final String OTHER_DATE_FIELD_FORMAT = "dd MMM yyyy";
-    public static final String REAL_FIELD_FORMAT = "#0";
-    public static final String INTEGER_FIELD_FORMAT = "#0";
+    private static final String REAL_FIELD_FORMAT = "#0";
+    private static final String INTEGER_FIELD_FORMAT = "#0";
 
     //Constants for Alert Dialogs
     public static final String MSGBOX_ICON_INFORMATION = "INFORMATION";
@@ -62,7 +62,7 @@ public class Utils {
     public static boolean _membersAccessedFromEditCycle = false;
 
     //Shared Preferences
-    public static SharedPreferences sharedPreferences = null;
+    private static SharedPreferences sharedPreferences = null;
 
     //SERVER Connection
     public static String VSLA_SERVER_BASE_URL = "http://defaulturl.com/default";
@@ -144,7 +144,7 @@ public class Utils {
 
     }
 
-    public static String insertPeriodically(
+    private static String insertPeriodically(
             String text, int period) {
         StringBuilder builder = new StringBuilder(
                 text.length() + " ".length() * (text.length() / period) + 1);
@@ -283,8 +283,7 @@ public class Utils {
     public static Date getDateFromString(String date, String format) {
         try {
             SimpleDateFormat ft = new SimpleDateFormat(format);
-            Date dt = ft.parse(date);
-            return dt;
+            return ft.parse(date);
         } catch (Exception e) {
             e.printStackTrace();
             return new Date();
@@ -304,8 +303,7 @@ public class Utils {
     public static String formatDate(Date date, String format) {
         try {
             SimpleDateFormat ft = new SimpleDateFormat(format);
-            String dateString = ft.format(date);
-            return dateString;
+            return ft.format(date);
         } catch (Exception e) {
             return null;
         }
@@ -459,6 +457,7 @@ public class Utils {
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {
+
             // pre-condition
             return;
         }
@@ -476,53 +475,5 @@ public class Utils {
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
-
-    public double getTotalCashInBox(int meetingId, Context context) {
-        double totalSavings = 0.0;
-        double totalLoansRepaid = 0.0;
-        double totalLoansIssued = 0.0;
-        double totalFines = 0.0;
-
-        double loanTopUps = 0.0;
-        double actualStartingCash = 0.0;
-
-        double cashToBank = 0.0;
-
-        Meeting currentMeeting = null;
-
-        MeetingStartingCash startingCashDetails = null;
-
-        MeetingRepo meetingRepo = new MeetingRepo(context);
-        MeetingSavingRepo savingRepo = new MeetingSavingRepo(context);
-        MeetingLoanRepaymentRepo repaymentRepo = new MeetingLoanRepaymentRepo(context);
-        MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(context);
-        MeetingFineRepo fineRepo = new MeetingFineRepo(context);
-
-        try {
-
-
-            startingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
-
-            totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
-            totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
-            totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
-            totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId);
-
-            loanTopUps = startingCashDetails.getLoanTopUps();
-            actualStartingCash = startingCashDetails.getActualStartingCash();
-            cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());
-
-            return actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines + loanTopUps - cashToBank;
-
-        } catch (Exception ex) {
-            return 0.0;
-        } finally {
-            meetingRepo = null;
-            savingRepo = null;
-            repaymentRepo = null;
-            return 0.0;
-        }
-    }
-
 
 }

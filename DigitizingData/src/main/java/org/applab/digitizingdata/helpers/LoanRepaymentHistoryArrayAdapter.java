@@ -61,7 +61,7 @@ public class LoanRepaymentHistoryArrayAdapter extends ArrayAdapter<MemberLoanRep
             MemberLoanRepaymentRecord repaymentRecord = values.get(position);
             if (repaymentRecord != null) {
                 //txtPaymentListing.setText(String.format("%d\t %,.0f UGX\t %s\t",repaymentRecord.getLoanNo(), repaymentRecord.getAmount(), Utils.formatDate(repaymentRecord.getMeetingDate(), Utils.DATE_FIELD_FORMAT)));
-                if (repaymentRecord.getComments().isEmpty() || repaymentRecord.getComments() == null) {
+                if (repaymentRecord.getComments().isEmpty()) {
                     txtComments.setVisibility(View.GONE);
                 }
                 txtComments.setText(String.format("%s", repaymentRecord.getComments()));
