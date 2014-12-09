@@ -25,12 +25,9 @@ import org.applab.digitizingdata.repo.MeetingSavingRepo;
  * Created by Moses on 6/25/13.
  */
 public class MeetingSummaryFrag extends SherlockFragment {
-    ActionBar actionBar;
-    private int meetingId = 0;
-    private int previousMeetingId = 0;
-    MeetingRepo meetingRepo;
-    private MeetingActivity parentActivity;
-    ScrollView fragmentView;
+    private ActionBar actionBar;
+    private MeetingRepo meetingRepo;
+    private ScrollView fragmentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,11 +67,11 @@ public class MeetingSummaryFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
-        parentActivity = (MeetingActivity) getSherlockActivity();
+        MeetingActivity parentActivity = (MeetingActivity) getSherlockActivity();
         //TextView lblMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFMeetingDate);
         // lblMeetingDate.setText(meetingDate);
-        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-        previousMeetingId = getSherlockActivity().getIntent().getIntExtra("_previousMeetingId", 0);
+        int meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+        int previousMeetingId = getSherlockActivity().getIntent().getIntExtra("_previousMeetingId", 0);
 
         //Get the Cycle that contains this meeting
         meetingRepo = new MeetingRepo(getSherlockActivity().getBaseContext());
@@ -156,7 +153,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
             MeetingAttendanceRepo attendanceRepo = new MeetingAttendanceRepo(getSherlockActivity().getBaseContext());
             if (null != attendanceRepo) {
-                txtAttendedCount.setText(String.format("Attended: %d", attendanceRepo.getAttendanceCountByMeetingId(previousMeeting.getMeetingId(), 1)));
+                txtAttendedCount.setText(String.format("Attended: %d", attendanceRepo.getAttendanceCountByMeetingId(previousMeeting.getMeetingId())));
             }
 
             txtDataSent.setText(String.format("Data: %s", (previousMeeting.isMeetingDataSent()) ? "Sent" : "Not Sent"));

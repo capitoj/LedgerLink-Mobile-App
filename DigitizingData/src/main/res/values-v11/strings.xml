@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="finished">finished</string>
+    <string name="enter_next">enter next</string>
+    <string name="cancel">Cancel</string>
+    <string name="send">Send</string>
+    <string name="next">next</string>
+    <string name="sort_by">Sort By</string>
+</resources>

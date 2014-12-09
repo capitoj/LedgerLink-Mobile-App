@@ -21,7 +21,6 @@
 package org.applab.digitizingdata.helpers;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;

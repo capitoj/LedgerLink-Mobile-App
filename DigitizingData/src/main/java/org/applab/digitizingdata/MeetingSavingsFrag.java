@@ -1,9 +1,7 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +10,10 @@ import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
-import org.applab.digitizingdata.helpers.MembersRollCallArrayAdapter;
 import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
@@ -51,14 +47,6 @@ public class MeetingSavingsFrag extends SherlockFragment {
         fragmentView =  (RelativeLayout)inflater.inflate(R.layout.frag_meeting_savings, container, false);
         initializeFragment();
         return fragmentView;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-
     }
 
     private void initializeFragment()
@@ -107,7 +95,7 @@ public class MeetingSavingsFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        final MembersSavingsArrayAdapter adapter = new MembersSavingsArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersSavingsArrayAdapter adapter = new MembersSavingsArrayAdapter(getSherlockActivity().getBaseContext(), members);
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView

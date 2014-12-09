@@ -1,6 +1,6 @@
 <resources>
-    <dimen name="view_width">600dp</dimen>
-    <dimen name="view_height">510dp</dimen>
+   <!-- <dimen name="view_width">600dp</dimen>
+    <dimen name="view_height">510dp</dimen> -->
     <dimen name="logo_width">300dp</dimen>
     <dimen name="logo_height">210dp</dimen>
     <dimen name="activity_horizontal_margin">18dp</dimen>

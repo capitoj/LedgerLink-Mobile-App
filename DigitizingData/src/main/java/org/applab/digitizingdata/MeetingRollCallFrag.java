@@ -3,8 +3,6 @@ package org.applab.digitizingdata;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,13 +47,6 @@ public class MeetingRollCallFrag extends SherlockFragment {
     }
 
 
-    @Override
-    public void onAttach(Activity activity) {
-
-        super.onAttach(activity);
-
-    }
-
     private void reloadFragmentInfo() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
@@ -97,12 +88,6 @@ public class MeetingRollCallFrag extends SherlockFragment {
         LongTaskRunner.runLongTask(loaderRunnable, "Please wait..", "Loading member list", parentActivity);
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
     //Populate Members List
     private void populateMembersList() {
 
@@ -111,7 +96,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        final MembersRollCallArrayAdapter adapter = new MembersRollCallArrayAdapter(parentActivity.getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersRollCallArrayAdapter adapter = new MembersRollCallArrayAdapter(parentActivity.getBaseContext(), members);
         //set whether this adapter is view only, to disable changing roll call in view only mode
         adapter.viewOnly = parentActivity.isViewOnly();
         //Pass on the meeting Id to the adapter

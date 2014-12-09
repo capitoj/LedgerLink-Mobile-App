@@ -5,7 +5,7 @@
                 android:id="@+id/txtMeetingDate"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:text="01 Jan 2013"/>
+                android:text="@string/date_default"/>
         <org.applab.digitizingdata.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/txtMeetingCycleSummary"
@@ -13,7 +13,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/txtMeetingDate"
                 android:textColor="@color/ledger_link_grey"
-                android:text="xxx-xxx"
+                android:text=" "
             android:layout_marginBottom="3dip"/>
 
     </RelativeLayout>

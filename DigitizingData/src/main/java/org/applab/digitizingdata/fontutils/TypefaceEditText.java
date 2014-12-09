@@ -3,7 +3,6 @@ package org.applab.digitizingdata.fontutils;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.EditText;
-import android.widget.TextView;
 
 /**
  * A subclass of {@link android.widget.EditText} which has a custom {@link org.applab.digitizingdata.fontutils.TextStyle} applied.

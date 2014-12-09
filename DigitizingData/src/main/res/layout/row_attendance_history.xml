@@ -11,7 +11,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="8dip"
-        android:text="53. 01-JUL-2013" />
+        android:text="@string/default_rollcall_date" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRAHAttendance"
@@ -21,7 +21,7 @@
         android:layout_toRightOf="@id/txtRAHMeetingDate"
         android:layout_marginLeft="8dip"
         android:layout_marginRight="8dip"
-        android:text="Present" />
+        android:text="@string/present" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRAHComments"
@@ -31,5 +31,5 @@
         android:layout_marginLeft="8dip"
         android:layout_marginRight="5dip"
         android:layout_toRightOf="@id/txtRAHAttendance"
-        android:text="Apologized" />
+        android:text="@string/apologized" />
 </RelativeLayout>

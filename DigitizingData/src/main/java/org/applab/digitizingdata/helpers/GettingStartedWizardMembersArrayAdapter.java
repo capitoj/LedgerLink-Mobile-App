@@ -24,7 +24,7 @@ import java.util.ArrayList;
  */
 public class GettingStartedWizardMembersArrayAdapter extends MembersArrayAdapter {
     public GettingStartedWizardMembersArrayAdapter(Context context, ArrayList<Member> values) {
-        super(context, values,R.layout.row_members_getting_started_wizard_list);
+        super(context, values);
         this.context = context;
         this.values = values;
         this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");

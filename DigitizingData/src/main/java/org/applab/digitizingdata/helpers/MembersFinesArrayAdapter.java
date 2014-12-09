@@ -21,20 +21,20 @@ import java.util.ArrayList;
  * Created by Moses on 7/28/13.
  */
 public class MembersFinesArrayAdapter extends ArrayAdapter<Member> {
-    Context context;
-    ArrayList<Member> values;
-    int meetingId;
-    Meeting targetMeeting = null;
-    MeetingFineRepo fineRepo = null;
-    MeetingRepo meetingRepo = null;
-    Typeface typeface;
+    private final Context context;
+    private final ArrayList<Member> values;
+    private int meetingId;
+    private Meeting targetMeeting = null;
+    private MeetingFineRepo fineRepo = null;
+    private MeetingRepo meetingRepo = null;
+    private final Typeface typeface;
 
 
-    public MembersFinesArrayAdapter(Context context, ArrayList<Member> values, String font) {
+    public MembersFinesArrayAdapter(Context context, ArrayList<Member> values) {
         super(context, R.layout.row_member_fines, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
 
         meetingRepo = new MeetingRepo(getContext());
         fineRepo = new MeetingFineRepo(getContext());

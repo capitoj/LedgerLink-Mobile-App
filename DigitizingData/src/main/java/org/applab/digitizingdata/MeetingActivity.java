@@ -52,15 +52,14 @@ import java.util.HashMap;
  * Created by Moses on 6/27/13.
  */
 public class MeetingActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
-    public static Context appContext;
-    private ActionBar actionBar;
-    boolean enableSendData = false;
-    Meeting currentMeeting;
-    MeetingRepo meetingRepo;
-    MeetingSavingRepo savingRepo;
-    MeetingFineRepo fineRepo;
-    MeetingLoanIssuedRepo loanIssuedRepo;
-    MeetingLoanRepaymentRepo loanRepaymentRepo;
+    private static Context appContext;
+    private boolean enableSendData = false;
+    private Meeting currentMeeting;
+    private MeetingRepo meetingRepo;
+    private MeetingSavingRepo savingRepo;
+    private MeetingFineRepo fineRepo;
+    private MeetingLoanIssuedRepo loanIssuedRepo;
+    private MeetingLoanRepaymentRepo loanRepaymentRepo;
 
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
 
@@ -70,7 +69,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     private static int targetMeetingId = 0;
     private static int currentDataItemPosition = 0;
     private static String serverUri = "";
-    public LedgerLinkApplication ledgerLinkApplication;
+    private LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +81,12 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         appContext = getApplicationContext();
 
         //ActionBar
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
         actionBar.setDisplayHomeAsUpEnabled(true);
         String meetingDate = getIntent().getStringExtra("_meetingDate");
 
@@ -185,11 +189,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             menu.findItem(R.id.mnuMeetingFineMember).setEnabled(false);
             return false;
         }
-        if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
-            return true;
-        } else {
-            return false;
-        }
+        return Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_REVIEW;
     }
 
     public Meeting getCurrentMeeting() {
@@ -329,10 +329,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         if (getIntent().hasExtra("_viewOnly")) {
             return getIntent().getBooleanExtra("_viewOnly", false);
         }
-        if (getCurrentMeeting() != null) {
-            return !getCurrentMeeting().isCurrent();
-        }
-        return false;
+        return getCurrentMeeting() != null && !getCurrentMeeting().isCurrent();
     }
 
     protected Object mActionMode;
@@ -537,7 +534,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                         //If the process has finished, then mark the meeting as sent
                         Calendar cal = Calendar.getInstance();
                         MeetingRepo meetingRepo = new MeetingRepo(DatabaseHandler.databaseContext);
-                        meetingRepo.updateDataSentFlag(targetMeetingId, true, cal.getTime());
+                        meetingRepo.updateDataSentFlag(targetMeetingId, cal.getTime());
 
                         //Dismiss the progressDialog
                         dismissProgressDialog();

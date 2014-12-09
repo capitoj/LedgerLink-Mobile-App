@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -13,7 +14,7 @@
             style="@style/RegularTextListItems"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Moses Oscar Muhahala" />
+            android:text="@string/full_name" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHLoanNo"
@@ -21,7 +22,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="Loan Number" />
+            android:text="@string/loan_number_default" />
 
         <org.applab.digitizingdata.fontutils.TypefaceEditText
             android:id="@+id/txtMLIssuedHLoanNo"
@@ -30,8 +31,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
             android:inputType="number"
-            android:text="43"
-            android:textAlignment="textEnd" />
+            android:text="@string/loan_number_default"
+            android:textAlignment="textEnd"
+            tools:ignore="UnusedAttribute" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHAmount"
@@ -63,7 +65,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:text="UGX" />
+                android:text="@string/operating_currency" />
         </LinearLayout>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -90,7 +92,7 @@
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
-            android:text="NEW BALANCE" />
+            android:text="@string/new_balance" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHInstruction2"
@@ -136,7 +138,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:text="UGX" />
+                android:text="@string/operating_currency" />
         </LinearLayout>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -167,7 +169,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:text="UGX" />
+                android:text="@string/operating_currency" />
         </LinearLayout>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -197,29 +199,7 @@
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:text="LOAN HISTORY" />
-
-            <!--  <org.applab.digitizingdata.fontutils.TypefaceTextView
-                  android:id="@+id/lblMLIssuedHOutstandingLoans"
-                  style="@style/RegularText"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_gravity="left"
-                  android:layout_marginLeft="30dip"
-                  android:text="Total Balance:" /> -->
-            <!--
-                <TextView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:paddingLeft="5dp"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:text="Past Loans"
-                        android:id="@+id/lblMLIssuedHPastLoans"
-                        android:layout_gravity="left"/>
-
-                        -->
+                android:text="@string/loan_history" />
 
             <ListView
                 android:id="@android:id/list"
@@ -239,7 +219,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:text="No outstanding loans" />
+                android:text="@string/no_outsanding_loans" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

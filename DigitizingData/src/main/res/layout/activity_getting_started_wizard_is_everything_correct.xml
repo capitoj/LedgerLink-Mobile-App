@@ -3,17 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblConfirmationHeading"
             style="@style/RegularHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Is everything correct?"
+            android:text="@string/is_everything_correct"
             android:layout_marginBottom="20dip"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -21,11 +16,9 @@
             style="@style/RegularTextInstruction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/lblConfirmationHeading"
             android:text="If you are satisfied that all information is correct, please press done, otherwise press back to revise information"
 
             />
-
-
-    </LinearLayout>
 
 </RelativeLayout>

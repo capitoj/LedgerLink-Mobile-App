@@ -42,18 +42,17 @@ import java.util.Date;
  */
 public class MeetingDefinitionActivity extends SherlockActivity {
 
-    ActionBar actionBar;
-    TextView txtMeetingDate;
-    TextView viewClicked;
+    private ActionBar actionBar;
+    private TextView txtMeetingDate;
+    private TextView viewClicked;
     public static final int Date_dialog_id = 1;
     // date and time
     private int mYear;
     private int mMonth;
     private int mDay;
-    String dateString;
-    MeetingRepo repo;
+    private String dateString;
+    private MeetingRepo repo;
     private ArrayList<Member> members;
-    private MemberRepo memberRepo;
     private MeetingAttendanceRepo attendanceRepo;
     private Meeting previousMeeting; //The most recent meeting before this one
     private Meeting meetingOfSameDate = null;
@@ -228,7 +227,6 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
                         }
                         else{
-                            return;
                         }
 
                     }
@@ -238,10 +236,14 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                     @Override
                     public void onClick(View v) {
                         finish();
-                        return;
                     }
                 });
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
         actionBar.setTitle("Meeting");
 
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
@@ -359,7 +361,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         Intent i = null;
         if(null != currentMeeting) {
             //Setup Meeting
-            memberRepo = new MemberRepo(MeetingDefinitionActivity.this);
+            MemberRepo memberRepo = new MemberRepo(MeetingDefinitionActivity.this);
             attendanceRepo = new MeetingAttendanceRepo(MeetingDefinitionActivity.this);
             if(memberRepo != null && attendanceRepo != null) {
                 //Get the Members
@@ -367,7 +369,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
                 //Preset Meeting Attendance to Absent if it is a NEW meeting
                 if(!reloadedExistingMeeting) {
-                    presetMeetingAttendance(currentMeeting.getMeetingId(), 0);
+                    presetMeetingAttendance(currentMeeting.getMeetingId());
 
                     //TODO: Do the same for Savings, Loans etc
                 }
@@ -396,9 +398,9 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         }
 
     }
-    public void presetMeetingAttendance(int meetingId, int isPresent) {
+    public void presetMeetingAttendance(int meetingId) {
         for(Member m: members) {
-            attendanceRepo.saveMemberAttendance(meetingId, m.getMemberId(), isPresent);
+            attendanceRepo.saveMemberAttendance(meetingId, m.getMemberId(), 0);
         }
     }
 
@@ -407,12 +409,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         Meeting meeting = new Meeting();
         repo = new MeetingRepo(getApplicationContext());
 
-        if(validateMeeting(meeting)) {
-            return repo.addMeeting(meeting);
-        }
-        else{
-            return false;
-        }
+        return validateMeeting(meeting) && repo.addMeeting(meeting);
     }
 
     private boolean validateMeeting(Meeting meeting){

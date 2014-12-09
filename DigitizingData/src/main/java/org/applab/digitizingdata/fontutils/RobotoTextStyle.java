@@ -14,8 +14,8 @@ public enum RobotoTextStyle implements TextStyle {
     CONDENSED_LIGHT("condensedLight", "fonts/robotocondensed-light.ttf"),
     CONDENSED_BOLD("condensedBold", "fonts/robotocondensed-bold.ttf");
 
-    private String mName;
-    private String mFontName;
+    private final String mName;
+    private final String mFontName;
 
     RobotoTextStyle(String name, String fontName) {
         mName = name;

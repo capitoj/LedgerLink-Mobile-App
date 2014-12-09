@@ -37,14 +37,8 @@ public class AttendanceSchema {
     }
 
     public static String getColumnList() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(COL_A_ATTENDANCE_ID + ",");
-        sb.append(COL_A_MEETING_ID + ",");
-        sb.append(COL_A_MEMBER_ID + ",");
-        sb.append(COL_A_IS_PRESENT + ",");
-        sb.append(COL_A_COMMENTS);
 
-        return sb.toString();
+        return (COL_A_ATTENDANCE_ID + ",") + COL_A_MEETING_ID + "," + COL_A_MEMBER_ID + "," + COL_A_IS_PRESENT + "," + COL_A_COMMENTS;
     }
 
     public static String[] getColumnListArray() {

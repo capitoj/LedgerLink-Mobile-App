@@ -23,17 +23,11 @@ public class MembersArrayAdapter extends ArrayAdapter<Member> {
     int position;
     Typeface typeface;
 
-    public MembersArrayAdapter(Context context, ArrayList<Member> values, String font) {
+    public MembersArrayAdapter(Context context, ArrayList<Member> values) {
         super(context, R.layout.row_members_main_list, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
-    }
-
-    public MembersArrayAdapter(Context context, ArrayList<Member> values, int layout) {
-        super(context, layout, values);
-        this.context = context;
-        this.values = values;
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
     }
 
     @Override

@@ -21,13 +21,13 @@ import java.util.Date;
  * Created by Moses on 7/7/13.
  */
 public class MeetingSavingRepo {
-    private Context context;
+    private final Context context;
 
     public MeetingSavingRepo(Context context){
         this.context = context;
     }
 
-    public int getMemberSavingId(int meetingId, int memberId) {
+    int getMemberSavingId(int meetingId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         int savingId = 0;
@@ -311,12 +311,7 @@ public class MeetingSavingRepo {
                 retVal = db.insert(SavingSchema.getTableName(), null, values);
             }
 
-            if (retVal != -1) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return retVal != -1;
         }
         catch (Exception ex) {
             Log.e("MemberSavingRepo.saveMemberSaving", ex.getMessage());

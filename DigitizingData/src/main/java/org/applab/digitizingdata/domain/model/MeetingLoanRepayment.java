@@ -3,7 +3,7 @@ package org.applab.digitizingdata.domain.model;
 /**
  * Created by Moses on 7/9/13.
  */
-public class MeetingLoanRepayment {
+class MeetingLoanRepayment {
     private int repaymentId;
     private MeetingLoanIssued loanIssued;
     private Meeting meeting;

@@ -5,7 +5,7 @@ package org.applab.digitizingdata.domain.schema;
  */
 public class VslaInfoSchema {
     // Table: VslaInfo
-    public static final String TBL_VSLA_INFO = "VslaInfo";
+    private static final String TBL_VSLA_INFO = "VslaInfo";
     public static final String COL_VI_VSLA_NAME = "VslaName";
     public static final String COL_VI_VSLA_CODE = "VslaCode";
     public static final String COL_VI_PASS_KEY = "PassKey";

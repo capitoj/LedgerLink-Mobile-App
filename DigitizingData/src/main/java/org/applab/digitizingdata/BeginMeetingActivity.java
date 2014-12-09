@@ -47,18 +47,17 @@ import java.util.HashMap;
 
 
 public class BeginMeetingActivity extends SherlockActivity {
-    ActionBar actionBar;
-    MeetingRepo meetingRepo = null;
-    ArrayList<Meeting> pastMeetings = null;
-    VslaCycle recentCycle = null;
-    VslaCycleRepo cycleRepo = null;
+    private ActionBar actionBar;
+    private MeetingRepo meetingRepo = null;
+    private ArrayList<Meeting> pastMeetings = null;
+    private VslaCycle recentCycle = null;
+    private VslaCycleRepo cycleRepo = null;
     private static ProgressDialog progressDialog = null;
     private static int targetMeetingId = 0;
     private static int currentDataItemPosition = 0;
     private static String serverUri = "";
     private static boolean actionSucceeded = false;
     private static Meeting currentMeeting = null;
-    private static int httpStatusCode = 0; //To know whether the Request was successful
     private static int numberOfSentMeetings = 0;
     private ArrayList<Meeting> currentMeetings;
     private boolean noPriorMeetings = false;
@@ -82,7 +81,7 @@ public class BeginMeetingActivity extends SherlockActivity {
 
         recentCycle = cycleRepo.getMostRecentCycle();
         //past meetings should be not active and not sent
-        pastMeetings = meetingRepo.getAllMeetingsByDataSentStatusAndActiveStatus(false, false);
+        pastMeetings = meetingRepo.getAllMeetingsByDataSentStatusAndActiveStatus();
 
         // Check fore fresh start; no meetings other than GSW
         // if (meetingRepo.getAllNonGSWMeetings().isEmpty()) {
@@ -161,7 +160,6 @@ public class BeginMeetingActivity extends SherlockActivity {
 
                         // Skip the Current meeting i.e. mostRecentUnsentMeeting coz it is already displayed
                         if (meeting.getMeetingId() == mostRecentUnsentMeeting.getMeetingId()) {
-                            continue;
                         }
                         //We are using a list now
                         //So this block is obsolete
@@ -267,7 +265,7 @@ public class BeginMeetingActivity extends SherlockActivity {
         //to populate the current meetings
         //Now get the data via the adapter
 
-        currentMeetings = meetingRepo.getAllMeetingsByActiveStatus(true);
+        currentMeetings = meetingRepo.getAllMeetingsByActiveStatus();
         ConcurrentMeetingsArrayAdapter adapter = new ConcurrentMeetingsArrayAdapter(getBaseContext(), currentMeetings);
 
         // listening to single list item on click
@@ -354,6 +352,11 @@ public class BeginMeetingActivity extends SherlockActivity {
 
 
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
         actionBar.setTitle("Meeting");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -509,6 +512,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                 // close the connection
                 httpClient.getConnectionManager().shutdown();
 
+                int httpStatusCode = 0;
                 if (httpStatusCode == 200) //sucess
                 {
                     result = new JSONObject(responseString);
@@ -540,7 +544,7 @@ public class BeginMeetingActivity extends SherlockActivity {
 
             try {
                 if (result != null) {
-                    actionSucceeded = ((result.getInt("StatusCode") == 0) ? true : false);
+                    actionSucceeded = ((result.getInt("StatusCode") == 0));
                 }
                 if (actionSucceeded) {
                     numberOfSentMeetings++;
@@ -558,7 +562,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                         //If the process has finished, then mark the meeting as sent
                         Calendar cal = Calendar.getInstance();
                         MeetingRepo meetingRepo = new MeetingRepo(DatabaseHandler.databaseContext);
-                        meetingRepo.updateDataSentFlag(targetMeetingId, true, cal.getTime());
+                        meetingRepo.updateDataSentFlag(targetMeetingId, cal.getTime());
 
                         //Dismiss the progressDialog
                         dismissProgressDialog();

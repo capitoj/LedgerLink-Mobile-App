@@ -168,7 +168,7 @@ public class MeetingLoanIssuedRepo {
                     Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
                     loan.setDateCleared(dateCleared);
                 }
-                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1) ? true : false);
+                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
             }
 
             return loan;
@@ -355,11 +355,8 @@ public class MeetingLoanIssuedRepo {
                     LoanIssueSchema.COL_LI_LOAN_NO, loanNo);
             cursor = db.rawQuery(query, null);
 
-            if (cursor != null && cursor.moveToFirst()) {
-                return false;
-            }
+            return !(cursor != null && cursor.moveToFirst());
 
-            return true;
         } catch (Exception ex) {
             Log.e("MeetingLoanIssuedRepo.validateLoanNumber", ex.getMessage());
             return false;
@@ -400,11 +397,8 @@ public class MeetingLoanIssuedRepo {
                     LoanIssueSchema.COL_LI_LOAN_NO, loanNo, LoanIssueSchema.COL_LI_LOAN_ID, loanId);
             cursor = db.rawQuery(query, null);
 
-            if (cursor != null && cursor.moveToFirst()) {
-                return false;
-            }
+            return !(cursor != null && cursor.moveToFirst());
 
-            return true;
         } catch (Exception ex) {
             Log.e("MeetingLoanIssuedRepo.validateLoanNumber", ex.getMessage());
             return false;
@@ -556,11 +550,7 @@ public class MeetingLoanIssuedRepo {
                 retVal = db.insert(LoanIssueSchema.getTableName(), null, values);
             }
 
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MemberLoanIssuedRepo.saveMemberLoanIssue", ex.getMessage());
             return false;
@@ -571,7 +561,7 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
-    public boolean saveMemberLoanIssue(int meetingId, int memberId, int loanNo, double amount, double interest, double loanBalance, Date dateDue) {
+    public boolean saveMemberLoanIssue(int meetingId, int memberId, int loanNo, double amount, double loanBalance, Date dateDue) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int loanId = 0;
@@ -589,7 +579,7 @@ public class MeetingLoanIssuedRepo {
             values.put(LoanIssueSchema.COL_LI_MEMBER_ID, memberId);
             values.put(LoanIssueSchema.COL_LI_LOAN_NO, loanNo);
             values.put(LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, amount);
-            values.put(LoanIssueSchema.COL_LI_INTEREST_AMOUNT, interest);
+            values.put(LoanIssueSchema.COL_LI_INTEREST_AMOUNT, 0.0);
 
 
             //The Date Due
@@ -617,11 +607,7 @@ public class MeetingLoanIssuedRepo {
                 retVal = db.insert(LoanIssueSchema.getTableName(), null, values);
             }
 
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MemberLoanIssuedRepo.saveMemberLoanIssue", ex.getMessage());
             return false;
@@ -1193,11 +1179,7 @@ public class MeetingLoanIssuedRepo {
             retVal = db.update(LoanIssueSchema.getTableName(), values, LoanIssueSchema.COL_LI_LOAN_ID + " = ?",
                     new String[]{String.valueOf(loanId)});
 
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MemberLoanIssuedRepo.updateMemberLoanBalances", ex.getMessage());
             return false;
@@ -1239,11 +1221,7 @@ public class MeetingLoanIssuedRepo {
             retVal = db.update(LoanIssueSchema.getTableName(), values, LoanIssueSchema.COL_LI_LOAN_ID + " = ?",
                     new String[]{String.valueOf(loanId)});
 
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MemberLoanIssuedRepo.updateMemberLoanBalances", ex.getMessage());
             return false;
@@ -1255,7 +1233,7 @@ public class MeetingLoanIssuedRepo {
     }
 
 
-    public boolean updateMemberLoanBalancesAndComment(int loanId, double totalRepaid, double balance, Date newDateDue, String comment) {
+    public boolean updateMemberLoanBalancesAndComment(int loanId, double balance, Date newDateDue, String comment) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
 
@@ -1265,7 +1243,7 @@ public class MeetingLoanIssuedRepo {
             ContentValues values = new ContentValues();
             values.put(LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, balance);
             values.put(LoanIssueSchema.COL_LI_BALANCE, balance);
-            values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, totalRepaid);
+            values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, (double) 0);
             values.put(LoanIssueSchema.COL_LI_COMMENT, comment);
             //If the loan has been cleared, then the newDateDue will be null
             if (null != newDateDue) {
@@ -1287,11 +1265,7 @@ public class MeetingLoanIssuedRepo {
             retVal = db.update(LoanIssueSchema.getTableName(), values, LoanIssueSchema.COL_LI_LOAN_ID + " = ?",
                     new String[]{String.valueOf(loanId)});
 
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MemberLoanIssuedRepo.updateMemberLoanBalances", ex.getMessage());
             return false;

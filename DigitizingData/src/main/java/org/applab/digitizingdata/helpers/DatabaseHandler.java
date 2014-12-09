@@ -22,21 +22,21 @@ import java.io.File;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    public static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
+    private static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DATABASE_NAME = "ledgerlinkdb";
-    public static final int DATABASE_VERSION = 29;
-    public static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
-    public static final String DATA_FOLDER = "LedgerLink";
+    private static final int DATABASE_VERSION = 29;
+    private static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
+    private static final String DATA_FOLDER = "LedgerLink";
 
     public static Context databaseContext = null;
 
-    public DatabaseHandler(Context context) {
+    private DatabaseHandler(Context context) {
         super(context, createDatabaseFolder() + ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING)) ? TRAINING_DATABASE_NAME : DATABASE_NAME),
                 null, DATABASE_VERSION);
         databaseContext = context;
     }
 
-    public static String createDatabaseFolder() {
+    private static String createDatabaseFolder() {
         //creates the database folders and returns path as string
         File databaseStorageDir = new File(EXTERNAL_STORAGE_LOCATION + File.separator + DATA_FOLDER);
         if(! databaseStorageDir.exists()) {

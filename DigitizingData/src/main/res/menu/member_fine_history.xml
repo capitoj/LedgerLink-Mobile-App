@@ -2,7 +2,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/mnuMFBack"
-          android:title="Back"
+          android:title="@string/back"
           android:orderInCategory="1"
           android:showAsAction="never"
           android:icon="@drawable/ic_navigation_back"

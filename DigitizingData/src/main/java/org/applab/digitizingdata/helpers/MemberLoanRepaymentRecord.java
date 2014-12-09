@@ -9,13 +9,13 @@ import java.util.Date;
  * Created by Moses on 8/1/13.
  */
 public class MemberLoanRepaymentRecord {
-    int repaymentId;
-    int loanId;
-    int loanNo;
-    Date meetingDate;
-    double amount;
-    double rolloverAmount;
-    String comments;
+    private int repaymentId;
+    private int loanId;
+    private int loanNo;
+    private Date meetingDate;
+    private double amount;
+    private double rolloverAmount;
+    private String comments;
     private Meeting meeting;
     private Member member;
     private double balanceBefore;

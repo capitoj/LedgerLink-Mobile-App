@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.applab.digitizingdata.R;
@@ -21,17 +20,17 @@ import java.util.ArrayList;
 
 
 public class SendMeetingDataArrayAdapter<T> extends ArrayAdapter<Meeting> {
-    Context context;
-    ArrayList<Meeting> values;
+    private final Context context;
+    private final ArrayList<Meeting> values;
     int position;
-    Typeface typeface;
+    private final Typeface typeface;
     boolean itemSelected[] = { false, false, false, false, false, false };
 
-    public SendMeetingDataArrayAdapter(Context context, ArrayList<Meeting> values, String font) {
+    public SendMeetingDataArrayAdapter(Context context, ArrayList<Meeting> values) {
         super(context, R.layout.row_send_meeting_data, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
     }
 
     @Override

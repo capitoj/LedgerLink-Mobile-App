@@ -7,14 +7,14 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="30dip">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularTextInstructionBold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="BEGIN MEETING"
+            android:text="@string/begin_meeting"
             android:id="@+id/lblMDHeading" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -44,7 +44,7 @@
             style="@style/TextAccentColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="01-JUL-2013"
+            android:text="@string/date_default"
             android:clickable="true"
             android:layout_marginLeft="100dip"
             android:id="@+id/txtMDMeetingDate"/>

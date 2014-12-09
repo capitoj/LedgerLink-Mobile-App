@@ -17,8 +17,8 @@ import java.util.ArrayList;
  * Created by Moses on 3/11/14.
  */
 public class VslaCyclesArrayAdapter extends ArrayAdapter<VslaCycle> {
-    Context context;
-    ArrayList<VslaCycle> values;
+    private final Context context;
+    private final ArrayList<VslaCycle> values;
     int position;
 
     public VslaCyclesArrayAdapter(Context context, ArrayList<VslaCycle> values) {

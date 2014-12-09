@@ -37,21 +37,16 @@ import java.util.ArrayList;
  */
 public class MemberAttendanceHistoryActivity extends SherlockListActivity {
 
-    private ActionBar actionBar;
-    private ArrayList<AttendanceRecord> attendances;
-
     private int memberId = 0;
     private int cycleId = 0;
-    private VslaCycle currentCycle;
     private String meetingDate;
     private String fullName;
     private int isPresent;
     private int meetingId = 0;
 
-    private VslaCycleRepo cycleRepo;
     private MeetingAttendanceRepo attendanceRepo;
 
-    CheckBox chkAttendance;
+    private CheckBox chkAttendance;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,13 +54,13 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_attendance_history);
-        cycleRepo = new VslaCycleRepo(getApplicationContext());
+        VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
         attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
 
         if (getIntent().hasExtra("_cycleId")) {
             this.cycleId = getIntent().getIntExtra("_cycleId", 0);
         } else {
-            currentCycle = cycleRepo.getCurrentCycle();
+            VslaCycle currentCycle = cycleRepo.getCurrentCycle();
             if (null != currentCycle) {
                 this.cycleId = currentCycle.getCycleId();
             }
@@ -178,7 +173,12 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         );
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setTitle("Roll Call");
         actionBar.setHomeButtonEnabled(false);
@@ -208,14 +208,14 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
     private void populateAttendanceData() {
 
         MeetingAttendanceRepo repo = new MeetingAttendanceRepo(getApplicationContext());
-        attendances = repo.getMemberAbsenceHistoryInCycle(cycleId, memberId, meetingId);
+        ArrayList<AttendanceRecord> attendances = repo.getMemberAbsenceHistoryInCycle(cycleId, memberId, meetingId);
 
         if (attendances == null) {
             attendances = new ArrayList<AttendanceRecord>();
         }
 
         //Now get the data via the adapter
-        AttendanceArrayAdapter adapter = new AttendanceArrayAdapter(MemberAttendanceHistoryActivity.this, attendances, "fonts/roboto-regular.ttf");
+        AttendanceArrayAdapter adapter = new AttendanceArrayAdapter(MemberAttendanceHistoryActivity.this, attendances);
 
         //Assign Adapter to ListView
         setListAdapter(adapter);

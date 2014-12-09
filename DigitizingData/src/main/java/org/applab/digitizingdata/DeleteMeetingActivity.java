@@ -25,15 +25,15 @@ import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 public class DeleteMeetingActivity extends SherlockActivity {
-    ActionBar actionBar;
-    int meetingId = 0;
-    MeetingRepo meetingRepo = null;
-    MeetingSavingRepo savingRepo = null;
-    MeetingAttendanceRepo attendanceRepo = null;
-    MeetingLoanRepaymentRepo repaymentRepo = null;
-    MeetingLoanIssuedRepo loanIssuedRepo = null;
-    MeetingFineRepo fineRepo = null;
-    String meetingDate = "";
+    private ActionBar actionBar;
+    private int meetingId = 0;
+    private MeetingRepo meetingRepo = null;
+    private MeetingSavingRepo savingRepo = null;
+    private MeetingAttendanceRepo attendanceRepo = null;
+    private MeetingLoanRepaymentRepo repaymentRepo = null;
+    private MeetingLoanIssuedRepo loanIssuedRepo = null;
+    private MeetingFineRepo fineRepo = null;
+    private String meetingDate = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
                 attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
             }
             if (null != attendanceRepo) {
-                txtAttendedCount.setText(String.format("Members Present: %d", attendanceRepo.getAttendanceCountByMeetingId(meetingId, 1)));
+                txtAttendedCount.setText(String.format("Members Present: %d", attendanceRepo.getAttendanceCountByMeetingId(meetingId)));
             }
 
             if (null == savingRepo) {
@@ -172,7 +172,6 @@ public class DeleteMeetingActivity extends SherlockActivity {
                         if (cannotBeDeleted) {
                             Toast.makeText(getApplicationContext(), "The meeting cannot be deleted. It contains meeting data.", Toast.LENGTH_LONG).show();
                             finish();
-                            return;
 
                         } else {
                             //Check whether to make the sibling meeting the current one: Data should not have been sent
@@ -196,7 +195,6 @@ public class DeleteMeetingActivity extends SherlockActivity {
                             Intent i = new Intent(getApplicationContext(), BeginMeetingActivity.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
-                            return;
                         }
                     }
                 }
@@ -206,13 +204,17 @@ public class DeleteMeetingActivity extends SherlockActivity {
                     @Override
                     public void onClick(View v) {
                         finish();
-                        return;
                     }
                 }
         );
 
 
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
         actionBar.setTitle("Delete Meeting");
 
         actionBar.setDisplayShowTitleEnabled(false);
@@ -244,10 +246,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
 }

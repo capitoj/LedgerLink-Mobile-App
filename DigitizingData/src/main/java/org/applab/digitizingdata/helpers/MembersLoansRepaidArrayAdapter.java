@@ -23,20 +23,20 @@ import java.util.ArrayList;
  * Created by Moses on 7/9/13.
  */
 public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
-    Context context;
-    ArrayList<Member> values;
-    int meetingId;
-    Meeting targetMeeting = null;
-    MeetingLoanRepaymentRepo loansRepaidRepo = null;
-    MeetingLoanIssuedRepo loansIssuedRepo = null;
-    MeetingRepo meetingRepo = null;
-    Typeface typeface;
+    private final Context context;
+    private final ArrayList<Member> values;
+    private int meetingId;
+    private Meeting targetMeeting = null;
+    private MeetingLoanRepaymentRepo loansRepaidRepo = null;
+    private MeetingLoanIssuedRepo loansIssuedRepo = null;
+    private MeetingRepo meetingRepo = null;
+    private final Typeface typeface;
 
-    public MembersLoansRepaidArrayAdapter(Context context, ArrayList<Member> values, String font) {
+    public MembersLoansRepaidArrayAdapter(Context context, ArrayList<Member> values) {
         super(context, R.layout.row_member_loans_repaid, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
 
         meetingRepo = new MeetingRepo(getContext());
         loansRepaidRepo = new MeetingLoanRepaymentRepo(getContext());

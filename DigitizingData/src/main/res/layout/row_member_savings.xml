@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:text="0. FULL NAME"/>
+        android:text="@string/name_default"/>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
@@ -18,7 +18,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMSavFullName"
-        android:text="Today: 5,000UGX"/>
+        android:text="@string/today_saving_default"/>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
@@ -26,6 +26,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMSavTodaysSavings"
-        android:text="Total Savings: 60,000UGX"/>
+        android:text="@string/total_savings_default"/>
 
 </RelativeLayout>

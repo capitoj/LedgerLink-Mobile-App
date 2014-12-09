@@ -29,7 +29,7 @@ public class MeetingAttendanceRepo {
         this.context = context;
     }
 
-    public int getMemberAttendanceId(int meetingId, int memberId) {
+    int getMemberAttendanceId(int meetingId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         int attendanceId = 0;
@@ -81,12 +81,7 @@ public class MeetingAttendanceRepo {
                     isPresent = cursor.getInt(cursor.getColumnIndex(AttendanceSchema.COL_A_IS_PRESENT));
                 }
             }
-            if(isPresent > 0) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return isPresent > 0;
         }
         catch (Exception ex) {
             Log.e("MeetingRollCallRepo.getMemberAttendance", ex.getMessage());
@@ -179,7 +174,7 @@ public class MeetingAttendanceRepo {
         }
     }
 
-    public int getAttendanceCountByMeetingId(int meetingId, int isPresentFlag) {
+    public int getAttendanceCountByMeetingId(int meetingId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
 
@@ -190,7 +185,7 @@ public class MeetingAttendanceRepo {
             //TODO: Performance will be affected but will come here later and return both absent and present count
             String query = String.format("SELECT  COUNT(*) AS PresentCount FROM %s WHERE %s=%d AND %s=%d",
                     AttendanceSchema.getTableName(),
-                    AttendanceSchema.COL_A_IS_PRESENT, isPresentFlag,
+                    AttendanceSchema.COL_A_IS_PRESENT, 1,
                     AttendanceSchema.COL_A_MEETING_ID, meetingId);
             cursor = db.rawQuery(query, null);
 
@@ -404,12 +399,7 @@ public class MeetingAttendanceRepo {
                 retVal = db.insert(AttendanceSchema.getTableName(), null, values);
             }
 
-            if (retVal != -1) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return retVal != -1;
         }
         catch (Exception ex) {
             Log.e("MeetingAttendanceRepo.saveMemberAttendance", ex.getMessage());
@@ -452,12 +442,7 @@ public class MeetingAttendanceRepo {
                 retVal = db.insert(AttendanceSchema.getTableName(), null, values);
             }
 
-            if (retVal != -1) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return retVal != -1;
         }
         catch (Exception ex) {
             Log.e("MeetingAttendanceRepo.saveMemberAttendanceWithComment", ex.getMessage());

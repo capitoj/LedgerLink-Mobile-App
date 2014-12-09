@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:text="0. FULL NAME"/>
+        android:text="@string/name_default"/>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
@@ -19,7 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtFineFullName"
-        android:text="Total Fines: 60,000UGX"
+        android:text="@string/total_fines_default"
         android:layout_marginBottom="5dip"/>
 
 </RelativeLayout>

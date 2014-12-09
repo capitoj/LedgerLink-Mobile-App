@@ -49,23 +49,23 @@ public class NewCycleActivity extends SherlockActivity {
     TextView txtStartDate;
     TextView txtEndDate;
     TextView viewClicked;
-    protected boolean settingStartDate = false;
+    boolean settingStartDate = false;
     protected static final int Date_dialog_id = 1;
     // date and time
-    protected int mYear;
-    protected int mMonth;
-    protected int mDay;
-    protected int mEndYear;
-    protected int mEndMonth;
-    protected int mEndDay;
-    protected String dialogTitle = "New Cycle";
-    protected AlertDialog alertDialog = null;
-    protected boolean successAlertDialogShown = false;
-    protected boolean isUpdateCycleAction = false;
-    protected boolean multipleCyclesIndicator = false;
-    LinearLayout linearLayout;
+    int mYear;
+    int mMonth;
+    int mDay;
+    int mEndYear;
+    int mEndMonth;
+    int mEndDay;
+    final String dialogTitle = "New Cycle";
+    private AlertDialog alertDialog = null;
+    private boolean successAlertDialogShown = false;
+    boolean isUpdateCycleAction = false;
+    private boolean multipleCyclesIndicator = false;
+    private LinearLayout linearLayout;
 
-    protected VslaCycle selectedCycle;
+    VslaCycle selectedCycle;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -228,13 +228,19 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     /* inflates custom menu bar for review members */
-    public void inflateCustombar() {
+    void inflateCustombar() {
 
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
 
         View customActionBarView = null;
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
+
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_back_next_done, null);
@@ -311,7 +317,7 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
 
-    protected void setupDefaultDates() {
+    void setupDefaultDates() {
         final Calendar c = Calendar.getInstance();
         mYear = c.get(Calendar.YEAR);
         mMonth = c.get(Calendar.MONTH);
@@ -329,7 +335,7 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     //Event that is raised when the date has been set
-    protected DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+    final DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             mYear = year;
             mMonth = monthOfYear;
@@ -350,7 +356,7 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     //Displays the selected Date in the TextView
-    protected void updateDisplay() {
+    void updateDisplay() {
         if (viewClicked != null) {
             viewClicked.setText(new StringBuilder()
                     // Month is 0 based so add 1
@@ -402,7 +408,7 @@ public class NewCycleActivity extends SherlockActivity {
         }
     }
 
-    protected void updateDisplay(TextView theField, int theYear, int theMonth, int theDay) {
+    void updateDisplay(TextView theField, int theYear, int theMonth, int theDay) {
         if (theField != null) {
             theField.setText(new StringBuilder()
                     .append(String.format("%02d", theDay))
@@ -457,7 +463,7 @@ public class NewCycleActivity extends SherlockActivity {
 
     }
 
-    protected boolean saveCycleData() {
+    boolean saveCycleData() {
         boolean successFlg = false;
 
         VslaCycle cycle = new VslaCycle();
@@ -536,7 +542,7 @@ public class NewCycleActivity extends SherlockActivity {
         return successFlg;
     }
 
-    protected boolean validateData(VslaCycle cycle) {
+    boolean validateData(VslaCycle cycle) {
         try {
             if (null == cycle) {
                 return false;
@@ -546,13 +552,13 @@ public class NewCycleActivity extends SherlockActivity {
             TextView txtSharePrice = (TextView) findViewById(R.id.txtNCSharePrice);
             String sharePrice = txtSharePrice.getText().toString().trim();
             if (sharePrice.length() < 1) {
-                displayMessageBox(dialogTitle, "The Share Price is required.", Utils.MSGBOX_ICON_EXCLAMATION);
+                displayMessageBox(dialogTitle, "The Share Price is required.");
                 txtSharePrice.requestFocus();
                 return false;
             } else {
                 double theSharePrice = Double.parseDouble(sharePrice);
                 if (theSharePrice <= 0.00) {
-                    displayMessageBox(dialogTitle, "The Share Price must be positive.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    displayMessageBox(dialogTitle, "The Share Price must be positive.");
                     txtSharePrice.requestFocus();
                     return false;
                 } else {
@@ -578,7 +584,7 @@ public class NewCycleActivity extends SherlockActivity {
                 String maxShareQty = cboMaxShareQty.getSelectedItem().toString().trim();
                 int theMaxShareQty = Integer.valueOf(maxShareQty);
                 if (theMaxShareQty <= 0) {
-                    displayMessageBox(dialogTitle, "The Maximum Share Quantity must be positive.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    displayMessageBox(dialogTitle, "The Maximum Share Quantity must be positive.");
                     cboMaxShareQty.requestFocus();
                     return false;
                 } else {
@@ -609,7 +615,7 @@ public class NewCycleActivity extends SherlockActivity {
             Date dtEnd = Utils.getDateFromString(endDate, Utils.DATE_FIELD_FORMAT);
 
             if (dtEnd.before(cycle.getStartDate())) {
-                displayMessageBox(dialogTitle, "The End Date must be after the Start Date", Utils.MSGBOX_ICON_EXCLAMATION);
+                displayMessageBox(dialogTitle, "The End Date must be after the Start Date");
                 txtEndDate.requestFocus();
                 return false;
             } else {
@@ -620,13 +626,13 @@ public class NewCycleActivity extends SherlockActivity {
             TextView txtInterestRate = (TextView) findViewById(R.id.txtNCInterestRate);
             String interestRate = txtInterestRate.getText().toString().trim();
             if (interestRate.length() < 1) {
-                displayMessageBox(dialogTitle, "The Interest Rate is required.", Utils.MSGBOX_ICON_EXCLAMATION);
+                displayMessageBox(dialogTitle, "The Interest Rate is required.");
                 txtInterestRate.requestFocus();
                 return false;
             } else {
                 double theInterestRate = Double.parseDouble(interestRate);
                 if (theInterestRate < 0.00) {
-                    displayMessageBox(dialogTitle, "The Interest Rate should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    displayMessageBox(dialogTitle, "The Interest Rate should be zero and above.");
                     txtInterestRate.requestFocus();
                     return false;
                 } else {
@@ -671,7 +677,7 @@ public class NewCycleActivity extends SherlockActivity {
             } else {
                 double interestSoFar = Double.parseDouble(interest);
                 if (interestSoFar < 0.00) {
-                    displayMessageBox(dialogTitle, "Total amount of Interest collected in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    displayMessageBox(dialogTitle, "Total amount of Interest collected in Current Cycle so far should be zero and above.");
                     txtInterestCollectedSoFar.requestFocus();
                     return false;
                 } else {
@@ -691,7 +697,7 @@ public class NewCycleActivity extends SherlockActivity {
             } else {
                 double finesSoFar = Double.parseDouble(fines);
                 if (finesSoFar < 0.00) {
-                    displayMessageBox(dialogTitle, "Total amount of Fines collected in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    displayMessageBox(dialogTitle, "Total amount of Fines collected in Current Cycle so far should be zero and above.");
                     txtFinesCollectedSoFar.requestFocus();
                     return false;
                 } else {
@@ -726,7 +732,7 @@ public class NewCycleActivity extends SherlockActivity {
         }
     }
 
-    protected void displayMessageBox(String title, String message, String icon) {
+    protected void displayMessageBox(String title, String message) {
         alertDialog = new AlertDialog.Builder(NewCycleActivity.this).create();
 
         // Setting Dialog Title
@@ -736,11 +742,11 @@ public class NewCycleActivity extends SherlockActivity {
         alertDialog.setMessage(message);
 
         // Setting Icon to Dialog
-        if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_EXCLAMATION)) {
+        if (Utils.MSGBOX_ICON_EXCLAMATION.equalsIgnoreCase(Utils.MSGBOX_ICON_EXCLAMATION)) {
             alertDialog.setIcon(R.drawable.phone);
-        } else if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_TICK)) {
+        } else if (Utils.MSGBOX_ICON_EXCLAMATION.equalsIgnoreCase(Utils.MSGBOX_ICON_TICK)) {
             alertDialog.setIcon(R.drawable.phone);
-        } else if (icon.equalsIgnoreCase(Utils.MSGBOX_ICON_QUESTION)) {
+        } else if (Utils.MSGBOX_ICON_EXCLAMATION.equalsIgnoreCase(Utils.MSGBOX_ICON_QUESTION)) {
             alertDialog.setIcon(R.drawable.phone);
         }
 

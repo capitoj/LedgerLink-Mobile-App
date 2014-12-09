@@ -14,7 +14,7 @@
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Tap [Begin] to begin a new meeting." />
+            android:text="@string/begin_meeting_instruction" />
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/grpBMCurrentMeeting"
@@ -27,33 +27,14 @@
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:text="CURRENT MEETING" />
+                android:text="@string/current_meeting" />
 
-            <!--   <TextView
-                   android:layout_width="fill_parent"
-                   android:layout_height="wrap_content"
-                   android:layout_marginTop="10dp"
-                   android:paddingLeft="5dp"
-                   android:textStyle="bold"
-                   android:textSize="20sp"
-                   android:textColor="#FFFFFF"
-                   android:background="#3b5998"
-                   android:text="CURRENT MEETING"
-                   android:id="@+id/lblBMSection1"
-                   /> -->
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblBMInstructionCurrent"
                 style="@style/RegularTextInstruction"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="You may edit before sending." />
-
-            <!--<org.applab.digitizingdata.fontutils.TypefaceTextView-->
-            <!--style="@style/TextAccentColor"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:text="04 Mar 2013"-->
-            <!--android:id="@+id/lblBMCurrentMeetingDate" />-->
+                android:text="@string/edit_before_sending_intruction" />
 
 
             <ListView
@@ -65,7 +46,7 @@
                 android:layout_marginRight="20dip"
                 android:layout_marginBottom="10dip"
                 android:choiceMode="singleChoice"
-                android:dividerHeight="2dip"></ListView>
+                android:dividerHeight="2dip"/>
 
 
         </LinearLayout>
@@ -77,47 +58,26 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!--  <TextView style="@style/SubHeading"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                  android:layout_marginTop="10dp"
-                  android:paddingLeft="5dp"
-                  android:text="UNSENT PAST MEETINGS"
-                  android:id="@+id/lblBMSection2" /> -->
-
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblBMSection2"
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:text="UNSENT PAST MEETINGS" />
+                android:text="@string/unsent_past_meeting" />
 
-            <!--<TextView style="@style/LedgerLinkSubHeading"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingLeft="5dp"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:textColor="#FFFFFF"
-                android:text="UNSENT PAST MEETINGS"
-                android:id="@+id/lblBMSection2"
-                android:background="#3b5998"
-                />   -->
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblBMInstructionPast"
                 style="@style/RegularTextInstruction"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="You may not edit, but you may review before sending." />
+                android:text="@string/review_before_sending_instruction" />
 
             <org.applab.digitizingdata.fontutils.TypefaceTextView
                 android:id="@+id/lblBMWarning"
                 style="@style/RegularTextInstruction"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="There are several unsent meetings. It is not safe to keep meetings without sending! Please send every week." />
-
+                android:text="@string/send_meetings_reminder" />
 
             <ListView
                 android:id="@+id/lstBMPastMeetingList"

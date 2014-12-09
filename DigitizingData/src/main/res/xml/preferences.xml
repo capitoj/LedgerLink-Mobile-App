@@ -43,13 +43,13 @@
             android:defaultValue="false"
             android:key="prefRefreshTrainingData"
             android:summary="The Training Data will be refreshed the next time you sign in. Actual VSLA records will not be refreshed."
-            android:title="Refresh Training Data"></CheckBoxPreference>
+            android:title="Refresh Training Data"/>
 
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefConfirmTrainingMode"
             android:summary="When you Sign-in, you will be required to confirm that you want to enter into the Training Mode"
-            android:title="Ask for Confirmation"></CheckBoxPreference>
+            android:title="Ask for Confirmation"/>
 
         <!-- May be just a Yes/No confirmation or user may be required to enter a password -->
         <EditTextPreference

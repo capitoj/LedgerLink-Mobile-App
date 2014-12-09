@@ -71,25 +71,8 @@ public class VslaCycleSchema {
     }
 
     public static String getColumnList() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(COL_VC_CYCLE_ID + ",");
-        sb.append(COL_VC_CYCLE_CODE + ",");
-        sb.append(COL_VC_START_DATE + ",");
-        sb.append(COL_VC_END_DATE + ",");
-        sb.append(COL_VC_SHARE_PRICE + ",");
-        sb.append(COL_VC_MAX_SHARE_QTY + ",");
-        sb.append(COL_VC_MAX_START_SHARE + ",");
-        sb.append(COL_VC_INTEREST_RATE + ",");
-        sb.append(COL_VC_IS_ACTIVE + ",");
-        sb.append(COL_VC_IS_ENDED + ",");
-        sb.append(COL_VC_DATE_ENDED + ",");
-        sb.append(COL_VC_SHARED_AMOUNT + ",");
-        sb.append(COL_VC_INTEREST_AT_SETUP + ",");
-        sb.append(COL_VC_INTEREST_AT_SETUP_COMMENT + ",");
-        sb.append(COL_VC_FINES_AT_SETUP + ",");
-        sb.append(COL_VC_FINES_AT_SETUP_COMMENT);
 
-        return sb.toString();
+        return (COL_VC_CYCLE_ID + ",") + COL_VC_CYCLE_CODE + "," + COL_VC_START_DATE + "," + COL_VC_END_DATE + "," + COL_VC_SHARE_PRICE + "," + COL_VC_MAX_SHARE_QTY + "," + COL_VC_MAX_START_SHARE + "," + COL_VC_INTEREST_RATE + "," + COL_VC_IS_ACTIVE + "," + COL_VC_IS_ENDED + "," + COL_VC_DATE_ENDED + "," + COL_VC_SHARED_AMOUNT + "," + COL_VC_INTEREST_AT_SETUP + "," + COL_VC_INTEREST_AT_SETUP_COMMENT + "," + COL_VC_FINES_AT_SETUP + "," + COL_VC_FINES_AT_SETUP_COMMENT;
     }
 
     public static String[] getColumnListArray() {

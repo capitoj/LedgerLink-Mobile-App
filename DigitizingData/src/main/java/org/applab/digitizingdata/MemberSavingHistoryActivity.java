@@ -33,16 +33,16 @@ import java.util.ArrayList;
  * Created by Moses on 7/7/13.
  */
 public class MemberSavingHistoryActivity extends SherlockListActivity {
-    ActionBar actionBar;
-    String meetingDate;
-    int memberId;
-    int meetingId;
+    private ActionBar actionBar;
+    private String meetingDate;
+    private int memberId;
+    private int meetingId;
     private MeetingSavingRepo savingRepo = null;
-    Meeting targetMeeting = null;
-    MeetingRepo meetingRepo = null;
-    ArrayList<MemberSavingRecord> savings;
-    int targetCycleId = 0;
-    boolean proceedWithSaving = false;
+    private Meeting targetMeeting = null;
+    private MeetingRepo meetingRepo = null;
+    private ArrayList<MemberSavingRecord> savings;
+    private int targetCycleId = 0;
+    private boolean proceedWithSaving = false;
     boolean alertDialogShowing = false;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +73,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         targetMeeting = meetingRepo.getMeetingById(meetingId);
 
         TextView txtTotalSavings = (TextView)findViewById(R.id.lblMSHTotalSavings);
+        TextView txtMSHAmount = (TextView)findViewById(R.id.txtMSHAmount);
 
         if(targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
@@ -84,14 +85,14 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         if(targetMeeting != null ) {
             double saving = savingRepo.getMemberSaving(targetMeeting.getMeetingId(), memberId);
             if(saving > 0) {
-                TextView txtSavingAmount = (TextView)findViewById(R.id.txtMSHAmount);
-                txtSavingAmount.setText(String.format("%.0f",saving));
+                txtMSHAmount = (TextView)findViewById(R.id.txtMSHAmount);
+                txtMSHAmount.setText(String.format("%.0f",saving));
             }
         }
 
         populateSavingHistory();
 
-        TextView txtMSHAmount = (TextView)findViewById(R.id.txtMSHAmount);
+
         txtMSHAmount.requestFocus();
     }
 
@@ -132,6 +133,12 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
 
 
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
+
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setTitle("SAVINGS");
         actionBar.setHomeButtonEnabled(false);
@@ -167,7 +174,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        SavingsArrayAdapter adapter = new SavingsArrayAdapter(MemberSavingHistoryActivity.this, savings, "fonts/roboto-regular.ttf");
+        SavingsArrayAdapter adapter = new SavingsArrayAdapter(MemberSavingHistoryActivity.this, savings);
 
         //Assign Adapter to ListView
         setListAdapter(adapter);

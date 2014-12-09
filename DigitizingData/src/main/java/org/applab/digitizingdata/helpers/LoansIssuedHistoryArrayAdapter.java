@@ -21,20 +21,20 @@ import java.util.ArrayList;
  */
 public class LoansIssuedHistoryArrayAdapter extends ArrayAdapter<MemberLoanIssueRecord> {
     private static final int TYPE_MAX_COUNT = 1;
-    Context context;
-    ArrayList<MemberLoanIssueRecord> values;
+    private final Context context;
+    private final ArrayList<MemberLoanIssueRecord> values;
     int position;
-    Typeface typefaceRegular;
-    Typeface typefaceBold;
-    MeetingLoanRepaymentRepo loanRepaymentRepo;
-    VslaCycleRepo vslaCycleRepo = null;
-    VslaCycle cycle = null;
+    private final Typeface typefaceRegular;
+    private final Typeface typefaceBold;
+    private final MeetingLoanRepaymentRepo loanRepaymentRepo;
+    private VslaCycleRepo vslaCycleRepo = null;
+    private VslaCycle cycle = null;
 
-    public LoansIssuedHistoryArrayAdapter(Context context, ArrayList<MemberLoanIssueRecord> values, String font) {
+    public LoansIssuedHistoryArrayAdapter(Context context, ArrayList<MemberLoanIssueRecord> values) {
         super(context, R.layout.row_loans_issued_history, values);
         this.context = context;
         this.values = values;
-        this.typefaceRegular = Typeface.createFromAsset(context.getAssets(), font);
+        this.typefaceRegular = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
         this.typefaceBold = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-bold.ttf");
 
         loanRepaymentRepo = new MeetingLoanRepaymentRepo(getContext());

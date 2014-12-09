@@ -24,8 +24,6 @@
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
             android:layout_gravity="center"
             android:text="Tap box to tick member as present. Leave boxes empty for absent members. Press and hold name to add comment." />
 
@@ -35,7 +33,6 @@
             style="@style/List"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/frmMRCF_top_control_bar"
             android:choiceMode="singleChoice">
 
         </ListView>
@@ -46,7 +43,6 @@
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/frmMRCF_top_control_bar"
             android:text="@string/empty_members_list" />
     </LinearLayout>
 

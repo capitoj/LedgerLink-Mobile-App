@@ -36,7 +36,7 @@
         android:layout_height="0dip"
         android:choiceMode="multipleChoice"
         android:layout_below="@id/top_control_bar"
-        android:layout_above="@id/bottom_control_bar"></ListView>
+        android:layout_above="@id/bottom_control_bar"/>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/RegularText"

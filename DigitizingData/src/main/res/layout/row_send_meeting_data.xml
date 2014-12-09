@@ -12,33 +12,6 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:padding="5dp"
-            android:text="Meeting Date" />
-
-    <!--
-    <TextView
-            android:id="@+id/txtMListTotalSavings"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtMListFullNames"
-            android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Savings: 55,000UGX"
-            android:textSize="16sp" >
-    </TextView>
-
-
-    <TextView
-            android:id="@+id/txtMListTotalLoans"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtMListTotalSavings"
-            android:paddingLeft="5dp"
-            android:layout_marginLeft="5dp"
-            android:gravity="left"
-            android:text="Loans: 40,000UGX"
-            android:textSize="16sp" >
-    </TextView>
--->
+            android:text="@string/date" />
 
 </RelativeLayout>

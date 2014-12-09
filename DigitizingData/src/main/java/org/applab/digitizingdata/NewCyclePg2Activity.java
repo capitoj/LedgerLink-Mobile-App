@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
@@ -126,6 +125,12 @@ public class NewCyclePg2Activity extends SherlockListActivity {
         );
 
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
+
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("NEW CYCLE");
         actionBar.setHomeButtonEnabled(true);
@@ -207,7 +212,7 @@ public class NewCyclePg2Activity extends SherlockListActivity {
         }
 
         // Get the data via the adapter; Pass on font type as well - Hard coded for now
-        final MembersCustomArrayAdapter adapter = new MembersCustomArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersCustomArrayAdapter adapter = new MembersCustomArrayAdapter(getBaseContext(), members);
 
         //Assign Adapter to ListView
         Runnable runnable = new Runnable()

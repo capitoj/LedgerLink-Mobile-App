@@ -1,7 +1,6 @@
 package org.applab.digitizingdata;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,28 +25,28 @@ import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 public class MeetingStartingCashFrag extends SherlockFragment {
 
-    ActionBar actionBar = null;
-    String meetingDate = null;
-    int meetingId = 0;
-    double totalCash = 0.0;
-    double expectedStartingCash = 0.0;
-    double theCashFromBox = 0.0;
-    double theCashFromBank = 0.0;
-    double theFinesPaid = 0.0;
-    String comment = "";
-    boolean successFlg = false;
+    private ActionBar actionBar = null;
+    private String meetingDate = null;
+    private int meetingId = 0;
+    private double totalCash = 0.0;
+    private double expectedStartingCash = 0.0;
+    private double theCashFromBox = 0.0;
+    private final double theCashFromBank = 0.0;
+    private final double theFinesPaid = 0.0;
+    private String comment = "";
+    private boolean successFlg = false;
     private MeetingActivity parentActivity;
-    TextView txtActualCashInBox;
-    TextView txtActualCashInBoxComment;
-    TextView lblExpectedStartingCash;
-    TextView lblActualCashInBox;
-    TextView lblCashTakenToBank;
-    MeetingRepo meetingRepo;
-    MeetingSavingRepo savingRepo;
-    MeetingFineRepo fineRepo;
-    MeetingLoanIssuedRepo loanIssuedRepo;
-    MeetingLoanRepaymentRepo loanRepaymentRepo;
-    ScrollView fragmentView;
+    private TextView txtActualCashInBox;
+    private TextView txtActualCashInBoxComment;
+    private TextView lblExpectedStartingCash;
+    private TextView lblActualCashInBox;
+    private TextView lblCashTakenToBank;
+    private MeetingRepo meetingRepo;
+    private MeetingSavingRepo savingRepo;
+    private MeetingFineRepo fineRepo;
+    private MeetingLoanIssuedRepo loanIssuedRepo;
+    private MeetingLoanRepaymentRepo loanRepaymentRepo;
+    private ScrollView fragmentView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,7 +143,6 @@ public class MeetingStartingCashFrag extends SherlockFragment {
                 public void onClick(View v) {
                     if (Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                         Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
-                        return;
                     }
                 }
             });
@@ -152,7 +150,6 @@ public class MeetingStartingCashFrag extends SherlockFragment {
                 public void onClick(View v) {
                     if (parentActivity.isViewOnly()) {
                         Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
-                        return;
                     }
                 }
             });
@@ -229,7 +226,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
 
     }
 
-    public boolean saveStartingCash() {
+    boolean saveStartingCash() {
         txtActualCashInBox = (TextView) getSherlockActivity().findViewById(R.id.txtActualStartingCash);
         if (parentActivity.isViewOnly()) {
             return false;

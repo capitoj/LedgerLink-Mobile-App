@@ -6,15 +6,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.applab.digitizingdata.domain.model.FineType;
-import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.domain.schema.FineSchema;
 import org.applab.digitizingdata.domain.schema.FineTypeSchema;
 import org.applab.digitizingdata.domain.schema.MemberSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
-import org.applab.digitizingdata.helpers.Utils;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Moses on 4/2/14.

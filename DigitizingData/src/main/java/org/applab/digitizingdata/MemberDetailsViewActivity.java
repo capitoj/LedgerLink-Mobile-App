@@ -32,17 +32,16 @@ import java.util.Calendar;
  * Created by Moses on 6/26/13.
  */
 public class MemberDetailsViewActivity extends SherlockActivity {
-    ActionBar actionBar;
-    int selectedMemberId = -1;
-    String selectedMemberNames = "VSLA Member";
-    MemberRepo repo;
-    private Member selectedMember;
+    private ActionBar actionBar;
+    private int selectedMemberId = -1;
+    private String selectedMemberNames = "VSLA Member";
+    private MemberRepo repo;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-       inflateCustomActionBar();
+        inflateCustomActionBar();
 
 
         setContentView(R.layout.activity_member_details_view);
@@ -54,10 +53,10 @@ public class MemberDetailsViewActivity extends SherlockActivity {
 
             selectedMemberId = b.getInt("_id", 5);
 
-            if(b.containsKey("_names")) {
+            if (b.containsKey("_names")) {
                 //getString(key, defValue) was added in API 12. Use getString(key), as this will return null if the key doesn't exist.
-                String value =  b.getString("_names");
-                selectedMemberNames = (null != value)? value : "Unknown Member";
+                String value = b.getString("_names");
+                selectedMemberNames = (null != value) ? value : "Unknown Member";
             }
             //Toast.makeText(getBaseContext(),String.format("Member Names: %s",selectedMemberNames),Toast.LENGTH_LONG).show();
             actionBar.setTitle(selectedMemberNames);
@@ -65,12 +64,12 @@ public class MemberDetailsViewActivity extends SherlockActivity {
 
 
         repo = new MemberRepo(getApplicationContext());
-        selectedMember = repo.getMemberById(selectedMemberId);
+        Member selectedMember = repo.getMemberById(selectedMemberId);
         populateDataFields(selectedMember);
 
     }
 
-    private void inflateCustomActionBar(){
+    private void inflateCustomActionBar() {
 
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
@@ -103,7 +102,10 @@ public class MemberDetailsViewActivity extends SherlockActivity {
 
         actionBar = getSupportActionBar();
 
-
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
 
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -127,7 +129,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MainActivity.class);
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
@@ -162,30 +164,30 @@ public class MemberDetailsViewActivity extends SherlockActivity {
             }
 
             // Populate the Fields
-            TextView txtMemberNo = (TextView)findViewById(R.id.txtMDVMemberNo);
+            TextView txtMemberNo = (TextView) findViewById(R.id.txtMDVMemberNo);
             txtMemberNo.setText(Utils.formatLongNumber(member.getMemberNo()));
-            TextView txtSurname = (TextView)findViewById(R.id.txtMDVSurname);
+            TextView txtSurname = (TextView) findViewById(R.id.txtMDVSurname);
             if (member.getSurname() != null) {
                 txtSurname.setText(member.getSurname());
             }
-            TextView txtOtherNames = (TextView)findViewById(R.id.txtMDVOtherNames);
+            TextView txtOtherNames = (TextView) findViewById(R.id.txtMDVOtherNames);
             if (member.getOtherNames() != null) {
                 txtOtherNames.setText(member.getOtherNames());
             }
-            TextView txtGender = (TextView)findViewById(R.id.txtMDVGender);
+            TextView txtGender = (TextView) findViewById(R.id.txtMDVGender);
             if (member.getGender() != null) {
                 txtGender.setText(member.getGender());
             }
 
-            TextView txtOccupation = (TextView)findViewById(R.id.txtMDVOccupation);
+            TextView txtOccupation = (TextView) findViewById(R.id.txtMDVOccupation);
             if (member.getOccupation() != null) {
                 txtOccupation.setText(member.getOccupation());
             }
-            TextView txtPhone = (TextView)findViewById(R.id.txtMDVPhone);
+            TextView txtPhone = (TextView) findViewById(R.id.txtMDVPhone);
             if (member.getPhoneNumber() != null) {
                 txtPhone.setText(member.getPhoneNumber());
             }
-            TextView txtAge = (TextView)findViewById(R.id.txtMDVAge);
+            TextView txtAge = (TextView) findViewById(R.id.txtMDVAge);
 
             //TODO: I need to retrieve the Age from the DateOfBirth
             Calendar calToday = Calendar.getInstance();
@@ -195,7 +197,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
             txtAge.setText(String.format("%d", computedAge));
 
             //TODO: When we allow members to take leave, we may be better allowing this field to be editable
-            TextView txtCyclesCompleted = (TextView)findViewById(R.id.txtMDVCyclesCompleted);
+            TextView txtCyclesCompleted = (TextView) findViewById(R.id.txtMDVCyclesCompleted);
             Calendar calDbCycles = Calendar.getInstance();
             calDbCycles.setTime(member.getDateOfAdmission());
             int cycles = calToday.get(Calendar.YEAR) - calDbCycles.get(Calendar.YEAR);
@@ -206,25 +208,23 @@ public class MemberDetailsViewActivity extends SherlockActivity {
             TextView lblMDMiddleCycleSavings = (TextView) findViewById(R.id.lblMDMiddleCycleSavings);
             TextView lblMDMiddleCycleLoansOutstanding = (TextView) findViewById(R.id.lblMDMiddleCycleLoansOutstanding);
 
-            lblMDMiddleCycleSavings.setText(String.format("Total Savings %,.0f %s", member.getSavingsOnSetup(),getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleSavings.setText(String.format("Total Savings %,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
             lblMDMiddleCycleLoansOutstanding.setText(String.format("Loans Outstanding %,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
 
             //Show the heading
             //Get the date of the dummy GSW meeting
             MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
 
-            String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her":"his";
-            lblMDMiddleCycleInformationHeading.setText("This member’s information was added after the cycle started. Here are "+pronoun+" total savings and outstanding loans on that day.");
+            String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her" : "his";
+            lblMDMiddleCycleInformationHeading.setText("This member’s information was added after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
 
             Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
-            if(dummyGSWMeeting != null) {
-                lblMDMiddleCycleInformationHeading.setText("This member’s information was added on "+Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy")+" after the cycle started. Here are "+pronoun+" total savings and outstanding loans on that day.");
+            if (dummyGSWMeeting != null) {
+                lblMDMiddleCycleInformationHeading.setText("This member’s information was added on " + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
             }
 
 
-
-        }
-        finally {
+        } finally {
 
         }
 
@@ -232,21 +232,21 @@ public class MemberDetailsViewActivity extends SherlockActivity {
 
     private void clearDataFields() {
         // Populate the Fields
-        TextView txtMemberNo = (TextView)findViewById(R.id.txtMDVMemberNo);
+        TextView txtMemberNo = (TextView) findViewById(R.id.txtMDVMemberNo);
         txtMemberNo.setText(null);
-        TextView txtSurname = (TextView)findViewById(R.id.txtMDVSurname);
+        TextView txtSurname = (TextView) findViewById(R.id.txtMDVSurname);
         txtSurname.setText(null);
-        TextView txtOtherNames = (TextView)findViewById(R.id.txtMDVOtherNames);
+        TextView txtOtherNames = (TextView) findViewById(R.id.txtMDVOtherNames);
         txtOtherNames.setText(null);
-        TextView txtGender = (TextView)findViewById(R.id.txtMDVGender);
+        TextView txtGender = (TextView) findViewById(R.id.txtMDVGender);
         txtGender.setText(null);
-        TextView txtOccupation = (TextView)findViewById(R.id.txtMDVOccupation);
+        TextView txtOccupation = (TextView) findViewById(R.id.txtMDVOccupation);
         txtOccupation.setText(null);
-        TextView txtPhone = (TextView)findViewById(R.id.txtMDVPhone);
+        TextView txtPhone = (TextView) findViewById(R.id.txtMDVPhone);
         txtPhone.setText(null);
-        TextView txtAge = (TextView)findViewById(R.id.txtMDVAge);
+        TextView txtAge = (TextView) findViewById(R.id.txtMDVAge);
         txtAge.setText(null);
-        TextView txtCyclesCompleted = (TextView)findViewById(R.id.txtMDVCyclesCompleted);
+        TextView txtCyclesCompleted = (TextView) findViewById(R.id.txtMDVCyclesCompleted);
         txtCyclesCompleted.setText(null);
 
         txtMemberNo.requestFocus();
@@ -256,15 +256,14 @@ public class MemberDetailsViewActivity extends SherlockActivity {
         String caller = "reviewMembers";
         Intent i;
 
-        if(getIntent().hasExtra("_caller")) {
+        if (getIntent().hasExtra("_caller")) {
             caller = getIntent().getStringExtra("_caller");
         }
 
-        if(caller.equalsIgnoreCase("newCyclePg2")) {
+        if (caller.equalsIgnoreCase("newCyclePg2")) {
             i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
             startActivity(i);
-        }
-        else {
+        } else {
             i = new Intent(getApplicationContext(), MembersListActivity.class);
             startActivity(i);
         }
@@ -272,7 +271,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
 
     private void editMember() {
         Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
-        i.putExtra("_id",selectedMemberId);
+        i.putExtra("_id", selectedMemberId);
         i.putExtra("_isEditAction", true);
         startActivity(i);
     }
@@ -280,7 +279,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     private boolean delete() {
         final MemberRepo repo = new MemberRepo(getApplicationContext());
         final Member selMember = repo.getMemberById(selectedMemberId);
-        if(selMember == null) {
+        if (selMember == null) {
             Utils.createAlertDialogOk(MemberDetailsViewActivity.this, "Remove Member", "System failed to retrieve the member's records.", Utils.MSGBOX_ICON_EXCLAMATION).show();
             return false;
         }
@@ -289,19 +288,19 @@ public class MemberDetailsViewActivity extends SherlockActivity {
         ad.setTitle("Remove Member");
         ad.setMessage("Are you sure you want to remove this member?");
         ad.setPositiveButton(
-            "Yes", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int arg1) {
-                    repo.deleteMember(selMember);
-                    navigateBack();
+                "Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
+                        repo.deleteMember(selMember);
+                        navigateBack();
+                    }
                 }
-            }
         );
         ad.setNegativeButton(
-            "No", new DialogInterface.OnClickListener(){
-                public void onClick(DialogInterface dialog, int arg1) {
+                "No", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int arg1) {
 
+                    }
                 }
-            }
         );
 //        ad.setCancelable(true);
 //        ad.setOnCancelListener(

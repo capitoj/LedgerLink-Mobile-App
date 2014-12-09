@@ -23,23 +23,23 @@ import java.util.ArrayList;
  * Created by Moses on 7/5/13.
  */
 public class MembersRollCallArrayAdapter extends ArrayAdapter<Member> {
-    Context context;
-    ArrayList<Member> values;
-    MeetingAttendanceRepo attendanceRepo ;
-    VslaCycleRepo cycleRepo;
-    VslaCycle currentCycle;
+    private final Context context;
+    private final ArrayList<Member> values;
+    private MeetingAttendanceRepo attendanceRepo ;
+    private final VslaCycleRepo cycleRepo;
+    private final VslaCycle currentCycle;
     private int meetingId;
     private boolean isFromCode = false;
     public boolean viewOnly = false;
-Typeface typeface;
+private final Typeface typeface;
     //Use Class variable to hold state as it will be lost on scrolling
     private final boolean[] mCheckedState;
 
-    public MembersRollCallArrayAdapter(Context context, ArrayList<Member> values, String font) {
-        super(context, R.layout.row_member_roll_call_2, values);
+    public MembersRollCallArrayAdapter(Context context, ArrayList<Member> values) {
+        super(context, R.layout.row_member_roll_call, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
 
         //set array size to number of records in the adapter
         this.mCheckedState = new boolean[values.size()];
@@ -59,7 +59,7 @@ Typeface typeface;
             LayoutInflater inflater = (LayoutInflater)context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View rowView = inflater.inflate(R.layout.row_member_roll_call_2, parent, false);
+            View rowView = inflater.inflate(R.layout.row_member_roll_call, parent, false);
 
             //Get the Widgets
             //final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMRCFullName);

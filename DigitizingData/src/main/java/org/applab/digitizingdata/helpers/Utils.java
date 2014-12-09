@@ -109,11 +109,11 @@ public class Utils {
             return phoneNumber;
         }
         if (phoneNumber.length() > 4 && phoneNumber.length() <= 7) {
-            return insertPeriodically(phoneNumber, " ", 4);
+            return insertPeriodically(phoneNumber, 4);
         }
 
         //length is greater than 7!
-        phoneNumber = phoneNumber.substring(0, 4) + " " + insertPeriodically(phoneNumber.substring(4), " ", 3);
+        phoneNumber = phoneNumber.substring(0, 4) + " " + insertPeriodically(phoneNumber.substring(4), 3);
         return phoneNumber;
     }
 
@@ -145,9 +145,9 @@ public class Utils {
     }
 
     public static String insertPeriodically(
-            String text, String insert, int period) {
+            String text, int period) {
         StringBuilder builder = new StringBuilder(
-                text.length() + insert.length() * (text.length() / period) + 1);
+                text.length() + " ".length() * (text.length() / period) + 1);
 
         int index = 0;
         String prefix = "";
@@ -155,7 +155,7 @@ public class Utils {
             // Don't put the insert in the very first iteration.
             // This is easier than appending it *after* each substring
             builder.append(prefix);
-            prefix = insert;
+            prefix = " ";
             builder.append(text.substring(index,
                     Math.min(index + period, text.length())));
             index += period;
@@ -171,8 +171,6 @@ public class Utils {
         VIEW_MODE_READ_ONLY
     }
 
-    ;
-
     public static MeetingDataViewMode _meetingDataViewMode = MeetingDataViewMode.VIEW_MODE_CAPTURE;
 
     public enum MeetingActiveActionBarMenu {
@@ -182,8 +180,6 @@ public class Utils {
         MENU_START_CASH_TAB,
         MENU_SEND_DATA_TAB
     }
-
-    ;
 
     public static MeetingActiveActionBarMenu _meetingActiveActionBarMenu = MeetingActiveActionBarMenu.MENU_NONE;
 
@@ -373,16 +369,15 @@ public class Utils {
      * Creates an alert dialog without buttons
      *
      * @param context
-     * @param title
      * @param message
      * @param icon
      * @return
      */
-    public static AlertDialog createAlertDialog(Context context, String title, String message, String icon) {
+    public static AlertDialog createAlertDialog(Context context, String message, String icon) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
 
         // Setting Dialog Title
-        alertDialog.setTitle(title);
+        alertDialog.setTitle("End Cycle");
 
         // Setting Dialog Message
         alertDialog.setMessage(message);

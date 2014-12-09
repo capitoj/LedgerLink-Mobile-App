@@ -18,8 +18,8 @@ import java.util.ArrayList;
  * Created by Moses on 3/11/14.
  */
 public class ConcurrentMeetingsArrayAdapter extends ArrayAdapter<Meeting> {
-    Context context;
-    ArrayList<Meeting> values;
+    private final Context context;
+    private final ArrayList<Meeting> values;
     int position;
 
     public ConcurrentMeetingsArrayAdapter(Context context, ArrayList<Meeting> values) {

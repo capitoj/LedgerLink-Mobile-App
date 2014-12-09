@@ -24,7 +24,7 @@ import java.util.HashMap;
  */
 public class MeetingTabHostActivity extends SherlockFragmentActivity implements TabHost.OnTabChangeListener {
     private TabHost mTabHost;
-    private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, MeetingTabHostActivity.TabInfo>();
+    private final HashMap<String, TabInfo> mapTabInfo = new HashMap<String, MeetingTabHostActivity.TabInfo>();
     private TabInfo mLastTab = null;
     /**
      *
@@ -32,9 +32,9 @@ public class MeetingTabHostActivity extends SherlockFragmentActivity implements 
      *
      */
     private class TabInfo {
-        private String tag;
-        private Class<?> clss;
-        private Bundle args;
+        private final String tag;
+        private final Class<?> clss;
+        private final Bundle args;
         private Fragment fragment;
         TabInfo(String tag, Class<?> clazz, Bundle args) {
             this.tag = tag;

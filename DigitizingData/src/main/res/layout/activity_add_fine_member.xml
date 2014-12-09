@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblFMessage"
-            android:text="0. FULL NAME" />
+            android:text="@string/name_default" />
 
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -36,7 +36,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtFMFullName"
-            android:text="Fine Type"
+            android:text="@string/fine_type"
 
             />
 
@@ -60,7 +60,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/cboFMFineType"
-            android:text="Amount" />
+            android:text="@string/amount" />
 
         <org.applab.digitizingdata.fontutils.TypefaceEditText
             android:id="@+id/txtFMFineAmount"
@@ -74,7 +74,6 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:layout_weight="10"
             android:layout_below="@id/txtFMFineAmount">
 
 
@@ -91,11 +90,10 @@
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             android:id="@+id/lblFPaid"
             style="@style/InlineTextItem"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/chkFMPaidStatus"
             android:layout_marginTop="15dip"
-            android:text="Paid"
+            android:text="@string/paid"
             android:gravity="left"
             android:layout_weight="9"/>
         </LinearLayout>

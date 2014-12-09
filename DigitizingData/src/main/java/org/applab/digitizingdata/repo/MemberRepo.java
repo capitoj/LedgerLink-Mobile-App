@@ -173,7 +173,7 @@ public class MemberRepo {
             // Update loan balances
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued record found, update it");
             meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
-            return meetingLoanIssuedRepo.updateMemberLoanBalancesAndComment(loanIssuedToMemberInMeeting.getLoanId(), 0, member.getOutstandingLoanOnSetup(), member.getDateOfFirstRepayment(), comment);
+            return meetingLoanIssuedRepo.updateMemberLoanBalancesAndComment(loanIssuedToMemberInMeeting.getLoanId(), member.getOutstandingLoanOnSetup(), member.getDateOfFirstRepayment(), comment);
         }
     }
 
@@ -207,12 +207,7 @@ public class MemberRepo {
             int retVal = db.update(MemberSchema.getTableName(), values, MemberSchema.COL_M_MEMBER_ID + " = ?",
                     new String[]{String.valueOf(member.getMemberId())});
 
-            if (retVal > 0) {
-                return saveMiddleCycleValues(member);
-
-            } else {
-                return false;
-            }
+            return retVal > 0 && saveMiddleCycleValues(member);
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
@@ -532,11 +527,7 @@ public class MemberRepo {
             int retVal = db.update(MemberSchema.getTableName(), values, MemberSchema.COL_M_MEMBER_ID + " = ?",
                     new String[]{String.valueOf(member.getMemberId())});
 
-            if (retVal > 0) {
-                return saveMiddleCycleValues(member);
-            } else {
-                return false;
-            }
+            return retVal > 0 && saveMiddleCycleValues(member);
         } catch (Exception ex) {
             ex.printStackTrace();
             Log.e("MemberRepo.updateMember", ex.getMessage());
@@ -611,10 +602,10 @@ public class MemberRepo {
 
 
     /*Returns a list of available member numbers that can be used */
-    public ArrayList<String> getListOfAvailableMemberNumbers(int count) {
+    public ArrayList<String> getListOfAvailableMemberNumbers() {
         ArrayList<String> memberNumbers = new ArrayList<String>();
 
-        for (int i = 1; memberNumbers.size() < count; i++) {
+        for (int i = 1; memberNumbers.size() < 30; i++) {
             if (isMemberNoAvailable(i, 0)) {
                 memberNumbers.add(i + "");
             }

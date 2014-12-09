@@ -35,13 +35,8 @@ public class FineTypeSchema {
     }
 
     public static String getColumnList() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(COL_FT_FINE_TYPE_ID + ",");
-        sb.append(COL_FT_FINE_TYPE_NAME + ",");
-        sb.append(COL_FT_FINE_TYPE_DESC + ",");
-        sb.append(COL_FT_DEFAULT_AMOUNT);
 
-        return sb.toString();
+        return (COL_FT_FINE_TYPE_ID + ",") + COL_FT_FINE_TYPE_NAME + "," + COL_FT_FINE_TYPE_DESC + "," + COL_FT_DEFAULT_AMOUNT;
     }
 
     public static String[] getColumnListArray() {

@@ -22,18 +22,18 @@
                 <!-- Fully qualify the names coz R.id is universal -->
 
                 <org.applab.digitizingdata.fontutils.TypefaceTextView
-                    style="@style/RegularText"
                     android:id="@+id/lblBCSharePrice"
+                    style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Share Price (UGX)"/>
+                    android:text="Share Price (UGX)" />
 
                 <org.applab.digitizingdata.fontutils.TypefaceEditText
-                    style="@style/NormalEditText"
                     android:id="@+id/txtBCSharePrice"
+                    style="@style/NormalEditText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapWords"/>
+                    android:inputType="textCapWords" />
             </LinearLayout>
 
             <LinearLayout
@@ -42,18 +42,18 @@
                 android:orientation="vertical">
 
                 <org.applab.digitizingdata.fontutils.TypefaceTextView
-style="@style/RegularText"
                     android:id="@+id/lblBCMaxShares"
+                    style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Maximum number of shares a member may purchase per meeting" />
 
                 <org.applab.digitizingdata.fontutils.TypefaceEditText
-                    style="@style/NormalEditText"
                     android:id="@+id/txtBCMaxShares"
+                    style="@style/NormalEditText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number" />
             </LinearLayout>
 
             <LinearLayout
@@ -62,8 +62,8 @@ style="@style/RegularText"
                 android:orientation="vertical">
 
                 <org.applab.digitizingdata.fontutils.TypefaceTextView
-                    style="@style/RegularText"
                     android:id="@+id/lblBCStartDate"
+                    style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Date your cycle will begin" />
@@ -80,11 +80,11 @@ style="@style/RegularText"
                 android:orientation="vertical">
 
                 <org.applab.digitizingdata.fontutils.TypefaceTextView
-                    style="@style/RegularText"
                     android:id="@+id/lblBCEndDate"
+                    style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Date your cycle will end"/>
+                    android:text="Date your cycle will end" />
 
                 <DatePicker
                     android:id="@+id/dtpBCEndDate"
@@ -97,23 +97,28 @@ style="@style/RegularText"
     </ScrollView>
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:weightSum="100">
 
         <Button
+            android:id="@+id/btnBCCancel"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="50"
+            android:text="Cancel" />
+
+        <Button
             android:id="@+id/btnBCNext1"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="50"
             android:text="Save" />
 
-        <Button
-            android:id="@+id/btnBCCancel"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="50"
-            android:text="Cancel" />
+
     </LinearLayout>
 </LinearLayout>

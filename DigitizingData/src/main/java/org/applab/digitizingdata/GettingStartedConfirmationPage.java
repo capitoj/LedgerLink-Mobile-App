@@ -26,12 +26,10 @@ import org.applab.digitizingdata.repo.VslaInfoRepo;
 public class GettingStartedConfirmationPage extends SherlockActivity {
 
 
-    ActionBar actionBar;
-    boolean confirmed = false;
+    private ActionBar actionBar;
+    private boolean confirmed = false;
     private View customActionBarView;
-    private double totalSavings = 0.0;
-    private double expectedStartingCash = 0.0;
-    boolean successFlg = false;
+    private boolean successFlg = false;
 
 
     @Override
@@ -102,7 +100,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         }
         // Finished wizard...
         VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
-        boolean updateStatus = vslaInfoRepo.updateGettingStartedWizardCompleteFlag(true);
+        boolean updateStatus = vslaInfoRepo.updateGettingStartedWizardCompleteFlag();
 
         // Update GSW starting cash
         updateGSWStartingCash();
@@ -137,8 +135,8 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
 
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getBaseContext());
-        totalSavings = meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
-        expectedStartingCash = dummyGettingStartedWizardMeeting.getVslaCycle().getFinesAtSetup() + dummyGettingStartedWizardMeeting.getVslaCycle().getInterestAtSetup() + totalSavings;
+        double totalSavings = meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
+        double expectedStartingCash = dummyGettingStartedWizardMeeting.getVslaCycle().getFinesAtSetup() + dummyGettingStartedWizardMeeting.getVslaCycle().getInterestAtSetup() + totalSavings;
 
         // Save Starting cash values
         successFlg = meetingRepo.updateExpectedStartingCash(dummyGettingStartedWizardMeeting.getMeetingId(), expectedStartingCash);
@@ -197,7 +195,6 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         //final MenuInflater inflater = getSupportMenuInflater();
         //inflater.inflate(R.menu.done_cancel, menu);
-        Menu MENU = menu;
 
         return true;
 

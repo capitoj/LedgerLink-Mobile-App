@@ -38,9 +38,7 @@ import java.util.Date;
  * Created by Moses on 7/16/13.
  */
 public class GettingStartedWizardReviewMembersActivity extends MembersListActivity {
-    private ActionBar actionBar;
     private ArrayList<Member> members;
-    private double totalSavings = 0.0;
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -73,7 +71,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
         //Set savings in GSW meeting
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getBaseContext());
-        totalSavings = meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
+        double totalSavings = meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
         TextView lblRvwMembersTotalSavings = (TextView) findViewById(R.id.lblRvwMembersTotalSavings);
         lblRvwMembersTotalSavings.setText(String.format("Total savings this cycle %,.0f %s", totalSavings,
                 getResources().getString(R.string.operating_currency)));
@@ -92,7 +90,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
     }
 
     /* inflates custom menu bar for review members */
-    public void inflateCustombar() {
+    void inflateCustombar() {
 
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -134,7 +132,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 }
         );
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("GET STARTED");
         actionBar.setHomeButtonEnabled(true);

@@ -18,16 +18,16 @@ import java.util.ArrayList;
  */
 public class AttendanceArrayAdapter extends ArrayAdapter<AttendanceRecord> {
 
-    Context context;
-    ArrayList<AttendanceRecord> values;
+    private final Context context;
+    private final ArrayList<AttendanceRecord> values;
     int position;
-    Typeface typeface;
+    private final Typeface typeface;
 
-    public AttendanceArrayAdapter(Context context, ArrayList<AttendanceRecord> values, String font) {
+    public AttendanceArrayAdapter(Context context, ArrayList<AttendanceRecord> values) {
         super(context, R.layout.row_attendance_history, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
     }
 
     @Override

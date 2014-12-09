@@ -1,6 +1,5 @@
 package org.applab.digitizingdata.helpers;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import org.apache.http.HttpResponse;

@@ -45,31 +45,27 @@ import java.util.Date;
  * Created by Moses on 7/15/13.
  */
 public class AddMemberActivity extends SherlockActivity {
-    private ActionBar actionBar;
-    public Member selectedMember;
+    Member selectedMember;
     private int selectedMemberId;
     private boolean successAlertDialogShown = false;
     private boolean selectedFinishButton = false;
-    private String dlgTitle = "Add Member";
     private int meetingId;
-    private MeetingFineRepo fineRepo;
-    private MeetingRepo meetingRepo;
-    MemberRepo repo;
-    Meeting targetMeeting;
+    private MemberRepo repo;
+    private Meeting targetMeeting;
     private boolean isEditAction;
 
-    TextView viewClicked;
-    protected int mYear;
-    protected int mMonth;
-    protected int mDay;
+    private TextView viewClicked;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
 
-    public Spinner cboAMMemberNo;
-    TextView txtAMMLoanNextRepaymentDate;
-    TextView txtAMMLoanNumber;
-    protected boolean isGettingStartedMode = false; //flags whether we are in wizard mode
+    Spinner cboAMMemberNo;
+    private TextView txtAMMLoanNextRepaymentDate;
+    private TextView txtAMMLoanNumber;
+    boolean isGettingStartedMode = false; //flags whether we are in wizard mode
 
     //Event that is raised when the date has been set
-    protected DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             mYear = year;
             mMonth = monthOfYear;
@@ -87,7 +83,7 @@ public class AddMemberActivity extends SherlockActivity {
 
     //This method initializes this activity
     //It is overiden in GSW Add member activity so as to load the relevant layout
-    protected void initializeActivity() {
+    void initializeActivity() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         if (getIntent().hasExtra("_meetingId")) {
@@ -100,7 +96,7 @@ public class AddMemberActivity extends SherlockActivity {
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction", false);
         }
 
-        meetingRepo = new MeetingRepo(getApplicationContext());
+        MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
         targetMeeting = meetingRepo.getMeetingById(meetingId);
         inflateCustomActionBar();
         // END_INCLUDE (inflate_set_custom_view)
@@ -226,7 +222,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
 
-    protected void showMiddleStartCycleValues(Member member) {
+    void showMiddleStartCycleValues(Member member) {
         //loads the Middle start cycle values for this member
 
         if (isGettingStartedMode) return; //this code shouldnt run in GSW mode hence this check
@@ -301,7 +297,12 @@ public class AddMemberActivity extends SherlockActivity {
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
 
         if (isEditAction) {
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
@@ -404,7 +405,7 @@ public class AddMemberActivity extends SherlockActivity {
         return true;
     }
 
-    protected boolean saveMemberData() {
+    boolean saveMemberData() {
         boolean successFlg = false;
         AlertDialog dlg = null;
 
@@ -534,7 +535,7 @@ public class AddMemberActivity extends SherlockActivity {
         return successFlg;
     }
 
-    protected boolean validateData(Member member) {
+    boolean validateData(Member member) {
         try {
             if (null == member) {
                 return false;
@@ -543,6 +544,7 @@ public class AddMemberActivity extends SherlockActivity {
 
             // Validate: MemberNo
             Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
+            String dlgTitle = "Add Member";
             if (cboAMMemberNo.getSelectedItemPosition() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The member number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAMMemberNo.requestFocus();
@@ -748,7 +750,7 @@ public class AddMemberActivity extends SherlockActivity {
         }
     }
 
-    protected void populateDataFields(final Member member) {
+    void populateDataFields(final Member member) {
         try {
 
             clearDataFields();
@@ -826,7 +828,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
 
-    protected void clearDataFields() {
+    void clearDataFields() {
         //Spinner items
         buildGenderSpinner();
         //This portion could take long so run it as long task
@@ -862,7 +864,7 @@ public class AddMemberActivity extends SherlockActivity {
         cboAMMemberNo.requestFocus();
     }
 
-    protected void updateDisplay() {
+    void updateDisplay() {
         if (viewClicked != null) {
             viewClicked.setText(new StringBuilder()
 
@@ -914,7 +916,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     /* Populates the member no spinner with available member numbers */
-    protected void buildMemberNoSpinner() {
+    void buildMemberNoSpinner() {
 
 
         repo = new MemberRepo(getApplicationContext());
@@ -926,7 +928,7 @@ public class AddMemberActivity extends SherlockActivity {
         }
 
 
-        for (String mNo : repo.getListOfAvailableMemberNumbers(30)) {
+        for (String mNo : repo.getListOfAvailableMemberNumbers()) {
             Log.d(getBaseContext().getPackageName(), "Member number found " + mNo);
             memberNumberArrayList.add(mNo);
         }

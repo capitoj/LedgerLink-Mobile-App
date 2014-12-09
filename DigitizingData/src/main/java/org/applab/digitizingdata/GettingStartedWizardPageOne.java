@@ -22,10 +22,10 @@ import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 public class GettingStartedWizardPageOne  extends SherlockActivity {
-    VslaInfoRepo vslaInfoRepo = null;
-    VslaInfo vslaInfo = null;
-    ActionBar actionBar;
-    TextView savingsGroupName;
+    private VslaInfoRepo vslaInfoRepo = null;
+    private VslaInfo vslaInfo = null;
+    private ActionBar actionBar;
+    private TextView savingsGroupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

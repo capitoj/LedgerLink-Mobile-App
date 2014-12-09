@@ -16,11 +16,11 @@ import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 public class GettingStartedWizardPageTwo extends SherlockActivity {
-    VslaInfoRepo vslaInfoRepo = null;
-    VslaInfo vslaInfo = null;
-    ActionBar actionBar;
+    private VslaInfoRepo vslaInfoRepo = null;
+    private VslaInfo vslaInfo = null;
+    private ActionBar actionBar;
 
-    TextView savingsGroupName;
+    private TextView savingsGroupName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
 
 
 
-    public void validatePassKey()
+    void validatePassKey()
     {
         TextView txtPassKey = null;
         try {

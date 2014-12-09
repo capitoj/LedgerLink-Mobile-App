@@ -38,14 +38,14 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 public class ActivationActivity extends SherlockActivity {
-    VslaInfoRepo vslaInfoRepo = null;
+    private VslaInfoRepo vslaInfoRepo = null;
     HttpClient client;
-    int httpStatusCode = 0; //To know whether the Request was successful
-    boolean activationSuccessful = false;
-    String targetVslaCode = null; //fake-fix
-    String securityPasskey = null;
-    ProgressDialog progressDialog = null;
-    ActionBar actionBar;
+    private int httpStatusCode = 0; //To know whether the Request was successful
+    private boolean activationSuccessful = false;
+    private String targetVslaCode = null; //fake-fix
+    private String securityPasskey = null;
+    private ProgressDialog progressDialog = null;
+    private ActionBar actionBar;
 
 
     @Override
@@ -280,7 +280,6 @@ public class ActivationActivity extends SherlockActivity {
 
             activateVlsaUsingPostAsync(jsonRequest);
         } catch (Exception ex) {
-            return;
         }
     }
 

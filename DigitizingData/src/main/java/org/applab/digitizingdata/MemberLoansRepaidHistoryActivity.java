@@ -47,46 +47,46 @@ import java.util.Date;
  * Created by Moses on 7/13/13.
  */
 public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
-    ActionBar actionBar;
-    String meetingDate;
-    int meetingId;
-    int memberId;
-    int targetCycleId = 0;
-    VslaCycle cycle = null;
-    Meeting targetMeeting = null;
-    MeetingRepo meetingRepo = null;
-    MeetingLoanIssuedRepo loanIssuedRepo = null;
-    MeetingLoanRepaymentRepo loansRepaidRepo = null;
-    VslaCycleRepo vslaCycleRepo = null;
-    ArrayList<MemberLoanRepaymentRecord> loanRepayments;
-    MeetingLoanIssued recentLoan = null;
+    private ActionBar actionBar;
+    private String meetingDate;
+    private int meetingId;
+    private int memberId;
+    private int targetCycleId = 0;
+    private VslaCycle cycle = null;
+    private Meeting targetMeeting = null;
+    private MeetingRepo meetingRepo = null;
+    private MeetingLoanIssuedRepo loanIssuedRepo = null;
+    private MeetingLoanRepaymentRepo loansRepaidRepo = null;
+    private VslaCycleRepo vslaCycleRepo = null;
+    private ArrayList<MemberLoanRepaymentRecord> loanRepayments;
+    private MeetingLoanIssued recentLoan = null;
 
-    LinearLayout repaymentHistorySection;
-    LinearLayout frmLoanRecord;
+    private LinearLayout repaymentHistorySection;
+    private LinearLayout frmLoanRecord;
 
     //Flags for Edit Operation
-    boolean isEditOperation = false;
+    private boolean isEditOperation = false;
 
     //This is the repayment that is being edited
-    MemberLoanRepaymentRecord repaymentBeingEdited = null;
+    private MemberLoanRepaymentRecord repaymentBeingEdited = null;
 
     //Fields for Rollover calculation
-    double interestRate = 0.0;
-    EditText editTextInterestRate;
-    TextView txtRolloverAmount;
-    TextView txtLoanBalance;
-    double theCurLoanBalanceAmount = 0.0;
-    double theCurLoanRepayAmount = 0.0;
+    private double interestRate = 0.0;
+    private EditText editTextInterestRate;
+    private TextView txtRolloverAmount;
+    private TextView txtLoanBalance;
+    private double theCurLoanBalanceAmount = 0.0;
+    private double theCurLoanRepayAmount = 0.0;
 
     //Date stuff
-    TextView txtDateDue;
-    TextView viewClicked;
+    private TextView txtDateDue;
+    private TextView viewClicked;
     public static final int Date_dialog_id = 1;
     // date and time
     private int mYear;
     private int mMonth;
     private int mDay;
-    String dateString;
+    private String dateString;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -128,11 +128,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
         // Get current cycle interest rate
         TextView lblInterestDesc = (TextView) findViewById(R.id.lblMLRepayHInterestDesc);
-        /**   if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
-         targetCycleId = targetMeeting.getVslaCycle().getCycleId();
-         cycle = vslaCycleRepo.getCycle(targetCycleId);
-         lblInterestDesc.setText(String.format("at %.0f%% every 30 days", cycle.getInterestRate()));
-         } */
 
         // Get the Interest Rate for the Current Cycle
         if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
@@ -552,6 +547,12 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
 
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
+
         actionBar.setTitle("Repayments");
 
         actionBar.setDisplayShowTitleEnabled(false);
@@ -642,7 +643,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             repaymentHistorySection.setVisibility(View.GONE);
         }
         //Now get the data via the adapter
-        LoanRepaymentHistoryArrayAdapter adapter = new LoanRepaymentHistoryArrayAdapter(MemberLoansRepaidHistoryActivity.this, loanRepayments, "fonts/roboto-regular.ttf");
+        LoanRepaymentHistoryArrayAdapter adapter = new LoanRepaymentHistoryArrayAdapter(MemberLoansRepaidHistoryActivity.this, loanRepayments);
 
         //Assign Adapter to ListView
         setListAdapter(adapter);
@@ -651,6 +652,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         Utils.setListViewHeightBasedOnChildren(getListView());
     }
 
+    @SuppressWarnings("WeakerAccess")
     public boolean saveMemberLoanRepayment() {
         double theAmount = 0.0;
 

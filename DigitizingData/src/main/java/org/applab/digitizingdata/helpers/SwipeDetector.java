@@ -4,8 +4,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.logging.Logger;
-
 /**
  * Class that allows swipe to delete functionality on ListView
  */
@@ -21,7 +19,8 @@ public class SwipeDetector implements View.OnTouchListener {
 
     private static final String logTag = "SwipeDetector";
     private static final int MIN_DISTANCE = 100;
-    private float downX, downY, upX, upY;
+    private float downX;
+    private float downY;
     private Action mSwipeDetected = Action.None;
 
     public boolean swipeDetected() {
@@ -41,8 +40,8 @@ public class SwipeDetector implements View.OnTouchListener {
                 return false; // allow other events like Click to be processed
             }
             case MotionEvent.ACTION_MOVE: {
-                upX = event.getX();
-                upY = event.getY();
+                float upX = event.getX();
+                float upY = event.getY();
 
                 float deltaX = downX - upX;
                 float deltaY = downY - upY;

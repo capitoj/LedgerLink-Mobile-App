@@ -30,8 +30,8 @@ import java.util.ArrayList;
 public class MeetingSendDataFrag extends SherlockFragment {
 
     private static com.actionbarsherlock.view.Menu MENU;
-    ActionBar actionBar = null;
-    int numberOfPastUnsentMeetings = 0;
+    private ActionBar actionBar = null;
+    private int numberOfPastUnsentMeetings = 0;
     private Meeting selectedMeeting;
     private int numberOfMembers;
     private double totalSavingsInSelectedMeeting;
@@ -39,11 +39,10 @@ public class MeetingSendDataFrag extends SherlockFragment {
     private double totalFinesInSelectedMeeting;
     private double totalLoansIssuedInSelectedMeeting;
     private int selectedMeetingAttendance;
-    int currentMeetingId;
-    int selectedMeetingId;
+    private int currentMeetingId;
+    private int selectedMeetingId;
     private boolean viewingCurrentMeeting;
     private ArrayList<Meeting> unsentInactiveMeetings;
-    private ArrayList<Meeting> activeMeetings;
     private MeetingActivity parentActivity;
     //public FragmentTransaction fragmentTransaction;
 
@@ -201,7 +200,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
 
 
     /*counts the number of past unset meetings, and computes current meeting saved values */
-    public void loadFragmentInformation(int meetingIdToLoad) {
+    void loadFragmentInformation(int meetingIdToLoad) {
 
         selectedMeetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
@@ -210,18 +209,13 @@ public class MeetingSendDataFrag extends SherlockFragment {
         selectedMeeting = meetingRepo.getMeetingById(selectedMeetingId);
 
 
+        viewingCurrentMeeting = selectedMeeting.getMeetingId() == currentMeetingId;
 
-        if(selectedMeeting.getMeetingId() == currentMeetingId) {
-            viewingCurrentMeeting = true;
-        } else {
-            viewingCurrentMeeting = false;
-        }
-       
-        activeMeetings = meetingRepo.getAllMeetingsByActiveStatus(true);
+        ArrayList<Meeting> activeMeetings = meetingRepo.getAllMeetingsByActiveStatus();
 
         //unsentInactiveMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
         //Past unsent and inactive
-        unsentInactiveMeetings = meetingRepo.getAllMeetingsByDataSentStatusAndActiveStatus(false, false);
+        unsentInactiveMeetings = meetingRepo.getAllMeetingsByDataSentStatusAndActiveStatus();
        numberOfPastUnsentMeetings = unsentInactiveMeetings.size();
 
         Log.i("Unset meeting count ",""+numberOfPastUnsentMeetings);
@@ -248,7 +242,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         
         //Get attendance in current meeting
         MeetingAttendanceRepo meetingAttendanceRepo = new MeetingAttendanceRepo(getSherlockActivity().getBaseContext());
-        selectedMeetingAttendance = meetingAttendanceRepo.getAttendanceCountByMeetingId(selectedMeetingId, 1);
+        selectedMeetingAttendance = meetingAttendanceRepo.getAttendanceCountByMeetingId(selectedMeetingId);
 
         //Get count of all members
         MemberRepo memberRepo = new MemberRepo(getSherlockActivity().getBaseContext());

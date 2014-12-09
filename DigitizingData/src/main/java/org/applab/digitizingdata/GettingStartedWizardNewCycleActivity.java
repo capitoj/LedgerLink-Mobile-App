@@ -39,7 +39,7 @@ import java.util.Calendar;
  */
 public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
-    protected boolean _isFromReviewMembers = false;
+    private boolean _isFromReviewMembers = false;
 
 
     @Override
@@ -340,7 +340,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                     finish();
                 }
             } else {
-                displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.", Utils.MSGBOX_ICON_EXCLAMATION);
+                displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.");
             }
         } else {
 
@@ -373,7 +373,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             } else {
                 double theInterestCollected = Double.parseDouble(interestCollected);
                 if (theInterestCollected < 0.00) {
-                    displayMessageBox(dialogTitle, "The Interest Collected should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    displayMessageBox(dialogTitle, "The Interest Collected should be zero and above.");
                     txtInterestCollected.requestFocus();
                     return false;
                 } else {
@@ -393,7 +393,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             } else {
                 double theFinesCollected = Double.parseDouble(finesCollected);
                 if (theFinesCollected < 0.00) {
-                    displayMessageBox(dialogTitle, "The Fines Collected should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                    displayMessageBox(dialogTitle, "The Fines Collected should be zero and above.");
                     txtFinesCollected.requestFocus();
                     return false;
                 } else {

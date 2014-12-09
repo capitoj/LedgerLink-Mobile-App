@@ -31,7 +31,7 @@ import java.util.ArrayList;
  */
 public class SelectCycle extends SherlockActivity {
 
-    ActionBar actionBar;
+    private ActionBar actionBar;
 
     private VslaCycle selectedCycle = null;
     private RadioGroup grpCycleDates;
@@ -209,7 +209,6 @@ public class SelectCycle extends SherlockActivity {
                     @Override
                     public void onClick(View v) {
                         finish();
-                        return;
                     }
                 }
         );
@@ -217,6 +216,11 @@ public class SelectCycle extends SherlockActivity {
         customActionBarView.findViewById(R.id.actionbar_next).setVisibility(View.GONE);
 
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
 
         if (isEndCycleAction) {
             actionBar.setTitle("END CYCLE");

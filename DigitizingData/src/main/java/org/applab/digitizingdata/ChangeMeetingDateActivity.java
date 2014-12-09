@@ -30,21 +30,21 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ChangeMeetingDateActivity extends SherlockActivity {
-    ActionBar actionBar;
-    int meetingId = 0;
-    MeetingRepo meetingRepo = null;
-    MeetingLoanRepaymentRepo repaymentRepo = null;
-    MeetingLoanIssuedRepo loanIssuedRepo = null;
-    MeetingFineRepo fineRepo = null;
+    private ActionBar actionBar;
+    private int meetingId = 0;
+    private MeetingRepo meetingRepo = null;
+    private MeetingLoanRepaymentRepo repaymentRepo = null;
+    private MeetingLoanIssuedRepo loanIssuedRepo = null;
+    private MeetingFineRepo fineRepo = null;
 
-    TextView txtMeetingDate;
-    TextView viewClicked;
+    private TextView txtMeetingDate;
+    private TextView viewClicked;
     public static final int Date_dialog_id = 1;
     // date and time
     private int mYear;
     private int mMonth;
     private int mDay;
-    String dateString;
+    private String dateString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +150,6 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
                         if(cannotBeModified) {
                             Toast.makeText(getApplicationContext(),"The meeting date cannot be modified due to data integrity reasons.",Toast.LENGTH_LONG).show();
                             finish();
-                            return;
 
                         }
                         else{
@@ -166,8 +165,6 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
                                 startActivity(i);
                             }
 
-                            return;
-
                         }
                     }
                 });
@@ -176,12 +173,17 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
                     @Override
                     public void onClick(View v) {
                         finish();
-                        return;
                     }
                 });
 
 
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
+
         actionBar.setTitle("Change Meeting Date");
 
         actionBar.setDisplayShowTitleEnabled(false);
@@ -256,10 +258,7 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     private boolean validateMeetingDate(Meeting meeting){

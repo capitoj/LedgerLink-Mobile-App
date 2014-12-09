@@ -51,21 +51,8 @@ public class LoanRepaymentSchema {
     }
 
     public static String getColumnList() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(COL_LR_REPAYMENT_ID + ",");
-        sb.append(COL_LR_LOAN_ID + ",");
-        sb.append(COL_LR_MEMBER_ID + ",");
-        sb.append(COL_LR_MEETING_ID + ",");
-        sb.append(COL_LR_AMOUNT + ",");
-        sb.append(COL_LR_BAL_BEFORE + ",");
-        sb.append(COL_LR_BAL_AFTER + ",");
-        sb.append(COL_LR_INTEREST_AMOUNT + ",");
-        sb.append(COL_LR_ROLLOVER_AMOUNT + ",");
-        sb.append(COL_LR_COMMENTS + ",");
-        sb.append(COL_LR_LAST_DATE_DUE + ",");
-        sb.append(COL_LR_NEXT_DATE_DUE );
 
-        return sb.toString();
+        return (COL_LR_REPAYMENT_ID + ",") + COL_LR_LOAN_ID + "," + COL_LR_MEMBER_ID + "," + COL_LR_MEETING_ID + "," + COL_LR_AMOUNT + "," + COL_LR_BAL_BEFORE + "," + COL_LR_BAL_AFTER + "," + COL_LR_INTEREST_AMOUNT + "," + COL_LR_ROLLOVER_AMOUNT + "," + COL_LR_COMMENTS + "," + COL_LR_LAST_DATE_DUE + "," + COL_LR_NEXT_DATE_DUE;
     }
 
     public static String[] getColumnListArray() {

@@ -16,10 +16,9 @@ import android.widget.TextView;
  * To change this template use File | Settings | File Templates.
  */
 public class AboutDialog extends Dialog {
-    private static Context mContext = null;
     public AboutDialog(Context context) {
         super(context);
-        mContext = context;
+        Context mContext = context;
 
 
 }
@@ -29,13 +28,9 @@ public class AboutDialog extends Dialog {
         TextView tv = (TextView)findViewById(R.id.legal_text);
         tv.setText(getContext().getResources().getString(R.string.about_legal));
 
-        StringBuilder aboutBuilder = new StringBuilder();
-        aboutBuilder.append("<h3>LedgerLink</h3>");
-        aboutBuilder.append(getContext().getResources().getString(R.string.about_version)+"<br>" +
-                "Copyright 2014<br><b>www.applab.org</b><br><br>");
-
         tv = (TextView)findViewById(R.id.info_text);
-        tv.setText(Html.fromHtml(aboutBuilder.toString()));
+        tv.setText(Html.fromHtml("<h3>LedgerLink</h3>" + getContext().getResources().getString(R.string.about_version) + "<br>" +
+                "Copyright 2014<br><b>www.applab.org</b><br><br>"));
 
 
 

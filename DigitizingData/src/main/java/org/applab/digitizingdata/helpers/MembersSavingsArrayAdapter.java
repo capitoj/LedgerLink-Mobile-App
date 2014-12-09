@@ -21,19 +21,19 @@ import java.util.ArrayList;
  * Created by Moses on 7/7/13.
  */
 public class MembersSavingsArrayAdapter extends ArrayAdapter<Member> {
-    Context context;
-    ArrayList<Member> values;
-    int meetingId;
-    Meeting targetMeeting = null;
-    MeetingSavingRepo savingRepo = null;
-    MeetingRepo meetingRepo = null;
-    Typeface typeface;
+    private final Context context;
+    private final ArrayList<Member> values;
+    private int meetingId;
+    private Meeting targetMeeting = null;
+    private MeetingSavingRepo savingRepo = null;
+    private MeetingRepo meetingRepo = null;
+    private final Typeface typeface;
 
-    public MembersSavingsArrayAdapter(Context context, ArrayList<Member> values, String font) {
+    public MembersSavingsArrayAdapter(Context context, ArrayList<Member> values) {
         super(context, R.layout.row_member_savings, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
 
         savingRepo = new MeetingSavingRepo(getContext());
         meetingRepo = new MeetingRepo(getContext());

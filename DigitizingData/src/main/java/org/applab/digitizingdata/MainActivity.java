@@ -24,6 +24,7 @@ import com.actionbarsherlock.view.MenuInflater;
 
 import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.MenuItem;
+import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.ArrayList;
@@ -33,13 +34,13 @@ import java.util.ArrayList;
  */
 public class MainActivity extends SherlockActivity {
 
-    GridView gridView;
-    ArrayList<MenuItem> mainMenuItemsGridArray = new ArrayList<MenuItem>();
-    CustomGridViewAdapter customGridAdapter;
+    private GridView gridView;
+    private final ArrayList<MenuItem> mainMenuItemsGridArray = new ArrayList<MenuItem>();
+    private CustomGridViewAdapter customGridAdapter;
     ArrayList<MenuItem> mainMenuItems = null;
-    VslaInfo vslaInfo = null;
-    VslaInfoRepo vslaInfoRepo = null;
-    ActionBar actionBar;
+    private VslaInfo vslaInfo = null;
+    private VslaInfoRepo vslaInfoRepo = null;
+    private ActionBar actionBar;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +48,11 @@ public class MainActivity extends SherlockActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setTitle("Ledger Link");
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
 
         //Retrieve VSLA Information
         vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
@@ -90,7 +96,7 @@ public class MainActivity extends SherlockActivity {
 
         gridView = (GridView) findViewById(R.id.grid);
 
-        customGridAdapter = new CustomGridViewAdapter(this, R.layout.mainmenurowgrid, mainMenuItemsGridArray);
+        customGridAdapter = new CustomGridViewAdapter(this, mainMenuItemsGridArray);
         gridView.setAdapter(customGridAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -146,10 +152,10 @@ public class MainActivity extends SherlockActivity {
         int layoutResourceId;
         ArrayList<MenuItem> data = new ArrayList<MenuItem>();
 
-        public CustomGridViewAdapter(Context context, int layoutResourceId,
+        public CustomGridViewAdapter(Context context,
                                      ArrayList<MenuItem> data) {
-            super(context, layoutResourceId, data);
-            this.layoutResourceId = layoutResourceId;
+            super(context, R.layout.mainmenurowgrid, data);
+            this.layoutResourceId = R.layout.mainmenurowgrid;
             this.context = context;
             this.data = data;
 

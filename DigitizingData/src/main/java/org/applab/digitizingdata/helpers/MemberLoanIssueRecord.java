@@ -6,16 +6,16 @@ import java.util.Date;
  * Created by Moses on 7/29/13.
  */
 public class MemberLoanIssueRecord {
-    int loanId;
-    int loanNo;
-    Date meetingDate;
-    double principalAmount;
-    double interestAmount;
-    double balance;
-    double totalRepaid;
-    boolean isCleared;
-    Date dateCleared;
-    Date dateDue;
+    private int loanId;
+    private int loanNo;
+    private Date meetingDate;
+    private double principalAmount;
+    private double interestAmount;
+    private double balance;
+    private double totalRepaid;
+    private boolean isCleared;
+    private Date dateCleared;
+    private Date dateDue;
     private String lastRepaymentComment;
 
     public double getInterestAmount() {

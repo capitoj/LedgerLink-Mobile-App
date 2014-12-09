@@ -11,14 +11,14 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:text="FULL NAMES" />
+        android:text="@string/full_name" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/txtMOccupation"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Occupation" />
+        android:text="@string/occupation" />
 
 </LinearLayout>
 

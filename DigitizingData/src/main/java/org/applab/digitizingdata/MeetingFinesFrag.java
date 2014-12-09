@@ -29,10 +29,10 @@ import java.util.ArrayList;
  * Created by Moses on 6/25/13.
  */
 public class MeetingFinesFrag extends SherlockFragment {
-    ActionBar actionBar;
-    ArrayList<Member> members;
-    String meetingDate;
-    int meetingId;
+    private ActionBar actionBar;
+    private ArrayList<Member> members;
+    private String meetingDate;
+    private int meetingId;
     private MeetingActivity parentActivity;
     private RelativeLayout fragmentView;
 
@@ -54,20 +54,6 @@ public class MeetingFinesFrag extends SherlockFragment {
         return fragmentView;
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-
-    }
 
     private void initializeFragment()
     {
@@ -115,7 +101,7 @@ public class MeetingFinesFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        final MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(parentActivity.getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(parentActivity.getBaseContext(), members);
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView

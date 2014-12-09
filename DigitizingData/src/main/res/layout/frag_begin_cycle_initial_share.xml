@@ -9,6 +9,6 @@
         style="@style/RegularText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:text="@string/new_text"
         android:id="@+id/textView" />
 </LinearLayout>

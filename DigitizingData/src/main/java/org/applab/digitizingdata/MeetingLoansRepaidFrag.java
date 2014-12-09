@@ -29,10 +29,10 @@ import java.util.ArrayList;
  * Created by Moses on 6/25/13.
  */
 public class MeetingLoansRepaidFrag extends SherlockFragment {
-    ActionBar actionBar;
-    ArrayList<Member> members;
-    String meetingDate;
-    int meetingId;
+    private ActionBar actionBar;
+    private ArrayList<Member> members;
+    private String meetingDate;
+    private int meetingId;
     private MeetingActivity parentActivity;
     private RelativeLayout fragmentView;
 
@@ -52,11 +52,6 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         fragmentView = (RelativeLayout) inflater.inflate(R.layout.frag_meeting_loans_repaid, container, false);
         initializeFragment();
         return fragmentView;
-    }
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
     }
 
     private void initializeFragment()
@@ -105,7 +100,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        final MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(parentActivity.getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(parentActivity.getBaseContext(), members);
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView

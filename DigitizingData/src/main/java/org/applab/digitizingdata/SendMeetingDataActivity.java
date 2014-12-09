@@ -1,6 +1,5 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -10,13 +9,12 @@ import android.widget.AdapterView;
 
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.R;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.domain.model.Meeting;
-import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.SendMeetingDataArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
@@ -28,7 +26,6 @@ import java.util.Calendar;
  * Created by Moses on 7/23/13.
  */
 public class SendMeetingDataActivity extends SherlockListActivity {
-    private ActionBar actionBar;
     private ArrayList<Meeting> meetings;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +34,13 @@ public class SendMeetingDataActivity extends SherlockListActivity {
 
         setContentView(R.layout.activity_send_meeting_data);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
+
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("Send Data");
         actionBar.setHomeButtonEnabled(true);
@@ -65,7 +68,7 @@ public class SendMeetingDataActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        SendMeetingDataArrayAdapter adapter = new SendMeetingDataArrayAdapter(getBaseContext(), meetings, "fonts/roboto-regular.ttf");
+        SendMeetingDataArrayAdapter adapter = new SendMeetingDataArrayAdapter(getBaseContext(), meetings);
 
         //Assign Adapter to ListView
         setListAdapter(adapter);

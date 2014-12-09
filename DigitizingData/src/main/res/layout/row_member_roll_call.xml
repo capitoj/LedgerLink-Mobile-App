@@ -3,24 +3,44 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <CheckBox
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/layoutRMRCall"
+        android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text=""
-        android:id="@+id/chkRMRCAttendance"
-        android:layout_gravity="left" />
+        android:layout_weight="9">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/RegularText"
-        android:id="@+id/txtRMRCFullName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/chkRMRCAttendance"
-        android:text="FULL NAME" />
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/txtRMRCallFullName"
+            style="@style/RegularTextListItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="0. FULL NAME" />
 
+        <org.applab.digitizingdata.fontutils.TypefaceTextView
+            android:id="@+id/txtRMRCallAttendance"
+            style="@style/ListSmallSubItems"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtRMRCallFullName"
+            android:text="Attended 5 Missed 3" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <CheckBox
+            android:id="@+id/chkRMRCallAttendance"
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dip"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="" />
+    </RelativeLayout>
 
 </RelativeLayout>

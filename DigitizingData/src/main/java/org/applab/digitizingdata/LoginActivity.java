@@ -2,8 +2,6 @@ package org.applab.digitizingdata;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -39,24 +37,23 @@ import org.applab.digitizingdata.repo.VslaInfoRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 //import android.view.Menu;
 
 public class LoginActivity extends SherlockActivity {
-    VslaInfoRepo vslaInfoRepo = null;
-    VslaInfo vslaInfo = null;
-    boolean wasCalledFromActivation = false;
+    private VslaInfoRepo vslaInfoRepo = null;
+    private VslaInfo vslaInfo = null;
+    private boolean wasCalledFromActivation = false;
 
     //variables for activating the VSLA
     HttpClient client;
-    int httpStatusCode = 0; //To know whether the Request was successful
-    boolean activationSuccessful = false;
-    String targetVslaCode = null; //fake-fix
-    ProgressDialog progressDialog = null;
-    ActionBar actionBar;
+    private int httpStatusCode = 0; //To know whether the Request was successful
+    private boolean activationSuccessful = false;
+    private String targetVslaCode = null; //fake-fix
+    private ProgressDialog progressDialog = null;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +100,7 @@ public class LoginActivity extends SherlockActivity {
             actionBar.setCustomView(R.layout.activity_main_training_mode);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
+
             //Set the label of the link
             //         tvSwitchMode.setText("Switch To Actual VSLA Data");
             //       tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
@@ -351,7 +349,6 @@ public class LoginActivity extends SherlockActivity {
 
             activateVlsaUsingPostAsync(jsonRequest);
         } catch (Exception ex) {
-            return;
         }
     }
 

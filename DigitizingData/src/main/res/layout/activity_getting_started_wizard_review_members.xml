@@ -35,7 +35,6 @@
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lblRvwMembersSubHeading"
             android:text="As of" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -43,7 +42,6 @@
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lblRvwMembersDate"
             android:text="Total savings this cycle" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -51,7 +49,6 @@
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lblRvwMembersTotalSavings"
             android:text="Total loans outstanding" />
 
 
@@ -60,7 +57,6 @@
             style="@style/List"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_below="@id/lblRvwMembersTotalSavings"
             android:choiceMode="singleChoice">
 
         </ListView>
@@ -70,7 +66,6 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lblRvwMembersTotalSavings"
             android:text="@string/empty_members_list" />
     </LinearLayout>
 

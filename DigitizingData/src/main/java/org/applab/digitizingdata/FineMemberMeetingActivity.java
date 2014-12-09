@@ -2,7 +2,6 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,26 +9,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.app.SherlockListActivity;
 
-import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.helpers.FineHistoryArrayAdapter;
-import org.applab.digitizingdata.helpers.MemberFineRecord;
 import org.applab.digitizingdata.helpers.MembersFinesArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
-import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
 import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
@@ -71,22 +59,12 @@ public class FineMemberMeetingActivity extends SherlockActivity {
     }
 
     private void inflateCustomActionBar() {
-        // BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
+
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
-        //final View
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel, null);
-        /** customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                 new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-                         finish();
-                         return;
-                     }
-                 }); */
 
+        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel, null);
         customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -97,6 +75,11 @@ public class FineMemberMeetingActivity extends SherlockActivity {
 
 
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setTitle("FINE MEMBER");
 
@@ -120,7 +103,7 @@ public class FineMemberMeetingActivity extends SherlockActivity {
         members = memberRepo.getAllMembers();
 
         // Now get the data via the adapter
-        MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
+        MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(getBaseContext(), members);
         adapter.setMeetingId(meetingId);
 
 

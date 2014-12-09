@@ -9,15 +9,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 
 import android.app.ActionBar;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.view.Menu;
-
-import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
@@ -83,7 +77,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-      //  actionBar.setHomeButtonEnabled(true);
+        //  actionBar.setHomeButtonEnabled(true);
 
         refreshView();
         if (key.equals(PREF_KEY_REFRESH_TRAINING_DATA)) {

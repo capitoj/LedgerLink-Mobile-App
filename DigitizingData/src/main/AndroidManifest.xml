@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.applab.digitizingdata"
     android:versionCode="3"
     android:versionName="1.0" >
@@ -25,7 +26,8 @@
         android:normalScreens="false"
         android:largeScreens="true"
         android:xlargeScreens="true"
-        android:requiresSmallestWidthDp="533"/>
+        android:requiresSmallestWidthDp="533"
+        tools:ignore="UnusedAttribute" />
 
     <!-- android:theme="@style/AppTheme" -->
     <application
@@ -160,7 +162,7 @@
             android:parentActivityName="org.applab.digitizingdata.GettingStartedWizardPageOne" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="Introduction" />
+                android:value="MainActivity" />
         </activity>
         <activity
             android:name="org.applab.digitizingdata.GettingStartedWizardPageOne"

@@ -21,7 +21,7 @@ import java.util.Date;
  */
 public class MeetingFineRepo {
 
-    private Context context;
+    private final Context context;
 
     public MeetingFineRepo(Context context) {
         this.context = context;
@@ -374,11 +374,7 @@ public class MeetingFineRepo {
             long retVal = -1;
             retVal = db.insert(FineSchema.getTableName(), null, values);
 
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MemberFineRepo.saveMemberFine", ex.getMessage());
             return false;
@@ -518,11 +514,7 @@ public class MeetingFineRepo {
             // Updating row
             retVal = db.update(FineSchema.getTableName(), values, FineSchema.COL_F_FINE_ID + " = ?",
                     new String[]{String.valueOf(fineId)});
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MemberFineRepo.updateMemberFine", ex.getMessage());
             return false;
@@ -548,11 +540,7 @@ public class MeetingFineRepo {
             // Updating row
             retVal = db.update(FineSchema.getTableName(), values, FineSchema.COL_F_FINE_ID + " = ?",
                     new String[]{String.valueOf(fineId)});
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MemberFineRepo.updateMemberFine", ex.getMessage());
             return false;

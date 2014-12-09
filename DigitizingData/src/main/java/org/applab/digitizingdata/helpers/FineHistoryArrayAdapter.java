@@ -26,17 +26,16 @@ import java.util.Date;
  */
 public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
 
-    Context context;
-    ArrayList<MemberFineRecord> values;
+    private final Context context;
+    private final ArrayList<MemberFineRecord> values;
     int position;
-    Typeface typeface;
-    FineTypeRepo fineTypeRepo;
-    MeetingFineRepo finesRepo;
-    VslaCycleRepo cycleRepo;
-    VslaCycle currentCycle;
-    String datePaid;
-    private View viewContainer;
-    int meetingId;
+    private final Typeface typeface;
+    private final FineTypeRepo fineTypeRepo;
+    private final MeetingFineRepo finesRepo;
+    private final VslaCycleRepo cycleRepo;
+    private final VslaCycle currentCycle;
+    private String datePaid;
+    private final int meetingId;
 
     public FineHistoryArrayAdapter(Context context, int meetingId, ArrayList<MemberFineRecord> values, String font) {
         super(context, R.layout.row_fines_history, values);
@@ -61,7 +60,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
 
             rowView = inflater.inflate(R.layout.row_fines_history, parent, false);
 
-            viewContainer = rowView.findViewById(R.id.undobar);
+            //View viewContainer = rowView.findViewById(R.id.undobar);
 
             //Assign Values to the Widgets
             final MemberFineRecord fineRecord = values.get(position);

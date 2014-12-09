@@ -29,9 +29,6 @@ import java.util.Calendar;
 public class SampleDataBuilderRepo {
     private static Context appContext;
 
-    private static String comment = "";
-    private static boolean isUpdate = false;
-
     public static boolean refreshTrainingData(Context context) {
 
         //Determine whether the refresh flag is ON
@@ -60,7 +57,7 @@ public class SampleDataBuilderRepo {
         if(refreshSucceeded) {
             //Set the Getting Started Wizard flag
             VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(appContext);
-            vslaInfoRepo.updateGettingStartedWizardCompleteFlag(true);
+            vslaInfoRepo.updateGettingStartedWizardCompleteFlag();
 
             //Reset the Refresh Flag i.e. set it to False and the Shared Preference to Unchecked
             Utils.setRefreshDataFlag(false);
@@ -215,6 +212,8 @@ public class SampleDataBuilderRepo {
             double shareValue = 5000D;
             int loanNumber = 0;
 
+            String comment = "";
+            boolean isUpdate = false;
             for(Member memb:members){
                 //Wrap this in a try...catch so that in case an error occurs on one member we just jump to the next one
                 try{
@@ -247,7 +246,6 @@ public class SampleDataBuilderRepo {
                     }
                 }
                 catch(Exception ex) {
-                    continue;
                 }
 
             }
@@ -301,7 +299,6 @@ public class SampleDataBuilderRepo {
                     //Don't Issue New Loans in this meeting
                 }
                 catch(Exception ex) {
-                    continue;
                 }
             }
 
@@ -356,7 +353,6 @@ public class SampleDataBuilderRepo {
                     }
                 }
                 catch(Exception ex) {
-                    continue;
                 }
             }
 
@@ -433,7 +429,6 @@ public class SampleDataBuilderRepo {
                     }
                 }
                 catch(Exception ex) {
-                    continue;
                 }
             }
 
@@ -483,7 +478,6 @@ public class SampleDataBuilderRepo {
                     }
                 }
                 catch(Exception ex) {
-                    continue;
                 }
             }
 

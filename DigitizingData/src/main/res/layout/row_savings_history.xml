@@ -11,7 +11,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="5dip"
-        android:text="01-JUL-2013" />
+        android:text="@string/date_default" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRSHAmount"
@@ -20,6 +20,6 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/txtRSHMeetingDate"
         android:layout_marginLeft="10dip"
-        android:text="Saved: 0UGX" />
+        android:text="@string/total_savings_default" />
 
 </RelativeLayout>

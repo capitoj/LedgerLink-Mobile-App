@@ -49,20 +49,9 @@ public class FineSchema {
     }
 
     public static String getColumnList() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(COL_F_FINE_ID + ",");
-        sb.append(COL_F_MEETING_ID + ",");
-        sb.append(COL_F_MEMBER_ID + ",");
-        sb.append(COL_F_FINE_TYPE_ID + ",");
-       // sb.append(COL_F_FINE_TYPE_NAME + ",");
-        sb.append(COL_F_AMOUNT + ",");
-        sb.append(COL_F_EXPECTED_DATE + ",");
-        sb.append(COL_F_IS_DELETED + ",");
-        sb.append(COL_F_IS_CLEARED + ",");
-        sb.append(COL_F_DATE_CLEARED + ",");
-        sb.append(COL_F_PAID_IN_MEETING_ID);
+        // sb.append(COL_F_FINE_TYPE_NAME + ",");
 
-        return sb.toString();
+        return (COL_F_FINE_ID + ",") + COL_F_MEETING_ID + "," + COL_F_MEMBER_ID + "," + COL_F_FINE_TYPE_ID + "," + COL_F_AMOUNT + "," + COL_F_EXPECTED_DATE + "," + COL_F_IS_DELETED + "," + COL_F_IS_CLEARED + "," + COL_F_DATE_CLEARED + "," + COL_F_PAID_IN_MEETING_ID;
     }
 
     public static String[] getColumnListArray() {

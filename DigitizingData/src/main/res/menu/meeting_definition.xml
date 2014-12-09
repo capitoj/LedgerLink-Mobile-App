@@ -2,14 +2,14 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/mnuMDCancel"
-          android:title="cancel"
+          android:title="@string/cancel"
           android:orderInCategory="1"
           android:showAsAction="never"
           android:icon="@drawable/ic_navigation_cancel"
             />
 
     <item android:id="@+id/mnuMDSave"
-          android:title="next"
+          android:title="@string/next"
           android:orderInCategory="11"
           android:showAsAction="never"
           android:icon="@drawable/ic_navigation_forward"

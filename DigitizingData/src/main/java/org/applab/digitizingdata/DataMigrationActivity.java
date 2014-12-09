@@ -37,7 +37,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
     private static final String TAG = "MainActivity";
     // DatabaseHandler dbHelper = null;
-    File file = null;
+    private File file = null;
     private TextView lblMigrationResult = null;
     private Button btnimport = null;
 
@@ -230,7 +230,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                             boolean memberNoAvailable = memberRepo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId());
 
                             //Loop to get a Unique member No. Hope no Infinite Loops
-                            while(memberNoAvailable == false) {
+                            while(!memberNoAvailable) {
                                 member.setMemberNo(member.getMemberNo() + 1);
                                 memberNoAvailable = memberRepo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId());
                             }
@@ -269,7 +269,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                                     Date dateIssued = Utils.getDateFromString(loanIssueDate,"yyyy-MM-dd");
                                     Date dateDue = Utils.getDateFromString(loanDueDate,"yyyy-MM-dd");
                                     MeetingLoanIssuedRepo loansRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-                                    boolean loanIssued = loansRepo.saveMemberLoanIssue(recentMeeting.getMeetingId(),recentMember.getMemberId(),recentMember.getMemberNo(),thePrincipalAmount,0.0, theLoanBalance,dateDue);
+                                    boolean loanIssued = loansRepo.saveMemberLoanIssue(recentMeeting.getMeetingId(),recentMember.getMemberId(),recentMember.getMemberNo(),thePrincipalAmount, theLoanBalance,dateDue);
 
                                     //Even if it fails continue. Can be done manually later
                                 }
@@ -313,7 +313,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                     // Flag that Data has already been Migrated
                     VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
                     if(vslaInfoRepo != null){
-                        vslaInfoRepo.updateDataMigrationStatusFlag(true);
+                        vslaInfoRepo.updateDataMigrationStatusFlag();
                     }
 
                     //TODO: Only do this if there were no records skipped

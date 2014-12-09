@@ -1,29 +1,13 @@
 package org.applab.digitizingdata.repo;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.telephony.TelephonyManager;
-import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.applab.digitizingdata.LoginActivity;
-import org.applab.digitizingdata.MainActivity;
 import org.applab.digitizingdata.datatransformation.FinesDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.LoanDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.RepaymentDataTransferRecord;
 import org.applab.digitizingdata.datatransformation.SavingsDataTransferRecord;
 import org.applab.digitizingdata.domain.model.Meeting;
-import org.applab.digitizingdata.domain.model.MeetingFine;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.domain.model.VslaInfo;
@@ -32,11 +16,8 @@ import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 import org.json.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
 /**
@@ -306,7 +287,7 @@ public class SendDataRepo {
             MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(DatabaseHandler.databaseContext);
             MeetingLoanRepaymentRepo loanRepaymentRepo = new MeetingLoanRepaymentRepo(DatabaseHandler.databaseContext);
 
-            double membersPresent = attendanceRepo.getAttendanceCountByMeetingId(meeting.getMeetingId(), 1);
+            double membersPresent = attendanceRepo.getAttendanceCountByMeetingId(meeting.getMeetingId());
             double savings = savingRepo.getTotalSavingsInMeeting(meeting.getMeetingId());
             double loansRepaid = loanRepaymentRepo.getTotalLoansRepaidInMeeting(meeting.getMeetingId());
             double loansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meeting.getMeetingId());

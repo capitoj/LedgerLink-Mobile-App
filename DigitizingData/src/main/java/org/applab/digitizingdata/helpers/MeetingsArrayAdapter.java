@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import org.applab.digitizingdata.R;
 import org.applab.digitizingdata.domain.model.Meeting;
-import org.applab.digitizingdata.domain.model.VslaCycle;
 
 import java.util.ArrayList;
 
@@ -19,9 +18,9 @@ import java.util.ArrayList;
 /**
  * Created by Moses on 3/11/14.
  */
-public class MeetingsArrayAdapter extends ArrayAdapter<Meeting> {
-    Context context;
-    ArrayList<Meeting> values;
+class MeetingsArrayAdapter extends ArrayAdapter<Meeting> {
+    private final Context context;
+    private final ArrayList<Meeting> values;
     int position;
 
     public MeetingsArrayAdapter(Context context, ArrayList<Meeting> values) {

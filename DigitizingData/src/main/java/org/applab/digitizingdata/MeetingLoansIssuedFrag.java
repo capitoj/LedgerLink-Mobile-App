@@ -34,24 +34,24 @@ import java.util.ArrayList;
  * Created by Moses on 6/25/13.
  */
 public class MeetingLoansIssuedFrag extends SherlockFragment {
-    ActionBar actionBar;
-    ArrayList<Member> members;
-    String meetingDate;
-    int meetingId;
+    private ActionBar actionBar;
+    private ArrayList<Member> members;
+    private String meetingDate;
+    private int meetingId;
     private MeetingActivity parentActivity;
     private View fragmentView;
-    MeetingRepo meetingRepo = null;
-    MeetingSavingRepo savingRepo = null;
-    MeetingLoanRepaymentRepo repaymentRepo = null;
-    MeetingLoanIssuedRepo loanIssuedRepo = null;
-    MeetingFineRepo fineRepo = null;
-    double cashToBank = 0.0;
-    Meeting currentMeeting = null;
-    double totalCashInBox = 0.0;
+    private MeetingRepo meetingRepo = null;
+    private MeetingSavingRepo savingRepo = null;
+    private MeetingLoanRepaymentRepo repaymentRepo = null;
+    private MeetingLoanIssuedRepo loanIssuedRepo = null;
+    private MeetingFineRepo fineRepo = null;
+    private double cashToBank = 0.0;
+    private Meeting currentMeeting = null;
+    private double totalCashInBox = 0.0;
 
-    TextView lblTotalCash;
+    private TextView lblTotalCash;
 
-    MeetingStartingCash startingCashDetails = null;
+    private MeetingStartingCash startingCashDetails = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -143,7 +143,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         members = memberRepo.getAllMembers();
 
         //Now get the data via the adapter
-        final MembersLoansIssuedArrayAdapter adapter = new MembersLoansIssuedArrayAdapter(getSherlockActivity().getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersLoansIssuedArrayAdapter adapter = new MembersLoansIssuedArrayAdapter(getSherlockActivity().getBaseContext(), members);
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView

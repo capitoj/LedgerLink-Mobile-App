@@ -1,18 +1,15 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.R;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
@@ -29,9 +26,7 @@ import java.util.ArrayList;
  * Created by Moses on 7/23/13.
  */
 public class ViewSentDataActivity extends SherlockListActivity {
-    private ActionBar actionBar;
     private ArrayList<Meeting> meetings;
-    private ArrayList<Meeting> unsentMeetings;
     TextView txtHeader;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -40,7 +35,13 @@ public class ViewSentDataActivity extends SherlockListActivity {
 
         setContentView(R.layout.activity_send_meeting_data);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
+
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("Sent Data");
         actionBar.setHomeButtonEnabled(true);
@@ -60,7 +61,7 @@ public class ViewSentDataActivity extends SherlockListActivity {
         MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
         meetings = meetingRepo.getAllMeetingsByDataSentStatus(true);
 
-        unsentMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
+        ArrayList<Meeting> unsentMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
 
         if (meetings.isEmpty()) {
             meetings = new ArrayList<Meeting>();
@@ -75,7 +76,7 @@ public class ViewSentDataActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        SendMeetingDataArrayAdapter adapter = new SendMeetingDataArrayAdapter(getBaseContext(), meetings, "fonts/roboto-regular.ttf");
+        SendMeetingDataArrayAdapter adapter = new SendMeetingDataArrayAdapter(getBaseContext(), meetings);
 
         //Assign Adapter to ListView
         setListAdapter(adapter);

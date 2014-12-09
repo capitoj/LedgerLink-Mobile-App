@@ -17,13 +17,13 @@ import java.util.ArrayList;
 /**
  * Created by Moses on 7/28/13.
  */
-public class FineTypeCustomArrayAdapter extends ArrayAdapter<FineType> {
-    Context context;
-    ArrayList<FineType> values;
+class FineTypeCustomArrayAdapter extends ArrayAdapter<FineType> {
+    private final Context context;
+    private final ArrayList<FineType> values;
     int position;
-    Typeface typeface;
+    private final Typeface typeface;
     private Activity activity;
-    FineType tempValues = null;
+    private FineType tempValues = null;
 
     public FineTypeCustomArrayAdapter(Context context, int viewResourceId, ArrayList<FineType> values, String font) {
         super(context, viewResourceId, values);
@@ -44,7 +44,7 @@ public class FineTypeCustomArrayAdapter extends ArrayAdapter<FineType> {
     }
 
     // This funtion called for each row ( Called data.size() times )
-    public View getCustomView(int position, View convertView, ViewGroup parent) {
+    View getCustomView(int position, View convertView, ViewGroup parent) {
 
         //LayoutInflater inflater = activity.getLayoutInflater();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

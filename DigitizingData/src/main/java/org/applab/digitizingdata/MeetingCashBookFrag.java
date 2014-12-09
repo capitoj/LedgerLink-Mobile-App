@@ -24,22 +24,22 @@ import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 public class MeetingCashBookFrag extends SherlockFragment {
 
-    ActionBar actionBar = null;
-    String meetingDate = null;
-    int meetingId = 0;
-    double cashToBank = 0.0;
+    private ActionBar actionBar = null;
+    private String meetingDate = null;
+    private int meetingId = 0;
+    private double cashToBank = 0.0;
     double cashToBox = 0.0;
-    double totalCashInBox = 0.0;
-    MeetingRepo meetingRepo = null;
-    MeetingSavingRepo savingRepo = null;
-    MeetingLoanRepaymentRepo repaymentRepo = null;
-    MeetingLoanIssuedRepo loanIssuedRepo = null;
-    MeetingFineRepo fineRepo = null;
-    MeetingStartingCash startingCashDetails = null;
+    private double totalCashInBox = 0.0;
+    private MeetingRepo meetingRepo = null;
+    private MeetingSavingRepo savingRepo = null;
+    private MeetingLoanRepaymentRepo repaymentRepo = null;
+    private MeetingLoanIssuedRepo loanIssuedRepo = null;
+    private MeetingFineRepo fineRepo = null;
+    private MeetingStartingCash startingCashDetails = null;
     MeetingStartingCash currentStartingCashDetails = null;
-    MeetingStartingCash previousClosingCash = null;
+    private MeetingStartingCash previousClosingCash = null;
     private MeetingActivity parentActivity; //to access parent meeting activity
-    EditText txtCashToBankAmount;
+    private EditText txtCashToBankAmount;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,7 +147,6 @@ public class MeetingCashBookFrag extends SherlockFragment {
                 public void onClick(View v) {
                     if (Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                         Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
-                        return;
                     }
                 }
             });
@@ -155,7 +154,6 @@ public class MeetingCashBookFrag extends SherlockFragment {
                 public void onClick(View v) {
                     if (parentActivity.isViewOnly()) {
                         Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
-                        return;
                     }
                 }
             });

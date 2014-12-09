@@ -7,9 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.applab.digitizingdata.domain.model.VslaInfo;
-import org.applab.digitizingdata.domain.schema.LoanIssueSchema;
-import org.applab.digitizingdata.domain.schema.MeetingSchema;
-import org.applab.digitizingdata.domain.schema.VslaCycleSchema;
 import org.applab.digitizingdata.domain.schema.VslaInfoSchema;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
@@ -57,13 +54,13 @@ public class VslaInfoRepo {
             vslaInfo.setDateLinked(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_LINKED))));
             vslaInfo.setBankBranch(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_BANK_BRANCH)));
             vslaInfo.setAccountNo(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_ACCOUNT_NO)));
-            vslaInfo.setOffline((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_OFFLINE)) == 1)? true : false);
-            vslaInfo.setActivated((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_ACTIVATED)) == 1)? true : false);
+            vslaInfo.setOffline((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_OFFLINE)) == 1));
+            vslaInfo.setActivated((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_ACTIVATED)) == 1));
             vslaInfo.setDateActivated(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_ACTIVATED))));
-            vslaInfo.setAllowDataMigration((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_ALLOW_DATA_MIGRATION)) == 1)? true : false);
-            vslaInfo.setDataMigrated((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_DATA_MIGRATED)) == 1)? true : false);
+            vslaInfo.setAllowDataMigration((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_ALLOW_DATA_MIGRATION)) == 1));
+            vslaInfo.setDataMigrated((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_DATA_MIGRATED)) == 1));
 
-            vslaInfo.setGettingStartedWizardComplete((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE)) == 1)? true : false);
+            vslaInfo.setGettingStartedWizardComplete((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE)) == 1));
             vslaInfo.setGettingStartedWizardStage(cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_GETTING_STARTED_WIZARD_STAGE)));
             // return data
             return vslaInfo;
@@ -96,11 +93,8 @@ public class VslaInfoRepo {
             cursor = db.rawQuery(selectQuery, null);
 
             // Determine whether there was data
-            if (cursor != null && cursor.moveToFirst()){
-                return true;
-            }
+            return cursor != null && cursor.moveToFirst();
 
-            return false;
         }
         catch (Exception ex) {
             Log.e("VslaInfoRepo.VslaInfoExists", ex.getMessage());
@@ -154,7 +148,7 @@ public class VslaInfoRepo {
 
                 //If executing in trainng mode, set GSW as completed
                 if(Utils.isExecutingInTrainingMode()) {
-                    updateGettingStartedWizardCompleteFlag(true);
+                    updateGettingStartedWizardCompleteFlag();
                 }
 
                 return true;
@@ -206,7 +200,7 @@ public class VslaInfoRepo {
             if (retVal != -1) {
                 //If executing in trainng mode, set GSW as completed
                 if(Utils.isExecutingInTrainingMode()) {
-                    updateGettingStartedWizardCompleteFlag(true);
+                    updateGettingStartedWizardCompleteFlag();
                 }
                 return true;
             }
@@ -226,7 +220,7 @@ public class VslaInfoRepo {
     }
 
 
-    public boolean updateDataMigrationStatusFlag(boolean isDataMigrated) {
+    public boolean updateDataMigrationStatusFlag() {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int loanId = 0;
@@ -239,7 +233,7 @@ public class VslaInfoRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            if(isDataMigrated) {
+            if(true) {
                 values.put(VslaInfoSchema.COL_VI_IS_DATA_MIGRATED, 1);
             }
             else{
@@ -250,12 +244,7 @@ public class VslaInfoRepo {
             // updating row
             long retVal = db.update(VslaInfoSchema.getTableName(), values, null,null);
 
-            if (retVal != -1) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return retVal != -1;
         }
         catch (Exception ex) {
             Log.e("VslaInfoRepo.updateDataMigrationStatusFlag", ex.getMessage());
@@ -271,7 +260,7 @@ public class VslaInfoRepo {
 
 
     //Updates whether the Getting started wizard has been completed
-    public boolean updateGettingStartedWizardCompleteFlag(boolean isDataMigrated) {
+    public boolean updateGettingStartedWizardCompleteFlag() {
         SQLiteDatabase db = null;
 
         try {
@@ -283,7 +272,7 @@ public class VslaInfoRepo {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            if(isDataMigrated) {
+            if(true) {
                 values.put(VslaInfoSchema.COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE, 1);
 
                 //Update the GSW meeting to inactive
@@ -298,12 +287,7 @@ public class VslaInfoRepo {
             // updating row
             long retVal = db.update(VslaInfoSchema.getTableName(), values, null,null);
 
-            if (retVal != -1) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return retVal != -1;
         }
         catch (Exception ex) {
             Log.e("VslaInfoRepo.updateDataMigrationStatusFlag", ex.getMessage());
@@ -340,12 +324,7 @@ public class VslaInfoRepo {
             // updating row
             long retVal = db.update(VslaInfoSchema.getTableName(), values, null,null);
 
-            if (retVal != -1) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return retVal != -1;
         }
         catch (Exception ex) {
             Log.e("VslaInfoRepo.updateDataMigrationStatusFlag", ex.getMessage());

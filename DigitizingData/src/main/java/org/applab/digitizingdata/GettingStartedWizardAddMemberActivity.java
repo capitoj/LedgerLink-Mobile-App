@@ -38,25 +38,23 @@ import java.util.Date;
  * Created by Moses on 7/15/13.
  */
 public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
-    MemberRepo repo;
-    private ActionBar actionBar;
+    private MemberRepo repo;
     private int selectedMemberId;
     private boolean successAlertDialogShown = false;
     private boolean selectedFinishButton = false;
-    private String dlgTitle = "Add Member";
-    protected AlertDialog alertDialog = null;
+    private AlertDialog alertDialog = null;
     private boolean isEditAction;
 
-    TextView viewClicked;
-    protected int mYear;
-    protected int mMonth;
-    protected int mDay;
+    private TextView viewClicked;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
 
-    TextView txtNCGSWLoanNextRepaymentDate;
-    TextView txtNCGSWLoanNumber;
+    private TextView txtNCGSWLoanNextRepaymentDate;
+    private TextView txtNCGSWLoanNumber;
 
     // Event that is raised when the date has been set
-    protected DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             mYear = year;
             mMonth = monthOfYear;
@@ -91,27 +89,20 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         TypefaceTextView lblAMInstruction = (TypefaceTextView) findViewById(R.id.lblAMInstruction);
         SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
         SpannableStringBuilder plusText = new SpannableStringBuilder("+ ");
-       // plusText.setSpan(new StyleSpan(Typeface.BOLD), 0, plusText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         SpannableStringBuilder nextText = new SpannableStringBuilder("done");
-        //nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         headingInstruction.append("Enter each member. Save and add another member by pressing <b>");
         headingInstruction.append(plusText);
         headingInstruction.append("</b> or press <b>");
         headingInstruction.append(nextText);
         headingInstruction.append("</b> if you have entered all members.");
 
-      //  sb = new StringBuilder("Enter each member. Save and add another member by pressing <b>Send</b> to send all data for all existing meetings or <b>Begin</b> to begin a new meeting.");
-        //sb.append("You will not be able to edit the current meeting after beginning a new meeting.");
-       // tvInstructionsHeader.setText(Html.fromHtml(headingInstruction.toString()));
-
-        // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (isEditAction) {
-            // actionBar.setTitle("Edit Member");
+
             actionBar.setTitle("GET STARTED");
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
             customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
@@ -128,7 +119,6 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
             headingInstruction = new SpannableStringBuilder("");
         } else {
-            // actionBar.setTitle("New Member");
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back_next_done, null);
             customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
                     new View.OnClickListener() {
@@ -434,6 +424,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
             // Validate: MemberNo
             Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
+            String dlgTitle = "Add Member";
             if (cboAMMemberNo.getSelectedItemPosition() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The member number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAMMemberNo.requestFocus();

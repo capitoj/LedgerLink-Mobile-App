@@ -144,7 +144,7 @@ public class MeetingLoanRepaymentRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT %s FROM %s WHERE %s=%d AND %s=%d ORDER BY %s DESC LIMIT 1",
+            String query = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC LIMIT 1",
                     LoanRepaymentSchema.COL_LR_COMMENTS, LoanRepaymentSchema.getTableName(),
                     LoanRepaymentSchema.COL_LR_MEETING_ID, loanId,
                     LoanRepaymentSchema.COL_LR_REPAYMENT_ID);
@@ -171,7 +171,7 @@ public class MeetingLoanRepaymentRepo {
         }
     }
 
-    public int getMemberRepaymentId(int meetingId, int memberId) {
+    int getMemberRepaymentId(int meetingId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
         int repaymentId = 0;
@@ -263,14 +263,9 @@ public class MeetingLoanRepaymentRepo {
                 retVal = db.insert(LoanRepaymentSchema.getTableName(), null, values);
             }
 
-            if (retVal != -1) {
-                //Now update the lastDateDue and nextDateDue
-                //boolean retValDates = updateMemberLoanRepaymentDates(meetingId, memberId, lastDateDue, nextDateDue);
-                return true;
-            }
-            else {
-                return false;
-            }
+            //Now update the lastDateDue and nextDateDue
+//boolean retValDates = updateMemberLoanRepaymentDates(meetingId, memberId, lastDateDue, nextDateDue);
+            return retVal != -1;
         }
         catch (Exception ex) {
             Log.e("MeetingLoanRepaymentRepo.saveMemberLoanRepayment", ex.getMessage());
@@ -326,12 +321,7 @@ public class MeetingLoanRepaymentRepo {
                         new String[] { String.valueOf(repaymentId) });
             }
 
-            if (retVal != -1) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return retVal != -1;
         }
         catch (Exception ex) {
             Log.e("MeetingLoanRepaymentRepo.updateMemberLoanRepaymentDates", ex.getMessage());
@@ -698,12 +688,7 @@ public class MeetingLoanRepaymentRepo {
             affectedRows = db.delete(LoanRepaymentSchema.getTableName(), LoanRepaymentSchema.COL_LR_REPAYMENT_ID + " = ?",
                     new String[] {String.valueOf(repaymentId)});
 
-            if(affectedRows > 0) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return affectedRows > 0;
 
         }
         catch (Exception ex) {

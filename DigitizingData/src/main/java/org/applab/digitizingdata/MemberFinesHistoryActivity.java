@@ -47,15 +47,15 @@ import java.util.Date;
  * Created by Moses on 7/7/13.
  */
 public class MemberFinesHistoryActivity extends SherlockListActivity {
-    ActionBar actionBar;
-    String meetingDate;
-    int memberId;
-    int meetingId;
+    private ActionBar actionBar;
+    private String meetingDate;
+    private int memberId;
+    private int meetingId;
     private MeetingFineRepo fineRepo = null;
-    Meeting targetMeeting = null;
-    MeetingRepo meetingRepo = null;
-    ArrayList<MemberFineRecord> fines;
-    int targetCycleId = 0;
+    private Meeting targetMeeting = null;
+    private MeetingRepo meetingRepo = null;
+    private ArrayList<MemberFineRecord> fines;
+    private int targetCycleId = 0;
     boolean proceedWithSaving = false;
     boolean alertDialogShowing = false;
     SwipeDetector swipeDetector = new SwipeDetector();
@@ -201,6 +201,11 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
 
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
         actionBar.setTitle("Fines");
 
         actionBar.setDisplayShowTitleEnabled(false);
@@ -245,7 +250,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
          swipeListView.setAdapter(swipeViewAdapter); */
         //Now get the data via the adapter
       //  FineHistoryArrayAdapter adapter = new FineHistoryArrayAdapter(MemberFinesHistoryActivity.this, fines, "fonts/roboto-regular.ttf");
-        mAdapter = new EnhancedListAdapter(MemberFinesHistoryActivity.this, fines, "fonts/roboto-regular.ttf");
+        mAdapter = new EnhancedListAdapter(MemberFinesHistoryActivity.this, fines);
         // mAdapter.resetItems();
 
         mListView.setAdapter(mAdapter);
@@ -368,11 +373,11 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         private View viewContainer;
         private boolean changedFromCode = false;
 
-        public EnhancedListAdapter(Context context, ArrayList<MemberFineRecord> values, String font) {
+        public EnhancedListAdapter(Context context, ArrayList<MemberFineRecord> values) {
             //super(context, R.layout.row_fines_history, values);
             this.context = context;
             this.values = values;
-            this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+            this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
 
             finesRepo = new MeetingFineRepo(getApplicationContext());
             fineTypeRepo = new FineTypeRepo(getApplicationContext());

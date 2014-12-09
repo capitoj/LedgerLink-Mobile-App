@@ -57,24 +57,8 @@ public class LoanIssueSchema {
     }
 
     public static String getColumnList() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(COL_LI_LOAN_ID + ",");
-        sb.append(COL_LI_LOAN_NO + ",");
-        sb.append(COL_LI_MEETING_ID + ",");
-        sb.append(COL_LI_MEMBER_ID + ",");
-        sb.append(COL_LI_PRINCIPAL_AMOUNT + ",");
-        sb.append(COL_LI_INTEREST_AMOUNT + ",");
-        sb.append(COL_LI_BALANCE + ",");
-        sb.append(COL_LI_DATE_DUE + ",");
-        sb.append(COL_LI_TOTAL_REPAID + ",");
-        sb.append(COL_LI_CLEARANCE_DATE + ",");
-        sb.append(COL_LI_IS_DEFAULTED + ",");
-        sb.append(COL_LI_IS_CLEARED + ",");
-        sb.append(COL_LI_DATE_CLEARED + ",");
-        sb.append(COL_LI_COMMENT + ",");
-        sb.append(COL_LI_IS_WRITTEN_OFF);
 
-        return sb.toString();
+        return (COL_LI_LOAN_ID + ",") + COL_LI_LOAN_NO + "," + COL_LI_MEETING_ID + "," + COL_LI_MEMBER_ID + "," + COL_LI_PRINCIPAL_AMOUNT + "," + COL_LI_INTEREST_AMOUNT + "," + COL_LI_BALANCE + "," + COL_LI_DATE_DUE + "," + COL_LI_TOTAL_REPAID + "," + COL_LI_CLEARANCE_DATE + "," + COL_LI_IS_DEFAULTED + "," + COL_LI_IS_CLEARED + "," + COL_LI_DATE_CLEARED + "," + COL_LI_COMMENT + "," + COL_LI_IS_WRITTEN_OFF;
     }
 
     public static String[] getColumnListArray() {

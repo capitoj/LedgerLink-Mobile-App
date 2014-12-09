@@ -27,8 +27,6 @@ public class MeetingRepo {
         ORDER_BY_MEETING_DATE
     }
 
-    ;
-
     public MeetingRepo() {
 
     }
@@ -74,14 +72,14 @@ public class MeetingRepo {
         }
     }
 
-    public boolean updateDataSentFlag(int meetingId, boolean isDataSent, Date dateSent) {
+    public boolean updateDataSentFlag(int meetingId, Date dateSent) {
         SQLiteDatabase db = null;
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             ContentValues values = new ContentValues();
 
-            values.put(MeetingSchema.COL_MT_IS_DATA_SENT, (isDataSent) ? 1 : 0);
-            if (isDataSent) {
+            values.put(MeetingSchema.COL_MT_IS_DATA_SENT, (true) ? 1 : 0);
+            if (true) {
                 if (dateSent == null) {
                     dateSent = new Date();
                 }
@@ -91,11 +89,7 @@ public class MeetingRepo {
             long retVal = -1;
             retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                     new String[]{String.valueOf(meetingId)});
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MeetingRepo.updateDataSentFlag", ex.getMessage());
             return false;
@@ -120,11 +114,7 @@ public class MeetingRepo {
             long retVal = -1;
             retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
                     new String[]{String.valueOf(meetingId)});
-            if (retVal != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return retVal != -1;
         } catch (Exception ex) {
             Log.e("MeetingRepo.updateMeetingDate", ex.getMessage());
             return false;
@@ -387,7 +377,7 @@ public class MeetingRepo {
     }
 
 
-    public ArrayList<Meeting> getAllMeetingsByDataSentStatusAndActiveStatus(boolean isDataSent, boolean isActive) {
+    public ArrayList<Meeting> getAllMeetingsByDataSentStatusAndActiveStatus() {
         ArrayList<Meeting> meetings = null;
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -400,11 +390,11 @@ public class MeetingRepo {
             meetings = new ArrayList<Meeting>();
             String columnList = MeetingSchema.getColumnList();
 
-            if (isDataSent) {
+            if (false) {
                 dataSentFlag = 1;
             }
 
-            if (isActive) {
+            if (false) {
                 activeFlag = 1;
             }
 
@@ -457,7 +447,7 @@ public class MeetingRepo {
     }
 
 
-    public ArrayList<Meeting> getAllMeetingsByActiveStatus(boolean isCurrent) {
+    public ArrayList<Meeting> getAllMeetingsByActiveStatus() {
         ArrayList<Meeting> meetings = null;
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -469,7 +459,7 @@ public class MeetingRepo {
             meetings = new ArrayList<Meeting>();
             String columnList = MeetingSchema.getColumnList();
 
-            if (isCurrent) {
+            if (true) {
                 dataSentFlag = 1;
             }
 

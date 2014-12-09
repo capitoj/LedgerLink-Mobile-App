@@ -45,40 +45,40 @@ import java.util.Date;
  * Created by Moses on 7/12/13.
  */
 public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
-    ActionBar actionBar;
-    String meetingDate;
-    int meetingId;
-    int memberId;
-    Meeting targetMeeting = null;
+    private ActionBar actionBar;
+    private String meetingDate;
+    private int meetingId;
+    private int memberId;
+    private Meeting targetMeeting = null;
     VslaCycle cycle = null;
-    MeetingRepo meetingRepo = null;
-    MeetingLoanIssuedRepo loanIssuedRepo = null;
-    MeetingLoanRepaymentRepo loanRepaymentRepo = null;
-    VslaCycleRepo vslaCycleRepo = null;
-    ArrayList<MemberLoanIssueRecord> loansIssued;
-    EditText txtInterestAmount;
-    TextView txtTotalLoanAmount;
-    TextView lblCurrency;
+    private MeetingRepo meetingRepo = null;
+    private MeetingLoanIssuedRepo loanIssuedRepo = null;
+    private MeetingLoanRepaymentRepo loanRepaymentRepo = null;
+    private VslaCycleRepo vslaCycleRepo = null;
+    private ArrayList<MemberLoanIssueRecord> loansIssued;
+    private EditText txtInterestAmount;
+    private TextView txtTotalLoanAmount;
+    private TextView lblCurrency;
     int targetCycleId = 0;
-    double interestRate = 0.0;
-    double theCurLoanAmount = 0.0;
-    double thePrincipalLoanAmount = 0.0;
-    int currentLoanId = 0;
-    boolean loanWasDeleted = false;
-    LinearLayout issuedHistorySection;
+    private double interestRate = 0.0;
+    private double theCurLoanAmount = 0.0;
+    private double thePrincipalLoanAmount = 0.0;
+    private int currentLoanId = 0;
+    private boolean loanWasDeleted = false;
+    private LinearLayout issuedHistorySection;
     private boolean isEditOperation = false;
     private double loanTopUp = 0.0;
     private double totalCashInBox = 0.0;
 
     //Date stuff
-    TextView txtDateDue;
-    TextView viewClicked;
+    private TextView txtDateDue;
+    private TextView viewClicked;
     public static final int Date_dialog_id = 1;
     // date and time
     private int mYear;
     private int mMonth;
     private int mDay;
-    String dateString;
+    private String dateString;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -304,16 +304,12 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
 
         // Display Members current loan if any
-        TextView txtLoanNo = (TextView) findViewById(R.id.txtMLIssuedHLoanNo);
-        TextView txtComment = (TextView) findViewById(R.id.txtMLIssuedHComment);
-        //txtInterestAmount = (EditText) findViewById(R.id.txtMLIssuedHInterest);
-        TextView txtTotalAmount = (TextView) findViewById(R.id.txtMLIssuedHTotal);
-        // TextView txtDateDue = (TextView)findViewById(R.id.txtMLIssuedHDateDue);
+       TextView txtComment = (TextView) findViewById(R.id.txtMLIssuedHComment);
 
         if (null != memberLoan) {
             lblCurrency.setVisibility(View.GONE);
             currentLoanId = memberLoan.getLoanId();
-            txtLoanNo.setText(String.format("%d", memberLoan.getLoanNo()));
+            txtLILoanNo.setText(String.format("%d", memberLoan.getLoanNo()));
             txtLoanAmount.setText(String.format("%.0f", memberLoan.getPrincipalAmount()));
             txtComment.setText(String.format("%s", memberLoan.getComment()));
             txtInterestAmount.setText(String.format("%.0f", memberLoan.getInterestAmount()));
@@ -372,6 +368,12 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
 
         actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
+
         actionBar.setTitle("New Loans");
 
         actionBar.setDisplayShowTitleEnabled(false);
@@ -406,7 +408,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         }
 
         // Now get the data via the adapter
-        LoansIssuedHistoryArrayAdapter adapter = new LoansIssuedHistoryArrayAdapter(MemberLoansIssuedHistoryActivity.this, loansIssued, "fonts/roboto-regular.ttf");
+        LoansIssuedHistoryArrayAdapter adapter = new LoansIssuedHistoryArrayAdapter(MemberLoansIssuedHistoryActivity.this, loansIssued);
 
         //Assign Adapter to ListView
         setListAdapter(adapter);

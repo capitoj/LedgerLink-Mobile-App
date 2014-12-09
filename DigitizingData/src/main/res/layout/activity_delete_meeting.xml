@@ -7,13 +7,13 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="DELETE MEETING"
+            android:text="@string/delete_meeting"
             android:id="@+id/lblDMTitle" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
@@ -27,42 +27,42 @@
             style="@style/TextAccentColor"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="01 Mar 2014"
+            android:text="@string/date_default"
             android:id="@+id/lblDMMeetingDate"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Members Present: 28"
+            android:text="@string/members_present"
             android:id="@+id/lblDMAttended"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Savings: 100,000 UGX"
+            android:text="@string/total_savings_default"
             android:id="@+id/lblDMSavings"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Loans Repaid: 50,000 UGX"
+            android:text="@string/loans_repaid_default"
             android:id="@+id/lblDMLoansRepaid"/>
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Fines: 5,000UGX"
+            android:text="@string/fines_default"
             android:id="@+id/lblDMFines" />
 
         <org.applab.digitizingdata.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Loans Issued: 50,000UGX"
+            android:text="@string/loans_issued_default"
             android:id="@+id/lblDMLoansIssued"/>
     </LinearLayout>
 </ScrollView>

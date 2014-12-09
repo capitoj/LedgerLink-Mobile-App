@@ -16,16 +16,16 @@ import org.applab.digitizingdata.R;
  * Created by Moses on 7/28/13.
  */
 public class SavingsArrayAdapter extends ArrayAdapter<MemberSavingRecord> {
-    Context context;
-    ArrayList<MemberSavingRecord> values;
+    private final Context context;
+    private final ArrayList<MemberSavingRecord> values;
     int position;
-    Typeface typeface;
+    private final Typeface typeface;
 
-    public SavingsArrayAdapter(Context context, ArrayList<MemberSavingRecord> values, String font) {
+    public SavingsArrayAdapter(Context context, ArrayList<MemberSavingRecord> values) {
         super(context, R.layout.row_savings_history, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
     }
 
     @Override

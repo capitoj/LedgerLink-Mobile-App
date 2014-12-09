@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:text="0. FULL NAME" />
+        android:text="@string/name_default" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLIssuedFullName"
-        android:text="Outstanding: 60,000UGX"/>
+        android:text="@string/outstanding_loan_default"/>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
@@ -28,32 +28,5 @@
         android:layout_below="@id/txtRMLIssuedOutstanding"
         android:text=" "
         android:layout_marginBottom="20dip"/>
-
-
-    <!--
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
-        android:id="@+id/txtRMLIssuedTodaysLoan"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtRMLIssuedFullName"
-        android:text="Today: 5,000UGX" />
-
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
-        android:id="@+id/txtRMLIssuedTotals"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtRMLIssuedTodaysLoan"
-        android:text="Total: 60,000UGX" />
-
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-        style="@style/ListSubItems"
-        android:id="@+id/txtRMLIssuedSavings"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtRMLIssuedOutstanding"
-        android:text="Total Savings: 60,000UGX" />
--->
 
 </RelativeLayout>

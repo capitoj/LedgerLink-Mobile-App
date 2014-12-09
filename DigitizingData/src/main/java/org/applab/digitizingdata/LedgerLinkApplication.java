@@ -1,14 +1,6 @@
 package org.applab.digitizingdata;
 
 import android.app.Application;
-import android.content.Context;
-import org.applab.digitizingdata.domain.model.Member;
-import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MemberRepo;
-
-import java.util.ArrayList;
-
-
 
 
 /**
@@ -16,9 +8,6 @@ import java.util.ArrayList;
  */
 public class LedgerLinkApplication extends Application
 {
-    ArrayList<Member> allMembers;
-    private MemberRepo memberRepo;
-
     public LedgerLinkApplication() {
       super();
 

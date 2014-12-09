@@ -56,12 +56,7 @@ public class VslaCycleRepo {
 
             // Inserting Row
             long retVal = db.insert(VslaCycleSchema.getTableName(), null, values);
-            if (retVal != -1) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return retVal != -1;
         }
         catch (Exception ex) {
             Log.e("VslaCycleRepo.addCycle", ex.getMessage());
@@ -550,12 +545,7 @@ public class VslaCycleRepo {
             int retVal = db.update(VslaCycleSchema.getTableName(), values, VslaCycleSchema.COL_VC_CYCLE_ID + " = ?",
                     new String[] { String.valueOf(cycle.getCycleId()) });
 
-            if (retVal > 0) {
-                return true;
-            }
-            else {
-                return false;
-            }
+            return retVal > 0;
         }
         catch (Exception ex) {
             Log.e("VslaCycleSchema.updateCycle", ex.getMessage());

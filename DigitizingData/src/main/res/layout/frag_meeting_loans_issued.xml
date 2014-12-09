@@ -17,43 +17,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:text="Total Cash 0 UGX" />
-        <!-- <TextView
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="5dp"
-                 android:layout_below="@id/lblMLIssuedFTotalCash"
-                 android:paddingLeft="10dp"
-                 android:textStyle="normal"
-                 android:textSize="14sp"
-                 android:text="Starting Cash: 0 UGX"
-                 android:id="@+id/lblMLIssuedFOpeningCash"
-                 android:layout_gravity="center"/>
-         <TextView
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:layout_marginTop="5dp"
-             android:layout_below="@id/lblMLIssuedFOpeningCash"
-             android:paddingLeft="10dp"
-             android:textStyle="normal"
-             android:textSize="14sp"
-             android:text="Savings: 0 UGX"
-             android:id="@+id/lblMLIssuedFSavings"
-             android:layout_gravity="center"/>
-
-         <TextView
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="5dp"
-                 android:layout_marginBottom="10dp"
-                 android:layout_below="@id/lblMLIssuedFSavings"
-                 android:paddingLeft="10dp"
-                 android:textStyle="normal"
-                 android:textSize="14sp"
-                 android:text="Loans Repaid: 0 UGX"
-                 android:id="@+id/lblMLIssuedFLoansRepaid"
-                 android:layout_gravity="center"/>
-         -->
-
     </RelativeLayout>
 
     <ListView
@@ -65,7 +28,7 @@
         android:layout_below="@id/frmMLIssuedF_top_control_bar"
         android:choiceMode="singleChoice"
         android:divider="@null"
-        android:dividerHeight="0dp"></ListView>
+        android:dividerHeight="0dp"/>
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtMLIssuedFEmpty"

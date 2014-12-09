@@ -2,20 +2,20 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/mnuMDVEdit"
-          android:title="Edit"
+          android:title="@string/edit"
           android:orderInCategory="1"
           android:showAsAction="never"
           android:icon="@drawable/ic_content_edit"
             />
 
     <item android:id="@+id/mnuMDVDelete"
-          android:title="Remove"
+          android:title="@string/remove"
           android:orderInCategory="2"
           android:showAsAction="never"
           android:icon="@drawable/ic_action_discard"
             />
     <item android:id="@+id/mnuMDVBack"
-          android:title="Back"
+          android:title="@string/back"
           android:orderInCategory="3"
           android:showAsAction="never"
           android:icon="@drawable/ic_navigation_back"

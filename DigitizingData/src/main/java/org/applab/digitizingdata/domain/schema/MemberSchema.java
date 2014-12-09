@@ -57,24 +57,8 @@ public class MemberSchema {
     }
 
     public static String getColumnList() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(COL_M_MEMBER_ID + ",");
-        sb.append(COL_M_MEMBER_NO + ",");
-        sb.append(COL_M_GLOBAL_ID + ",");
-        sb.append(COL_M_SURNAME + ",");
-        sb.append(COL_M_OTHER_NAMES + ",");
-        sb.append(COL_M_PHONE_NO + ",");
-        sb.append(COL_M_GENDER + ",");
-        sb.append(COL_M_DATE_OF_BIRTH + ",");
-        sb.append(COL_M_OCCUPATION + ",");
-        sb.append(COL_M_DATE_JOINED + ",");
-        sb.append(COL_M_DATE_LEFT + ",");
-        sb.append(COL_M_HAS_LEFT + ",");
-        sb.append(COL_M_IS_RECESSED + ",");
-        sb.append(COL_M_SAVINGS_AT_REGISTRATION + ",");
-        sb.append(COL_M_LOAN_BALANCE_AT_REGISTRATION );
 
-        return sb.toString();
+        return (COL_M_MEMBER_ID + ",") + COL_M_MEMBER_NO + "," + COL_M_GLOBAL_ID + "," + COL_M_SURNAME + "," + COL_M_OTHER_NAMES + "," + COL_M_PHONE_NO + "," + COL_M_GENDER + "," + COL_M_DATE_OF_BIRTH + "," + COL_M_OCCUPATION + "," + COL_M_DATE_JOINED + "," + COL_M_DATE_LEFT + "," + COL_M_HAS_LEFT + "," + COL_M_IS_RECESSED + "," + COL_M_SAVINGS_AT_REGISTRATION + "," + COL_M_LOAN_BALANCE_AT_REGISTRATION;
     }
 
     public static String[] getColumnListArray() {

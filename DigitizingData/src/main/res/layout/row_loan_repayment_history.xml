@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="5dip"
         android:layout_marginLeft="10dip"
-        android:text="Loan No " />
+        android:text="@string/loan_number_default" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHAmount"
@@ -22,7 +22,7 @@
         android:layout_marginRight="5dip"
         android:layout_marginLeft="5dip"
         android:layout_toRightOf="@id/txtRLRHLoanNo"
-        android:text="Amount " />
+        android:text="@string/amount" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHMeetingDate"
@@ -32,7 +32,7 @@
         android:layout_marginRight="10dip"
         android:layout_marginLeft="5dip"
         android:layout_toRightOf="@id/txtRLRHAmount"
-        android:text="Date " />
+        android:text="@string/date" />
 
     <org.applab.digitizingdata.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHComments"
@@ -43,44 +43,5 @@
         android:layout_marginTop="2dip"
         android:paddingBottom="5dip"
         android:layout_below="@id/txtRLRHLoanNo"
-        android:text="Comments " />
-
-   <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
-        android:id="@+id/txtRLRHLoanNo"
-        style="@style/RegularText"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="25dip"
-        android:paddingTop="2dp"
-        android:text="Loan No " />
-
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-        android:id="@+id/txtRLRHMeetingDate"
-        style="@style/ListSmallSubItems"
-        android:layout_width="100dip"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Date " />
-
-
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
-        android:id="@+id/txtRLRHAmount"
-        style="@style/ListSmallSubItems"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/txtRLRHMeetingDate"
-        android:text="Amount " />
-
-   <org.applab.digitizingdata.fontutils.TypefaceTextView
-        android:id="@+id/txtRLRHRollover"
-        style="@style/ListSmallSubItems"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtRLRHAmount"
-        android:text="Rollover " />
-
-     -->
+        android:text="@string/comments" />
 </RelativeLayout>

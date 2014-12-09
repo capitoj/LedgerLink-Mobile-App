@@ -37,14 +37,8 @@ public class SavingSchema {
     }
 
     public static String getColumnList() {
-        StringBuffer sb = new StringBuffer();
-        sb.append(COL_S_SAVING_ID + ",");
-        sb.append(COL_S_MEETING_ID + ",");
-        sb.append(COL_S_MEMBER_ID + ",");
-        sb.append(COL_S_AMOUNT + ",");
-        sb.append(COL_S_SAVINGS_AT_SETUP_CORRECTION_COMMENT);
 
-        return sb.toString();
+        return (COL_S_SAVING_ID + ",") + COL_S_MEETING_ID + "," + COL_S_MEMBER_ID + "," + COL_S_AMOUNT + "," + COL_S_SAVINGS_AT_SETUP_CORRECTION_COMMENT;
     }
 
     public static String[] getColumnListArray() {

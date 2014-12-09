@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TabHost.TabContentFactory;
 
-public class DummyTabContentFactory implements TabContentFactory{
+class DummyTabContentFactory implements TabContentFactory{
     private Context mContext;
 
     public DummyTabContentFactory(Context context){

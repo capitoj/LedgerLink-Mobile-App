@@ -44,12 +44,10 @@ public class EndCycleActivity extends SherlockActivity {
     private int mMonth;
     private int mDay;
     private TextView txtShareOutDate;
-    private TextView txtInstructions;
     private boolean successAlertDialogShown = false;
     private boolean multipleCyclesIndicator = false;
 
     private VslaCycle selectedCycle;
-    private ActionBar actionBar;
     private ArrayList<VslaCycle> vslaCycles;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -71,7 +69,7 @@ public class EndCycleActivity extends SherlockActivity {
          actionBar.setDisplayHomeAsUpEnabled(true);*/
 
         txtShareOutDate = (TextView) findViewById(R.id.txtECShareOutDate);
-        txtInstructions = (TextView) findViewById(R.id.lblECInstruction);
+        TextView txtInstructions = (TextView) findViewById(R.id.lblECInstruction);
 
         //Set onClick Listeners to load the DateDialog for startDate
         txtShareOutDate.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +190,7 @@ public class EndCycleActivity extends SherlockActivity {
     }
 
     /* inflates custom menu bar for review members */
-    public void inflateCustombar() {
+    void inflateCustombar() {
 
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -239,7 +237,12 @@ public class EndCycleActivity extends SherlockActivity {
         customActionBarView.findViewById(R.id.actionbar_back).setVisibility(View.GONE);
 
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("END CYCLE");
 
@@ -333,7 +336,7 @@ public class EndCycleActivity extends SherlockActivity {
             }
 
             if (retVal) {
-                AlertDialog dlg = Utils.createAlertDialog(EndCycleActivity.this, "End Cycle", "The cycle has been ended successfully.", Utils.MSGBOX_ICON_TICK);
+                AlertDialog dlg = Utils.createAlertDialog(EndCycleActivity.this, "The cycle has been ended successfully.", Utils.MSGBOX_ICON_TICK);
 
                 // Setting OK Button for the Dialog Box
                 dlg.setButton("OK", new DialogInterface.OnClickListener() {
@@ -354,7 +357,7 @@ public class EndCycleActivity extends SherlockActivity {
 
                 successFlg = true;
             } else {
-                Utils.createAlertDialog(EndCycleActivity.this, "End Cycle", "A problem occurred while attempting to close the cycle.", Utils.MSGBOX_ICON_TICK).show();
+                Utils.createAlertDialog(EndCycleActivity.this, "A problem occurred while attempting to close the cycle.", Utils.MSGBOX_ICON_TICK).show();
             }
         } else {
             //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
@@ -372,7 +375,7 @@ public class EndCycleActivity extends SherlockActivity {
             TextView txtShareOutDate = (TextView) findViewById(R.id.txtECShareOutDate);
             String endDate = txtShareOutDate.getText().toString().trim();
             if (endDate == null || endDate.length() < 1) {
-                Utils.createAlertDialog(EndCycleActivity.this, "End Cycle", "The Share out Date is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialog(EndCycleActivity.this, "The Share out Date is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtShareOutDate.requestFocus();
                 return false;
             }
@@ -383,13 +386,13 @@ public class EndCycleActivity extends SherlockActivity {
             TextView txtShareOutAmount = (TextView) findViewById(R.id.txtECShareOutAmount);
             String shareOutAmount = txtShareOutAmount.getText().toString().trim();
             if (shareOutAmount.length() < 1) {
-                Utils.createAlertDialog(EndCycleActivity.this, "End Cycle", "The Share out Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialog(EndCycleActivity.this, "The Share out Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtShareOutAmount.requestFocus();
                 return false;
             } else {
                 theShareOutAmount = Double.parseDouble(shareOutAmount);
                 if (theShareOutAmount < 0.00) {
-                    Utils.createAlertDialog(EndCycleActivity.this, "End Cycle", "The Share out Amount should be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialog(EndCycleActivity.this, "The Share out Amount should be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtShareOutAmount.requestFocus();
                     return false;
                 }

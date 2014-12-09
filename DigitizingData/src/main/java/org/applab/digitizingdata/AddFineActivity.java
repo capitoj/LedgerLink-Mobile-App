@@ -2,27 +2,22 @@ package org.applab.digitizingdata;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.internal.widget.IcsAdapterView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -32,7 +27,6 @@ import org.applab.digitizingdata.domain.model.MeetingFine;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
 
@@ -42,21 +36,13 @@ import java.util.ArrayList;
  * Created by Moses on 7/15/13.
  */
 public class AddFineActivity extends SherlockActivity {
-    private ActionBar actionBar;
-    private Member selectedMember;
     private int selectedMemberId;
     private int meetingId;
-    private boolean successAlertDialogShown = false;
     private boolean selectedFinishButton = false;
-    private String dlgTitle = "Add Fine";
-    MeetingFineRepo fineRepo;
-    private boolean isEditAction;
-    ArrayList<FineType> fineTypes = null;
+    private MeetingFineRepo fineRepo;
     private int paymentStatus = 0;
-    private AlertDialog alertDialog;
-    String selectedFineTypeName;
+    private String selectedFineTypeName;
     private MeetingFine fine;
-    // String selectedFineType;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,22 +94,11 @@ public class AddFineActivity extends SherlockActivity {
 
         buildFineTypeSpinner();
 
-        /** //Setup the Spinner Items
-         Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
-         FineTypeCustomArrayAdapter adapter = new FineTypeCustomArrayAdapter(this, android.R.layout.simple_spinner_item,
-         populateFineTypeList(), "fonts/roboto-regular.ttf");
-
-
-         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-         cboFineType.setAdapter(adapter);
-
-         */
-
         clearDataFields();
     }
 
     private void inflateCustomActionBar() {
-        // BEGIN_INCLUDE (inflate_set_custom_view)
+
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -150,7 +125,12 @@ public class AddFineActivity extends SherlockActivity {
         );
 
         // actionbar with logo
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setTitle("New Fine");
 
@@ -236,6 +216,7 @@ public class AddFineActivity extends SherlockActivity {
 
             //Validate: Fine Type
             Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
+            String dlgTitle = "Add Fine";
             if (cboFineType.getSelectedItemPosition() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The fine type is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboFineType.requestFocus();

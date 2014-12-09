@@ -6,37 +6,27 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
-import android.app.Activity;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Environment;
-import android.preference.PreferenceActivity;
-import android.provider.ContactsContract;
-import android.text.format.DateFormat;
 import android.util.Log;
-import android.widget.Toast;
-
-import org.applab.digitizingdata.SettingsActivity;
 
 public class DbBackupRestore {
 
-    public static final String TAG = DbBackupRestore.class.getName();
+    private static final String TAG = DbBackupRestore.class.getName();
     public static final String PACKAGE_NAME = "org.applab.digitizingdata";
     public static final String DATABASE_NAME = DatabaseHandler.DATABASE_NAME;
-    public static final String DATABASE_TABLE = "entryTable";
-    public static final String DATA_FOLDER = "LedgerLink";
-    public static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + DATA_FOLDER;
+    private static final String DATABASE_TABLE = "entryTable";
+    private static final String DATA_FOLDER = "LedgerLink";
+    private static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + DATA_FOLDER;
 
     /**
      * Directory that files are to be read from and written to *
      */
-    protected static final File DATABASE_DIRECTORY = new File(EXTERNAL_STORAGE_LOCATION, "ledgerlinkdb");
+    private static final File DATABASE_DIRECTORY = new File(EXTERNAL_STORAGE_LOCATION, "ledgerlinkdb");
 
     /**
      * Contains: /data/data/com.example.app/databases/example.db *
@@ -160,7 +150,7 @@ public class DbBackupRestore {
     /**
      * Returns whether an SD card is present and writable *
      */
-    public static boolean SdIsPresent() {
+    private static boolean SdIsPresent() {
         return Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED);
     }

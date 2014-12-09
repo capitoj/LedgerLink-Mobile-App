@@ -18,16 +18,16 @@ import java.util.ArrayList;
  */
 public class LoanRepaymentHistoryArrayAdapter extends ArrayAdapter<MemberLoanRepaymentRecord> {
 
-    Context context;
-    ArrayList<MemberLoanRepaymentRecord> values;
+    private final Context context;
+    private final ArrayList<MemberLoanRepaymentRecord> values;
     int position;
-    Typeface typeface;
+    private final Typeface typeface;
 
-    public LoanRepaymentHistoryArrayAdapter(Context context, ArrayList<MemberLoanRepaymentRecord> values, String font) {
+    public LoanRepaymentHistoryArrayAdapter(Context context, ArrayList<MemberLoanRepaymentRecord> values) {
         super(context, R.layout.row_loan_repayment_history, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
     }
 
     @Override

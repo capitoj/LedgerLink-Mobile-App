@@ -18,6 +18,7 @@ import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersArrayAdapter;
+import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
  * Created by Moses on 7/16/13.
  */
 public class MembersListActivity extends SherlockListActivity {
-    private ActionBar actionBar;
     private ArrayList<Member> members;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,13 @@ public class MembersListActivity extends SherlockListActivity {
 
         setContentView(R.layout.activity_members_list);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
+
+        // Swap in training mode icon if in training mode
+        if (Utils.isExecutingInTrainingMode()) {
+            actionBar.setIcon(R.drawable.icon_training_mode);
+        }
+
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("Edit Members");
         actionBar.setHomeButtonEnabled(true);
@@ -92,7 +98,7 @@ public class MembersListActivity extends SherlockListActivity {
     }
 
     //Populate Members List
-    protected void populateMembersList() {
+    void populateMembersList() {
         //Load the Main Menu
         MemberRepo memberRepo = new MemberRepo(getApplicationContext());
         members = memberRepo.getAllMembers();
@@ -102,7 +108,7 @@ public class MembersListActivity extends SherlockListActivity {
         }
 
         //Now get the data via the adapter
-        final MembersArrayAdapter adapter = new MembersArrayAdapter(getBaseContext(), members, "fonts/roboto-regular.ttf");
+        final MembersArrayAdapter adapter = new MembersArrayAdapter(getBaseContext(), members);
 
         //Assign Adapter to ListView
         runOnUiThread(new Runnable()

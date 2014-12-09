@@ -3,7 +3,7 @@
     tools:context="org.applab.digitizingdata.BeginMeetingActivity" >
     
     <item android:id="@+id/mnuBMBegin"
-        android:title="Begin"
+        android:title="@string/begin"
         android:orderInCategory="100"
         android:showAsAction="ifRoom" />
 </menu>

@@ -11,5 +11,5 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="IN TRAINING MODE" />
+        android:text="@string/in_training_mode" />
 </LinearLayout>

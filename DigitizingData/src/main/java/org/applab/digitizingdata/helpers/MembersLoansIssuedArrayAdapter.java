@@ -24,16 +24,16 @@ import java.util.ArrayList;
  * Created by Moses on 7/9/13.
  */
 public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
-    Context context;
-    ArrayList<Member> values;
-    int meetingId;
-    Meeting targetMeeting = null;
-    MeetingLoanIssuedRepo loansIssuedRepo = null;
-    MeetingSavingRepo savingRepo = null;
-    MeetingRepo meetingRepo = null;
-    Typeface typeface;
+    private final Context context;
+    private final ArrayList<Member> values;
+    private int meetingId;
+    private Meeting targetMeeting = null;
+    private MeetingLoanIssuedRepo loansIssuedRepo = null;
+    private MeetingSavingRepo savingRepo = null;
+    private MeetingRepo meetingRepo = null;
+    private final Typeface typeface;
 
-    public MembersLoansIssuedArrayAdapter(Context context, ArrayList<Member> values, String font) {
+    public MembersLoansIssuedArrayAdapter(Context context, ArrayList<Member> values) {
         super(context, R.layout.row_member_loans_issued, values);
         this.context = context;
         this.values = values;
@@ -42,7 +42,7 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
         meetingRepo = new MeetingRepo(getContext());
         savingRepo = new MeetingSavingRepo(getContext());
 
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
     }
 
     public void setMeetingId(int meetingId) {

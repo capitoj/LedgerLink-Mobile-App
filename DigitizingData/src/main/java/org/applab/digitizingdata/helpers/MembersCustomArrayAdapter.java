@@ -18,16 +18,16 @@ import java.util.ArrayList;
  * Created by Moses on 6/25/13.
  */
 public class MembersCustomArrayAdapter extends ArrayAdapter<Member> {
-    Context context;
-    ArrayList<Member> values;
+    private final Context context;
+    private final ArrayList<Member> values;
     int position;
-    Typeface typeface;
+    private final Typeface typeface;
 
-    public MembersCustomArrayAdapter(Context context, ArrayList<Member> values, String font) {
+    public MembersCustomArrayAdapter(Context context, ArrayList<Member> values) {
         super(context, R.layout.memberlistrowlayout, values);
         this.context = context;
         this.values = values;
-        this.typeface = Typeface.createFromAsset(context.getAssets(), font);
+        this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
     }
 
     @Override

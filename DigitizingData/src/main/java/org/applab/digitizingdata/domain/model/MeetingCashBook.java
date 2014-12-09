@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by Moses on 4/1/14.
  */
-public class MeetingCashBook {
+class MeetingCashBook {
     private int cashBookId;
     private Meeting meeting;
     private double amount;

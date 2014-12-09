@@ -24,11 +24,11 @@ public class VslaCycle {
     private String interestAtSetupCorrectionComment;
     private String finesAtSetupCorrectionComment;
 
-    public VslaCycle(){
+    public VslaCycle() {
 
     }
 
-    public VslaCycle(int cycleId, String cycleCode, Date startDate, Date endDate, double sharePrice, double maxSharesQty, double maxStartShare, double interestRate){
+    public VslaCycle(int cycleId, String cycleCode, Date startDate, Date endDate, double sharePrice, double maxSharesQty, double maxStartShare, double interestRate) {
         this.cycleId = cycleId;
         this.cycleCode = cycleCode;
         this.startDate = startDate;
@@ -41,7 +41,7 @@ public class VslaCycle {
         setFinesAtSetup(0);
     }
 
-    public VslaCycle(int cycleId, String cycleCode, Date startDate, Date endDate, double sharePrice, double maxSharesQty, double maxStartShare, double interestRate, double interestAtSetup, double finesAtSetup){
+    public VslaCycle(int cycleId, String cycleCode, Date startDate, Date endDate, double sharePrice, double maxSharesQty, double maxStartShare, double interestRate, double interestAtSetup, double finesAtSetup) {
         this.cycleId = cycleId;
         this.cycleCode = cycleCode;
         this.startDate = startDate;
@@ -55,11 +55,11 @@ public class VslaCycle {
     }
 
     public VslaCycle(int cycleId) {
-        this(cycleId,null,null,null,0.0,0.0,0.0,0.0);
+        this(cycleId, null, null, null, 0.0, 0.0, 0.0, 0.0);
     }
 
-    public VslaCycle(int cycleId,Date startDate, Date endDate) {
-        this(cycleId,null, startDate, endDate,0.0,0.0,0.0,0.0);
+    public VslaCycle(int cycleId, Date startDate, Date endDate) {
+        this(cycleId, null, startDate, endDate, 0.0, 0.0, 0.0, 0.0);
     }
 
     public int getCycleId() {
@@ -135,7 +135,7 @@ public class VslaCycle {
     }
 
     public void end(Date dateEnded) {
-        end(dateEnded,0.0);
+        end(dateEnded, 0.0);
     }
 
     public void end(Date dateEnded, double sharedAmount) {
