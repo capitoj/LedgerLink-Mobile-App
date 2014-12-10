@@ -36,7 +36,6 @@ public class LoansIssuedHistoryArrayAdapter extends ArrayAdapter<MemberLoanIssue
         this.typefaceRegular = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
         this.typefaceBold = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-bold.ttf");
 
-        MeetingLoanRepaymentRepo loanRepaymentRepo = new MeetingLoanRepaymentRepo(getContext());
         vslaCycleRepo = new VslaCycleRepo(getContext());
         cycle = new VslaCycle();
     }

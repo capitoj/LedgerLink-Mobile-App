@@ -761,9 +761,9 @@ public class MeetingLoanRepaymentRepo {
                     LoanRepaymentSchema.COL_LR_REPAYMENT_ID
             );
             cursor = db.rawQuery(query, null);
-
+            Log.d("MLRAA", "HERE18");
             if (cursor != null && cursor.moveToFirst()) {
-
+                Log.d("MLRAA", "HERE19");
                 repaymentRecord = new MemberLoanRepaymentRecord();
                 Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("MeetingDate")));
                 repaymentRecord.setMeetingDate(meetingDate);
@@ -778,6 +778,7 @@ public class MeetingLoanRepaymentRepo {
                     repaymentRecord.setLastDateDue(lastDateDue);
                 }
                 if(!cursor.isNull(cursor.getColumnIndex("NextDateDue"))){
+                    Log.d("MLRAA", "HERE20");
                     Date nextDateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("NextDateDue")));
                     repaymentRecord.setNextDateDue(nextDateDue);
                 }

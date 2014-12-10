@@ -35,8 +35,9 @@ public class GettingStartedWizardMembersArrayAdapter extends MembersArrayAdapter
     public View getView(int position, View convertView, ViewGroup parent) {
 
         try {
-            //Here I populate the ListView Row with data.
-            //I will handle the itemClick event in the ListView view on the actual fragment
+
+            // Populate the ListView Row with data.
+            // Handle the itemClick event in the ListView view on the actual fragment
             LayoutInflater inflater = (LayoutInflater)context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

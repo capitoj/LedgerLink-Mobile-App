@@ -26,7 +26,6 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
     private final Context context;
     private final ArrayList<Member> values;
     private int meetingId;
-    private Meeting targetMeeting = null;
     private MeetingLoanRepaymentRepo loansRepaidRepo = null;
     private MeetingLoanIssuedRepo loansIssuedRepo = null;
     private MeetingRepo meetingRepo = null;
@@ -87,9 +86,7 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             txtFullName.setText(selectedMember.toString());
 
             //Get the Total
-            targetMeeting = meetingRepo.getMeetingById(meetingId);
-
-
+            Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
 
 
             //Get the Repayments in selected Meeting
@@ -109,25 +106,31 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             }
 
             // if (outstandingLoan == 0.0) {
-// MemberLoanRepaid
-            MemberLoanRepaymentRecord memberLoan = null;
-
-            if ((recentLoan == null || recentLoan.getLoanBalance() == 0.0) && (recentLoan.getDateCleared().compareTo(targetMeeting.getMeetingDate()) < 0)) {
+            // MemberLoanRepaid
+            MemberLoanRepaymentRecord memberLoan;
+            if (recentLoan == null) {
                 txtBalance.setText("No outstanding loans");
                 txtDateDue.setVisibility(View.GONE);
             } else {
-                // Get Member Loan Repayment Details
 
-                //txtBalance.setText(String.format("Outstanding loan %,.0f UGX", outstandingLoan));
-                txtBalance.setText(String.format("Outstanding loan %,.0f UGX", recentLoan.getLoanBalance()));
-                if (recentLoan == null || recentLoan.getLoanBalance() == 0.0) {
-                    txtDateDue.setText("");
+                if ((recentLoan.getLoanBalance() == 0.0) && ((recentLoan.getDateCleared() != null ? recentLoan.getDateCleared().compareTo(targetMeeting.getMeetingDate()) : 0) < 0)) {
+                    txtBalance.setText("No outstanding loans");
+                    txtDateDue.setVisibility(View.GONE);
                 } else {
-                    memberLoan = loansRepaidRepo.getMemberLoanRepaymentRecord(selectedMember.getMemberId());
+                    // Get Member Loan Repayment Details
+                    //txtBalance.setText(String.format("Outstanding loan %,.0f UGX", outstandingLoan));
+                    txtBalance.setText(String.format("Outstanding loan %,.0f UGX", recentLoan.getLoanBalance()));
 
-                    txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(memberLoan.getNextDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
-
-                    //    txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(recentLoan.getDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                    if (recentLoan.getLoanBalance() == 0.0) {
+                        txtDateDue.setText("");
+                    } else {
+                        memberLoan = loansRepaidRepo.getMemberLoanRepaymentRecord(selectedMember.getMemberId());
+                        if (memberLoan != null) {
+                            txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(memberLoan.getNextDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                        } else {
+                            txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(recentLoan.getDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                        }
+                    }
                 }
             }
 
@@ -143,6 +146,7 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
 
             return rowView;
         } catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));
             return null;
         }
