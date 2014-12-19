@@ -28,9 +28,7 @@ import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.EnhancedListView;
-import org.applab.digitizingdata.helpers.FineHistoryArrayAdapter;
 import org.applab.digitizingdata.helpers.MemberFineRecord;
-import org.applab.digitizingdata.helpers.SwipeDetector;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.FineTypeRepo;
 import org.applab.digitizingdata.repo.MeetingFineRepo;
@@ -38,9 +36,6 @@ import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
-import java.util.Date;
-
-//import de.timroes.android.listview.EnhancedListView;
 
 
 /**
@@ -52,30 +47,9 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
     private int meetingId;
     private MeetingFineRepo fineRepo = null;
     private int targetCycleId = 0;
-    boolean proceedWithSaving = false;
-    boolean alertDialogShowing = false;
-    SwipeDetector swipeDetector = new SwipeDetector();
-
-
-    private enum ControlGroup {
-        SWIPE_TO_DISMISS
-    }
-
-    private static final String PREF_UNDO_STYLE = "de.timroes.android.listviewdemo.UNDO_STYLE";
-    private static final String PREF_SWIPE_TO_DISMISS = "de.timroes.android.listviewdemo.SWIPE_TO_DISMISS";
-    private static final String PREF_SWIPE_DIRECTION = "de.timroes.android.listviewdemo.SWIPE_DIRECTION";
-    private static final String PREF_SWIPE_LAYOUT = "de.timroes.android.listviewdemo.SWIPE_LAYOUT";
-
 
     private EnhancedListAdapter mAdapter;
     private EnhancedListView mListView;
-
-
-    private Bundle mUndoStylePref;
-    private Bundle mSwipeDirectionPref;
-
-    FineHistoryArrayAdapter fineHistoryArrayAdapter;
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,21 +58,11 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
         setContentView(R.layout.activity_member_fines_history);
 
-        // TextView lblMeetingDate = (TextView)findViewById(R.id.lblMSHMeetingDate);
         meetingDate = getIntent().getStringExtra("_meetingDate");
-        // lblMeetingDate.setText(meetingDate);
 
         TextView lblFullName = (TextView) findViewById(R.id.lblFineFullName);
         String fullName = getIntent().getStringExtra("_name");
         lblFullName.setText(fullName);
-
-        //ListView swipeListView= (ListView) findViewById(android.R.id.list);
-
-        // SwipeListView swipeListView = (SwipeListView) findViewById(android.R.id.list);
-
-        // swipeViewAdapter= new SwipeViewAdapter(this, R.layout.swipelistview, countries);
-
-        // swipeListView.setAdapter(swipeViewAdapter);
 
         mListView = (EnhancedListView) findViewById(android.R.id.list);
 
@@ -165,22 +129,6 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back, null);
-        /** final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back_done, null);
-         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
-         new View.OnClickListener() {
-        @Override public void onClick(View v) {
-        if(saveMemberFine()) {
-        Toast.makeText(MemberFinesHistoryActivity.this,"New Fine entered successfully",Toast.LENGTH_LONG).show();
-        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-        i.putExtra("_tabToSelect", "fines");
-        i.putExtra("_meetingDate",meetingDate);
-        i.putExtra("_meetingId",meetingId);
-        startActivity(i);
-        finish();
-        }
-
-        }
-        }); */
         customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -216,17 +164,6 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
         actionBar.setDisplayShowCustomEnabled(true);
 
-        /**   actionBar.setDisplayOptions(
-         ActionBar.DISPLAY_SHOW_CUSTOM,
-         ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-         | ActionBar.DISPLAY_SHOW_TITLE
-         );
-         actionBar.setCustomView(customActionBarView,
-         new ActionBar.LayoutParams(
-         ViewGroup.LayoutParams.MATCH_PARENT,
-         ViewGroup.LayoutParams.MATCH_PARENT)
-         ); */
-        // END_INCLUDE (inflate_set_custom_view)
     }
 
     private void populateFineHistory() {
@@ -240,35 +177,10 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
         }
 
-
-        /** swipeViewAdapter= new SwipeViewAdapter(this,R.layout.swipelistview, countries);
-
-         swipeListView.setAdapter(swipeViewAdapter); */
         //Now get the data via the adapter
-      //  FineHistoryArrayAdapter adapter = new FineHistoryArrayAdapter(MemberFinesHistoryActivity.this, fines, "fonts/roboto-regular.ttf");
         mAdapter = new EnhancedListAdapter(MemberFinesHistoryActivity.this, fines);
-        // mAdapter.resetItems();
 
         mListView.setAdapter(mAdapter);
-        //Assign Adapter to ListView
-        // setListAdapter(adapter);
-
-        /**   getListView().setOnTouchListener(swipeDetector);
-
-         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-         public void onItemClick(AdapterView<?> parent, View view,
-         int position, long id) {
-         if (swipeDetector.swipeDetected()) {
-         if (swipeDetector.getAction() == SwipeDetector.Action.RL) {
-         view.setBackgroundColor(R.color.light_blue_bottom_right);
-         } else {
-
-         }
-         }
-         }
-
-         });
-         */
 
         //Hack to ensure all Items in the List View are visible
         Utils.setListViewHeightBasedOnChildren(getListView());
@@ -293,6 +205,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                 upIntent.putExtra("_meetingId", meetingId);
 
                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+
                     // This activity is not part of the application's task, so
                     // create a new task
                     // with a synthesized back stack.
@@ -302,6 +215,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                             .addNextIntent(upIntent).startActivities();
                     finish();
                 } else {
+
                     // This activity is part of the application's task, so simply
                     // navigate up to the hierarchical parent activity.
                     NavUtils.navigateUpTo(this, upIntent);
@@ -314,27 +228,10 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                 i.putExtra("_meetingId", meetingId);
                 startActivity(i);
                 return true;
-            /** case R.id.mnuMSHSave:
 
-             if (saveMemberFine()) {
-             Toast.makeText(MemberFinesHistoryActivity.this, "Fines entered successfully", Toast.LENGTH_LONG).show();
-             i = new Intent(MemberFinesHistoryActivity.this, MeetingActivity.class);
-             i.putExtra("_tabToSelect", "fines");
-             i.putExtra("_meetingDate", meetingDate);
-             i.putExtra("_meetingId", meetingId);
-             startActivity(i);
-             } */
         }
         return true;
     }
-
-    /** public void onClick(View view) {
-     Toast.makeText(this, "Deletion undone, OKAY?", Toast.LENGTH_LONG).show();
-     // fineHistoryArrayAdapter.insert(itemToDelete, position);
-     view.setVisibility(View.GONE);
-
-     } */
-
 
     /**
      * Applies the settings the user has made to the list view.
@@ -366,11 +263,10 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         VslaCycleRepo cycleRepo;
         VslaCycle currentCycle;
         String datePaid;
-        private View viewContainer;
         private boolean changedFromCode = false;
 
         public EnhancedListAdapter(Context context, ArrayList<MemberFineRecord> values) {
-            //super(context, R.layout.row_fines_history, values);
+
             this.context = context;
             this.values = values;
             this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
@@ -380,16 +276,6 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
             cycleRepo = new VslaCycleRepo(getApplicationContext());
             currentCycle = cycleRepo.getCurrentCycle();
         }
-
-        /**
-         * void resetItems() {
-         * values.clear();
-         * for (int i = 1; i <= 40; i++) {
-         * values.add("Item " + i);
-         * }
-         * notifyDataSetChanged();
-         * }
-         */
 
         public void remove(int position) {
             values.remove(position);
@@ -520,8 +406,6 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
                                                                              if (isChecked) {
                                                                                  fineRecord.setStatus(1);
-                                                                                 Date date = new Date();
-                                                                                 // datePaid = Utils.formatDateToSqlite((date));
                                                                                  datePaid = meetingDate;
                                                                              } else {
                                                                                  fineRecord.setStatus(0);

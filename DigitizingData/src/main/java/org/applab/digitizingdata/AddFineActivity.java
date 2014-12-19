@@ -182,8 +182,6 @@ public class AddFineActivity extends SherlockActivity {
                 }
                 return true;
             case R.id.mnuFCancel:
-                //Toast.makeText(getBaseContext(), "You have successfully added a new member", Toast.LENGTH_LONG).show();
-                //  return saveFineData();
             case R.id.mnuFFinished:
                 selectedFinishButton = true;
                 return saveMemberFine();
@@ -221,11 +219,11 @@ public class AddFineActivity extends SherlockActivity {
                 cboFineType.requestFocus();
                 return false;
             } else {
-                //String selectedFineTypeName = cboFineType.getSelectedItem().toString().trim();
-
                 /** TODO: REMOVE
-                 * Meantime fix for QA time*/
-                if (selectedFineTypeName.equalsIgnoreCase(getResources().getString(R.string.finetype_other))) {
+                 * Meantime fix for QA time
+                 * */
+
+                 if (selectedFineTypeName.equalsIgnoreCase(getResources().getString(R.string.finetype_other))) {
                     fine.setFineTypeId(1);
                 } else if (selectedFineTypeName.equalsIgnoreCase(getResources().getString(R.string.finetype_latecoming))) {
                     fine.setFineTypeId(2);
@@ -236,7 +234,6 @@ public class AddFineActivity extends SherlockActivity {
                 }
                 fine.setFineTypeName(selectedFineTypeName);
             }
-
 
             // Validate: Fine Amount
             TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFMFineAmount);
@@ -272,6 +269,7 @@ public class AddFineActivity extends SherlockActivity {
     private void clearDataFields() {
 
         buildFineTypeSpinner();
+
         // Clear the Fields
         TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFMFineAmount);
         txtMemberFineAmount.setText("");
@@ -284,35 +282,6 @@ public class AddFineActivity extends SherlockActivity {
     protected void buildFineTypeSpinner() {
 
         Spinner cboFMFineType = (Spinner) findViewById(R.id.cboFMFineType);
-        // String[] fineTypeList = new String[]{"select fine type", "Other", "Latecoming", "Disorder"};
-        // ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, fineTypeList) {
-        /** ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item) {
-
-         public View getView(int position, View convertView, ViewGroup parent) {
-         View v = super.getView(position, convertView, parent);
-
-         Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-         ((TextView) v).setTypeface(externalFont);
-
-         // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-
-         return v;
-         }
-
-         public View getDropDownView(int position, View convertView, ViewGroup parent) {
-         View v = super.getDropDownView(position, convertView, parent);
-
-         Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-         ((TextView) v).setTypeface(externalFont);
-
-         return v;
-         }
-         };
-
-         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-         cboFMFineType.setAdapter(adapter);
-         cboFMFineType.setOnItemSelectedListener(new CustomGenderSpinnerListener()); */
-
         cboFMFineType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override

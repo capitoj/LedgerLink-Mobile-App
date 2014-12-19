@@ -1,5 +1,6 @@
 package org.applab.digitizingdata;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -75,7 +76,7 @@ public class MeetingSavingsFrag extends SherlockFragment {
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
         parentActivity = (MeetingActivity) getSherlockActivity();
         //Wrap long task in runnable an run asynchronously
-        Runnable populateRunnable = new Runnable()
+       Runnable populateRunnable = new Runnable()
         {
             @Override
             public void run()
@@ -86,7 +87,6 @@ public class MeetingSavingsFrag extends SherlockFragment {
         };
         LongTaskRunner.runLongTask(populateRunnable, "Please wait", "Loading savings information", parentActivity);
     }
-
 
     //Populate Members List
     private void populateMembersList() {
