@@ -33,13 +33,7 @@ import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
-import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
-import org.applab.digitizingdata.repo.SendDataRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
+import org.applab.digitizingdata.repo.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,9 +47,10 @@ import java.util.HashMap;
  */
 public class MeetingActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
     private Meeting currentMeeting;
-    private MeetingRepo meetingRepo;
 
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
+
+    LedgerLinkApplication ledgerLinkApplication;
 
     private static ProgressDialog progressDialog = null;
     private static int httpStatusCode = 0; //To know whether the Request was successful
@@ -66,7 +61,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LedgerLinkApplication ledgerLinkApplication = (LedgerLinkApplication) getApplication();
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_meeting);
@@ -155,8 +150,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             // If target meeting id is 0, then load it as current meeting id
             VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getBaseContext());
 
-            meetingRepo = new MeetingRepo(getBaseContext());
-            targetMeetingId = meetingRepo.getCurrentMeeting(vslaCycleRepo.getCurrentCycle().getCycleId()).getMeetingId();
+             targetMeetingId = ledgerLinkApplication.getMeetingRepo().getCurrentMeeting(vslaCycleRepo.getCurrentCycle().getCycleId()).getMeetingId();
 
             // Define the meeting id to be accessed by all tab fragments
             getIntent().putExtra("_meetingId", targetMeetingId);
@@ -580,19 +574,18 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         Meeting previousMeeting = null;
         int meetingId = -1;
 
-        meetingRepo = new MeetingRepo(getApplicationContext());
         MeetingSavingRepo savingRepo = new MeetingSavingRepo(getApplicationContext());
         MeetingFineRepo fineRepo = new MeetingFineRepo(getApplicationContext());
         MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
         MeetingLoanRepaymentRepo loanRepaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
 
-        previousMeeting = meetingRepo.getPreviousMeeting(meetingRepo.getMeetingById(targetMeetingId).getVslaCycle().getCycleId(), targetMeetingId);
+        previousMeeting = ledgerLinkApplication.getMeetingRepo().getPreviousMeeting(ledgerLinkApplication.getMeetingRepo().getMeetingById(targetMeetingId).getVslaCycle().getCycleId(), targetMeetingId);
 
         if (previousMeeting != null) {
             //meetingId = previousMeeting.getMeetingId();
             meetingId = targetMeetingId;
 
-            previousMeetingClosure = meetingRepo.getMeetingStartingCash(previousMeeting.getMeetingId());
+            previousMeetingClosure = ledgerLinkApplication.getMeetingRepo().getMeetingStartingCash(previousMeeting.getMeetingId());
 
             totalSavings = savingRepo.getTotalSavingsInMeeting(previousMeeting.getMeetingId());
             totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(previousMeeting.getMeetingId());
@@ -613,15 +606,15 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
              *If GSW has recorded cash then the recorded cash should be shown here as a net
              */
             meetingId = targetMeetingId;
-            if (meetingRepo.getMeetingById(targetMeetingId).isGettingStarted()) {
-                totalSavings = savingRepo.getTotalSavingsInMeeting(meetingRepo.getMeetingById(targetMeetingId).getMeetingId());
-                expectedStartingCash = meetingRepo.getMeetingById(targetMeetingId).getVslaCycle().getFinesAtSetup() + meetingRepo.getMeetingById(targetMeetingId).getVslaCycle().getInterestAtSetup() + totalSavings;
+            if (ledgerLinkApplication.getMeetingRepo().getMeetingById(targetMeetingId).isGettingStarted()) {
+                totalSavings = savingRepo.getTotalSavingsInMeeting(ledgerLinkApplication.getMeetingRepo().getMeetingById(targetMeetingId).getMeetingId());
+                expectedStartingCash = ledgerLinkApplication.getMeetingRepo().getMeetingById(targetMeetingId).getVslaCycle().getFinesAtSetup() + ledgerLinkApplication.getMeetingRepo().getMeetingById(targetMeetingId).getVslaCycle().getInterestAtSetup() + totalSavings;
                 Log.d("MA exCahgsw", String.valueOf(expectedStartingCash));
             }
         }
 
         Log.d("MA exCah3", String.valueOf(meetingId) + String.valueOf(expectedStartingCash));
         // Save Starting cash values as closing balance for previous meeting
-        successFlg = meetingRepo.updateExpectedStartingCash(meetingId, expectedStartingCash);
+        successFlg = ledgerLinkApplication.getMeetingRepo().updateExpectedStartingCash(meetingId, expectedStartingCash);
     }
 }

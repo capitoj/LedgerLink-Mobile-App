@@ -14,27 +14,17 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,10 +53,13 @@ public class NewCycleActivity extends SherlockActivity {
     boolean isUpdateCycleAction = false;
     private boolean multipleCyclesIndicator = false;
 
+    LedgerLinkApplication ledgerLinkApplication;
+
     VslaCycle selectedCycle;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         setContentView(R.layout.activity_new_cycle);
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
@@ -123,15 +116,12 @@ public class NewCycleActivity extends SherlockActivity {
             // Setup the Fields by getting the current Cycle
 
             if (!getIntent().hasExtra("_cycleId")) {
-                VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
-                selectedCycle = repo.getCurrentCycle();
+                selectedCycle = ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle();
             } else if (getIntent().getIntExtra("_cycleId", 0) != 0) {
                 //for concurrent cycles , if cycle id is passed then load the specified cycle
-                VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
-                selectedCycle = repo.getCycle(getIntent().getIntExtra("_cycleId", 0));
+                selectedCycle = ledgerLinkApplication.getVslaCycleRepo().getCycle(getIntent().getIntExtra("_cycleId", 0));
             } else {
-                VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
-                selectedCycle = repo.getCurrentCycle();
+                selectedCycle = ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle();
             }
             if (selectedCycle != null) {
                 //displayMessageBox("Testing", "Cycle to Update Found", Utils.MSGBOX_ICON_INFORMATION);
@@ -143,8 +133,7 @@ public class NewCycleActivity extends SherlockActivity {
 
                 // Populate GSW fields
                 // If cycle has no GSW data don't show GSW fields
-                MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
-                Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+                Meeting dummyGSWMeeting = ledgerLinkApplication.getMeetingRepo().getDummyGettingStartedWizardMeeting();
                 if (dummyGSWMeeting != null) {
                     if (selectedCycle.getCycleId() != dummyGSWMeeting.getVslaCycle().getCycleId()) {
                         //linearLayout = (LinearLayout) findViewById(R.id.sectionNCMiddleCycleStart);
@@ -458,13 +447,12 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     private boolean saveCycleDataToDb(VslaCycle cycle) {
-        VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
         boolean retVal = false;
         if (cycle.getCycleId() != 0) {
-            retVal = repo.updateCycle(cycle);
+            retVal = ledgerLinkApplication.getVslaCycleRepo().updateCycle(cycle);
         } else {
 
-            retVal = repo.addCycle(cycle);
+            retVal = ledgerLinkApplication.getVslaCycleRepo().addCycle(cycle);
         }
         boolean successFlg = false;
         if (retVal) {
@@ -476,13 +464,13 @@ public class NewCycleActivity extends SherlockActivity {
                 //displayMessageBox("Update Cycle", "The Cycle has been updated Successfully.", Utils.MSGBOX_ICON_TICK);
             }
 
-            String testJson = SendDataRepo.getVslaCycleJson(repo.getCurrentCycle());
+            String testJson = SendDataRepo.getVslaCycleJson(ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle());
             if (testJson.length() < 0) {
                 return false;
             }
-            MemberRepo memberRepo = new MemberRepo(getApplicationContext());
+            //MemberRepo memberRepo = new MemberRepo(getApplicationContext());
 
-            String membersJson = SendDataRepo.getMembersJson(memberRepo.getAllMembers());
+            String membersJson = SendDataRepo.getMembersJson(ledgerLinkApplication.getMemberRepo().getAllMembers());
             if (membersJson.length() < 0) {
                 return false;
             }
@@ -609,8 +597,7 @@ public class NewCycleActivity extends SherlockActivity {
 
             //Check that the Cycle Start Date does not overlap with the date the previous cycle ended
             //First, get the most recent cycle
-            VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getApplicationContext());
-            VslaCycle mostRecentCycle = vslaCycleRepo.getMostRecentUnEndedCycle();
+             VslaCycle mostRecentCycle = ledgerLinkApplication.getVslaCycleRepo().getMostRecentUnEndedCycle();
 
             if (null != mostRecentCycle) {
                 if (isUpdateCycleAction && mostRecentCycle.getCycleId() == cycle.getCycleId()) {

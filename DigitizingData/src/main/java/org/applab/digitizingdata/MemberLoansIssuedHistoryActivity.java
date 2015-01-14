@@ -337,12 +337,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                             } else {
                                 Toast.makeText(MemberLoansIssuedHistoryActivity.this, "New Loan issued successfully", Toast.LENGTH_LONG).show();
                             }
-                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                            i.putExtra("_tabToSelect", "loansIssued");
-                            i.putExtra("_meetingDate", meetingDate);
-                            i.putExtra("_meetingId", meetingId);
-                            startActivity(i);
-                            finish();
+                            goBackToLoansIssuedFragment();
                         }
 
                     }
@@ -352,12 +347,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect", "loansIssued");
-                        i.putExtra("_meetingDate", meetingDate);
-                        i.putExtra("_meetingId", meetingId);
-                        startActivity(i);
-                        finish();
+                        goBackToLoansIssuedFragment();
                     }
                 }
         );
@@ -385,6 +375,16 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         actionBar.setDisplayShowCustomEnabled(true);
 
         // END_INCLUDE (inflate_set_custom_view)
+    }
+
+    //Closes this fragment and goes back to the loans issued fragment
+    private void goBackToLoansIssuedFragment() {
+        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+        i.putExtra("_tabToSelect", "loansIssued");
+        i.putExtra("_meetingDate", meetingDate);
+        i.putExtra("_meetingId", meetingId);
+        startActivity(i);
+        finish();
     }
 
     private void populateLoanIssueHistory() {

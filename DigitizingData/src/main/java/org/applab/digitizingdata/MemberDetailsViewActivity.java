@@ -11,20 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.Calendar;
 
@@ -36,8 +32,11 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     private int selectedMemberId = -1;
     private String selectedMemberNames = "VSLA Member";
 
+    LedgerLinkApplication ledgerLinkApplication;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         inflateCustomActionBar();
@@ -62,8 +61,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
         }
 
 
-        MemberRepo repo = new MemberRepo(getApplicationContext());
-        Member selectedMember = repo.getMemberById(selectedMemberId);
+        Member selectedMember = ledgerLinkApplication.getMemberRepo().getMemberById(selectedMemberId);
         populateDataFields(selectedMember);
 
     }
@@ -212,12 +210,10 @@ public class MemberDetailsViewActivity extends SherlockActivity {
 
             //Show the heading
             //Get the date of the dummy GSW meeting
-            MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
-
             String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her" : "his";
             lblMDMiddleCycleInformationHeading.setText("This member’s information was added after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
 
-            Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+            Meeting dummyGSWMeeting = ledgerLinkApplication.getMeetingRepo().getDummyGettingStartedWizardMeeting();
             if (dummyGSWMeeting != null) {
                 lblMDMiddleCycleInformationHeading.setText("This member’s information was added on " + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
             }
@@ -276,8 +272,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     }
 
     private boolean delete() {
-        final MemberRepo repo = new MemberRepo(getApplicationContext());
-        final Member selMember = repo.getMemberById(selectedMemberId);
+        final Member selMember = ledgerLinkApplication.getMemberRepo().getMemberById(selectedMemberId);
         if (selMember == null) {
             Utils.createAlertDialogOk(MemberDetailsViewActivity.this, "Remove Member", "System failed to retrieve the member's records.", Utils.MSGBOX_ICON_EXCLAMATION).show();
             return false;
@@ -289,7 +284,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
         ad.setPositiveButton(
                 "Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
-                        repo.deleteMember(selMember);
+                        ledgerLinkApplication.getMemberRepo().deleteMember(selMember);
                         navigateBack();
                     }
                 }

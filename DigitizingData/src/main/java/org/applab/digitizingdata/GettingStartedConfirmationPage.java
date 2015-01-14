@@ -10,18 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.TypefaceTextView;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.MeetingSavingRepo;
-import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 public class GettingStartedConfirmationPage extends SherlockActivity {
 
@@ -30,10 +26,13 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
     private boolean confirmed = false;
     private View customActionBarView;
 
+    LedgerLinkApplication ledgerLinkApplication;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         setContentView(R.layout.activity_getting_started_wizard_is_everything_correct);
 
         inflateCustombar();
@@ -60,8 +59,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
 
         lblConfirmationText.setText(Html.fromHtml(instruction.toString()));
 
-        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
-        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_CONFIRMATION);
+        ledgerLinkApplication.getVslaInfoRepo().updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_CONFIRMATION);
 
 
     }
@@ -98,8 +96,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
             return true;
         }
         // Finished wizard...
-        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
-        boolean updateStatus = vslaInfoRepo.updateGettingStartedWizardCompleteFlag();
+        boolean updateStatus = ledgerLinkApplication.getVslaInfoRepo().updateGettingStartedWizardCompleteFlag();
 
         // Update GSW starting cash
         updateGSWStartingCash();
@@ -130,15 +127,14 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
     // Update starting cash at end of GSW
     private void updateGSWStartingCash() {
 
-        MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
-        Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+        Meeting dummyGettingStartedWizardMeeting = ledgerLinkApplication.getMeetingRepo().getDummyGettingStartedWizardMeeting();
 
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getBaseContext());
         double totalSavings = meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
         double expectedStartingCash = dummyGettingStartedWizardMeeting.getVslaCycle().getFinesAtSetup() + dummyGettingStartedWizardMeeting.getVslaCycle().getInterestAtSetup() + totalSavings;
 
         // Save Starting cash values
-        boolean successFlg = meetingRepo.updateExpectedStartingCash(dummyGettingStartedWizardMeeting.getMeetingId(), expectedStartingCash);
+        boolean successFlg = ledgerLinkApplication.getMeetingRepo().updateExpectedStartingCash(dummyGettingStartedWizardMeeting.getMeetingId(), expectedStartingCash);
     }
 
     /* Inflates custom menu bar for confirmation page */

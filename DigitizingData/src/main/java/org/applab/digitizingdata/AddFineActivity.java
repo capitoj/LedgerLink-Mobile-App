@@ -1,6 +1,5 @@
 package org.applab.digitizingdata;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -9,28 +8,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
-import org.applab.digitizingdata.domain.model.FineType;
 import org.applab.digitizingdata.domain.model.MeetingFine;
-import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
-
-import java.util.ArrayList;
 
 /**
  * Created by Moses on 7/15/13.
@@ -39,7 +26,7 @@ public class AddFineActivity extends SherlockActivity {
     private int selectedMemberId;
     private int meetingId;
     private boolean selectedFinishButton = false;
-    private MeetingFineRepo fineRepo;
+    LedgerLinkApplication ledgerLinkApplication;
     private int paymentStatus = 0;
     private String selectedFineTypeName;
     private MeetingFine fine;
@@ -47,6 +34,7 @@ public class AddFineActivity extends SherlockActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
 
@@ -193,10 +181,7 @@ public class AddFineActivity extends SherlockActivity {
         boolean successFlg = false;
         if (validateData()) {
 
-            if (fineRepo == null) {
-                fineRepo = new MeetingFineRepo(AddFineActivity.this);
-            }
-            successFlg = fineRepo.saveMemberFine(meetingId, selectedMemberId, fine.getAmount(), fine.getFineTypeId(), paymentStatus);
+            successFlg = ledgerLinkApplication.getMeetingFineRepo().saveMemberFine(meetingId, selectedMemberId, fine.getAmount(), fine.getFineTypeId(), paymentStatus);
         } else {
             //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
         }
@@ -209,8 +194,6 @@ public class AddFineActivity extends SherlockActivity {
         try {
 
             fine = new MeetingFine();
-            fineRepo = new MeetingFineRepo(getApplicationContext());
-
             //Validate: Fine Type
             Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
             String dlgTitle = "Add Fine";

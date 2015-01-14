@@ -38,37 +38,9 @@ import java.util.Date;
  * Created by Moses on 7/15/13.
  */
 public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
-    private MemberRepo repo;
-    private int selectedMemberId;
-    private boolean successAlertDialogShown = false;
-    private boolean selectedFinishButton = false;
-    private boolean isEditAction;
-
-    private TextView viewClicked;
-    private int mYear;
-    private int mMonth;
-    private int mDay;
 
     private TextView txtNCGSWLoanNextRepaymentDate;
     private TextView txtNCGSWLoanNumber;
-
-    // Event that is raised when the date has been set
-    private final DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
-        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-            mYear = year;
-            mMonth = monthOfYear;
-            mDay = dayOfMonth;
-            updateDisplay();
-        }
-    };
-
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//
-//
-//        super.onCreate(savedInstanceState);
-//        initializeActivity();
-//    }
 
     @Override
     protected void initializeActivity()
@@ -214,8 +186,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         clearDataFields();
         if (isEditAction) {
-            repo = new MemberRepo(getApplicationContext());
-            selectedMember = repo.getMemberById(selectedMemberId);
+            selectedMember = ledgerLinkApplication.getMemberRepo().getMemberById(selectedMemberId);
             populateDataFields(selectedMember);
         } else {
             //Set the current stage of the wizard
@@ -240,45 +211,6 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             viewClicked.setText(String.format("%02d", mDay) + "-" + Utils.getMonthNameAbbrev(mMonth + 1) + "-" + mYear);
         }
     }
-
-
-
-    private void buildGenderSpinner() {
-
-        //Setup the Spinner Items
-        Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
-        String[] genderList = new String[]{"select sex", "Male", "Female"};
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-
-                return v;
-            }
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                return v;
-            }
-        };
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboGender.setAdapter(adapter);
-        cboGender.setOnItemSelectedListener(new CustomGenderSpinnerListener());
-
-        //Make the spinner selectable
-        cboGender.setFocusable(true);
-        cboGender.setFocusableInTouchMode(true);
-        cboGender.setClickable(true);
-    }
-
 
 
     @Override
@@ -348,16 +280,15 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         boolean successFlg = false;
         AlertDialog dlg = null;
         Member member = new Member();
-        repo = new MemberRepo(getApplicationContext());
         if (selectedMember != null) {
             member = selectedMember;
         }
         if (validateData(member)) {
             boolean retVal = false;
             if (member.getMemberId() != 0) {
-                retVal = repo.updateGettingStartedWizardMember(member);
+                retVal = ledgerLinkApplication.getMemberRepo().updateGettingStartedWizardMember(member);
             } else {
-                retVal = repo.addGettingStartedWizardMember(member);
+                retVal = ledgerLinkApplication.getMemberRepo().addGettingStartedWizardMember(member);
             }
             if (retVal) {
                 if (!isEditAction) {
@@ -412,8 +343,6 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             if (null == member) {
                 return false;
             }
-            repo = new MemberRepo(getApplicationContext());
-
             // Validate: MemberNo
             Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
             String dlgTitle = "Add Member";
@@ -519,7 +448,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
             //Final Verifications
             //TODO: Trying to use Application context to ensure dialog box does not disappear
-            if (!repo.isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
+            if (!ledgerLinkApplication.getMemberRepo().isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
                 Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAMMemberNo.requestFocus();
                 return false;

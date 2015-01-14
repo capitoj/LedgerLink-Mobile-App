@@ -10,19 +10,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import au.com.bytecode.opencsv.CSVReader;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
-import org.applab.digitizingdata.repo.MemberRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
-import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,17 +25,17 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 public class DataMigrationActivity extends Activity implements OnClickListener {
 
     private static final String TAG = "MainActivity";
     private TextView lblMigrationResult = null;
     private Button btnimport = null;
+    LedgerLinkApplication ledgerLinkApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_data_migration);
 
@@ -75,8 +69,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
                 //If the meeting has not been created start with it
                 //Retrieve the Current Cycle
-                VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
-                VslaCycle mostRecentCycle = cycleRepo.getMostRecentCycle();
+                 VslaCycle mostRecentCycle = ledgerLinkApplication.getVslaCycleRepo().getMostRecentCycle();
                 if(null == mostRecentCycle) {
                     //Toast that there is no Cycle
                     Toast.makeText(getApplicationContext(),"There is no existing cycle.", Toast.LENGTH_LONG).show();
@@ -84,8 +77,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                 }
 
                 //Get the Meeting if it is there
-                MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
-                Meeting recentMeeting = meetingRepo.getMostRecentMeeting();
+                 Meeting recentMeeting = ledgerLinkApplication.getMeetingRepo().getMostRecentMeeting();
                 if(null == recentMeeting) {
                     //Create a meeting
                     Meeting newMeeting = new Meeting();
@@ -94,10 +86,10 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                     newMeeting.setVslaCycle(mostRecentCycle);
                     newMeeting.setIsCurrent(true);
 
-                    boolean meetingCreated = meetingRepo.addMeeting(newMeeting);
+                    boolean meetingCreated = ledgerLinkApplication.getMeetingRepo().addMeeting(newMeeting);
                     if(meetingCreated) {
                         //Retrieve the current Meeting
-                        recentMeeting = meetingRepo.getMeetingByDate(newMeeting.getMeetingDate());
+                        recentMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingByDate(newMeeting.getMeetingDate());
                     }
 
                     if(recentMeeting == null) {
@@ -224,18 +216,17 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
                             //Check the MemberNo to confirm that it doesn't exist, then add the member
                             Member recentMember = null;
-                            MemberRepo memberRepo = new MemberRepo(getApplicationContext());
-                            boolean memberNoAvailable = memberRepo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId());
+                            boolean memberNoAvailable = ledgerLinkApplication.getMemberRepo().isMemberNoAvailable(member.getMemberNo(), member.getMemberId());
 
                             //Loop to get a Unique member No. Hope no Infinite Loops
                             while(!memberNoAvailable) {
                                 member.setMemberNo(member.getMemberNo() + 1);
-                                memberNoAvailable = memberRepo.isMemberNoAvailable(member.getMemberNo(),member.getMemberId());
+                                memberNoAvailable = ledgerLinkApplication.getMemberRepo().isMemberNoAvailable(member.getMemberNo(), member.getMemberId());
                             }
-                            boolean memberAdded = memberRepo.addMember(member);
+                            boolean memberAdded = ledgerLinkApplication.getMemberRepo().addMember(member);
                             if(memberAdded) {
                                 //retrieve the MemberId
-                                recentMember = memberRepo.getMemberByMemberNo(member.getMemberNo());
+                                recentMember = ledgerLinkApplication.getMemberRepo().getMemberByMemberNo(member.getMemberNo());
                             }
 
                             //Continue only if we have added the member
@@ -246,12 +237,11 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                             }
 
                             //Now deal with Savings
-                            MeetingSavingRepo savingRepo = new MeetingSavingRepo(getApplicationContext());
                             String comment = "";
 
                             if(totalSavings.length() > 0){
                                 double theSavings = Double.parseDouble(totalSavings);
-                                boolean savingsDone = savingRepo.saveMemberSaving(recentMeeting.getMeetingId(),recentMember.getMemberId(), theSavings, comment);
+                                boolean savingsDone = ledgerLinkApplication.getMeetingSavingRepo().saveMemberSaving(recentMeeting.getMeetingId(), recentMember.getMemberId(), theSavings, comment);
                             }
 
                             //Loan Issued
@@ -266,8 +256,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                                 if(thePrincipalAmount > 0 && theLoanBalance > 0) {
                                     Date dateIssued = Utils.getDateFromString(loanIssueDate,"yyyy-MM-dd");
                                     Date dateDue = Utils.getDateFromString(loanDueDate,"yyyy-MM-dd");
-                                    MeetingLoanIssuedRepo loansRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-                                    boolean loanIssued = loansRepo.saveMemberLoanIssue(recentMeeting.getMeetingId(),recentMember.getMemberId(),recentMember.getMemberNo(),thePrincipalAmount, theLoanBalance,dateDue);
+                                    boolean loanIssued = ledgerLinkApplication.getMeetingLoanIssuedRepo().saveMemberLoanIssue(recentMeeting.getMeetingId(), recentMember.getMemberId(), recentMember.getMemberNo(), thePrincipalAmount, theLoanBalance, dateDue);
 
                                     //Even if it fails continue. Can be done manually later
                                 }
@@ -308,8 +297,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                     }
 
                     // Flag that Data has already been Migrated
-                    VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
-                    vslaInfoRepo.updateDataMigrationStatusFlag();
+                    ledgerLinkApplication.getVslaInfoRepo().updateDataMigrationStatusFlag();
 
                     //TODO: Only do this if there were no records skipped
                     btnimport.setText("Finished");

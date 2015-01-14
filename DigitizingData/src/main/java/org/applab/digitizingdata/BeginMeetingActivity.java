@@ -9,15 +9,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -35,7 +29,6 @@ import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingRepo;
 import org.applab.digitizingdata.repo.SendDataRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,9 +40,7 @@ import java.util.HashMap;
 
 
 public class BeginMeetingActivity extends SherlockActivity {
-    private MeetingRepo meetingRepo = null;
     private ArrayList<Meeting> pastMeetings = null;
-    private VslaCycleRepo cycleRepo = null;
     private static ProgressDialog progressDialog = null;
     private static int targetMeetingId = 0;
     private static int currentDataItemPosition = 0;
@@ -60,9 +51,12 @@ public class BeginMeetingActivity extends SherlockActivity {
     private ArrayList<Meeting> currentMeetings;
     private boolean noPriorMeetings = false;
 
+    LedgerLinkApplication ledgerLinkApplication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_begin_meeting);
         refreshActivityView();
@@ -73,17 +67,13 @@ public class BeginMeetingActivity extends SherlockActivity {
 
 
         //Check the past meetings that have not been sent
-        if (null == cycleRepo) cycleRepo = new VslaCycleRepo(getApplicationContext());
-
-        if (null == meetingRepo) meetingRepo = new MeetingRepo(getApplicationContext());
-
-        VslaCycle recentCycle = cycleRepo.getMostRecentCycle();
+        VslaCycle recentCycle = ledgerLinkApplication.getVslaCycleRepo().getMostRecentCycle();
         //past meetings should be not active and not sent
-        pastMeetings = meetingRepo.getAllMeetingsByDataSentStatusAndActiveStatus();
+        pastMeetings = ledgerLinkApplication.getMeetingRepo().getAllMeetingsByDataSentStatusAndActiveStatus();
 
         // Check fore fresh start; no meetings other than GSW
         // if (meetingRepo.getAllNonGSWMeetings().isEmpty()) {
-        if (meetingRepo.getAllMeetings().isEmpty()) {
+        if (ledgerLinkApplication.getMeetingRepo().getAllMeetings().isEmpty()) {
             noPriorMeetings = true;
         }
 
@@ -241,7 +231,7 @@ public class BeginMeetingActivity extends SherlockActivity {
         //to populate the current meetings
         //Now get the data via the adapter
 
-        currentMeetings = meetingRepo.getAllMeetingsByActiveStatus();
+        currentMeetings = ledgerLinkApplication.getMeetingRepo().getAllMeetingsByActiveStatus();
         ConcurrentMeetingsArrayAdapter adapter = new ConcurrentMeetingsArrayAdapter(getBaseContext(), currentMeetings);
 
         // listening to single list item on click
@@ -375,10 +365,9 @@ public class BeginMeetingActivity extends SherlockActivity {
         }
         //TODO: Confirm this later. Does not support multiple cycles
         //Meeting meeting = repo.getMostRecentMeeting();
-        MeetingRepo repo = new MeetingRepo(getApplicationContext());
-        currentMeeting = repo.getMeetingById(meetingId);
+        currentMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
 
-        HashMap<String, String> meetingData = repo.generateMeetingDataMapToSendToServer(meetingId);
+        HashMap<String, String> meetingData = ledgerLinkApplication.getMeetingRepo().generateMeetingDataMapToSendToServer(meetingId);
 
         sendDataUsingPostAsync(meetingId, meetingData);
     }

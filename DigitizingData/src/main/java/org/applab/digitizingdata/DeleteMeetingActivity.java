@@ -17,24 +17,17 @@ import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
-import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
+
 
 public class DeleteMeetingActivity extends SherlockActivity {
     private int meetingId = 0;
-    private MeetingRepo meetingRepo = null;
-    private MeetingSavingRepo savingRepo = null;
-    private MeetingLoanRepaymentRepo repaymentRepo = null;
-    private MeetingLoanIssuedRepo loanIssuedRepo = null;
     private String meetingDate = "";
+    LedgerLinkApplication ledgerLinkApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_delete_meeting);
@@ -48,14 +41,6 @@ public class DeleteMeetingActivity extends SherlockActivity {
         if (getIntent().hasExtra("_meetingDate")) {
             this.meetingDate = getIntent().getStringExtra("_meetingDate");
         }
-
-        //Initialize the Repositories
-        meetingRepo = new MeetingRepo(getApplicationContext());
-        savingRepo = new MeetingSavingRepo(getApplicationContext());
-        MeetingAttendanceRepo attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
-        repaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
-        loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-        MeetingFineRepo fineRepo = new MeetingFineRepo(getApplicationContext());
 
         //Set the values for the meeting details
         TextView txtMeetingDate = (TextView) findViewById(R.id.lblDMMeetingDate);
@@ -71,36 +56,26 @@ public class DeleteMeetingActivity extends SherlockActivity {
         lblDMInstructions.setText(Html.fromHtml("Are you sure you want to delete this meeting? If so, tap <b>Done</b>. The following information will be deleted:"));
 
         //Retrieve the target Meeting
-        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
+        Meeting targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
 
         if (null != targetMeeting) {
             txtMeetingDate.setText(String.format("%s", Utils.formatDate(targetMeeting.getMeetingDate())));
 
-            if (null == attendanceRepo) {
-                attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
-            }
-            if (null != attendanceRepo) {
-                txtAttendedCount.setText(String.format("Members Present: %d", attendanceRepo.getAttendanceCountByMeetingId(meetingId)));
-            }
-
-            if (null == savingRepo) {
-                savingRepo = new MeetingSavingRepo(getApplicationContext());
-            }
             double totalMeetingSavings = 0.0;
             double totalFinesCollected = 0.0;
             double totalLoansIssuedInMeeting = 0.0;
             double totalLoansRepaidInMeeting = 0.0;
 
-            totalMeetingSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
+            totalMeetingSavings = ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(meetingId);
             txtSavings.setText(String.format("Savings: %,.0f %s", totalMeetingSavings, getResources().getString(R.string.operating_currency)));
 
-            totalLoansRepaidInMeeting = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
+            totalLoansRepaidInMeeting = ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(meetingId);
             txtLoanRepayments.setText(String.format("Loans repaid: %,.0f %s", totalLoansRepaidInMeeting, getResources().getString(R.string.operating_currency)));
 
-            totalFinesCollected = fineRepo.getTotalFinesPaidInThisMeeting(meetingId);
+            totalFinesCollected = ledgerLinkApplication.getMeetingFineRepo().getTotalFinesPaidInThisMeeting(meetingId);
             txtFines.setText(String.format("Fines: %,.0f %s", totalFinesCollected, getResources().getString(R.string.operating_currency)));
 
-            totalLoansIssuedInMeeting = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
+            totalLoansIssuedInMeeting = ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(meetingId);
             txtLoanIssues.setText(String.format("Loans issued: %,.0f %s", totalLoansIssuedInMeeting, getResources().getString(R.string.operating_currency)));
         } else {
             txtAttendedCount.setText("");
@@ -124,7 +99,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
 
                         boolean cannotBeDeleted = false;
 
-                        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
+                        Meeting targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
                         if (null == targetMeeting) {
                             //The meeting was not retrieved.
                             //TODO: Figure out a better way of handling this.
@@ -134,19 +109,19 @@ public class DeleteMeetingActivity extends SherlockActivity {
                         }
 
                         // Check whether there are savings attached to the target meeting
-                        if (savingRepo.getTotalSavingsInMeeting(meetingId) > 0.0D) {
+                        if (ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(meetingId) > 0.0D) {
                             cannotBeDeleted = true;
                         }
 
                         //Check whether there are Repayments attached to the target meeting
                         //will require a look into the repayments
-                        if (repaymentRepo.getTotalLoansRepaidInMeeting(meetingId) > 0.0D) {
+                        if (ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(meetingId) > 0.0D) {
                             cannotBeDeleted = true;
                         }
 
                         //Check whether there are Loans attached to the target meeting
                         //will require a look into the loans issued
-                        if (loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId) > 0.0D) {
+                        if (ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(meetingId) > 0.0D) {
                             cannotBeDeleted = true;
                         }
 
@@ -157,7 +132,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
                         //If not, then don't allow deleting coz it will mess up loans
                         //TODO: Figure out how to cascade Loan info when a meet is deleted
                         if (targetMeeting.getVslaCycle() != null) {
-                            Meeting mostRecent = meetingRepo.getMostRecentMeetingInCycle(targetMeeting.getVslaCycle().getCycleId());
+                            Meeting mostRecent = ledgerLinkApplication.getMeetingRepo().getMostRecentMeetingInCycle(targetMeeting.getVslaCycle().getCycleId());
                             if (mostRecent.getMeetingId() == meetingId) {
                                 cannotBeDeleted = false;
                             } else {
@@ -171,10 +146,10 @@ public class DeleteMeetingActivity extends SherlockActivity {
 
                         } else {
                             //Check whether to make the sibling meeting the current one: Data should not have been sent
-                            Meeting previousMeeting = meetingRepo.getPreviousMeeting(targetMeeting.getVslaCycle().getCycleId(), targetMeeting.getMeetingId());
+                            Meeting previousMeeting = ledgerLinkApplication.getMeetingRepo().getPreviousMeeting(targetMeeting.getVslaCycle().getCycleId(), targetMeeting.getMeetingId());
                             if (previousMeeting != null) {   // && targetMeeting.isCurrent()
                                 if (!previousMeeting.isMeetingDataSent()) {
-                                    meetingRepo.activateMeeting(previousMeeting);
+                                    ledgerLinkApplication.getMeetingRepo().activateMeeting(previousMeeting);
                                 }
                             }
 
@@ -182,8 +157,8 @@ public class DeleteMeetingActivity extends SherlockActivity {
                             //TODO: Cascade the deletion to clear meeting items and avoid orphaned records
                             //TODO: What if the meeting's data has been sent, what happens?
                             //repaymentRepo.reverseLoanRepaymentsForMeeting(meetingId);
-                            repaymentRepo.reverseLoanRepaymentsForMeeting(meetingId, meetingDate);
-                            meetingRepo.deleteMeeting(meetingId);
+                            ledgerLinkApplication.getMeetingLoanRepaymentRepo().reverseLoanRepaymentsForMeeting(meetingId, meetingDate);
+                            ledgerLinkApplication.getMeetingRepo().deleteMeeting(meetingId);
                             Toast.makeText(getApplicationContext(), "The meeting has been deleted.", Toast.LENGTH_LONG).show();
 
 

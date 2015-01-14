@@ -45,26 +45,27 @@ import java.util.Date;
  * Created by Moses on 7/15/13.
  */
 public class AddMemberActivity extends SherlockActivity {
-    Member selectedMember;
-    private int selectedMemberId;
-    private boolean successAlertDialogShown = false;
-    private boolean selectedFinishButton = false;
-    private int meetingId;
-    private MemberRepo repo;
-    private boolean isEditAction;
+    protected Member selectedMember;
+    protected int selectedMemberId;
+    protected boolean successAlertDialogShown = false;
+    protected boolean selectedFinishButton = false;
+    protected int meetingId;
+    protected boolean isEditAction;
 
-    private TextView viewClicked;
-    private int mYear;
-    private int mMonth;
-    private int mDay;
+    protected TextView viewClicked;
+    protected int mYear;
+    protected int mMonth;
+    protected int mDay;
 
-    Spinner cboAMMemberNo;
-    private TextView txtAMMLoanNextRepaymentDate;
-    private TextView txtAMMLoanNumber;
-    boolean isGettingStartedMode = false; //flags whether we are in wizard mode
+    protected Spinner cboAMMemberNo;
+    protected TextView txtAMMLoanNextRepaymentDate;
+    protected TextView txtAMMLoanNumber;
+    protected boolean isGettingStartedMode = false; //flags whether we are in wizard mode
+
+    protected LedgerLinkApplication ledgerLinkApplication;
 
     //Event that is raised when the date has been set
-    private final DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+    protected final DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             mYear = year;
             mMonth = monthOfYear;
@@ -77,12 +78,13 @@ public class AddMemberActivity extends SherlockActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         initializeActivity();
     }
 
     //This method initializes this activity
     //It is overiden in GSW Add member activity so as to load the relevant layout
-    void initializeActivity() {
+    protected void initializeActivity() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         if (getIntent().hasExtra("_meetingId")) {
@@ -146,8 +148,7 @@ public class AddMemberActivity extends SherlockActivity {
         cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         clearDataFields();
         if (isEditAction) {
-            repo = new MemberRepo(getApplicationContext());
-            selectedMember = repo.getMemberById(selectedMemberId);
+            selectedMember = ledgerLinkApplication.getMemberRepo().getMemberById(selectedMemberId);
             populateDataFields(selectedMember);
         }
 
@@ -286,7 +287,7 @@ public class AddMemberActivity extends SherlockActivity {
 
     }
 
-    private void inflateCustomActionBar() {
+    protected void inflateCustomActionBar() {
 
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
@@ -406,7 +407,6 @@ public class AddMemberActivity extends SherlockActivity {
         AlertDialog dlg;
 
         Member member = new Member();
-        repo = new MemberRepo(getApplicationContext());
         if (selectedMember != null) {
             member = selectedMember;
         }
@@ -414,9 +414,9 @@ public class AddMemberActivity extends SherlockActivity {
         if (validateData(member)) {
             boolean retVal;
             if (member.getMemberId() != 0) {
-                retVal = repo.updateMember(member);
+                retVal = ledgerLinkApplication.getMemberRepo().updateMember(member);
             } else {
-                retVal = repo.addMember(member);
+                retVal = ledgerLinkApplication.getMemberRepo().addMember(member);
 
             }
             if (retVal) {
@@ -531,13 +531,11 @@ public class AddMemberActivity extends SherlockActivity {
         return successFlg;
     }
 
-    boolean validateData(Member member) {
+    protected boolean validateData(Member member) {
         try {
             if (null == member) {
                 return false;
             }
-            repo = new MemberRepo(getApplicationContext());
-
             // Validate: MemberNo
             Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
             String dlgTitle = "Add Member";
@@ -702,7 +700,7 @@ public class AddMemberActivity extends SherlockActivity {
             validateMiddleCycleValues(member);
             //Final Verifications
             //TODO: Trying to use Application context to ensure dialog box does not disappear
-            if (!repo.isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
+            if (!ledgerLinkApplication.getMemberRepo().isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
                 Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAMMemberNo.requestFocus();
                 return false;
@@ -716,7 +714,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     // TODO: Resolve Redundancy
-    private void validateMiddleCycleValues(Member member) {
+    protected void validateMiddleCycleValues(Member member) {
         //If edit mode and not GSW, validate middle cycle start values
         if (!isGettingStartedMode) {
             //if there are corrections, set them
@@ -746,7 +744,7 @@ public class AddMemberActivity extends SherlockActivity {
         }
     }
 
-    void populateDataFields(final Member member) {
+    protected void populateDataFields(final Member member) {
         try {
 
             clearDataFields();
@@ -824,7 +822,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
 
-    void clearDataFields() {
+    protected void clearDataFields() {
         //Spinner items
         buildGenderSpinner();
         //This portion could take long so run it as long task
@@ -860,14 +858,14 @@ public class AddMemberActivity extends SherlockActivity {
         cboAMMemberNo.requestFocus();
     }
 
-    void updateDisplay() {
+    protected void updateDisplay() {
         if (viewClicked != null) {
             viewClicked.setText(String.format("%02d", mDay) + "-" + Utils.getMonthNameAbbrev(mMonth + 1) + "-" + mYear);
         }
     }
 
 
-    private void buildGenderSpinner() {
+    protected void buildGenderSpinner() {
 
         //Setup the Spinner Items
         Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
@@ -904,10 +902,7 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     /* Populates the member no spinner with available member numbers */
-    void buildMemberNoSpinner() {
-
-
-        repo = new MemberRepo(getApplicationContext());
+    protected void buildMemberNoSpinner() {
         final ArrayList<String> memberNumberArrayList = new ArrayList<String>();
         memberNumberArrayList.add("select number");
         //If we have a selected member, then add the member number to the adapter
@@ -916,7 +911,7 @@ public class AddMemberActivity extends SherlockActivity {
         }
 
 
-        for (String mNo : repo.getListOfAvailableMemberNumbers()) {
+        for (String mNo : ledgerLinkApplication.getMemberRepo().getListOfAvailableMemberNumbers()) {
             Log.d(getBaseContext().getPackageName(), "Member number found " + mNo);
             memberNumberArrayList.add(mNo);
         }
@@ -974,10 +969,9 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     /* Populates the member age spinner  */
-    void buildAgeSpinner() {
+    protected void buildAgeSpinner() {
 
         Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
-        repo = new MemberRepo(getApplicationContext());
         ArrayList<String> ageArrayList = new ArrayList<String>();
         ageArrayList.add("select age");
         for (int i = 12; i <= 80; i++) {
@@ -1019,7 +1013,6 @@ public class AddMemberActivity extends SherlockActivity {
     void buildCyclesCompletedSpinner() {
 
         Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
-        repo = new MemberRepo(getApplicationContext());
         ArrayList<String> cyclesArrayList = new ArrayList<String>();
         cyclesArrayList.add("select number");
         for (int i = 0; i <= 20; i++) {

@@ -12,17 +12,12 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
-import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
 
 import java.util.ArrayList;
@@ -31,9 +26,7 @@ import java.util.Date;
 
 public class ChangeMeetingDateActivity extends SherlockActivity {
     private int meetingId = 0;
-    private MeetingRepo meetingRepo = null;
-    private MeetingLoanRepaymentRepo repaymentRepo = null;
-    private MeetingLoanIssuedRepo loanIssuedRepo = null;
+    LedgerLinkApplication ledgerLinkApplication;
 
     private TextView viewClicked;
     public static final int Date_dialog_id = 1;
@@ -46,6 +39,7 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = new LedgerLinkApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_change_meeting_date);
@@ -56,14 +50,8 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
             this.meetingId = getIntent().getIntExtra("_meetingId", 0);
         }
 
-        //Initialize the Repositories
-        meetingRepo = new MeetingRepo(getApplicationContext());
-        repaymentRepo = new MeetingLoanRepaymentRepo(getApplicationContext());
-        loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-        MeetingFineRepo fineRepo = new MeetingFineRepo(getApplicationContext());
-
         //Retrieve the target Meeting
-        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
+        Meeting targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
 
         //Manage Dates
         TextView txtMeetingDate = (TextView) findViewById(R.id.txtCMDMeetingDate);
@@ -109,7 +97,7 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
                         boolean cannotBeModified = false;
                         Date oldMeetingDate = null;
 
-                        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
+                        Meeting targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
                         if(null == targetMeeting) {
                             //The meeting was not retrieved.
                             //TODO: Figure out a better way of handling this.
@@ -120,13 +108,13 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
 
                         //Check whether there are Repayments attached to the target meeting
                         //will require a look into the repayments
-                        if(repaymentRepo.getTotalLoansRepaidInMeeting(meetingId) > 0.0D) {
+                        if(ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(meetingId) > 0.0D) {
                             cannotBeModified = true;
                         }
 
                         //Check whether there are Loans attached to the target meeting
                         //will require a look into the loans issued
-                        if(loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId) > 0.0D) {
+                        if(ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(meetingId) > 0.0D) {
                             cannotBeModified = true;
                         }
 
@@ -135,7 +123,7 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
                         //If not, then don't allow deleting coz it will mess up loans
                         //TODO: Figure out how to cascade Loan info when a meet date is edited
                         if(targetMeeting.getVslaCycle() != null) {
-                            Meeting mostRecent = meetingRepo.getMostRecentMeetingInCycle(targetMeeting.getVslaCycle().getCycleId());
+                            Meeting mostRecent = ledgerLinkApplication.getMeetingRepo().getMostRecentMeetingInCycle(targetMeeting.getVslaCycle().getCycleId());
                             if(mostRecent.getMeetingId() == meetingId) {
                                 cannotBeModified = false;
                             }
@@ -154,7 +142,7 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
                             //get the Old Date for use to adjust Loans and Fines
                             oldMeetingDate = targetMeeting.getMeetingDate();
                             if(validateMeetingDate(targetMeeting)) {
-                                meetingRepo.updateMeetingDate(meetingId, targetMeeting.getMeetingDate());
+                                ledgerLinkApplication.getMeetingRepo().updateMeetingDate(meetingId, targetMeeting.getMeetingDate());
                                 Toast.makeText(getApplicationContext(),"The meeting date has been modified.",Toast.LENGTH_LONG).show();
 
                                 Intent i = new Intent(getApplicationContext(),BeginMeetingActivity.class);
@@ -290,7 +278,7 @@ public class ChangeMeetingDateActivity extends SherlockActivity {
             //Ensure the current date is between the boundary of the siblings of the target meeting
             Meeting predecessor = null;
             Meeting successor = null;
-            ArrayList<Meeting> meetingsInCycle = meetingRepo.getAllMeetingsOfCycle(meeting.getVslaCycle().getCycleId(), MeetingRepo.MeetingOrderByEnum.ORDER_BY_MEETING_DATE);
+            ArrayList<Meeting> meetingsInCycle = ledgerLinkApplication.getMeetingRepo().getAllMeetingsOfCycle(meeting.getVslaCycle().getCycleId(), MeetingRepo.MeetingOrderByEnum.ORDER_BY_MEETING_DATE);
 
             int indexOfTargetMeeting = -1;
             //Get index of current meeting

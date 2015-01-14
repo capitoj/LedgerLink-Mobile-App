@@ -8,15 +8,9 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -29,7 +23,6 @@ import org.apache.http.util.EntityUtils;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.VslaInfoRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -38,7 +31,7 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 public class ActivationActivity extends SherlockActivity {
-    private VslaInfoRepo vslaInfoRepo = null;
+    LedgerLinkApplication ledgerLinkApplication;
     HttpClient client;
     private int httpStatusCode = 0; //To know whether the Request was successful
     private boolean activationSuccessful = false;
@@ -50,6 +43,7 @@ public class ActivationActivity extends SherlockActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_activation);
 
@@ -84,7 +78,6 @@ public class ActivationActivity extends SherlockActivity {
             }
         }
 
-        vslaInfoRepo = new VslaInfoRepo(ActivationActivity.this);
         Button btnActivate = (Button) findViewById(R.id.btnVAActivate);
         btnActivate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -169,7 +162,7 @@ public class ActivationActivity extends SherlockActivity {
                 return false;
             }
 
-            return vslaInfoRepo.saveOfflineVslaInfo(vslaCode, passKey);
+            return ledgerLinkApplication.getVslaInfoRepo().saveOfflineVslaInfo(vslaCode, passKey);
         } catch (Exception ex) {
             return false;
         }
@@ -396,7 +389,7 @@ public class ActivationActivity extends SherlockActivity {
                     passKey = result.getString("PassKey");
                 }
                 if (activationSuccessful && null != vslaName) {
-                    retrievedVslaNameSavedSuccessfully = vslaInfoRepo.saveVslaInfo(targetVslaCode, vslaName, passKey);
+                    retrievedVslaNameSavedSuccessfully = ledgerLinkApplication.getVslaInfoRepo().saveVslaInfo(targetVslaCode, vslaName, passKey);
                     if (retrievedVslaNameSavedSuccessfully) {
                         Toast.makeText(ActivationActivity.this, "Congratulations! Registration Completed Successfully.", Toast.LENGTH_LONG).show();
                         dismissProgressDialog();
@@ -418,7 +411,7 @@ public class ActivationActivity extends SherlockActivity {
                 //In case activation failed
                 if (!retrievedVslaNameSavedSuccessfully) {
                     //Save the record offline
-                    vslaInfoRepo.saveOfflineVslaInfo(targetVslaCode, securityPasskey);
+                    ledgerLinkApplication.getVslaInfoRepo().saveOfflineVslaInfo(targetVslaCode, securityPasskey);
 
                     //Then call the login activity
                     Intent i = new Intent(getBaseContext(), LoginActivity.class);

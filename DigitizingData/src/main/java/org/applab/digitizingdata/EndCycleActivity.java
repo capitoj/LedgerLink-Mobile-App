@@ -50,8 +50,11 @@ public class EndCycleActivity extends SherlockActivity {
     private VslaCycle selectedCycle;
     private ArrayList<VslaCycle> vslaCycles;
 
+    LedgerLinkApplication ledgerLinkApplication;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_end_cycle);
@@ -81,13 +84,13 @@ public class EndCycleActivity extends SherlockActivity {
         });
 
         //Setup the Fields by getting the current Cycle
-        VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
+        //VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
 
         //Deal with the radio buttons
         // RadioGroup grpCycleDates = (RadioGroup)findViewById(R.id.grpECExistingCycles);
 
         //Retrieve all the active cycles
-        ArrayList<VslaCycle> activeCycles = repo.getActiveCycles();
+        ArrayList<VslaCycle> activeCycles = ledgerLinkApplication.getVslaCycleRepo().getActiveCycles();
 
         //Create radio buttons dynamically
         /**if(activeCycles != null) {
@@ -125,15 +128,15 @@ public class EndCycleActivity extends SherlockActivity {
         // }
 
         if (!getIntent().hasExtra("_cycleId")) {
-            repo = new VslaCycleRepo(getApplicationContext());
-            selectedCycle = repo.getCurrentCycle();
+            //repo = new VslaCycleRepo(getApplicationContext());
+            selectedCycle = ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle();
         } else if (getIntent().getIntExtra("_cycleId", 0) != 0) {
             //for concurrent cycles , if cycle id is passed then load the specified cycle
-            repo = new VslaCycleRepo(getApplicationContext());
-            selectedCycle = repo.getCycle(getIntent().getIntExtra("_cycleId", 0));
+            //repo = new VslaCycleRepo(getApplicationContext());
+            selectedCycle = ledgerLinkApplication.getVslaCycleRepo().getCycle(getIntent().getIntExtra("_cycleId", 0));
         } else {
-            repo = new VslaCycleRepo(getApplicationContext());
-            selectedCycle = repo.getCurrentCycle();
+            //repo = new VslaCycleRepo(getApplicationContext());
+            selectedCycle = ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle();
         }
         if (selectedCycle != null) {
             //displayMessageBox("Testing", "Cycle to Update Found", Utils.MSGBOX_ICON_INFORMATION);
