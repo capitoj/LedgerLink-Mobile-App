@@ -694,7 +694,7 @@ public class AddMemberActivity extends SherlockActivity {
                 }
 
             }
-            member.setOutstandingLoanNumberOnSetup(Integer.valueOf(txtAMMLoanNumber.getText().toString().trim()));
+            member.setOutstandingLoanNumberOnSetup(Utils.getAsNumberOrZeroIfNull(txtAMMLoanNumber.getText().toString().trim()));
             member.setDateOfFirstRepayment(Utils.getDateFromString(txtAMMLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy"));
 
             validateMiddleCycleValues(member);

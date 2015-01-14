@@ -102,6 +102,13 @@ public class Utils {
         }
     }
 
+    public static Integer getAsNumberOrZeroIfNull(String numberString)
+    {
+        if(numberString == null) return 0;
+        if(numberString.length() == 0) return 0;
+        return Integer.parseInt(numberString);
+    }
+
     public static String formatAsPhoneNumber(String phoneNumber) {
         //Formats phone number as #### ### ###
         phoneNumber = phoneNumber.replaceAll(" ", ""); //first collapse all spaces
