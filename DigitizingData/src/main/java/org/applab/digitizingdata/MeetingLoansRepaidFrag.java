@@ -6,22 +6,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersLoansRepaidArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
 
@@ -34,6 +27,12 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
     private int meetingId;
     private MeetingActivity parentActivity;
     private RelativeLayout fragmentView;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        parentActivity = (MeetingActivity) getSherlockActivity();
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,8 +82,6 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         actionBar.setSubtitle(meetingDate);
 
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-        parentActivity = (MeetingActivity) getSherlockActivity();
-
         //Wrap and run long task
         Runnable populatorRunnable = new Runnable() {
             @Override
@@ -100,8 +97,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
-        members = memberRepo.getAllMembers();
+        members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
 
         //Now get the data via the adapter
         final MembersLoansRepaidArrayAdapter adapter = new MembersLoansRepaidArrayAdapter(parentActivity.getBaseContext(), members);

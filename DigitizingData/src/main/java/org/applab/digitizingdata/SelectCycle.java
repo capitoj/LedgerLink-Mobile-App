@@ -4,24 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.helpers.VslaCyclesArrayAdapter;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 
@@ -35,9 +31,11 @@ public class SelectCycle extends SherlockActivity {
     private RadioGroup grpCycleDates;
     private boolean isEndCycleAction;
     private boolean multipleCycles = false;
+    LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_select_cycle);
@@ -48,8 +46,6 @@ public class SelectCycle extends SherlockActivity {
 
         inflateCustomBar();
         //Setup the Fields by getting the current Cycle
-        VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
-
         //Deal with the radio buttons
         //grpCycleDates = (RadioGroup)findViewById(R.id.grpMDExistingCycles);
 
@@ -57,7 +53,7 @@ public class SelectCycle extends SherlockActivity {
         ListView cyclesListView = (ListView) findViewById(R.id.lstSelectCycleToEdit);
         TextView txtInstructions = (TextView) findViewById(R.id.lblMDMultipleCycles);
 
-        ArrayList<VslaCycle> activeCycles = cycleRepo.getActiveCycles();
+        ArrayList<VslaCycle> activeCycles = ledgerLinkApplication.getVslaCycleRepo().getActiveCycles();
         if (activeCycles != null && activeCycles.size() == 0) {
             // no cycles
             cyclesListView.setVisibility(View.GONE);

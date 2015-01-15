@@ -3,25 +3,19 @@ package org.applab.digitizingdata;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersRollCallArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
 
@@ -35,6 +29,12 @@ public class MeetingRollCallFrag extends SherlockFragment {
     Meeting selectedMeeting;
     private MeetingActivity parentActivity;
     ScrollView fragmentView;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        parentActivity = (MeetingActivity) getSherlockActivity();
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,14 +59,12 @@ public class MeetingRollCallFrag extends SherlockFragment {
     private void reloadFragmentInfo() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        parentActivity = (MeetingActivity) getSherlockActivity();
         actionBar = parentActivity.getSupportActionBar();
         meetingId = parentActivity.getIntent().getIntExtra("_meetingId", 0);
         //get date from meeting repo via id
         String title = "Meeting";
         if (meetingId != 0) {
-            MeetingRepo meetingRepo = new MeetingRepo(this.parentActivity.getBaseContext());
-            selectedMeeting = meetingRepo.getMeetingById(meetingId);
+            selectedMeeting = parentActivity.ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
             //title = String.format("Meeting    %s", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
             title = "Meeting";
 
@@ -107,8 +105,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
     private void populateMembersList() {
 
         // Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
-        members = memberRepo.getAllMembers();
+        members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
 
         // Now get the data via the adapter
         final MembersRollCallArrayAdapter adapter = new MembersRollCallArrayAdapter(parentActivity.getBaseContext(), members);

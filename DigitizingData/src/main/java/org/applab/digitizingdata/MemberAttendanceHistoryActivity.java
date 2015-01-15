@@ -9,26 +9,18 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
+import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.helpers.AttendanceArrayAdapter;
 import org.applab.digitizingdata.helpers.AttendanceRecord;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 
@@ -44,23 +36,21 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
     private int isPresent;
     private int meetingId = 0;
 
-    private MeetingAttendanceRepo attendanceRepo;
-
     private CheckBox chkAttendance;
+    LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_attendance_history);
-        VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
-        attendanceRepo = new MeetingAttendanceRepo(getApplicationContext());
 
         if (getIntent().hasExtra("_cycleId")) {
             this.cycleId = getIntent().getIntExtra("_cycleId", 0);
         } else {
-            VslaCycle currentCycle = cycleRepo.getCurrentCycle();
+            VslaCycle currentCycle = ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle();
             if (null != currentCycle) {
                 this.cycleId = currentCycle.getCycleId();
             }
@@ -92,7 +82,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         chkAttendance = (CheckBox) findViewById(R.id.chkMAHAttendance);
 
 
-        chkAttendance.setChecked(attendanceRepo.getMemberAttendance(meetingId, memberId));
+        chkAttendance.setChecked(ledgerLinkApplication.getMeetingAttendanceRepo().getMemberAttendance(meetingId, memberId));
 
         RelativeLayout r = (RelativeLayout) chkAttendance.getParent();
 
@@ -119,7 +109,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
         });
 
         TextView txtComments = (TextView) findViewById(R.id.txtMAHComment);
-        txtComments.setText(attendanceRepo.getMemberAttendanceComment(meetingId, memberId));
+        txtComments.setText(ledgerLinkApplication.getMeetingAttendanceRepo().getMemberAttendanceComment(meetingId, memberId));
 
         fullName = fullName.substring(fullName.lastIndexOf(".") + 1).trim();
         txtFullName.setText(fullName);
@@ -206,9 +196,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
     }
 
     private void populateAttendanceData() {
-
-        MeetingAttendanceRepo repo = new MeetingAttendanceRepo(getApplicationContext());
-        ArrayList<AttendanceRecord> attendances = repo.getMemberAbsenceHistoryInCycle(cycleId, memberId, meetingId);
+        ArrayList<AttendanceRecord> attendances = ledgerLinkApplication.getMeetingAttendanceRepo().getMemberAbsenceHistoryInCycle(cycleId, memberId, meetingId);
 
         if (attendances == null) {
             attendances = new ArrayList<AttendanceRecord>();
@@ -286,10 +274,7 @@ public class MemberAttendanceHistoryActivity extends SherlockListActivity {
             TextView txtComment = (TextView) findViewById(R.id.txtMAHComment);
             comment = txtComment.getText().toString().trim();
             if (comment.length() > 0) {
-                if (attendanceRepo == null) {
-                    attendanceRepo = new MeetingAttendanceRepo(MemberAttendanceHistoryActivity.this);
-                }
-                successFlg = attendanceRepo.saveMemberAttendanceWithComment(meetingId, memberId, comment, isPresent);
+                successFlg = ledgerLinkApplication.getMeetingAttendanceRepo().saveMemberAttendanceWithComment(meetingId, memberId, comment, isPresent);
             } else {
                 Utils.createAlertDialogOk(MemberAttendanceHistoryActivity.this, "Roll Call", "You have not entered the Comments", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtComment.requestFocus();

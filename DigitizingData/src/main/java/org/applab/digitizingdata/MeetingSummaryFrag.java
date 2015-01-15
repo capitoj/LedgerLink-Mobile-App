@@ -7,27 +7,27 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
 import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
-import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 /**
  * Created by Moses on 6/25/13.
  */
 public class MeetingSummaryFrag extends SherlockFragment {
     private ActionBar actionBar;
-    private MeetingRepo meetingRepo;
     private ScrollView fragmentView;
+    MeetingActivity parentActivity;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        parentActivity = (MeetingActivity) getSherlockActivity();
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,16 +74,12 @@ public class MeetingSummaryFrag extends SherlockFragment {
         int previousMeetingId = getSherlockActivity().getIntent().getIntExtra("_previousMeetingId", 0);
 
         //Get the Cycle that contains this meeting
-        meetingRepo = new MeetingRepo(getSherlockActivity().getBaseContext());
-        Meeting currentMeeting = meetingRepo.getMeetingById(meetingId);
+        Meeting currentMeeting = parentActivity.ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
 
         TextView lblTotalSavings = (TextView) getSherlockActivity().findViewById(R.id.lblMSFTotalSavings);
         TextView lblOutstandingLoans = (TextView) getSherlockActivity().findViewById(R.id.lblMSFOutstandingLoans);
         TextView lblSectionLastMeeting = (TextView) getSherlockActivity().findViewById(R.id.lblMSFSection2);
 
-        MeetingSavingRepo savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
-        MeetingLoanIssuedRepo loansIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
-        MeetingLoanRepaymentRepo loansRepaidRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
         double outstandingLoans = 0.0;
         double totalSavings = 0.0;
         double issuedLoans = 0.0;
@@ -96,13 +92,13 @@ public class MeetingSummaryFrag extends SherlockFragment {
             endDate = Utils.formatDate(currentMeeting.getVslaCycle().getEndDate());
 
             //Setup the Total Savings
-            totalSavings = savingRepo.getTotalSavingsInCycle(currentMeeting.getVslaCycle().getCycleId());
+            totalSavings = parentActivity.ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInCycle(currentMeeting.getVslaCycle().getCycleId());
 
             //Setup the Loans Issued
-            issuedLoans = loansIssuedRepo.getTotalLoansIssuedInCycle(currentMeeting.getVslaCycle().getCycleId());
+            issuedLoans = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInCycle(currentMeeting.getVslaCycle().getCycleId());
 
             //Setup the Loans Outstanding
-            outstandingLoans = loansIssuedRepo.getTotalOutstandingLoansInCycle(currentMeeting.getVslaCycle().getCycleId());
+            outstandingLoans = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalOutstandingLoansInCycle(currentMeeting.getVslaCycle().getCycleId());
 
 
             //Get Cash In Bank
@@ -127,17 +123,14 @@ public class MeetingSummaryFrag extends SherlockFragment {
         TextView txtTotalRepayments = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastLoansRepaid);
         TextView txtTotalLoanIssues = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastLoansIssued);
 
-        if (null == meetingRepo) {
-            meetingRepo = new MeetingRepo(getSherlockActivity().getBaseContext());
-        }
 
         //TODO: May be I should retrieve the previous meeting from the previousMeetingId that was sent here by the MeetingDefinitionActivity
         //Challenge is how to get the same in case this activity was called from a different activity
         //Possible Solution: Store the value of Previous Meeting in database->Meetings table
         Meeting previousMeeting = null;
-        if (null != meetingRepo) {
-            previousMeeting = meetingRepo.getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), currentMeeting.getMeetingId());
-        }
+
+            previousMeeting = parentActivity.ledgerLinkApplication.getMeetingRepo().getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), currentMeeting.getMeetingId());
+
 
         //Force view to be of current meeting if in Data Review mode
         if (Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
@@ -151,27 +144,23 @@ public class MeetingSummaryFrag extends SherlockFragment {
         if (null != previousMeeting) {
             lblSectionLastMeeting.setText(String.format("PAST MEETING: %s", Utils.formatDate(previousMeeting.getMeetingDate())));
 
-            MeetingAttendanceRepo attendanceRepo = new MeetingAttendanceRepo(getSherlockActivity().getBaseContext());
-            txtAttendedCount.setText(String.format("Attended: %d", attendanceRepo.getAttendanceCountByMeetingId(previousMeeting.getMeetingId())));
+            txtAttendedCount.setText(String.format("Attended: %d", parentActivity.ledgerLinkApplication.getMeetingAttendanceRepo().getAttendanceCountByMeetingId(previousMeeting.getMeetingId())));
 
             txtDataSent.setText(String.format("Data: %s", (previousMeeting.isMeetingDataSent()) ? "Sent" : "Not Sent"));
 
             //TODO: Get Values for the Financials
-            if (null == savingRepo) {
-                savingRepo = new MeetingSavingRepo(getSherlockActivity().getBaseContext());
-            }
             double totalMeetingSavings = 0.0;
             double totalMeetingCollections = 0.0;
             double totalLoansIssuedInMeeting = 0.0;
             double totalLoansRepaidInMeeting = 0.0;
 
-            totalMeetingSavings = savingRepo.getTotalSavingsInMeeting(previousMeeting.getMeetingId());
+            totalMeetingSavings = parentActivity.ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(previousMeeting.getMeetingId());
             txtTotalSavings.setText(String.format("Savings: %,.0f UGX", totalMeetingSavings));
 
-            totalLoansRepaidInMeeting = loansRepaidRepo.getTotalLoansRepaidInMeeting(previousMeeting.getMeetingId());
+            totalLoansRepaidInMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(previousMeeting.getMeetingId());
             txtTotalRepayments.setText(String.format("Loans repaid: %,.0f UGX", totalLoansRepaidInMeeting));
 
-            totalLoansIssuedInMeeting = loansIssuedRepo.getTotalLoansIssuedInMeeting(previousMeeting.getMeetingId());
+            totalLoansIssuedInMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(previousMeeting.getMeetingId());
             txtTotalLoanIssues.setText(String.format("Loans issued: %,.0f UGX", totalLoansIssuedInMeeting));
 
        /**     double finesCollected = fineRepo.getTotalFinesInCycle(previousMeeting.getVslaCycle().getCycleId());

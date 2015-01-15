@@ -1,23 +1,19 @@
 package org.applab.digitizingdata;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-
+import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersSavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
 
@@ -31,6 +27,12 @@ public class MeetingSavingsFrag extends SherlockFragment {
     int meetingId;
     private MeetingActivity parentActivity;
     private RelativeLayout fragmentView;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        parentActivity = (MeetingActivity) getSherlockActivity();
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,8 +76,7 @@ public class MeetingSavingsFrag extends SherlockFragment {
         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-        parentActivity = (MeetingActivity) getSherlockActivity();
-        //Wrap long task in runnable an run asynchronously
+       //Wrap long task in runnable an run asynchronously
        Runnable populateRunnable = new Runnable()
         {
             @Override
@@ -91,8 +92,7 @@ public class MeetingSavingsFrag extends SherlockFragment {
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(getSherlockActivity().getApplicationContext());
-        members = memberRepo.getAllMembers();
+        members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
 
         //Now get the data via the adapter
         final MembersSavingsArrayAdapter adapter = new MembersSavingsArrayAdapter(getSherlockActivity().getBaseContext(), members);

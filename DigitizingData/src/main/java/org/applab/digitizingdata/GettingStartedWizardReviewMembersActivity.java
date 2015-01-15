@@ -14,13 +14,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
@@ -28,7 +25,6 @@ import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.fontutils.TypefaceTextView;
 import org.applab.digitizingdata.helpers.GettingStartedWizardMembersArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,8 +55,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         reviewSubHeading.setText(reviewSubHeadingPart);
 
         //Load the summary information
-        MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
-        Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+        Meeting dummyGettingStartedWizardMeeting = ledgerLinkApplication.getMeetingRepo().getDummyGettingStartedWizardMeeting();
 
         //Set cycle start date in label
         Date startDate = dummyGettingStartedWizardMeeting.getMeetingDate();
@@ -70,23 +65,20 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
 
         //Set savings in GSW meeting
-        MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getBaseContext());
-        double totalSavings = meetingSavingRepo.getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
+        double totalSavings = ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
         TextView lblRvwMembersTotalSavings = (TextView) findViewById(R.id.lblRvwMembersTotalSavings);
         lblRvwMembersTotalSavings.setText(String.format("Total savings this cycle %,.0f %s", totalSavings,
                 getResources().getString(R.string.operating_currency)));
 
         //Set loans issued in GSW meeting
-        MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(getBaseContext());
         TextView lblRvwMembersTotalLoan = (TextView) findViewById(R.id.lblRvwMembersTotalLoan);
         lblRvwMembersTotalLoan.setText(String.format("Total loans outstanding %,.0f %s",
-                meetingLoanIssuedRepo.getTotalLoansIssuedInMeeting(dummyGettingStartedWizardMeeting.getMeetingId()),
+                ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(dummyGettingStartedWizardMeeting.getMeetingId()),
                 getResources().getString(R.string.operating_currency)));
 
         //Populate the Members
         populateMembersList();
-        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
-        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_REVIEW_MEMBERS);
+        ledgerLinkApplication.getVslaInfoRepo().updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_REVIEW_MEMBERS);
     }
 
     /* inflates custom menu bar for review members */
@@ -180,8 +172,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
     @Override
     protected void populateMembersList() {
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(getApplicationContext());
-        members = memberRepo.getAllMembers();
+        members = ledgerLinkApplication.getMemberRepo().getAllMembers();
         if (members == null) {
             members = new ArrayList<Member>();
         }

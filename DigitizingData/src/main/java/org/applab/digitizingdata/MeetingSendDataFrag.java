@@ -10,17 +10,14 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.ConcurrentMeetingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.*;
 
 import java.util.ArrayList;
 
@@ -45,6 +42,12 @@ public class MeetingSendDataFrag extends SherlockFragment {
     private ArrayList<Meeting> unsentInactiveMeetings;
     private MeetingActivity parentActivity;
     //public FragmentTransaction fragmentTransaction;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        parentActivity = (MeetingActivity) getSherlockActivity();
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,7 +83,6 @@ public class MeetingSendDataFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
         actionBar.setSubtitle(title);
-        parentActivity = (MeetingActivity) getSherlockActivity();
         if(parentActivity.getCurrentMeeting() != null)
         {
             currentMeetingId = parentActivity.getCurrentMeeting().getMeetingId();
@@ -205,17 +207,16 @@ public class MeetingSendDataFrag extends SherlockFragment {
         selectedMeetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
         //get the current meeting by id
-        MeetingRepo meetingRepo = new MeetingRepo(getSherlockActivity().getBaseContext());
-        selectedMeeting = meetingRepo.getMeetingById(selectedMeetingId);
+       selectedMeeting = parentActivity.ledgerLinkApplication.getMeetingRepo().getMeetingById(selectedMeetingId);
 
 
         viewingCurrentMeeting = selectedMeeting.getMeetingId() == currentMeetingId;
 
-        ArrayList<Meeting> activeMeetings = meetingRepo.getAllMeetingsByActiveStatus();
+        ArrayList<Meeting> activeMeetings = parentActivity.ledgerLinkApplication.getMeetingRepo().getAllMeetingsByActiveStatus();
 
         //unsentInactiveMeetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
         //Past unsent and inactive
-        unsentInactiveMeetings = meetingRepo.getAllMeetingsByDataSentStatusAndActiveStatus();
+        unsentInactiveMeetings = parentActivity.ledgerLinkApplication.getMeetingRepo().getAllMeetingsByDataSentStatusAndActiveStatus();
        numberOfPastUnsentMeetings = unsentInactiveMeetings.size();
 
         Log.i("Unset meeting count ",""+numberOfPastUnsentMeetings);
@@ -224,29 +225,23 @@ public class MeetingSendDataFrag extends SherlockFragment {
         //selectedMeeting = meetingRepo.getMeetingById(meetingIdToLoad);
 
         //Get total savings in current meeting
-        MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(getSherlockActivity().getBaseContext());
-        totalSavingsInSelectedMeeting = meetingSavingRepo.getTotalSavingsInMeeting(selectedMeetingId);
+        totalSavingsInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(selectedMeetingId);
 
         
-        MeetingLoanRepaymentRepo meetingLoanRepaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getBaseContext());
-        totalLoansRepaidInSelectedMeeting = meetingLoanRepaymentRepo.getTotalLoansRepaidInMeeting(selectedMeetingId);
+        totalLoansRepaidInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(selectedMeetingId);
 
 
         //Get total fines in meeting
-        MeetingFineRepo meetingFineRepo = new MeetingFineRepo(getSherlockActivity().getBaseContext());
-        totalFinesInSelectedMeeting = meetingFineRepo.getTotalFinesInMeeting(selectedMeetingId);
+        totalFinesInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingFineRepo().getTotalFinesInMeeting(selectedMeetingId);
         
         //Get total loans in current meeting
-        MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getBaseContext());
-        totalLoansIssuedInSelectedMeeting = meetingLoanIssuedRepo.getTotalLoansIssuedInMeeting(selectedMeetingId);
+        totalLoansIssuedInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(selectedMeetingId);
         
         //Get attendance in current meeting
-        MeetingAttendanceRepo meetingAttendanceRepo = new MeetingAttendanceRepo(getSherlockActivity().getBaseContext());
-        selectedMeetingAttendance = meetingAttendanceRepo.getAttendanceCountByMeetingId(selectedMeetingId);
+        selectedMeetingAttendance = parentActivity.ledgerLinkApplication.getMeetingAttendanceRepo().getAttendanceCountByMeetingId(selectedMeetingId);
 
         //Get count of all members
-        MemberRepo memberRepo = new MemberRepo(getSherlockActivity().getBaseContext());
-        numberOfMembers = memberRepo.countMembers();
+        numberOfMembers = parentActivity.ledgerLinkApplication.getMemberRepo().countMembers();
 
         if(numberOfPastUnsentMeetings > 0) {
             populateMeetingsList();

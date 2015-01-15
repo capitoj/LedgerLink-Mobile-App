@@ -12,18 +12,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.domain.model.VslaCycle;
@@ -32,10 +26,6 @@ import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.LoansIssuedHistoryArrayAdapter;
 import org.applab.digitizingdata.helpers.MemberLoanIssueRecord;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
-import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,8 +40,6 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     private int memberId;
     private Meeting targetMeeting = null;
     VslaCycle cycle = null;
-    private MeetingRepo meetingRepo = null;
-    private MeetingLoanIssuedRepo loanIssuedRepo = null;
     private EditText txtInterestAmount;
     private TextView txtTotalLoanAmount;
     private TextView lblCurrency;
@@ -76,8 +64,11 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     private int mDay;
     private String dateString;
 
+    LedgerLinkApplication ledgerLinkApplication;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         inflateCustomActionBar();
 
@@ -105,23 +96,14 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             totalCashInBox = getIntent().getDoubleExtra("_totalCashInBox", 0);
         }
 
-
-        loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
-        meetingRepo = new MeetingRepo(MemberLoansIssuedHistoryActivity.this);
-        targetMeeting = meetingRepo.getMeetingById(meetingId);
-        MeetingLoanRepaymentRepo loanRepaymentRepo = new MeetingLoanRepaymentRepo((MemberLoansIssuedHistoryActivity.this));
-        VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(MemberLoansIssuedHistoryActivity.this);
+        targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
 
         //TextView txtOutstandingLoans = (TextView)findViewById(R.id.lblMLIssuedHOutstandingLoans);
-
-        if (null == loanIssuedRepo) {
-            loanIssuedRepo = new MeetingLoanIssuedRepo(getApplicationContext());
-        }
 
         //Determine whether this is top up or edit on an existing Loan Repayment
         // Commented out for now as multiple loans are not yet enabled un comment to allow for issuing of multiple loans
         // MeetingLoanIssued memberLoan = loanIssuedRepo.getLoanIssuedToMemberInMeeting(meetingId, memberId);
-        final MeetingLoanIssued memberLoan = loanIssuedRepo.getUnclearedLoanIssuedToMember(memberId);
+        final MeetingLoanIssued memberLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getUnclearedLoanIssuedToMember(memberId);
         if (null != memberLoan) {
             // Flag that this is an edit operation
             isEditOperation = true;
@@ -389,11 +371,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
     private void populateLoanIssueHistory() {
 
-        if (loanIssuedRepo == null) {
-            loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
-        }
-
-        ArrayList<MemberLoanIssueRecord> loansIssued = loanIssuedRepo.getAllLoansIssuedToMember(memberId);
+        ArrayList<MemberLoanIssueRecord> loansIssued = ledgerLinkApplication.getMeetingLoanIssuedRepo().getAllLoansIssuedToMember(memberId);
 
         if (loansIssued == null) {
             loansIssued = new ArrayList<MemberLoanIssueRecord>();
@@ -560,9 +538,6 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             }
 
             //Now Save the data
-            if (null == loanIssuedRepo) {
-                loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansIssuedHistoryActivity.this);
-            }
 
             if (isEditOperation) {
                 theBalance = Double.valueOf(txtTotalLoanAmount.getText().toString().trim().split(" ")[0]);
@@ -581,14 +556,14 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             if (currentLoanId > 0 && theAmount <= 0) {
                 //Mark flag to indicate that the loan was deleted
                 loanWasDeleted = true;
-                return loanIssuedRepo.deleteLoan(currentLoanId);
+                return ledgerLinkApplication.getMeetingLoanIssuedRepo().deleteLoan(currentLoanId);
             }
 
             if (loanTopUp > 0.0) {
-                boolean success = meetingRepo.updateTopUp(meetingId, loanTopUp);
+                boolean success = ledgerLinkApplication.getMeetingRepo().updateTopUp(meetingId, loanTopUp);
             }
 
-            return loanIssuedRepo.saveMemberLoanIssue(meetingId, memberId, theLoanNo, theAmount, theInterestAmount, theBalance, theDateDue, theComment, isEditOperation);
+            return ledgerLinkApplication.getMeetingLoanIssuedRepo().saveMemberLoanIssue(meetingId, memberId, theLoanNo, theAmount, theInterestAmount, theBalance, theDateDue, theComment, isEditOperation);
         } catch (Exception ex) {
             ex.printStackTrace();
             //Log.e("MemberLoansIssuedHistory.saveMemberLoan", ex.getMessage());

@@ -6,30 +6,27 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.AdapterView;
-
-import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
-import org.applab.digitizingdata.fontutils.TypefaceManager;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
+import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
+import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.SendMeetingDataArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingRepo;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by Moses on 7/23/13.
  */
 public class SendMeetingDataActivity extends SherlockListActivity {
     private ArrayList<Meeting> meetings;
+    LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_send_meeting_data);
@@ -53,13 +50,11 @@ public class SendMeetingDataActivity extends SherlockListActivity {
     //Populate Members List
     private void populateMeetingData() {
         //Load the Main Menu
-        MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
-
         //TODO: Testing purposes only. Should be removed
         //If the process has finished, then mark the meeting as sent
 
         //Retrieve the meetings whose data has not been sent
-        meetings = meetingRepo.getAllMeetingsByDataSentStatus(false);
+        meetings = ledgerLinkApplication.getMeetingRepo().getAllMeetingsByDataSentStatus(false);
 
         if(meetings == null) {
             meetings = new ArrayList<Meeting>();

@@ -19,13 +19,15 @@ import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.fontutils.TypefaceTextView;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 public class GettingStartedWizardPageOne  extends SherlockActivity {
+    LedgerLinkApplication ledgerLinkApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
+
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
 
@@ -70,8 +72,8 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
 
         actionBar.setDisplayShowCustomEnabled(true);
 
-        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
-        VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
+
+        VslaInfo vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
         TextView savingsGroupName = (TextView) findViewById(R.id.txtNCP_header);
         if(!vslaInfo.isActivated()) {
           //If not activated, show message to avoid displaying "Offline Mode" as vsla name
@@ -91,7 +93,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
 
         txtGSW_info.setText(txtGSWInfoText);
 
-        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_ONE);
+        ledgerLinkApplication.getVslaInfoRepo().updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_ONE);
     }
 
 

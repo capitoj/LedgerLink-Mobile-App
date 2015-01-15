@@ -11,21 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.MemberSavingRecord;
 import org.applab.digitizingdata.helpers.SavingsArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 import java.util.ArrayList;
 
@@ -36,13 +32,14 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
     private String meetingDate;
     private int memberId;
     private int meetingId;
-    private MeetingSavingRepo savingRepo = null;
     private Meeting targetMeeting = null;
     private int targetCycleId = 0;
     boolean alertDialogShowing = false;
+    LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         inflateCustomActionBar();
 
@@ -64,22 +61,20 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             memberId = getIntent().getIntExtra("_memberId",0);
         }
 
-        savingRepo = new MeetingSavingRepo(MemberSavingHistoryActivity.this);
-        MeetingRepo meetingRepo = new MeetingRepo(MemberSavingHistoryActivity.this);
-        targetMeeting = meetingRepo.getMeetingById(meetingId);
+        targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
 
         TextView txtTotalSavings = (TextView)findViewById(R.id.lblMSHTotalSavings);
         TextView txtMSHAmount = (TextView)findViewById(R.id.txtMSHAmount);
 
         if(targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
-            double totalSavings = savingRepo.getMemberTotalSavingsInCycle(targetCycleId, memberId);
+            double totalSavings = ledgerLinkApplication.getMeetingSavingRepo().getMemberTotalSavingsInCycle(targetCycleId, memberId);
             txtTotalSavings.setText(String.format("Total Savings  %,.0f UGX\n", totalSavings));
         }
 
         //Fill-out the Savings Amount in case it exists
         if(targetMeeting != null ) {
-            double saving = savingRepo.getMemberSaving(targetMeeting.getMeetingId(), memberId);
+            double saving = ledgerLinkApplication.getMeetingSavingRepo().getMemberSaving(targetMeeting.getMeetingId(), memberId);
             if(saving > 0) {
                 txtMSHAmount = (TextView)findViewById(R.id.txtMSHAmount);
                 txtMSHAmount.setText(String.format("%.0f",saving));
@@ -160,10 +155,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
     }
 
     private void populateSavingHistory() {
-        if(savingRepo == null) {
-            savingRepo = new MeetingSavingRepo(MemberSavingHistoryActivity.this);
-        }
-        ArrayList<MemberSavingRecord> savings = savingRepo.getMemberSavingHistoryInCycle(targetCycleId, memberId);
+         ArrayList<MemberSavingRecord> savings = ledgerLinkApplication.getMeetingSavingRepo().getMemberSavingHistoryInCycle(targetCycleId, memberId);
 
         if(savings == null) {
             savings = new ArrayList<MemberSavingRecord>();
@@ -337,12 +329,10 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             */
 
             //Now save
-            if(savingRepo == null) {
-                savingRepo = new MeetingSavingRepo(MemberSavingHistoryActivity.this);
-            }
+
 
             String comment = "";
-            successFlg = savingRepo.saveMemberSaving(meetingId, memberId, theAmount, comment);
+            successFlg = ledgerLinkApplication.getMeetingSavingRepo().saveMemberSaving(meetingId, memberId, theAmount, comment);
 
             return successFlg;
         }

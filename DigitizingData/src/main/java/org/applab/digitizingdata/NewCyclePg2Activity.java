@@ -10,19 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-
+import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersCustomArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
 
@@ -33,9 +30,11 @@ public class NewCyclePg2Activity extends SherlockListActivity {
     ActionBar actionBar;
     ArrayList<Member> members = null;
     boolean isUpdateCycleAction = false;
+    LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_new_cycle_pg2);
@@ -204,8 +203,7 @@ public class NewCyclePg2Activity extends SherlockListActivity {
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(getApplicationContext());
-        members = memberRepo.getAllMembers();
+         members = ledgerLinkApplication.getMemberRepo().getAllMembers();
 
         if(members == null) {
             members = new ArrayList<Member>();

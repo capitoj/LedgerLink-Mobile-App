@@ -39,6 +39,13 @@ public class MeetingCashBookFrag extends SherlockFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        parentActivity = (MeetingActivity) getSherlockActivity();
+        meetingRepo = parentActivity.ledgerLinkApplication.getMeetingRepo();
+        savingRepo = parentActivity.ledgerLinkApplication.getMeetingSavingRepo();
+        loanIssuedRepo = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo();
+        repaymentRepo = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo();
+        fineRepo = parentActivity.ledgerLinkApplication.getMeetingFineRepo();
         setHasOptionsMenu(true);
     }
 
@@ -71,19 +78,11 @@ public class MeetingCashBookFrag extends SherlockFragment {
                 //  title = "Meeting";
                 break;
         }
-
-        meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
-        savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
-        loanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
-        repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
-        fineRepo = new MeetingFineRepo(getSherlockActivity().getApplicationContext());
-
-
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
 
-        parentActivity = (MeetingActivity) getSherlockActivity();
+
         populateCashBookFields();
 
     }
@@ -222,9 +221,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
         } catch (Exception ex) {
 
         } finally {
-            meetingRepo = null;
-            savingRepo = null;
-            repaymentRepo = null;
+
         }
     }
 
@@ -237,9 +234,6 @@ public class MeetingCashBookFrag extends SherlockFragment {
             txtCashToBankAmount = (EditText) getSherlockActivity().findViewById(R.id.txtCashToBank);
             theCashToBank = Double.valueOf(txtCashToBankAmount.getText().toString());
 
-            if (meetingRepo == null) {
-                meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
-            }
             meetingRepo.updateCashBook(meetingId, totalCashInBox, theCashToBank);
         }
     }

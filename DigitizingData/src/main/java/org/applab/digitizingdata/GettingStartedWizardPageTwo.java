@@ -8,19 +8,20 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
+import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
-import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 public class GettingStartedWizardPageTwo extends SherlockActivity {
     private VslaInfo vslaInfo = null;
+    LedgerLinkApplication ledgerLinkApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
+
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
 
@@ -32,8 +33,7 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
 
         actionBar.setTitle("Get Started");
 
-        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
-        vslaInfo = vslaInfoRepo.getVslaInfo();
+        vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
 
         TextView savingsGroupName = (TextView) findViewById(R.id.txtNCP_header);
         if(!vslaInfo.isActivated()) {
@@ -46,7 +46,7 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
         }
 
 
-        vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_PIN);
+        ledgerLinkApplication.getVslaInfoRepo().updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_PIN);
 
     }
 

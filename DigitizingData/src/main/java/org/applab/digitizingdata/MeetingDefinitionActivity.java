@@ -16,22 +16,16 @@ import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MemberRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,28 +43,20 @@ public class MeetingDefinitionActivity extends SherlockActivity {
     private int mMonth;
     private int mDay;
     private String dateString;
-    private MeetingRepo repo;
     private ArrayList<Member> members;
-    private MeetingAttendanceRepo attendanceRepo;
     private Meeting previousMeeting; //The most recent meeting before this one
     private Meeting meetingOfSameDate = null;
     private boolean reloadedExistingMeeting = false; //Flag to determine whether some actions will be performed
     private VslaCycle selectedCycle = null;
+    LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         inflateCustomBar();
-
-
-
         setContentView(R.layout.activity_meeting_definition);
-
-        repo = new MeetingRepo(MeetingDefinitionActivity.this);
-
         //Setup the Fields by getting the current Cycle
-        VslaCycleRepo cycleRepo = new VslaCycleRepo(getApplicationContext());
-
         //The multiple cycle text view
         TextView lblMDMultipleCycles = (TextView) findViewById(R.id.lblMDMultipleCycles);
 
@@ -78,7 +64,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         RadioGroup grpCycleDates = (RadioGroup)findViewById(R.id.grpMDExistingCycles);
 
         //Retrieve all the active cycles
-        ArrayList<VslaCycle> activeCycles = cycleRepo.getActiveCycles();
+        ArrayList<VslaCycle> activeCycles = ledgerLinkApplication.getVslaCycleRepo().getActiveCycles();
 
         //Create radio buttons dynamically
         if(activeCycles != null) {
@@ -145,7 +131,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
                 //Setup the Previous Meeting at this point so that it holds the meeting of the selected Cycle
                 if(null != selectedCycle) {
-                    previousMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
+                    previousMeeting = ledgerLinkApplication.getMeetingRepo().getCurrentMeeting(selectedCycle.getCycleId());
                 }
                 //Toast.makeText(getApplicationContext(), "Selected VSLA Cycle is: " + Utils.formatDate(selectedCycle.getStartDate()),Toast.LENGTH_LONG).show();
             }
@@ -153,7 +139,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
         //TODO: This will be deprecated after the introduction of multi-cycle support
         if(null != selectedCycle) {
-            previousMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
+            previousMeeting = ledgerLinkApplication.getMeetingRepo().getCurrentMeeting(selectedCycle.getCycleId());
         }
 
         //Reset the instruction text
@@ -208,10 +194,8 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                         boolean retSetupMeeting = false;
                         if(saveMeetingDate()) {
                             //Get the Current Meeting ID
-                            if(repo == null) {
-                                repo = new MeetingRepo(MeetingDefinitionActivity.this);
-                            }
-                            Meeting currentMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
+
+                            Meeting currentMeeting = ledgerLinkApplication.getMeetingRepo().getCurrentMeeting(selectedCycle.getCycleId());
 
                             retSetupMeeting = setupCurrentMeeting(currentMeeting);
 
@@ -333,10 +317,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 //TODO: I can avoid the trip to the database by making the new meeting variable be module-level
                 if(saveMeetingDate()) {
                     //Get the Current Meeting ID
-                    if(repo == null) {
-                        repo = new MeetingRepo(MeetingDefinitionActivity.this);
-                    }
-                    Meeting currentMeeting = repo.getCurrentMeeting(selectedCycle.getCycleId());
+                    Meeting currentMeeting = ledgerLinkApplication.getMeetingRepo().getCurrentMeeting(selectedCycle.getCycleId());
 
                     return setupCurrentMeeting(currentMeeting);
                 }
@@ -357,10 +338,8 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         Intent i = null;
         if(null != currentMeeting) {
             //Setup Meeting
-            MemberRepo memberRepo = new MemberRepo(MeetingDefinitionActivity.this);
-            attendanceRepo = new MeetingAttendanceRepo(MeetingDefinitionActivity.this);
-            //Get the Members
-            members = memberRepo.getAllMembers();
+                //Get the Members
+            members = ledgerLinkApplication.getMemberRepo().getAllMembers();
 
             //Preset Meeting Attendance to Absent if it is a NEW meeting
             if(!reloadedExistingMeeting) {
@@ -394,16 +373,14 @@ public class MeetingDefinitionActivity extends SherlockActivity {
     }
     public void presetMeetingAttendance(int meetingId) {
         for(Member m: members) {
-            attendanceRepo.saveMemberAttendance(meetingId, m.getMemberId(), 0);
+            ledgerLinkApplication.getMeetingAttendanceRepo().saveMemberAttendance(meetingId, m.getMemberId(), 0);
         }
     }
 
     private boolean saveMeetingDate(){
         boolean successFlg = false;
         Meeting meeting = new Meeting();
-        repo = new MeetingRepo(getApplicationContext());
-
-        return validateMeeting(meeting) && repo.addMeeting(meeting);
+        return validateMeeting(meeting) && ledgerLinkApplication.getMeetingRepo().addMeeting(meeting);
     }
 
     private boolean validateMeeting(Meeting meeting){
@@ -439,15 +416,12 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             //Before Proceeding determine whether to reload an existing meeting
             //as long as the meeting has not been closed i.e. data sent
             //Get the Most Recent Meeting
-            if(null == repo) {
-                repo = new MeetingRepo(MeetingDefinitionActivity.this);
-            }
-            Meeting mostRecent = repo.getMostRecentMeetingInCycle(selectedCycle.getCycleId());
+            Meeting mostRecent = ledgerLinkApplication.getMeetingRepo().getMostRecentMeetingInCycle(selectedCycle.getCycleId());
 
             //First: Check whether a meeting with this date exists in the given vsla cycle
             //Only dont proceed if a meeting on this date is found, and is non GSW
             meetingOfSameDate = null;
-            meetingOfSameDate = repo.getMeetingByDate(meeting.getMeetingDate(), selectedCycle.getCycleId());
+            meetingOfSameDate = ledgerLinkApplication.getMeetingRepo().getMeetingByDate(meeting.getMeetingDate(), selectedCycle.getCycleId());
             if(null != meetingOfSameDate) {
                 if(meetingOfSameDate.isGettingStarted()) {
                     //return true to force creating of this new meeting

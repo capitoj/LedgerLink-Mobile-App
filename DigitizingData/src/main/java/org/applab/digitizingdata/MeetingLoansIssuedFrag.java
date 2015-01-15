@@ -9,10 +9,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingStartingCash;
 import org.applab.digitizingdata.domain.model.Member;
@@ -21,12 +19,7 @@ import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersLoansIssuedArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
-import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
-import org.applab.digitizingdata.repo.MemberRepo;
+import org.applab.digitizingdata.repo.*;
 
 import java.util.ArrayList;
 
@@ -46,6 +39,18 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     private MeetingFineRepo fineRepo = null;
     private Meeting currentMeeting = null;
     private double totalCashInBox = 0.0;
+
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        parentActivity = (MeetingActivity) getSherlockActivity();
+        meetingRepo = parentActivity.ledgerLinkApplication.getMeetingRepo();
+        savingRepo = parentActivity.ledgerLinkApplication.getMeetingSavingRepo();
+        loanIssuedRepo = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo();
+        repaymentRepo = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo();
+        fineRepo = parentActivity.ledgerLinkApplication.getMeetingFineRepo();
+
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,12 +103,6 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
 
-        meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
-        savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
-        loanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
-        repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
-        fineRepo = new MeetingFineRepo(getSherlockActivity().getApplicationContext());
-
         /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
          meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */
@@ -115,8 +114,6 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         }
 
         //Populate the Cash Available
-        parentActivity = (MeetingActivity) getSherlockActivity();
-
         // Populate members list
         //Wrap and run long task
         Runnable runnable = new Runnable() {
@@ -133,8 +130,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(getSherlockActivity().getApplicationContext());
-        members = memberRepo.getAllMembers();
+        members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
 
         //Now get the data via the adapter
         final MembersLoansIssuedArrayAdapter adapter = new MembersLoansIssuedArrayAdapter(getSherlockActivity().getBaseContext(), members);
@@ -200,10 +196,6 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         double actualStartingCash = 0.0;
 
         try {
-            meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
-            savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
-            repaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
-
             MeetingStartingCash startingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
 
             totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
@@ -223,9 +215,6 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         } catch (Exception ex) {
 
         } finally {
-            meetingRepo = null;
-            savingRepo = null;
-            repaymentRepo = null;
         }
     }
 

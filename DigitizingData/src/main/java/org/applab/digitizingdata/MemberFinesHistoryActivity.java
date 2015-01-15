@@ -10,19 +10,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.VslaCycle;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
@@ -30,10 +23,6 @@ import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.EnhancedListView;
 import org.applab.digitizingdata.helpers.MemberFineRecord;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.FineTypeRepo;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 
@@ -45,14 +34,15 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
     private String meetingDate;
     private int memberId;
     private int meetingId;
-    private MeetingFineRepo fineRepo = null;
     private int targetCycleId = 0;
 
     private EnhancedListAdapter mAdapter;
     private EnhancedListView mListView;
+    LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         inflateActionBar();
 
@@ -75,13 +65,11 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
             memberId = getIntent().getIntExtra("_memberId", 0);
         }
 
-        fineRepo = new MeetingFineRepo(MemberFinesHistoryActivity.this);
-        MeetingRepo meetingRepo = new MeetingRepo(MemberFinesHistoryActivity.this);
-        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
+         Meeting targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
 
         if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
-            double totalFines = fineRepo.getMemberTotalFinesInCycle(targetCycleId, memberId);
+            double totalFines = ledgerLinkApplication.getMeetingFineRepo().getMemberTotalFinesInCycle(targetCycleId, memberId);
         }
 
         mListView.setSwipingLayout();
@@ -110,7 +98,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
                     // Delete item completely from your persistent storage
                     @Override public void discard() {
-                        fineRepo.updateMemberFineDeletedFlag(item.getFineId());
+                        ledgerLinkApplication.getMeetingFineRepo().updateMemberFineDeletedFlag(item.getFineId());
                     }
 
                 };
@@ -167,10 +155,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
     }
 
     private void populateFineHistory() {
-        if (fineRepo == null) {
-            fineRepo = new MeetingFineRepo(MemberFinesHistoryActivity.this);
-        }
-        ArrayList<MemberFineRecord> fines = fineRepo.getMemberFineHistoryInCycle(targetCycleId, memberId);
+        ArrayList<MemberFineRecord> fines = ledgerLinkApplication.getMeetingFineRepo().getMemberFineHistoryInCycle(targetCycleId, memberId);
 
         if (fines == null) {
             fines = new ArrayList<MemberFineRecord>();
@@ -258,23 +243,19 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         ArrayList<MemberFineRecord> values;
         int position;
         Typeface typeface;
-        FineTypeRepo fineTypeRepo;
-        MeetingFineRepo finesRepo;
-        VslaCycleRepo cycleRepo;
         VslaCycle currentCycle;
         String datePaid;
         private boolean changedFromCode = false;
+        LedgerLinkApplication ledgerLinkApplication;
 
         public EnhancedListAdapter(Context context, ArrayList<MemberFineRecord> values) {
 
             this.context = context;
             this.values = values;
             this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
+            ledgerLinkApplication = (LedgerLinkApplication) getApplication();
 
-            finesRepo = new MeetingFineRepo(getApplicationContext());
-            fineTypeRepo = new FineTypeRepo(getApplicationContext());
-            cycleRepo = new VslaCycleRepo(getApplicationContext());
-            currentCycle = cycleRepo.getCurrentCycle();
+            currentCycle = ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle();
         }
 
         public void remove(int position) {
@@ -411,7 +392,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                                                                                  fineRecord.setStatus(0);
                                                                                  datePaid = "";
                                                                              }
-                                                                             finesRepo.updateMemberFineStatus(meetingId, fineRecord.getFineId(), fineRecord.getStatus(), datePaid);
+                                                                             ledgerLinkApplication.getMeetingFineRepo().updateMemberFineStatus(meetingId, fineRecord.getFineId(), fineRecord.getStatus(), datePaid);
                                                                          }
                                                                      }
                                                                  }

@@ -8,20 +8,14 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingStartingCash;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingFineRepo;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
-import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
 import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.MeetingSavingRepo;
 
 public class MeetingStartingCashFrag extends SherlockFragment {
 
@@ -34,6 +28,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        parentActivity = (MeetingActivity) getSherlockActivity();
         setHasOptionsMenu(true);
     }
 
@@ -73,7 +68,6 @@ public class MeetingStartingCashFrag extends SherlockFragment {
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-        parentActivity = (MeetingActivity) getSherlockActivity();
         populateStartingCash();
     }
 
@@ -106,11 +100,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
         txtActualCashInBoxComment = (TextView) getSherlockActivity().findViewById(R.id.txtStartingCashComment);
 
 
-        MeetingRepo meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
-        MeetingSavingRepo savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
-        MeetingFineRepo fineRepo = new MeetingFineRepo(getSherlockActivity().getApplicationContext());
-        MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(getSherlockActivity().getApplicationContext());
-        MeetingLoanRepaymentRepo loanRepaymentRepo = new MeetingLoanRepaymentRepo(getSherlockActivity().getApplicationContext());
+        MeetingRepo meetingRepo = parentActivity.ledgerLinkApplication.getMeetingRepo();
 
         // Lock fields in read-only mode
         //Do not invoke the event when in Read only Mode
@@ -252,10 +242,9 @@ public class MeetingStartingCashFrag extends SherlockFragment {
             }
 
             // Now Save
-            MeetingRepo meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext());
             double theFinesPaid = 0.0;
             double totalCash = theCashFromBox + theCashFromBank + theFinesPaid;
-            successFlg = meetingRepo.updateStartingCash(meetingId, theCashFromBox, theCashFromBank, theFinesPaid, comment);
+            successFlg = parentActivity.ledgerLinkApplication.getMeetingRepo().updateStartingCash(meetingId, theCashFromBox, theCashFromBank, theFinesPaid, comment);
 
             populateStartingCash();
             return successFlg;

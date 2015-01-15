@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
@@ -12,20 +11,19 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.fontutils.TypefaceTextView;
-import org.applab.digitizingdata.helpers.CustomGenderSpinnerListener;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MemberRepo;
 import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.Calendar;

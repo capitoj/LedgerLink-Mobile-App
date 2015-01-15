@@ -52,8 +52,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     private int memberId;
     private int targetCycleId = 0;
     private Meeting targetMeeting = null;
-    private MeetingLoanIssuedRepo loanIssuedRepo = null;
-    private MeetingLoanRepaymentRepo loansRepaidRepo = null;
     private MeetingLoanIssued recentLoan = null;
 
     private LinearLayout repaymentHistorySection;
@@ -82,9 +80,12 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     private int mDay;
     private String dateString;
 
+    LedgerLinkApplication ledgerLinkApplication;
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         inflateCustomActionBar();
 
@@ -107,14 +108,10 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             memberId = getIntent().getIntExtra("_memberId", 0);
         }
 
-        MeetingRepo meetingRepo = new MeetingRepo(MemberLoansRepaidHistoryActivity.this);
-        targetMeeting = meetingRepo.getMeetingById(meetingId);
-        loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansRepaidHistoryActivity.this);
-        loansRepaidRepo = new MeetingLoanRepaymentRepo(MemberLoansRepaidHistoryActivity.this);
-        VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(MemberLoansRepaidHistoryActivity.this);
+        targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
 
         //Determine whether this is an edit operation on an existing Loan Repayment
-        repaymentBeingEdited = loansRepaidRepo.getLoansRepaymentByMemberInMeeting(meetingId, memberId);
+        repaymentBeingEdited = ledgerLinkApplication.getMeetingLoanRepaymentRepo().getLoansRepaymentByMemberInMeeting(meetingId, memberId);
         if (null != repaymentBeingEdited) {
             //Flag that this is an edit operation
             isEditOperation = true;
@@ -144,7 +141,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         final TextView lblMLRepayHCurrencyTotal = (TextView) findViewById(R.id.lblMLRepayHCurrencyTotal);
         repaymentHistorySection = (LinearLayout) findViewById(R.id.frmMLRepayHHistory);
 
-        recentLoan = loanIssuedRepo.getAllMostRecentLoanIssuedToMember(memberId);
+        recentLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getAllMostRecentLoanIssuedToMember(memberId);
         StringBuilder sb = null;
         if (null != recentLoan) {
             txtLoanNumber.setText(String.format("%d", recentLoan.getLoanNo()));
@@ -317,7 +314,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
         {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
-            VslaCycle cycle = vslaCycleRepo.getCycle(targetCycleId);
+            VslaCycle cycle = ledgerLinkApplication.getVslaCycleRepo().getCycle(targetCycleId);
             txtCycleSpan.setText(String.format("Cycle %s to %s", Utils.formatDate(cycle.getStartDate(), Utils.DATE_FIELD_FORMAT), Utils.formatDate(cycle.getEndDate(), Utils.DATE_FIELD_FORMAT)));
             // outstandingLoans = loanIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetCycleId, memberId);
             // loanIssue = loanIssuedRepo.getOutstandingLoansByMemberInCycle(targetCycleId, memberId);
@@ -624,10 +621,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     }
 
     private void populateLoanRepaymentHistory() {
-        if (loansRepaidRepo == null) {
-            loansRepaidRepo = new MeetingLoanRepaymentRepo(MemberLoansRepaidHistoryActivity.this);
-        }
-        ArrayList<MemberLoanRepaymentRecord> loanRepayments = loansRepaidRepo.getLoansRepaymentsByMemberInCycle(targetCycleId, memberId);
+        ArrayList<MemberLoanRepaymentRecord> loanRepayments = ledgerLinkApplication.getMeetingLoanRepaymentRepo().getLoansRepaymentsByMemberInCycle(targetCycleId, memberId);
 
         if (loanRepayments == null) {
             loanRepayments = new ArrayList<MemberLoanRepaymentRecord>();
@@ -727,10 +721,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             String comments = txtComments.getText().toString().trim();
 
             //Now Save the data
-            if (null == loansRepaidRepo) {
-                loansRepaidRepo = new MeetingLoanRepaymentRepo(MemberLoansRepaidHistoryActivity.this);
-            }
-
             //retrieve the LoanId and LoanNo of the most recent uncleared loan
             int recentLoanId = 0;
             double balanceBefore = 0.0;
@@ -772,7 +762,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             boolean undoSucceeded = false;
             if (isEditOperation && repaymentBeingEdited != null) {
                 // Post a Reversal or just edit the figures
-                undoSucceeded = loanIssuedRepo.updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() - repaymentBeingEdited.getAmount(), repaymentBeingEdited.getBalanceBefore(), repaymentBeingEdited.getLastDateDue(), meetingDate);
+                undoSucceeded = ledgerLinkApplication.getMeetingLoanIssuedRepo().updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() - repaymentBeingEdited.getAmount(), repaymentBeingEdited.getBalanceBefore(), repaymentBeingEdited.getLastDateDue(), meetingDate);
             }
 
             //If it was an edit operation and undo changes failed, then exit
@@ -782,17 +772,13 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
             //Otherwise, proceed
             //saveMemberLoanRepayment(int meetingId, int memberId, int loanId, double amount, double balanceBefore, String comments, double balanceAfter,double interestAmount, double rolloverAmount, Date lastDateDue, Date nextDateDue)//
-            boolean saveRepayment = loansRepaidRepo.saveMemberLoanRepayment(meetingId, memberId, recentLoanId, theAmount, balanceBefore, comments, newBalance, theInterest, theRollover, dtLastDateDue, dtNextDateDue);
+            boolean saveRepayment = ledgerLinkApplication.getMeetingLoanRepaymentRepo().saveMemberLoanRepayment(meetingId, memberId, recentLoanId, theAmount, balanceBefore, comments, newBalance, theInterest, theRollover, dtLastDateDue, dtNextDateDue);
             if (saveRepayment) {
                 //Also update the balances
-                if (loanIssuedRepo == null) {
-                    loanIssuedRepo = new MeetingLoanIssuedRepo(MemberLoansRepaidHistoryActivity.this);
-                }
-
                 //TODO: Decide whether to update the Interest Paid also: and whether it will be Cummulative Interest or Just current Interest
                 //updateMemberLoanBalances(int loanId, double totalRepaid, double balance, Date newDateDue)
                 // return loanIssuedRepo.updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() + theAmount, theRollover, theDateDue, meetingDate);
-                return loanIssuedRepo.updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() + theAmount, theRollover, recentLoan.getDateDue(), meetingDate);
+                return ledgerLinkApplication.getMeetingLoanIssuedRepo().updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() + theAmount, theRollover, recentLoan.getDateDue(), meetingDate);
 
 
             } else {

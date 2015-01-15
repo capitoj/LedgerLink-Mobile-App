@@ -1,27 +1,19 @@
 package org.applab.digitizingdata;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.MembersFinesArrayAdapter;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MemberRepo;
 
 import java.util.ArrayList;
 
@@ -35,6 +27,11 @@ public class MeetingFinesFrag extends SherlockFragment {
     private MeetingActivity parentActivity;
     private RelativeLayout fragmentView;
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        parentActivity = (MeetingActivity) getSherlockActivity();
+
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,7 +55,6 @@ public class MeetingFinesFrag extends SherlockFragment {
     {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        parentActivity = (MeetingActivity) getSherlockActivity();
         ActionBar actionBar = parentActivity.getSupportActionBar();
         meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
         String title = String.format("Meeting");
@@ -96,8 +92,7 @@ public class MeetingFinesFrag extends SherlockFragment {
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
-        members = memberRepo.getAllMembers();
+        members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
 
         //Now get the data via the adapter
         final MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(parentActivity.getBaseContext(), members);

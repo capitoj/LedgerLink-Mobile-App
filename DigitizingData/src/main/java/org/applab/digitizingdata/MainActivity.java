@@ -11,22 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.AbsListView.LayoutParams;
-import android.widget.ImageView;
-import android.widget.TextView;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
-
 import org.applab.digitizingdata.domain.model.VslaInfo;
 import org.applab.digitizingdata.helpers.MenuItem;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.VslaInfoRepo;
 
 import java.util.ArrayList;
 
@@ -39,11 +32,12 @@ public class MainActivity extends SherlockActivity {
     private CustomGridViewAdapter customGridAdapter;
     ArrayList<MenuItem> mainMenuItems = null;
     private VslaInfo vslaInfo = null;
-    private VslaInfoRepo vslaInfoRepo = null;
     private ActionBar actionBar;
+    LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         setContentView(R.layout.main_menu);
 
         actionBar = getSupportActionBar();
@@ -55,8 +49,7 @@ public class MainActivity extends SherlockActivity {
         }
 
         //Retrieve VSLA Information
-        vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
-            vslaInfo = vslaInfoRepo.getVslaInfo();
+         vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
 
         //Display the main menu
         displayMainMenu();
