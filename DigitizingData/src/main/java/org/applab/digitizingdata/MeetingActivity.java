@@ -58,6 +58,8 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     private static int targetMeetingId = 0;
     private static int currentDataItemPosition = 0;
     private static String serverUri = "";
+    private ActionBar actionBar;
+    private String meetingDate;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,33 +67,68 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_meeting);
+        meetingDate = getIntent().getStringExtra("_meetingDate");
+        setupActionBarAndTabs();
 
-        Context appContext = getApplicationContext();
 
+        if (getIntent().hasExtra("_meetingId")) {
+            targetMeetingId = getIntent().getIntExtra("_meetingId", 0);
+        }
+
+        if (targetMeetingId == 0) {
+            // If target meeting id is 0, then load it as current meeting id
+            targetMeetingId = ledgerLinkApplication.getMeetingRepo().getCurrentMeeting(ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle().getCycleId()).getMeetingId();
+
+            // Define the meeting id to be accessed by all tab fragments
+            getIntent().putExtra("_meetingId", targetMeetingId);
+        }
+
+
+        if (getIntent().hasExtra("_enableSendData")) {
+            boolean enableSendData = getIntent().getBooleanExtra("_enableSendData", false);
+        }
+
+
+        /*if(viewOnly) {
+            Utils._meetingDataViewMode = Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY;
+        }*/
+
+
+        // Update Starting Cash
+        updateStartingCash(targetMeetingId);
+
+    }
+
+    private void setupActionBarAndTabs() {
         //ActionBar
-        ActionBar actionBar = getSupportActionBar();
+        actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
         actionBar.setDisplayHomeAsUpEnabled(true);
-        String meetingDate = getIntent().getStringExtra("_meetingDate");
+
 
         // String title = String.format("Meeting    %s", meetingDate);
         String title = "Meeting";
-
-
-        switch (Utils._meetingDataViewMode) {
-            case VIEW_MODE_REVIEW:
-                title = "Send Data";
-                break;
-            case VIEW_MODE_READ_ONLY:
-                title = "Sent Data";
-                break;
-            default:
-                break;
+        if(! getCurrentMeeting().isMeetingDataSent())
+        {
+            title = "Send Data";
         }
+        else {
+            title = "Sent Data";
+        }
+//        switch (Utils._meetingDataViewMode) {
+//            case VIEW_MODE_REVIEW:
+//                title = "Send Data";
+//                break;
+//            case VIEW_MODE_READ_ONLY:
+//                title = "Sent Data";
+//                break;
+//            default:
+//                break;
+//        }
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
 
@@ -132,33 +169,6 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
                 actionBar.selectTab(actionBar.getTabAt(0));
             }
         }
-
-        if (getIntent().hasExtra("_enableSendData")) {
-            boolean enableSendData = getIntent().getBooleanExtra("_enableSendData", false);
-        }
-
-
-        /*if(viewOnly) {
-            Utils._meetingDataViewMode = Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY;
-        }*/
-
-        if (getIntent().hasExtra("_meetingId")) {
-            targetMeetingId = getIntent().getIntExtra("_meetingId", 0);
-        }
-
-        if (targetMeetingId == 0) {
-            // If target meeting id is 0, then load it as current meeting id
-            VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(getBaseContext());
-
-             targetMeetingId = ledgerLinkApplication.getMeetingRepo().getCurrentMeeting(vslaCycleRepo.getCurrentCycle().getCycleId()).getMeetingId();
-
-            // Define the meeting id to be accessed by all tab fragments
-            getIntent().putExtra("_meetingId", targetMeetingId);
-        }
-
-        // Update Starting Cash
-        updateStartingCash(targetMeetingId);
-
     }
 
 
@@ -185,8 +195,13 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         if (getIntent().hasExtra("_currentMeetingId")) {
 
             //try to load it from db
-            MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
-            currentMeeting = meetingRepo.getMeetingById(getIntent().getIntExtra("_currentMeetingId", 0));
+            currentMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(getIntent().getIntExtra("_currentMeetingId", 0));
+            return currentMeeting;
+        }
+        else if (getIntent().hasExtra("_meetingId")) {
+
+            //try to load it from db
+            currentMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(getIntent().getIntExtra("_meetingId", 0));
             return currentMeeting;
         }
 
@@ -317,6 +332,14 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             return getIntent().getBooleanExtra("_viewOnly", false);
         }
         return getCurrentMeeting() != null && !getCurrentMeeting().isCurrent();
+    }
+
+    //Indicates that we are viewing sent data
+    public boolean isViewingSentData() {
+        if (getIntent().hasExtra("_viewingSentData")) {
+            return getIntent().getBooleanExtra("_viewingSentData", false);
+        }
+        return false;
     }
 
     protected Object mActionMode;

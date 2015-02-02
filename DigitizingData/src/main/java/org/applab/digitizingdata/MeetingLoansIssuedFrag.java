@@ -67,19 +67,19 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         }
         fragmentView = inflater.inflate(R.layout.frag_meeting_loans_issued, container, false);
 
-        initializeFragmentView();
         return fragmentView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        TextView lblTotalCash = (TextView) getSherlockActivity().findViewById(R.id.lblMLIssuedFTotalCash);
 
-        populateTotalCash();
-        if (null != lblTotalCash) {
-            lblTotalCash.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
-        }
+
+    }
+
+    public void onResume() {
+        super.onResume();
+        initializeFragmentView();
 
     }
 
@@ -103,6 +103,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
 
+
         /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
          meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */
@@ -112,6 +113,14 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         if (null == currentMeeting) {
             currentMeeting = meetingRepo.getMeetingById(meetingId);
         }
+
+        TextView lblTotalCash = (TextView) getSherlockActivity().findViewById(R.id.lblMLIssuedFTotalCash);
+
+        populateTotalCash();
+        if (null != lblTotalCash) {
+            lblTotalCash.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
+        }
+
 
         //Populate the Cash Available
         // Populate members list
@@ -213,6 +222,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
 
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
 
         } finally {
         }

@@ -111,7 +111,7 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
                         continue;
                     }
 
-                    if (loanIssue.getComment() == null || loanIssue.getComment().trim().isEmpty()) {
+                    if (loanIssue.getComment() == null || "".equals(loanIssue.getComment().trim())) {
                         txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", loanIssue.getLoanBalance()));
                         txtComment.setVisibility(View.GONE);
                     } else {

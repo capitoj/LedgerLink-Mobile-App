@@ -13,7 +13,6 @@ import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingAttendanceRepo;
 
 /**
  * Created by Moses on 6/25/13.
@@ -52,6 +51,16 @@ public class MeetingSummaryFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         actionBar = getSherlockActivity().getSupportActionBar();
+
+    }
+
+    public void onResume() {
+        super.onResume();
+        populateMeetingSummary();
+
+    }
+
+    private void populateMeetingSummary() {
         String meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
         String title = "Meeting";
 
@@ -67,7 +76,6 @@ public class MeetingSummaryFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
-        MeetingActivity parentActivity = (MeetingActivity) getSherlockActivity();
         //TextView lblMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFMeetingDate);
         // lblMeetingDate.setText(meetingDate);
         int meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
@@ -129,7 +137,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
         //Possible Solution: Store the value of Previous Meeting in database->Meetings table
         Meeting previousMeeting = null;
 
-            previousMeeting = parentActivity.ledgerLinkApplication.getMeetingRepo().getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), currentMeeting.getMeetingId());
+        previousMeeting = parentActivity.ledgerLinkApplication.getMeetingRepo().getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), currentMeeting.getMeetingId());
 
 
         //Force view to be of current meeting if in Data Review mode

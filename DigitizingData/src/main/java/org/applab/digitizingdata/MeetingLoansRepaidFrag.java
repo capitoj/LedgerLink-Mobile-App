@@ -123,8 +123,8 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
 
-                //Do not invoke the event when in Read only Mode
-                if (parentActivity.isViewOnly()) {
+                //Do not invoke the event when in Read only Mode but not in sent data mode
+                if (parentActivity.isViewOnly() && !parentActivity.isViewingSentData()) {
                     Toast.makeText(parentActivity.getBaseContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -137,6 +137,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                     viewHistory.putExtra("_names", selectedMember.getFullName());
                     viewHistory.putExtra("_meetingDate", meetingDate);
                     viewHistory.putExtra("_meetingId", meetingId);
+                    viewHistory.putExtra("_viewingSentData", parentActivity.isViewingSentData());
                     startActivity(viewHistory);
                 }
 

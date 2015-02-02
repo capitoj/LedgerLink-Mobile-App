@@ -108,10 +108,10 @@ public class MeetingStartingCashFrag extends SherlockFragment {
             Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
             txtActualCashInBoxComment.setEnabled(false);
             txtActualCashInBoxComment.setClickable(false);
-            txtActualCashInBoxComment.setActivated(false);
+            //txtActualCashInBoxComment.setActivated(false);
             txtActualCashInBox.setEnabled(false);
             txtActualCashInBox.setClickable(false);
-            txtActualCashInBox.setActivated(false);
+            //txtActualCashInBox.setActivated(false);
 
             txtActualCashInBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -154,7 +154,7 @@ public class MeetingStartingCashFrag extends SherlockFragment {
             if ((int) (startingCash.getActualStartingCash()) > 0) {
                 txtActualCashInBox.setText(String.format("%.0f", Double.valueOf(actualStartingCash)));
             }
-            if (!startingCash.getComment().isEmpty()) {
+            if (!"".equals(startingCash.getComment())) {
                 txtActualCashInBoxComment.setText(String.format("%s", startingCash.getComment()));
             }
         }

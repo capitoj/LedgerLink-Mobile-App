@@ -14,18 +14,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.MeetingLoanIssued;
 import org.applab.digitizingdata.domain.model.VslaCycle;
@@ -34,10 +28,6 @@ import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.helpers.LoanRepaymentHistoryArrayAdapter;
 import org.applab.digitizingdata.helpers.MemberLoanRepaymentRecord;
 import org.applab.digitizingdata.helpers.Utils;
-import org.applab.digitizingdata.repo.MeetingLoanIssuedRepo;
-import org.applab.digitizingdata.repo.MeetingLoanRepaymentRepo;
-import org.applab.digitizingdata.repo.MeetingRepo;
-import org.applab.digitizingdata.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,6 +71,23 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     private String dateString;
 
     LedgerLinkApplication ledgerLinkApplication;
+    private TextView lblLoanNo;
+    private TextView txtLoanNumber;
+    private TextView txtLoanAmountFld;
+    private TextView txtComment;
+    private TextView txtBalance;
+    private TextView txtNewInterest;
+    private TextView txtTotal;
+    private TextView txtNewDateDue;
+    private TextView lblInstruction;
+    private TextView lblMLRepayHLBCurrency;
+    private TextView lblMLRepayHCurrencyTotal;
+    private TextView lblMLRepayHInstruction;
+    private TextView txtLoanAmount;
+    private TextView txtComments;
+    private TextView txtInterest;
+    private TextView txtRollover;
+    private TextView txtNextDateDue;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -90,6 +97,8 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_loans_repaid_history);
+
+        getFieldsFromLayout();
 
         /** TextView lblMeetingDate = (TextView)findViewById(R.id.lblMLRepayHMeetingDate);
 
@@ -110,6 +119,45 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
         targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
 
+
+
+    }
+
+    private void getFieldsFromLayout() {
+        lblLoanNo = (TextView) findViewById(R.id.lblMLRepayHLoanNo);
+        txtLoanNumber = (TextView) findViewById(R.id.txtMLRepayHLoanNo);
+        txtLoanAmountFld = (TextView) findViewById(R.id.txtMLRepayHAmount);
+        txtComment = (TextView) findViewById(R.id.txtMLRepayHComment);
+        txtBalance = (TextView) findViewById(R.id.txtMLRepayHBalance);
+        txtNewInterest = (TextView) findViewById(R.id.txtMLRepayHInterest);
+        txtTotal = (TextView) findViewById(R.id.txtMLRepayHTotal);
+        txtNewDateDue = (TextView) findViewById(R.id.txtMLRepayHDateDue);
+        lblInstruction = (TextView) findViewById(R.id.lblMLRepayHInstruction);
+        lblMLRepayHLBCurrency = (TextView) findViewById(R.id.lblMLRepayHLBCurrency);
+        lblMLRepayHCurrencyTotal = (TextView) findViewById(R.id.lblMLRepayHCurrencyTotal);
+        lblMLRepayHInstruction = (TextView) findViewById(R.id.lblMLRepayHInstruction);
+
+        txtLoanAmount = (TextView) findViewById(R.id.txtMLRepayHAmount);
+        txtComments = (TextView) findViewById(R.id.txtMLRepayHComment);
+        txtInterest = (TextView) findViewById(R.id.txtMLRepayHInterest);
+        txtRollover = (TextView) findViewById(R.id.txtMLRepayHTotal);
+        txtNextDateDue = (TextView) findViewById(R.id.txtMLRepayHDateDue);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showContent();
+    }
+
+    private void showContent() {
+        if(isViewingSentData())
+        {
+            //Show sent data as per Nov wireframe V1.4 Page 24
+            showSentDataContent();
+            return;
+        }
+
         //Determine whether this is an edit operation on an existing Loan Repayment
         repaymentBeingEdited = ledgerLinkApplication.getMeetingLoanRepaymentRepo().getLoansRepaymentByMemberInMeeting(meetingId, memberId);
         if (null != repaymentBeingEdited) {
@@ -128,17 +176,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
         LinearLayout frmLoanRecord = (LinearLayout) findViewById(R.id.frmMLRepayHLoanRecord);
         // Get Loan Number of currently running loan
-        TextView lblLoanNo = (TextView) findViewById(R.id.lblMLRepayHLoanNo);
-        TextView txtLoanNumber = (TextView) findViewById(R.id.txtMLRepayHLoanNo);
-        TextView txtLoanAmountFld = (TextView) findViewById(R.id.txtMLRepayHAmount);
-        TextView txtComment = (TextView) findViewById(R.id.txtMLRepayHComment);
-        TextView txtBalance = (TextView) findViewById(R.id.txtMLRepayHBalance);
-        final TextView txtNewInterest = (TextView) findViewById(R.id.txtMLRepayHInterest);
-        TextView txtTotal = (TextView) findViewById(R.id.txtMLRepayHTotal);
-        final TextView txtNewDateDue = (TextView) findViewById(R.id.txtMLRepayHDateDue);
-        TextView lblInstruction = (TextView) findViewById(R.id.lblMLRepayHInstruction);
-        final TextView lblMLRepayHLBCurrency = (TextView) findViewById(R.id.lblMLRepayHLBCurrency);
-        final TextView lblMLRepayHCurrencyTotal = (TextView) findViewById(R.id.lblMLRepayHCurrencyTotal);
+
         repaymentHistorySection = (LinearLayout) findViewById(R.id.frmMLRepayHHistory);
 
         recentLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getAllMostRecentLoanIssuedToMember(memberId);
@@ -488,7 +526,11 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                                                                 }
                                                             }
         );
+    }
 
+
+    private void showSentDataContent() {
+        lblMLRepayHInstruction.setText(Utils.formatDate(targetMeeting.getMeetingDate())); //Set date in comments field
     }
 
     private void inflateCustomActionBar() {
@@ -650,12 +692,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                 return false;
             }
 
-            TextView txtLoanAmount = (TextView) findViewById(R.id.txtMLRepayHAmount);
-            TextView txtComments = (TextView) findViewById(R.id.txtMLRepayHComment);
-            TextView txtBalance = (TextView) findViewById(R.id.txtMLRepayHBalance);
-            TextView txtInterest = (TextView) findViewById(R.id.txtMLRepayHInterest);
-            TextView txtRollover = (TextView) findViewById(R.id.txtMLRepayHTotal);
-            TextView txtNextDateDue = (TextView) findViewById(R.id.txtMLRepayHDateDue);
+
 
             String amount = txtLoanAmount.getText().toString().trim();
             if (amount.length() < 1) {
@@ -789,6 +826,14 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             Log.e("MemberLoansRepaidHistory.saveMemberLoanRepayment", ex.getMessage());
             return false;
         }
+    }
+
+    //Indicates that we are viewing sent data
+    public boolean isViewingSentData() {
+        if (getIntent().hasExtra("_viewingSentData")) {
+            return getIntent().getBooleanExtra("_viewingSentData", false);
+        }
+        return false;
     }
 
     //DATE

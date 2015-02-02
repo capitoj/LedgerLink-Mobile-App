@@ -542,6 +542,7 @@ public class MeetingRepo {
                 return null;
             }
         } catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MeetingRepo.getMeetingStartingCash", ex.getMessage());
             return null;
         } finally {
