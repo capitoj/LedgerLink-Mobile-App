@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/mnuImportFromCsv"
+          android:title="Import from CSV"
+          android:orderInCategory="0"
+          android:showAsAction="never"
+            />
+
+</menu>

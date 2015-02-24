@@ -158,13 +158,17 @@ public class BeginMeetingActivity extends SherlockActivity {
                 LinearLayout parent = (LinearLayout) grpPastMeetings.getParent();
                 grpPastMeetings.setVisibility(View.GONE);
 
-                // Hide the Section for Current Meeting
-                grpCurrentMeeting.setVisibility(View.GONE);
 
                 // Display the default Instructions
                 sb = new StringBuilder("Press <b>Begin</b> to begin a new meeting.");
 
             }
+        }
+
+        if(currentMeetings.size() == 0) {
+            // Hide the Section for Current Meeting
+            grpCurrentMeeting.setVisibility(View.GONE);
+
         }
 
         // Take care of Fresh start No meetings at all
@@ -197,7 +201,9 @@ public class BeginMeetingActivity extends SherlockActivity {
         //Remove meetings set as current from the past list..
         //These should be displayed in current section
         for (int i = 0; i < pastMeetings.size(); i++) {
-            if (pastMeetings.get(i).isCurrent()) {
+            //If meetings is current
+            //And requested later on, if GSW, then dont show it
+            if (pastMeetings.get(i).isCurrent() || pastMeetings.get(i).isGettingStarted()) {
                 pastMeetings.remove(i);
             }
         }
@@ -248,7 +254,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                 i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
                 i.putExtra("_meetingId", meeting.getMeetingId());
                 i.putExtra("_currentMeetingId", meeting.getMeetingId());
-                i.putExtra("_viewOnly", false);  //viewing current meeetings should not be read only
+                i.putExtra("_viewOnly", false);  //viewing current meetings should not be read only
                 startActivity(i);
 
             }
@@ -293,6 +299,7 @@ public class BeginMeetingActivity extends SherlockActivity {
                             }
                         }
                         if (numberOfSentMeetings > 0) {
+                            //If atleast a meeting was sent succesfully, refresh the view to reflect sent meetings
                             refreshActivityView();
                         }
                     }

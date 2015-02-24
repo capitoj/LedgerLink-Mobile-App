@@ -169,6 +169,7 @@ public class MeetingRepo {
             // Return the list
             return meetings;
         } catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("MeetingRepo.getAllMeetings", ex.getMessage());
             return null;
         } finally {

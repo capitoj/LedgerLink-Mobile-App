@@ -15,18 +15,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
+import au.com.bytecode.opencsv.CSVReader;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
 import org.applab.digitizingdata.fontutils.TypefaceManager;
 import org.applab.digitizingdata.fontutils.TypefaceTextView;
+import org.applab.digitizingdata.helpers.DatabaseHandler;
 import org.applab.digitizingdata.helpers.GettingStartedWizardMembersArrayAdapter;
+import org.applab.digitizingdata.helpers.LongTaskRunner;
 import org.applab.digitizingdata.helpers.Utils;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -139,11 +147,15 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         actionBar.setDisplayShowCustomEnabled(true);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
+        final MenuInflater inflater = getSupportMenuInflater();
+        inflater.inflate(R.menu.review_members, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -164,8 +176,250 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
                 startActivity(i);
                 return true;
+
+            case R.id.mnuImportFromCsv:
+                attemptToImportFromCsv();
+                return true;
         }
         return true;
+    }
+
+    private void attemptToImportFromCsv() {
+        Runnable importer = new Runnable() {
+            @Override
+            public void run() {
+                LongTaskRunner.runLongTask(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            importCsv();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                "Importing members",
+                        "Please wait while member information is imported from the CSV file",
+                        GettingStartedWizardReviewMembersActivity.this);
+
+            }
+        };
+        Utils.showDialogAndRunAction(this, "Import members from CSV?", "To import member information from CSV, place the member information file named \"LLMembers.csv\" in SDCARD/LedgerLink and Press continue", importer);
+    }
+
+    private void importCsv() {
+        CSVReader reader = null;
+        try {
+            reader = new CSVReader(new FileReader(DatabaseHandler.createDatabaseFolder() + "LLMembers.csv"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "File missing", "CSV File \"LLMembers.csv\" wasn't found. Please place this file in the LedgerLink folder and try again", Utils.MSGBOX_ICON_EXCLAMATION).show();
+
+                }
+            });
+            return;
+        }
+        String[] nextLine;
+        int i = 0;
+        int dataRowNo = 0;
+        int migratedCount = 0;
+        int skippedCount = 0;
+        try {
+
+            String skippedRows = "";
+            while ((nextLine = reader.readNext()) != null) {
+
+                if (0 >= i++) {
+                    continue;
+                }
+
+                dataRowNo++;
+                //increment the dataRow number
+
+
+                String memberNo = nextLine[0].trim();
+                String surname = nextLine[1].trim();
+                String otherNames = nextLine[2].trim();
+                String gender = nextLine[3].trim();
+                String age = nextLine[4].trim();
+                String occupation = nextLine[5].trim();
+                String phoneNo = nextLine[6].trim();
+                String cyclesCompleted = nextLine[7].trim();
+                String totalSavings = nextLine[8].trim();
+                String outsstandingLoanNumber = nextLine[9].trim();
+                String outstandingLoanAmount = nextLine[10].trim();
+                String loanDueDate = nextLine[11].trim();
+
+
+                //First Insert the Member Details
+                Member member = new Member();
+
+                try {
+                    if (memberNo.length() > 0) {
+                        member.setMemberNo(Integer.parseInt(memberNo));
+                    } else {
+                        member.setMemberNo(i);
+                    }
+
+                    //Surname
+                    if (surname.length() > 0) {
+                        member.setSurname(surname);
+                    } else {
+                        member.setSurname(Utils.MISSING_NAME_MARKER);
+                    }
+
+                    //Other Names
+                    if (otherNames.length() > 0) {
+                        member.setOtherNames(otherNames);
+                    } else {
+                        member.setOtherNames(Utils.MISSING_NAME_MARKER);
+                    }
+
+                    //Gender
+                    if (gender.length() > 0) {
+                        member.setGender((gender.startsWith("M") ? "Male" : "Female"));
+                    } else {
+                        member.setGender("Female");
+                    }
+
+                    //Date Of Birth
+                    //Default Age: 18
+                    Calendar d = Calendar.getInstance();
+
+                    if (age.length() > 0) {
+                        int theAge = Integer.parseInt(age);
+                        d.add(Calendar.YEAR, -theAge);
+                        member.setDateOfBirth(d.getTime());
+                    } else {
+                        d.add(Calendar.YEAR, -Utils.DEFAULT_MEMBER_AGE);
+                        member.setDateOfBirth(d.getTime());
+                    }
+
+                    //Occupation
+                    if (occupation.length() > 0) {
+                        member.setOccupation(occupation);
+                    } else {
+                        member.setOccupation(Utils.DEFAULT_MEMBER_OCCUPATION);
+                    }
+
+                    //Cycles Completed
+                    Calendar calCycles = Calendar.getInstance();
+
+                    if (cyclesCompleted.length() > 0) {
+                        int theCycles = Integer.parseInt(cyclesCompleted);
+                        member.setCyclesCompleted(theCycles);
+                        calCycles.add(Calendar.YEAR, -theCycles);
+                        member.setDateOfAdmission(calCycles.getTime());
+                    } else {
+                        member.setCyclesCompleted(0);
+                        member.setDateOfAdmission(calCycles.getTime());
+                    }
+
+                    //Phone Number
+                    if (phoneNo.length() > 0) {
+                        member.setPhoneNumber(phoneNo);
+                    } else {
+                        member.setPhoneNumber(null);
+                    }
+
+                    if(totalSavings.length()>0) {
+                        member.setSavingsOnSetup(new Double(totalSavings));
+                    }
+                    else {
+                        member.setSavingsOnSetup(0);
+                    }
+
+
+                    if(outsstandingLoanNumber.length()>0) {
+                        member.setOutstandingLoanNumberOnSetup(Integer.parseInt(outsstandingLoanNumber));
+                    }
+                    else {
+                        member.setOutstandingLoanNumberOnSetup(0);
+                    }
+
+
+                    if(outstandingLoanAmount.length()>0) {
+                        member.setOutstandingLoanOnSetup(Integer.parseInt(outstandingLoanAmount));
+                    }
+                    else {
+                        member.setOutstandingLoanOnSetup(0);
+                    }
+
+
+                    if(loanDueDate.length()>0) {
+                        member.setDateOfFirstRepayment(Utils.getDateFromString(loanDueDate, "dd/MM/yyyy"));
+                    }
+                    else {
+                        member.setDateOfFirstRepayment(null);
+                    }
+
+                    //Check the MemberNo to confirm that it doesn't exist, then add the member
+                    Member recentMember = null;
+                    boolean memberNoAvailable = ledgerLinkApplication.getMemberRepo().isMemberNoAvailable(member.getMemberNo(), member.getMemberId());
+                    boolean memberAdded;
+                    if (!memberNoAvailable) {
+                        memberAdded =  ledgerLinkApplication.getMemberRepo().updateGettingStartedWizardMember(member);
+                    }
+                    else {
+                        memberAdded = ledgerLinkApplication.getMemberRepo().addGettingStartedWizardMember(member);
+                    }
+
+
+                    if (!memberAdded) {
+                        //retrieve the MemberId
+                        final int finalDataRowNo1 = dataRowNo;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "A record failed", "Data at row" + finalDataRowNo1 +" couldnt be imported. Correct it and perform import again", Utils.MSGBOX_ICON_EXCLAMATION).show();
+
+                            }
+                        });
+                        return;
+                    }
+
+                    //Done with this member
+                    Log.d("CSV import ", "Imported member "+memberNo);
+                    //Toast.makeText(getApplicationContext(), String.format("Member of data record %d was migrated successfully.", dataRowNo), Toast.LENGTH_SHORT).show();
+
+                    //Increment the migrated count
+                    migratedCount++;
+                } catch (Exception exMember) {
+                    //Toast.makeText(getApplicationContext(), String.format("An error has occurred. Skipping member on data record %d", dataRowNo), Toast.LENGTH_SHORT).show();
+                    skippedCount++;
+                    if (skippedCount > 1) {
+                        skippedRows.concat(String.format(", %d", dataRowNo));
+                    } else {
+                        skippedRows.concat(String.format("%d", dataRowNo));
+                    }
+                }
+            }
+
+            final int finalMigratedCount = migratedCount;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "Import completed", "Data import has been completed succesfully. " + finalMigratedCount +" members imported during this session.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            final int finalDataRowNo = dataRowNo;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "Failed", "An error occured while importing a record. Last record processed was " + finalDataRowNo, Utils.MSGBOX_ICON_EXCLAMATION).show();
+
+                }
+            });
+
+        }
     }
 
     //Populate Members List

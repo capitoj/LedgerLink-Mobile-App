@@ -36,7 +36,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         databaseContext = context;
     }
 
-    private static String createDatabaseFolder() {
+    public static String createDatabaseFolder() {
         //creates the database folders and returns path as string
         File databaseStorageDir = new File(EXTERNAL_STORAGE_LOCATION + File.separator + DATA_FOLDER);
         if(! databaseStorageDir.exists()) {
@@ -102,40 +102,40 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Drop and Recreate the Tables - By calling onCreate()
 
         //Table: VslaInfo
-        db.execSQL(VslaInfoSchema.getDropTableScript());
+//        db.execSQL(VslaInfoSchema.getDropTableScript());
 
         //Table: Members
-        db.execSQL(MemberSchema.getDropTableScript());
+//        db.execSQL(MemberSchema.getDropTableScript());
 
         //Table: VslaCycle
-        db.execSQL(VslaCycleSchema.getDropTableScript());
+//        db.execSQL(VslaCycleSchema.getDropTableScript());
 
         //Table: Meetings
-        db.execSQL(MeetingSchema.getDropTableScript());
+//        db.execSQL(MeetingSchema.getDropTableScript());
 
         //Table: Attendance
-        db.execSQL(AttendanceSchema.getDropTableScript());
+//        db.execSQL(AttendanceSchema.getDropTableScript());
 
         //Table: Savings
-        db.execSQL(SavingSchema.getDropTableScript());
+//        db.execSQL(SavingSchema.getDropTableScript());
 
         //Table: LoanIssues
-        db.execSQL(LoanIssueSchema.getDropTableScript());
+//        db.execSQL(LoanIssueSchema.getDropTableScript());
 
         //Table: LoanRepayments
-        db.execSQL(LoanRepaymentSchema.getDropTableScript());
+//        db.execSQL(LoanRepaymentSchema.getDropTableScript());
 
         //Table:FineTypes
-        db.execSQL(FineTypeSchema.getDropTableScript());
+//        db.execSQL(FineTypeSchema.getDropTableScript());
 
         //Table: Fines
-        db.execSQL(FineSchema.getDropTableScript());
+//        db.execSQL(FineSchema.getDropTableScript());
 
 //        db.execSQL("DROP TRIGGER IF EXISTS dept_id_trigger");
 //        db.execSQL("DROP TRIGGER IF EXISTS dept_id_trigger22");
 //        db.execSQL("DROP TRIGGER IF EXISTS fk_empdept_deptid");
 //        db.execSQL("DROP VIEW IF EXISTS " + viewEmps);
-        onCreate(db);
+//        onCreate(db);
     }
 
     public static DatabaseHandler getInstance(Context context) {

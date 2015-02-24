@@ -31,13 +31,14 @@ public class ConcurrentMeetingsArrayAdapter extends ArrayAdapter<Meeting> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View rowView = inflater.inflate(R.layout.row_meeting_with_cycle, parent, false);
         try {
             //Here I populate the ListView Row with data.
             //I will handle the itemClick event in the ListView view on the actual fragment
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View rowView = inflater.inflate(R.layout.row_meeting_with_cycle, parent, false);
 
             //Get the Widgets
             final TextView txtMeetingDate = (TextView) rowView.findViewById(R.id.txtMeetingDate);

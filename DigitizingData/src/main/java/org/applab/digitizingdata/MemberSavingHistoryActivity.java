@@ -103,7 +103,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                             i.putExtra("_tabToSelect", "savings");
                             i.putExtra("_meetingDate", meetingDate);
                             i.putExtra("_meetingId", meetingId);
-                            startActivity(i);
+                            //startActivity(i);
                             finish();
                         }
 
@@ -117,7 +117,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                         i.putExtra("_tabToSelect", "savings");
                         i.putExtra("_meetingDate", meetingDate);
                         i.putExtra("_meetingId", meetingId);
-                        startActivity(i);
+                        //startActivity(i);
                         finish();
                     }
                 });
@@ -208,7 +208,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                 i.putExtra("_tabToSelect", "savings");
                 i.putExtra("_meetingDate", meetingDate);
                 i.putExtra("_meetingId", meetingId);
-                startActivity(i);
+                //startActivity(i);
                 return true;
             case R.id.mnuMSHSave:
 

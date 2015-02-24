@@ -125,7 +125,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                         i.putExtra("_tabToSelect", "fines");
                         i.putExtra("_meetingDate", meetingDate);
                         i.putExtra("_meetingId", meetingId);
-                        startActivity(i);
+                        //startActivity(i);
                         finish();
                     }
                 }
@@ -370,12 +370,12 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                 holder.paidStatusCheckBox.setEnabled(false);
                 holder.paidStatusCheckBox.setClickable(false);
                 parentLayout.setEnabled(false);
-                parentLayout.setActivated(false);
+                //parentLayout.setActivated(false);
             } else {
                 holder.paidStatusCheckBox.setEnabled(true);
                 holder.paidStatusCheckBox.setClickable(true);
                 parentLayout.setEnabled(true);
-                parentLayout.setActivated(true);
+                //parentLayout.setActivated(true);
             }
 
             holder.paidStatusCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

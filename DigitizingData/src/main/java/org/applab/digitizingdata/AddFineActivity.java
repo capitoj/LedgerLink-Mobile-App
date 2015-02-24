@@ -97,8 +97,11 @@ public class AddFineActivity extends SherlockActivity {
                     @Override
                     public void onClick(View v) {
                         selectedFinishButton = true;
-                        saveMemberFine();
-                        finish();
+                        if(saveMemberFine())
+                        {
+                            finish();
+                        }
+
                     }
                 }
         );

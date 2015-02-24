@@ -51,14 +51,15 @@ private final Typeface typeface;
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater)context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View rowView = inflater.inflate(R.layout.row_member_roll_call, parent, false);
 
         try {
             //Here I populate the ListView Row with data.
             //I will handle the itemClick event in the ListView view on the actual fragment
-            LayoutInflater inflater = (LayoutInflater)context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            View rowView = inflater.inflate(R.layout.row_member_roll_call, parent, false);
 
             //Get the Widgets
             //final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtRMRCFullName);
@@ -130,8 +131,9 @@ private final Typeface typeface;
             return rowView;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));
-            return null;
+            return rowView;
         }
     }
 

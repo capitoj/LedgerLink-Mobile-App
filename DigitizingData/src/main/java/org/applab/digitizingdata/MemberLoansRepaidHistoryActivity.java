@@ -549,7 +549,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                             i.putExtra("_tabToSelect", "loansRepaid");
                             i.putExtra("_meetingDate", meetingDate);
                             i.putExtra("_meetingId", meetingId);
-                            startActivity(i);
+                            //startActivity(i);
                             finish();
                         } else if (saveMemberLoanRepayment()) {
                             Toast.makeText(MemberLoansRepaidHistoryActivity.this, "Loan Repayment entered successfully", Toast.LENGTH_LONG).show();
@@ -557,7 +557,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                             i.putExtra("_tabToSelect", "loansRepaid");
                             i.putExtra("_meetingDate", meetingDate);
                             i.putExtra("_meetingId", meetingId);
-                            startActivity(i);
+                            //startActivity(i);
                             finish();
                         }
 
@@ -572,7 +572,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                         i.putExtra("_tabToSelect", "loansRepaid");
                         i.putExtra("_meetingDate", meetingDate);
                         i.putExtra("_meetingId", meetingId);
-                        startActivity(i);
+                        //startActivity(i);
                         finish();
                     }
                 }

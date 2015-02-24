@@ -365,7 +365,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         i.putExtra("_tabToSelect", "loansIssued");
         i.putExtra("_meetingDate", meetingDate);
         i.putExtra("_meetingId", meetingId);
-        startActivity(i);
+        //startActivity(i);
         finish();
     }
 

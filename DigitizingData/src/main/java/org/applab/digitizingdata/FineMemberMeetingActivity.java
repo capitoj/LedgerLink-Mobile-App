@@ -128,6 +128,8 @@ public class FineMemberMeetingActivity extends SherlockActivity {
                     i.putExtra("_meetingId", meetingId);
 
                     startActivity(i);
+                    //finish this list so that it doesnt show up after fining
+                    finish();
                 }
             }
         });
