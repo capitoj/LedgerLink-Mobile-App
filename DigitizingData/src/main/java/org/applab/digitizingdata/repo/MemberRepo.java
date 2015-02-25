@@ -180,7 +180,6 @@ public class MemberRepo {
 
     public boolean updateGettingStartedWizardMember(Member member) {
         SQLiteDatabase db = null;
-
         try {
             if (member == null) {
                 return false;

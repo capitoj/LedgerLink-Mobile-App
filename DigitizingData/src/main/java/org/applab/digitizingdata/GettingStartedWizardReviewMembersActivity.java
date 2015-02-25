@@ -2,6 +2,7 @@ package org.applab.digitizingdata;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.text.SpannableString;
@@ -21,6 +22,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.ipaulpro.afilechooser.utils.FileUtils;
 import org.applab.digitizingdata.domain.model.Meeting;
 import org.applab.digitizingdata.domain.model.Member;
 import org.applab.digitizingdata.fontutils.RobotoTextStyleExtractor;
@@ -42,6 +44,7 @@ import java.util.Date;
  * Created by Moses on 7/16/13.
  */
 public class GettingStartedWizardReviewMembersActivity extends MembersListActivity {
+    private static final int PICKFILE_RESULT_CODE = 6006;
     private ArrayList<Member> members;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -178,13 +181,40 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 return true;
 
             case R.id.mnuImportFromCsv:
-                attemptToImportFromCsv();
+                //attemptToImportFromCsv();
+                startFileChooserForCsvImport();
                 return true;
         }
         return true;
     }
 
-    private void attemptToImportFromCsv() {
+    private void startFileChooserForCsvImport() {
+        // Create the ACTION_GET_CONTENT Intent
+        Intent getContentIntent = FileUtils.createGetContentIntent();
+
+        Intent intent = Intent.createChooser(getContentIntent, "Choose CSV");
+        startActivityForResult(intent, PICKFILE_RESULT_CODE);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    switch(requestCode){
+            case PICKFILE_RESULT_CODE:
+                if(resultCode==RESULT_OK){
+                    final Uri uri = data.getData();
+
+                    // Get the File path from the Uri
+                    String filePath = FileUtils.getPath(this, uri);
+                    Log.d("File chosen", "Chosen file "+filePath);
+                    attemptToImportFromCsv(filePath);
+                }
+                break;
+
+        }
+    }
+
+    private void attemptToImportFromCsv(final String filename) {
         Runnable importer = new Runnable() {
             @Override
             public void run() {
@@ -192,7 +222,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                     @Override
                     public void run() {
                         try {
-                            importCsv();
+                            importCsv(filename);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -204,13 +234,13 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
             }
         };
-        Utils.showDialogAndRunAction(this, "Import members from CSV?", "To import member information from CSV, place the member information file named \"LLMembers.csv\" in SDCARD/LedgerLink and Press continue", importer);
+        Utils.showDialogAndRunAction(this, "Import members from CSV?", "You are about to import member information from the file \""+filename+"\"\nPress continue to start", importer);
     }
 
-    private void importCsv() {
+    private void importCsv(String csvFile) {
         CSVReader reader = null;
         try {
-            reader = new CSVReader(new FileReader(DatabaseHandler.createDatabaseFolder() + "LLMembers.csv"));
+            reader = new CSVReader(new FileReader(csvFile));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             runOnUiThread(new Runnable() {
@@ -356,11 +386,14 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                         member.setDateOfFirstRepayment(null);
                     }
 
-                    //Check the MemberNo to confirm that it doesn't exist, then add the member
-                    Member recentMember = null;
                     boolean memberNoAvailable = ledgerLinkApplication.getMemberRepo().isMemberNoAvailable(member.getMemberNo(), member.getMemberId());
                     boolean memberAdded;
                     if (!memberNoAvailable) {
+                        //Lets loadd this member id from db
+                        Member existingMember = ledgerLinkApplication.getMemberRepo().getMemberByMemberNo(member.getMemberNo());
+                        if(existingMember != null) {
+                            member.setMemberId(existingMember.getMemberId());
+                        }
                         memberAdded =  ledgerLinkApplication.getMemberRepo().updateGettingStartedWizardMember(member);
                     }
                     else {
@@ -374,8 +407,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "A record failed", "Data at row" + finalDataRowNo1 +" couldnt be imported. Correct it and perform import again", Utils.MSGBOX_ICON_EXCLAMATION).show();
-
+                                Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "A record failed", "Data at row " + finalDataRowNo1 +" couldnt be imported. Correct it and perform import again", Utils.MSGBOX_ICON_EXCLAMATION).show();
                             }
                         });
                         return;
@@ -403,7 +435,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 @Override
                 public void run() {
                     Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "Import completed", "Data import has been completed succesfully. " + finalMigratedCount +" members imported during this session.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-
+                    populateMembersList();
                 }
             });
         }
