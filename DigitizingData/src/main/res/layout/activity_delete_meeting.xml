@@ -9,56 +9,56 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/delete_meeting"
             android:id="@+id/lblDMTitle" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Are you sure you want to delete this meeting? If so, tap [Done]. The following information will be deleted:"
             android:id="@+id/lblDMInstructions" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/TextAccentColor"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/date_default"
             android:id="@+id/lblDMMeetingDate"/>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/members_present"
             android:id="@+id/lblDMAttended"/>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/total_savings_default"
             android:id="@+id/lblDMSavings"/>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/loans_repaid_default"
             android:id="@+id/lblDMLoansRepaid"/>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/fines_default"
             android:id="@+id/lblDMFines" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

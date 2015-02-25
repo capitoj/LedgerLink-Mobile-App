@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRAHMeetingDate"
         style="@style/RegularText"
         android:layout_width="120dip"
@@ -13,7 +13,7 @@
         android:layout_marginRight="8dip"
         android:text="@string/default_rollcall_date" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRAHAttendance"
         style="@style/RegularText"
         android:layout_width="60dip"
@@ -23,7 +23,7 @@
         android:layout_marginRight="8dip"
         android:text="@string/present" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRAHComments"
         style="@style/RegularText"
         android:layout_width="150dip"

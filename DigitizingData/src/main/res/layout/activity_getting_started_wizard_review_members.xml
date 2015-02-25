@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblRvwMembersHeading"
             style="@style/RegularHeading"
             android:layout_width="fill_parent"
@@ -22,7 +22,7 @@
             android:textStyle="bold" />
         <requestFocus/>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblRvwMembersSubHeading"
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
@@ -30,21 +30,21 @@
             android:layout_marginBottom="20dip"
             android:text="Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may exit and come back later." />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblRvwMembersDate"
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="As of" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblRvwMembersTotalSavings"
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Total savings this cycle" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblRvwMembersTotalLoan"
             style="@style/RegularText"
             android:layout_width="wrap_content"
@@ -61,7 +61,7 @@
 
         </ListView>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@android:id/empty"
             style="@style/RegularText"
             android:layout_width="fill_parent"

@@ -26,7 +26,7 @@
                 android:textAlignment="center"
                 tools:ignore="UnusedAttribute" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblVAHeader"
                 style="@style/InTextHeader"
                 android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:layout_marginBottom="2dip"
                 />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularTextLogin"
                 android:id="@+id/lblVAVslaCode"
                 android:layout_width="match_parent"
@@ -53,7 +53,7 @@
                 android:paddingTop="2dip"
                 android:layout_marginBottom="3dip"/>
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 style="@style/EditTextLogin"
                 android:id="@+id/txtVAVslaCode"
                 android:layout_width="265dip"
@@ -64,7 +64,7 @@
             <requestFocus />
 
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblVAPassKey"
                 style="@style/RegularTextLogin"
                 android:layout_width="match_parent"
@@ -74,7 +74,7 @@
                 android:layout_alignRight="@id/txtVAVslaCode"
                 android:layout_alignLeft="@+id/txtVAVslaCode" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblVAPassKeyInfo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
                 android:layout_alignRight="@id/lblVAPassKey"
                 android:layout_alignLeft="@+id/txtVAPassKey" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtVAPassKey"
                 style="@style/EditTextLogin"
                 android:layout_width="265dip"
@@ -94,7 +94,7 @@
                 android:inputType="numberPassword"
                 android:textAlignment="center" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtVAConfirmPassKey"
                 style="@style/EditTextLogin"
                 android:layout_width="265dip"
@@ -104,7 +104,7 @@
                 android:layout_marginTop="20dip"
                 android:inputType="numberPassword" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceButton
+            <org.applab.ledgerlink.fontutils.TypefaceButton
                 android:id="@+id/btnVAActivate"
                 style="@style/LoginButton"
                 android:layout_width="265dip"
@@ -115,7 +115,7 @@
 
                 />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtHelpInfo"
                 style="@style/RegularTextActivationLoginMsg"
                 android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                 android:text="@string/help_forgot_passkey"
                 android:layout_alignLeft="@id/btnVAActivate"/>
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtVersionInfo"
                 style="@style/SmallerRegularText"
                 android:layout_width="match_parent"

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="org.applab.digitizingdata"
-    android:versionCode="3"
-    android:versionName="1.0" >
+    package="org.applab.ledgerlink"
+    android:versionCode="4"
+    android:versionName="@string/about_version" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -35,10 +35,10 @@
         android:icon="@drawable/ic_ledgerlink_icona"
         android:label="@string/app_name"
         android:theme="@style/LedgerLinkTheme"
-        android:name="org.applab.digitizingdata.LedgerLinkApplication">
+        android:name="org.applab.ledgerlink.LedgerLinkApplication">
        <!-- android:debuggable="false"> -->
         <activity
-            android:name="org.applab.digitizingdata.LoginActivity"
+            android:name="org.applab.ledgerlink.LoginActivity"
             android:label="Ledger Link" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,37 +46,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.MainActivity"
+            android:name="org.applab.ledgerlink.MainActivity"
             android:label="Main Menu"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.MeetingTabHostActivity"
+            android:name="org.applab.ledgerlink.MeetingTabHostActivity"
             android:label="Meeting"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
         <activity
-            android:name="org.applab.digitizingdata.MemberDetailsViewActivity"
+            android:name="org.applab.ledgerlink.MemberDetailsViewActivity"
             android:label="Member Details"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
         <activity
-            android:name="org.applab.digitizingdata.MeetingActivity"
+            android:name="org.applab.ledgerlink.MeetingActivity"
             android:label="Meeting"
-            android:parentActivityName="org.applab.digitizingdata.BeginMeetingActivity"
+            android:parentActivityName="org.applab.ledgerlink.BeginMeetingActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.applab.digitizingdata.BeginMeetingActivity"
+                android:value="org.applab.ledgerlink.BeginMeetingActivity"
                 android:screenOrientation="portrait"
                 android:configChanges="orientation|keyboardHidden|screenSize"/>
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.EndCycleActivity"
+            android:name="org.applab.ledgerlink.EndCycleActivity"
             android:label="@string/title_activity_end_cycle"
-            android:parentActivityName="org.applab.digitizingdata.MainActivity"
+            android:parentActivityName="org.applab.ledgerlink.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
@@ -84,55 +84,55 @@
                 android:value="MainActivity" />
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.NewCycleActivity"
+            android:name="org.applab.ledgerlink.NewCycleActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="New Cycle" />
         <activity
-            android:name="org.applab.digitizingdata.NewCyclePg2Activity"
+            android:name="org.applab.ledgerlink.NewCyclePg2Activity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_new_cycle_pg2"
-            android:parentActivityName="org.applab.digitizingdata.MainActivity" >
+            android:parentActivityName="org.applab.ledgerlink.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.MeetingDefinitionActivity"
+            android:name="org.applab.ledgerlink.MeetingDefinitionActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Create New Meeting" />
         <activity
-            android:name="org.applab.digitizingdata.MemberSavingHistoryActivity"
+            android:name="org.applab.ledgerlink.MemberSavingHistoryActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Savings History" />
         <activity
-            android:name="org.applab.digitizingdata.MemberFinesHistoryActivity"
+            android:name="org.applab.ledgerlink.MemberFinesHistoryActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Fines History" />
         <activity
-            android:name="org.applab.digitizingdata.FineMemberMeetingActivity"
+            android:name="org.applab.ledgerlink.FineMemberMeetingActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Fine Member" />
         <activity
-            android:name="org.applab.digitizingdata.AddFineActivity"
+            android:name="org.applab.ledgerlink.AddFineActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Fine Member" />
-        <activity android:name="org.applab.digitizingdata.MemberLoansIssuedHistoryActivity"
+        <activity android:name="org.applab.ledgerlink.MemberLoansIssuedHistoryActivity"
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden|screenSize"/>
-        <activity android:name="org.applab.digitizingdata.MemberLoansRepaidHistoryActivity"
+        <activity android:name="org.applab.ledgerlink.MemberLoansRepaidHistoryActivity"
                   android:screenOrientation="portrait"
                   android:configChanges="orientation|keyboardHidden|screenSize"/>
         <activity
-            android:name="org.applab.digitizingdata.SendDataActivity"
+            android:name="org.applab.ledgerlink.SendDataActivity"
             android:label="@string/title_activity_send_data"
-            android:parentActivityName="org.applab.digitizingdata.MainActivity"
+            android:parentActivityName="org.applab.ledgerlink.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
@@ -140,9 +140,9 @@
                 android:value="MainActivity" />
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.AddMemberActivity"
+            android:name="org.applab.ledgerlink.AddMemberActivity"
             android:label="@string/title_activity_add_member"
-            android:parentActivityName="org.applab.digitizingdata.MainActivity"
+            android:parentActivityName="org.applab.ledgerlink.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
@@ -150,9 +150,9 @@
                 android:value="MainActivity" />
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.MembersListActivity"
+            android:name="org.applab.ledgerlink.MembersListActivity"
             android:label="@string/title_activity_members_list"
-            android:parentActivityName="org.applab.digitizingdata.MainActivity"
+            android:parentActivityName="org.applab.ledgerlink.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
@@ -160,9 +160,9 @@
                 android:value="MainActivity" />
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.SendMeetingDataActivity"
+            android:name="org.applab.ledgerlink.SendMeetingDataActivity"
             android:label="@string/title_activity_send_meeting_data"
-            android:parentActivityName="org.applab.digitizingdata.MainActivity"
+            android:parentActivityName="org.applab.ledgerlink.MainActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
@@ -170,14 +170,14 @@
                 android:value="MainActivity" />
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.ViewSentDataActivity"
+            android:name="org.applab.ledgerlink.ViewSentDataActivity"
             android:label="View Sent Data"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
         <activity
-            android:name="org.applab.digitizingdata.MemberAttendanceHistoryActivity"
+            android:name="org.applab.ledgerlink.MemberAttendanceHistoryActivity"
             android:label="@string/title_activity_member_attendance_history"
-            android:parentActivityName="org.applab.digitizingdata.MainActivity"
+            android:parentActivityName="org.applab.ledgerlink.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
@@ -186,19 +186,19 @@
                 android:value="MainActivity" />
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.ActivationActivity"
+            android:name="org.applab.ledgerlink.ActivationActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_activation" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.GettingStartedWizardAddMemberActivity"
+            android:name="org.applab.ledgerlink.GettingStartedWizardAddMemberActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gettings_started_wizard_add_member" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.GettingStartedWizardReviewMembersActivity"
+            android:name="org.applab.ledgerlink.GettingStartedWizardReviewMembersActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gettings_started_wizard_review_members" >
@@ -206,7 +206,7 @@
         <activity
             android:name=".GettingStartedWizardNewCycleActivity"
             android:label="@string/title_activity_gettings_started_wizard_add_cycle"
-            android:parentActivityName="org.applab.digitizingdata.GettingStartedWizardPageOne"
+            android:parentActivityName="org.applab.ledgerlink.GettingStartedWizardPageOne"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
             <meta-data
@@ -214,54 +214,54 @@
                 android:value="MainActivity" />
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.GettingStartedWizardPageOne"
+            android:name="org.applab.ledgerlink.GettingStartedWizardPageOne"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gettings_started_wizard_page_1" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.GettingStartedWizardPageTwo"
+            android:name="org.applab.ledgerlink.GettingStartedWizardPageTwo"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gettings_started_wizard_page_2" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.GettingStartedConfirmationPage"
+            android:name="org.applab.ledgerlink.GettingStartedConfirmationPage"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Confirmation" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.SelectCycle"
+            android:name="org.applab.ledgerlink.SelectCycle"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Select Cycle" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.DataMigrationActivity"
+            android:name="org.applab.ledgerlink.DataMigrationActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Data Migration" />
         <activity
-            android:name="org.applab.digitizingdata.BeginMeetingActivity"
+            android:name="org.applab.ledgerlink.BeginMeetingActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_begin_meeting" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.SettingsActivity"
+            android:name="org.applab.ledgerlink.SettingsActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.DeleteMeetingActivity"
+            android:name="org.applab.ledgerlink.DeleteMeetingActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_delete_meeting" >
         </activity>
         <activity
-            android:name="org.applab.digitizingdata.ChangeMeetingDateActivity"
+            android:name="org.applab.ledgerlink.ChangeMeetingDateActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_change_meeting_date" >

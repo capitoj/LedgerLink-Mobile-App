@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRMLRepayFullName"
         style="@style/RegularTextListItems"
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:text="@string/name_default" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRMLRepayBalance"
         style="@style/ListSmallSubItems"
         android:layout_width="fill_parent"
@@ -20,7 +20,7 @@
         android:layout_below="@id/txtRMLRepayFullName"
         android:text="@string/loan_balance_default" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRMLRepayDateDue"
         style="@style/ListSmallSubItems"
         android:layout_width="fill_parent"

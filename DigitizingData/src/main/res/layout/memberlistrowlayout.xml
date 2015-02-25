@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:weightSum="100">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularText"
         android:id="@+id/txtMFullNames"
         android:layout_width="fill_parent"
@@ -13,7 +13,7 @@
         android:padding="5dp"
         android:text="@string/full_name" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/txtMOccupation"
         android:layout_width="fill_parent"

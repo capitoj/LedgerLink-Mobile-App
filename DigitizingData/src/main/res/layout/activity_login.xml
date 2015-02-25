@@ -21,7 +21,7 @@
             android:contentDescription="@string/image_content_desc"
              />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lbl_vsla_name"
             style="@style/InTextHeader"
             android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:layout_below="@+id/imgVALogo"
             android:text="VSLA NAME " />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblActivationLoginMsg"
             style="@style/RegularTextActivationLoginMsg"
             android:layout_width="@dimen/login_ctrl_width"
@@ -47,7 +47,7 @@
         android:layout_marginTop="40dip"
         android:paddingTop="25dip" -->
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblPassKeyPrompt"
             style="@style/RegularTextLogin"
             android:layout_width="match_parent"
@@ -57,7 +57,7 @@
             android:layout_below="@+id/lbl_vsla_name"
             android:text="Passkey" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceEditText
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/edt_passkey"
             style="@style/EditTextLogin"
             android:layout_width="@dimen/login_ctrl_width"
@@ -72,7 +72,7 @@
         <requestFocus />
 
 
-        <org.applab.digitizingdata.fontutils.TypefaceButton
+        <org.applab.ledgerlink.fontutils.TypefaceButton
             android:id="@+id/btnLogin"
             style="@style/LoginButton"
             android:layout_width="@dimen/login_ctrl_width"
@@ -80,7 +80,7 @@
             android:layout_below="@id/edt_passkey"
             android:text="Sign In" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtHelpInfo"
             style="@style/RegularTextActivationLoginMsg"
             android:layout_width="match_parent"
@@ -103,7 +103,7 @@
               android:textColor="#0000FF"
               android:text="Switch to Training Mode" /> -->
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtVersionInfo"
             style="@style/SmallerRegularText"
             android:layout_width="match_parent"

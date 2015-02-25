@@ -8,7 +8,7 @@
         android:orientation="vertical">
 
         <!-- Auto entered from figure left in the box at the end of previous meeting: The differnce of cash in bank and cash in box-->
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblExpectedStartingCash"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -18,7 +18,7 @@
             android:text="Expected Starting Cash" />
 
         <!-- Date of Previous meeting, Previous Total Cah in Box , currency -->
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblTotalCashInBox"
             style="@style/ListSmallSubItems"
             android:layout_width="fill_parent"
@@ -26,7 +26,7 @@
             android:layout_below="@id/lblExpectedStartingCash"
             android:text="4 Mar 2014 Total Cash in Box 1,000,000 UGX" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblCashTakenToBank"
             style="@style/ListSmallSubItems"
             android:layout_width="fill_parent"
@@ -35,7 +35,7 @@
             android:text="Cash Taken to Bank 900,000 UGX" />
 
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblActualStartingCash"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -43,7 +43,7 @@
             android:layout_below="@id/lblCashTakenToBank"
             android:text="Actual Starting Cash" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceEditText
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtActualStartingCash"
             style="@style/NormalEditText"
             android:layout_width="200dip"
@@ -53,7 +53,7 @@
             android:text="" />
 
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblStartingCashCurrency"
             style="@style/RegularText"
             android:layout_width="115dp"
@@ -63,7 +63,7 @@
             android:inputType="number"
             android:text="UGX" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblStartingCashComment"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -71,7 +71,7 @@
             android:layout_below="@id/txtActualStartingCash"
             android:text="Comment" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceEditText
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtStartingCashComment"
             style="@style/NormalEditText"
             android:layout_width="match_parent"

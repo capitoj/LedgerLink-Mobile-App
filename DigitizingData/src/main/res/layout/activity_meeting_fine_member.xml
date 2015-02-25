@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/frmMFine_top_control_bar">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularTextInstructionBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
             android:text="FINE MEMBER"
             android:id="@+id/lblFineMember" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularTextInstruction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
 
     </ListView>
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularText"
         android:id="@+id/txtMFineEmpty"
         android:layout_width="match_parent"

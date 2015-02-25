@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRSHMeetingDate"
         style="@style/RegularText"
         android:layout_width="120dip"
@@ -13,7 +13,7 @@
         android:layout_marginRight="5dip"
         android:text="@string/date_default" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRSHAmount"
         style="@style/RegularText"
         android:layout_width="150dip"

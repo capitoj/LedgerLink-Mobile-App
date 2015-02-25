@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularTextMeetingListItems"
                 android:id="@+id/txtMeetingDate"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:text="@string/date_default"/>
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/txtMeetingCycleSummary"
                 android:layout_width="fill_parent"

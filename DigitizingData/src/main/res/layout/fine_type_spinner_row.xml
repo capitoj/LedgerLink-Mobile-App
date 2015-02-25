@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
-       <org.applab.digitizingdata.fontutils.TypefaceTextView
+       <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/lblFineType"
         android:layout_width="wrap_content"

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHLoanNo"
         style="@style/RegularTextBold"
         android:layout_width="45dip"
@@ -14,7 +14,7 @@
         android:layout_marginLeft="10dip"
         android:text="@string/loan_number_default" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHAmount"
         style="@style/RegularText"
         android:layout_width="120dip"
@@ -24,7 +24,7 @@
         android:layout_toRightOf="@id/txtRLRHLoanNo"
         android:text="@string/amount" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHMeetingDate"
         style="@style/RegularText"
         android:layout_width="200dip"
@@ -34,7 +34,7 @@
         android:layout_toRightOf="@id/txtRLRHAmount"
         android:text="@string/date" />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLRHComments"
         style="@style/RegularText"
         android:layout_width="match_parent"

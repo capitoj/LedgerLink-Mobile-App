@@ -6,14 +6,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMemberFinesHeader"
             style="@style/RegularTextInstructionBold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="FINE MEMBER" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblFMessage"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -21,7 +21,7 @@
             android:layout_below="@id/lblMemberFinesHeader"
             android:text="Select type of fine and the amount. Check the box if the member has paid." />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtFMFullName"
             style="@style/RegularTextListItems"
             android:layout_width="match_parent"
@@ -30,7 +30,7 @@
             android:text="@string/name_default" />
 
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblFineType"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -54,7 +54,7 @@
 
         <!-- android:layout_below="@id/lblFineFullName"-->
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblFMAmount"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -62,7 +62,7 @@
             android:layout_below="@id/cboFMFineType"
             android:text="@string/amount" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceEditText
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtFMFineAmount"
             style="@style/NormalEditText"
             android:layout_width="200dip"
@@ -87,7 +87,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblFPaid"
             style="@style/InlineTextItem"
             android:layout_width="0dp"

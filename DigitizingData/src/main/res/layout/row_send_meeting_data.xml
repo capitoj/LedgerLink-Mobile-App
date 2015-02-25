@@ -4,7 +4,7 @@
                 android:layout_height="wrap_content"
         >
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularText"
             android:id="@+id/txtSMDMeetingDate"
             android:layout_width="fill_parent"

@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.applab.digitizingdata.BeginMeetingActivity" >
+    tools:context="org.applab.ledgerlink.BeginMeetingActivity" >
     
     <item android:id="@+id/mnuBMBegin"
         android:title="@string/begin"

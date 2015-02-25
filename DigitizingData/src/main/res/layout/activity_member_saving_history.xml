@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSHFullNames"
             style="@style/RegularTextListItems"
             android:layout_width="fill_parent"
@@ -24,7 +24,7 @@
             android:layout_marginLeft="30dip"
             android:text="01-JUL-2013" /> -->
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSHAmount"
             style="@style/RegularText"
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMSHAmount"
                 style="@style/NormalEditText"
                 android:layout_width="150dip"
@@ -48,7 +48,7 @@
                 android:textAlignment="viewEnd"
                 tools:ignore="UnusedAttribute" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMSHCurrency"
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
@@ -56,14 +56,14 @@
                 android:text="UGX" />
         </LinearLayout>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSHSection1"
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
             android:text="HISTORY" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSHTotalSavings"
             style="@style/RegularTextBold"
             android:textSize="17sp"
@@ -80,7 +80,7 @@
             android:dividerHeight="0dp"
             />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@android:id/empty"
             style="@style/RegularText"
             android:layout_width="wrap_content"

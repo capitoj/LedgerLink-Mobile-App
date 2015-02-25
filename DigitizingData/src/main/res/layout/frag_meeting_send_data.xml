@@ -24,7 +24,7 @@
         android:id="@+id/lblMSDFragStatus"
         android:text="Internet is Available" /> -->
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularTextInstruction"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -41,35 +41,35 @@
                   android:showDividers="middle"
                   android:dividerPadding="5dp">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lblMSDFragRollcall"
                 android:text="" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lblMSDFragSavings"
                 android:text="" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lblMSDFragLoanPayments"
                 android:text="" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/lblMSDFragFines"
                 android:text="" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -85,20 +85,20 @@
                   android:dividerPadding="5dp"
                   android:id="@+id/layoutMSDCurrentMeetingSummary">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/SubHeading"
                 android:id="@+id/txtMSDFragCurrentMeetingHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
                 android:text="CURRENT MEETING" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/txtMSDFragCurrentMeetingInstructions"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
                 android:text="You may edit before sending." />
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/txtMSDFragCurrentMeetingDetails"
                 android:layout_width="fill_parent"
@@ -119,14 +119,14 @@
                   android:dividerPadding="5dp"
                   android:id="@+id/layoutMSDUnsentPastMeetings">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/SubHeading"
                 android:id="@+id/txtMSDFragPastMeetingsHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
                 android:text="UNSENT PAST MEETINGS" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                 android:id="@+id/txtMSDFragPastMeetingInstructions"
                 android:layout_width="wrap_content"

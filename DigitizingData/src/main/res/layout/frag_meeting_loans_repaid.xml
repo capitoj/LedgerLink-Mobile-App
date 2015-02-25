@@ -33,7 +33,7 @@
 
     </ListView>
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularText"
         android:id="@+id/txtMLRepayFEmpty"
         android:layout_width="wrap_content"

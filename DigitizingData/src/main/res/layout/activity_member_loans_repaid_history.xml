@@ -11,14 +11,14 @@
         android:orientation="vertical"
         android:weightSum="1">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLRepayHFullName"
             style="@style/RegularTextListItemsBold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Moses Oscar Muhahala" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLRepayHInstruction"
             style="@style/RegularTextInstruction"
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:weightSum="10">
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblMLRepayHLoanNo"
                     style="@style/RegularTextBold"
                     android:layout_width="fill_parent"
@@ -62,7 +62,7 @@
                     android:textAlignment="textEnd"
                     tools:ignore="UnusedAttribute" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/txtMLRepayHLoanNo"
                     style="@style/RegularTextBold"
                     android:layout_width="fill_parent"
@@ -73,7 +73,7 @@
                     android:textAlignment="textEnd" />
             </LinearLayout>
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHAmount"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:weightSum="10">
 
-                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtMLRepayHAmount"
                     style="@style/NormalEditText"
                     android:layout_width="fill_parent"
@@ -96,7 +96,7 @@
                     android:text=""
                     android:textAlignment="viewEnd" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblMLRepayHCurrency"
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
@@ -105,14 +105,14 @@
                     android:text="UGX" />
             </LinearLayout>
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHComment"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Comments" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMLRepayHComment"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
@@ -120,21 +120,21 @@
                 android:inputType="text"
                 android:textAlignment="viewEnd" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHSection1"
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
                 android:text="NEW BALANCE" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHInstruction2"
                 style="@style/RegularTextInstruction"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/loan_repayment_instruction2" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHBalance"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -148,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:weightSum="10">
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/txtMLRepayHBalance"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
@@ -159,7 +159,7 @@
                     android:text=""
                     android:textAlignment="textEnd" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblMLRepayHLBCurrency"
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
@@ -168,14 +168,14 @@
                     android:text="UGX" />
             </LinearLayout>
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHInterest"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Interest Added" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHInterestDesc"
                 style="@style/RegularTextSmall"
                 android:layout_width="fill_parent"
@@ -189,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:weightSum="10">
 
-                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtMLRepayHInterest"
                     style="@style/NormalEditText"
                     android:layout_width="fill_parent"
@@ -199,7 +199,7 @@
                     android:text=""
                     android:textAlignment="textEnd" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblMLRepaydHCurrencyInt"
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
@@ -208,7 +208,7 @@
                     android:text="UGX" />
             </LinearLayout>
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHTotal"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -221,7 +221,7 @@
                 android:layout_height="wrap_content"
                 android:weightSum="10">
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/txtMLRepayHTotal"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
@@ -230,7 +230,7 @@
                     android:clickable="true"
                     android:text="" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblMLRepayHCurrencyTotal"
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
@@ -239,14 +239,14 @@
                     android:text="UGX" />
             </LinearLayout>
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHDateDue"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Next payment date" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMLRepayHDateDue"
                 style="@style/TextAccentColor"
                 android:layout_width="fill_parent"
@@ -260,7 +260,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblMLRepayHSection2"
                     style="@style/SubHeading"
                     android:layout_width="fill_parent"
@@ -289,7 +289,7 @@
                      android:text="Interest" /> -->
 
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblMLRepayHCycleSpan"
                     style="@style/RegularTextInstructionBold"
                     android:layout_width="match_parent"
@@ -310,7 +310,7 @@
                     android:divider="@null"
                     android:dividerHeight="0dp" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@android:id/empty"
                     style="@style/RegularText"
                     android:layout_width="wrap_content"

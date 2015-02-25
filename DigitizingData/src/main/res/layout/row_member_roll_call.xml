@@ -14,7 +14,7 @@
             android:layout_weight="9"
             android:id="@+id/layoutRMRCall">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularTextListItems"
                 android:id="@+id/txtRMRCallFullName"
                 android:layout_width="match_parent"
@@ -23,7 +23,7 @@
                 android:layout_alignParentLeft="true"
                 android:text="0. FULL NAME" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/ListSmallSubItems"
                 android:id="@+id/txtRMRCallAttendance"
                 android:layout_width="match_parent"

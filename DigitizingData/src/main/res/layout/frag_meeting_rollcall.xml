@@ -19,7 +19,7 @@
              android:id="@+id/lblMRCFMeetingDate"
              android:layout_gravity="center" /> -->
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMRCFInstructions"
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
@@ -38,7 +38,7 @@
         </ListView>
 
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lvwMRCFEmpty"
             style="@style/RegularText"
             android:layout_width="wrap_content"

@@ -14,7 +14,7 @@
             android:orientation="vertical">
 
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularTextBold"
                 android:id="@+id/txtNCP_header"
                 android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularTextInstruction"
                 android:id="@+id/txtNCP_header_instruction"
                 android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
             android:layout_width="fill_parent"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularHeading"
                 android:id="@+id/txtNCP_header2"
                 android:layout_width="match_parent"
@@ -56,7 +56,7 @@
             android:layout_marginTop="2dip"
             android:layout_marginBottom="150dip">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularTextInstruction"
                 android:id="@+id/txtGSW_info"
                 android:layout_marginTop="-5dip"

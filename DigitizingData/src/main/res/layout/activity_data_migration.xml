@@ -21,7 +21,7 @@
                 android:layout_width="match_parent"
                 android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                     android:id="@+id/lblMigrationInstruction"
                     android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
                     android:clickable="false"
                     android:text="Place the CSV file containing the VSLA Data on to the phone storage. Ensure it is named: vslaMigrationInfo.csv then tap the button below." />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
                     android:id="@+id/lblMigrationResult"
                     android:layout_width="wrap_content"

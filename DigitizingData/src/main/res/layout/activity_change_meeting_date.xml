@@ -9,28 +9,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularTextInstructionBold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/change_meeting_date"
             android:id="@+id/lblCMDTitle" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="View the date below and tap to change if it is not the correct meeting date."
             android:id="@+id/lblCMDInstructions1" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/change_meeting_date_instruction_2"
             android:id="@+id/lblCMDInstructions2" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/TextAccentColor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

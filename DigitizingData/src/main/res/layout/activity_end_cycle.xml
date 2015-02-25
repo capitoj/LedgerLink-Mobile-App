@@ -15,7 +15,7 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         -->
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblECInstruction"
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
@@ -50,7 +50,7 @@
                android:orientation="vertical"></RadioGroup>
         -->
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblECShareOutDate"
             style="@style/RegularText"
             android:layout_width="match_parent"
@@ -59,7 +59,7 @@
             android:layout_below="@id/lblECInstruction"
             android:text="Share Out Date" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceEditText
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtECShareOutDate"
             style="@style/NormalEditText"
             android:layout_width="150dip"
@@ -71,7 +71,7 @@
             android:focusable="true"
             android:text="30-Jun-2013" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblECShareOutAmount"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -88,7 +88,7 @@
             android:layout_marginBottom="20dip"
             android:weightSum="4">
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtECShareOutAmount"
                 style="@style/NormalEditText"
                 android:layout_width="200dip"
@@ -96,7 +96,7 @@
                 android:inputType="number"
                 android:text="" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblECCurrency"
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"

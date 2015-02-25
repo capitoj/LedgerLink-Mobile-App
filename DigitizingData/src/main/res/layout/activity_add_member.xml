@@ -13,14 +13,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMInstruction"
                 style="@style/SmallerRegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="('*' = required)" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMemberNo"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -41,14 +41,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMSurname"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Surname *" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMSurname"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
@@ -63,14 +63,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMOtherName"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Other Names *" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMOtherName"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
@@ -85,7 +85,7 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMGender"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -116,7 +116,7 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMAge"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -139,14 +139,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMOccupation"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="What does this member do to make money?" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMOccupation"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
@@ -161,14 +161,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMPhone"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Phone number" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMPhoneNo"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
@@ -183,7 +183,7 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMCyclesCompleted"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -206,35 +206,35 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleStartHeading"
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="MIDDLE CYCLE START" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleInformationHeading"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="This member’s information was added on 3 Mar 2013 after the cycle started. Here are his total savings and outstanding loans on that day." />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleSavingsLabel"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Total amount this member has saved during current cycle so far" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleSavings"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="0 UGX" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleSavingsCorrectionLabel"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -245,7 +245,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtAMMiddleCycleSavingsCorrection"
                     style="@style/NormalEditText"
                     android:layout_width="200dip"
@@ -253,7 +253,7 @@
                     android:inputType="number"
                     android:text="" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblAMCurrency"
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
@@ -262,14 +262,14 @@
 
             </LinearLayout>
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleSavingCorrectionCommentLabel"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Comment" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMMiddleCycleSavingsCorrectionComment"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
@@ -277,35 +277,35 @@
                 android:inputType="text"
                 android:text="" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblRvwMembersLoanNumber"
                 style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Loan number for this member's regular loan outstanding" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMMOutstandingLoanNumber"
                 style="@style/NormalEditText"
                 android:layout_width="100dip"
                 android:layout_height="wrap_content"
                 android:inputType="number" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleLoansLabel"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Total amount of this member’s regular loan outstanding" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleLoans"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="0 UGX" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleLoansCorrectionLabel"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -316,7 +316,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtAMMiddleCycleLoansCorrection"
                     style="@style/NormalEditText"
                     android:layout_width="200dip"
@@ -324,7 +324,7 @@
                     android:inputType="number"
                     android:text="" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblAMLoanCurrency"
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
@@ -333,14 +333,14 @@
 
             </LinearLayout>
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblAMMiddleCycleLoansCorrectionCommentLabel"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Comment" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMMiddleCycleLoansCorrectionComment"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
@@ -348,14 +348,14 @@
                 android:inputType="text"
                 android:text="" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblNCAMMLoanNextRepaymentDate"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="When is the next repayment expected for this loan" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtAMMLoanNextRepaymentDate"
                 style="@style/TextAccentColor"
                 android:layout_width="150dip"

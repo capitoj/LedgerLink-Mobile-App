@@ -9,14 +9,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHFullName"
             style="@style/RegularTextListItems"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/full_name" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHLoanNo"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -24,7 +24,7 @@
             android:layout_marginLeft="30dip"
             android:text="@string/loan_number_default" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceEditText
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtMLIssuedHLoanNo"
             style="@style/NormalEditText"
             android:layout_width="100dip"
@@ -35,7 +35,7 @@
             android:textAlignment="textEnd"
             tools:ignore="UnusedAttribute" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHAmount"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:weightSum="10">
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMLIssuedHAmount"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
@@ -59,7 +59,7 @@
                 android:text=""
                 android:textAlignment="textEnd" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLIssuedHCurrency"
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
@@ -68,7 +68,7 @@
                 android:text="@string/operating_currency" />
         </LinearLayout>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHComment"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -76,7 +76,7 @@
             android:layout_marginLeft="30dip"
             android:text="Comment" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceEditText
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtMLIssuedHComment"
             style="@style/NormalEditText"
             android:layout_width="fill_parent"
@@ -87,28 +87,28 @@
             android:text=""
             android:textAlignment="textEnd" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLRepayHSection1"
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
             android:text="@string/new_balance" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHInstruction2"
             style="@style/RegularTextInstruction"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/loan_issue_instruction" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHInterest"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Interest Added" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHInterestDesc"
             style="@style/RegularTextSmall"
             android:layout_width="fill_parent"
@@ -122,7 +122,7 @@
             android:layout_height="wrap_content"
             android:weightSum="10">
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMLIssuedHInterest"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
@@ -132,7 +132,7 @@
                 android:text=""
                 android:textAlignment="textEnd" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLIssuedHCurrencyInt"
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
@@ -141,7 +141,7 @@
                 android:text="@string/operating_currency" />
         </LinearLayout>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHTotal"
             style="@style/RegularText"
             android:layout_width="fill_parent"
@@ -154,7 +154,7 @@
             android:layout_height="wrap_content"
             android:weightSum="10">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMLIssuedHTotal"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -163,7 +163,7 @@
                 android:clickable="true"
                 android:text="" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLIssuedHCurrencyTotal"
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
@@ -172,14 +172,14 @@
                 android:text="@string/operating_currency" />
         </LinearLayout>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHDateDue"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Next Payment Date" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtMLIssuedHDateDue"
             style="@style/TextAccentColor"
             android:layout_width="fill_parent"
@@ -194,7 +194,7 @@
             android:orientation="vertical">
 
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLIssuedHSection1"
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
@@ -213,7 +213,7 @@
                 android:divider="@null"
                 android:dividerHeight="0dp" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@android:id/empty"
                 style="@style/RegularText"
                 android:layout_width="wrap_content"

@@ -9,7 +9,7 @@
         >
 
         <!-- Cash in Box in currently running meeting -->
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:id="@+id/lblTotalCashInBox"
             android:layout_width="fill_parent"
@@ -17,7 +17,7 @@
             android:text="Total Cash In Box 0 UGX" />
 
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
@@ -25,32 +25,32 @@
             android:id="@+id/lblCashCollected"
             android:layout_gravity="left" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblExpectedStartingCash"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Expected Starting Cash 0 UGX" />
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblActualStartingCash"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Actual Starting Cash 0 UGX" />
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblCashDifference"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Difference 0 UGX" />
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblCashBookComment"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Comment  " />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
@@ -58,32 +58,32 @@
             android:id="@+id/lblMeetingActivity"
             android:layout_gravity="left" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblSavings"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Savings 0 UGX" />
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblLoanRepayments"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Loan Repayments 0 UGX" />
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblFines"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Fines 0 UGX" />
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
             android:id="@+id/lblNewLoans"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="New Loans 0 UGX " />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
@@ -91,21 +91,21 @@
             android:id="@+id/lblCashToBank"
             android:layout_gravity="left" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:id="@+id/lblCashToBankMessage"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="If you will take some of the Total Cash in Box to the bank after the meeting, enter the amount. It will then be subtracted from the Expected Starting Cash for your next meeting." />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularText"
             android:id="@+id/lblCashToBankAmount"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="Cash to Bank" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceEditText
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
             style="@style/NormalEditText"
             android:id="@+id/txtCashToBank"
             android:layout_width="200dip"

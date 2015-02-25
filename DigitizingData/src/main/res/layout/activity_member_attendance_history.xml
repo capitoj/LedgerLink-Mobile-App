@@ -32,7 +32,7 @@
                     android:focusableInTouchMode="false"
                     android:text="" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/txtMAHFullName"
                     style="@style/RegularText"
                     android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
                     android:text="Member Name" />
             </RelativeLayout>
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMAHComment"
                 style="@style/RegularText"
                 android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
                 android:layout_below="@id/frmMAH_check"
                 android:text="Comment" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceEditText
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMAHComment"
                 style="@style/NormalEditText"
                 android:layout_width="fill_parent"
@@ -61,7 +61,7 @@
                 android:inputType="textCapSentences"
                 android:text="OK" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMAHSection1"
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
@@ -79,7 +79,7 @@
             android:divider="@null"
             android:dividerHeight="0dp" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@android:id/empty"
             style="@style/RegularText"
             android:layout_width="wrap_content"

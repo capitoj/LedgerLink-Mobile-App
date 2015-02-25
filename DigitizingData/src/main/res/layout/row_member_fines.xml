@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dip">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularTextListItems"
         android:id="@+id/txtFineFullName"
         android:layout_width="fill_parent"
@@ -13,7 +13,7 @@
         android:layout_alignParentLeft="true"
         android:text="@string/name_default"/>
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/txtFineTotal"
         android:layout_width="fill_parent"

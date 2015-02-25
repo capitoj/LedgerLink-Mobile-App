@@ -34,7 +34,7 @@
         android:layout_height="25dip"
         android:layout_weight=".03">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/menu_item_desc"
             style="@style/RegularTextMainMenu"
             android:layout_width="match_parent"

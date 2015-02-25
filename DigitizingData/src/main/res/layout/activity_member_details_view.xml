@@ -14,14 +14,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVMemberNo"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Member Number" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMDVMemberNo"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -35,14 +35,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVSurname"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Surname" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMDVSurname"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -56,7 +56,7 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVOtherNames"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -64,7 +64,7 @@
                 android:text="Other Names"
                 android:textStyle="normal" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMDVOtherNames"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -78,14 +78,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVGender"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Sex (M/F)" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMDVGender"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -99,14 +99,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVAge"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Age" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMDVAge"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -120,14 +120,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVOccupation"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="What does this member do to make money?" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMDVOccupation"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -141,14 +141,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVPhone"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Phone number" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMDVPhone"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -162,14 +162,14 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVCyclesCompleted"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Number of cycles member completed" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMDVCyclesCompleted"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
@@ -202,7 +202,7 @@
             android:layout_marginBottom="20dip"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDMiddleCycleStartHeading"
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
@@ -210,21 +210,21 @@
                 android:text="MIDDLE CYCLE START" />
 
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDMiddleCycleInformationHeading"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="---" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDMiddleCycleSavings"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Total Savings 0 UGX" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDMiddleCycleLoansOutstanding"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"

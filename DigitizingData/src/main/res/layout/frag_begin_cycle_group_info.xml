@@ -21,14 +21,14 @@
 
                 <!-- Fully qualify the names coz R.id is universal -->
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblBCSharePrice"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Share Price (UGX)" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtBCSharePrice"
                     style="@style/NormalEditText"
                     android:layout_width="fill_parent"
@@ -41,14 +41,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblBCMaxShares"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="Maximum number of shares a member may purchase per meeting" />
 
-                <org.applab.digitizingdata.fontutils.TypefaceEditText
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtBCMaxShares"
                     style="@style/NormalEditText"
                     android:layout_width="fill_parent"
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblBCStartDate"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <org.applab.digitizingdata.fontutils.TypefaceTextView
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblBCEndDate"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"

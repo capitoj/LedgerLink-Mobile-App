@@ -11,7 +11,7 @@
         android:orientation="vertical">
 
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMDMultipleCycles"
             style="@style/RegularTextInstruction"
             android:layout_width="match_parent"

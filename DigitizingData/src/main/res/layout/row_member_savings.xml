@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularTextListItems"
         android:id="@+id/txtRMSavFullName"
         android:layout_width="fill_parent"
@@ -12,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:text="@string/name_default"/>
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/txtRMSavTodaysSavings"
         android:layout_width="fill_parent"
@@ -20,7 +20,7 @@
         android:layout_below="@id/txtRMSavFullName"
         android:text="@string/today_saving_default"/>
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
         android:id="@+id/txtRMSavTotals"
         android:layout_width="fill_parent"

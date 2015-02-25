@@ -8,14 +8,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMemberFinesHeader"
             style="@style/RegularTextInstructionBold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/fines" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblFMessage"
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblFineFullName"
                 style="@style/RegularTextListItems"
                 android:layout_width="fill_parent"
@@ -42,7 +42,7 @@
             android:layout_height="fill_parent"
             android:orientation="vertical">
 
-            <org.applab.digitizingdata.helpers.EnhancedListView
+            <org.applab.ledgerlink.helpers.EnhancedListView
                 android:id="@android:id/list"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +50,7 @@
                 android:divider="@null"
                 android:dividerHeight="0dp" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@android:id/empty"
                 style="@style/RegularText"
                 android:layout_width="wrap_content"

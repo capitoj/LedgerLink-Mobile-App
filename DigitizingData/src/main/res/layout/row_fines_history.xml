@@ -39,7 +39,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblFineType"
                 style="@style/ListSubItemsWithCheckbox"
                 android:layout_width="60dip"
@@ -49,7 +49,7 @@
                 android:layout_toRightOf="@id/chkMemberFine"
                 android:text="Latecoming" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMemberFineAmount"
                 style="@style/ListSubItemsWithCheckbox"
                 android:layout_width="80dip"
@@ -58,7 +58,7 @@
                 android:layout_toRightOf="@id/lblFineType"
                 android:text="XXX UGX" />
 
-            <org.applab.digitizingdata.fontutils.TypefaceTextView
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtFineMeetingDate"
                 style="@style/ListSubItemsWithCheckbox"
                 android:layout_width="match_parent"

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblConfirmationHeading"
             style="@style/RegularHeading"
             android:layout_width="wrap_content"
@@ -11,7 +11,7 @@
             android:text="@string/is_everything_correct"
             android:layout_marginBottom="20dip"/>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblConfirmationText"
             style="@style/RegularTextInstruction"
             android:layout_width="wrap_content"

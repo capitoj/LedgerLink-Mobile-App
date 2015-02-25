@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedFTotalCash"
             style="@style/RegularText"
             android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:divider="@null"
         android:dividerHeight="0dp"/>
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtMLIssuedFEmpty"
         style="@style/RegularText"
         android:layout_width="wrap_content"

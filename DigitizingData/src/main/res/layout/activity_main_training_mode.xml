@@ -5,7 +5,7 @@
     android:background="@drawable/red"
     android:layout_height="match_parent">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/TrainingModeBanner"
         android:id="@+id/lblMainTitle"
         android:layout_width="fill_parent"

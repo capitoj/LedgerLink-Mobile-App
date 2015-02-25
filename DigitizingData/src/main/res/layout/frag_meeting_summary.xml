@@ -36,49 +36,49 @@
                   android:layout_height="match_parent"
                   android:orientation="vertical"
                   android:id="@+id/lblMSFPastmeetingSection">
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFSection2"
             style="@style/SubHeading"
             android:layout_width="match_parent"
             android:layout_height="25dip"
             android:text="Past Meeting"/>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFDataSentStatus"
             style="@style/RegularTextListItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Data: Not Sent" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFAttended"
             style="@style/RegularTextListItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Attended: 28" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFCollections"
             style="@style/RegularTextListItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Total collections: 150,000 UGX" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFLastSavings"
             style="@style/ListRegularSubItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Savings: 100,000 UGX" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFLastLoansRepaid"
             style="@style/ListRegularSubItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Loans repaid: 50,000 UGX" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFLastLoansIssued"
             style="@style/ListRegularSubItems"
             android:layout_width="match_parent"
@@ -138,7 +138,7 @@
       -->
         </LinearLayout>
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFSection1"
             style="@style/SubHeading"
             android:layout_width="fill_parent"
@@ -161,14 +161,14 @@
              android:text="To: 30-Jun-2014"
              android:id="@+id/lblMSFCycleEndDate"/> -->
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFTotalSavings"
             style="@style/RegularTextListItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Total Savings: 1,000,000 UGX" />
 
-        <org.applab.digitizingdata.fontutils.TypefaceTextView
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFOutstandingLoans"
             style="@style/RegularTextListItems"
             android:layout_width="match_parent"

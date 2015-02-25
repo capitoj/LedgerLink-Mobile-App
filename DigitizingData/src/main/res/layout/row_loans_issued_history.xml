@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLIHCycleSpan"
         style="@style/RegularTextBold"
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/txtRLIHCycleSpan">
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLIHLoanNo"
         style="@style/RegularTextBold"
         android:layout_width="45dip"
@@ -32,7 +32,7 @@
         android:layout_marginLeft="10dip"
         android:text="Loan No " />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLIHAmount"
         style="@style/RegularText"
         android:layout_width="120dip"
@@ -42,7 +42,7 @@
         android:layout_toRightOf="@id/txtRLIHLoanNo"
         android:text="Amount " />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLIHDateTaken"
         style="@style/RegularText"
         android:layout_width="200dip"
@@ -52,7 +52,7 @@
         android:layout_toRightOf="@id/txtRLIHAmount"
         android:text="Date " />
 
-    <org.applab.digitizingdata.fontutils.TypefaceTextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLIHComment"
         style="@style/RegularText"
         android:layout_width="match_parent"
