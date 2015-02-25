@@ -1,0 +1,4 @@
+Keys store is named LL.jks
+
+Alias: ll
+Password: abc123
