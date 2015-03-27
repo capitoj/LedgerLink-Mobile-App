@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.applab.ledgerlink"
-    android:versionCode="4"
+    android:versionCode="5"
     android:versionName="@string/about_version" >
 
     <uses-sdk
@@ -22,8 +22,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <supports-screens
-        android:smallScreens="false"
-        android:normalScreens="false"
+        android:smallScreens="true"
+        android:normalScreens="true"
         android:largeScreens="true"
         android:xlargeScreens="true"
         android:requiresSmallestWidthDp="533"

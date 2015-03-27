@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.*;
@@ -272,6 +273,7 @@ public class ActivationActivity extends SherlockActivity {
 
             activateVlsaUsingPostAsync(jsonRequest);
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -304,6 +306,7 @@ public class ActivationActivity extends SherlockActivity {
                     }
                 }
             } catch (Exception ex) {
+                ex.printStackTrace();
                 assert progressDialog != null;
                 progressDialog.setMessage(ex.getMessage());
             }
@@ -322,7 +325,8 @@ public class ActivationActivity extends SherlockActivity {
 
                 //passes the results to a string builder/entity
                 StringEntity se = new StringEntity(params[1]);
-
+                Log.d("URI", "URI is " + params[0]);
+                Log.d("Request", "Request is " + params[1]);
                 //sets the post request as the resulting string
                 httpPost.setEntity(se);
                 httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -347,7 +351,7 @@ public class ActivationActivity extends SherlockActivity {
                 };
 
                 String responseString = httpClient.execute(httpPost, rh);
-
+                Log.d("Registration", "Response is " + responseString);
                 // close the connection
                 httpClient.getConnectionManager().shutdown();
 
@@ -358,12 +362,16 @@ public class ActivationActivity extends SherlockActivity {
 
                 return result;
             } catch (ClientProtocolException exClient) {
+                exClient.printStackTrace();
                 return null;
             } catch (IOException exIo) {
+                exIo.printStackTrace();
                 return null;
             } catch (JSONException exJson) {
+                exJson.printStackTrace();
                 return null;
             } catch (Exception ex) {
+                ex.printStackTrace();
                 return null;
             }
         }
@@ -422,9 +430,11 @@ public class ActivationActivity extends SherlockActivity {
                 }
             } catch (JSONException exJson) {
                 //Process failed
+                exJson.printStackTrace();
                 Toast.makeText(getApplicationContext(), "Registration failed due to invalid Data Format. Try again later.", Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
             } catch (Exception ex) {
+                ex.printStackTrace();
                 //Process failed
                 Toast.makeText(getApplicationContext(), "Registration failed. Try again later.", Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
