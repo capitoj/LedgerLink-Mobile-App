@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.widget.EditText;
 
 /**
- * A subclass of {@link android.widget.EditText} which has a custom {@link org.applab.ledgerlink.fontutils.TextStyle} applied.
+ * A subclass of {@link android.widget.EditText} which has a custom {@link TextStyle} applied.
  */
 public class TypefaceEditText extends EditText {
 

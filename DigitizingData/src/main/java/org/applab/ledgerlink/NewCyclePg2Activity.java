@@ -14,12 +14,13 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.MembersCustomArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.util.ArrayList;
 

@@ -9,13 +9,14 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
+
 import org.applab.ledgerlink.domain.model.Meeting;
-import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.MembersRollCallArrayAdapter;
-import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
 

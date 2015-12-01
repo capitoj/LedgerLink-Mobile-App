@@ -9,12 +9,13 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
+
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.MembersLoansRepaidArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.util.ArrayList;
 
@@ -59,6 +60,12 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        this.initializeFragment();
     }
 
     private void initializeFragment() {

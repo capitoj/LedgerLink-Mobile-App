@@ -9,11 +9,11 @@ import android.util.Log;
 import org.applab.ledgerlink.datatransformation.RepaymentDataTransferRecord;
 import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.domain.schema.LoanIssueSchema;
-import org.applab.ledgerlink.domain.schema.LoanRepaymentSchema;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
-import org.applab.ledgerlink.helpers.DatabaseHandler;
 import org.applab.ledgerlink.helpers.MemberLoanRepaymentRecord;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.domain.schema.LoanRepaymentSchema;
+import org.applab.ledgerlink.helpers.DatabaseHandler;
 
 import java.util.ArrayList;
 import java.util.Calendar;

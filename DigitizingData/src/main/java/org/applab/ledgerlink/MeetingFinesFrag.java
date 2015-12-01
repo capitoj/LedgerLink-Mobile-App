@@ -8,12 +8,13 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import org.applab.ledgerlink.domain.model.Member;
+
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.MembersFinesArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.domain.model.Member;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.util.ArrayList;
 
@@ -86,6 +87,12 @@ public class MeetingFinesFrag extends SherlockFragment {
             }
         };
         LongTaskRunner.runLongTask(runnable, "Please wait", "Loading list of fines...", parentActivity);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        populateMembersList();
     }
 
 

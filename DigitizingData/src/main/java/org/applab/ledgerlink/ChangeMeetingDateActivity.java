@@ -14,10 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
+
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.repo.MeetingRepo;
 
 import java.util.ArrayList;

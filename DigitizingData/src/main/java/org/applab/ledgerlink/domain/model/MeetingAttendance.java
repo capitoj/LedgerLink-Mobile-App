@@ -3,11 +3,12 @@ package org.applab.ledgerlink.domain.model;
 /**
  * Created by Moses on 7/5/13.
  */
-class MeetingAttendance {
+public class MeetingAttendance {
     private int attendanceId;
     private Meeting meeting;
     private Member member;
     private boolean isPresent;
+    protected String comment;
 
     public boolean isPresent() {
         return isPresent;
@@ -39,6 +40,14 @@ class MeetingAttendance {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    public void setComment(String comment){
+        this.comment = comment;
+    }
+
+    public String getComment(){
+        return this.comment;
     }
 
     public MeetingAttendance(){

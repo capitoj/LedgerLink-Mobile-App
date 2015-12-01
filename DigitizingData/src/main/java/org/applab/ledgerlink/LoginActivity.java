@@ -20,8 +20,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
@@ -215,10 +215,11 @@ public class LoginActivity extends SherlockActivity {
     // This method is called once the menu is selected
     @Override
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        Intent i;
         switch (item.getItemId()) {
             case R.id.action_settings:
                 // Launch preferences activity
-                Intent i = new Intent(this, SettingsActivity.class);
+                i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 break;
             case R.id.action_about:
@@ -226,6 +227,17 @@ public class LoginActivity extends SherlockActivity {
                 AboutDialog about = new AboutDialog(this);
                 about.setTitle("About LedgerLink");
                 about.show();
+                break;
+            case R.id.action_recovery:
+                // Launch Data Recovery
+                i = new Intent(this, DataRecoveryActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                break;
+            case R.id.action_training_modules:
+                //Launch the training modules
+                i = new Intent(this, TrainingModuleActivity.class);
+                startActivity(i);
                 break;
         }
         return true;

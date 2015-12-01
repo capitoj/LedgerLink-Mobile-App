@@ -16,12 +16,14 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.MemberSavingRecord;
 import org.applab.ledgerlink.helpers.SavingsArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
 
@@ -97,7 +99,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(saveMemberSaving()) {
+                        if(saveMemberSaving(true)) {
                             Toast.makeText(MemberSavingHistoryActivity.this, "Savings entered successfully", Toast.LENGTH_LONG).show();
                             Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                             i.putExtra("_tabToSelect", "savings");
@@ -184,6 +186,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         switch(item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MeetingActivity.class);
+                upIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 upIntent.putExtra("_tabToSelect", "savings");
                 upIntent.putExtra("_meetingDate", meetingDate);
                 upIntent.putExtra("_meetingId", meetingId);
@@ -205,6 +208,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                 return true;
             case R.id.mnuMSHCancel:
                 i = new Intent(MemberSavingHistoryActivity.this, MeetingActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.putExtra("_tabToSelect", "savings");
                 i.putExtra("_meetingDate", meetingDate);
                 i.putExtra("_meetingId", meetingId);
@@ -212,9 +216,10 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                 return true;
             case R.id.mnuMSHSave:
 
-                if(saveMemberSaving()) {
+                if(saveMemberSaving(true)) {
                     Toast.makeText(MemberSavingHistoryActivity.this,"Savings entered successfully",Toast.LENGTH_LONG).show();
                     i = new Intent(MemberSavingHistoryActivity.this, MeetingActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     i.putExtra("_tabToSelect", "savings");
                     i.putExtra("_meetingDate", meetingDate);
                     i.putExtra("_meetingId", meetingId);
@@ -228,7 +233,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         boolean proceedWithSaving = value;
     }
 
-    public boolean saveMemberSaving(){
+    public boolean saveMemberSaving(boolean showWarning){
         boolean successFlg = false;
         double theAmount = 0.0;
 
@@ -255,12 +260,28 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                 }
             else if(theAmount>0 && theAmount < targetMeeting.getVslaCycle().getSharePrice()) {
                 //Check if saving amount is less than price of a single star (share)
+                if(showWarning) {
+                    Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            if(saveMemberSaving(false)){
+                                Toast.makeText(MemberSavingHistoryActivity.this,"Savings entered successfully",Toast.LENGTH_LONG).show();
+                                finish();
+                            }
+                        }
+                    };
+                    String message = "The amount entered " + Utils.formatNumber(theAmount) + " is less than one star, please enter atleast " + Utils.formatNumber(targetMeeting.getVslaCycle().getSharePrice()) + " " + getResources().getString(R.string.operating_currency);
+                    DialogMessageBox.show(this, "Savings", message, runnable);
+
+                /*
                 Utils.createAlertDialogOk(MemberSavingHistoryActivity.this,
                         "Savings","The amount entered "+Utils.formatNumber(theAmount)+" is less than one star, please enter atleast "+
                         Utils.formatNumber(targetMeeting.getVslaCycle().getSharePrice())+" "+ getResources().getString(R.string.operating_currency),
                         Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtSaving.requestFocus();
-                return false;
+                */
+                    txtSaving.requestFocus();
+                    return false;
+                }
             }
 
 

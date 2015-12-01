@@ -24,12 +24,16 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.domain.model.VslaCycle;
+import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceTextView;
 import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.repo.*;
+import org.applab.ledgerlink.repo.MemberRepo;
+import org.applab.ledgerlink.repo.SendDataRepo;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
+import org.applab.ledgerlink.repo.VslaInfoRepo;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.Calendar;
 
@@ -40,6 +44,7 @@ import java.util.Calendar;
 public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
     private boolean _isFromReviewMembers = false;
+    protected boolean isCycleValidated = false;
 
 
     @Override
@@ -75,7 +80,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            saveMiddleCycleData();
+                            saveMiddleCycleData(true);
                         }
                     }
             );
@@ -96,7 +101,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            saveMiddleCycleData();
+                            saveMiddleCycleData(true);
                         }
                     }
             );
@@ -117,7 +122,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
         actionBar.setDisplayShowCustomEnabled(true);
 
         // Populate Max Shares Spinner
-        super.buildMaxSharesSpinner();
+        //super.buildMaxSharesSpinner();
 
         txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
         txtEndDate = (TextView) findViewById(R.id.txtNCEndDate);
@@ -250,34 +255,34 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
     }
 
 
-     @Override
-     public boolean onOptionsItemSelected(MenuItem item) {
-         Intent i;
-         switch(item.getItemId()) {
-             case android.R.id.home:
-                 Intent upIntent = new Intent(this, GettingStartedWizardPageOne.class);
-                 if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent i;
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                Intent upIntent = new Intent(this, GettingStartedWizardPageOne.class);
+                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
 
-                     // This activity is not part of the application's task, so
-                     // create a new task
-                     // with a synthesized back stack.
-                     TaskStackBuilder
-                             .from(this)
-                             .addNextIntent(new Intent(this, GettingStartedWizardPageOne.class))
-                             .addNextIntent(upIntent).startActivities();
-                     finish();
-                 } else {
+                    // This activity is not part of the application's task, so
+                    // create a new task
+                    // with a synthesized back stack.
+                    TaskStackBuilder
+                            .from(this)
+                            .addNextIntent(new Intent(this, GettingStartedWizardPageOne.class))
+                            .addNextIntent(upIntent).startActivities();
+                    finish();
+                } else {
 
-                     // This activity is part of the application's task, so simply
-                     // navigate up to the hierarchical parent activity.
-                     NavUtils.navigateUpTo(this, upIntent);
-                 }
+                    // This activity is part of the application's task, so simply
+                    // navigate up to the hierarchical parent activity.
+                    NavUtils.navigateUpTo(this, upIntent);
+                }
 
-         }
-         return true;
-     }
+        }
+        return true;
+    }
 
-    private boolean saveMiddleCycleData() {
+    private boolean saveMiddleCycleData(boolean warnOnHighInterest) {
         boolean successFlg = false;
         VslaCycle cycle = new VslaCycle();
         VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
@@ -285,7 +290,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             cycle = selectedCycle;
         }
 
-        if (validateGettingStartedData(cycle)) {
+        if (validateGettingStartedData(cycle, warnOnHighInterest)) {
             boolean retVal = false;
             if (cycle.getCycleId() != 0) {
                 retVal = repo.updateCycle(cycle);
@@ -313,7 +318,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
                     //displayMessageBox("Update Cycle", "The Cycle has been updated Successfully.", Utils.MSGBOX_ICON_TICK);
                 }
-
+                /*
                 String testJson = SendDataRepo.getVslaCycleJson(repo.getCurrentCycle());
                 if (testJson.length() < 0) {
                     return false;
@@ -324,7 +329,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 if (membersJson.length() < 0) {
                     return false;
                 }
-
+                */
                 // Pass on the flag indicating whether this is an Update operation
                 Intent i;
                 if (isUpdateCycleAction && _isFromReviewMembers) {
@@ -336,6 +341,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 } else {
                     i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
                     i.putExtra("_isUpdateCycleAction", isUpdateCycleAction);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     finish();
                 }
@@ -343,21 +349,41 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.");
             }
         } else {
-
-            // displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
+            if(isCycleValidated) {
+                EditText txtNCInterestRate = (EditText) findViewById(R.id.txtNCInterestRate);
+                String interestRate = txtNCInterestRate.getText().toString().trim();
+                showDialogMsgBox("Warning", Utils.formatNumber(Double.parseDouble(interestRate)) + "% is high. Are you sure you entered the correct interest rate");
+                // displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
+            }
         }
 
         return successFlg;
     }
 
+    protected void showDialogMsgBox(String title, String message){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                saveMiddleCycleData(false);
+            }
+        };
+        DialogMessageBox.show(this, title, message, runnable);
+    }
 
-    private boolean validateGettingStartedData(VslaCycle cycle) {
+    private boolean validateGettingStartedData(VslaCycle cycle, boolean warnOnHighInterest) {
         try {
             if (null == cycle) {
                 return false;
             }
             //validate Data common to New Cycle
-            if (!validateData(cycle)) {
+            if (validateData(cycle)) {
+                isCycleValidated = true;
+                if(cycle.getInterestRate() > 10){
+                    if(warnOnHighInterest) {
+                        return false;
+                    }
+                }
+            }else{
                 return false;
             }
 
@@ -433,7 +459,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
     protected void clearDataFields() {
         super.clearDataFields();
-        buildMaxSharesSpinner();
+        //buildMaxSharesSpinner();
         try {
 
             //Now Clear fields specific to GSWizard

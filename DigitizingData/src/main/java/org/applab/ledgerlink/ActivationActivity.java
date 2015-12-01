@@ -22,8 +22,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -118,12 +118,17 @@ public class ActivationActivity extends SherlockActivity {
     // This method is called once the menu is selected
     @Override
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        Intent i = null;
         switch (item.getItemId()) {
             case R.id.action_settings:
                 // Launch preferences activity
-                Intent i = new Intent(this, SettingsActivity.class);
+                i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
                 break;
+            case R.id.action_recovery:
+                i = new Intent(this, DataRecoveryActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
         }
         return true;
     }

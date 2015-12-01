@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -18,15 +17,16 @@ import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.repo.SendDataRepo;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -52,6 +52,7 @@ public class NewCycleActivity extends SherlockActivity {
     private boolean successAlertDialogShown = false;
     boolean isUpdateCycleAction = false;
     private boolean multipleCyclesIndicator = false;
+    private boolean isCycleValidated = false;
 
     LedgerLinkApplication ledgerLinkApplication;
 
@@ -209,7 +210,7 @@ public class NewCycleActivity extends SherlockActivity {
         }
 
         // Populate Max Shares Spinner
-        buildMaxSharesSpinner();
+        //buildMaxSharesSpinner();
     }
 
     /* inflates custom menu bar for review members */
@@ -235,7 +236,28 @@ public class NewCycleActivity extends SherlockActivity {
                     @Override
                     public void onClick(View v) {
                         //Save this as long task
-                        saveCycleData();
+                        boolean savedStatus = saveCycleData(true);
+                        if (savedStatus) {
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                        } else {
+                            if (isCycleValidated) {
+
+                                Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        saveCycleData(false);
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    }
+                                };
+                                EditText txtNCInterestRate = (EditText) findViewById(R.id.txtNCInterestRate);
+                                int interestRate = Integer.valueOf(txtNCInterestRate.getText().toString().trim());
+                                DialogMessageBox.show(NewCycleActivity.this, "Warning", Utils.formatNumber(interestRate) + "% is high. Are you sure you entered the correct interest rate", runnable);
+                            }
+                        }
                     }
                 }
         );
@@ -253,10 +275,26 @@ public class NewCycleActivity extends SherlockActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        saveCycleData();
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(i);
+                        boolean savedStatus = saveCycleData(true);
+                        if (savedStatus) {
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                        } else {
+                            if (isCycleValidated) {
 
+                                Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        saveCycleData(false);
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    }
+                                };
+                                DialogMessageBox.show(NewCycleActivity.this, "Warning", Utils.formatNumber(selectedCycle.getInterestRate()) + "% is high. Are you sure you entered the correct interest rate", runnable);
+                            }
+                        }
                     }
                 }
         );
@@ -420,31 +458,41 @@ public class NewCycleActivity extends SherlockActivity {
 
     }
 
-    boolean saveCycleData() {
-
+    private boolean saveCycleData(boolean warnOnHighInterest) {
+        boolean isCycleSaved = false;
         VslaCycle cycle = new VslaCycle();
-
-        if (selectedCycle != null) {
+        if(selectedCycle != null){
             cycle = selectedCycle;
         }
-
-        if (validateData(cycle)) {
-            final VslaCycle finalCycle = cycle;
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    saveCycleDataToDb(finalCycle);
+        if(validateData(cycle)){
+            isCycleValidated = true;
+            if(cycle.getInterestRate() > 10){
+                if(warnOnHighInterest){
+                    isCycleSaved = false;
+                }else{
+                    this.executeCycleTask(cycle);
+                    isCycleSaved = true;
                 }
-            };
-            LongTaskRunner.runLongTask(runnable, "Please wait...", "Saving cycle information...", NewCycleActivity.this);
-
-            return true;
-            //clearDataFields(); //Not needed now
-        } else {
-            //displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.", Utils.MSGBOX_ICON_EXCLAMATION);
-            return false;
+            }else{
+                this.executeCycleTask(cycle);
+                isCycleSaved = true;
+            }
         }
+        return isCycleSaved;
     }
+
+    private void executeCycleTask(VslaCycle cycle){
+        final VslaCycle finalCycle = cycle;
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                saveCycleDataToDb(finalCycle);
+            }
+        };
+        LongTaskRunner.runLongTask(runnable, "Please wait...", "Saving cycle information...", NewCycleActivity.this);
+    }
+
+
 
     private boolean saveCycleDataToDb(VslaCycle cycle) {
         boolean retVal = false;
@@ -464,6 +512,7 @@ public class NewCycleActivity extends SherlockActivity {
                 //displayMessageBox("Update Cycle", "The Cycle has been updated Successfully.", Utils.MSGBOX_ICON_TICK);
             }
 
+            /*
             String testJson = SendDataRepo.getVslaCycleJson(ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle());
             if (testJson.length() < 0) {
                 return false;
@@ -483,6 +532,7 @@ public class NewCycleActivity extends SherlockActivity {
             Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
             i.putExtra("_isUpdateCycleAction", isUpdateCycleAction);
             startActivity(i);
+            */
                 /*
                 if(null != alertDialog && alertDialog.isShowing()) {
                     //Flag that ready to goto Next
@@ -517,7 +567,17 @@ public class NewCycleActivity extends SherlockActivity {
                     txtSharePrice.requestFocus();
                     return false;
                 } else {
-                    cycle.setSharePrice(theSharePrice);
+                    if(theSharePrice < 100){
+                        displayMessageBox(dialogTitle, "The Share Price can not be less than 100");
+                        txtSharePrice.requestFocus();
+                        return false;
+                    }else if(theSharePrice > 100000){
+                        displayMessageBox(dialogTitle, "The Share Price can not be more than 100000");
+                        txtSharePrice.requestFocus();
+                        return false;
+                    }else {
+                        cycle.setSharePrice(theSharePrice);
+                    }
                 }
             }
 
@@ -530,6 +590,24 @@ public class NewCycleActivity extends SherlockActivity {
              else { */
 
             // Validate: MaxShareAmount
+            EditText txtNCMaxShares = (EditText)findViewById(R.id.txtNCMaxShares);
+            if(txtNCMaxShares.getText().toString().length() == 0){
+                Utils.createAlertDialogOk(this, dialogTitle, "The Maximum Share Quantity is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtNCMaxShares.requestFocus();
+                return false;
+            }else{
+                int theMaxShareQty = Integer.valueOf(txtNCMaxShares.getText().toString());
+                if(theMaxShareQty <= 0){
+                    displayMessageBox(dialogTitle, "The Maximum Share Quantity must be positive.");
+                    txtNCMaxShares.requestFocus();
+                    return false;
+                }else{
+                    cycle.setMaxSharesQty(theMaxShareQty);
+                }
+            }
+
+
+            /*
             Spinner cboMaxShareQty = (Spinner) findViewById(R.id.cboNCMaxShares);
             if (cboMaxShareQty.getSelectedItemPosition() == 0) {
                 Utils.createAlertDialogOk(this, dialogTitle, "The Maximum Share Quantity is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
@@ -545,7 +623,7 @@ public class NewCycleActivity extends SherlockActivity {
                 } else {
                     cycle.setMaxSharesQty(theMaxShareQty);
                 }
-            }
+            }*/
 
             // Validate: MaxStartShare
             cycle.setMaxStartShare(0.0); //Unlimited
@@ -586,8 +664,8 @@ public class NewCycleActivity extends SherlockActivity {
                 return false;
             } else {
                 double theInterestRate = Double.parseDouble(interestRate);
-                if (theInterestRate < 0.00) {
-                    displayMessageBox(dialogTitle, "The Interest Rate should be zero and above.");
+                if (theInterestRate < 1 || theInterestRate > 20) {
+                    displayMessageBox(dialogTitle, "The Interest Rate should be between 1% and 20%");
                     txtInterestRate.requestFocus();
                     return false;
                 } else {
@@ -733,7 +811,8 @@ public class NewCycleActivity extends SherlockActivity {
         try {
             // Now populate
             TextView txtSharePrice = (TextView) findViewById(R.id.txtNCSharePrice);
-            final Spinner cboMaxShareQty = (Spinner) findViewById(R.id.cboNCMaxShares);
+            EditText txtNCMaxShares = (EditText)findViewById(R.id.txtNCMaxShares);
+            //final Spinner cboMaxShareQty = (Spinner) findViewById(R.id.cboNCMaxShares);
             TextView txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
             TextView txtEndDate = (TextView) findViewById(R.id.txtNCEndDate);
             TextView txtInterestRate = (TextView) findViewById(R.id.txtNCInterestRate);
@@ -741,14 +820,16 @@ public class NewCycleActivity extends SherlockActivity {
             txtSharePrice.setText(Utils.formatRealNumber(cycle.getSharePrice()));
             //Fix... select spinner on post creation
             //fix for failure to select these values
+            /*
             cboMaxShareQty.post(new Runnable() {
                 @Override
                 public void run() {
                     Utils.setSpinnerSelection(String.format("%.0f", cycle.getMaxSharesQty()), cboMaxShareQty); //format shares qty with no decimal points so that the Utils can select it correctly
                 }
-            });
+            });*/
 
             //cboMaxShareQty.setSelection(6 , true);
+            txtNCMaxShares.setText(Utils.formatRealNumber(cycle.getMaxSharesQty()));
             txtStartDate.setText(Utils.formatDate(cycle.getStartDate(), "dd-MMM-yyyy"));
             txtEndDate.setText(Utils.formatDate(cycle.getEndDate(), "dd-MMM-yyyy"));
             txtInterestRate.setText(Utils.formatRealNumber(cycle.getInterestRate()));
@@ -758,17 +839,19 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     protected void clearDataFields() {
-        buildMaxSharesSpinner();
+        //buildMaxSharesSpinner();
         try {
             // Now populate
             TextView txtSharePrice = (TextView) findViewById(R.id.txtNCSharePrice);
-            Spinner cboMaxShareQty = (Spinner) findViewById(R.id.cboNCMaxShares);
+            //Spinner cboMaxShareQty = (Spinner) findViewById(R.id.cboNCMaxShares);
+            EditText txtNCMaxShares = (EditText)findViewById(R.id.txtNCMaxShares);
             TextView txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
             TextView txtEndDate = (TextView) findViewById(R.id.txtNCEndDate);
             TextView txtInterestRate = (TextView) findViewById(R.id.txtNCInterestRate);
 
             txtSharePrice.setText("");
-            cboMaxShareQty.setSelection(0);
+            txtNCMaxShares.setText("");
+            //cboMaxShareQty.setSelection(0);
             txtStartDate.setText("");
             txtEndDate.setText("");
             txtInterestRate.setText("");
@@ -779,6 +862,7 @@ public class NewCycleActivity extends SherlockActivity {
     }
 
     /* Populates the max shares spinner  */
+    /*
     public void buildMaxSharesSpinner() {
 
         Spinner cboNCMaxShares = (Spinner) findViewById(R.id.cboNCMaxShares);
@@ -818,6 +902,6 @@ public class NewCycleActivity extends SherlockActivity {
         cboNCMaxShares.setFocusable(true);
         cboNCMaxShares.setFocusableInTouchMode(true);
         cboNCMaxShares.setClickable(true);
-    }
+    }*/
 
 }

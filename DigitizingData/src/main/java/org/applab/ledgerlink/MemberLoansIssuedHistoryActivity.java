@@ -18,14 +18,17 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.ledgerlink.domain.model.Meeting;
-import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LoansIssuedHistoryArrayAdapter;
 import org.applab.ledgerlink.helpers.MemberLoanIssueRecord;
-import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
+import org.applab.ledgerlink.repo.MeetingRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -493,13 +496,22 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanNo.requestFocus();
                 return false;
-            } else {
-                theLoanNo = Integer.parseInt(loanNo);
-                if (theLoanNo <= 0.00) {
-                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Number is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtLoanNo.requestFocus();
-                    return false;
-                }
+            }
+
+            theLoanNo = Integer.valueOf(loanNo);
+            if(theLoanNo < 0.00){
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Number is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtLoanNo.requestFocus();
+                return false;
+            }
+
+            MeetingRepo meetingRepo = new MeetingRepo(this, meetingId);
+            int cycleID = meetingRepo.getCycleID();
+            boolean hasLoanNo = MeetingLoanIssuedRepo.hasLoanNumber(this, cycleID, theLoanNo);
+            if(hasLoanNo && theAmount > 0.00){
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The loan number " + String.valueOf(theLoanNo) + " already exists.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                txtLoanNo.requestFocus();
+                return false;
             }
 
             String comment = txtComment.getText().toString().trim();

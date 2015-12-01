@@ -17,11 +17,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import org.applab.ledgerlink.GettingStartedWizardPageTwo;
 import org.applab.ledgerlink.GettingStartedConfirmationPage;
 import org.applab.ledgerlink.GettingStartedWizardAddMemberActivity;
 import org.applab.ledgerlink.GettingStartedWizardNewCycleActivity;
 import org.applab.ledgerlink.GettingStartedWizardPageOne;
-import org.applab.ledgerlink.GettingStartedWizardPageTwo;
 import org.applab.ledgerlink.GettingStartedWizardReviewMembersActivity;
 import org.applab.ledgerlink.SettingsActivity;
 
@@ -281,6 +281,7 @@ public class Utils {
     }
 
     public static Date getDateFromString(String date, String format) {
+
         try {
             SimpleDateFormat ft = new SimpleDateFormat(format);
             return ft.parse(date);
@@ -288,7 +289,6 @@ public class Utils {
             e.printStackTrace();
             return new Date();
         }
-
         //Parameterized constructor :- Date(int year,int month,int day) creates a Date object and initialize it with given year+1900,  given month and given day.
     }
 
@@ -515,4 +515,25 @@ public class Utils {
 
     }
 
+    /**
+     * Created by Joseph Capito on 7/23/2015.
+     */
+    public static class Size {
+
+        private int height;
+        private int width;
+
+        public Size(int width, int height){
+            this.width = width;
+            this.height = height;
+        }
+
+        public int getWidth(){
+            return this.width;
+        }
+
+        public int getHeight(){
+            return this.height;
+        }
+    }
 }

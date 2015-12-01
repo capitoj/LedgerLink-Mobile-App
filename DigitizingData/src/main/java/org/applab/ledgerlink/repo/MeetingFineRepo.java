@@ -200,36 +200,19 @@ public class MeetingFineRepo {
 
 
     public double getTotalFinesInMeeting(int meetingId) {
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
         double totalFines = 0.00;
 
-        try {
-            db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT IFNULL(SUM(%s),0) AS TotalFines FROM %s WHERE %s=%d",
-                    FineSchema.COL_F_AMOUNT, FineSchema.getTableName(),
-                    FineSchema.COL_F_MEETING_ID, meetingId);
-            cursor = db.rawQuery(sumQuery, null);
-
-            if (cursor != null && cursor.moveToFirst()) {
-                totalFines = cursor.getDouble(cursor.getColumnIndex("TotalFines"));
-            }
-
-
-            return totalFines;
-        } catch (Exception ex) {
-            Log.e("MeetingFineRepo.getTotalFinesInMeeting", ex.getMessage());
-            return 0;
-        } finally {
-
-            if (cursor != null) {
-                cursor.close();
-            }
-
-            if (db != null) {
-                db.close();
-            }
+        try{
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            Cursor cursor = db.rawQuery("select sum(Amount) as TotalFines from Fines where MeetingId = ?", new String[]{String.valueOf(meetingId)});
+            cursor.moveToNext();
+            totalFines = cursor.getDouble(0);
+            cursor.close();
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        return totalFines;
     }
 
     public double getTotalFinesPaidInThisMeeting(int meetingId) {
@@ -344,6 +327,21 @@ public class MeetingFineRepo {
         }
     }
 
+    public boolean saveMemberFine(FinesDataTransferRecord finesDataTransferRecord){
+        boolean isFineSaved = false;
+        try{
+            SQLiteDatabase db = DatabaseHandler.getInstance(this.context).getWritableDatabase();
+            int isFineCleared = finesDataTransferRecord.isCleared() ? 1 : 0;
+            String sql = "insert into Fines (_id, MeetingId, MemberId, FineTypeId, Amount, IsCleared, DateCleared, PaidInMeetingId) values (?, ?, ?, ?, ?, ?, ?, ?)";
+            db.execSQL(sql, new String[]{String.valueOf(finesDataTransferRecord.getFinesId()), String.valueOf(finesDataTransferRecord.getMeetingId()), String.valueOf(finesDataTransferRecord.getMemberId()), String.valueOf(finesDataTransferRecord.getFineTypeId()), String.valueOf(finesDataTransferRecord.getAmount()), String.valueOf(isFineCleared), Utils.formatDateToSqlite(finesDataTransferRecord.getDateCleared()), String.valueOf(finesDataTransferRecord.getPaidInMeetingId())});
+            isFineSaved = true;
+        }catch (Exception e){
+            e.printStackTrace();
+            isFineSaved = false;
+        }
+        return isFineSaved;
+    }
+
 
     public boolean saveMemberFine(int meetingId, int memberId, double fineAmount, int fineTypeId, int paymentStatus) {
         SQLiteDatabase db = null;
@@ -359,7 +357,6 @@ public class MeetingFineRepo {
             values.put(FineSchema.COL_F_AMOUNT, fineAmount);
             values.put(FineSchema.COL_F_IS_CLEARED, paymentStatus);
             values.put(FineSchema.COL_F_FINE_TYPE_ID, fineTypeId);
-
 
             if (paymentStatus == 1) {
                 Date date = new Date();
@@ -457,24 +454,19 @@ public class MeetingFineRepo {
             fines = new ArrayList<FinesDataTransferRecord>();
 
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT %s AS FineId, %s AS MemberId, %s AS Amount " +
-                            " FROM %s WHERE %s=%d ORDER BY %s",
-                    FineSchema.COL_F_FINE_ID, FineSchema.COL_F_MEMBER_ID, FineSchema.COL_F_AMOUNT,
-                    FineSchema.getTableName(), FineSchema.COL_F_MEETING_ID, meetingId, FineSchema.COL_F_FINE_ID
-            );
-            cursor = db.rawQuery(query, null);
-
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    FinesDataTransferRecord fine = new FinesDataTransferRecord();
-                    fine.setFinesId(cursor.getInt(cursor.getColumnIndex("FineId")));
-                    fine.setMemberId(cursor.getInt(cursor.getColumnIndex("MemberId")));
-                    fine.setAmount(cursor.getDouble(cursor.getColumnIndex("Amount")));
-                    fine.setMeetingId(meetingId);
-
-                    fines.add(fine);
-
-                } while (cursor.moveToNext());
+            String query = "select _id, MeetingId, MemberId, FineTypeId, Amount, IsCleared, DateCleared, PaidInMeetingId from Fines where MeetingId = ? or PaidInMeetingId = ?";
+            cursor = db.rawQuery(query, new String[]{String.valueOf(meetingId), String.valueOf(meetingId)});
+            while(cursor.moveToNext()){
+                FinesDataTransferRecord fine = new FinesDataTransferRecord();
+                fine.setFinesId(cursor.getInt(0));
+                fine.setMeetingId(meetingId);
+                fine.setMemberId(cursor.getInt(2));
+                fine.setFineTypeId(cursor.getInt(3));
+                fine.setAmount(cursor.getDouble(4));
+                fine.setCleared(cursor.getInt(5) == 0 ? false : true);
+                fine.setDateCleared(Utils.getDateFromSqlite(cursor.getString(6)));
+                fine.setPaidInMeeting(cursor.getInt(7));
+                fines.add(fine);
             }
             return fines;
         } catch (Exception ex) {

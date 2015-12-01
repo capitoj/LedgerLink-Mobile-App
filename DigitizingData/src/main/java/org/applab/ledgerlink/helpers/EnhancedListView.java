@@ -61,7 +61,7 @@ public class EnhancedListView extends ListView {
 
     /**
      * Defines the style in which <i>undos</i> should be displayed and handled in the list.
-     * Pass this to {@link #setUndoStyle(org.applab.ledgerlink.helpers.EnhancedListView.UndoStyle)}
+     * Pass this to {@link #setUndoStyle(EnhancedListView.UndoStyle)}
      * to change the default behavior from {@link #SINGLE_POPUP}.
      */
     public enum UndoStyle {
@@ -95,7 +95,7 @@ public class EnhancedListView extends ListView {
 
     /**
      * Defines the direction in which list items can be swiped out to delete them.
-     * Use {@link #setSwipeDirection(org.applab.ledgerlink.helpers.EnhancedListView.SwipeDirection)}
+     * Use {@link #setSwipeDirection(EnhancedListView.SwipeDirection)}
      * to change the default behavior.
      * <p>
      * <b>Note:</b> This method requires the <i>Swipe to Dismiss</i> feature enabled. Use
@@ -162,19 +162,19 @@ public class EnhancedListView extends ListView {
          * Don't return from this method, before your item has been deleted from the adapter, meaning
          * if you delete the item in another thread, you have to make sure, you don't return from
          * this method, before the item has been deleted. Since the way how you delete your item
-         * depends on your data and adapter, the {@link org.applab.ledgerlink.helpers.EnhancedListView}
+         * depends on your data and adapter, the {@link EnhancedListView}
          * cannot handle that synchronizing for you. If you return from this method before you removed
          * the view from the adapter, you will most likely get errors like exceptions and flashing
          * items in the list.
          * <p>
          * If the user should get the possibility to undo this deletion, return an implementation
-         * of {@link org.applab.ledgerlink.helpers.EnhancedListView.Undoable} from this method.
+         * of {@link EnhancedListView.Undoable} from this method.
          * If you return {@code null} no undo will be possible. You are free to return an {@code Undoable}
          * for some items, and {@code null} for others, though it might be a horrible user experience.
          *
          * @param listView The {@link EnhancedListView} the item has been deleted from.
          * @param position The position of the item to delete from your adapter.
-         * @return An {@link org.applab.ledgerlink.helpers.EnhancedListView.Undoable}, if you want
+         * @return An {@link EnhancedListView.Undoable}, if you want
          *      to give the user the possibility to undo the deletion.
          */
         Undoable onDismiss(EnhancedListView listView, int position);
@@ -217,7 +217,7 @@ public class EnhancedListView extends ListView {
         /**
          * Discard the undo, meaning the user has no longer the possibility to undo the deletion.
          * Implement this, to finally delete your stuff from permanent storages like databases
-         * (whereas in {@link org.applab.ledgerlink.helpers.EnhancedListView.OnDismissCallback#onKeyDown(int, android.view.KeyEvent)}
+         * (whereas in {@link EnhancedListView.OnDismissCallback#onKeyDown(int, android.view.KeyEvent)}
          * you should only remove it from the list adapter).
          */
         public void discard() { }
@@ -412,14 +412,14 @@ public class EnhancedListView extends ListView {
     /**
      * Enables the <i>Swipe to Dismiss</i> feature for this list. This allows users to swipe out
      * an list item element to delete it from the list. Every time the user swipes out an element
-     * {@link org.applab.ledgerlink.helpers.EnhancedListView.OnDismissCallback#onDismiss(EnhancedListView, int)}
-     * of the given {@link org.applab.ledgerlink.helpers.EnhancedListView} will be called. To enable
-     * <i>undo</i> of the deletion, return an {@link org.applab.ledgerlink.helpers.EnhancedListView.Undoable}
-     * from {@link org.applab.ledgerlink.helpers.EnhancedListView.OnDismissCallback#onDismiss(EnhancedListView, int)}.
+     * {@link EnhancedListView.OnDismissCallback#onDismiss(EnhancedListView, int)}
+     * of the given {@link EnhancedListView} will be called. To enable
+     * <i>undo</i> of the deletion, return an {@link EnhancedListView.Undoable}
+     * from {@link EnhancedListView.OnDismissCallback#onDismiss(EnhancedListView, int)}.
      * Return {@code null}, if you don't want the <i>undo</i> feature enabled. Read the README file
      * or the demo project for more detailed samples.
      *
-     * @return The {@link org.applab.ledgerlink.helpers.EnhancedListView}
+     * @return The {@link EnhancedListView}
      * @throws java.lang.IllegalStateException when you haven't passed an {@link EnhancedListView.OnDismissCallback}
      *      to {@link #setDismissCallback(EnhancedListView.OnDismissCallback)} before calling this
      *      method.
@@ -438,7 +438,7 @@ public class EnhancedListView extends ListView {
     /**
      * Disables the <i>Swipe to Dismiss</i> feature for this list.
      *
-     * @return This {@link org.applab.ledgerlink.helpers.EnhancedListView}
+     * @return This {@link EnhancedListView}
      */
     public EnhancedListView disableSwipeToDismiss() {
         mSwipeEnabled = false;
@@ -452,7 +452,7 @@ public class EnhancedListView extends ListView {
      * {@link #enableSwipeToDismiss()} otherwise you will get an {@link java.lang.IllegalStateException}.
      *
      * @param dismissCallback The callback used to handle dismisses of list items.
-     * @return This {@link org.applab.ledgerlink.helpers.EnhancedListView}
+     * @return This {@link EnhancedListView}
      */
     public EnhancedListView setDismissCallback(OnDismissCallback dismissCallback) {
         mDismissCallback = dismissCallback;
@@ -463,7 +463,7 @@ public class EnhancedListView extends ListView {
      * Sets the callback to be called when the user is swiping an item from the list.
      *
      * @param shouldSwipeCallback The callback used to handle swipes of list items.
-     * @return This {@link org.applab.ledgerlink.helpers.EnhancedListView}
+     * @return This {@link EnhancedListView}
      */
     public EnhancedListView setShouldSwipeCallback(OnShouldSwipeCallback shouldSwipeCallback) {
         mShouldSwipeCallback = shouldSwipeCallback;
@@ -471,12 +471,12 @@ public class EnhancedListView extends ListView {
     }
 
     /**
-     * Sets the undo style of this list. See the javadoc of {@link org.applab.ledgerlink.helpers.EnhancedListView.UndoStyle}
+     * Sets the undo style of this list. See the javadoc of {@link EnhancedListView.UndoStyle}
      * for a detailed explanation of the different styles. The default style (if you never call this
-     * method) is {@link org.applab.ledgerlink.helpers.EnhancedListView.UndoStyle#SINGLE_POPUP}.
+     * method) is {@link EnhancedListView.UndoStyle#SINGLE_POPUP}.
      *
      * @param undoStyle The style of this listview.
-     * @return This {@link org.applab.ledgerlink.helpers.EnhancedListView}
+     * @return This {@link EnhancedListView}
      */
     public EnhancedListView setUndoStyle(UndoStyle undoStyle) {
         mUndoStyle = undoStyle;
@@ -490,7 +490,7 @@ public class EnhancedListView extends ListView {
      * {@code false}.
      *
      * @param hideDelay The delay in milliseconds.
-     * @return This {@link org.applab.ledgerlink.helpers.EnhancedListView}
+     * @return This {@link EnhancedListView}
      */
     public EnhancedListView setUndoHideDelay(int hideDelay) {
         mUndoHideDelay = hideDelay;
@@ -502,7 +502,7 @@ public class EnhancedListView extends ListView {
      * the undo popup. By default this is set to {@code true}.
      *
      * @param touchBeforeDismiss Whether the screen needs to be touched before the countdown starts.
-     * @return This {@link org.applab.ledgerlink.helpers.EnhancedListView}
+     * @return This {@link EnhancedListView}
      *
      * @see #setUndoHideDelay(int)
      */
@@ -520,7 +520,7 @@ public class EnhancedListView extends ListView {
      * {@link #enableSwipeToDismiss()} to enable the feature.
      *
      * @param direction The direction to which the swipe should be limited.
-     * @return This {@link org.applab.ledgerlink.helpers.EnhancedListView}
+     * @return This {@link EnhancedListView}
      */
     public EnhancedListView setSwipeDirection(SwipeDirection direction) {
         mSwipeDirection = direction;
@@ -538,7 +538,7 @@ public class EnhancedListView extends ListView {
      * <b>Note:</b> This method requires the <i>Swipe to Dismiss</i> feature enabled. Use
      * {@link #enableSwipeToDismiss()} to enable the feature.
      *
-     * @return This {@link org.applab.ledgerlink.helpers.EnhancedListView}
+     * @return This {@link EnhancedListView}
      */
     public EnhancedListView setSwipingLayout() {
         mSwipingLayout = R.id.swiping_layout;
@@ -574,7 +574,7 @@ public class EnhancedListView extends ListView {
      * @param position The position of the item in the list.
      * @throws java.lang.IndexOutOfBoundsException when trying to delete an item outside of the list range.
      * @throws java.lang.IllegalStateException when this method is called before an {@link EnhancedListView.OnDismissCallback}
-     *      is set via {@link #setDismissCallback(org.applab.ledgerlink.helpers.EnhancedListView.OnDismissCallback)}.
+     *      is set via {@link #setDismissCallback(EnhancedListView.OnDismissCallback)}.
      * */
     public void delete(int position) {
         if(mDismissCallback == null) {
@@ -927,7 +927,7 @@ public class EnhancedListView extends ListView {
     /**
      * Checks whether the delta of a swipe indicates, that the swipe is in the
      * correct direction, regarding the direction set via
-     * {@link #setSwipeDirection(org.applab.ledgerlink.helpers.EnhancedListView.SwipeDirection)}
+     * {@link #setSwipeDirection(EnhancedListView.SwipeDirection)}
      *
      * @param deltaX The delta of x coordinate of the swipe.
      * @return Whether the delta of a swipe is in the right direction.

@@ -1,7 +1,16 @@
 package org.applab.ledgerlink;
 
 import android.app.Application;
-import org.applab.ledgerlink.repo.*;
+
+import org.applab.ledgerlink.repo.MeetingAttendanceRepo;
+import org.applab.ledgerlink.repo.MeetingFineRepo;
+import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
+import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
+import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.repo.MeetingSavingRepo;
+import org.applab.ledgerlink.repo.MemberRepo;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
+import org.applab.ledgerlink.repo.VslaInfoRepo;
 
 
 /**

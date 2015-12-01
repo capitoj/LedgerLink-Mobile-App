@@ -41,7 +41,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblCashTakenToBank"
-            android:text="Actual Starting Cash" />
+            android:text="Actual Cash in the Box" />
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtActualStartingCash"

@@ -165,7 +165,7 @@ public class Meeting {
         this.meetingDataSent = meetingDataSent;
     }
 
-    public Date DateSent() {
+    public Date getDateSent() {
         return dateSent;
     }
 

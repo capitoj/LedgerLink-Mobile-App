@@ -6,8 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +20,10 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+
+import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.helpers.MenuItem;
-import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
 
@@ -34,6 +38,7 @@ public class MainActivity extends SherlockActivity {
     private VslaInfo vslaInfo = null;
     private ActionBar actionBar;
     LedgerLinkApplication ledgerLinkApplication;
+    private Utils.Size size;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +56,19 @@ public class MainActivity extends SherlockActivity {
         //Retrieve VSLA Information
          vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
 
+        this.getScreenSize();
+
         //Display the main menu
         displayMainMenu();
+    }
 
+    private void getScreenSize(){
+        DisplayMetrics metrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.actionBarSize, typedValue, true);
+        int actionBarHeight = Build.VERSION.SDK_INT >= 16 ? TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics()) + 38 : TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics()) + 19;
+        this.size = new Utils.Size(metrics.widthPixels, metrics.heightPixels - actionBarHeight);
     }
 
     @Override
@@ -87,7 +102,7 @@ public class MainActivity extends SherlockActivity {
 
         GridView gridView = (GridView) findViewById(R.id.grid);
 
-        customGridAdapter = new CustomGridViewAdapter(this, mainMenuItemsGridArray);
+        customGridAdapter = new CustomGridViewAdapter(this, mainMenuItemsGridArray, size);
         gridView.setAdapter(customGridAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -98,33 +113,41 @@ public class MainActivity extends SherlockActivity {
 
                 if (selectedMenuName.equalsIgnoreCase("beginMeeting")) {
                     Intent i = new Intent(getApplicationContext(), BeginMeetingActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("sendData")) {
                     Intent i = new Intent(getApplicationContext(), SendMeetingDataActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("viewSentData")) {
                     Intent i = new Intent(getApplicationContext(), ViewSentDataActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("updateCycle")) {
                     //Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
                     //i.putExtra("_isUpdateCycleAction", true);
                     //For multiple active cycles, show activity to allow selecting
                     Intent i = new Intent(getApplicationContext(), SelectCycle.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     i.putExtra("_isEndCycleAction", false);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("endCycle")) {
                     //Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
                     Intent i = new Intent(getApplicationContext(), SelectCycle.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     i.putExtra("_isEndCycleAction", true);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("beginCycle")) {
                     Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("reviewMembers")) {
                     Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("dataMigration")) {
                     Intent i = new Intent(getApplicationContext(), DataMigrationActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase("help")) {
 
@@ -142,14 +165,14 @@ public class MainActivity extends SherlockActivity {
         Context context;
         int layoutResourceId;
         ArrayList<MenuItem> data = new ArrayList<MenuItem>();
+        private Utils.Size size;
 
-        public CustomGridViewAdapter(Context context,
-                                     ArrayList<MenuItem> data) {
+        public CustomGridViewAdapter(Context context, ArrayList<MenuItem> data, Utils.Size size) {
             super(context, R.layout.mainmenurowgrid, data);
             this.layoutResourceId = R.layout.mainmenurowgrid;
             this.context = context;
             this.data = data;
-
+            this.size = size;
         }
 
         @Override
@@ -160,7 +183,8 @@ public class MainActivity extends SherlockActivity {
 
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
                 row = inflater.inflate(layoutResourceId, parent, false);
-                row.setLayoutParams(new LayoutParams((int)((Activity)context).getResources().getDimension(R.dimen.view_width), (int) ((Activity)context).getResources().getDimension(R.dimen.view_height)));
+                row.setLayoutParams(new LayoutParams(this.size.getWidth()/2, this.size.getHeight()/3));
+                //row.setLayoutParams(new LayoutParams((int)((Activity)context).getResources().getDimension(R.dimen.view_width), (int) ((Activity)context).getResources().getDimension(R.dimen.view_height)));
 
                 holder = new MenuItemHolder();
                 holder.textDescription = (TextView)row.findViewById(R.id.menu_item_desc);
@@ -171,7 +195,6 @@ public class MainActivity extends SherlockActivity {
             } else {
                 holder = (MenuItemHolder) row.getTag();
             }
-
 
             MenuItem item = data.get(position);
             try {

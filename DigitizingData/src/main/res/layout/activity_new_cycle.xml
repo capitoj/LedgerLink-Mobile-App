@@ -87,20 +87,29 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
-                <!-- <org.applab.digitizingdata.fontutils.TypefaceEditText
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
+                    android:id="@+id/txtNCMaxShares"
+                    style="@style/NormalEditText"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="" />
+
+                <!--
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
                      style="@style/NormalEditText"
                      android:id="@+id/txtNCMaxShares"
                      android:layout_width="300dip"
                      android:layout_height="wrap_content"
                      android:inputType="number"
-                     android:layout_weight="7" /> -->
+                     android:layout_weight="7" />-->
 
-                <Spinner
+                <!--<Spinner
                     android:id="@+id/cboNCMaxShares"
                     style="@style/RegularText"
                     android:layout_width="210dip"
                     android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown" />
+                    android:spinnerMode="dropdown" />-->
 
                 <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblNCSpace1"

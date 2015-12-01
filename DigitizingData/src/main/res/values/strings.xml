@@ -14,6 +14,7 @@
     <string name="title_activity_member_attendance_history">Attendance History</string>
     <string name="title_activity_activation">Register</string>
     <string name="add_member_gender_prompt">select sex</string>
+    <string name="add_member_profession_prompt">Select Profession</string>
     <string name="title_activity_meeting_cash_book_frag">Cash Book</string>
     <string name="title_activity_meeting_send_data_frag">Send Data</string>
     <string name="title_activity_meeting_opening_cash_frag">Starting Cash</string>
@@ -28,8 +29,9 @@
     <string name="image_content_desc">icon</string>
     <string name="title_activity_delete_meeting">DeleteMeetingActivity</string>
     <string name="about_legal">All rights reserved. Not liable for any damage incurred from use of this software.</string>
-    <string name="about_version">Version 2015022601</string>
+    <string name="about_version">Version 2015101201</string>
     <string name="action_about">About</string>
+    <string name="action_recovery">Data Recovery</string>
     <string name="register">REGISTER</string>
     <string name="meeting_is_readonly_warning">Values for this past meeting can not be modified at this time. Meeting is read only.</string>
     <string name="fine_is_previously__paid_warning">This past fine payment cannot be undone or modified at this time.</string>
@@ -43,6 +45,7 @@
     <string name="loan_issue_instruction">Changing the interest added will change the interest rate for the loan. Changing the date due will change how often payments must be made for the life of the loan.</string>
     <string name="help_forgot_passkey">Forgot your pass key: \nPlease call 0771638070</string>
     <string name="helpline">Forgot your pass key: \nPlease call 0771638070</string>
+    <string name="data_recovery_notice">To recover your data, kindly fill in the following information</string>
 
 
 
@@ -113,5 +116,7 @@
     <string name="new_balance">NEW BALANCE</string>
     <string name="loan_history">LOAN HISTORY</string>
     <string name="no_outsanding_loans">No outstanding loans</string>
+    <string name="title_activity_data_recovery">Data Recovery</string>
+    <string name="title_activity_training_module">Training Modules</string>
 
 </resources>

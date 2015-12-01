@@ -66,8 +66,8 @@ public class LongTaskRunner  extends AsyncTask<Runnable, Void, Void>
         }
 
 
-    public static void runLongTask(Runnable r, String title, String info, Activity parentActivity) {
+        public static void runLongTask(Runnable r, String title, String info, Activity parentActivity) {
 
-        new LongTaskRunner(parentActivity, title, info).execute(r, null, null);
-    }
+            new LongTaskRunner(parentActivity, title, info).execute(r, null, null);
+        }
     }

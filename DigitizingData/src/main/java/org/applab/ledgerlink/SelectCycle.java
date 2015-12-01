@@ -13,10 +13,11 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.VslaCyclesArrayAdapter;
 
 import java.util.ArrayList;

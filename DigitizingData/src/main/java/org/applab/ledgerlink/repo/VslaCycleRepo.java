@@ -9,8 +9,8 @@ import android.util.Log;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.domain.schema.VslaCycleSchema;
-import org.applab.ledgerlink.helpers.DatabaseHandler;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.DatabaseHandler;
 
 import java.util.ArrayList;
 import java.util.Calendar;

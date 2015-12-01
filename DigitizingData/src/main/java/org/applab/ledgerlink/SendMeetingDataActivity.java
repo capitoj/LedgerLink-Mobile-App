@@ -9,11 +9,14 @@ import android.widget.AdapterView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.SendMeetingDataArrayAdapter;
-import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
 
@@ -54,6 +57,7 @@ public class SendMeetingDataActivity extends SherlockListActivity {
         //If the process has finished, then mark the meeting as sent
 
         //Retrieve the meetings whose data has not been sent
+        MeetingRepo meetingRepo = new MeetingRepo(this);
         meetings = ledgerLinkApplication.getMeetingRepo().getAllMeetingsByDataSentStatus(false);
 
         if(meetings == null) {

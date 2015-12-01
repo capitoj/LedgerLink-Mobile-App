@@ -11,9 +11,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.R;
-import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.repo.MeetingAttendanceRepo;
 import org.applab.ledgerlink.repo.VslaCycleRepo;
 

@@ -5,12 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingStartingCash;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
-import org.applab.ledgerlink.helpers.DatabaseHandler;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.DatabaseHandler;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +23,7 @@ import java.util.HashMap;
  */
 public class MeetingRepo {
     private Context context;
+    private int meetingID;
 
 
     public enum MeetingOrderByEnum {
@@ -34,6 +37,27 @@ public class MeetingRepo {
 
     public MeetingRepo(Context context) {
         this.context = context;
+    }
+
+    public MeetingRepo(Context context, int meetingID){
+        this.context = context;
+        this.meetingID = meetingID;
+    }
+
+    public int getCycleID(){
+        int cycleID = 0;
+        try {
+            SQLiteDatabase db = DatabaseHandler.getInstance(this.context).getWritableDatabase();
+            String query = "SELECT CycleId FROM Meetings WHERE _id = ?";
+            Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(this.meetingID)});
+            cursor.moveToNext();
+            cycleID = cursor.getInt(0);
+            cursor.close();
+            db.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return cycleID;
     }
 
     // Should add this meeting, deactivate all other meetings in cycle, and activate this meeting
@@ -149,6 +173,8 @@ public class MeetingRepo {
                     meeting.setMeetingDate(meetingDate);
                     meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
                     meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD)) == 1);
+                    boolean isCurrent = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_CURRENT)) == 1 ? true : false;
+                    meeting.setIsCurrent(isCurrent);
 
                     // Check for Nulls while loading the VSLA Cycle
                     int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
@@ -311,69 +337,33 @@ public class MeetingRepo {
 
 
     public ArrayList<Meeting> getAllMeetingsByDataSentStatus(boolean isDataSent) {
-        ArrayList<Meeting> meetings = null;
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        int dataSentFlag = 0;
-        VslaCycleRepo cycleRepo = null;
-
+        ArrayList<Meeting> filteredMeetings = new ArrayList<Meeting>();
         try {
-            db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            meetings = new ArrayList<Meeting>();
-            String columnList = MeetingSchema.getColumnList();
-
-            if (isDataSent) {
-                dataSentFlag = 1;
+            ArrayList<Meeting> meetingsList = this.getAllMeetings();
+            for(Meeting meeting : meetingsList){
+                if(meeting.isMeetingDataSent() == isDataSent){
+                    filteredMeetings.add(meeting);
+                }
             }
-
-            cycleRepo = new VslaCycleRepo(context);
-
-            // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s WHERE COALESCE(%s,0)=%d ORDER BY %s DESC",
-                    columnList, MeetingSchema.getTableName(),
-                    MeetingSchema.COL_MT_IS_DATA_SENT, dataSentFlag, MeetingSchema.COL_MT_MEETING_ID);
-            cursor = db.rawQuery(selectQuery, null);
-
-            // looping through all rows and adding to list
-            if (cursor != null && cursor.moveToFirst()) {
-                do {
-                    Meeting meeting = new Meeting();
-                    Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
-                    meeting.setMeetingDate(meetingDate);
-                    meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
-                    meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD)) == 1);
-                    meeting.setIsCurrent(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_CURRENT)) == 1);
-
-                    //Check for Nulls while loading the VSLA Cycle
-                    int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
-                    meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                    if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
-                        meeting.setMeetingDataSent(true);
-                        Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
-                        meeting.setDateSent(dateMeetingDataSent);
-                    } else {
-                        meeting.setMeetingDataSent(false);
-                    }
-
-                    meetings.add(meeting);
-
-                } while (cursor.moveToNext());
-            }
-
-            // return the list
-            return meetings;
-        } catch (Exception ex) {
-            Log.e("MeetingRepo.getMeeting", ex.getMessage());
-            return null;
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-
-            if (db != null) {
-                db.close();
-            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+        return filteredMeetings;
+    }
+
+    public ArrayList<Meeting> getPastMeetings(){
+        ArrayList<Meeting> oldMeetings = new ArrayList<Meeting>();
+        try{
+            ArrayList<Meeting> meetingsList = this.getAllMeetings();
+            for(Meeting meeting : meetingsList){
+                if(!meeting.isMeetingDataSent() && !meeting.isCurrent()){
+                    oldMeetings.add(meeting);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  oldMeetings;
     }
 
 
@@ -1333,6 +1323,7 @@ public class MeetingRepo {
 
         Meeting meeting = getMeetingById(meetingId);
         HashMap<String, String> meetingData = new HashMap<String, String>();
+        /*
         if (null != meeting) {
             //Get the Cycle in which this meeting belongs to
             String vslaCycleJson = SendDataRepo.getVslaCycleJson(meeting.getVslaCycle().getCycleId());
@@ -1385,14 +1376,8 @@ public class MeetingRepo {
 
 
              */
-            // Fine
-            String meetingFineJson = SendDataRepo.getMeetingFinesJson(meeting.getMeetingId());
-            if (meetingFineJson != null) {
 
-                //Add to Map
-                meetingData.put(SendDataRepo.FINES_ITEM_KEY, meetingFineJson);
-            }
-
+            /*
             //Repayments
             String meetingRepaymentsJson = SendDataRepo.getMeetingRepaymentsJson(meeting.getMeetingId());
             if (meetingRepaymentsJson != null) {
@@ -1409,7 +1394,14 @@ public class MeetingRepo {
                 meetingData.put(SendDataRepo.LOANS_ITEM_KEY, meetingLoansJson);
             }
 
+            // Fine
+            String meetingFineJson = SendDataRepo.getMeetingFinesJson(meeting.getMeetingId());
+            if (meetingFineJson != null) {
+                //Add to Map
+                meetingData.put(SendDataRepo.FINES_ITEM_KEY, meetingFineJson);
+            }
         }
+        */
         return meetingData;
     }
 
@@ -1503,5 +1495,19 @@ public class MeetingRepo {
 
     }
 
+    public boolean isMeetingSent(){
+        boolean isMeetingSent = false;
+        try {
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            Cursor cursor = db.rawQuery("SELECT IsDataSent FROM Meetings WHERE _id = ?", new String[]{String.valueOf(this.meetingID)});
+            cursor.moveToNext();
+            isMeetingSent = cursor.getInt(0) == 0 ? false : true;
+            cursor.close();
+            db.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
+        return isMeetingSent;
+    }
 }

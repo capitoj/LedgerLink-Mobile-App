@@ -14,10 +14,11 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import org.applab.ledgerlink.domain.model.MeetingFine;
+
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.domain.model.MeetingFine;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
 
 /**
  * Created by Moses on 7/15/13.
@@ -202,6 +203,7 @@ public class AddFineActivity extends SherlockActivity {
             String dlgTitle = "Add Fine";
             if (cboFineType.getSelectedItemPosition() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The fine type is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                cboFineType.setFocusableInTouchMode(true);
                 cboFineType.requestFocus();
                 return false;
             } else {
@@ -218,6 +220,7 @@ public class AddFineActivity extends SherlockActivity {
                 } else {
                     fine.setFineTypeId(0);
                 }
+                cboFineType.setFocusableInTouchMode(false);
                 fine.setFineTypeName(selectedFineTypeName);
             }
 
@@ -283,8 +286,14 @@ public class AddFineActivity extends SherlockActivity {
 
         // Make the spinner selectable
         cboFMFineType.setFocusable(true);
-        cboFMFineType.setFocusableInTouchMode(true);
+        cboFMFineType.setFocusableInTouchMode(false);
         cboFMFineType.setClickable(true);
+        cboFMFineType.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                view.setFocusableInTouchMode(false);
+            }
+        });
     }
 
 }

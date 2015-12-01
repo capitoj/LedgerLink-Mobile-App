@@ -50,13 +50,19 @@ public class VslaInfoRepo {
             vslaInfo.setVslaCode(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_VSLA_CODE)));
             vslaInfo.setVslaName(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_VSLA_NAME)));
             vslaInfo.setPassKey(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_PASS_KEY)));
-            vslaInfo.setDateRegistered(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_REGISTERED))));
-            vslaInfo.setDateLinked(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_LINKED))));
+            vslaInfo.setDateRegistered(null);
+            if(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_REGISTERED)) != null)
+                vslaInfo.setDateRegistered(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_REGISTERED))));
+            vslaInfo.setDateLinked(null);
+            if(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_LINKED)) != null)
+                vslaInfo.setDateLinked(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_LINKED))));
             vslaInfo.setBankBranch(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_BANK_BRANCH)));
             vslaInfo.setAccountNo(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_ACCOUNT_NO)));
             vslaInfo.setOffline((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_OFFLINE)) == 1));
             vslaInfo.setActivated((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_ACTIVATED)) == 1));
-            vslaInfo.setDateActivated(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_ACTIVATED))));
+            vslaInfo.setDateActivated(null);
+            if(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_ACTIVATED)) != null)
+                vslaInfo.setDateActivated(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(VslaInfoSchema.COL_VI_DATE_ACTIVATED))));
             vslaInfo.setAllowDataMigration((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_ALLOW_DATA_MIGRATION)) == 1));
             vslaInfo.setDataMigrated((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_DATA_MIGRATED)) == 1));
 

@@ -20,14 +20,15 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LoanRepaymentHistoryArrayAdapter;
 import org.applab.ledgerlink.helpers.MemberLoanRepaymentRecord;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
+
 import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;

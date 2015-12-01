@@ -16,11 +16,12 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.ledgerlink.domain.model.Meeting;
-import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.domain.model.Member;
 
 import java.util.Calendar;
 
@@ -268,6 +269,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
         Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
         i.putExtra("_id", selectedMemberId);
         i.putExtra("_isEditAction", true);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 

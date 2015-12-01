@@ -8,12 +8,13 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
-import org.applab.ledgerlink.domain.model.Member;
+
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.MembersSavingsArrayAdapter;
-import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class MeetingSavingsFrag extends SherlockFragment {
     int meetingId;
     private MeetingActivity parentActivity;
     private RelativeLayout fragmentView;
+    protected MembersSavingsArrayAdapter adapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,12 @@ public class MeetingSavingsFrag extends SherlockFragment {
         fragmentView =  (RelativeLayout)inflater.inflate(R.layout.frag_meeting_savings, container, false);
         initializeFragment();
         return fragmentView;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        this.populateMembersList();
     }
 
     private void initializeFragment()
@@ -95,7 +103,7 @@ public class MeetingSavingsFrag extends SherlockFragment {
         members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
 
         //Now get the data via the adapter
-        final MembersSavingsArrayAdapter adapter = new MembersSavingsArrayAdapter(getSherlockActivity().getBaseContext(), members);
+        adapter = new MembersSavingsArrayAdapter(getSherlockActivity().getBaseContext(), members);
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView

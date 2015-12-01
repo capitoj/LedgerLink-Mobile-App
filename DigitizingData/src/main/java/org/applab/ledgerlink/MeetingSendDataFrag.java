@@ -10,14 +10,21 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.ConcurrentMeetingsArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
 
@@ -26,7 +33,7 @@ import java.util.ArrayList;
 
 public class MeetingSendDataFrag extends SherlockFragment {
 
-    private static com.actionbarsherlock.view.Menu MENU;
+    private com.actionbarsherlock.view.Menu MENU;
     private ActionBar actionBar = null;
     private int numberOfPastUnsentMeetings = 0;
     private Meeting selectedMeeting;
@@ -46,7 +53,6 @@ public class MeetingSendDataFrag extends SherlockFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parentActivity = (MeetingActivity) getSherlockActivity();
-
     }
 
     @Override
@@ -109,8 +115,6 @@ public class MeetingSendDataFrag extends SherlockFragment {
         //Hide unrequired views
         layoutMSDUnsentPastMeetings.setVisibility( (numberOfPastUnsentMeetings==0) ? View.GONE : View.VISIBLE);
 
-
-
         //TODO: Load current meeting(s)
         /*/could be more than one
         if(activeMeetings != null) {
@@ -129,12 +133,16 @@ public class MeetingSendDataFrag extends SherlockFragment {
                 });
             }
         } */
+
+
+
         //If viewing current meeting, hide the current meeting summary
         LinearLayout layoutMSDCurrentMeetingSummary = (LinearLayout) getSherlockActivity().findViewById(R.id.layoutMSDCurrentMeetingSummary);
         //layoutMSDCurrentMeetingSummary.setVisibility(selectedMeeting.isCurrent() ? View.GONE : View.VISIBLE);
         layoutMSDCurrentMeetingSummary.setVisibility(viewingCurrentMeeting ? View.GONE : View.VISIBLE);
         //Populate summary of the "Current" meeting from the parent activity
         //Apply null check
+
         if(parentActivity.getCurrentMeeting() != null) {
             TextView txtMSDFragCurrentMeetingDetails = (TextView) getSherlockActivity().findViewById(R.id.txtMSDFragCurrentMeetingDetails);
             txtMSDFragCurrentMeetingDetails.setText(Utils.formatDate(parentActivity.getCurrentMeeting().getMeetingDate(), "dd MMM yyyy"));
@@ -160,43 +168,46 @@ public class MeetingSendDataFrag extends SherlockFragment {
             //TODO: to accomodate concurrent cycles, this section may show all current meetings for the differenct cycles
             layoutMSDCurrentMeetingSummary.setVisibility(View.GONE);
         }
-
-
         populateSelectedMeetingSummary();
         // TextView txtStatus = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragStatus);
         TextView txtInstructions = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragInstructions);
         if (Utils.isNetworkConnected(getSherlockActivity().getApplicationContext())) {
-
             if (numberOfPastUnsentMeetings > 0) {
                 populateMeetingsList();
-
                 //txtStatus.setText("The data network is available.");
                 txtInstructions.setText((Html.fromHtml("The data network is available. You may review the information below then tap <b>Send</b> to send the current meeting and all past meetings.")));
-                //Show button
-                MENU.findItem(R.id.mnuMSDFSend).setVisible(true);
             } else {
                 //txtStatus.setText("The data network is available.");
                 txtInstructions.setText((Html.fromHtml("The data network is available. You may review the information below then tap <b>Send</b>  to send the current meeting.")));
-                //Show button
-                MENU.findItem(R.id.mnuMSDFSend).setVisible(true);
             }
         } else {
             // txtStatus.setText("The data network is not available.");
             txtInstructions.setText((Html.fromHtml("The data network is not available. Move to a place with data network to send meeting data. You can send meeting data later by selecting <b>Meeting</b> from the main menu.")));
-            //Hide button
-            MENU.findItem(R.id.mnuMSDFSend).setVisible(false);
         }
+    }
 
-        //Set onclick event of send meeting button
-        MENU.findItem(R.id.mnuMSDFSend).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+    private void loadSherlockMenu(Menu menu){
+        MenuItem menuItem = menu.findItem(R.id.mnuMSDFSend);
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 MeetingActivity meetingActivity = (MeetingActivity) getSherlockActivity();
                 meetingActivity.sendMeetingData(selectedMeetingId);
-                return true;  //To change body of implemented methods use File | Settings | File Templates.
+                return true;
             }
         });
-
+        if(Utils.isNetworkConnected(getSherlockActivity().getApplicationContext())) {
+            int meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+            MeetingRepo meetingRepo = new MeetingRepo(getSherlockActivity().getApplication(), meetingId);
+            boolean isDataSent = meetingRepo.isMeetingSent();
+            if(isDataSent){
+                menuItem.setVisible(false);
+            }else{
+                menuItem.setVisible(true);
+            }
+        }else{
+            menuItem.setVisible(false);
+        }
     }
 
 
@@ -219,7 +230,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         unsentInactiveMeetings = parentActivity.ledgerLinkApplication.getMeetingRepo().getAllMeetingsByDataSentStatusAndActiveStatus();
        numberOfPastUnsentMeetings = unsentInactiveMeetings.size();
 
-        Log.i("Unset meeting count ",""+numberOfPastUnsentMeetings);
+        Log.i("Unset meeting count ", "" + numberOfPastUnsentMeetings);
 
         //Get the current meeting
         //selectedMeeting = meetingRepo.getMeetingById(meetingIdToLoad);
@@ -227,12 +238,11 @@ public class MeetingSendDataFrag extends SherlockFragment {
         //Get total savings in current meeting
         totalSavingsInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(selectedMeetingId);
 
-        
         totalLoansRepaidInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(selectedMeetingId);
 
 
         //Get total fines in meeting
-        totalFinesInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingFineRepo().getTotalFinesInMeeting(selectedMeetingId);
+        totalFinesInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingFineRepo().getTotalFinesPaidInThisMeeting(selectedMeetingId);
         
         //Get total loans in current meeting
         totalLoansIssuedInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(selectedMeetingId);
@@ -339,15 +349,23 @@ public class MeetingSendDataFrag extends SherlockFragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
-        menu.clear();
-        MENU = menu;
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater){
         getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_send_data, menu);
+        this.loadSherlockMenu(menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    //@Override
+    //public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu, com.actionbarsherlock.view.MenuInflater inflater) {
+
+       // menu.clear();
+        //getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_send_data, menu);
         /*if(isNetworkConnected(getSherlockActivity().getApplicationContext())) {
             getSherlockActivity().getSupportMenuInflater().inflate(R.menu.meeting_send_data, menu);
         } */
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+        //super.onCreateOptionsMenu(menu, inflater);
+        //MENU = menu;
+    //}
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

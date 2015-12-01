@@ -4,22 +4,22 @@ buildscript {
         maven { url 'http://repo1.maven.org/maven2' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9.+'
+        classpath 'com.android.tools.build:gradle:1.2.3'
     }
 }
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 
 dependencies {
-    compile files('libs/android-support-v4.jar')
+    compile 'com.android.support:support-v4:22.2.0'
 }
 
 android {
-    compileSdkVersion 17
+    compileSdkVersion 19
     buildToolsVersion '19.1.0'
 
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 16
+        minSdkVersion 13
+        targetSdkVersion 15
     }
     sourceSets {
         main {
@@ -33,5 +33,9 @@ android {
         }
 
         //instrumentTest.setRoot('tests')
+    }
+
+    lintOptions{
+        abortOnError false
     }
 }

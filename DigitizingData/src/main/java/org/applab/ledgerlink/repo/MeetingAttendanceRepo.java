@@ -8,10 +8,10 @@ import android.util.Log;
 
 import org.applab.ledgerlink.domain.schema.AttendanceSchema;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
+import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.datatransformation.AttendanceDataTransferRecord;
 import org.applab.ledgerlink.helpers.AttendanceRecord;
 import org.applab.ledgerlink.helpers.DatabaseHandler;
-import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;

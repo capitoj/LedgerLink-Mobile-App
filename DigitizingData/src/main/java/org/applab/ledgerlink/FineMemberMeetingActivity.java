@@ -11,11 +11,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import org.applab.ledgerlink.domain.model.Member;
+
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.MembersFinesArrayAdapter;
-import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
 

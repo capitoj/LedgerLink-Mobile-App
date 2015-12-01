@@ -26,16 +26,22 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.Member;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.CustomGenderSpinnerListener;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
+import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -56,6 +62,15 @@ public class AddMemberActivity extends SherlockActivity {
     protected int mDay;
 
     protected Spinner cboAMMemberNo;
+    protected TextView txtSurname;
+    protected TextView txtOtherNames;
+    protected Spinner cboGender;
+    protected Spinner cboAMAge;
+    protected Spinner cboAMOccupation;
+    protected TextView txtPhoneNo;
+    protected Spinner cboAMCycles;
+    protected TextView txtSavingsSoFar;
+    protected TextView txtLoanAmount;
     protected TextView txtAMMLoanNextRepaymentDate;
     protected TextView txtAMMLoanNumber;
     protected boolean isGettingStartedMode = false; //flags whether we are in wizard mode
@@ -106,44 +121,20 @@ public class AddMemberActivity extends SherlockActivity {
         txtAMMLoanNextRepaymentDate = (TextView) findViewById(R.id.txtAMMLoanNextRepaymentDate);
         txtAMMLoanNumber = (TextView) findViewById(R.id.txtAMMOutstandingLoanNumber);
 
-        //Setup the Spinner Items
-        Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
-        String[] genderList = new String[]{"Male", "Female"};
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList)
+        txtSurname  = (TextView) findViewById(R.id.txtAMSurname);
 
-        {
+        txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
 
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
+        this.buildOccupationSpinner();
 
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
+        txtPhoneNo = (TextView) findViewById(R.id.txtAMPhoneNo);
 
-                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
+        cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
 
-                return v;
-            }
+        txtSavingsSoFar = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
 
+        txtLoanAmount = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
 
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                return v;
-            }
-
-        };
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboGender.setAdapter(adapter);
-        cboGender.setOnItemSelectedListener(new CustomGenderSpinnerListener());
-
-        //Make the spinner selectable
-        cboGender.setFocusable(true);
-        cboGender.setFocusableInTouchMode(true);
-        cboGender.setClickable(true);
-        cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         clearDataFields();
         if (isEditAction) {
             selectedMember = ledgerLinkApplication.getMemberRepo().getMemberById(selectedMemberId);
@@ -219,8 +210,7 @@ public class AddMemberActivity extends SherlockActivity {
         Utils.setAsPhoneNumberInput(txtAMPhoneNo);
     }
 
-
-    void showMiddleStartCycleValues(Member member) {
+    protected void showMiddleStartCycleValues(Member member) {
         //loads the Middle start cycle values for this member
 
         if (isGettingStartedMode) return; //this code shouldnt run in GSW mode hence this check
@@ -330,7 +320,7 @@ public class AddMemberActivity extends SherlockActivity {
                         public void onClick(View v) {
                             selectedFinishButton = true;
                             saveMemberData();
-                            finish();
+                            //finish();
                         }
                     }
             );
@@ -400,7 +390,7 @@ public class AddMemberActivity extends SherlockActivity {
         return true;
     }
 
-    boolean saveMemberData() {
+    protected boolean saveMemberData() {
         boolean successFlg = false;
         AlertDialog dlg;
 
@@ -431,13 +421,16 @@ public class AddMemberActivity extends SherlockActivity {
                         if (Utils._membersAccessedFromNewCycle) {
                             Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
                             i.putExtra("_isUpdateCycleAction", false);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
                         } else if (Utils._membersAccessedFromEditCycle) {
                             Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
                             i.putExtra("_isUpdateCycleAction", true);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
                         } else {
                             Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
                         }
                         Utils._membersAccessedFromNewCycle = false;
@@ -491,6 +484,7 @@ public class AddMemberActivity extends SherlockActivity {
                 } else {
                     Toast.makeText(this, "The member was updated successfully.", Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
 
                     /*
@@ -530,186 +524,204 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     protected boolean validateData(Member member) {
-        try {
-            if (null == member) {
-                return false;
-            }
-            // Validate: MemberNo
-            Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
-            String dlgTitle = "Add Member";
-            if (cboAMMemberNo.getSelectedItemPosition() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The member number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                cboAMMemberNo.requestFocus();
-                return false;
-            } else {
-                String memberNo = cboAMMemberNo.getSelectedItem().toString().trim();
-                int theMemberNo = Integer.parseInt(memberNo);
-                member.setMemberNo(theMemberNo);
-            }
-
-            //Validate: Surname
-            TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
-            String surname = txtSurname.getText().toString().trim();
-            if (surname.length() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtSurname.requestFocus();
-                return false;
-            } else {
-                member.setSurname(surname);
-            }
-
-            //Validate: OtherNames
-            TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
-            String otherNames = txtOtherNames.getText().toString().trim();
-            if (otherNames.length() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtOtherNames.requestFocus();
-                return false;
-            } else {
-                member.setOtherNames(otherNames);
-            }
-
-            //Validate: Gender
-            //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
-            Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
-            if (cboGender.getSelectedItemPosition() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                cboGender.requestFocus();
-                return false;
-            } else {
-                String gender = cboGender.getSelectedItem().toString().trim();
-                member.setGender(gender);
-            }
-
-            // Validate: Age
-            Spinner cboAge = (Spinner) findViewById(R.id.cboAMAge);
-            if (cboAge.getSelectedItemPosition() == 0) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                cboAge.requestFocus();
-                return false;
-            } else {
-                String age = cboAge.getSelectedItem().toString().trim();
-                Integer theAge = Integer.parseInt(age);
-                Calendar c = Calendar.getInstance();
-                c.add(Calendar.YEAR, -theAge);
-                member.setDateOfBirth(c.getTime());
-            }
-
-            //Validate: Occupation
-            TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
-            String occupation = txtOccupation.getText().toString().trim();
-            if (occupation.length() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtOccupation.requestFocus();
-                return false;
-            } else {
-                member.setOccupation(occupation);
-            }
-
-            //Validate: PhoneNumber
-            TextView txtPhoneNo = (TextView) findViewById(R.id.txtAMPhoneNo);
-            String phoneNo = txtPhoneNo.getText().toString().trim();
-            if (phoneNo.length() < 1) {
-                //Utils.createAlertDialogOk(AddMemberActivity.this, dlgTitle, "The Phone Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                //txtPhoneNo.requestFocus();
-                //return false;
-                member.setPhoneNumber(null);
-            } else {
-                member.setPhoneNumber(phoneNo.replaceAll(" ", "")); //remove smart formattings
-            }
-
-            // Validate: Cycles Completed
-            Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
-            if (cboAMCycles.getSelectedItemPosition() == 0) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The cycles completed field is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                cboAMCycles.requestFocus();
-                return false;
-            } else {
-                String cycles = cboAMCycles.getSelectedItem().toString().trim();
-                Integer theCycles = Integer.parseInt(cycles);
-                if (theCycles > 100) {
-                    Utils.createAlertDialogOk(this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    cboAMCycles.requestFocus();
-                    return false;
-                }
-                member.setCyclesCompleted(theCycles);
-                Calendar c = Calendar.getInstance();
-                c.add(Calendar.YEAR, -theCycles);
-                member.setDateOfAdmission(c.getTime());
-            }
-
-            TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
-            String savings = txtSavingsSoFar.getText().toString().trim();
-            if (savings.length() < 1) {
-                if (isEditAction) {
-                    member.setSavingsOnSetup(member.getSavingsOnSetup());
-                } else {
-                    member.setSavingsOnSetup(0);
-                }
-            } else {
-                double amountSavedSoFar = Double.parseDouble(savings);
-                if (amountSavedSoFar < 0.00) {
-                    Utils.createAlertDialogOk(this, dlgTitle, "Total Amount this Member has Saved in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
-                    txtSavingsSoFar.requestFocus();
-                    return false;
-                } else {
-                    member.setSavingsOnSetup(amountSavedSoFar);
-                }
-            }
-
-            //Validate Amount of Loan outstanding for this member
-            TextView txtLoanAmount = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
-            String loanAmount = txtLoanAmount.getText().toString().trim();
-            if (loanAmount.length() < 1) {
-                if (isEditAction) {
-                    member.setOutstandingLoanOnSetup(member.getOutstandingLoanOnSetup());
-                } else {
-                    member.setOutstandingLoanOnSetup(0);
-                }
-            } else {
-                double outstandingLoan = Double.parseDouble(loanAmount);
-                if (outstandingLoan < 0.00) {
-                    Utils.createAlertDialogOk(this, dlgTitle, "Total Amount of this Member's Regular Loan Outstanding should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
-                    txtLoanAmount.requestFocus();
-                    return false;
-                } else {
-                    member.setOutstandingLoanOnSetup(outstandingLoan);
-
-                    //set the date of next repayment
-                    if (outstandingLoan > 0 && txtAMMLoanNextRepaymentDate.getText().length() == 0) {
-                        Utils.createAlertDialogOk(this, dlgTitle, "The next repayment date is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
-                        txtAMMLoanNextRepaymentDate.requestFocus();
-                        return false;
-                    }
-
-                    //set the loan number
-                    if (outstandingLoan > 0 && txtAMMLoanNumber.getText().length() == 0) {
-                        Utils.createAlertDialogOk(this, dlgTitle, "The loan number is required for the outstanding loan", Utils.MSGBOX_ICON_EXCLAMATION);
-                        txtAMMLoanNumber.requestFocus();
-                        return false;
-                    }
-
-                }
-
-            }
-            member.setOutstandingLoanNumberOnSetup(Utils.getAsNumberOrZeroIfNull(txtAMMLoanNumber.getText().toString().trim()));
-            member.setDateOfFirstRepayment(Utils.getDateFromString(txtAMMLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy"));
-
-            validateMiddleCycleValues(member);
-            //Final Verifications
-            //TODO: Trying to use Application context to ensure dialog box does not disappear
-            if (!ledgerLinkApplication.getMemberRepo().isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
-                Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                cboAMMemberNo.requestFocus();
-                return false;
-            }
-
-            return true;
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        String dlgTitle = "Add Member";
+        if(cboAMMemberNo.getSelectedItemPosition() < 1){
+            Utils.createAlertDialogOk(this, dlgTitle, "The member number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            cboAMMemberNo.setFocusableInTouchMode(true);
+            cboAMMemberNo.requestFocus();
             return false;
         }
+        cboAMMemberNo.setFocusableInTouchMode(false);
+        String memberNo = cboAMMemberNo.getSelectedItem().toString().trim();
+        int theMemberNo = Integer.parseInt(memberNo);
+        member.setMemberNo(theMemberNo);
+
+        String surname = txtSurname.getText().toString().trim();
+        if(surname.length() < 1){
+            Utils.createAlertDialogOk(this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            txtSurname.requestFocus();
+            return false;
+        }
+        member.setSurname(surname);
+
+        String otherNames = txtOtherNames.getText().toString().trim();
+        if(otherNames.length() < 1){
+            Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            txtOtherNames.requestFocus();
+            return false;
+        }
+        member.setOtherNames(otherNames);
+
+        if (cboGender.getSelectedItemPosition() < 1) {
+            cboGender.setFocusableInTouchMode(true);
+            cboGender.requestFocus();
+            Utils.createAlertDialogOk(this, dlgTitle, "The sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            return false;
+        }
+        cboGender.setFocusableInTouchMode(false);
+        String gender = cboGender.getSelectedItem().toString().trim();
+        member.setGender(gender);
+
+        if(cboAMAge.getSelectedItemPosition() == 0){
+            Utils.createAlertDialogOk(this, dlgTitle, "The age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            cboAMAge.setFocusableInTouchMode(true);
+            cboAMAge.requestFocus();
+            return false;
+        }
+        cboAMAge.setFocusableInTouchMode(false);
+        String age = cboAMAge.getSelectedItem().toString().trim();
+        Integer theAge = Integer.parseInt(age);
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.YEAR, -theAge);
+        member.setDateOfBirth(c.getTime());
+
+        if(cboAMOccupation.getSelectedItemPosition() == 0){
+            Utils.createAlertDialogOk(this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            cboAMOccupation.setFocusableInTouchMode(true);
+            cboAMOccupation.requestFocus();
+            return false;
+        }
+        cboAMOccupation.setFocusableInTouchMode(false);
+        String occupation = cboAMOccupation.getSelectedItem().toString().trim();
+        member.setOccupation(occupation);
+
+        String phoneNo = txtPhoneNo.getText().toString().trim();
+        if(phoneNo.length() < 1){
+            member.setPhoneNumber(null);
+        }else{
+            member.setPhoneNumber(phoneNo.replaceAll(" ", "")); //remove smart formattings
+        }
+
+        if(cboAMCycles.getSelectedItemPosition() == 0){
+            Utils.createAlertDialogOk(this, dlgTitle, "The cycles completed field is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            cboAMCycles.setFocusableInTouchMode(true);
+            cboAMCycles.requestFocus();
+            return false;
+        }
+        String cycles = cboAMCycles.getSelectedItem().toString().trim();
+        Integer theCycles = Integer.parseInt(cycles);
+        if (theCycles > 100) {
+            Utils.createAlertDialogOk(this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            cboAMCycles.setFocusableInTouchMode(true);
+            cboAMCycles.requestFocus();
+            return false;
+        }
+        cboAMCycles.setFocusableInTouchMode(false);
+        member.setCyclesCompleted(theCycles);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, -theCycles);
+        member.setDateOfAdmission(calendar.getTime());
+
+        String savings = txtSavingsSoFar.getText().toString().trim();
+        if(savings.length() < 1){
+            if (isEditAction) {
+                member.setSavingsOnSetup(member.getSavingsOnSetup());
+            } else {
+                member.setSavingsOnSetup(0);
+            }
+        }else{
+            double amountSavedSoFar = Double.parseDouble(savings);
+            if (amountSavedSoFar < 0.00) {
+                Utils.createAlertDialogOk(this, dlgTitle, "Total Amount this Member has Saved in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                txtSavingsSoFar.requestFocus();
+                return false;
+            } else {
+                member.setSavingsOnSetup(amountSavedSoFar);
+            }
+        }
+        String loanAmount = txtLoanAmount.getText().toString().trim();
+        if(loanAmount.length() < 1){
+            if (isEditAction) {
+                member.setOutstandingLoanOnSetup(member.getOutstandingLoanOnSetup());
+                String loanNumber = txtAMMLoanNumber.getText().toString().trim();
+                if(loanNumber.length() < 1){
+                    txtAMMLoanNumber.setText(String.valueOf(member.getOutstandingLoanNumberOnSetup()));
+                }
+                loanNumber = txtAMMLoanNumber.getText().toString().trim();
+                int loanNo = Integer.valueOf(loanNumber);
+                boolean status = this.validateLoanNumber(member, loanNo, member.getOutstandingLoanOnSetup());
+                if(!status){
+                    return false;
+                }
+            } else {
+                member.setOutstandingLoanOnSetup(0);
+            }
+        }else{
+            double outstandingLoan = Double.parseDouble(loanAmount);
+            if (outstandingLoan < 0.00){
+                DialogMessageBox.show(this, dlgTitle, "Total Amount of this Member's Regular Loan Outstanding should be zero and above.");
+                txtLoanAmount.requestFocus();
+            }else{
+                member.setOutstandingLoanOnSetup(outstandingLoan);
+
+                //set the date of next repayment
+                if (outstandingLoan > 0 && txtAMMLoanNextRepaymentDate.getText().length() == 0) {
+                    DialogMessageBox.show(this, dlgTitle, "The next repayment date is required for the outstanding loan");
+                    txtAMMLoanNextRepaymentDate.requestFocus();
+                    return false;
+                }
+
+                //set the loan number
+                if (outstandingLoan > 0 && txtAMMLoanNumber.getText().length() == 0) {
+                    DialogMessageBox.show(this, dlgTitle, "The loan number is required for the outstanding loan");
+                    txtAMMLoanNumber.requestFocus();
+                    return false;
+                }else{
+                    String loanNumber = txtAMMLoanNumber.getText().toString();
+                    int loanNo = Integer.valueOf(loanNumber);
+                    if (!this.validateLoanNumber(member, loanNo, outstandingLoan))
+                        return false;
+                }
+            }
+        }
+
+
+        member.setOutstandingLoanNumberOnSetup(Utils.getAsNumberOrZeroIfNull(txtAMMLoanNumber.getText().toString().trim()));
+        member.setDateOfFirstRepayment(Utils.getDateFromString(txtAMMLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy"));
+
+        validateMiddleCycleValues(member);
+        //Final Verifications
+        //TODO: Trying to use Application context to ensure dialog box does not disappear
+        if (!ledgerLinkApplication.getMemberRepo().isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
+            Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            cboAMMemberNo.requestFocus();
+            return false;
+        }
+
+        return true;
     }
+
+    protected boolean validateLoanNumber(Member member, int loanNo, double outstandingLoan){
+        String dlgTitle = "Loan Error";
+        VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(this);
+        VslaCycle vslaCycle = vslaCycleRepo.getCurrentCycle();
+
+        if(loanNo < 1 && outstandingLoan > 0){
+            DialogMessageBox.show(this, dlgTitle, "The loan number cannot be zero");
+            txtAMMLoanNumber.requestFocus();
+            return false;
+        }
+
+        boolean hasLoanNo = MeetingLoanIssuedRepo.hasLoanNumber(this, vslaCycle.getCycleId(), loanNo);
+        if (hasLoanNo) {
+            if (outstandingLoan > 0.00 || outstandingLoan < 1) {
+                if (isEditAction) {
+                    if (loanNo != member.getOutstandingLoanNumberOnSetup()) {
+                        DialogMessageBox.show(this, dlgTitle, "The loan number " + loanNo + " already exists");
+                        txtAMMLoanNumber.requestFocus();
+                        return  false;
+                    }
+                } else {
+                    DialogMessageBox.show(this, dlgTitle, "The loan number " + loanNo + " already exists");
+                    txtAMMLoanNumber.requestFocus();
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
 
     // TODO: Resolve Redundancy
     protected void validateMiddleCycleValues(Member member) {
@@ -768,21 +780,29 @@ public class AddMemberActivity extends SherlockActivity {
                 }
             }
 
-            TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
-            if (member.getOccupation() != null) {
-                txtOccupation.setText(member.getOccupation());
+            if(member.getOccupation() != null){
+                final Spinner cboAMOccupation = (Spinner) findViewById(R.id.cboAMOccupation);
+                cboAMOccupation.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utils.setSpinnerSelection(member.getOccupation(), cboAMOccupation);
+                    }
+                });
             }
+
             TextView txtPhone = (TextView) findViewById(R.id.txtAMPhoneNo);
             if (member.getPhoneNumber() != null) {
                 txtPhone.setText(Utils.formatAsPhoneNumber(member.getPhoneNumber()));
             }
 
             // Set the age
-            final Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
+            //cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
+
             Calendar calToday = Calendar.getInstance();
             Calendar calDb = Calendar.getInstance();
             calDb.setTime(member.getDateOfBirth());
             final int computedAge = calToday.get(Calendar.YEAR) - calDb.get(Calendar.YEAR);
+            final Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
 
             cboAMAge.post(new Runnable() {
                 @Override
@@ -812,11 +832,9 @@ public class AddMemberActivity extends SherlockActivity {
             if (!isGettingStartedMode) {
                 showMiddleStartCycleValues(member);
             }
-        } finally {
-
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-
-
     }
 
 
@@ -843,10 +861,7 @@ public class AddMemberActivity extends SherlockActivity {
         txtSurname.setText(null);
         TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
         txtOtherNames.setText(null);
-        //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
-        //txtGender.setText(null);
-        TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
-        txtOccupation.setText(null);
+
         TextView txtPhone = (TextView) findViewById(R.id.txtAMPhoneNo);
         txtPhone.setText(null);
 
@@ -866,41 +881,46 @@ public class AddMemberActivity extends SherlockActivity {
     protected void buildGenderSpinner() {
 
         //Setup the Spinner Items
-        Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
+        cboGender = (Spinner) findViewById(R.id.cboAMGender);
         String[] genderList = new String[]{"select sex", "Male", "Female"};
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, genderList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-
-                return v;
+        ArrayAdapter<CharSequence> genderAdapter = new DropDownAdapter(this, genderList);
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cboGender.setAdapter(genderAdapter);
+        cboGender.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                view.setFocusableInTouchMode(false);
             }
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                return v;
-            }
-        };
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboGender.setAdapter(adapter);
-        cboGender.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+        });
 
         //Make the spinner selectable
         cboGender.setFocusable(true);
-        cboGender.setFocusableInTouchMode(true);
         cboGender.setClickable(true);
+    }
+
+    protected void buildOccupationSpinner(){
+        cboAMOccupation = (Spinner) findViewById(R.id.cboAMOccupation);
+        String[] professions = new String[]{"Trader", "Farmer", "Shopkeeper", "Fish Monger", "Soldier", "Traditional Healer", "Welder", "Medical Doctor", "Student", "Mason", "Builder", "Boda Boad Rider", "Driver", "Teacher", "Pastor", "Butcher", "Painter", "Nurse", "Barber", "Hair Dresser", "Other"};
+        Arrays.sort(professions);
+
+        professions = ArrayUtils.addAll(new String[]{"Select Profession"}, professions);
+
+        ArrayAdapter<CharSequence> occupationAdapter = new DropDownAdapter(this, professions);
+        occupationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cboAMOccupation.setAdapter(occupationAdapter);
+        cboAMOccupation.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                view.setFocusableInTouchMode(false);
+            }
+        });
+        cboAMOccupation.setFocusable(true);
+        cboAMOccupation.setClickable(true);
     }
 
     /* Populates the member no spinner with available member numbers */
     protected void buildMemberNoSpinner() {
+        cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         final ArrayList<String> memberNumberArrayList = new ArrayList<String>();
         memberNumberArrayList.add("select number");
         //If we have a selected member, then add the member number to the adapter
@@ -908,12 +928,10 @@ public class AddMemberActivity extends SherlockActivity {
             memberNumberArrayList.add(selectedMember.getMemberNo() + "");
         }
 
-
         for (String mNo : ledgerLinkApplication.getMemberRepo().getListOfAvailableMemberNumbers()) {
             Log.d(getBaseContext().getPackageName(), "Member number found " + mNo);
             memberNumberArrayList.add(mNo);
         }
-
 
         String[] memberNumberList = memberNumberArrayList.toArray(new String[memberNumberArrayList.size()]);
         memberNumberArrayList.toArray(memberNumberList);
@@ -959,17 +977,21 @@ public class AddMemberActivity extends SherlockActivity {
         };
         runOnUiThread(runnable);
 
-        cboAMMemberNo.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+        cboAMMemberNo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                view.setFocusableInTouchMode(false);
+            }
+        });
         //Make the spinner selectable
         cboAMMemberNo.setFocusable(true);
-        cboAMMemberNo.setFocusableInTouchMode(true);
         cboAMMemberNo.setClickable(true);
     }
 
     /* Populates the member age spinner  */
     protected void buildAgeSpinner() {
 
-        Spinner cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
+        cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
         ArrayList<String> ageArrayList = new ArrayList<String>();
         ageArrayList.add("select age");
         for (int i = 12; i <= 80; i++) {
@@ -977,79 +999,44 @@ public class AddMemberActivity extends SherlockActivity {
         }
         String[] ageList = ageArrayList.toArray(new String[ageArrayList.size()]);
         ageArrayList.toArray(ageList);
-        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, ageList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-
-                return v;
-            }
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                return v;
-            }
-        };
+        ArrayAdapter<CharSequence> memberNoAdapter = new DropDownAdapter(this, ageList);
         memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboAMAge.setAdapter(memberNoAdapter);
-        cboAMAge.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+        cboAMAge.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                view.setFocusableInTouchMode(false);
+            }
+        });
         //Make the spinner selectable
         cboAMAge.setFocusable(true);
-        cboAMAge.setFocusableInTouchMode(true);
         cboAMAge.setClickable(true);
     }
 
     /* Populates the member cycles completed spinner */
-    void buildCyclesCompletedSpinner() {
+    private void buildCyclesCompletedSpinner() {
 
-        Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
+        cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
         ArrayList<String> cyclesArrayList = new ArrayList<String>();
         cyclesArrayList.add("select number");
         for (int i = 0; i <= 20; i++) {
             cyclesArrayList.add(i + "");
         }
-        String[] ageList = cyclesArrayList.toArray(new String[cyclesArrayList.size()]);
-        cyclesArrayList.toArray(ageList);
-        ArrayAdapter<CharSequence> memberNoAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, ageList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-
-                return v;
-            }
-
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                return v;
-            }
-        };
-
-
-        memberNoAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboAMCycles.setAdapter(memberNoAdapter);
-        cboAMCycles.setOnItemSelectedListener(new CustomGenderSpinnerListener());
+        String[] cycleList = cyclesArrayList.toArray(new String[cyclesArrayList.size()]);
+        cyclesArrayList.toArray(cycleList);
+        ArrayAdapter<CharSequence> cyclesAdapter = new DropDownAdapter(this, cycleList);
+        cyclesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cboAMCycles.setAdapter(cyclesAdapter);
 
         // Make the spinner selectable
         cboAMCycles.setFocusable(true);
-        cboAMCycles.setFocusableInTouchMode(true);
         cboAMCycles.setClickable(true);
+        cboAMCycles.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                view.setFocusableInTouchMode(false);
+            }
+        });
     }
 
 

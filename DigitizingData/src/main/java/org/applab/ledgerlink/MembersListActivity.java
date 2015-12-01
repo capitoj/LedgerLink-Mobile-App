@@ -11,12 +11,13 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.MembersArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.util.ArrayList;
 
@@ -90,6 +91,7 @@ public class MembersListActivity extends SherlockListActivity {
                 return true; */
             case R.id.mnuMListAdd:
                 Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 return true;
         }
@@ -127,6 +129,7 @@ public class MembersListActivity extends SherlockListActivity {
                 // Launching new Activity on selecting single List Item
                 Member selectedMember = members.get(position);
                 Intent viewMember = new Intent(view.getContext(), MemberDetailsViewActivity.class);
+                viewMember.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                 // Pass on data
                 Bundle b = new Bundle();

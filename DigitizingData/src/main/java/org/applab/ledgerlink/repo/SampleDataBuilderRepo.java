@@ -4,20 +4,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.applab.ledgerlink.SettingsActivity;
 import org.applab.ledgerlink.domain.model.Meeting;
-import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
-import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.domain.schema.AttendanceSchema;
 import org.applab.ledgerlink.domain.schema.LoanIssueSchema;
-import org.applab.ledgerlink.domain.schema.LoanRepaymentSchema;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
+import org.applab.ledgerlink.domain.schema.VslaCycleSchema;
+import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.SettingsActivity;
+import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
+import org.applab.ledgerlink.domain.model.Member;
+import org.applab.ledgerlink.domain.schema.LoanRepaymentSchema;
 import org.applab.ledgerlink.domain.schema.MemberSchema;
 import org.applab.ledgerlink.domain.schema.SavingSchema;
-import org.applab.ledgerlink.domain.schema.VslaCycleSchema;
 import org.applab.ledgerlink.helpers.DatabaseHandler;
-import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;

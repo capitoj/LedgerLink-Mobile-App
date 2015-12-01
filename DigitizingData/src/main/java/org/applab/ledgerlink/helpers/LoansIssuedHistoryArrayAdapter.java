@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.domain.model.VslaCycle;
+import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.repo.VslaCycleRepo;
 
 import java.util.ArrayList;

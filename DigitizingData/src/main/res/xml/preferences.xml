@@ -4,7 +4,7 @@
     android:title="@string/action_settings">
 
     <EditTextPreference
-        android:defaultValue="http://74.208.213.214:9905/DigitizingDataRestfulService.svc"
+        android:defaultValue="http://192.168.1.201/DigitizingDataWebService/DigitizingDataRestfulService.svc"
         android:key="prefServerUrl"
         android:summary="Set Internet address for the server that will receive data"
         android:title="Server URL" />
@@ -57,7 +57,6 @@
             android:key="prefTrainingPassword"
             android:summary="A second password that you would enter to sign-in to Training Mode. Leave it blank if it is not required"
             android:title="Training Password" />
-
 
     </PreferenceScreen>
    <!-- Removed  for now. Could be useful for data restore

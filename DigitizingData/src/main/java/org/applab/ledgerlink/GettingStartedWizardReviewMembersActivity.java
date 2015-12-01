@@ -22,14 +22,15 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.ipaulpro.afilechooser.utils.FileUtils;
+
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.fontutils.TypefaceTextView;
 import org.applab.ledgerlink.helpers.GettingStartedWizardMembersArrayAdapter;
-import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

@@ -106,12 +106,19 @@
                       android:layout_height="wrap_content"
                       android:inputType="number" /> -->
 
-                <Spinner
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
+                    android:id="@+id/txtNCMaxShares"
+                    style="@style/NormalEditText"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="" />
+                <!--<Spinner
                     android:id="@+id/cboNCMaxShares"
                     style="@style/RegularText"
                     android:layout_width="150dip"
                     android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown" />
+                    android:spinnerMode="dropdown" />-->
 
                 <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblNCSpace1"

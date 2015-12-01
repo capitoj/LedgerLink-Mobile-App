@@ -9,10 +9,10 @@ import android.util.Log;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.domain.model.MeetingSaving;
+import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.domain.schema.MemberSchema;
 import org.applab.ledgerlink.helpers.DatabaseHandler;
-import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -173,6 +173,7 @@ public class MemberRepo {
             // Update loan balances
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued record found, update it");
             meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
+            meetingLoanIssuedRepo.updateMemberLoanNumber(loanIssuedToMemberInMeeting.getLoanId(), member.getOutstandingLoanNumberOnSetup());
             return meetingLoanIssuedRepo.updateMemberLoanBalancesAndComment(loanIssuedToMemberInMeeting.getLoanId(), member.getOutstandingLoanOnSetup(), member.getDateOfFirstRepayment(), comment);
         }
     }

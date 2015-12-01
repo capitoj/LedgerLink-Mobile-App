@@ -341,77 +341,16 @@ public class MeetingLoanIssuedRepo {
      * @param loanNo
      * @return
      */
-    public boolean validateLoanNumber(int loanNo) {
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
 
-        try {
-            if (loanNo <= 0) {
-                return false;
-            }
-            db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT  %s FROM %s WHERE %s=%d",
-                    LoanIssueSchema.COL_LI_LOAN_ID, LoanIssueSchema.getTableName(),
-                    LoanIssueSchema.COL_LI_LOAN_NO, loanNo);
-            cursor = db.rawQuery(query, null);
-
-            return !(cursor != null && cursor.moveToFirst());
-
-        } catch (Exception ex) {
-            Log.e("MeetingLoanIssuedRepo.validateLoanNumber", ex.getMessage());
-            return false;
-        } finally {
-
-            if (cursor != null) {
-                cursor.close();
-            }
-
-            if (db != null) {
-                db.close();
-            }
-        }
-    }
-
-    /**
-     * checks whether a Loan Number has already been used.
-     * Here I include MeetingId and MemberId to support validation during edit
-     *
-     * @param loanNo
-     * @return
-     */
-    public boolean validateLoanNumber(int loanNo, int meetingId, int memberId) {
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-
-        try {
-            if (loanNo <= 0) {
-                return false;
-            }
-
-            //Get the Loan Id
-            int loanId = getMemberLoanId(meetingId, memberId);
-
-            db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String query = String.format("SELECT  %s FROM %s WHERE %s=%d AND %s <> %d",
-                    LoanIssueSchema.COL_LI_LOAN_ID, LoanIssueSchema.getTableName(),
-                    LoanIssueSchema.COL_LI_LOAN_NO, loanNo, LoanIssueSchema.COL_LI_LOAN_ID, loanId);
-            cursor = db.rawQuery(query, null);
-
-            return !(cursor != null && cursor.moveToFirst());
-
-        } catch (Exception ex) {
-            Log.e("MeetingLoanIssuedRepo.validateLoanNumber", ex.getMessage());
-            return false;
-        } finally {
-
-            if (cursor != null) {
-                cursor.close();
-            }
-
-            if (db != null) {
-                db.close();
-            }
-        }
+    public static boolean hasLoanNumber(Context context, int cycleID, int loanNo) {
+        SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+        String query = "SELECT COUNT(LoanIssues.LoanNo) AS Count FROM LoanIssues INNER JOIN Meetings on LoanIssues.MeetingId = Meetings._id INNER JOIN VslaCycles on VslaCycles._id = Meetings.CycleId WHERE VslaCycles._id = ? AND LoanIssues.LoanNo = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(cycleID), String.valueOf(loanNo)});
+        cursor.moveToNext();
+        int count = cursor.getInt(0);
+        cursor.close();
+        db.close();
+        return count > 0 ? true : false;
     }
 
     /**
@@ -1232,6 +1171,15 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
+    public boolean updateMemberLoanNumber(int loanID, int loanNumber){
+        int retVal = -1;
+        SQLiteDatabase db = DatabaseHandler.getInstance(this.context).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(LoanIssueSchema.COL_LI_LOAN_NO, loanNumber);
+        retVal = db.update(LoanIssueSchema.getTableName(), values, LoanIssueSchema.COL_LI_LOAN_ID + " = ?", new String[]{String.valueOf(loanID)});
+        db.close();
+        return retVal == -1 ? false : true;
+    }
 
     public boolean updateMemberLoanBalancesAndComment(int loanId, double balance, Date newDateDue, String comment) {
         SQLiteDatabase db = null;

@@ -19,11 +19,12 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import org.applab.ledgerlink.domain.model.Member;
+
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.fontutils.TypefaceTextView;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.repo.VslaInfoRepo;
 
 import java.util.Calendar;
@@ -54,6 +55,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         }
         setContentView(R.layout.activity_member_details_view_gettings_started_wizard);
 
+        this.buildOccupationSpinner();
+
         // Set instructions
         TypefaceTextView lblAMInstruction = (TypefaceTextView) findViewById(R.id.lblAMInstruction);
         SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
@@ -80,6 +83,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                         public void onClick(View v) {
 
                             Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             startActivity(i);
                             finish();
                         }
@@ -185,7 +189,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         clearDataFields();
         if (isEditAction) {
             selectedMember = ledgerLinkApplication.getMemberRepo().getMemberById(selectedMemberId);
-            populateDataFields(selectedMember);
+            this.populateDataFields(selectedMember);
         } else {
             //Set the current stage of the wizard
             VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(this);
@@ -199,8 +203,6 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         //txtAMPhoneNo.addTextChangedListener(phoneNumberFormattingTextWatcher);
 
     }
-
-
 
 
     protected void updateDisplay() {
@@ -223,52 +225,48 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-     Intent i;
-         switch(item.getItemId()) {
-             case android.R.id.home:
-                 Intent upIntent = new Intent(this, GettingStartedWizardNewCycleActivity.class);
-                 upIntent.putExtra("_isFromReviewMembers", false);
-                 startActivity(upIntent);
-                 finish();
+        Intent i;
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                Intent upIntent = new Intent(this, GettingStartedWizardNewCycleActivity.class);
+                upIntent.putExtra("_isFromReviewMembers", false);
+                startActivity(upIntent);
+                finish();
                  /*if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-
                      // This activity is not part of the application's task, so
                      // create a new task
                      // with a synthesized back stack.
-
                      TaskStackBuilder
                              .from(this)
                              .addNextIntent(upIntent)
                              .addNextIntent(upIntent).startActivities();
                      finish();
                  } else {
-
                      // This activity is part of the application's task, so simply
                      // navigate up to the hierarchical parent activity.
                      NavUtils.navigateUpTo(this, upIntent);
                  } */
 
-         }
-         return true;
-     /**
-        switch(item.getItemId()) {
-            case R.id.mnuAMNext:
-                //TODO: If member number is nothing, allow proceeding without saving
-                //Save member and add new member
-                if(saveMemberData()) {
-                    clearDataFields();
-                }
-                else {
-                     Toast.makeText(this, "Failed to save member information", Toast.LENGTH_LONG).show();
-                }
-
-                return true;
-            case R.id.mnuAMFinished:
-                selectedFinishButton = true;
-                return saveMemberData();
         }
         return true;
-    */
+        /**
+         switch(item.getItemId()) {
+         case R.id.mnuAMNext:
+         //TODO: If member number is nothing, allow proceeding without saving
+         //Save member and add new member
+         if(saveMemberData()) {
+         clearDataFields();
+         }
+         else {
+         Toast.makeText(this, "Failed to save member information", Toast.LENGTH_LONG).show();
+         }
+         return true;
+         case R.id.mnuAMFinished:
+         selectedFinishButton = true;
+         return saveMemberData();
+         }
+         return true;
+         */
     }
 
 
@@ -346,9 +344,11 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             String dlgTitle = "Add Member";
             if (cboAMMemberNo.getSelectedItemPosition() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The member number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                cboAMMemberNo.setFocusableInTouchMode(true);
                 cboAMMemberNo.requestFocus();
                 return false;
             } else {
+                cboAMMemberNo.setFocusableInTouchMode(false);
                 String memberNo = cboAMMemberNo.getSelectedItem().toString().trim();
                 int theMemberNo = Integer.parseInt(memberNo);
                 member.setMemberNo(theMemberNo);
@@ -381,9 +381,11 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
             if (cboGender.getSelectedItemPosition() < 1) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                cboGender.setFocusableInTouchMode(true);
                 cboGender.requestFocus();
                 return false;
             } else {
+                cboGender.setFocusableInTouchMode(false);
                 String gender = cboGender.getSelectedItem().toString().trim();
                 member.setGender(gender);
             }
@@ -392,9 +394,11 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             Spinner cboAge = (Spinner) findViewById(R.id.cboAMAge);
             if (cboAge.getSelectedItemPosition() == 0) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                cboAge.setFocusableInTouchMode(true);
                 cboAge.requestFocus();
                 return false;
             } else {
+                cboAge.setFocusableInTouchMode(false);
                 String age = cboAge.getSelectedItem().toString().trim();
                 Integer theAge = Integer.parseInt(age);
                 Calendar c = Calendar.getInstance();
@@ -403,15 +407,17 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             }
 
             //Validate: Occupation
-            TextView txtOccupation = (TextView) findViewById(R.id.txtAMOccupation);
-            String occupation = txtOccupation.getText().toString().trim();
-            if (occupation.length() < 1) {
+
+            if(this.cboAMOccupation.getSelectedItemPosition() == 0){
                 Utils.createAlertDialogOk(this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtOccupation.requestFocus();
+                this.cboAMOccupation.setFocusable(true);
+                this.cboAMOccupation.requestFocus();
                 return false;
-            } else {
-                member.setOccupation(occupation);
             }
+            cboAMOccupation.setFocusableInTouchMode(false);
+            String occupation = this.cboAMOccupation.getSelectedItem().toString().trim();
+            member.setOccupation(occupation);
+
             //Validate: PhoneNumber
             TextView txtPhoneNo = (TextView) findViewById(R.id.txtAMPhoneNo);
             String phoneNo = txtPhoneNo.getText().toString().trim();
@@ -428,9 +434,11 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
             if (cboAMCycles.getSelectedItemPosition() == 0) {
                 Utils.createAlertDialogOk(this, dlgTitle, "The cycles completed field is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                cboAMCycles.setFocusableInTouchMode(true);
                 cboAMCycles.requestFocus();
                 return false;
             } else {
+                cboAMCycles.setFocusableInTouchMode(false);
                 String cycles = cboAMCycles.getSelectedItem().toString().trim();
                 Integer theCycles = Integer.parseInt(cycles);
                 if (theCycles > 100) {
@@ -503,24 +511,23 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     }
 
                     //set the loan number
-                    if(outstandingLoan > 0 && txtNCGSWLoanNumber.getText().length()==0)
+                    if(outstandingLoan > 0.00 && txtNCGSWLoanNumber.getText().length()==0)
                     {
                         displayMessageBox(dlgTitle, "The loan number is required for the outstanding loan");
                         txtNCGSWLoanNumber.requestFocus();
                         return false;
                     }
-                    else {
-                        member.setOutstandingLoanNumberOnSetup(Integer.valueOf(txtNCGSWLoanNumber.getText().toString().trim()));
-                    }
+                    int loanNo = Integer.valueOf(txtNCGSWLoanNumber.getText().toString().trim());
+                    if(!this.validateLoanNumber(member, loanNo, outstandingLoan))
+                        return false;
 
+                    member.setOutstandingLoanNumberOnSetup(loanNo);
                 }
             }
-
 
             /**
              int amountSavedSoFar = 0;
              int outstandingLoan = 0;
-
              TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
              String savings = txtSavingsSoFar.getText().toString().trim();
              amountSavedSoFar = Integer.parseInt(savings);
@@ -539,6 +546,11 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             return false;
         }
 
+    }
+
+    @Override
+    protected boolean validateLoanNumber(Member member, int loanNo, double outstandingLoan){
+        return super.validateLoanNumber(member, loanNo, outstandingLoan);
     }
 
     protected void displayMessageBox(String title, String message) {
@@ -576,8 +588,6 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         // Showing Alert Message
         alertDialog.show();
     }
-
-
 
     @Override
     protected void populateDataFields(Member member) {

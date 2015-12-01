@@ -30,9 +30,17 @@ import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingStartingCash;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.DatabaseHandler;
+import org.applab.ledgerlink.helpers.DataFactory;
 import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.repo.*;
+import org.applab.ledgerlink.helpers.tasks.SubmitDataAsync;
+import org.applab.ledgerlink.repo.MeetingFineRepo;
+import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
+import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
+import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.repo.MeetingSavingRepo;
+import org.applab.ledgerlink.repo.SendDataRepo;
+import org.applab.ledgerlink.helpers.DatabaseHandler;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,7 +76,6 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         setContentView(R.layout.activity_meeting);
         meetingDate = getIntent().getStringExtra("_meetingDate");
         setupActionBarAndTabs();
-
 
         if (getIntent().hasExtra("_meetingId")) {
             targetMeetingId = getIntent().getIntExtra("_meetingId", 0);
@@ -146,7 +153,6 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         //Do not show the Send Data tab when in READ_ONLY Mode
         if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
             actionBar.addTab(actionBar.newTab().setTag("sendData").setText("Send Data").setTabListener(this));
-
         }
 
 
@@ -308,8 +314,12 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
             //Create an Context Action Bar Menu
             //mActionMode = MeetingActivity.this.startActionMode(cashBookActionModeCallback);
         } else if (selectedTag.equalsIgnoreCase("sendData")) {
-            fragment = new MeetingSendDataFrag();
-            fragmentTransaction.replace(android.R.id.content, fragment);
+            try {
+                fragment = new MeetingSendDataFrag();
+                fragmentTransaction.replace(android.R.id.content, fragment);
+            }catch(Exception e){
+                Toast.makeText(MeetingActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+            }
         } else {
             //Not Sure what to do
         }
@@ -381,8 +391,6 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     //Change this to send specified meeting by id
     public void sendMeetingData(int meetingId) {
-
-
         MeetingRepo repo = new MeetingRepo(getApplicationContext());
 
         //TODO: Confirm this later. Does not support multiple cycles
@@ -397,186 +405,23 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     //Brought this method back from SendDataRepo
     private void sendDataUsingPostAsync(int meetingId, HashMap<String, String> dataFromPhone) {
         //Store the MeetingId as it will be used later after the Async process
+
+        String meetingDataToBeSent = DataFactory.getJSONOutput(this, meetingId);
+        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
+        new SubmitDataAsync(this, meetingId).execute(serverUri, meetingDataToBeSent);
+
         targetMeetingId = meetingId;
 
+        /*
         //First identify the initial data to be sent
         SendDataRepo.dataToBeSent = dataFromPhone;
         currentDataItemPosition = 1;
         String request = SendDataRepo.dataToBeSent.get(SendDataRepo.meetingDataItems.get(currentDataItemPosition));
+
         serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
 
         new SendDataPostAsyncTask(this).execute(serverUri, request);
-    }
-
-
-    // The definition of our task class
-    private static class SendDataPostAsyncTask extends AsyncTask<String, String, JSONObject> {
-
-        //Use a Weak Reference
-        private final WeakReference<MeetingActivity> meetingActivityWeakReference;
-        private String message = "Please wait...";
-
-        //Initialize the Weak reference in the constructor
-        public SendDataPostAsyncTask(MeetingActivity meetingActivity) {
-            this.meetingActivityWeakReference = new WeakReference<MeetingActivity>(meetingActivity);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            try {
-                if (meetingActivityWeakReference.get() != null && !meetingActivityWeakReference.get().isFinishing()) {
-                    if (null == progressDialog) {
-                        progressDialog = new ProgressDialog(meetingActivityWeakReference.get());
-                        progressDialog.setTitle("Sending Meeting Data...");
-
-                        message = SendDataRepo.progressDialogMessages.get(currentDataItemPosition);
-                        if (message == null) {
-                            message = "Please wait...";
-                        }
-                        progressDialog.setMessage(message);
-                        progressDialog.setMax(10);
-                        progressDialog.setProgress(1);
-                        progressDialog.setCancelable(false);
-                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        progressDialog.show();
-                    }
-                }
-            } catch (Exception ex) {
-                assert progressDialog != null;
-                progressDialog.setMessage(ex.getMessage());
-            }
-        }
-
-        @Override
-        protected JSONObject doInBackground(String... params) {
-            JSONObject result = null;
-            String uri = params[0];
-            try {
-                message = SendDataRepo.progressDialogMessages.get(currentDataItemPosition);
-                if (message == null) {
-                    message = "Please wait...";
-                }
-                publishProgress(message);
-
-                //instantiates httpclient to make request
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-
-                //url with the post data
-                HttpPost httpPost = new HttpPost(uri);
-
-                //passes the results to a string builder/entity
-                StringEntity se = new StringEntity(params[1]);
-
-                //sets the post request as the resulting string
-                httpPost.setEntity(se);
-                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                // Response handler
-                ResponseHandler<String> rh = new ResponseHandler<String>() {
-                    // invoked when client receives response
-                    public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
-
-                        // get response entity
-                        HttpEntity entity = response.getEntity();
-                        httpStatusCode = response.getStatusLine().getStatusCode();
-
-                        // read the response as byte array
-                        StringBuffer out = new StringBuffer();
-                        byte[] b = EntityUtils.toByteArray(entity);
-
-                        // write the response byte array to a string buffer
-                        out.append(new String(b, 0, b.length));
-                        return out.toString();
-                    }
-                };
-
-                String responseString = httpClient.execute(httpPost, rh);
-
-                // close the connection
-                httpClient.getConnectionManager().shutdown();
-
-                if (httpStatusCode == 200) //sucess
-                {
-                    result = new JSONObject(responseString);
-                }
-
-                return result;
-            } catch (ClientProtocolException exClient) {
-                return null;
-            } catch (IOException exIo) {
-                return null;
-            } catch (JSONException exJson) {
-                return null;
-            } catch (Exception ex) {
-                return null;
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
-            if (null != progressDialog) {
-                progressDialog.setMessage(values[0]);
-            }
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            super.onPostExecute(result);
-
-            try {
-                if (result != null) {
-                    actionSucceeded = ((result.getInt("StatusCode") == 0));
-                }
-                if (actionSucceeded) {
-                    //Record that the piece of info has been submitted
-                    //Pick and Post the next piece of item if there is any RECURSION
-                    currentDataItemPosition++;
-                    String nextRequest = SendDataRepo.dataToBeSent.get(SendDataRepo.meetingDataItems.get(currentDataItemPosition));
-                    if (nextRequest != null) {
-                        new SendDataPostAsyncTask(meetingActivityWeakReference.get()).execute(serverUri, nextRequest);
-                    } else {
-                        //Finished
-                        //Have some code to run when process is finished
-                        Toast.makeText(DatabaseHandler.databaseContext, "Meeting Data was Sent Successfully", Toast.LENGTH_SHORT).show();
-
-                        //If the process has finished, then mark the meeting as sent
-                        Calendar cal = Calendar.getInstance();
-                        MeetingRepo meetingRepo = new MeetingRepo(DatabaseHandler.databaseContext);
-                        meetingRepo.updateDataSentFlag(targetMeetingId, cal.getTime());
-
-                        //Dismiss the progressDialog
-                        dismissProgressDialog();
-
-                        //Display the Main Menu or Check & Send data
-                        Intent i = new Intent(meetingActivityWeakReference.get(), SendMeetingDataActivity.class);
-                        meetingActivityWeakReference.get().startActivity(i);
-                    }
-                } else {
-                    //Process failed
-                    Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed due to internet connection error. Try again later.", Toast.LENGTH_LONG).show();
-                    dismissProgressDialog();
-                }
-            } catch (JSONException exJson) {
-                //Process failed
-                Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed due to a data format error. Try again later.", Toast.LENGTH_LONG).show();
-                dismissProgressDialog();
-            } catch (Exception ex) {
-                //Process failed
-                Toast.makeText(DatabaseHandler.databaseContext, "Sending of Meeting Data failed. Try again later.", Toast.LENGTH_LONG).show();
-                dismissProgressDialog();
-            }
-        }
-
-        //Dismisses the currently showing progress dialog
-        private void dismissProgressDialog() {
-            if (progressDialog != null) {
-                progressDialog.dismiss();
-                //set it to null
-                progressDialog = null;
-            }
-        }
+        */
     }
 
     // Update starting cash

@@ -8,11 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import org.applab.ledgerlink.R;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.R;
+
 import org.applab.ledgerlink.repo.MeetingSavingRepo;
 
 import java.util.ArrayList;
