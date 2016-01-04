@@ -21,14 +21,20 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 
+import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.helpers.MenuItem;
+import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.utils.Connection;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Moses on 6/13/13.
+ * Modified by Joseph Capito 10/12/2015
  */
 public class MainActivity extends SherlockActivity {
 
@@ -39,11 +45,14 @@ public class MainActivity extends SherlockActivity {
     private ActionBar actionBar;
     LedgerLinkApplication ledgerLinkApplication;
     private Utils.Size size;
+    protected Context context;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         setContentView(R.layout.main_menu);
+
+        this.context = this;
 
         actionBar = getSupportActionBar();
         actionBar.setTitle("Ledger Link");
@@ -60,6 +69,23 @@ public class MainActivity extends SherlockActivity {
 
         //Display the main menu
         displayMainMenu();
+        this.showNotificationForUnsentMeetings();
+    }
+
+    protected void showNotificationForUnsentMeetings(){
+        MeetingRepo meetingRepo = new MeetingRepo(this);
+        List<Meeting> pastMeetings = meetingRepo.getPastMeetings();
+        if(pastMeetings.size() > 0){
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    Intent i = new Intent(getApplicationContext(), BeginMeetingActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }
+            };
+            DialogMessageBox.show(this, "Alert", "You have " + String.valueOf(pastMeetings.size()) + " unsent meetings on your phone", runnable, true);
+        }
     }
 
     private void getScreenSize(){
@@ -244,14 +270,36 @@ public class MainActivity extends SherlockActivity {
     // This method is called once the menu is selected
     @Override
     public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+        Intent i;
         switch (item.getItemId()) {
             case R.id.mnuMainSettings:
 
                 // Launch preferences activity
-                Intent i = new Intent(this, SettingsActivity.class);
+                i = new Intent(this, SettingsActivity.class);
                 startActivity(i);
+                break;
+
+            case R.id.mnuMainProfile:
+                loadVslaProfile();
                 break;
         }
         return true;
+    }
+
+    protected void loadVslaProfile(){
+        if(Connection.isNetworkConnected(context)) {
+            Intent intent = new Intent(context, ProfileActivity.class);
+            startActivity(intent);
+        }else{
+            DialogMessageBox.show(context, "Connection Alert", "An internet connection could not be detected. Retrieval of the VSLA Profile will require an internet connection");
+        }
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 }
