@@ -7,6 +7,7 @@
     <dimen name="logo_width">260dip</dimen>
     <dimen name="logo_height">100dip</dimen>
     <dimen name="login_margin">2dp</dimen>
+    <dimen name="profile_padding">20dp</dimen>
 
     <dimen name="login_ctrl_width">265dip</dimen>
 
