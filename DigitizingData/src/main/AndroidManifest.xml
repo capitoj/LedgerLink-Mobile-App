@@ -20,6 +20,7 @@
 
     <!-- to allow access to external storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <supports-screens
         android:largeScreens="true"
@@ -291,11 +292,26 @@
         </activity>
         <activity
             android:name=".DataRecoveryActivity"
-            android:label="@string/title_activity_data_recovery" >
+            android:label="@string/title_activity_data_recovery"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".TrainingModuleActivity"
-            android:label="@string/title_activity_training_module" >
+            android:label="@string/title_activity_training_module"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <service android:name=".service.BackgroundService" />
+
+        <receiver android:name=".service.AlarmReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_profile" >
         </activity>
     </application>
 

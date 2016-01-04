@@ -1,10 +1,17 @@
 package org.applab.ledgerlink;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.*;
@@ -26,6 +33,9 @@ import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.SampleDataBuilderRepo;
+import org.applab.ledgerlink.service.AlarmReceiver;
+import org.applab.ledgerlink.utils.Connection;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -40,6 +50,7 @@ public class LoginActivity extends SherlockActivity {
 
     LedgerLinkApplication ledgerLinkApplication;
     private VslaInfo vslaInfo = null;
+    private Context context;
 
     //variables for activating the VSLA
     HttpClient client;
@@ -55,6 +66,11 @@ public class LoginActivity extends SherlockActivity {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_login);
+
+        this.context = this;
+
+        this.loadBackgroundService();
+
         TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
 
@@ -205,6 +221,16 @@ public class LoginActivity extends SherlockActivity {
         });
     }
 
+    protected void loadBackgroundService(){
+        Intent alarm = new Intent(this.context, AlarmReceiver.class);
+        boolean alarmRunning = (PendingIntent.getBroadcast(this.context, 0, alarm, PendingIntent.FLAG_NO_CREATE) != null);
+        if(!alarmRunning){
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.context, 0, alarm, 0);
+            AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 30000, pendingIntent);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -230,9 +256,7 @@ public class LoginActivity extends SherlockActivity {
                 break;
             case R.id.action_recovery:
                 // Launch Data Recovery
-                i = new Intent(this, DataRecoveryActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                this.launchDataRecovery();
                 break;
             case R.id.action_training_modules:
                 //Launch the training modules
@@ -241,6 +265,16 @@ public class LoginActivity extends SherlockActivity {
                 break;
         }
         return true;
+    }
+
+    protected void launchDataRecovery(){
+        if(Connection.isNetworkConnected(this)) {
+            Intent intent = new Intent(this, DataRecoveryActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }else{
+            DialogMessageBox.show(this, "Connection Alert", "No internet connection could be established. Data recovery requires an internet connection");
+        }
     }
 
 
