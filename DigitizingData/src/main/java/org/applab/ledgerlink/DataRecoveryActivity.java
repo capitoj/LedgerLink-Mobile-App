@@ -2,7 +2,9 @@ package org.applab.ledgerlink;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
@@ -12,6 +14,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 
 import org.applab.ledgerlink.domain.model.DataRecovery;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
 import org.applab.ledgerlink.helpers.tasks.DataRecoveryAsync;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONObject;
@@ -21,12 +24,15 @@ public class DataRecoveryActivity extends SherlockActivity {
 
     protected int clickIndex;
     protected DataRecovery dataRecovery;
+    protected Spinner cboDRVslaRegion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_recovery);
         getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
         this.clickIndex = 0;
         this.dataRecovery = new DataRecovery();
@@ -51,6 +57,16 @@ public class DataRecoveryActivity extends SherlockActivity {
         });
     }
 
+    protected Spinner buildVslaRegions(){
+        cboDRVslaRegion = (Spinner) findViewById(R.id.cboDRVslaRegion);
+        String[] vslaRegions = new String[]{"None", "Busia", "Bugiri", "Iganga", "Namayingo"};
+        ArrayAdapter<CharSequence> regionAdapter = new DropDownAdapter(this, vslaRegions);
+        regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cboDRVslaRegion.setAdapter(regionAdapter);
+        cboDRVslaRegion.setFocusable(true);
+        cboDRVslaRegion.setClickable(true);
+        return cboDRVslaRegion;
+    }
 
     protected void switchLayoutView(){
         try {
@@ -136,17 +152,18 @@ public class DataRecoveryActivity extends SherlockActivity {
                 }
                 dataRecovery.setNoOfMembers(Integer.valueOf(txtDRNoOfMembers.getText().toString().trim()));
                 setContentView(R.layout.activity_data_recovery_vsla_region);
-                EditText txtDRVslaRegion = (EditText)findViewById(R.id.txtDRVslaRegion);
-                txtDRVslaRegion.setText(dataRecovery.getVslaRegion());
+                this.buildVslaRegions();
+                Utils.setSpinnerSelection(dataRecovery.getVslaRegion(), cboDRVslaRegion);
                 clickIndex++;
             } else if (clickIndex == 7) {
-                EditText txtDRVslaRegion = (EditText)findViewById(R.id.txtDRVslaRegion);
-                if (txtDRVslaRegion.getText().toString().trim().length() < 1) {
+                String region = cboDRVslaRegion.getSelectedItem().toString();
+                if(region.toLowerCase().equals("none")){
                     DialogMessageBox.show(this, "Data Recovery", "The Region in which the Vsla was registered is required");
-                    txtDRVslaRegion.requestFocus();
+                    cboDRVslaRegion.requestFocus();
                     return;
                 }
-                dataRecovery.setVslaRegion(txtDRVslaRegion.getText().toString().trim());
+                dataRecovery.setVslaRegion(region);
+
                 //Submit to remote server
                 JSONObject jObject = new JSONObject();
                 jObject.put("VslaCode", dataRecovery.getVslaCode());
@@ -190,36 +207,58 @@ public class DataRecoveryActivity extends SherlockActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }else if(clickIndex == 1){
+            EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRPassKey);
+            dataRecovery.setPassKey(txtDRPassKey.getText().toString());
+
             setContentView(R.layout.activity_data_recovery);
             EditText txtDRVslaCode = (EditText)findViewById(R.id.txtDRVslaCode);
             txtDRVslaCode.setText(dataRecovery.getVslaCode());
             clickIndex--;
         }else if(clickIndex == 2){
+            EditText txtDRVslaName = (EditText)findViewById(R.id.txtDRVslaName);
+            dataRecovery.setVslaName(txtDRVslaName.getText().toString());
+
             setContentView(R.layout.activity_data_recovery_passkey);
             EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRPassKey);
             txtDRPassKey.setText(dataRecovery.getPassKey());
             clickIndex--;
         }else if(clickIndex == 3){
+            EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRContactPerson);
+            dataRecovery.setContactPerson(txtDRContactPerson.getText().toString());
+
             setContentView(R.layout.activity_data_recovery_vsla_name);
             EditText txtDRVslaName = (EditText)findViewById(R.id.txtDRVslaName);
             txtDRVslaName.setText(dataRecovery.getVslaName());
             clickIndex--;
         }else if(clickIndex == 4){
+            EditText txtDRPhoneNumber = (EditText)findViewById(R.id.txtDRPhoneNumber);
+            dataRecovery.setPhoneNumber(txtDRPhoneNumber.getText().toString());
+
             setContentView(R.layout.activity_data_recovery_contact_person);
             EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRContactPerson);
             txtDRContactPerson.setText(dataRecovery.getContactPerson());
             clickIndex--;
         }else if(clickIndex == 5){
+            EditText txtDRPositionInVsla = (EditText)findViewById(R.id.txtDRPositionInVsla);
+            dataRecovery.setPositionInVsla(txtDRPositionInVsla.getText().toString());
+
             setContentView(R.layout.activity_data_recovery_phone_number);
             EditText txtDRPhoneNumber = (EditText)findViewById(R.id.txtDRPhoneNumber);
             txtDRPhoneNumber.setText(dataRecovery.getPhoneNumber());
             clickIndex--;
         }else if(clickIndex == 6){
+            EditText txtDRNoOfMembers = (EditText)findViewById(R.id.txtDRNoOfMembers);
+            dataRecovery.setNoOfMembers(Integer.valueOf(txtDRNoOfMembers.getText().toString()));
+
             setContentView(R.layout.activity_data_recovery_position_in_vsla);
             EditText txtDRPositionInVsla = (EditText)findViewById(R.id.txtDRPositionInVsla);
             txtDRPositionInVsla.setText(dataRecovery.getPositionInVsla());
             clickIndex--;
         }else if(clickIndex == 7){
+            cboDRVslaRegion = (Spinner)findViewById(R.id.cboDRVslaRegion);
+            String region = cboDRVslaRegion.getSelectedItem().toString();
+            dataRecovery.setVslaRegion(region);
+
             setContentView(R.layout.activity_data_recovery_no_of_members);
             EditText txtDRNoOfMembers = (EditText)findViewById(R.id.txtDRNoOfMembers);
             txtDRNoOfMembers.setText(String.valueOf(dataRecovery.getNoOfMembers()));

@@ -11,6 +11,7 @@ import org.applab.ledgerlink.datatransformation.SavingsDataTransferRecord;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.repo.MemberRepo;
 import org.applab.ledgerlink.repo.SendDataRepo;
+import org.json.JSONArray;
 import org.json.JSONStringer;
 
 import java.util.ArrayList;
@@ -287,8 +288,10 @@ public class DataFactory extends SendDataRepo {
 
     public static String getJSONOutput(Context context, int meetingId){
         DataFactory dataFactory = new DataFactory(context, meetingId);
+
         JSONStringer js = new JSONStringer();
         try {
+            //js.object().key("FileSubmission").array();
             js.object();
             js = dataFactory.getHeaderInfo(js);
             js = dataFactory.getCycleInfo(js);
@@ -300,6 +303,8 @@ public class DataFactory extends SendDataRepo {
             js = dataFactory.getLoanRepayments(js);
             js = dataFactory.getLoanIssues(js);
             js.endObject();
+            //js.endArray().endObject();
+
         }catch (Exception e){
             e.printStackTrace();
         }

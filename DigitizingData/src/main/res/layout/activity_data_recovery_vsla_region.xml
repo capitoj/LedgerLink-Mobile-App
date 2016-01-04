@@ -19,14 +19,14 @@
         android:paddingTop="40dp"
         android:id="@+id/lblDRVslaRegion"
         android:layout_below="@+id/lblDRTitle"
-        android:text="Vsla Region"/>
+        android:text="VSLA Region"/>
 
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+    <Spinner
+        android:id="@+id/cboDRVslaRegion"
         android:layout_below="@id/lblDRVslaRegion"
-        android:id="@+id/txtDRVslaRegion"
-        android:inputType="textCapWords"
+        android:layout_width="fill_parent"
+        android:layout_height="10dp"
+        android:spinnerMode="dropdown"
         android:paddingTop="20dp"/>
 
 </RelativeLayout>

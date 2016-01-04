@@ -24,6 +24,8 @@ import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.utils.Connection;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -126,11 +128,20 @@ public class ActivationActivity extends SherlockActivity {
                 startActivity(i);
                 break;
             case R.id.action_recovery:
-                i = new Intent(this, DataRecoveryActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+                this.launchDataRecovery();
+                break;
         }
         return true;
+    }
+
+    protected void launchDataRecovery(){
+        if(Connection.isNetworkConnected(this)) {
+            Intent intent = new Intent(this, DataRecoveryActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }else{
+            DialogMessageBox.show(this, "Connection Alert", "No internet connection could be established. Data recovery requires an internet connection");
+        }
     }
 
     private boolean saveOfflineVslaInfo() {

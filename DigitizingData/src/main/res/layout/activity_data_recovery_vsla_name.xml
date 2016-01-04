@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/lblDRVslaName"
         android:layout_below="@+id/lblDRTitle"
-        android:text="Vsla Name"
+        android:text="VSLA Name"
         android:paddingTop="40dp"/>
 
     <EditText

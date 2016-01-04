@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lblDRVslaCode"
-        android:text="Vsla Code"
+        android:text="VSLA Code"
         android:paddingTop="40dp"
         android:layout_below="@+id/lblDRTitle"/>
     
