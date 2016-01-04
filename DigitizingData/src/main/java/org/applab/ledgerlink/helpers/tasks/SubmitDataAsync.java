@@ -18,34 +18,35 @@ import org.applab.ledgerlink.SendMeetingDataActivity;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Calendar;
 
 /**
- * Created by JCapito on 10/27/2015.
+ * Created by Joseph Capito on 10/27/2015.
  */
-public class SubmitDataAsync extends AsyncTask<String, String, JSONObject> {
+public class SubmitDataAsync extends AsyncTask<String, String, JSONArray> {
     protected Context context;
     protected boolean isConnected;
     protected ProgressDialog progressDialog;
     protected int httpStatusCode;
     protected int meetingId;
 
-    public SubmitDataAsync(Context context, int meetingId){
+    public SubmitDataAsync(Context context){
         this.context = context;
         this.isConnected = false;
         this.progressDialog = null;
-        this.meetingId = meetingId;
     }
 
     @Override
     protected void onPreExecute(){
         super.onPreExecute();
         progressDialog = new ProgressDialog(this.context);
-        progressDialog.setTitle("Performing Data Recovery");
+        progressDialog.setTitle("Performing Data Submission");
         progressDialog.setMessage("Please wait...");
         progressDialog.setProgress(1);
         progressDialog.setCancelable(false);
@@ -54,8 +55,8 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONObject> {
     }
 
     @Override
-    protected JSONObject doInBackground(String... params){
-        JSONObject result = null;
+    protected JSONArray doInBackground(String... params){
+        JSONArray result = null;
         String uri = params[0];
         try{
             if(Connection.isNetworkConnected(this.context)){
@@ -79,7 +80,8 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONObject> {
                 String response = httpClient.execute(httpPost, rh);
                 httpClient.getConnectionManager().shutdown();
                 if (httpStatusCode == 200) {
-                    result = new JSONObject(response);
+                    result = new JSONArray(response);
+                    //result = new JSONObject(response);
                 }
             }
             return result;
@@ -94,29 +96,31 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONObject> {
     }
 
     @Override
-    protected void onPostExecute(JSONObject jsonObject){
-        String msgHeader = "Data Submission Error";
+    protected void onPostExecute(JSONArray jsonArray){
+        String dialogTitle = "Error Message";
         if(this.isConnected){
             try {
-                int statusCode = jsonObject.getInt("StatusCode");
-                if(statusCode == 0) {
+                if(jsonArray != null) {
                     Toast.makeText(this.context, "The meeting data was sent successfully", Toast.LENGTH_LONG).show();
-                    Calendar cal = Calendar.getInstance();
-                    MeetingRepo meetingRepo = new MeetingRepo(this.context);
-                    if(meetingRepo.updateDataSentFlag(this.meetingId, cal.getTime()) == true) {
-                        Intent intent = new Intent(this.context, SendMeetingDataActivity.class);
-                        this.context.startActivity(intent);
+                    for(int i = 0; i < jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        if(jsonObject.getInt("StatusCode") == 0){
+                            int meetingId = jsonObject.getInt("MeetingId");
+                            Calendar cal = Calendar.getInstance();
+                            MeetingRepo meetingRepo = new MeetingRepo(this.context);
+                            meetingRepo.updateDataSentFlag(meetingId, cal.getTime());
+                        }
                     }
-                }else if(statusCode == -1){
-                    DialogMessageBox.show(this.context, msgHeader, "The meeting data was not sent successfully. Kindly try again or get in touch with your support agent");
+                    Intent intent = new Intent(this.context, SendMeetingDataActivity.class);
+                    this.context.startActivity(intent);
                 }else{
-                    DialogMessageBox.show(this.context, msgHeader, "The remote server encountered an internal error. Kindly try again or get in touch with your support agent");
+                    DialogMessageBox.show(this.context, dialogTitle, "The remote server encountered an internal error. There was not response from the server");
                 }
-            }catch(JSONException e){
-                DialogMessageBox.show(this.context, msgHeader, "Ledger Link has encountered an error. Kindly get in touch with your support agent");
+            }catch(Exception e){
+                DialogMessageBox.show(this.context, dialogTitle, "Ledger Link has encountered an error. Kindly get in touch with your support agent " + e.getMessage());
             }
-        }else{
-            DialogMessageBox.show(this.context, msgHeader, "The meeting information was not successfully submitted because the remote server could not be reached. Kindly check to ensure that you have an internet connection");
+        } else {
+            DialogMessageBox.show(this.context, dialogTitle, "The meeting information was not successfully submitted because the remote server could not be reached. Kindly check to ensure that you have an internet connection");
         }
         this.dismissProgressDialog();
     }

@@ -357,7 +357,7 @@ public class MeetingRepo {
             ArrayList<Meeting> meetingsList = this.getAllMeetings();
             for(Meeting meeting : meetingsList){
                 if(!meeting.isMeetingDataSent() && !meeting.isCurrent()){
-                    oldMeetings.add(meeting);
+                    oldMeetings.add(0, meeting);
                 }
             }
         }catch (Exception e){

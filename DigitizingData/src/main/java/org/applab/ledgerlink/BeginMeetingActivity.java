@@ -12,31 +12,19 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.ConcurrentMeetingsArrayAdapter;
+import org.applab.ledgerlink.helpers.DataFactory;
 import org.applab.ledgerlink.helpers.DatabaseHandler;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.tasks.SubmitDataAsync;
 import org.applab.ledgerlink.repo.MeetingRepo;
-import org.applab.ledgerlink.repo.SendDataRepo;
-import org.applab.ledgerlink.utils.DialogMessageBox;
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,9 +33,7 @@ public class BeginMeetingActivity extends SherlockActivity {
     private ArrayList<Meeting> pastMeetings = null;
     private static ProgressDialog progressDialog = null;
     private static int targetMeetingId = 0;
-    private static int currentDataItemPosition = 0;
     private static String serverUri = "";
-    private static boolean actionSucceeded = false;
     private static Meeting currentMeeting = null;
     private static int numberOfSentMeetings = 0;
     private ArrayList<Meeting> currentMeetings;
@@ -290,11 +276,26 @@ public class BeginMeetingActivity extends SherlockActivity {
                     @Override
                     public void onClick(View v) {
                         MeetingRepo meetingRepo = new MeetingRepo(BeginMeetingActivity.this);
+                        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
                         List<Meeting> pastMeetings = meetingRepo.getPastMeetings();
+                        JSONArray jsonArray = new JSONArray();
                         for(Meeting meeting : pastMeetings){
-
+                            String meetingDataToBeSent = DataFactory.getJSONOutput(BeginMeetingActivity.this, meeting.getMeetingId());
+                            try {
+                                JSONObject jsonItem = new JSONObject(meetingDataToBeSent);
+                                jsonArray.put(jsonItem);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
-
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("FileSubmission", jsonArray);
+                            serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
+                            new SubmitDataAsync(BeginMeetingActivity.this).execute(serverUri, String.valueOf(jsonObject));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         /*
                         //send all meeting data
                         numberOfSentMeetings = 0;

@@ -80,7 +80,7 @@ public class SendMeetingDataActivity extends SherlockListActivity {
                 Intent i = new Intent(view.getContext(), MeetingActivity.class);
 
                 i.putExtra("_meetingDate", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd-MMM-yyyy"));
-                i.putExtra("_meetingId",selectedMeeting.getMeetingId());
+                i.putExtra("_meetingId", selectedMeeting.getMeetingId());
                 i.putExtra("_enableSendData", true);
 
                 //Indicate that current data view mode is REVIEW
@@ -116,5 +116,12 @@ public class SendMeetingDataActivity extends SherlockListActivity {
 
         return true;
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 }

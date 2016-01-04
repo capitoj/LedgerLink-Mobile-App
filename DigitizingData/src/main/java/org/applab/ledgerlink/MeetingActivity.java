@@ -40,9 +40,12 @@ import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.repo.MeetingSavingRepo;
 import org.applab.ledgerlink.repo.SendDataRepo;
 import org.applab.ledgerlink.helpers.DatabaseHandler;
+import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -405,23 +408,20 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     //Brought this method back from SendDataRepo
     private void sendDataUsingPostAsync(int meetingId, HashMap<String, String> dataFromPhone) {
         //Store the MeetingId as it will be used later after the Async process
-
         String meetingDataToBeSent = DataFactory.getJSONOutput(this, meetingId);
-        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
-        new SubmitDataAsync(this, meetingId).execute(serverUri, meetingDataToBeSent);
+        try {
+            JSONObject jsonItem = new JSONObject(meetingDataToBeSent);
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(jsonItem);
 
-        targetMeetingId = meetingId;
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("FileSubmission", jsonArray);
 
-        /*
-        //First identify the initial data to be sent
-        SendDataRepo.dataToBeSent = dataFromPhone;
-        currentDataItemPosition = 1;
-        String request = SendDataRepo.dataToBeSent.get(SendDataRepo.meetingDataItems.get(currentDataItemPosition));
-
-        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
-
-        new SendDataPostAsyncTask(this).execute(serverUri, request);
-        */
+            serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
+            new SubmitDataAsync(this).execute(serverUri, String.valueOf(jsonObject));
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     // Update starting cash
