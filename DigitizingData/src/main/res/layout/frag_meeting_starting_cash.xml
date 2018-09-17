@@ -18,21 +18,22 @@
             android:text="Expected Starting Cash" />
 
         <!-- Date of Previous meeting, Previous Total Cah in Box , currency -->
+        <!--
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblTotalCashInBox"
-            style="@style/ListSmallSubItems"
+            style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblExpectedStartingCash"
-            android:text="4 Mar 2014 Total Cash in Box 1,000,000 UGX" />
+            android:text="4 Mar 2014 Total Cash in Box 1,000,000 UGX" />-->
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblCashTakenToBank"
-            style="@style/ListSmallSubItems"
+            style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lblTotalCashInBox"
-            android:text="Cash Taken to Bank 900,000 UGX" />
+            android:layout_below="@id/lblExpectedStartingCash"
+            android:text="Cash Taken to Bank 0 UGX" />
 
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -64,11 +65,65 @@
             android:text="UGX" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblStartingCashComment"
+            android:id="@+id/lblCashFromBank"
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtActualStartingCash"
+            android:text="Cash From Bank" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
+            android:id="@+id/txtCashFromBank"
+            style="@style/NormalEditText"
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblCashFromBank"
+            android:inputType="number"
+            android:text="" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblCashFromBankCurrency"
+            style="@style/RegularText"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblCashFromBank"
+            android:layout_toRightOf="@+id/txtCashFromBank"
+            android:inputType="number"
+            android:text="UGX" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblLoanFromBank"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtCashFromBank"
+            android:text="Loan From Bank" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
+            android:id="@+id/txtLoanFromBank"
+            style="@style/NormalEditText"
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblLoanFromBank"
+            android:inputType="number"
+            android:text="" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblLoanFromBankCurrency"
+            style="@style/RegularText"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblLoanFromBank"
+            android:layout_toRightOf="@+id/txtLoanFromBank"
+            android:inputType="number"
+            android:text="UGX" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblStartingCashComment"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtLoanFromBank"
             android:text="Comment" />
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText

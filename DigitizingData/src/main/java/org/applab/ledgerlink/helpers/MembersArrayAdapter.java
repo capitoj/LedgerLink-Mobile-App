@@ -44,6 +44,7 @@ public class MembersArrayAdapter extends ArrayAdapter<Member> {
             //Get the Widgets
             final TextView txtFullNames = (TextView)rowView.findViewById(R.id.txtMListFullName);
             final TextView txtSavings = (TextView)rowView.findViewById(R.id.txtMListTotalSavings);
+            final TextView txtStatus = (TextView)rowView.findViewById(R.id.txtMListStatus);
             //final TextView txtLoans = (TextView)rowView.findViewById(R.id.txtMListTotalLoans);
 
             // Set Typeface
@@ -64,6 +65,9 @@ public class MembersArrayAdapter extends ArrayAdapter<Member> {
                 if(null == occupation || occupation.trim().length() <= 0) {
                     occupation = "No Occupation";
                 }
+
+                String status = memb.isActive() ? "Active" : "Inactive";
+                txtStatus.setText(status);
 
                 //txtSavings.setText(phoneNo);
                 txtSavings.setText(occupation);

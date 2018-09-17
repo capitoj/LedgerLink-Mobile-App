@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingStartingCash;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.DatabaseHandler;
@@ -24,6 +25,8 @@ import java.util.HashMap;
 public class MeetingRepo {
     private Context context;
     private int meetingID;
+    private boolean isLoaded;
+    private Meeting meeting;
 
 
     public enum MeetingOrderByEnum {
@@ -37,28 +40,163 @@ public class MeetingRepo {
 
     public MeetingRepo(Context context) {
         this.context = context;
+        this.isLoaded = false;
     }
 
     public MeetingRepo(Context context, int meetingID){
         this.context = context;
         this.meetingID = meetingID;
+        this.isLoaded = false;
+        this.meeting = new Meeting();
+        this.load();
     }
 
-    public int getCycleID(){
-        int cycleID = 0;
-        try {
-            SQLiteDatabase db = DatabaseHandler.getInstance(this.context).getWritableDatabase();
-            String query = "SELECT CycleId FROM Meetings WHERE _id = ?";
-            Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(this.meetingID)});
-            cursor.moveToNext();
-            cycleID = cursor.getInt(0);
-            cursor.close();
-            db.close();
-        }catch(Exception e){
-            e.printStackTrace();
+    protected void load(){
+        try{
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = String.format("select * from %s where _id = ?", MeetingSchema.getTableName());
+            Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(meetingID)});
+            if(cursor.getCount() > 0) {
+                if (cursor.moveToNext()) {
+                    isLoaded = true;
+                    meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
+                    VslaCycle vslaCycle = new VslaCycle();
+                    vslaCycle.setCycleId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID)));
+                    meeting.setVslaCycle(vslaCycle);
+                    meeting.setMeetingDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE))));
+                    meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD)) == 1);
+                    int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
+                    VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(context);
+                    meeting.setVslaCycle(vslaCycleRepo.getCycle(cycleId));
+                    meeting.setOpeningBalanceBox(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
+                    meeting.setOpeningBalanceBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
+                    meeting.setClosingBalanceBox(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
+                    meeting.setClosingBalanceBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BANK)));
+                    meeting.setLoanFromBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_LOAN_FROM_BANK)));
+                    meeting.setBankLoanRepayment(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_BANK_LOAN_REPAYMENT)));
+                    meeting.setComment(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT)));
+
+                    if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                        meeting.setMeetingDataSent(true);
+                        Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                        meeting.setDateSent(dateMeetingDataSent);
+                    } else {
+                        meeting.setMeetingDataSent(false);
+                    }
+                }
+            }
+
+        }catch (Exception e){
+            Log.e("MeetingRepo.load", e.getMessage());
         }
-        return cycleID;
     }
+
+    public boolean updateStartingCash(double cashFromBox, double cashFromBank, double loanFromBank, String actualStartingCashComment) {
+        boolean isUpdated = false;
+        try {
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            if (hasMeeting()) {
+                String sql = "update Meetings set CashFromBox = ?, CashFromBank = ?, LoanFromBank = ?, CashFromBoxComment = ? where _id = ?";
+                db.execSQL(sql, new String[]{String.valueOf(cashFromBox), String.valueOf(cashFromBank), String.valueOf(loanFromBank), actualStartingCashComment, String.valueOf(meetingID)});
+                isUpdated = true;
+            } else {
+                Log.e("UpdateStartingCash", "Meeting does not exist");
+            }
+        } catch (Exception e) {
+            Log.e("UpdateStartingCash", e.getMessage());
+        }
+        return isUpdated;
+    }
+
+    public Meeting getMeeting(){
+        return meeting;
+    }
+
+    public boolean hasMeeting(){
+        return isLoaded;
+    }
+
+    //The expected starting cash comes from the previous meeting
+    //ToDo: deprecated
+    protected double getExpectedStartingCash(){
+        double cashSavedToBox = 0.0;
+        try {
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = "select CashSavedBox from Meetings where _id < ? order by _id desc limit 1";
+            Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(meetingID)});
+            if (cursor.moveToNext()) {
+                cashSavedToBox = cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX));
+                cursor.close();
+                db.close();
+            }
+        }catch (Exception e){
+            Log.e("getExpectedStartedStartingCash", e.getMessage());
+        }
+        return cashSavedToBox;
+    }
+
+    //Get the previous meeting
+    public Meeting getPreviousMeeting(){
+        Meeting previousMeeting = new Meeting();
+        try{
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = "select * from Meetings where _id < 3 order by _id desc limit 0,1";
+            Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(meetingID)});
+            if(cursor.moveToNext()){
+                previousMeeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
+                VslaCycle vslaCycle = new VslaCycle();
+                vslaCycle.setCycleId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID)));
+                previousMeeting.setVslaCycle(vslaCycle);
+                previousMeeting.setMeetingDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE))));
+                previousMeeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD)) == 1);
+                int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
+                VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(context);
+                previousMeeting.setVslaCycle(vslaCycleRepo.getCycle(cycleId));
+                previousMeeting.setOpeningBalanceBox(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
+                previousMeeting.setOpeningBalanceBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
+                previousMeeting.setClosingBalanceBox(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
+                previousMeeting.setClosingBalanceBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BANK)));
+                previousMeeting.setLoanFromBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_LOAN_FROM_BANK)));
+                previousMeeting.setBankLoanRepayment(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_BANK_LOAN_REPAYMENT)));
+                previousMeeting.setComment(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT)));
+
+                if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                    previousMeeting.setMeetingDataSent(true);
+                    Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                    previousMeeting.setDateSent(dateMeetingDataSent);
+                } else {
+                    previousMeeting.setMeetingDataSent(false);
+                }
+            }
+        }catch (Exception e){
+            Log.e("getPreviousMeeting", e.getMessage());
+        }
+        return previousMeeting;
+    }
+
+    public void updateCashBook(double cashSavedToBox, double cashSavedToBank, double bankLoanRepayment){
+        try{
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = "update Meetings set CashSavedBox = ?, CashSavedBank = ?, BankLoanRepayment = ? where _id = ?";
+            db.execSQL(sql, new String[]{String.valueOf(cashSavedToBox), String.valueOf(cashSavedToBank), String.valueOf(bankLoanRepayment), String.valueOf(meetingID)});
+        }catch (Exception e){
+            Log.e("updateCashBook", e.getMessage());
+        }
+    }
+
+
+
+    public MeetingStartingCash getStartingCash(){
+        MeetingStartingCash meetingStartingCash = new MeetingStartingCash();
+        meetingStartingCash.setCashSavedInBank(meeting.getOpeningBalanceBank());
+        meetingStartingCash.setActualStartingCash(meeting.getOpeningBalanceBox());
+        meetingStartingCash.setLoanFromBank(meeting.getLoanFromBank());
+        meetingStartingCash.setComment(meeting.getComment());
+        meetingStartingCash.setExpectedStartingCash(this.getExpectedStartingCash());
+        return meetingStartingCash;
+    }
+
+    //Legacy Code is below. The legacy code needs to be refactored to exploit dependency injection
 
     // Should add this meeting, deactivate all other meetings in cycle, and activate this meeting
     public boolean addMeeting(Meeting meeting) {
@@ -500,6 +638,7 @@ public class MeetingRepo {
     }
 
 
+    //Todo: To be deleted
     // public HashMap<String, Double> getMeetingStartingCash(int meetingId) {
     public MeetingStartingCash getMeetingStartingCash(int meetingId) {
         SQLiteDatabase db = null;
@@ -622,46 +761,6 @@ public class MeetingRepo {
         }
     }
 
-    public boolean updateStartingCash(int meetingId, double cashFromBox, double cashFromBank, double finesPaid, String actualStartingCashComment) {
-        SQLiteDatabase db = null;
-        boolean performUpdate = false;
-        try {
-
-            // Check if exists and do an Update
-            Meeting meeting = getMeetingById(meetingId);
-            if (meeting != null) {
-                performUpdate = true;
-            }
-
-            db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            ContentValues values = new ContentValues();
-
-            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX, cashFromBox);
-            //values.put(MeetingSchema.COL_MT_CASH_SAVED_BOX, cashTakenToBox);
-            //values.put(MeetingSchema.COL_MT_CASH_FROM_BANK, cashFromBank);
-            // values.put(MeetingSchema.COL_MT_CASH_FINES, finesPaid);
-            values.put(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT, actualStartingCashComment);
-
-            // Inserting or UpdatingRow
-            long retVal = -1;
-            if (performUpdate) {
-                retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
-                        new String[]{String.valueOf(meetingId)});
-            } else {
-                retVal = db.insert(MeetingSchema.getTableName(), null, values);
-            }
-
-            return retVal != -1;
-        } catch (Exception ex) {
-            Log.e("MeetingRepo.updateStartingCash", ex.getMessage());
-            return false;
-        } finally {
-            if (db != null) {
-                db.close();
-            }
-        }
-    }
-
     public boolean updateExpectedStartingCash(int meetingId, double cashTakenToBox) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
@@ -683,33 +782,6 @@ public class MeetingRepo {
             return retVal != -1;
         } catch (Exception ex) {
             Log.e("MeetingRepo.updateExpectedStartingCash", ex.getMessage());
-            return false;
-        } finally {
-            if (db != null) {
-                db.close();
-            }
-        }
-    }
-
-    public boolean updateCashBook(int meetingId, double cashSavedBox, double cashSavedBank) {
-        SQLiteDatabase db = null;
-
-        try {
-            db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            ContentValues values = new ContentValues();
-
-            /**
-             * Comment out for now
-             *
-             values.put(MeetingSchema.COL_MT_CASH_WELFARE, cashWelfare);
-             values.put(MeetingSchema.COL_MT_CASH_EXPENSES, cashExpenses); */
-            values.put(MeetingSchema.COL_MT_CASH_SAVED_BOX, cashSavedBox);
-            values.put(MeetingSchema.COL_MT_CASH_SAVED_BANK, cashSavedBank);
-            long retVal = -1;
-            retVal = db.update(MeetingSchema.getTableName(), values, MeetingSchema.COL_MT_MEETING_ID + " = ?",
-                    new String[]{String.valueOf(meetingId)});
-            return retVal != -1;
-        } catch (Exception ex) {
             return false;
         } finally {
             if (db != null) {

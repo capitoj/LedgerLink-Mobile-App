@@ -24,10 +24,52 @@ public class Meeting {
     private double closingBalanceBank;
     private double closingBalanceBox;
     private boolean cashBookBalanced;
+    private double loanFromBank;
+    private double bankLoanRepayment;
+    private String comment;
 
     //flag of whether this is a Getting started wizard meeting
     private boolean isGettingStarted;
 
+    public Meeting(int meetingId, VslaCycle vslaCycle, Date meetingDate, boolean isStartOfCycle, boolean isEndOfCycle) {
+        this.meetingId = meetingId;
+        this.vslaCycle = vslaCycle;
+        this.meetingDate = meetingDate;
+        this.isStartOfCycle = isStartOfCycle;
+        this.isEndOfCycle = isEndOfCycle;
+
+        //Ensure getting started flag defaults to false
+        setGettingStarted(false);
+    }
+
+    public Meeting() {
+        //Ensure getting started flag defaults to false
+        setGettingStarted(false);
+    }
+
+    public void setComment(String comment){
+        this.comment = comment;
+    }
+
+    public String getComment(){
+        return this.comment;
+    }
+
+    public void setLoanFromBank(double amount){
+        this.loanFromBank = amount;
+    }
+
+    public double getLoanFromBank(){
+        return this.loanFromBank;
+    }
+
+    public void setBankLoanRepayment(double amount){
+        this.bankLoanRepayment = amount;
+    }
+
+    public double getBankLoanRepayment(){
+        return this.bankLoanRepayment;
+    }
 
     public double getOpeningBalanceBox() {
         return openingBalanceBox;
@@ -171,22 +213,6 @@ public class Meeting {
 
     public void setDateSent(Date dateSent) {
         this.dateSent = dateSent;
-    }
-
-    public Meeting(int meetingId, VslaCycle vslaCycle, Date meetingDate, boolean isStartOfCycle, boolean isEndOfCycle) {
-        this.meetingId = meetingId;
-        this.vslaCycle = vslaCycle;
-        this.meetingDate = meetingDate;
-        this.isStartOfCycle = isStartOfCycle;
-        this.isEndOfCycle = isEndOfCycle;
-
-        //Ensure getting started flag defaults to false
-        setGettingStarted(false);
-    }
-
-    public Meeting() {
-        //Ensure getting started flag defaults to false
-        setGettingStarted(false);
     }
 
     public boolean sendMeetingData() {

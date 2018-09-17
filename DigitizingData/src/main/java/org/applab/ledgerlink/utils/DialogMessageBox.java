@@ -34,6 +34,21 @@ public class DialogMessageBox implements DialogInterface.OnClickListener {
         alertDialog = builder.create();
     }
 
+    public DialogMessageBox(Context context, String title, String message, Runnable runBtnPositive, boolean hideCancel){
+        this.runBtnPositive = runBtnPositive;
+
+        builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+
+        if(!hideCancel)
+            builder.setNegativeButton("Cancel", this);
+
+        builder.setPositiveButton("Continue", this);
+
+        alertDialog = builder.create();
+    }
+
     @Override
     public void onClick(DialogInterface dialogInterface, int which){
         switch (which){
@@ -63,6 +78,12 @@ public class DialogMessageBox implements DialogInterface.OnClickListener {
 
     public static void show(Context context, String title, String message, Runnable btnPositive) {
         DialogMessageBox dialogMessageBox = new DialogMessageBox(context, title, message, btnPositive);
+        AlertDialog alertDialog = dialogMessageBox.getAlertDialog();
+        alertDialog.show();
+    }
+
+    public static void show(Context context, String title, String message, Runnable btnPositive, boolean hideCancel) {
+        DialogMessageBox dialogMessageBox = new DialogMessageBox(context, title, message, btnPositive, hideCancel);
         AlertDialog alertDialog = dialogMessageBox.getAlertDialog();
         alertDialog.show();
     }

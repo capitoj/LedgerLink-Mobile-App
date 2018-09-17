@@ -1,16 +1,20 @@
 package org.applab.ledgerlink;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
@@ -22,6 +26,8 @@ import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.domain.model.Member;
+import org.applab.ledgerlink.repo.MemberRepo;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.Calendar;
 
@@ -32,6 +38,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     private ActionBar actionBar;
     private int selectedMemberId = -1;
     private String selectedMemberNames = "VSLA Member";
+    protected Context context;
 
     LedgerLinkApplication ledgerLinkApplication;
 
@@ -39,6 +46,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
         super.onCreate(savedInstanceState);
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+        context = this;
 
         inflateCustomActionBar();
 
@@ -266,6 +274,23 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     }
 
     private void editMember() {
+
+        MemberRepo memberRepo = new MemberRepo(getApplicationContext());
+        Member member = memberRepo.getMemberById(selectedMemberId);
+        if(member.isActive()) {
+            this.loadEditWindow();
+        }else{
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    loadEditWindow();
+                }
+            };
+            DialogMessageBox.show(context, "Member Reactivation", "Are you sure you would like to reactivate " + member.getSurname() + " " + member.getOtherNames(), runnable);
+        }
+    }
+
+    protected void loadEditWindow(){
         Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
         i.putExtra("_id", selectedMemberId);
         i.putExtra("_isEditAction", true);
@@ -281,12 +306,14 @@ public class MemberDetailsViewActivity extends SherlockActivity {
         }
 
         AlertDialog.Builder ad = new AlertDialog.Builder(MemberDetailsViewActivity.this);
-        ad.setTitle("Remove Member");
-        ad.setMessage("Are you sure you want to remove this member?");
+        ad.setTitle("Archive Member");
+        ad.setMessage("Are you sure you would like to archive this member?");
         ad.setPositiveButton(
                 "Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
-                        ledgerLinkApplication.getMemberRepo().deleteMember(selMember);
+                        MemberRepo memberRepo = new MemberRepo(getApplicationContext(), selectedMemberId);
+                        memberRepo.archiveMember();
+                        //ledgerLinkApplication.getMemberRepo().deleteMember(selMember);
                         navigateBack();
                     }
                 }

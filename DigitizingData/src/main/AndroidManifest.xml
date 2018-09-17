@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="org.applab.ledgerlink"
-    android:versionCode="6"
+    android:versionCode="7"
     android:versionName="@string/about_version" >
 
     <uses-sdk
@@ -21,6 +21,7 @@
     <!-- to allow access to external storage -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.GET_TASKS"/>
 
     <supports-screens
         android:largeScreens="true"
@@ -301,17 +302,73 @@
             android:screenOrientation="portrait" >
         </activity>
 
+        <!--
         <service android:name=".service.BackgroundService" />
+        <service android:name=".service.TrainingModuleService" />
+        -->
+        <service android:name=".service.OutboundChatService" />
+        <service android:name=".service.InboundChatService" />
+        <service android:name=".service.UpdateChatService" />
 
         <receiver android:name=".service.AlarmReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".service.TrainingModuleReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".service.OutboundChatReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".service.InboundChatReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <!--
+        <receiver android:name=".service.UpdateChatReceiver">
+        </receiver>
+        -->
 
         <activity
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile" >
+        </activity>
+        <activity
+            android:name=".LedgerLinkTrainingActivity"
+            android:label="@string/title_activity_ledger_link_training"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".EKeysTrainingActivity"
+            android:label="@string/title_activity_ekeys_training"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".GeneralSupportActivity"
+            android:label="@string/title_activity_general_support"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".MeetingMemberLoansIssueFrag"
+            android:label="@string/title_activity_meeting_member_loans_issue_frag" >
+        </activity>
+        <activity
+            android:name=".MeetingMemberLoansIssueActivity"
+            android:label="@string/title_activity_meeting_member_loans_issue" >
+        </activity>
+        <activity
+            android:name=".ChatActivity"
+            android:label="@string/title_activity_chat" >
+        </activity>
+        <activity
+            android:name=".MODActivity"
+            android:label="@string/title_activity_mod" >
         </activity>
     </application>
 

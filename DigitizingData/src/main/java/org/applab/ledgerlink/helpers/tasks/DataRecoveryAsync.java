@@ -32,14 +32,12 @@ public class DataRecoveryAsync extends AsyncTask<String, String, JSONObject> {
     protected boolean isConnected;
     protected ProgressDialog progressDialog;
     protected VslaInfo vslaInfo;
-    protected VslaCycle vslaCycle;
 
     public DataRecoveryAsync(Context context){
         this.context = context;
         this.isConnected = false;
         this.progressDialog = null;
         this.vslaInfo = new VslaInfo();
-        this.vslaCycle = new VslaCycle();
     }
 
     @Override

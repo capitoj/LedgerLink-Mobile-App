@@ -19,6 +19,7 @@ import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,8 +75,8 @@ public class SendDataRepo {
 
     protected void loadMeeting(){
         if(!this.meetingLoaded) {
-            MeetingRepo meetingRepo = new MeetingRepo(context);
-            meeting = meetingRepo.getMeetingById(this.meetingId);
+            MeetingRepo meetingRepo = new MeetingRepo(context, this.meetingId);
+            meeting = meetingRepo.getMeeting();
             this.meetingLoaded = true;
         }
     }
@@ -123,6 +124,11 @@ public class SendDataRepo {
     protected double getMembersPresent(){
         MeetingAttendanceRepo meetingAttendanceRepo = new MeetingAttendanceRepo(context);
         return meetingAttendanceRepo.getAttendanceCountByMeetingId(meeting.getMeetingId());
+    }
+
+    protected double getActiveMembers(Date meetingDate){
+        MemberRepo memberRepo = new MemberRepo(context);
+        return memberRepo.getActiveMembers(meetingDate).size();
     }
 
     protected double getTotalSavings(){

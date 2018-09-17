@@ -3,6 +3,7 @@ package org.applab.ledgerlink.helpers;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 
+import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.datatransformation.AttendanceDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.FinesDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.LoanDataTransferRecord;
@@ -14,84 +15,18 @@ import org.applab.ledgerlink.repo.SendDataRepo;
 import org.json.JSONArray;
 import org.json.JSONStringer;
 
-import java.util.ArrayList;
-
 /**
  * Created by Joseph Capito on 10/22/2015.
  */
 public class DataFactory extends SendDataRepo {
 
-    private String phoneImei;
-    private String networkOperator;
-    private String networkType;
     private Context context;
+    protected Network network;
 
     public DataFactory(Context context, int meetingId){
         super(context, meetingId);
         this.context = context;
-    }
-
-    private String getPhoneImei() {
-        try {
-            if(phoneImei == null || phoneImei.length()<1){
-                TelephonyManager tm = (TelephonyManager)this.context.getSystemService(Context.TELEPHONY_SERVICE);
-                phoneImei = tm.getDeviceId();
-            }
-            return phoneImei;
-        }
-        catch(Exception ex) {
-            return null;
-        }
-    }
-
-    private void setNetworkType(String networkType){
-        this.networkType = networkType;
-    }
-
-    private String getNetworkType(){
-        return this.networkType;
-    }
-
-    private String getNetworkOperator() {
-        try {
-            if(networkOperator == null || networkOperator.length()<1){
-                TelephonyManager tm = (TelephonyManager)this.context.getSystemService(Context.TELEPHONY_SERVICE);
-                if(tm.getSimState() == TelephonyManager.SIM_STATE_READY) {
-                    networkOperator = tm.getNetworkOperatorName();
-                    if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE){
-                        this.setNetworkType("EDGE");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_GPRS){
-                        this.setNetworkType("GPRS");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA){
-                        this.setNetworkType("HSDPA");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA){
-                        this.setNetworkType("HSPA");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPAP){
-                        this.setNetworkType("HSPAP");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA){
-                        this.setNetworkType("HSUPA");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS){
-                        this.setNetworkType("UMTS");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE){
-                        this.setNetworkType("LTE");
-                    }
-                    else {
-                        this.setNetworkType("UNKNOWN");
-                    }
-                }
-            }
-            return networkOperator;
-        }
-        catch(Exception ex) {
-            return null;
-        }
+        this.network = new Network(context);
     }
 
     private JSONStringer getHeaderInfo(JSONStringer js){
@@ -99,9 +34,11 @@ public class DataFactory extends SendDataRepo {
             js.key("HeaderInfo")
                     .object()
                     .key("VslaCode").value(this.vslaInfo.getVslaCode())
-                    .key("PhoneImei").value(this.getPhoneImei())
-                    .key("NetworkOperator").value(this.getNetworkOperator())
-                    .key("NetworkType").value(this.getNetworkType())
+                    .key("PhoneImei").value(network.getPhoneImei())
+                    .key("NetworkOperator").value(network.getOperator())
+                    .key("NetworkType").value(network.getNetworkType())
+                    .key("PassKey").value(vslaInfo.getPassKey())
+                    .key("AppVersion").value(this.context.getResources().getString(R.string.about_version))
                     .endObject();
         }catch (Exception e){
             e.printStackTrace();
@@ -170,6 +107,10 @@ public class DataFactory extends SendDataRepo {
                     .key("ClosingBalanceBank").value(String.valueOf(this.meeting.getClosingBalanceBank()))
                     .key("IsCashBookBalanced").value(String.valueOf(this.meeting.isCashBookBalanced()))
                     .key("IsDataSent").value(String.valueOf(this.meeting.isMeetingDataSent()))
+                    .key("LoanFromBank").value(String.valueOf(this.meeting.getLoanFromBank()))
+                    .key("BankLoanRepayment").value(String.valueOf(this.meeting.getBankLoanRepayment()))
+                    .key("AttendanceRate").value(String.valueOf((this.getMembersPresent()/this.getActiveMembers(this.meeting.getMeetingDate())) * 100))
+                    .key("SavingsRate").value(String.valueOf((this.getTotalSavings()/(this.getActiveMembers(this.meeting.getMeetingDate()) * this.vslaCycle.getMaxSharesQty() * this.vslaCycle.getSharePrice())) * 100))
                     .endObject();
         }catch (Exception e){
             e.printStackTrace();
@@ -291,7 +232,6 @@ public class DataFactory extends SendDataRepo {
 
         JSONStringer js = new JSONStringer();
         try {
-            //js.object().key("FileSubmission").array();
             js.object();
             js = dataFactory.getHeaderInfo(js);
             js = dataFactory.getCycleInfo(js);
@@ -303,7 +243,6 @@ public class DataFactory extends SendDataRepo {
             js = dataFactory.getLoanRepayments(js);
             js = dataFactory.getLoanIssues(js);
             js.endObject();
-            //js.endArray().endObject();
 
         }catch (Exception e){
             e.printStackTrace();

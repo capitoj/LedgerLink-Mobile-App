@@ -31,6 +31,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 /**
  * Created by Moses on 7/3/13.
@@ -144,8 +145,7 @@ public class Utils {
 
     }
 
-    private static String insertPeriodically(
-            String text, int period) {
+    private static String insertPeriodically(String text, int period) {
         StringBuilder builder = new StringBuilder(
                 text.length() + " ".length() * (text.length() / period) + 1);
 
@@ -534,6 +534,28 @@ public class Utils {
 
         public int getHeight(){
             return this.height;
+        }
+    }
+
+    public static class RandomGenerator{
+        protected static final String CHAR_LIST = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        protected static final int RANDOM_STRING_LENGTH = 20;
+
+        public static String getRandomString(){
+            StringBuffer sb = new StringBuffer();
+            for(int i = 0; i < RANDOM_STRING_LENGTH; i++){
+                int number = getRandomNumber();
+                char ch = CHAR_LIST.charAt(number);
+                sb.append(ch);
+            }
+            return  sb.toString();
+        }
+
+        protected static int getRandomNumber(){
+            int randomInt = 0;
+            Random random = new Random();
+            randomInt = random.nextInt(CHAR_LIST.length());
+            return (randomInt - 1 == -1) ? randomInt : randomInt -1;
         }
     }
 }

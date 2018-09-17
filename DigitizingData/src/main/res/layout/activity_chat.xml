@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="org.applab.ledgerlink.ChatActivity">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:scrollbars="vertical"
+        android:inputType="textMultiLine|textCapSentences|textAutoComplete"
+        android:id="@+id/txtChatBox"
+        android:textSize="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/btnSendChat"
+        android:layout_toStartOf="@+id/btnSendChat"
+        android:padding="5dp"
+        android:background="#009ACD"
+        android:textColor="#FFFFFF"
+        android:maxLength="435"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listChatHistory"
+        android:layout_above="@id/txtChatBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:text="Send"
+        android:textSize="16dp"
+        android:id="@+id/btnSendChat"
+        android:layout_below="@+id/listChatHistory"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/ledger_link_dark_blue"
+        android:textColor="@color/elv_popup_text_color"/>
+
+</RelativeLayout>

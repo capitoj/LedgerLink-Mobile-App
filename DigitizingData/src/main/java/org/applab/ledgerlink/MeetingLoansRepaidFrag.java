@@ -137,6 +137,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                 }
                 if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = members.get(position);
+                    /*
                     Intent viewHistory = new Intent(view.getContext(), MemberLoansRepaidHistoryActivity.class);
 
                     // Pass on data
@@ -144,6 +145,14 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                     viewHistory.putExtra("_names", selectedMember.getFullName());
                     viewHistory.putExtra("_meetingDate", meetingDate);
                     viewHistory.putExtra("_meetingId", meetingId);
+                    viewHistory.putExtra("_viewingSentData", parentActivity.isViewingSentData());
+                    */
+                    Intent viewHistory = new Intent(view.getContext(), MeetingMemberLoansIssueActivity.class);
+                    viewHistory.putExtra("_memberId", selectedMember.getMemberId());
+                    viewHistory.putExtra("_names", selectedMember.getFullName());
+                    viewHistory.putExtra("_meetingDate", meetingDate);
+                    viewHistory.putExtra("_meetingId", meetingId);
+                    viewHistory.putExtra("_action", "loanrepayment");
                     viewHistory.putExtra("_viewingSentData", parentActivity.isViewingSentData());
                     startActivity(viewHistory);
                 }

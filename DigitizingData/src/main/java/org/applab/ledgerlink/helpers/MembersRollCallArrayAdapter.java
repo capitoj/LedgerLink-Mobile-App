@@ -112,7 +112,7 @@ private final Typeface typeface;
                         if(b){
                             isPresent = 1;
                         }
-                        Member selectedMember = (Member) values.get(position);
+                        Member selectedMember = values.get(position);
                         if(null != selectedMember) {
                             MeetingAttendanceRepo attendanceRepo = new MeetingAttendanceRepo(getContext());
                             attendanceRepo.saveMemberAttendance(meetingId,selectedMember.getMemberId(), isPresent );

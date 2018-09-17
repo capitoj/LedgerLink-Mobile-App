@@ -99,12 +99,25 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
             if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
                // outstandingLoansByMember = loansIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
                 //outstandingLoansByMember = loanIssued.getLoanBalance();
-                loansIssued = loansIssuedRepo.getOutstandingLoansListByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+                //loansIssued = loansIssuedRepo.getOutstandingLoansListByMemberInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+                loansIssued = loansIssuedRepo.getOutstandingMemberLoans(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
             if (loansIssued == null || loansIssued.size() == 0) {
                 txtOutstanding.setText("No outstanding loans");
 
             } else {
+                double loanBalance = 0.0;
+                for(MeetingLoanIssued loanIssue : loansIssued){
+                    loanBalance += loanIssue.getLoanBalance();
+                }
+                if(loanBalance == 0.0){
+                    txtOutstanding.setText("No outstanding loans");
+                }
+                if(loanBalance > 0.0){
+                    txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", loanBalance));
+                }
+
+                /*
                 for (MeetingLoanIssued loanIssue : loansIssued) {
                     if (loanIssue.getLoanBalance() == 0.0) {
                         txtOutstanding.setText("No outstanding loans");
@@ -124,7 +137,7 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
 
                     txtOutstanding.setLineSpacing(0.0f, 1.5f);
 
-                }
+                }*/
 
             }
 

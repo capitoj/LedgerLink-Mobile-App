@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.applab.ledgerlink.MeetingMemberLoansIssueActivity">
+    <item
+        android:id="@+id/action_new_loan"
+        android:title="New"
+        android:orderInCategory="100"
+        android:showAsAction="always" />
+</menu>

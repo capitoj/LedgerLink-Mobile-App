@@ -1,8 +1,6 @@
 package org.applab.ledgerlink;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.*;
@@ -34,6 +31,9 @@ import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.SampleDataBuilderRepo;
 import org.applab.ledgerlink.service.AlarmReceiver;
+import org.applab.ledgerlink.service.InboundChatReceiver;
+import org.applab.ledgerlink.service.OutboundChatReceiver;
+import org.applab.ledgerlink.service.TrainingModuleReceiver;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
@@ -58,6 +58,7 @@ public class LoginActivity extends SherlockActivity {
     private boolean activationSuccessful = false;
     private String targetVslaCode = null; //fake-fix
     private ProgressDialog progressDialog = null;
+    protected Intent alarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,32 +122,9 @@ public class LoginActivity extends SherlockActivity {
             //   tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
         }
 
-        //Set the textview to be underline
-        /**   tvSwitchMode.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
-
-         tvSwitchMode.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View view) {
-        SharedPreferences appPrefs = Utils.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor prefEditor = appPrefs.edit();
-        if(Utils.isExecutingInTrainingMode()){
-        prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_PROD);
-        Toast.makeText(getApplicationContext(), "Execution switched to Actual VSLA Data. Please start the app again.",Toast.LENGTH_LONG).show();
-        }
-        else {
-        prefEditor.putString(SettingsActivity.PREF_KEY_EXECUTION_MODE, SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING);
-        Toast.makeText(getApplicationContext(), "Execution switched to Training Mode. Please start the app again.",Toast.LENGTH_LONG).show();
-        }
-
-        //Save the values
-        //Can use apply() but would require API 9
-        prefEditor.commit();
-
-        finish();
-        }
-        }); */
-
         //Check whether the VSLA has been Activated
         vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
+
 
         boolean wasCalledFromActivation = getIntent().getBooleanExtra("_wasCalledFromActivation", false);
 
@@ -174,6 +152,7 @@ public class LoginActivity extends SherlockActivity {
         } else {
             //if VSLAInfo is NULL, force Activation
             //If it is not Activated and is not in Offline Mode, force activation
+
             Intent i = new Intent(LoginActivity.this, ActivationActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
@@ -222,12 +201,26 @@ public class LoginActivity extends SherlockActivity {
     }
 
     protected void loadBackgroundService(){
-        Intent alarm = new Intent(this.context, AlarmReceiver.class);
-        boolean alarmRunning = (PendingIntent.getBroadcast(this.context, 0, alarm, PendingIntent.FLAG_NO_CREATE) != null);
+        /*
+        alarm = new Intent(this.context, AlarmReceiver.class);
+        this.startBackgroundService(this.context, alarm, 30000);
+
+        alarm = new Intent(this.context, TrainingModuleReceiver.class);
+        this.startBackgroundService(this.context, alarm, 15000);
+        */
+
+        alarm = new Intent(context, OutboundChatReceiver.class);
+        this.startBackgroundService(context, alarm, 2000);
+
+        alarm = new Intent(context, InboundChatReceiver.class);
+        this.startBackgroundService(context, alarm, 2000);    }
+
+    protected void startBackgroundService(Context context, Intent alarm, int interval){
+        boolean alarmRunning = (PendingIntent.getBroadcast(context, 0, alarm, PendingIntent.FLAG_NO_CREATE) != null);
         if(!alarmRunning){
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.context, 0, alarm, 0);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, alarm, 0);
             AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 30000, pendingIntent);
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), interval, pendingIntent);
         }
     }
 

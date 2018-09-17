@@ -38,6 +38,7 @@ import java.util.Date;
  * Created by Moses on 7/13/13.
  */
 public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
+    protected int loanId;
     private String meetingDate;
     private int meetingId;
     private int memberId;
@@ -90,7 +91,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     private TextView txtRollover;
     private TextView txtNextDateDue;
 
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
@@ -118,10 +118,11 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             memberId = getIntent().getIntExtra("_memberId", 0);
         }
 
+        if(getIntent().hasExtra("_loanId")){
+            this.loanId = getIntent().getIntExtra("_loanId", 0);
+        }
         targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
-
-
-
+        recentLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getMemberLoan(this.loanId);
     }
 
     private void getFieldsFromLayout() {
@@ -160,7 +161,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         }
 
         //Determine whether this is an edit operation on an existing Loan Repayment
-        repaymentBeingEdited = ledgerLinkApplication.getMeetingLoanRepaymentRepo().getLoansRepaymentByMemberInMeeting(meetingId, memberId);
+        repaymentBeingEdited = ledgerLinkApplication.getMeetingLoanRepaymentRepo().getLoansRepaymentByLoanInMeeting(this.loanId, this.meetingId); // ledgerLinkApplication.getMeetingLoanRepaymentRepo().getLoansRepaymentByMemberInMeeting(meetingId, memberId);
         if (null != repaymentBeingEdited) {
             //Flag that this is an edit operation
             isEditOperation = true;
@@ -180,7 +181,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
         repaymentHistorySection = (LinearLayout) findViewById(R.id.frmMLRepayHHistory);
 
-        recentLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getAllMostRecentLoanIssuedToMember(memberId);
+        recentLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getMemberLoan(getIntent().getIntExtra("_loanId", 0)); //.getAllMostRecentLoanIssuedToMember(memberId);
         StringBuilder sb = null;
         if (null != recentLoan) {
             txtLoanNumber.setText(String.format("%d", recentLoan.getLoanNo()));
@@ -289,7 +290,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
             // If it is not an edit operation then initialize the date. Otherwise, retain the date pulled from db
             if (!isEditOperation) {
-
                 // If loan repayment is due
                 if (recentLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT))) <= 0) {
                     initializeDate();
@@ -441,7 +441,6 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                                                                   }
                                                                   txtLoanBalance.setText(String.format("%,.0f UGX", theCurLoanBalanceAmount));
                                                                   double interestAmount = 0;
-
                                                                   // If meeting date is before loan due date then default interest to 0
                                                                   if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
                                                                       editTextInterestRate.setText("0");
@@ -451,7 +450,8 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                                                                   }
                                                                   double rolloverAmount = theCurLoanBalanceAmount + interestAmount;
                                                                   txtRolloverAmount.setText(String.format("%,.0f UGX", rolloverAmount));
-
+                                                                  Toast.makeText(MemberLoansRepaidHistoryActivity.this, String.valueOf(theCurLoanBalanceAmount), Toast.LENGTH_SHORT).show();
+                                                                  /*
                                                                   // If balance = 0, then next due date field should be blank
                                                                   if (theCurLoanBalanceAmount == 0) {
                                                                       String dtNextDateDue = txtDateDue.getText().toString().trim();
@@ -485,6 +485,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                                                                   }
                                                                   // Have this value redundantly stored for future use
                                                                   theCurLoanRepayAmount = theRepayAmount;
+                                                                  */
                                                               }
                                                           }
         );
@@ -546,7 +547,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                     public void onClick(View v) {
                         if (recentLoan == null) {
                             //Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                            Intent i = new Intent(getApplicationContext(), MeetingMemberLoansIssueActivity.class);
                             i.putExtra("_tabToSelect", "loansRepaid");
                             i.putExtra("_meetingDate", meetingDate);
                             i.putExtra("_meetingId", meetingId);
@@ -554,12 +555,15 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
                             finish();
                         } else if (saveMemberLoanRepayment()) {
                             Toast.makeText(MemberLoansRepaidHistoryActivity.this, "Loan Repayment entered successfully", Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                            Intent i = new Intent(getApplicationContext(), MeetingMemberLoansIssueActivity.class);
                             i.putExtra("_tabToSelect", "loansRepaid");
                             i.putExtra("_meetingDate", meetingDate);
                             i.putExtra("_meetingId", meetingId);
-                            //startActivity(i);
-                            finish();
+                            i.putExtra("_action", "loanrepayment");
+                            i.putExtra("_memberId", memberId);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                            //finish();
                         }
 
                     }
@@ -664,7 +668,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
     }
 
     private void populateLoanRepaymentHistory() {
-        ArrayList<MemberLoanRepaymentRecord> loanRepayments = ledgerLinkApplication.getMeetingLoanRepaymentRepo().getLoansRepaymentsByMemberInCycle(targetCycleId, memberId);
+        ArrayList<MemberLoanRepaymentRecord> loanRepayments = ledgerLinkApplication.getMeetingLoanRepaymentRepo().getLoansRepaymentsByMemberInCycle(targetCycleId, memberId, loanId);
 
         if (loanRepayments == null) {
             loanRepayments = new ArrayList<MemberLoanRepaymentRecord>();

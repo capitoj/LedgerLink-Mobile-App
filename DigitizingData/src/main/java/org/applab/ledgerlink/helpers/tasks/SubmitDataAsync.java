@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
@@ -15,6 +16,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.SendMeetingDataActivity;
+import org.applab.ledgerlink.helpers.Network;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
@@ -34,7 +36,6 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONArray> {
     protected boolean isConnected;
     protected ProgressDialog progressDialog;
     protected int httpStatusCode;
-    protected int meetingId;
 
     public SubmitDataAsync(Context context){
         this.context = context;
@@ -81,7 +82,6 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONArray> {
                 httpClient.getConnectionManager().shutdown();
                 if (httpStatusCode == 200) {
                     result = new JSONArray(response);
-                    //result = new JSONObject(response);
                 }
             }
             return result;
@@ -97,7 +97,7 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONArray> {
 
     @Override
     protected void onPostExecute(JSONArray jsonArray){
-        String dialogTitle = "Error Message";
+        String dialogTitle = "Warning";
         if(this.isConnected){
             try {
                 if(jsonArray != null) {

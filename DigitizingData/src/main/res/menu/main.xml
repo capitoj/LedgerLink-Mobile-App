@@ -2,8 +2,32 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/mnuMainChat"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_vsla_chat" />
+
+    <item
+        android:id="@+id/mnuMainMOD"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_vsla_mod" />
+
+    <item
         android:id="@+id/mnuMainSettings"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/action_settings" />
+
+    <item
+        android:id="@+id/mnuMainProfile"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_vsla_profile" />
+
+    <item
+        android:id="@+id/mnuChangePIN"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/action_change_pin" />
 </menu>

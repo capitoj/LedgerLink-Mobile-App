@@ -229,6 +229,27 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
+    public ArrayList<MeetingLoanIssued> getOutstandingMemberLoans(int cycleId, int memberId){
+        ArrayList<MeetingLoanIssued> loanIssuedList = new ArrayList<MeetingLoanIssued>();
+        try{
+            SQLiteDatabase db = DatabaseHandler.getInstance(this.context).getWritableDatabase();
+            String sql = "select li._id, li.LoanNo, li.Balance from LoanIssues li inner join Meetings m on m._id = li.MeetingId inner join VslaCycles c on c._id = m.CycleId where li.MemberId = ? and c._id = ?";
+            Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(memberId), String.valueOf(cycleId)});
+            while(cursor.moveToNext()){
+                if(cursor.getDouble(2) > 0) {
+                    MeetingLoanIssued loanIssued = new MeetingLoanIssued();
+                    loanIssued.setLoanId(cursor.getInt(0));
+                    loanIssued.setLoanNo(cursor.getInt(1));
+                    loanIssued.setLoanBalance(cursor.getDouble(2));
+                    loanIssuedList.add(loanIssued);
+                }
+            }
+        }catch (Exception e){
+            Log.e("getOutstandingMemberLoans", e.getMessage());
+        }
+        return loanIssuedList;
+    }
+
     public ArrayList<MeetingLoanIssued> getOutstandingLoansListByMemberInCycle(int cycleId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -237,9 +258,10 @@ public class MeetingLoanIssuedRepo {
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT %s AS LoanBalance, %s AS Comment FROM %s WHERE %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY %s DESC",
+            String sumQuery = String.format("SELECT %s AS LoanBalance, %s AS Comment, %s AS LoanNo FROM %s WHERE %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d) ORDER BY %s DESC",
                     LoanIssueSchema.COL_LI_BALANCE,
                     LoanIssueSchema.COL_LI_COMMENT,
+                    LoanIssueSchema.COL_LI_LOAN_NO,
                     LoanIssueSchema.getTableName(),
                     LoanIssueSchema.COL_LI_MEMBER_ID, memberId,
                     LoanIssueSchema.COL_LI_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
@@ -251,6 +273,7 @@ public class MeetingLoanIssuedRepo {
                 loanIssued = new MeetingLoanIssued();
                 loanIssued.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("LoanBalance")));
                 loanIssued.setComment(cursor.getString((cursor.getColumnIndex("Comment"))));
+                loanIssued.setLoanNo(cursor.getInt(cursor.getColumnIndex(LoanIssueSchema.COL_LI_LOAN_NO)));
                 loanIssuedList.add(loanIssued);
 
             }
@@ -952,6 +975,55 @@ public class MeetingLoanIssuedRepo {
                 db.close();
             }
         }
+    }
+
+    public MeetingLoanIssued getMemberLoan(int loanId){
+        MeetingLoanIssued loan = new MeetingLoanIssued();
+        try{
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT  L.%s AS LoanId, L.%s AS MeetingId, L.MemberId, L.%s AS PrincipalAmount, L.%s AS InterestAmount, " +
+                            "L.%s AS LoanNo, L.%s AS Balance, L.%s AS TotalRepaid, L.%s AS Comment, L.%s AS IsCleared, L.%s AS DateCleared, L.%s AS DateDue" +
+                            " FROM %s AS L WHERE L.%s=%d ORDER BY L.%s DESC LIMIT 1",
+                    LoanIssueSchema.COL_LI_LOAN_ID, LoanIssueSchema.COL_LI_MEETING_ID, LoanIssueSchema.COL_LI_PRINCIPAL_AMOUNT, LoanIssueSchema.COL_LI_INTEREST_AMOUNT,
+                    LoanIssueSchema.COL_LI_LOAN_NO, LoanIssueSchema.COL_LI_BALANCE, LoanIssueSchema.COL_LI_TOTAL_REPAID,
+                    LoanIssueSchema.COL_LI_COMMENT, LoanIssueSchema.COL_LI_IS_CLEARED, LoanIssueSchema.COL_LI_DATE_CLEARED, LoanIssueSchema.COL_LI_DATE_DUE,
+                    LoanIssueSchema.getTableName(),
+                    LoanIssueSchema.COL_LI_LOAN_ID, loanId,
+                    LoanIssueSchema.COL_LI_LOAN_ID
+            );
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+
+                loan = new MeetingLoanIssued();
+
+                loan.setLoanId(cursor.getInt(cursor.getColumnIndex("LoanId")));
+                Meeting meeting = new Meeting();
+                meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex("MeetingId")));
+                loan.setMeeting(meeting);
+                loan.setPrincipalAmount(cursor.getDouble(cursor.getColumnIndex("PrincipalAmount")));
+                loan.setLoanNo(cursor.getInt(cursor.getColumnIndex("LoanNo")));
+                loan.setLoanBalance(cursor.getDouble(cursor.getColumnIndex("Balance")));
+                loan.setTotalRepaid(cursor.getDouble(cursor.getColumnIndex("TotalRepaid")));
+                loan.setComment(cursor.getString(cursor.getColumnIndex("Comment")));
+                loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
+                if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
+                    Date dateCleared = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
+                    loan.setDateCleared(dateCleared);
+                }
+                if (cursor.getString(cursor.getColumnIndex("DateDue")) != null) {
+                    Date dateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateDue")));
+                    loan.setDateDue(dateDue);
+                }
+                loan.setInterestAmount(cursor.getDouble(cursor.getColumnIndex("InterestAmount")));
+
+                Member member = new Member();
+                member.setMemberId(cursor.getInt(cursor.getColumnIndex("MemberId")));
+                loan.setMember(member);
+            }
+        }catch (Exception ex){
+            Log.e("getUnclearedLoan", ex.getMessage());
+        }
+        return loan;
     }
 
     public MeetingLoanIssued getUnclearedLoanIssuedToMember(int memberId) {

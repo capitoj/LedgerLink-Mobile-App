@@ -84,7 +84,7 @@ public class MainActivity extends SherlockActivity {
                     startActivity(i);
                 }
             };
-            DialogMessageBox.show(this, "Alert", "You have " + String.valueOf(pastMeetings.size()) + " unsent meetings on your phone", runnable, true);
+            //DialogMessageBox.show(this, "Alert", "You have " + String.valueOf(pastMeetings.size()) + " unsent meetings on your phone", runnable, true);
         }
     }
 
@@ -282,8 +282,24 @@ public class MainActivity extends SherlockActivity {
             case R.id.mnuMainProfile:
                 loadVslaProfile();
                 break;
+            case R.id.mnuMainChat:
+                loadChatWindow();
+                break;
+            case R.id.mnuMainMOD:
+                loadMODWindow();
+                break;
         }
         return true;
+    }
+
+    protected void loadMODWindow(){
+        Intent intent = new Intent(context, MODActivity.class);
+        startActivity(intent);
+    }
+
+    protected void loadChatWindow(){
+        Intent intent = new Intent(context, ChatActivity.class);
+        startActivity(intent);
     }
 
     protected void loadVslaProfile(){

@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="org.applab.ledgerlink.MeetingMemberLoansIssueActivity">
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/txtLoanTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_5"
+        android:textSize="16dp"
+        android:text="Loans Taken" />
+
+    <ListView
+        android:id="@+id/listUnpaidLoans"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/txtLoanTitle"
+        android:choiceMode="singleChoice"
+        android:divider="@null"
+        android:dividerHeight="0dp" />
+
+</RelativeLayout>

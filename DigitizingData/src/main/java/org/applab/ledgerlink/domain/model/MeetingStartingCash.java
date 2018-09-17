@@ -15,6 +15,7 @@ public class MeetingStartingCash {
     private Date dateSent;
     private double expectedStartingCash;
     private double loanTopUps;
+    private double loanFromBank;
 
     public int getStartingCashId() {
         return startingCashId;
@@ -86,5 +87,13 @@ public class MeetingStartingCash {
 
     public void setCashSavedInBank(double cashSavedInBank){
         this.cashSavedInBank = cashSavedInBank;
+    }
+
+    public void setLoanFromBank(double loanFromBank){
+        this.loanFromBank = loanFromBank;
+    }
+
+    public double getLoanFromBank(){
+        return this.loanFromBank;
     }
 }

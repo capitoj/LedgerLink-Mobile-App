@@ -21,12 +21,36 @@ import java.util.Date;
  */
 public class MeetingAttendanceRepo {
     private Context context;
+    private int meetingId;
 
     public MeetingAttendanceRepo() {
     }
 
     public MeetingAttendanceRepo(Context context){
         this.context = context;
+    }
+
+    public MeetingAttendanceRepo(Context context, int meetingId){
+        this.context = context;
+        this.meetingId = meetingId;
+    }
+
+    public boolean hasAttendants(){
+        boolean hasAttedants = false;
+        try {
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = "select count(*) as total from Attendance where _id = ?";
+            Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(meetingId)});
+            if(cursor.moveToNext()){
+                int total = cursor.getInt(0);
+                if(total > 0){
+                    hasAttedants = true;
+                }
+            }
+        }catch (Exception e){
+            Log.e("hasAttendants", e.getMessage());
+        }
+        return  hasAttedants;
     }
 
     int getMemberAttendanceId(int meetingId, int memberId) {

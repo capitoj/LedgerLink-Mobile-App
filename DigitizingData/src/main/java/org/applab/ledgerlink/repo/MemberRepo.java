@@ -14,7 +14,9 @@ import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.domain.schema.MemberSchema;
 import org.applab.ledgerlink.helpers.DatabaseHandler;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -23,12 +25,28 @@ import java.util.Date;
 public class MemberRepo {
     static ArrayList<Member> members;
     private Context context;
+    protected int memberId;
 
     public MemberRepo() {
     }
 
     public MemberRepo(Context context) {
         this.context = context;
+    }
+
+    public MemberRepo(Context context, int memberId){
+        this.memberId = memberId;
+        this.context = context;
+    }
+
+    public void archiveMember(){
+        try{
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = "update Members set HasLeft = ?, MemberNo = ?, DateLeft = ? where _id = ?";
+            db.execSQL(sql, new String[]{String.valueOf(1), String.valueOf(0), Utils.formatDateToSqlite(new Date()), String.valueOf(this.memberId)});
+        }catch (Exception e){
+            Log.e("archiveMember", e.getMessage());
+        }
     }
 
     // Adding new Entity
@@ -274,6 +292,25 @@ public class MemberRepo {
         return true;
     }
 
+    public ArrayList<Member> getActiveMembers(Date meetingDate){
+        ArrayList<Member> allMembers = this.getAllMembers();
+        ArrayList<Member> activeMembers = new ArrayList<Member>();
+        if(allMembers != null) {
+            for (Member member : allMembers) {
+                if(member.isActive()){
+                    activeMembers.add(member);
+                    Log.e("getActiveMembers", "Active " + String.valueOf(meetingDate) + " " + String.valueOf(member.getDateLeft()));
+                }else {
+                    if(meetingDate.equals(member.getDateLeft()) || meetingDate.before(member.getDateLeft())) {
+                        activeMembers.add(member);
+                        Log.e("getActiveMembers", "Inactive " + String.valueOf(meetingDate) + " " + String.valueOf(member.getDateLeft()));
+                    }
+                }
+            }
+        }
+        return activeMembers;
+    }
+
 
     public ArrayList<Member> getAllMembers() {
 
@@ -307,6 +344,17 @@ public class MemberRepo {
                     member.setGender(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_GENDER)));
                     member.setOccupation(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_OCCUPATION)));
                     member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
+                    int status = cursor.getInt(cursor.getColumnIndex(MemberSchema.COL_M_HAS_LEFT));
+                    if(status == 0){
+                        member.activate();
+                    }else if(status == 1){
+                        member.deactivate();
+                    }
+                    if(cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_LEFT))){
+                        member.setDateLeft(null);
+                    }else{
+                        member.setDateLeft(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_LEFT))));
+                    }
 
                     if (!loadMemberGettingStartedWizardValues(member)) {
                         Log.d(context.getPackageName(), "Failed to load Loan at setup and saving at setup for member " + member.getFullName());
@@ -413,6 +461,13 @@ public class MemberRepo {
             member.setGender(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_GENDER)));
             member.setOccupation(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_OCCUPATION)));
             member.setPhoneNumber(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_PHONE_NO)));
+
+            if(cursor.getInt(cursor.getColumnIndex(MemberSchema.COL_M_HAS_LEFT)) == 1 ? true : false){
+                member.deactivate();
+            }else{
+                member.activate();
+            }
+
             loadMemberGettingStartedWizardValues(member);
 
             if (cursor.isNull(cursor.getColumnIndex(MemberSchema.COL_M_DATE_OF_BIRTH))) {
@@ -512,6 +567,8 @@ public class MemberRepo {
             values.put(MemberSchema.COL_M_OTHER_NAMES, member.getOtherNames());
             values.put(MemberSchema.COL_M_OCCUPATION, member.getOccupation());
             values.put(MemberSchema.COL_M_GENDER, member.getGender());
+            values.put(MemberSchema.COL_M_HAS_LEFT, 0);
+            values.put(MemberSchema.COL_M_DATE_LEFT, "");
             if (member.getDateOfBirth() == null) {
                 member.setDateOfBirth(new Date());
             }

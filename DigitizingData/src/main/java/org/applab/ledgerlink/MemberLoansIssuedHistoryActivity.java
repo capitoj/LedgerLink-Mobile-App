@@ -106,11 +106,13 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         //Determine whether this is top up or edit on an existing Loan Repayment
         // Commented out for now as multiple loans are not yet enabled un comment to allow for issuing of multiple loans
         // MeetingLoanIssued memberLoan = loanIssuedRepo.getLoanIssuedToMemberInMeeting(meetingId, memberId);
-        final MeetingLoanIssued memberLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getUnclearedLoanIssuedToMember(memberId);
-        if (null != memberLoan) {
-            // Flag that this is an edit operation
-            isEditOperation = true;
-            thePrincipalLoanAmount = memberLoan.getPrincipalAmount();
+        final MeetingLoanIssued memberLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getMemberLoan(getIntent().getIntExtra("_loanId", 0)); //.getUnclearedLoanIssuedToMember(memberId);
+        if(getIntent().getIntExtra("_action", 0) == 1) {
+            if (null != memberLoan) {
+                // Flag that this is an edit operation
+                isEditOperation = true;
+                thePrincipalLoanAmount = memberLoan.getPrincipalAmount();
+            }
         }
 
         TextView lblInterestDesc = (TextView) findViewById(R.id.lblMLIssuedHInterestDesc);
@@ -122,7 +124,10 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             //lblInterestDesc.setText(String.format("at %.0f%% every 30 days", cycle.getInterestRate()));
             lblInterestDesc.setText(String.format("at %.0f%% every 30 days", targetMeeting.getVslaCycle().getInterestRate()));
         }
-        populateLoanIssueHistory();
+
+        if(getIntent().getIntExtra("_action", 0) == 1) {
+            populateLoanIssueHistory();
+        }
 
         TextView txtLILoanNo = (TextView) findViewById(R.id.txtMLIssuedHLoanNo);
         txtLILoanNo.setText("");
@@ -287,18 +292,20 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         // Display Members current loan if any
        TextView txtComment = (TextView) findViewById(R.id.txtMLIssuedHComment);
 
-        if (null != memberLoan) {
-            lblCurrency.setVisibility(View.GONE);
-            currentLoanId = memberLoan.getLoanId();
-            txtLILoanNo.setText(String.format("%d", memberLoan.getLoanNo()));
-            txtLoanAmount.setText(String.format("%.0f", memberLoan.getPrincipalAmount()));
-            txtComment.setText(String.format("%s", memberLoan.getComment()));
-            txtInterestAmount.setText(String.format("%.0f", memberLoan.getInterestAmount()));
-            txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
+        if(getIntent().getIntExtra("_action", 0) == 1) {
+            if (null != memberLoan) {
+                lblCurrency.setVisibility(View.GONE);
+                currentLoanId = memberLoan.getLoanId();
+                txtLILoanNo.setText(String.format("%d", memberLoan.getLoanNo()));
+                txtLoanAmount.setText(String.format("%.0f", memberLoan.getPrincipalAmount()));
+                txtComment.setText(String.format("%s", memberLoan.getComment()));
+                txtInterestAmount.setText(String.format("%.0f", memberLoan.getInterestAmount()));
+                txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
 
-            // May consider just recomputing the total amount afresh
-            //txtTotalAmount.setText(String.format("%.0f UGX",memberLoan.getLoanBalance()));
-            txtTotalLoanAmount.setText(String.format("%.0f UGX", memberLoan.getLoanBalance()));
+                // May consider just recomputing the total amount afresh
+                //txtTotalAmount.setText(String.format("%.0f UGX",memberLoan.getLoanBalance()));
+                txtTotalLoanAmount.setText(String.format("%.0f UGX", memberLoan.getLoanBalance()));
+            }
         }
     }
 
@@ -364,12 +371,22 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
     //Closes this fragment and goes back to the loans issued fragment
     private void goBackToLoansIssuedFragment() {
+        /*
         Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
         i.putExtra("_tabToSelect", "loansIssued");
         i.putExtra("_meetingDate", meetingDate);
         i.putExtra("_meetingId", meetingId);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //startActivity(i);
-        finish();
+        finish();*/
+        Intent i = new Intent(this, MeetingMemberLoansIssueActivity.class);
+        i.putExtra("_memberId", this.memberId);
+        i.putExtra("_meetingId", this.meetingId);
+        i.putExtra("_action", "loanissue");
+        i.putExtra("_meetingDate", meetingDate);
+        i.putExtra("_totalCashInBox", totalCashInBox);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
     private void populateLoanIssueHistory() {
@@ -506,7 +523,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             }
 
             MeetingRepo meetingRepo = new MeetingRepo(this, meetingId);
-            int cycleID = meetingRepo.getCycleID();
+            int cycleID = meetingRepo.getMeeting().getVslaCycle().getCycleId();
             boolean hasLoanNo = MeetingLoanIssuedRepo.hasLoanNumber(this, cycleID, theLoanNo);
             if(hasLoanNo && theAmount > 0.00){
                 Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The loan number " + String.valueOf(theLoanNo) + " already exists.", Utils.MSGBOX_ICON_EXCLAMATION).show();

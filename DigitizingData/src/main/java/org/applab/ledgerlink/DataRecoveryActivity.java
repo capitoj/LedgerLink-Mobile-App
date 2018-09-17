@@ -32,8 +32,6 @@ public class DataRecoveryActivity extends SherlockActivity {
         setContentView(R.layout.activity_data_recovery);
         getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-
         this.clickIndex = 0;
         this.dataRecovery = new DataRecovery();
     }

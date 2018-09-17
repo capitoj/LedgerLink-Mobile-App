@@ -25,6 +25,8 @@ public class MeetingSchema {
     public static final String COL_MT_CASH_SAVED_BANK = "CashSavedBank";
     public static final String COL_MT_IS_GETTING_STARTED_WIZARD = "IsGettingStartedWizard";
     public static final String COL_MT_IS_MARKED_FOR_DELETION = "IsMarkedForDeletion";
+    public static final String COL_MT_LOAN_FROM_BANK = "LoanFromBank";
+    public static final String COL_MT_BANK_LOAN_REPAYMENT = "BankLoanRepayment";
 
     public static String getCreateTableScript() {
         StringBuffer sb = null;
@@ -50,7 +52,9 @@ public class MeetingSchema {
         sb.append(COL_MT_CASH_SAVED_BOX + " NUMERIC ,");
         sb.append(COL_MT_CASH_SAVED_BANK + " NUMERIC ,");
         sb.append(COL_MT_IS_GETTING_STARTED_WIZARD + " INTEGER ,");
-        sb.append(COL_MT_IS_MARKED_FOR_DELETION + " INTEGER");
+        sb.append(COL_MT_IS_MARKED_FOR_DELETION + " INTEGER ,");
+        sb.append(COL_MT_LOAN_FROM_BANK + " NUMERIC ,");
+        sb.append(COL_MT_BANK_LOAN_REPAYMENT + " NUMERIC");
         sb.append(")");
 
         return sb.toString();
@@ -71,5 +75,13 @@ public class MeetingSchema {
 
     public static String[] getColumnListArray() {
         return getColumnList().split(",");
+    }
+
+    public static String addColumnLoanFromBank(){
+        return "Alter table Meetings add column LoanFromBank NUMERIC";
+    }
+
+    public static String addColumnBankLoanRepayment(){
+        return "Alter table Meetings add column BankLoanRepayment NUMERIC";
     }
 }

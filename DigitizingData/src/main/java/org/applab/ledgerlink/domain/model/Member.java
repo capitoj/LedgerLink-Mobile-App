@@ -24,6 +24,7 @@ public class Member {
     private int creditGrade; //1.Good 2.Doubtful 3.Bad
     private double currentShareAmount;
     private double outstandingLoan;
+    private Date dateLeft;
 
     //Values for Getting started wizard
     private double savingsOnSetup;
@@ -262,13 +263,19 @@ public class Member {
 
     public Date getDateOfFirstRepayment()
     {
-
         return dateOfFirstRepayment;
     }
 
     public void setDateOfFirstRepayment(Date dateOfFirstRepayment)
     {
-
         this.dateOfFirstRepayment = dateOfFirstRepayment;
+    }
+
+    public void setDateLeft(Date dateLeft){
+        this.dateLeft = dateLeft;
+    }
+
+    public Date getDateLeft(){
+        return this.dateLeft;
     }
 }

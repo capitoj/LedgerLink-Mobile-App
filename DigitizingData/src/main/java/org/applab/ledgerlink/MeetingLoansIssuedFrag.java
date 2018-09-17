@@ -37,7 +37,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     private int meetingId;
     private MeetingActivity parentActivity;
     private View fragmentView;
-    private MeetingRepo meetingRepo = null;
+    private MeetingRepo meetingRepo;
     private MeetingSavingRepo savingRepo = null;
     private MeetingLoanRepaymentRepo repaymentRepo = null;
     private MeetingLoanIssuedRepo loanIssuedRepo = null;
@@ -48,7 +48,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parentActivity = (MeetingActivity) getSherlockActivity();
-        meetingRepo = parentActivity.ledgerLinkApplication.getMeetingRepo();
+        //meetingRepo = parentActivity.ledgerLinkApplication.getMeetingRepo();
         savingRepo = parentActivity.ledgerLinkApplication.getMeetingSavingRepo();
         loanIssuedRepo = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo();
         repaymentRepo = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo();
@@ -113,10 +113,11 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
          meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+        meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext(), meetingId);
 
         //Get the Cycle that contains this meeting
         if (null == currentMeeting) {
-            currentMeeting = meetingRepo.getMeetingById(meetingId);
+            currentMeeting = meetingRepo.getMeeting();
         }
 
         TextView lblTotalCash = (TextView) getSherlockActivity().findViewById(R.id.lblMLIssuedFTotalCash);
@@ -177,6 +178,17 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
                 }
                 if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = members.get(position);
+
+                    Intent viewHistory = new Intent(view.getContext(), MeetingMemberLoansIssueActivity.class);
+                    viewHistory.putExtra("_memberId", selectedMember.getMemberId());
+                    viewHistory.putExtra("_names", selectedMember.toString());
+                    viewHistory.putExtra("_meetingDate", meetingDate);
+                    viewHistory.putExtra("_meetingId", meetingId);
+                    viewHistory.putExtra("_totalCashInBox", totalCashInBox);
+                    viewHistory.putExtra("_action", "loanissue");
+                    startActivity(viewHistory);
+
+                    /*
                     Intent viewHistory = new Intent(view.getContext(), MemberLoansIssuedHistoryActivity.class);
 
                     // Pass on data
@@ -187,6 +199,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
                     viewHistory.putExtra("_totalCashInBox", totalCashInBox);
 
                     startActivity(viewHistory);
+                    */
                 }
 
             }
@@ -206,22 +219,28 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         double totalLoansIssued = 0.0;
         double totalFines = 0.0;
 
-        double loanTopUps = 0.0;
+        //double loanTopUps = 0.0;
         double actualStartingCash = 0.0;
+        double bankLoanRepayment = 0.0;
+        double cashFromBank = 0.0;
 
         try {
-            MeetingStartingCash startingCashDetails = meetingRepo.getMeetingStartingCash(meetingId);
+            MeetingStartingCash startingCashDetails = meetingRepo.getStartingCash();
 
             totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
             totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
             totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
             totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId);
 
-            loanTopUps = startingCashDetails.getLoanTopUps();
+            //loanTopUps = startingCashDetails.getLoanTopUps();
             actualStartingCash = startingCashDetails.getActualStartingCash();
             double cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());
+            bankLoanRepayment = currentMeeting.getBankLoanRepayment();
+            cashFromBank = currentMeeting.getOpeningBalanceBank();
 
-            totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines + loanTopUps - cashToBank;
+            totalCashInBox = (actualStartingCash + totalSavings + totalLoansRepaid + bankLoanRepayment + totalFines + cashFromBank) - (totalLoansIssued + cashToBank + bankLoanRepayment);
+
+            //totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines + loanTopUps - cashToBank;
             if(meetingId == meetingRepo.getDummyGettingStartedWizardMeeting().getMeetingId()){
                 totalCashInBox = startingCashDetails.getExpectedStartingCash();
 

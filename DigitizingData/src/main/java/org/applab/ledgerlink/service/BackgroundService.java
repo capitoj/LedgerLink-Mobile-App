@@ -14,6 +14,8 @@ import org.applab.ledgerlink.LoginActivity;
 import org.applab.ledgerlink.MainActivity;
 import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.repo.TrainingModuleRepo;
+import org.applab.ledgerlink.repo.TrainingModuleResponseRepo;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 
 /**
@@ -65,7 +67,7 @@ public class BackgroundService extends Service {
         if(noOfMeetings > 0) {
             PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, new Intent(this.context, LoginActivity.class), 0);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this.context);
-            builder.setContentTitle("Unsent Meetings");
+            builder.setContentTitle("Ledger Link");
             builder.setContentText(String.format("You have %s unsent %s", noOfMeetings, noOfMeetings > 1 ? "meetings" : "meeting"));
             builder.setSmallIcon(R.drawable.ic_ledgerlink_icona);
             builder.setContentIntent(pendingIntent);

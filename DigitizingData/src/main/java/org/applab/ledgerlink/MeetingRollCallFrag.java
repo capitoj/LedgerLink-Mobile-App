@@ -1,6 +1,7 @@
 package org.applab.ledgerlink;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,8 +18,10 @@ import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.MembersRollCallArrayAdapter;
+import org.applab.ledgerlink.repo.MeetingAttendanceRepo;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Moses on 6/25/13.
@@ -30,11 +33,11 @@ public class MeetingRollCallFrag extends SherlockFragment {
     Meeting selectedMeeting;
     private MeetingActivity parentActivity;
     ScrollView fragmentView;
+    protected Context context;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parentActivity = (MeetingActivity) getSherlockActivity();
-
     }
 
     @Override
@@ -45,6 +48,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
         }
         fragmentView = (ScrollView) inflater.inflate(R.layout.frag_meeting_rollcall, container, false);
         reloadFragmentInfo();
+        context = getSherlockActivity().getApplicationContext();
 
         return fragmentView;
     }
@@ -106,7 +110,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
     private void populateMembersList() {
 
         // Load the Main Menu
-        members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
+        members = parentActivity.ledgerLinkApplication.getMemberRepo().getActiveMembers(selectedMeeting.getMeetingDate());
 
         // Now get the data via the adapter
         final MembersRollCallArrayAdapter adapter = new MembersRollCallArrayAdapter(parentActivity.getBaseContext(), members);
