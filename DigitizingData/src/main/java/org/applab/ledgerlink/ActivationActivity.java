@@ -49,6 +49,7 @@ public class ActivationActivity extends SherlockActivity {
     private String securityPasskey = null;
     private ProgressDialog progressDialog = null;
     private Spinner dropdownFinancialInstitution = null;
+    private FinancialInstitution targetFinancialInstitution = null;
 
 
     @Override
@@ -97,6 +98,15 @@ public class ActivationActivity extends SherlockActivity {
                 saveActivatedVslaInfo();
             }
         });
+    }
+
+    protected void getSelectedFinancialInstitution(){
+        List<FinancialInstitution> listFinancialInstutions = FinancialInstitutionRepo.getFinancialInstitutions(this);
+        if(this.dropdownFinancialInstitution.getSelectedItemPosition() > 0){
+            int selectedIndex = this.dropdownFinancialInstitution.getSelectedItemPosition() - 1;
+            this.targetFinancialInstitution = listFinancialInstutions.get(selectedIndex);
+        }
+
     }
 
     @Override
@@ -178,6 +188,8 @@ public class ActivationActivity extends SherlockActivity {
     }
 
     private boolean saveOfflineVslaInfo() {
+        this.getSelectedFinancialInstitution();
+
         try {
             TextView txtVslaCode = (TextView) findViewById(R.id.txtVAVslaCode);
             TextView txtPassKey = (TextView) findViewById(R.id.txtVAPassKey);
@@ -212,7 +224,7 @@ public class ActivationActivity extends SherlockActivity {
                 return false;
             }
 
-            return ledgerLinkApplication.getVslaInfoRepo().saveOfflineVslaInfo(vslaCode, passKey);
+            return ledgerLinkApplication.getVslaInfoRepo().saveOfflineVslaInfo(vslaCode, passKey, this.targetFinancialInstitution.getFiID());
         } catch (Exception ex) {
             return false;
         }
@@ -220,6 +232,9 @@ public class ActivationActivity extends SherlockActivity {
 
     private void saveActivatedVslaInfo() {
         try {
+
+            this.getSelectedFinancialInstitution();
+
             TextView txtVslaCode = (TextView) findViewById(R.id.txtVAVslaCode);
             TextView txtPassKey = (TextView) findViewById(R.id.txtVAPassKey);
             TextView txtConfirmPassKey = (TextView) findViewById(R.id.txtVAConfirmPassKey);
@@ -447,7 +462,7 @@ public class ActivationActivity extends SherlockActivity {
                     passKey = result.getString("PassKey");
                 }
                 if (activationSuccessful && null != vslaName) {
-                    retrievedVslaNameSavedSuccessfully = ledgerLinkApplication.getVslaInfoRepo().saveVslaInfo(targetVslaCode, vslaName, passKey);
+                    retrievedVslaNameSavedSuccessfully = ledgerLinkApplication.getVslaInfoRepo().saveVslaInfo(targetVslaCode, vslaName, passKey, targetFinancialInstitution.getFiID());
                     if (retrievedVslaNameSavedSuccessfully) {
                         Toast.makeText(ActivationActivity.this, "Congratulations! Registration Completed Successfully.", Toast.LENGTH_LONG).show();
                         dismissProgressDialog();
@@ -469,7 +484,7 @@ public class ActivationActivity extends SherlockActivity {
                 //In case activation failed
                 if (!retrievedVslaNameSavedSuccessfully) {
                     //Save the record offline
-                    ledgerLinkApplication.getVslaInfoRepo().saveOfflineVslaInfo(targetVslaCode, securityPasskey);
+                    ledgerLinkApplication.getVslaInfoRepo().saveOfflineVslaInfo(targetVslaCode, securityPasskey, targetFinancialInstitution.getFiID());
 
                     //Then call the login activity
                     Intent i = new Intent(getBaseContext(), LoginActivity.class);

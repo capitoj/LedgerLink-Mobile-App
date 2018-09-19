@@ -17,6 +17,7 @@ public class FinancialInstitutionSchema {
         sb.append("CREATE TABLE " + TBL_FINANCIAL_INSTITUTION + " (");
         sb.append(COL_FI_FIID+ " INTEGER PRIMARY KEY AUTOINCREMENT, ");
         sb.append(COL_FI_NAME+ " TEXT, ");
+        sb.append(COL_FI_CODE+ " TEXT, ");
         sb.append(COL_FI_IP_ADDRESS+ " TEXT");
         sb.append(")");
         return sb.toString();
