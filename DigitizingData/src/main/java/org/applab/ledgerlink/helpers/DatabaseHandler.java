@@ -10,6 +10,7 @@ import android.util.Log;
 
 import org.applab.ledgerlink.domain.model.TrainingModule;
 import org.applab.ledgerlink.domain.schema.AttendanceSchema;
+import org.applab.ledgerlink.domain.schema.FinancialInstitutionSchema;
 import org.applab.ledgerlink.domain.schema.FineSchema;
 import org.applab.ledgerlink.domain.schema.FineTypeSchema;
 import org.applab.ledgerlink.domain.schema.LoanIssueSchema;
@@ -31,7 +32,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DATABASE_NAME = "ledgerlinkdb";
-    private static final int DATABASE_VERSION = 55;
+    private static final int DATABASE_VERSION = 57;
     private static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
     private static final String DATA_FOLDER = "LedgerLink";
 
@@ -71,6 +72,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String sqlQuery = null;
+
+        //Create Table: FinancialInstitution
+        sqlQuery = FinancialInstitutionSchema.getCreateTableScript();
+        Log.e("FinancialInstitutionTable", sqlQuery);
+        db.execSQL(sqlQuery);
 
         // Create Table: VslaInfo
         sqlQuery = VslaInfoSchema.getCreateTableScript();
@@ -120,6 +126,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //Create Table: TrainingModuleResponse
         sqlQuery = TrainingModuleResponseSchema.getCreateTableScript();
         db.execSQL(sqlQuery);
+        preLoadFinancialInstitutions(db);
 
         sqlQuery = MessageChannelsSchema.getCreateTableScript();
         db.execSQL(sqlQuery);
@@ -144,6 +151,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             Log.e("DatabaseHandler", "Table TrainingModuleResponse Added");
         }
 
+        //Create table: FinancialInstitution
+        if(!this.hasDbTable(db, FinancialInstitutionSchema.getTableName())){
+            sqlQuery = FinancialInstitutionSchema.getCreateTableScript();
+            db.execSQL(sqlQuery);
+            Log.e("DatabaseHandler", "Table FinancialInstitution Added");
+            preLoadFinancialInstitutions(db);
+        }
+
         //Add columns to the meeting table
         if(!this.hasTableColumn(db, MeetingSchema.getTableName(), "BankLoanRepayment"))
             db.execSQL(MeetingSchema.addColumnBankLoanRepayment());
@@ -159,12 +174,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     protected boolean hasDbTable(SQLiteDatabase db, String tableName){
         String sqlQuery = "select distinct tbl_name from sqlite_master where tbl_name = ?";
         Cursor cursor = db.rawQuery(sqlQuery, new String[]{tableName});
-        cursor.moveToNext();
-        String nTableName = cursor.getString(0);
-        cursor.close();
-        if(nTableName.length() > 0){
-            if(nTableName.equals(tableName)){
-                return true;
+        if(cursor.getCount() > 0) {
+            cursor.moveToNext();
+            String nTableName = cursor.getString(0);
+            cursor.close();
+            if (nTableName.length() > 0) {
+                if (nTableName.equals(tableName)) {
+                    return true;
+                }
             }
         }
         return  false;
@@ -192,6 +209,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("Insert into TrainingModule (module) values (?)", new String[]{"General Support"});
         db.execSQL("Insert into TrainingModule (module) values (?)", new String[]{"Refresher Training"});
         Log.e("DatabaseHandler", "Preloaded TrainingModule with data");
+    }
+
+    protected void preLoadFinancialInstitutions(SQLiteDatabase db){
+        db.execSQL("delete from " + FinancialInstitutionSchema.getTableName());
+        db.execSQL("delete from sqlite_sequence where name = '" + FinancialInstitutionSchema.getTableName() + "'");
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?)", new String[]{"Post Bank Uganda", "POST_BANK_UGANDA", "154.0.139.218:9008"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?)", new String[]{"Centenary Rural Development Bank", "CENTENARY_RURAL_DEVELOPMENT_BANK", "154.0.139.218:9008"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?)", new String[]{"Finca Uganda Limited", "FINCA_UGANDA_LIMITED", "154.0.139.218:9008"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?)", new String[]{"Opportunity Bank", "OPPORTUNITY_BANK", "154.0.139.218:9008"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?)", new String[]{"Rural Finance Initiative", "RURAL_FINANCE_INITIATIVE", "154.0.139.218:9008"});
+        Log.e("DatabaseHandler", "Preloaded Financial Institutions");
     }
 
     public static DatabaseHandler getInstance(Context context) {

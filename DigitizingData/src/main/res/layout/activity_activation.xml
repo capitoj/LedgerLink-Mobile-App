@@ -43,10 +43,32 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularTextLogin"
-                android:id="@+id/lblVAVslaCode"
+                android:id="@+id/lblVAFinancialInstitution"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/lblVAHeader"
+                android:text="Financial Institutions"
+                android:layout_alignLeft="@+id/txtVAVslaCode"
+                android:layout_alignRight="@+id/txtVAVslaCode"
+                android:paddingTop="2dip"
+                android:layout_marginBottom="3dip"/>
+
+            <Spinner
+                android:id="@+id/listVAFinanicalInstitution"
+                style="@style/DropDownLogin"
+                android:layout_width="265dip"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblVAFinancialInstitution"
+                android:layout_alignLeft="@+id/txtVAVslaCode"
+                android:layout_alignRight="@+id/txtVAVslaCode"
+                android:spinnerMode="dropdown" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                style="@style/RegularTextLogin"
+                android:id="@+id/lblVAVslaCode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/listVAFinanicalInstitution"
                 android:text="VSLA Number"
                 android:layout_alignLeft="@+id/txtVAVslaCode"
                 android:layout_alignRight="@+id/txtVAVslaCode"

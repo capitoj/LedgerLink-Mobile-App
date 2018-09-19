@@ -68,6 +68,7 @@ public class VslaInfoRepo {
 
             vslaInfo.setGettingStartedWizardComplete((cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE)) == 1));
             vslaInfo.setGettingStartedWizardStage(cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_GETTING_STARTED_WIZARD_STAGE)));
+            vslaInfo.setFiID(cursor.getInt(cursor.getColumnIndex(VslaInfoSchema.COL_VI_FINANCIAL_INSTITUTION_ID)));
             // return data
             return vslaInfo;
         }
@@ -117,7 +118,7 @@ public class VslaInfoRepo {
         }
     }
 
-    public boolean saveVslaInfo(String vslaCode, String vslaName, String passKey) {
+    public boolean saveVslaInfo(String vslaCode, String vslaName, String passKey, Integer fiID) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int loanId = 0;
@@ -139,6 +140,7 @@ public class VslaInfoRepo {
             values.put(VslaInfoSchema.COL_VI_VSLA_NAME, vslaName);
             values.put(VslaInfoSchema.COL_VI_PASS_KEY, passKey);
             values.put(VslaInfoSchema.COL_VI_IS_ACTIVATED, 1);
+            values.put(VslaInfoSchema.COL_VI_FINANCIAL_INSTITUTION_ID, fiID);
 
             // Inserting or UpdatingRow
             long retVal = -1;
@@ -174,7 +176,7 @@ public class VslaInfoRepo {
         }
     }
 
-    public boolean saveOfflineVslaInfo(String vslaCode, String passKey) {
+    public boolean saveOfflineVslaInfo(String vslaCode, String passKey, Integer fiID) {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int loanId = 0;
@@ -192,6 +194,7 @@ public class VslaInfoRepo {
             values.put(VslaInfoSchema.COL_VI_PASS_KEY, passKey);
             values.put(VslaInfoSchema.COL_VI_IS_ACTIVATED, 0);
             values.put(VslaInfoSchema.COL_VI_IS_OFFLINE, 1);
+            values.put(VslaInfoSchema.COL_VI_FINANCIAL_INSTITUTION_ID, fiID);
 
             // Inserting or UpdatingRow
             long retVal = -1;

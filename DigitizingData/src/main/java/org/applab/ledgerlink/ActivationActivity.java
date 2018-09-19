@@ -12,6 +12,8 @@ import android.view.ViewConfiguration;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockActivity;
+
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -21,9 +23,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.ledgerlink.domain.model.FinancialInstitution;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
+import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
@@ -32,6 +37,8 @@ import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
+import java.util.List;
 
 public class ActivationActivity extends SherlockActivity {
     LedgerLinkApplication ledgerLinkApplication;
@@ -41,6 +48,7 @@ public class ActivationActivity extends SherlockActivity {
     private String targetVslaCode = null; //fake-fix
     private String securityPasskey = null;
     private ProgressDialog progressDialog = null;
+    private Spinner dropdownFinancialInstitution = null;
 
 
     @Override
@@ -55,6 +63,8 @@ public class ActivationActivity extends SherlockActivity {
 
 
         ActionBar actionBar = getSupportActionBar();
+
+        this.buildFinancialInstitutionSpinner();
 
         ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
         imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
@@ -142,6 +152,29 @@ public class ActivationActivity extends SherlockActivity {
         }else{
             DialogMessageBox.show(this, "Connection Alert", "No internet connection could be established. Data recovery requires an internet connection");
         }
+    }
+
+    protected void buildFinancialInstitutionSpinner(){
+        this.dropdownFinancialInstitution = (Spinner)findViewById(R.id.listVAFinanicalInstitution);
+        List<FinancialInstitution> listFinancialInstutions = FinancialInstitutionRepo.getFinancialInstitutions(this);
+        String[] financialInstitutions = new String[listFinancialInstutions.size()];
+        for(int i = 0; i < listFinancialInstutions.size(); i++){
+            financialInstitutions[i] = listFinancialInstutions.get(i).getName();
+        }
+        Arrays.sort(financialInstitutions);
+        financialInstitutions = ArrayUtils.addAll(new String[]{"Select Financial Institution"}, financialInstitutions);
+
+        ArrayAdapter<CharSequence> financialInstitutionAdapter = new DropDownAdapter(this, financialInstitutions);
+        financialInstitutionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.dropdownFinancialInstitution.setAdapter(financialInstitutionAdapter);
+        this.dropdownFinancialInstitution.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                view.setFocusableInTouchMode(false);
+            }
+        });
+        this.dropdownFinancialInstitution.setFocusable(true);
+        this.dropdownFinancialInstitution.setClickable(true);
     }
 
     private boolean saveOfflineVslaInfo() {
@@ -299,6 +332,7 @@ public class ActivationActivity extends SherlockActivity {
         //Use a Weak Reference
         private final WeakReference<ActivationActivity> activationActivityWeakReference;
         private String message = "Please wait...";
+        private Integer selectedIndex;
 
         //Initialize the Weak reference in the constructor
         public PostTask(ActivationActivity activationActivity) {

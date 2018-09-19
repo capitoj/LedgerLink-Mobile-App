@@ -18,6 +18,7 @@ public class VslaInfoSchema {
     public static final String COL_VI_IS_OFFLINE = "IsOffline";
     public static final String COL_VI_ALLOW_DATA_MIGRATION = "AllowDataMigration";
     public static final String COL_VI_IS_DATA_MIGRATED = "IsDataMigrated";
+    public static final String COL_VI_FINANCIAL_INSTITUTION_ID = "FIID";
 
     public static final String COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE = "IsGettingStartedWizardComplete"; //field to show getting started wizard status
     public static final String COL_VI_GETTING_STARTED_WIZARD_STAGE = "GettingStartedWizard"; //field to show getting started wizard status
@@ -41,7 +42,8 @@ public class VslaInfoSchema {
         sb.append(COL_VI_ALLOW_DATA_MIGRATION + " INTEGER ,");
         sb.append(COL_VI_IS_DATA_MIGRATED + " INTEGER ,");
         sb.append(COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE+ " INTEGER ,");
-        sb.append(COL_VI_GETTING_STARTED_WIZARD_STAGE+ " INTEGER");
+        sb.append(COL_VI_GETTING_STARTED_WIZARD_STAGE+ " INTEGER ,");
+        sb.append(COL_VI_FINANCIAL_INSTITUTION_ID+ " INTEGER");
         sb.append(")");
 
         return sb.toString();

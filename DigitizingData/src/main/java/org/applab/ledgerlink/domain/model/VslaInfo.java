@@ -18,6 +18,7 @@ public class VslaInfo {
     private boolean isOffline;
     private boolean allowDataMigration;
     private boolean isDataMigrated;
+    private Integer fiID;
 
     /*
     Extra variables for gettings started wizard
@@ -138,5 +139,13 @@ public class VslaInfo {
 
     public void setGettingStartedWizardStage(int gettingStartedWizardStage) {
         this.gettingStartedWizardStage = gettingStartedWizardStage;
+    }
+
+    public void setFiID(Integer fiID){
+        this.fiID = fiID;
+    }
+
+    public Integer getFiID(){
+        return this.fiID;
     }
 }
