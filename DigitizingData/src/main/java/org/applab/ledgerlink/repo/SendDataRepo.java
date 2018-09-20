@@ -9,6 +9,7 @@ import org.applab.ledgerlink.datatransformation.FinesDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.LoanDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.RepaymentDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.SavingsDataTransferRecord;
+import org.applab.ledgerlink.domain.model.FinancialInstitution;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.domain.model.VslaCycle;
@@ -32,6 +33,7 @@ public class SendDataRepo {
     protected Context context;
     protected VslaCycle vslaCycle;
     protected VslaInfo vslaInfo;
+    protected FinancialInstitution financialInstitution;
     protected ArrayList<Member> members;
     protected Meeting meeting;
     protected ArrayList<AttendanceDataTransferRecord> attendances;
@@ -48,6 +50,7 @@ public class SendDataRepo {
         this.meetingId = meetingId;
 
         this.loadVslaInfo();
+        this.loadFinancialInstitution();
         this.loadVslaCycle();
         this.loadMembers();
         this.loadMeeting();
@@ -61,6 +64,11 @@ public class SendDataRepo {
     protected void loadVslaInfo(){
         VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(context);
         this.vslaInfo = vslaInfoRepo.getVslaInfo();
+    }
+
+    protected void loadFinancialInstitution(){
+        FinancialInstitutionRepo financialInstitutionRepo = new FinancialInstitutionRepo(this.context, this.vslaInfo.getFiID());
+        this.financialInstitution = financialInstitutionRepo.getFinancialInstitution();
     }
 
     protected void loadVslaCycle(){

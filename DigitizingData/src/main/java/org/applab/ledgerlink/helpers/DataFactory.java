@@ -33,6 +33,7 @@ public class DataFactory extends SendDataRepo {
         try{
             js.key("HeaderInfo")
                     .object()
+                    .key("FinancialInstitution").value(this.financialInstitution.getCode())
                     .key("VslaCode").value(this.vslaInfo.getVslaCode())
                     .key("PhoneImei").value(network.getPhoneImei())
                     .key("NetworkOperator").value(network.getOperator())
