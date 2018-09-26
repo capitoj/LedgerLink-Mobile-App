@@ -51,7 +51,6 @@
     <string name="data_recovery_notice">To recover your data, kindly fill in the following information</string>
 
 
-
     <!-- Fine Type strings -->
     <string name="finetype_select_fine_type">select fine type</string>
     <string name="finetype_other">Other</string>
@@ -131,7 +130,7 @@
     <string name="title_activity_meeting_member_loans_issue_frag">MeetingMemberLoansIssueFrag
     </string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_meeting_member_loans_issue">MeetingMemberLoansIssueActivity
     </string>

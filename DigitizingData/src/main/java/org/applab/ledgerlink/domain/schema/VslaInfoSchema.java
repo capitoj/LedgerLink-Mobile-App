@@ -73,7 +73,8 @@ public class VslaInfoSchema {
         sb.append(COL_VI_ALLOW_DATA_MIGRATION + ",");
         sb.append(COL_VI_IS_DATA_MIGRATED + ",");
         sb.append(COL_VI_IS_GETTING_STARTED_WIZARD_COMPLETE + ",");
-        sb.append(COL_VI_GETTING_STARTED_WIZARD_STAGE );
+        sb.append(COL_VI_GETTING_STARTED_WIZARD_STAGE + "," );
+        sb.append(COL_VI_FINANCIAL_INSTITUTION_ID);
 
         return sb.toString();
     }

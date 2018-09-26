@@ -24,27 +24,30 @@ import org.applab.ledgerlink.domain.schema.VslaCycleSchema;
 import org.applab.ledgerlink.domain.schema.VslaInfoSchema;
 import org.applab.ledgerlink.SettingsActivity;
 import org.applab.ledgerlink.domain.schema.MemberSchema;
+import org.applab.ledgerlink.domain.schema.WelfareSchema;
 import org.applab.ledgerlink.repo.TrainingModuleRepo;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DATABASE_NAME = "ledgerlinkdb";
-    private static final int DATABASE_VERSION = 57;
+    private static final int DATABASE_VERSION = 61;
     private static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
     private static final String DATA_FOLDER = "LedgerLink";
 
     public static Context databaseContext = null;
 
     private DatabaseHandler(Context context) {
-        //super(context, createDatabaseFolder() + ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING)) ? TRAINING_DATABASE_NAME : DATABASE_NAME), null, DATABASE_VERSION);
         super(context, createDatabaseFolder(context), null, DATABASE_VERSION);
         databaseContext = context;
     }
 
     protected static boolean isSDCardMounted(){
+
         return android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
@@ -52,21 +55,34 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //creates the database folders and returns path as string
         String folderName = DATABASE_NAME;
         if(DatabaseHandler.isSDCardMounted()){
-            File databaseStorageDir = new File(EXTERNAL_STORAGE_LOCATION + File.separator + DATA_FOLDER);
-            if(! databaseStorageDir.exists()) {
-                //create it
-                boolean mkdir = databaseStorageDir.mkdir();
-                if(mkdir) {
-                    Log.d("DatabaseHandler.createDatabaseFolder", "Data folder "+databaseStorageDir.getAbsolutePath() +" has been created");
-                }
-                else {
-                    Log.d("DatabaseHandler.createDatabaseFolder", "Data folder "+databaseStorageDir.getAbsolutePath() +" failed to be created");
+
+            String removableStoragePath = "";
+            File[] fileList = new File("/storage/").listFiles();
+            int cursor = 0;
+            for(File file: fileList){
+                String absolutePath = file.getAbsolutePath();
+                if(absolutePath.contains("sdcard")){
+                    cursor++;
+                    if(cursor == 1){
+                        removableStoragePath = absolutePath;
+                    }
                 }
             }
-            folderName = databaseStorageDir.getAbsolutePath() + File.separator + ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING)) ? TRAINING_DATABASE_NAME : DATABASE_NAME);
+            if(!removableStoragePath.equals("")){
+                folderName = DatabaseHandler.__createFolderPath(context, removableStoragePath);
+            }else{
+                folderName = DatabaseHandler.__createFolderPath(context, EXTERNAL_STORAGE_LOCATION);
+            }
         }
         return folderName;
-        //return databaseStorageDir.getAbsolutePath() + File.separator;
+    }
+
+    protected static String __createFolderPath(Context context, String absolutePath){
+        File databaseStorageDir = new File(absolutePath + File.separator + DATA_FOLDER);
+        if(! databaseStorageDir.exists()) {
+            boolean isFolderCreated = databaseStorageDir.mkdir();
+        }
+        return databaseStorageDir.getAbsolutePath() + File.separator + ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING)) ? TRAINING_DATABASE_NAME : DATABASE_NAME);
     }
 
     public void onCreate(SQLiteDatabase db) {
@@ -75,8 +91,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         //Create Table: FinancialInstitution
         sqlQuery = FinancialInstitutionSchema.getCreateTableScript();
-        Log.e("FinancialInstitutionTable", sqlQuery);
         db.execSQL(sqlQuery);
+        preLoadFinancialInstitutions(db);
 
         // Create Table: VslaInfo
         sqlQuery = VslaInfoSchema.getCreateTableScript();
@@ -100,6 +116,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // Create Table: Savings
         sqlQuery = SavingSchema.getCreateTableScript();
+        db.execSQL(sqlQuery);
+
+        // Create table: Welfare
+        sqlQuery = WelfareSchema.getCreateTableScript();
         db.execSQL(sqlQuery);
 
         // Create Table: LoanIssues
@@ -126,7 +146,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         //Create Table: TrainingModuleResponse
         sqlQuery = TrainingModuleResponseSchema.getCreateTableScript();
         db.execSQL(sqlQuery);
-        preLoadFinancialInstitutions(db);
 
         sqlQuery = MessageChannelsSchema.getCreateTableScript();
         db.execSQL(sqlQuery);
@@ -157,6 +176,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.execSQL(sqlQuery);
             Log.e("DatabaseHandler", "Table FinancialInstitution Added");
             preLoadFinancialInstitutions(db);
+        }
+
+        //Create table: welfare
+        if(!this.hasDbTable(db, WelfareSchema.getTableName())){
+            sqlQuery = WelfareSchema.getCreateTableScript();
+            db.execSQL(sqlQuery);
+            Log.e("DatabaseHandler", "Table Welfare Added");
         }
 
         //Add columns to the meeting table
@@ -214,11 +240,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     protected void preLoadFinancialInstitutions(SQLiteDatabase db){
         db.execSQL("delete from " + FinancialInstitutionSchema.getTableName());
         db.execSQL("delete from sqlite_sequence where name = '" + FinancialInstitutionSchema.getTableName() + "'");
-        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?)", new String[]{"Post Bank Uganda", "POST_BANK_UGANDA", "154.0.139.218:9008"});
-        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?)", new String[]{"Centenary Rural Development Bank", "CENTENARY_RURAL_DEVELOPMENT_BANK", "154.0.139.218:9008"});
-        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?)", new String[]{"Finca Uganda Limited", "FINCA_UGANDA_LIMITED", "154.0.139.218:9008"});
-        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?)", new String[]{"Opportunity Bank", "OPPORTUNITY_BANK", "154.0.139.218:9008"});
-        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?)", new String[]{"Rural Finance Initiative", "RURAL_FINANCE_INITIATIVE", "154.0.139.218:9008"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Post Bank Uganda", "POST_BANK_UGANDA", "154.0.139.218:9008"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Centenary Rural Development Bank", "CENTENARY_RURAL_DEVELOPMENT_BANK", "154.0.139.218:9008"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Finca Uganda Limited", "FINCA_UGANDA_LIMITED", "154.0.139.218:9008"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Opportunity Bank", "OPPORTUNITY_BANK", "154.0.139.218:9008"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Rural Finance Initiative", "RURAL_FINANCE_INITIATIVE", "154.0.139.218:9008"});
         Log.e("DatabaseHandler", "Preloaded Financial Institutions");
     }
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/frmMSavF_top_control_bar">
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lvwMSavFMembers"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:choiceMode="singleChoice"
+        android:layout_below="@id/frmMSavF_top_control_bar"
+        android:divider="@null"
+        android:dividerHeight="0dp">
+
+    </ListView>
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/RegularText"
+        android:id="@+id/txtMSavFEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_members_list"
+        android:layout_below="@id/frmMSavF_top_control_bar" />
+
+</RelativeLayout>

@@ -498,7 +498,7 @@ public class LoginActivity extends SherlockActivity {
                     passKey = result.getString("PassKey");
                 }
                 if (activationSuccessful && null != vslaName) {
-                    retrievedVslaNameSavedSuccessfully = ledgerLinkApplication.getVslaInfoRepo().saveVslaInfo(targetVslaCode, vslaName, passKey);
+                    retrievedVslaNameSavedSuccessfully = ledgerLinkApplication.getVslaInfoRepo().saveVslaInfo(targetVslaCode, vslaName, passKey, vslaInfo.getFiID());
                     if (retrievedVslaNameSavedSuccessfully) {
                         Toast.makeText(LoginActivity.this, "Congratulations! Registration Completed Successfully.", Toast.LENGTH_LONG).show();
                     } else {
