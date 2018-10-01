@@ -2,12 +2,14 @@ package org.applab.ledgerlink;
 
 import android.app.Application;
 
+import org.applab.ledgerlink.helpers.MemberWelfareRecord;
 import org.applab.ledgerlink.repo.MeetingAttendanceRepo;
 import org.applab.ledgerlink.repo.MeetingFineRepo;
 import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
 import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.repo.MeetingSavingRepo;
+import org.applab.ledgerlink.repo.MeetingWelfareRepo;
 import org.applab.ledgerlink.repo.MemberRepo;
 import org.applab.ledgerlink.repo.VslaCycleRepo;
 import org.applab.ledgerlink.repo.VslaInfoRepo;
@@ -31,6 +33,7 @@ public class LedgerLinkApplication extends Application
     private MemberRepo memberRepo;
     private VslaCycleRepo vslaCycleRepo;
     private VslaInfoRepo vslaInfoRepo;
+    private MeetingWelfareRepo meetingWelfareRepo;
 
 
 
@@ -138,5 +141,12 @@ public class LedgerLinkApplication extends Application
 
     public void setVslaInfoRepo(VslaInfoRepo vslaInfoRepo) {
         this.vslaInfoRepo = vslaInfoRepo;
+    }
+
+    public MeetingWelfareRepo getMeetingWelfareRepo(){
+        if(this.meetingWelfareRepo == null){
+            this.meetingWelfareRepo = new MeetingWelfareRepo(getApplicationContext());
+        }
+        return this.meetingWelfareRepo;
     }
 }

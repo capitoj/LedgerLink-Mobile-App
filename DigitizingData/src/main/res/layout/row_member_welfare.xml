@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/RegularTextListItems"
+        android:id="@+id/txtRMWelfareFullName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/name_default"/>
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtRMSavTodaysWelfare"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRMWelfareFullName"
+        android:text="@string/today_saving_default"/>
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtRMWelfareTotals"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRMSavTodaysWelfare"
+        android:text="@string/total_savings_default"/>
+
+</RelativeLayout>

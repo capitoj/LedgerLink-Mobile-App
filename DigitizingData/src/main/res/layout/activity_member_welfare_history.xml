@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblMSHFullNames"
+            style="@style/RegularTextListItems"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Moses Oscar Muhahala" />
+
+        <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
+             android:id="@+id/lblMSHMeetingDate"
+             style="@style/RegularText"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginLeft="30dip"
+             android:text="01-JUL-2013" /> -->
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblMSHAmount"
+            style="@style/RegularText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dip"
+            android:text="Amount" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
+                android:id="@+id/txtMSHAmount"
+                style="@style/NormalEditText"
+                android:layout_width="150dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:imeOptions="actionDone"
+                android:inputType="number"
+                android:text=""
+                android:textAlignment="viewEnd"
+                tools:ignore="UnusedAttribute" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblMSHCurrency"
+                style="@style/InlineTextItem"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="UGX" />
+        </LinearLayout>
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblMSHSection1"
+            style="@style/SubHeading"
+            android:layout_width="fill_parent"
+            android:layout_height="25dip"
+            android:text="HISTORY" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblMSHTotalSavings"
+            style="@style/RegularTextBold"
+            android:textSize="17sp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Total Savings 15,000 UGX" />
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:choiceMode="singleChoice"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            />
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@android:id/empty"
+            style="@style/RegularText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No History" />
+
+    </LinearLayout>
+</ScrollView>

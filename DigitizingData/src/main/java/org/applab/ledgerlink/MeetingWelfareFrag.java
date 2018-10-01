@@ -131,7 +131,7 @@ public class MeetingWelfareFrag extends SherlockFragment {
                 }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = (Member) members.get(position);
-                    Intent i = new Intent(view.getContext(), MemberSavingHistoryActivity.class);
+                    Intent i = new Intent(view.getContext(), MemberWelfareHistoryActivity.class);
 
                     // Pass on data
                     i.putExtra("_meetingDate",meetingDate);
@@ -143,5 +143,11 @@ public class MeetingWelfareFrag extends SherlockFragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        this.populateMembersList();
     }
 }

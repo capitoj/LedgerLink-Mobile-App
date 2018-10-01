@@ -31,7 +31,7 @@ public class MembersWelfareArrayAdapter extends ArrayAdapter<Member> {
     private final Typeface typeface;
 
     public MembersWelfareArrayAdapter(Context context, ArrayList<Member> values){
-        super(context, R.layout.row_member_fines, values);
+        super(context, R.layout.row_member_welfare, values);
         this.context = context;
         this.values = values;
         this.typeface = Typeface.createFromAsset(context.getAssets(), "fonts/roboto-regular.ttf");
@@ -50,7 +50,7 @@ public class MembersWelfareArrayAdapter extends ArrayAdapter<Member> {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            rowView = inflater.inflate(R.layout.row_member_fines, parent, false);
+            rowView = inflater.inflate(R.layout.row_member_welfare, parent, false);
 
             if (null == this.meetingWelfareRepo) {
                 this.meetingWelfareRepo = new MeetingWelfareRepo(getContext());
@@ -60,12 +60,14 @@ public class MembersWelfareArrayAdapter extends ArrayAdapter<Member> {
             }
 
             //Get the Widgets
-            final TextView txtFullName = (TextView) rowView.findViewById(R.id.txtFineFullName);
-            final TextView txtTotalFines = (TextView)rowView.findViewById(R.id.txtFineTotal);
+            final TextView txtFullName = (TextView) rowView.findViewById(R.id.txtRMWelfareFullName);
+            final TextView txtTodaysWelfare = (TextView)rowView.findViewById(R.id.txtRMSavTodaysWelfare);
+            final TextView txtTotalWelfare = (TextView)rowView.findViewById(R.id.txtRMWelfareTotals);
 
             // Set typeface
             txtFullName.setTypeface(typeface);
-            txtTotalFines.setTypeface(typeface);
+            txtTodaysWelfare.setTypeface(typeface);
+            txtTotalWelfare.setTypeface(typeface);
 
             //Assign Values to the Widgets
             Member member = values.get(position);
@@ -74,11 +76,14 @@ public class MembersWelfareArrayAdapter extends ArrayAdapter<Member> {
             //Get the Total welfare
             targetMeeting = meetingRepo.getMeetingById(meetingId);
             double totalWelfare = 0.0;
+            double todaysWelfare = 0.0;
             if(null != targetMeeting && null != targetMeeting.getVslaCycle()) {
+                todaysWelfare = this.meetingWelfareRepo.getMemberWelfare(this.meetingId, member.getMemberId());
                 totalWelfare = this.meetingWelfareRepo.getMemberTotalWelfareInCycle(this.targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+                Log.e("MemberWelfareInCycle", String.valueOf(totalWelfare));
             }
-
-            txtTotalFines.setText(String.format("Total welfare: %,.0f UGX", totalWelfare));
+            txtTodaysWelfare.setText(String.format("Today's welfare: %,.0f UGX", todaysWelfare));
+            txtTotalWelfare.setText(String.format("Total welfare: %,.0f UGX", totalWelfare));
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

@@ -12,6 +12,7 @@ import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
 import org.applab.ledgerlink.domain.schema.WelfareSchema;
 import org.applab.ledgerlink.helpers.DatabaseHandler;
+import org.applab.ledgerlink.helpers.MemberWelfareRecord;
 
 import java.util.ArrayList;
 
@@ -128,7 +129,7 @@ public class MeetingWelfareRepo {
         double welfareAmount = 0.0;
         try{
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sql = String.format("SELECT SUM(%s) TotalWelfare FROM %s WHERE %s=%d)",
+            String sql = String.format("SELECT SUM(%s) TotalWelfare FROM %s WHERE %s=%d",
                     WelfareSchema.COL_W_AMOUNT, WelfareSchema.getTableName(),
                     WelfareSchema.COL_W_MEETING_ID, meetingId);
             cursor = db.rawQuery(sql, null);
@@ -140,8 +141,10 @@ public class MeetingWelfareRepo {
         }catch (Exception e){
             Log.e("TotalWelfaraInMeeting", e.getMessage());
         }finally {
-            cursor.close();
-            db.close();
+            if(cursor != null) {
+                cursor.close();
+                db.close();
+            }
         }
 
         return welfareAmount;
@@ -179,7 +182,7 @@ public class MeetingWelfareRepo {
         Cursor cursor = null;
         try{
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sql = String.format("SELECT %s FROM %s WHERE %s=%d AND %s=%d)",
+            String sql = String.format("SELECT %s FROM %s WHERE %s=%d AND %s=%d",
                     WelfareSchema.COL_W_WELFARE_ID, WelfareSchema.getTableName(),
                     WelfareSchema.COL_W_MEETING_ID, meetingId,
                     WelfareSchema.COL_W_MEMBER_ID, memberId);
@@ -198,13 +201,14 @@ public class MeetingWelfareRepo {
         return welfareId;
     }
 
-    protected void saveMemberWelfare(int meetingId, int memberId, double amount, String comment){
+    public void saveMemberWelfare(int meetingId, int memberId, double amount, String comment){
         boolean performUpdate = false;
         SQLiteDatabase db = null;
         int welfareId = 0;
         boolean isSaved = false;
         try{
             welfareId = getMemberWelfareId(meetingId, memberId);
+            Log.e("SaveWelfare", String.valueOf(welfareId));
             if(welfareId > 0){
                 performUpdate = true;
             }
@@ -216,11 +220,11 @@ public class MeetingWelfareRepo {
             values.put(WelfareSchema.COL_W_AMOUNT, amount);
             values.put(WelfareSchema.COL_W_WELFARE_AT_SETUP_CORRECTION_COMMMENT, comment);
             if(performUpdate){
-                int result = db.update(WelfareSchema.getTableName(), values, WelfareSchema.COL_W_WELFARE_ID + " = ?", new String[]{String.valueOf(welfareId)});
-                Log.e("SaveMemberWelfare", String.valueOf(result));
+                String sql = "UPDATE " + WelfareSchema.getTableName() + " SET " + WelfareSchema.COL_W_AMOUNT + " = ? WHERE " + WelfareSchema.COL_W_WELFARE_ID + " = ?";
+                db.execSQL(sql, new String[]{String.valueOf(amount), String.valueOf(welfareId)});
             }else{
-                long result = db.insert(WelfareSchema.getTableName(), null, values);
-                Log.e("SaveMemberWelfare", String.valueOf(result));
+                String sql = "INSERT INTO " + WelfareSchema.getTableName() + " (" + WelfareSchema.COL_W_MEETING_ID + "," + WelfareSchema.COL_W_MEMBER_ID + ","+ WelfareSchema.COL_W_AMOUNT+","+WelfareSchema.COL_W_WELFARE_AT_SETUP_CORRECTION_COMMMENT+") VALUES (?, ?, ?, ?)";
+                db.execSQL(sql, new String[]{String.valueOf(meetingId), String.valueOf(memberId), String.valueOf(amount), comment});
             }
         }catch (Exception e){
             Log.e("SaveMemberWelfare", e.getMessage());
@@ -229,8 +233,8 @@ public class MeetingWelfareRepo {
         }
     }
 
-    public ArrayList<MeetingWelfare> getMemberWelfareHistoryInCyle(int cycleId, int memberId){
-        ArrayList<MeetingWelfare> meetingWelfareHistory = new ArrayList<MeetingWelfare>();
+    public ArrayList<MemberWelfareRecord> getMemberWelfareHistoryInCyle(int cycleId, int memberId){
+        ArrayList<MemberWelfareRecord> memberWelfareHistory = new ArrayList<MemberWelfareRecord>();
         SQLiteDatabase db = null;
         Cursor cursor = null;
         try{
@@ -239,15 +243,12 @@ public class MeetingWelfareRepo {
             cursor = db.rawQuery(sql, new String[]{String.valueOf(memberId), String.valueOf(cycleId)});
             if(cursor.getCount() > 0){
                 while(cursor.moveToNext()){
-                    MeetingWelfare meetingWelfare = new MeetingWelfare();
-                    meetingWelfare.setWelfareId(cursor.getInt(cursor.getColumnIndex(WelfareSchema.COL_W_WELFARE_ID)));
+                    MemberWelfareRecord memberWelfareRecord = new MemberWelfareRecord();
+                    memberWelfareRecord.setWelfareId(cursor.getInt(cursor.getColumnIndex(WelfareSchema.COL_W_WELFARE_ID)));
                     Meeting meeting = new MeetingRepo(this.context, cursor.getInt(cursor.getColumnIndex(WelfareSchema.COL_W_MEETING_ID))).getMeeting();
-                    meetingWelfare.setMeeting(meeting);
-                    Member member = new MemberRepo(this.context).getMemberById(cursor.getInt(cursor.getColumnIndex(WelfareSchema.COL_W_MEMBER_ID)));
-                    meetingWelfare.setMember(member);
-                    meetingWelfare.setAmount(cursor.getDouble(cursor.getColumnIndex(WelfareSchema.COL_W_AMOUNT)));
-                    meetingWelfare.setComment(cursor.getString(cursor.getColumnIndex(WelfareSchema.COL_W_WELFARE_AT_SETUP_CORRECTION_COMMMENT)));
-                    meetingWelfareHistory.add(meetingWelfare);
+                    memberWelfareRecord.setMeetingDate(meeting.getMeetingDate());
+                    memberWelfareRecord.setAmount(cursor.getDouble(cursor.getColumnIndex(WelfareSchema.COL_W_AMOUNT)));
+                    memberWelfareHistory.add(memberWelfareRecord);
                 }
             }
         }catch (Exception e){
@@ -256,6 +257,6 @@ public class MeetingWelfareRepo {
             cursor.close();
             db.close();
         }
-        return meetingWelfareHistory;
+        return memberWelfareHistory;
     }
 }

@@ -57,7 +57,7 @@
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Main Menu"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MeetingTabHostActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -198,17 +198,17 @@
             android:name=".ActivationActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_activation"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GettingStartedWizardAddMemberActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gettings_started_wizard_add_member"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GettingStartedWizardReviewMembersActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gettings_started_wizard_review_members"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GettingStartedWizardNewCycleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -223,22 +223,22 @@
             android:name=".GettingStartedWizardPageOne"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gettings_started_wizard_page_1"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GettingStartedWizardPageTwo"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gettings_started_wizard_page_2"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GettingStartedConfirmationPage"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Confirmation"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SelectCycle"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Select Cycle"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DataMigrationActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -248,22 +248,22 @@
             android:name=".BeginMeetingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_begin_meeting"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DeleteMeetingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_delete_meeting"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ChangeMeetingDateActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_change_meeting_date"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.ipaulpro.afilechooser.FileChooserActivity"
             android:enabled="@bool/use_activity"
@@ -282,11 +282,11 @@
         <activity
             android:name=".DataRecoveryActivity"
             android:label="@string/title_activity_data_recovery"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".TrainingModuleActivity"
             android:label="@string/title_activity_training_module"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <!--
         <service android:name=".service.BackgroundService" />
@@ -323,31 +323,32 @@
 
         <activity
             android:name=".ProfileActivity"
-            android:label="@string/title_activity_profile"></activity>
+            android:label="@string/title_activity_profile" />
         <activity
             android:name=".LedgerLinkTrainingActivity"
             android:label="@string/title_activity_ledger_link_training"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".EKeysTrainingActivity"
             android:label="@string/title_activity_ekeys_training"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GeneralSupportActivity"
             android:label="@string/title_activity_general_support"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MeetingMemberLoansIssueFrag"
-            android:label="@string/title_activity_meeting_member_loans_issue_frag"></activity>
+            android:label="@string/title_activity_meeting_member_loans_issue_frag" />
         <activity
             android:name=".MeetingMemberLoansIssueActivity"
-            android:label="@string/title_activity_meeting_member_loans_issue"></activity>
+            android:label="@string/title_activity_meeting_member_loans_issue" />
         <activity
             android:name=".ChatActivity"
-            android:label="@string/title_activity_chat"></activity>
+            android:label="@string/title_activity_chat" />
         <activity
             android:name=".MODActivity"
-            android:label="@string/title_activity_mod"></activity>
+            android:label="@string/title_activity_mod" />
+        <activity android:name=".MemberWelfareHistoryActivity" />
         <activity android:name=".MemberWelfareHistoryActivity"></activity>
     </application>
 

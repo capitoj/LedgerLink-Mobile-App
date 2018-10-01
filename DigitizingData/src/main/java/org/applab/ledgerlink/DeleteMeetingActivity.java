@@ -49,6 +49,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
         TextView txtSavings = (TextView) findViewById(R.id.lblDMSavings);
         TextView txtLoanRepayments = (TextView) findViewById(R.id.lblDMLoansRepaid);
         TextView txtLoanIssues = (TextView) findViewById(R.id.lblDMLoansIssued);
+        TextView txtWelfeare = (TextView)findViewById(R.id.lblDMWelfare);
 
 
         TextView lblDMInstructions = (TextView) findViewById(R.id.lblDMInstructions);
@@ -65,6 +66,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
             double totalFinesCollected = 0.0;
             double totalLoansIssuedInMeeting = 0.0;
             double totalLoansRepaidInMeeting = 0.0;
+            double totalWelfare = 0.0;
 
             totalMeetingSavings = ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(meetingId);
             txtSavings.setText(String.format("Savings: %,.0f %s", totalMeetingSavings, getResources().getString(R.string.operating_currency)));
@@ -77,12 +79,16 @@ public class DeleteMeetingActivity extends SherlockActivity {
 
             totalLoansIssuedInMeeting = ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(meetingId);
             txtLoanIssues.setText(String.format("Loans issued: %,.0f %s", totalLoansIssuedInMeeting, getResources().getString(R.string.operating_currency)));
+
+            totalWelfare = ledgerLinkApplication.getMeetingWelfareRepo().getTotalWelfareInMeeting(meetingId);
+            txtWelfeare.setText(String.format("Welfare: %,.0f %s", totalWelfare, getResources().getString(R.string.operating_currency)));
         } else {
             txtAttendedCount.setText("");
             txtFines.setText("");
             txtSavings.setText("");
             txtLoanRepayments.setText("");
             txtLoanIssues.setText("");
+            txtWelfeare.setText("");
         }
     }
 

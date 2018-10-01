@@ -85,6 +85,7 @@
     <string name="date_due_default">Date Due: 01-Jan-2013</string>
     <string name="today_saving_default">Today: 5,000UGX</string>
     <string name="total_savings_default">Total Savings: 60,000UGX</string>
+    <string name="total_welfare_default">Total Welfare: 10,000UGX</string>
     <string name="fine_type">Fine Type</string>
     <string name="amount">Amount</string>
     <string name="paid">Paid</string>
@@ -104,6 +105,7 @@
     <string name="fines_default">Fines: 5,000UGX</string>
     <string name="loans_repaid_default">Loans Repaid: 50,000 UGX</string>
     <string name="loans_issued_default">Loans Issued: 50,000UGX</string>
+    <string name="welfare_default">Welfare: 50,000UGX</string>
     <string name="members_present">Members Present: 28</string>
     <string name="is_everything_correct">Is everything correct?</string>
     <string name="fines">FINES</string>

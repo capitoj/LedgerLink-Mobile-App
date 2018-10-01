@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/txtRWHMeetingDate"
+        style="@style/RegularText"
+        android:layout_width="120dip"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dip"
+        android:text="@string/date_default" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/txtRWHAmount"
+        style="@style/RegularText"
+        android:layout_width="150dip"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/txtRWHMeetingDate"
+        android:layout_marginLeft="10dip"
+        android:text="@string/total_welfare_default" />
+
+</RelativeLayout>
