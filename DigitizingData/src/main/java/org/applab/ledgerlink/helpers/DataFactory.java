@@ -9,6 +9,7 @@ import org.applab.ledgerlink.datatransformation.FinesDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.LoanDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.RepaymentDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.SavingsDataTransferRecord;
+import org.applab.ledgerlink.datatransformation.WelfareDataTransferRecord;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.repo.MemberRepo;
 import org.applab.ledgerlink.repo.SendDataRepo;
@@ -228,6 +229,26 @@ public class DataFactory extends SendDataRepo {
         return js;
     }
 
+    private JSONStringer getWelfare(JSONStringer js){
+        try{
+            js.key("WelfareInfo").array();
+
+            for(WelfareDataTransferRecord record: this.welfares){
+                js.object()
+                        .key("WelfareId").value(String.valueOf(record.getWelfareId()))
+                        .key("MeetingId").value(String.valueOf(record.getMeetingId()))
+                        .key("MemberId").value(String.valueOf(record.getMemberId()))
+                        .key("Amount").value(String.valueOf(record.getAmount()))
+                        .key("Comment").value(String.valueOf(record.getComment()))
+                        .endObject();
+            }
+            js.endArray();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return js;
+    }
+
     public static String getJSONOutput(Context context, int meetingId){
         DataFactory dataFactory = new DataFactory(context, meetingId);
 
@@ -243,6 +264,7 @@ public class DataFactory extends SendDataRepo {
             js = dataFactory.getFines(js);
             js = dataFactory.getLoanRepayments(js);
             js = dataFactory.getLoanIssues(js);
+            js = dataFactory.getWelfare(js);
             js.endObject();
 
         }catch (Exception e){

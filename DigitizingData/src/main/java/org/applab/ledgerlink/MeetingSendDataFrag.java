@@ -42,6 +42,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
     private double totalLoansRepaidInSelectedMeeting;
     private double totalFinesInSelectedMeeting;
     private double totalLoansIssuedInSelectedMeeting;
+    private double totalWelfareInSelectedMeeting;
     private int selectedMeetingAttendance;
     private int currentMeetingId;
     private int selectedMeetingId;
@@ -246,6 +247,8 @@ public class MeetingSendDataFrag extends SherlockFragment {
         
         //Get total loans in current meeting
         totalLoansIssuedInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(selectedMeetingId);
+
+        totalWelfareInSelectedMeeting = parentActivity.ledgerLinkApplication.getMeetingWelfareRepo().getTotalWelfareInMeeting(selectedMeetingId);
         
         //Get attendance in current meeting
         selectedMeetingAttendance = parentActivity.ledgerLinkApplication.getMeetingAttendanceRepo().getAttendanceCountByMeetingId(selectedMeetingId);
@@ -323,7 +326,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         lblMSDFragLoanPayments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                actionBar.selectTab(actionBar.getTabAt(4));
+                actionBar.selectTab(actionBar.getTabAt(5));
             }
         });
 
@@ -332,7 +335,7 @@ public class MeetingSendDataFrag extends SherlockFragment {
         lblMSDFragFines.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                actionBar.selectTab(actionBar.getTabAt(5));
+                actionBar.selectTab(actionBar.getTabAt(6));
             }
         });
 
@@ -341,7 +344,16 @@ public class MeetingSendDataFrag extends SherlockFragment {
         lblMSDFragNewLoans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                actionBar.selectTab(actionBar.getTabAt(6));
+                actionBar.selectTab(actionBar.getTabAt(7));
+            }
+        });
+
+        TextView lblMSDFragWelfare = (TextView) getSherlockActivity().findViewById(R.id.lblMSDFragWelfare);
+        lblMSDFragWelfare.setText(String.format("Welfare %,.0f UGX", totalWelfareInSelectedMeeting));
+        lblMSDFragWelfare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                actionBar.selectTab(actionBar.getTabAt(4));
             }
         });
 

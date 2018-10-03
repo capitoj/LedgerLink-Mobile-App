@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.applab.ledgerlink.datatransformation.WelfareDataTransferRecord;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingWelfare;
 import org.applab.ledgerlink.domain.model.Member;
@@ -94,6 +95,37 @@ public class MeetingWelfareRepo {
         }
 
         return welfareAmount;
+    }
+
+    public ArrayList<WelfareDataTransferRecord> getMeetingWelfareForAllMembers(int meetingId){
+        ArrayList<WelfareDataTransferRecord> welfareDataTransferRecords = new ArrayList<WelfareDataTransferRecord>();
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try{
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = String.format("SELECT * FROM %s WHERE %s=%d",
+                    WelfareSchema.getTableName(),
+                    WelfareSchema.COL_W_MEETING_ID, meetingId);
+            cursor = db.rawQuery(sql, null);
+            if(cursor != null){
+                while(cursor.moveToNext()){
+                    WelfareDataTransferRecord welfareDataTransferRecord = new WelfareDataTransferRecord();
+                    welfareDataTransferRecord.setWelfareId(cursor.getInt(cursor.getColumnIndex(WelfareSchema.COL_W_WELFARE_ID)));
+                    welfareDataTransferRecord.setAmount(cursor.getDouble(cursor.getColumnIndex(WelfareSchema.COL_W_AMOUNT)));
+                    welfareDataTransferRecord.setMeetingId(cursor.getInt(cursor.getColumnIndex(WelfareSchema.COL_W_MEETING_ID)));
+                    welfareDataTransferRecord.setMemberId(cursor.getInt(cursor.getColumnIndex(WelfareSchema.COL_W_MEMBER_ID)));
+                    welfareDataTransferRecord.setComment(cursor.getString(cursor.getColumnIndex(WelfareSchema.COL_W_WELFARE_AT_SETUP_CORRECTION_COMMMENT)));
+                    welfareDataTransferRecords.add(welfareDataTransferRecord);
+                }
+            }
+
+        }catch (Exception e){
+            Log.e("MeetingWelfareRepo", e.getMessage());
+        }finally {
+            cursor.close();
+            db.close();
+        }
+        return welfareDataTransferRecords;
     }
 
     public double getMemberTotalWelfareInCycle(int cycleId, int memberId){

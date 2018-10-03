@@ -21,6 +21,7 @@ import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
 import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.repo.MeetingSavingRepo;
+import org.applab.ledgerlink.repo.MeetingWelfareRepo;
 
 @SuppressWarnings("ALL")
 public class MeetingCashBookFrag extends SherlockFragment {
@@ -110,12 +111,15 @@ public class MeetingCashBookFrag extends SherlockFragment {
         TextView lblExpectedStartingCash = (TextView) getSherlockActivity().findViewById(R.id.lblExpectedStartingCash);
         TextView lblActualStartingCash = (TextView) getSherlockActivity().findViewById(R.id.lblActualStartingCash);
         TextView lblCashDifference = (TextView) getSherlockActivity().findViewById(R.id.lblCashDifference);
+        TextView lblCashFromBank = (TextView) getSherlockActivity().findViewById(R.id.lblCashFromBank);
+        TextView lblLoanFromBank = (TextView) getSherlockActivity().findViewById(R.id.lblLoanFromBank);
         TextView lblCashBookComment = (TextView) getSherlockActivity().findViewById(R.id.lblCashBookComment);
 
         TextView lblSavings = (TextView) getSherlockActivity().findViewById(R.id.lblSavings);
         TextView lblLoanRepayments = (TextView) getSherlockActivity().findViewById(R.id.lblLoanRepayments);
         TextView lblFines = (TextView) getSherlockActivity().findViewById(R.id.lblFines);
         TextView lblNewLoans = (TextView) getSherlockActivity().findViewById(R.id.lblNewLoans);
+        TextView lblWelfare = (TextView) getSherlockActivity().findViewById(R.id.lblWelfare);
         EditText txtCashToBankAmount = (EditText) getSherlockActivity().findViewById(R.id.txtCashToBank);
         EditText txtBankLoanRepayment = (EditText) getSherlockActivity().findViewById(R.id.txtBankLoanRepayment);
 
@@ -149,10 +153,9 @@ public class MeetingCashBookFrag extends SherlockFragment {
             if(currentMeeting != null){
                 //Get the cycle that contains the previous meeting in order to get starting cash.
                 double expectedStartingCash = 0.0;
-                Meeting previousMeeting = meetingRepo.getPreviousMeeting();
-                if(previousMeeting != null){
-                    expectedStartingCash = previousMeeting.getClosingBalanceBox();
-                }
+                MeetingStartingCash startingCash = meetingRepo.getStartingCash();
+                expectedStartingCash = startingCash.getExpectedStartingCash();
+
                 MeetingSavingRepo savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
                 double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
 
@@ -165,7 +168,12 @@ public class MeetingCashBookFrag extends SherlockFragment {
                 MeetingFineRepo meetingFineRepo = new MeetingFineRepo(getSherlockActivity().getApplicationContext());
                 double totalFines = meetingFineRepo.getTotalFinesPaidInThisMeeting(meetingId);
 
+                MeetingWelfareRepo meetingWelfareRepo = new MeetingWelfareRepo(getSherlockActivity().getApplicationContext());
+                double totalWalfare = meetingWelfareRepo.getTotalWelfareInMeeting(meetingId);
+
                 double loanFromBank = currentMeeting.getLoanFromBank();
+
+
 
                 double actualStartingCash = currentMeeting.getOpeningBalanceBox();
 
@@ -187,7 +195,10 @@ public class MeetingCashBookFrag extends SherlockFragment {
                 lblSavings.setText(String.format("Savings %s", totalSavings));
                 lblLoanRepayments.setText(String.format("Loan Repayment %s UGX", totalLoansRepaid));
                 lblFines.setText(String.format("Fines %s UGX", totalFines));
+                lblWelfare.setText(String.format("Welfare %s UGX", totalWalfare));
                 lblNewLoans.setText(String.format("New Loans %s UGX", totalLoansIssued));
+                lblCashFromBank.setText(String.format("Cash From Bank %s UGX", cashFromBank));
+                lblLoanFromBank.setText(String.format("Loan From Bank %s UGX", loanFromBank));
                 txtCashToBankAmount.setText(String.valueOf((int)cashToBank));
                 txtBankLoanRepayment.setText(String.valueOf((int)bankLoanRepayment));
             }

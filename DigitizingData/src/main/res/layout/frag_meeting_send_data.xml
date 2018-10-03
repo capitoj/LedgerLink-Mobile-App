@@ -76,6 +76,13 @@
                 android:id="@+id/lblMSDFragNewLoans"
                 android:text="" />
 
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lblMSDFragWelfare"
+            android:text="" />
+
    </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

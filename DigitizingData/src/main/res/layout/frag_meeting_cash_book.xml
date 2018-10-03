@@ -45,6 +45,18 @@
             android:text="Difference 0 UGX" />
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/ListSmallSubItems"
+            android:id="@+id/lblCashFromBank"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="0 UGX" />
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            style="@style/ListSmallSubItems"
+            android:id="@+id/lblLoanFromBank"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="0 UGX" />
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            style="@style/ListSmallSubItems"
             android:id="@+id/lblCashBookComment"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -82,6 +94,12 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="New Loans 0 UGX " />
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            style="@style/ListSmallSubItems"
+            android:id="@+id/lblWelfare"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="0 UGX " />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/SubHeading"

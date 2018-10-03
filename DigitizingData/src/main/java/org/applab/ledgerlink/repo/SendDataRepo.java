@@ -9,6 +9,7 @@ import org.applab.ledgerlink.datatransformation.FinesDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.LoanDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.RepaymentDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.SavingsDataTransferRecord;
+import org.applab.ledgerlink.datatransformation.WelfareDataTransferRecord;
 import org.applab.ledgerlink.domain.model.FinancialInstitution;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.Member;
@@ -41,6 +42,7 @@ public class SendDataRepo {
     protected ArrayList<LoanDataTransferRecord> loanIssues;
     protected ArrayList<RepaymentDataTransferRecord> loanRepayments;
     protected ArrayList<FinesDataTransferRecord> fines;
+    protected ArrayList<WelfareDataTransferRecord> welfares;
     protected boolean meetingLoaded;
     protected int meetingId;
 
@@ -59,6 +61,7 @@ public class SendDataRepo {
         this.loadLoanIssue();
         this.loadLoanRepayment();
         this.loadFines();
+        this.loadWelfares();
     }
 
     protected void loadVslaInfo(){
@@ -124,6 +127,13 @@ public class SendDataRepo {
         }
     }
 
+    protected void loadWelfares(){
+        if(this.meetingLoaded){
+            MeetingWelfareRepo meetingWelfareRepo = new MeetingWelfareRepo(context);
+            this.welfares = meetingWelfareRepo.getMeetingWelfareForAllMembers(meeting.getMeetingId());
+        }
+    }
+
     protected double getTotalFinesPaid(){
         MeetingFineRepo meetingFineRepo = new MeetingFineRepo(context);
         return meetingFineRepo.getTotalFinesPaidInThisMeeting(meeting.getMeetingId());
@@ -152,5 +162,10 @@ public class SendDataRepo {
     protected double getTotalLoansIssued(){
         MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
         return meetingLoanIssuedRepo.getTotalLoansIssuedInMeeting(meeting.getMeetingId());
+    }
+
+    protected double getTotalWelfare(){
+        MeetingWelfareRepo meetingWelfareRepo = new MeetingWelfareRepo(context);
+        return meetingWelfareRepo.getTotalWelfareInMeeting(meeting.getMeetingId());
     }
 }
