@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
@@ -56,7 +57,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String folderName = DATABASE_NAME;
         if(DatabaseHandler.isSDCardMounted()){
 
-            String removableStoragePath = "";
             File[] fileList = new File("/storage/").listFiles();
             int cursor = 0;
             for(File file: fileList){
@@ -64,15 +64,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 if(absolutePath.contains("sdcard")){
                     cursor++;
                     if(cursor == 1){
-                        removableStoragePath = absolutePath;
+                        break;
                     }
                 }
             }
-            if(!removableStoragePath.equals("")){
-                folderName = DatabaseHandler.__createFolderPath(context, removableStoragePath);
-            }else{
+            if(cursor == 1){
                 folderName = DatabaseHandler.__createFolderPath(context, EXTERNAL_STORAGE_LOCATION);
             }
+        }else{
+            folderName = DatabaseHandler.__createFolderPath(context, EXTERNAL_STORAGE_LOCATION);
         }
         return folderName;
     }
