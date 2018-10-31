@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
+import org.applab.ledgerlink.business_rules.VslaMeeting;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.helpers.Utils;
@@ -214,37 +215,10 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     }
 
     private void populateTotalCash() {
-        double totalSavings = 0.0;
-        double totalLoansRepaid = 0.0;
-        double totalLoansIssued = 0.0;
-        double totalFines = 0.0;
-
-        //double loanTopUps = 0.0;
-        double actualStartingCash = 0.0;
-        double bankLoanRepayment = 0.0;
-        double cashFromBank = 0.0;
 
         try {
-            MeetingStartingCash startingCashDetails = meetingRepo.getStartingCash();
+            totalCashInBox = VslaMeeting.getTotalCashInBox(getSherlockActivity().getApplicationContext(), this.meetingId);
 
-            totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
-            totalLoansRepaid = repaymentRepo.getTotalLoansRepaidInMeeting(meetingId);
-            totalLoansIssued = loanIssuedRepo.getTotalLoansIssuedInMeeting(meetingId);
-            totalFines = fineRepo.getTotalFinesPaidInThisMeeting(meetingId);
-
-            //loanTopUps = startingCashDetails.getLoanTopUps();
-            actualStartingCash = startingCashDetails.getActualStartingCash();
-            double cashToBank = meetingRepo.getCashTakenToBankInPreviousMeeting(currentMeeting.getMeetingId());
-            bankLoanRepayment = currentMeeting.getBankLoanRepayment();
-            cashFromBank = currentMeeting.getOpeningBalanceBank();
-
-            totalCashInBox = (actualStartingCash + totalSavings + totalLoansRepaid + bankLoanRepayment + totalFines + cashFromBank) - (totalLoansIssued + cashToBank + bankLoanRepayment);
-
-            //totalCashInBox = actualStartingCash + totalSavings + totalLoansRepaid - totalLoansIssued + totalFines + loanTopUps - cashToBank;
-            if(meetingId == meetingRepo.getDummyGettingStartedWizardMeeting().getMeetingId()){
-                totalCashInBox = startingCashDetails.getExpectedStartingCash();
-
-            }
         } catch (Exception ex) {
             ex.printStackTrace();
 
