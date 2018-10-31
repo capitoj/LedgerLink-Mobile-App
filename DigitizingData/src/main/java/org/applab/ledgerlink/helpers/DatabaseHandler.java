@@ -34,7 +34,7 @@ import java.io.FileReader;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-    private static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
+    private static final String INTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DATABASE_NAME = "ledgerlinkdb";
     private static final int DATABASE_VERSION = 61;
     private static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
@@ -43,46 +43,44 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static Context databaseContext = null;
 
     private DatabaseHandler(Context context) {
-        super(context, createDatabaseFolder(context), null, DATABASE_VERSION);
+        super(context, pathToDatabaseFolder(context), null, DATABASE_VERSION);
         databaseContext = context;
     }
 
     protected static boolean isSDCardMounted(){
-
         return android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    public static String createDatabaseFolder(Context context) {
-        //creates the database folders and returns path as string
-        String folderName = DATABASE_NAME;
+    public static String pathToDatabaseFolder(Context context) {
+        String absoluteFilePath = DATABASE_NAME;
         if(DatabaseHandler.isSDCardMounted()){
-
             File[] fileList = new File("/storage/").listFiles();
             int cursor = 0;
             for(File file: fileList){
-                String absolutePath = file.getAbsolutePath();
-                if(absolutePath.contains("sdcard")){
+                String externalStorageLocation = file.getAbsolutePath();
+                if(externalStorageLocation.contains("sdcard")){
                     cursor++;
                     if(cursor == 1){
+                        absoluteFilePath = DatabaseHandler.__createFolderPath(externalStorageLocation);
                         break;
                     }
                 }
             }
-            if(cursor == 1){
-                folderName = DatabaseHandler.__createFolderPath(context, EXTERNAL_STORAGE_LOCATION);
+            if(cursor == 0){
+                absoluteFilePath = DatabaseHandler.__createFolderPath(INTERNAL_STORAGE_LOCATION);
             }
         }else{
-            folderName = DatabaseHandler.__createFolderPath(context, EXTERNAL_STORAGE_LOCATION);
+            absoluteFilePath = DatabaseHandler.__createFolderPath(INTERNAL_STORAGE_LOCATION);
         }
-        return folderName;
+        return absoluteFilePath;
     }
 
-    protected static String __createFolderPath(Context context, String absolutePath){
+    protected static String __createFolderPath(String absolutePath){
         File databaseStorageDir = new File(absolutePath + File.separator + DATA_FOLDER);
         if(! databaseStorageDir.exists()) {
-            boolean isFolderCreated = databaseStorageDir.mkdir();
+            databaseStorageDir.mkdir();
         }
-        return databaseStorageDir.getAbsolutePath() + File.separator + ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING)) ? TRAINING_DATABASE_NAME : DATABASE_NAME);
+        return databaseStorageDir.getAbsolutePath() + File.separator + DATABASE_NAME;
     }
 
     public void onCreate(SQLiteDatabase db) {
