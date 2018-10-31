@@ -456,7 +456,6 @@ public class ActivationActivity extends SherlockActivity {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            Log.e("PostRegistration", result.toString());
             String vslaName = null;
             String passKey = null;
             super.onPostExecute(result);
