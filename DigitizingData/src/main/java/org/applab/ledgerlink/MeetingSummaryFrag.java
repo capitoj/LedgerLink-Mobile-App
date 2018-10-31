@@ -1,6 +1,7 @@
 package org.applab.ledgerlink;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,13 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
+import org.applab.ledgerlink.business_rules.VslaMeeting;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.repo.MeetingRepo;
+import org.w3c.dom.Text;
 
 /**
  * Created by Moses on 6/25/13.
@@ -84,13 +88,23 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
         //Get the Cycle that contains this meeting
         Meeting currentMeeting = parentActivity.ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
+        //Meeting previousMeeting = new MeetingRepo(getSherlockActivity().getApplicationContext()).getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), meetingId);
 
+
+        TextView lblMSFCollections = (TextView) getSherlockActivity().findViewById(R.id.lblMSFCollections);
         TextView lblTotalSavings = (TextView) getSherlockActivity().findViewById(R.id.lblMSFTotalSavings);
         TextView lblOutstandingLoans = (TextView) getSherlockActivity().findViewById(R.id.lblMSFOutstandingLoans);
         TextView lblSectionLastMeeting = (TextView) getSherlockActivity().findViewById(R.id.lblMSFSection2);
+        TextView lblMSFLastWelfare = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastWelfare);
+        TextView lblMSFLastFines = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastFines);
+        TextView lblMSFLastCashFromBank = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastCashFromBank);
+        TextView lblMSFLastCashToBank = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastCashToBank);
+        TextView lblMSFLastLoanFromBank = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastLoanFromBank);
+        TextView lblMSFLastBankLoanRepayment = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastBankLoanRepayment);
 
         double outstandingLoans = 0.0;
         double totalSavings = 0.0;
+        double totalWelfare = 0.0;
         double issuedLoans = 0.0;
         String startDate = "";
         String endDate = "";
@@ -102,6 +116,8 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
             //Setup the Total Savings
             totalSavings = parentActivity.ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInCycle(currentMeeting.getVslaCycle().getCycleId());
+
+
 
             //Setup the Loans Issued
             issuedLoans = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInCycle(currentMeeting.getVslaCycle().getCycleId());
@@ -115,6 +131,8 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
             //TODO: May Add Attendance
         }
+
+
 
         lblOutstandingLoans.setText(String.format("Loans Outstanding: %,.0f UGX", outstandingLoans));
         lblTotalSavings.setText(String.format("Total Savings: %,.0f UGX", totalSavings));
@@ -163,21 +181,34 @@ public class MeetingSummaryFrag extends SherlockFragment {
             double totalLoansIssuedInMeeting = 0.0;
             double totalLoansRepaidInMeeting = 0.0;
 
+            VslaMeeting prevVslaMeeting = new VslaMeeting(getSherlockActivity().getApplicationContext(), previousMeeting.getMeetingId());
+
             totalMeetingSavings = parentActivity.ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(previousMeeting.getMeetingId());
-            txtTotalSavings.setText(String.format("Savings: %,.0f UGX", totalMeetingSavings));
+            txtTotalSavings.setText(String.format("Total Savings: %,.0f UGX", prevVslaMeeting.getTotalSavings()));
 
             totalLoansRepaidInMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(previousMeeting.getMeetingId());
-            txtTotalRepayments.setText(String.format("Loans repaid: %,.0f UGX", totalLoansRepaidInMeeting));
+            txtTotalRepayments.setText(String.format("Total Loans repaid: %,.0f UGX", prevVslaMeeting.getTotalLoansRepaid()));
 
-            totalLoansIssuedInMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(previousMeeting.getMeetingId());
-            txtTotalLoanIssues.setText(String.format("Loans issued: %,.0f UGX", totalLoansIssuedInMeeting));
+            txtTotalLoanIssues.setText(String.format("Total Loans issued: %,.0f UGX", prevVslaMeeting.getTotalLoansIssued()));
+
+            lblMSFLastWelfare.setText(String.format("Total Welfare: %,.0f UGX", prevVslaMeeting.getTotalWelfare()));
+
+            lblMSFLastFines.setText(String.format("Total Fines: %,.0f UGX", prevVslaMeeting.getTotalFinesPaid()));
+
+            lblMSFLastCashFromBank.setText(String.format("Cash From Bank: %,.0f UGX", prevVslaMeeting.getCashFromBank()));
+
+            lblMSFLastCashToBank.setText(String.format("Cash Taken To Bank: %,.0f UGX", prevVslaMeeting.getCashSavedToBank()));
+
+            lblMSFLastLoanFromBank.setText(String.format("Loan From Bank: %,.0f UGX", prevVslaMeeting.getLoanFromBank()));
+
+            lblMSFLastBankLoanRepayment.setText(String.format("Bank Loan Repayment: %,.0f UGX", prevVslaMeeting.getBankLoanRepayment()));
 
        /**     double finesCollected = fineRepo.getTotalFinesInCycle(previousMeeting.getVslaCycle().getCycleId());
             txtFines.setText(String.format("Fines: %,.0f UGX", finesCollected)); */
 
 
             totalMeetingCollections = totalMeetingSavings + totalLoansRepaidInMeeting;
-            txtTotalCollections.setText(String.format("Total Collections: %,.0f UGX", totalMeetingCollections));
+            lblMSFCollections.setText(String.format("Total Collections: %,.0f UGX", VslaMeeting.getTotalCashInBox(getSherlockActivity().getApplicationContext(), previousMeeting.getMeetingId())));
 
 
         } else {
