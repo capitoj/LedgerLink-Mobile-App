@@ -288,6 +288,63 @@
                 android:text="" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblAMMiddleCycleWelfareLabel"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Total welfare saved by this member during current cycle so far" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblAMMiddleCycleWelfare"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="0 UGX" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblAMMiddleCycleWelfareCorrectionLabel"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Actual amount if the original total welfare was incorrect (you may enter a correction once)" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
+                    android:id="@+id/txtAMMWelfareCorrection"
+                    style="@style/NormalEditText"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"
+                    android:inputType="number|numberSigned"
+                    android:text="" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblAMMWelfareCurrency"
+                    style="@style/InlineTextItem"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="UGX" />
+
+            </LinearLayout>
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblAMMiddleCycleWelfareCorrectionCommentLabel"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Comment" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
+                android:id="@+id/txtAMMiddleCycleWelfareCorrectionComment"
+                style="@style/NormalEditText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblRvwMembersLoanNumber"
                 style="@style/RegularText"
                 android:layout_width="wrap_content"

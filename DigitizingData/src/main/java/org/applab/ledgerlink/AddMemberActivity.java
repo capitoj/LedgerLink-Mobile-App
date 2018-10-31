@@ -70,6 +70,7 @@ public class AddMemberActivity extends SherlockActivity {
     protected TextView txtPhoneNo;
     protected Spinner cboAMCycles;
     protected TextView txtSavingsSoFar;
+    protected TextView txtWelfareSoFar;
     protected TextView txtLoanAmount;
     protected TextView txtAMMLoanNextRepaymentDate;
     protected TextView txtAMMLoanNumber;
@@ -133,6 +134,8 @@ public class AddMemberActivity extends SherlockActivity {
 
         txtSavingsSoFar = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
 
+        txtWelfareSoFar = (TextView) findViewById(R.id.txtAMMWelfareCorrection);
+
         txtLoanAmount = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
 
         clearDataFields();
@@ -173,6 +176,19 @@ public class AddMemberActivity extends SherlockActivity {
 
             TextView lblAMMiddleCycleLoans = (TextView) findViewById(R.id.lblAMMiddleCycleLoans);
             lblAMMiddleCycleLoans.setVisibility(View.GONE);
+
+            TextView lblAMMiddleCycleWelfare = (TextView) findViewById(R.id.lblAMMiddleCycleWelfare);
+            lblAMMiddleCycleWelfare.setVisibility(View.GONE);
+
+            TextView lblAMMiddleCycleWelfareCorrectionLabel = (TextView) findViewById(R.id.lblAMMiddleCycleWelfareCorrectionLabel);
+            lblAMMiddleCycleWelfareCorrectionLabel.setVisibility(View.GONE);
+
+            TextView lblAMMiddleCycleWelfareCorrectionCommentLabel = (TextView) findViewById(R.id.lblAMMiddleCycleWelfareCorrectionCommentLabel);
+            lblAMMiddleCycleWelfareCorrectionCommentLabel.setVisibility(View.GONE);
+
+            EditText txtAMMiddleCycleWelfareCorrectionComment = (EditText) findViewById(R.id.txtAMMiddleCycleWelfareCorrectionComment);
+            txtAMMiddleCycleWelfareCorrectionComment.setVisibility(View.GONE);
+
 
             //Default next repayment date to a month from now
             Calendar cal = Calendar.getInstance();
@@ -219,11 +235,13 @@ public class AddMemberActivity extends SherlockActivity {
         TextView lblAMMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblAMMiddleCycleInformationHeading);
         TextView lblAMMiddleCycleSavings = (TextView) findViewById(R.id.lblAMMiddleCycleSavings);
         TextView lblAMMiddleCycleLoans = (TextView) findViewById(R.id.lblAMMiddleCycleLoans);
+        TextView lblAMMiddleCycleWelfare = (TextView) findViewById(R.id.lblAMMiddleCycleWelfare);
 
         txtAMMLoanNumber.setText(String.valueOf(member.getOutstandingLoanNumberOnSetup()));
 
         lblAMMiddleCycleSavings.setText(String.format("%,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
         lblAMMiddleCycleLoans.setText(String.format("%,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
+        lblAMMiddleCycleWelfare.setText(String.format("%,.0f %s", member.getWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
 
         // populate the next repayment date
         if (member.getDateOfFirstRepayment() != null) {
@@ -629,6 +647,24 @@ public class AddMemberActivity extends SherlockActivity {
                 member.setSavingsOnSetup(amountSavedSoFar);
             }
         }
+
+        String welfare = txtWelfareSoFar.getText().toString().trim();
+        if(welfare.length() < 1){
+            if(isEditAction){
+                member.setWelfareOnSetup(member.getWelfareOnSetup());
+            }else{
+                member.setWelfareOnSetup(0);
+            }
+        }else{
+            try{
+                double welfareSavedSoFar = Double.parseDouble(welfare);
+                member.setWelfareOnSetup(welfareSavedSoFar);
+            }catch (Exception e){
+                Log.e("WelfareOnSetup", e.getMessage());
+                member.setWelfareOnSetup(0);
+            }
+        }
+
         String loanAmount = txtLoanAmount.getText().toString().trim();
         if(loanAmount.length() < 1){
             if (isEditAction) {
@@ -732,14 +768,19 @@ public class AddMemberActivity extends SherlockActivity {
             TextView txtAMMiddleCycleSavingsCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrection);
             TextView txtAMMiddleCycleLoansCorrection = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
             TextView txtAMMiddleCycleSavingsCorrectionComment = (TextView) findViewById(R.id.txtAMMiddleCycleSavingsCorrectionComment);
+            EditText txtAMMiddleCycleWelfareCorrectionComment = (EditText) findViewById(R.id.txtAMMiddleCycleWelfareCorrectionComment);
             TextView txtAMMiddleCycleLoansCorrectionComment = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrectionComment);
 
             if (txtAMMiddleCycleSavingsCorrection.getText().length() > 0) {
-                member.setSavingsOnSetup(Double.parseDouble(txtAMMiddleCycleSavingsCorrection.getText().toString()));
+                member.setSavingsOnSetupCorrectionComment(txtAMMiddleCycleSavingsCorrection.getText().toString());
             }
 
             if (!txtAMMiddleCycleSavingsCorrectionComment.getText().toString().isEmpty()) {
                 member.setSavingsOnSetupCorrectionComment(txtAMMiddleCycleSavingsCorrectionComment.getText().toString());
+            }
+
+            if(txtAMMiddleCycleWelfareCorrectionComment.getText().length() > 0 || !txtAMMiddleCycleWelfareCorrectionComment.getText().toString().isEmpty()){
+                member.setWelfareOnSetupCorrectionComment(txtAMMiddleCycleWelfareCorrectionComment.getText().toString());
             }
 
             if (txtAMMiddleCycleLoansCorrection.getText().length() > 0) {
@@ -900,7 +941,7 @@ public class AddMemberActivity extends SherlockActivity {
 
     protected void buildOccupationSpinner(){
         cboAMOccupation = (Spinner) findViewById(R.id.cboAMOccupation);
-        String[] professions = new String[]{"Trader", "Farmer", "Shopkeeper", "Fish Monger", "Soldier", "Traditional Healer", "Welder", "Medical Doctor", "Student", "Mason", "Builder", "Boda Boad Rider", "Driver", "Teacher", "Pastor", "Butcher", "Painter", "Nurse", "Barber", "Hair Dresser", "Other"};
+        String[] professions = new String[]{"Trader", "Farmer", "Shopkeeper", "Fish Monger", "Soldier", "Traditional Healer", "Welder", "Medical Doctor", "Student", "Mason", "Builder", "Boda Boda Rider", "Driver", "Teacher", "Pastor", "Butcher", "Painter", "Nurse", "Barber", "Hair Dresser", "Other", "Accountant", "Engineer", "Police Officer", "Security Guard", "Banker", "Architect"};
         Arrays.sort(professions);
 
         professions = ArrayUtils.addAll(new String[]{"Select Profession"}, professions);

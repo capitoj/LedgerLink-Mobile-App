@@ -9,6 +9,7 @@ import android.util.Log;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.domain.model.MeetingSaving;
+import org.applab.ledgerlink.domain.model.MeetingWelfare;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.domain.schema.MemberSchema;
@@ -240,6 +241,7 @@ public class MemberRepo {
 
         // Update savings at setup
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
+        MeetingWelfareRepo meetingWelfareRepo = new MeetingWelfareRepo(context);
         MeetingRepo meetingRepo = new MeetingRepo(context);
         String comment = "";
         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
@@ -262,6 +264,9 @@ public class MemberRepo {
             if (!loanSaveResult) {
                 Log.d(context.getPackageName(), "Failed to save GSW loan on setup" + member.getSurname());
             }
+
+            //Save the welfare on setup
+            meetingWelfareRepo.saveMemberWelfare(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), member.getWelfareOnSetup(), member.getWelfareOnSetupCorrectionComment());
         }
 
         return true;
@@ -289,6 +294,9 @@ public class MemberRepo {
         MeetingSaving memberSaving = meetingSavingRepo.getMemberSavingAndComment(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
         member.setSavingsOnSetup(memberSaving.getAmount());
         member.setSavingsOnSetupCorrectionComment(memberSaving.getComment());
+
+        MeetingWelfareRepo meetingWelfareRepo = new MeetingWelfareRepo(context);
+        member.setWelfareOnSetup(meetingWelfareRepo.getMemberWelfare(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId()));
         return true;
     }
 

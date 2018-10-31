@@ -30,7 +30,9 @@ public class Member {
     private double savingsOnSetup;
     private int outstandingLoanNumberOnSetup;
     private double outstandingLoanOnSetup;
+    private double welfareOnSetup;
     private String savingsOnSetupCorrectionComment;
+    private String welfareOnSetupCorrectionComment;
     private String outstandingLoanOnSetupCorrectionComment;
 
     //This is the date of next repayment of middle start loan
@@ -230,6 +232,14 @@ public class Member {
         this.savingsOnSetup = savingsOnSetup;
     }
 
+    public double getWelfareOnSetup(){
+        return this.welfareOnSetup;
+    }
+
+    public void setWelfareOnSetup(double welfareOnSetup){
+        this.welfareOnSetup = welfareOnSetup;
+    }
+
     public int getOutstandingLoanNumberOnSetup() {
         return outstandingLoanNumberOnSetup;
     }
@@ -251,6 +261,14 @@ public class Member {
 
     public void setSavingsOnSetupCorrectionComment(String savingsOnSetupCorrectionComment) {
         this.savingsOnSetupCorrectionComment = savingsOnSetupCorrectionComment;
+    }
+
+    public void setWelfareOnSetupCorrectionComment(String welfareOnSetupCorrectionComment){
+        this.welfareOnSetupCorrectionComment = welfareOnSetupCorrectionComment;
+    }
+
+    public String getWelfareOnSetupCorrectionComment(){
+        return this.welfareOnSetupCorrectionComment;
     }
 
     public String getOutstandingLoanOnSetupCorrectionComment() {

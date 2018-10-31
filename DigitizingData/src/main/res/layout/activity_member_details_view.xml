@@ -225,6 +225,13 @@
                 android:text="Total Savings 0 UGX" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblMDMiddleCycleWelfare"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Welfare 0 UGX" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDMiddleCycleLoansOutstanding"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"

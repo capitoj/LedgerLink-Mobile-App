@@ -28,6 +28,7 @@ import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.repo.MemberRepo;
 import org.applab.ledgerlink.utils.DialogMessageBox;
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
@@ -212,9 +213,11 @@ public class MemberDetailsViewActivity extends SherlockActivity {
             //Load the middle start values
             TextView lblMDMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblMDMiddleCycleInformationHeading);
             TextView lblMDMiddleCycleSavings = (TextView) findViewById(R.id.lblMDMiddleCycleSavings);
+            TextView lblMDMiddleCycleWelfare = (TextView) findViewById(R.id.lblMDMiddleCycleWelfare);
             TextView lblMDMiddleCycleLoansOutstanding = (TextView) findViewById(R.id.lblMDMiddleCycleLoansOutstanding);
 
             lblMDMiddleCycleSavings.setText(String.format("Total Savings %,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleWelfare.setText(String.format("Total Welfare %,.0f %s", member.getWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
             lblMDMiddleCycleLoansOutstanding.setText(String.format("Loans Outstanding %,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
 
             //Show the heading

@@ -252,8 +252,8 @@ public class MeetingWelfareRepo {
             values.put(WelfareSchema.COL_W_AMOUNT, amount);
             values.put(WelfareSchema.COL_W_WELFARE_AT_SETUP_CORRECTION_COMMMENT, comment);
             if(performUpdate){
-                String sql = "UPDATE " + WelfareSchema.getTableName() + " SET " + WelfareSchema.COL_W_AMOUNT + " = ? WHERE " + WelfareSchema.COL_W_WELFARE_ID + " = ?";
-                db.execSQL(sql, new String[]{String.valueOf(amount), String.valueOf(welfareId)});
+                String sql = "UPDATE " + WelfareSchema.getTableName() + " SET " + WelfareSchema.COL_W_AMOUNT + " = ?, " + WelfareSchema.COL_W_WELFARE_AT_SETUP_CORRECTION_COMMMENT + " = ? WHERE " + WelfareSchema.COL_W_WELFARE_ID + " = ?";
+                db.execSQL(sql, new String[]{String.valueOf(amount), String.valueOf(comment), String.valueOf(welfareId)});
             }else{
                 String sql = "INSERT INTO " + WelfareSchema.getTableName() + " (" + WelfareSchema.COL_W_MEETING_ID + "," + WelfareSchema.COL_W_MEMBER_ID + ","+ WelfareSchema.COL_W_AMOUNT+","+WelfareSchema.COL_W_WELFARE_AT_SETUP_CORRECTION_COMMMENT+") VALUES (?, ?, ?, ?)";
                 db.execSQL(sql, new String[]{String.valueOf(meetingId), String.valueOf(memberId), String.valueOf(amount), comment});
