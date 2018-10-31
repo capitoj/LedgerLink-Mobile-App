@@ -1,6 +1,8 @@
 package org.applab.ledgerlink.helpers;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -31,6 +33,13 @@ public class Network {
 
     public Network(Context context){
         this.context = context;
+    }
+
+    public static boolean isConnected(Context context){
+        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        boolean connected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return connected;
     }
 
     public String getPhoneImei() {
