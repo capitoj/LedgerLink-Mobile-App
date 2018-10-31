@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
                 android:imeOptions="actionDone"
-                android:inputType="number"
+                android:inputType="number|numberSigned"
                 android:text=""
                 android:textAlignment="viewEnd"
                 tools:ignore="UnusedAttribute" />

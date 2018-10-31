@@ -231,11 +231,11 @@ public class MemberWelfareHistoryActivity extends SherlockListActivity {
             theAmount = Double.parseDouble(amount);
 
 
-            if (theAmount < 0.0) {
-                Utils.createAlertDialogOk(MemberWelfareHistoryActivity.this, "Welfare","The Welfare Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtSaving.requestFocus();
-                return false;
-            }
+//            if (theAmount < 0.0) {
+//                Utils.createAlertDialogOk(MemberWelfareHistoryActivity.this, "Welfare","The Welfare Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+//                txtSaving.requestFocus();
+//                return false;
+//            }
 
             String comment = "";
             ledgerLinkApplication.getMeetingWelfareRepo().saveMemberWelfare(meetingId, memberId, theAmount, comment);
