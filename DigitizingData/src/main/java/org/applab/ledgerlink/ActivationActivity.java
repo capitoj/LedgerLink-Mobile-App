@@ -25,6 +25,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.domain.model.FinancialInstitution;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.helpers.Network;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
@@ -124,8 +125,13 @@ public class ActivationActivity extends SherlockActivity {
     }
 
     private void activateVlsaUsingPostAsync(String request) {
-        String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
-        new PostTask(this).execute(uri, request);
+
+        if(Network.isConnected(getApplicationContext())) {
+            String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
+            new PostTask(this).execute(uri, request);
+        }else{
+            this.saveOfflineVslaInfo();
+        }
 
         //Do the other stuff in the Async Task
     }
