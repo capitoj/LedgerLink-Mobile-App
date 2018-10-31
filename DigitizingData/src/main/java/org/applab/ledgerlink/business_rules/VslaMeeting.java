@@ -25,50 +25,54 @@ public class VslaMeeting {
         this.context = context;
     }
 
-    protected double __getActualStartingCash(){
+    public double getActualStartingCash(){
         return this.meetingRepo.getMeeting().getOpeningBalanceBox();
     }
 
-    protected double __getCashFromBank(){
+    public double getCashFromBank(){
         return this.meetingRepo.getMeeting().getOpeningBalanceBank();
     }
 
-    protected double __getLoanFromBank(){
+    public double getLoanFromBank(){
         return this.meetingRepo.getMeeting().getLoanFromBank();
     }
 
-    protected double __getTotalSavings(){
+    public double getTotalSavings(){
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(this.context);
         return meetingSavingRepo.getTotalSavingsInMeeting(this.meetingId);
     }
 
-    protected double __getTotalLoansRepaid(){
+    public double getTotalLoansRepaid(){
         MeetingLoanRepaymentRepo repaymentRepo = new MeetingLoanRepaymentRepo(this.context);
         return repaymentRepo.getTotalLoansRepaidInMeeting(this.meetingId);
     }
 
-    protected double __getTotalLoansIssued(){
+    public double getTotalLoansIssued(){
         MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(this.context);
         return loanIssuedRepo.getTotalLoansIssuedInMeeting(this.meetingId);
     }
 
-    protected double __getTotalFinesPaid(){
+    public double getTotalFinesPaid(){
         MeetingFineRepo meetingFineRepo = new MeetingFineRepo(this.context);
         return meetingFineRepo.getTotalFinesPaidInThisMeeting(this.meetingId);
     }
 
-    protected double __getTotalWelfare(){
+    public double getTotalWelfare(){
         MeetingWelfareRepo meetingWelfareRepo = new MeetingWelfareRepo(this.context);
         return meetingWelfareRepo.getTotalWelfareInMeeting(this.meetingId);
     }
 
-    protected double __getBankLoanRepayment(){
+    public double getBankLoanRepayment(){
         return this.meetingRepo.getMeeting().getBankLoanRepayment();
+    }
+
+    public double getCashSavedToBank(){
+        return this.meetingRepo.getMeeting().getClosingBalanceBank();
     }
 
     public static double getTotalCashInBox(Context context, int meetingId){
         VslaMeeting vslaMeeting = new VslaMeeting(context, meetingId);
-        double totalCashInBox = (vslaMeeting.__getActualStartingCash() + vslaMeeting.__getTotalSavings() + vslaMeeting.__getTotalLoansRepaid() + vslaMeeting.__getTotalFinesPaid() + vslaMeeting.__getLoanFromBank() + vslaMeeting.__getCashFromBank() + vslaMeeting.__getTotalWelfare()) - (vslaMeeting.__getTotalLoansIssued() + vslaMeeting.__getBankLoanRepayment());
+        double totalCashInBox = (vslaMeeting.getActualStartingCash() + vslaMeeting.getTotalSavings() + vslaMeeting.getTotalLoansRepaid() + vslaMeeting.getTotalFinesPaid() + vslaMeeting.getLoanFromBank() + vslaMeeting.getCashFromBank() + vslaMeeting.getTotalWelfare()) - (vslaMeeting.getTotalLoansIssued() + vslaMeeting.getBankLoanRepayment());
         return totalCashInBox;
 
     }
