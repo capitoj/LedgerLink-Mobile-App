@@ -349,7 +349,6 @@
             android:name=".MODActivity"
             android:label="@string/title_activity_mod" />
         <activity android:name=".MemberWelfareHistoryActivity" />
-        <activity android:name=".MemberWelfareHistoryActivity"></activity>
     </application>
 
 </manifest>
