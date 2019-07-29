@@ -1156,49 +1156,32 @@ public class MeetingLoanIssuedRepo {
         SQLiteDatabase db = null;
         boolean performUpdate = false;
 
+
         try {
             //TODO: Use a direct query to update the balances on the DB
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            ContentValues values = new ContentValues();
-
-            values.put(LoanIssueSchema.COL_LI_BALANCE, balance);
-            values.put(LoanIssueSchema.COL_LI_TOTAL_REPAID, totalRepaid);
-            //If the loan has been cleared, then the newDateDue will be null
-            if (null != newDateDue) {
-                values.put(LoanIssueSchema.COL_LI_DATE_DUE, Utils.formatDateToSqlite(newDateDue));
-            } else {
-                //I use ContentValues.putNull(sKey) but I can just leave this line out
-                values.putNull(LoanIssueSchema.COL_LI_DATE_DUE);
+            String loanDateDue = null;
+            if(newDateDue != null){
+                loanDateDue = Utils.formatDateToSqlite(newDateDue);
+            }
+            String loanIsCleared = String.valueOf(0);
+            String loanDateCleared = null;
+            if(balance <= 0){
+                loanIsCleared = String.valueOf(1);
+                loanDateCleared = Utils.formatDateToSqlite(Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT));
             }
 
-
-            //Determine whether to flag the loan as cleared
-            if (balance <= 0) {
-                values.put(LoanIssueSchema.COL_LI_IS_CLEARED, 1);
-                values.put(LoanIssueSchema.COL_LI_DATE_CLEARED, Utils.formatDateToSqlite(Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT)));
-                Log.d("MLIR", Utils.formatDateToSqlite(Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT)));
-            } else{
-                values.put(LoanIssueSchema.COL_LI_IS_CLEARED, 0);
-                values.putNull(LoanIssueSchema.COL_LI_DATE_CLEARED);
-
-            }
-
-            // Inserting or UpdatingRow
-            long retVal = -1;
-
-            // updating row
-            retVal = db.update(LoanIssueSchema.getTableName(), values, LoanIssueSchema.COL_LI_LOAN_ID + " = ?",
-                    new String[]{String.valueOf(loanId)});
-
-            return retVal != -1;
+            String sql = "UPDATE LoanIssues set Balance = ?, TotalRepaid = ?, DateDue = ?, IsCleared = ?, DateCleared = ? where _id = ?";
+            db.execSQL(sql, new String[]{String.valueOf(balance), String.valueOf(totalRepaid), loanDateDue, loanIsCleared, loanDateCleared, String.valueOf(loanId)});
+            performUpdate = true;
         } catch (Exception ex) {
-            Log.e("MemberLoanIssuedRepo.updateMemberLoanBalances", ex.getMessage());
-            return false;
+            Log.e("updateLoanBalances", ex.getMessage());
         } finally {
             if (db != null) {
                 db.close();
             }
         }
+        return performUpdate;
     }
 
     public boolean updateMemberLoanBalances(int loanId, double totalRepaid, double balance, Date newDateDue) {

@@ -14,10 +14,10 @@
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/ListSmallSubItems"
-        android:id="@+id/txtMListTotalSavings"
+        android:id="@+id/txtMListOccupation"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/total_savings_default"
+        android:text="Occupation"
         android:layout_below="@+id/txtMListFullName"
         android:layout_alignParentRight="true" />
 
@@ -26,9 +26,48 @@
         android:id="@+id/txtMListStatus"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtMListFullName"
-        android:layout_toRightOf="@id/txtMListTotalSavings"
+        android:layout_below="@+id/txtMListOccupation"
         android:text = "Active"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalSavings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListStatus"
+        android:text = "Savings - "
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalOutstandingLoans"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListTotalSavings"
+        android:text = "Outstanding Loans - "
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalWelfare"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListTotalOutstandingLoans"
+        android:text = "Welfare - "
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalOutstandingWelfare"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListTotalWelfare"
+        android:text = "Outstanding Welfare - "
         android:paddingRight="@dimen/dp_10"
         android:layout_alignParentRight="true" />
 

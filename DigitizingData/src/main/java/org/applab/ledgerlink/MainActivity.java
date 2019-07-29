@@ -22,10 +22,12 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 
 import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.helpers.MenuItem;
 import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 
@@ -74,7 +76,8 @@ public class MainActivity extends SherlockActivity {
 
     protected void showNotificationForUnsentMeetings(){
         MeetingRepo meetingRepo = new MeetingRepo(this);
-        List<Meeting> pastMeetings = meetingRepo.getPastMeetings();
+        VslaCycle recentCycle = new VslaCycleRepo(getApplicationContext()).getMostRecentCycle();
+        List<Meeting> pastMeetings = meetingRepo.getPastMeetings(recentCycle.getCycleId());
         if(pastMeetings.size() > 0){
             Runnable runnable = new Runnable() {
                 @Override
@@ -110,7 +113,7 @@ public class MainActivity extends SherlockActivity {
         //set grid view item
         mainMenuItemsGridArray.add(new MenuItem("beginMeeting", "MEETING", R.drawable.meeting));
         mainMenuItemsGridArray.add(new MenuItem("viewSentData", "SENT DATA", R.drawable.sent_data));
-        mainMenuItemsGridArray.add(new MenuItem("reviewMembers", "EDIT MEMBERS", R.drawable.members));
+        mainMenuItemsGridArray.add(new MenuItem("reviewMembers", "MEMBERS", R.drawable.members));
         mainMenuItemsGridArray.add(new MenuItem("updateCycle", "EDIT CYCLE", R.drawable.edit_cycle));
         mainMenuItemsGridArray.add(new MenuItem("endCycle", "END CYCLE", R.drawable.end_cycle));
         mainMenuItemsGridArray.add(new MenuItem("beginCycle", "BEGIN NEW CYCLE", R.drawable.new_cycle));

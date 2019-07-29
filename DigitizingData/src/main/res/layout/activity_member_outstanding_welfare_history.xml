@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblMemberOutstandingWelfareHeader"
+            style="@style/RegularTextInstructionBold"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="OUTSTANDING WELFARE" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblFMessage"
+            style="@style/RegularTextInstruction"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:text="Check to indicate paid" />
+        <!-- android:text="Check box to indicate paid. Swipe to delete."/> -->
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblOutstandingWelfareFullName"
+                style="@style/RegularTextListItems"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/full_name" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+            <org.applab.ledgerlink.helpers.EnhancedListView
+                android:id="@android:id/list"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice"
+                android:divider="@null"
+                android:dividerHeight="0dp" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@android:id/empty"
+                style="@style/RegularText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:text="@string/no_history" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

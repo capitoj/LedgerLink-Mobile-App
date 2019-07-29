@@ -12,10 +12,12 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.SendMeetingDataArrayAdapter;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 
@@ -57,9 +59,10 @@ public class ViewSentDataActivity extends SherlockListActivity {
     //Populate Members List
     private void populateMeetingData() {
         //Load the Main Menu
-        meetings = ledgerLinkApplication.getMeetingRepo().getAllMeetingsByDataSentStatus(true);
+        VslaCycle recentCycle = new VslaCycleRepo(getApplicationContext()).getMostRecentCycle();
+        meetings = ledgerLinkApplication.getMeetingRepo().getAllMeetingsByDataSentStatus(true, recentCycle.getCycleId());
 
-        ArrayList<Meeting> unsentMeetings = ledgerLinkApplication.getMeetingRepo().getAllMeetingsByDataSentStatus(false);
+        ArrayList<Meeting> unsentMeetings = ledgerLinkApplication.getMeetingRepo().getAllMeetingsByDataSentStatus(false, recentCycle.getCycleId());
 
         if (meetings.isEmpty()) {
             meetings = new ArrayList<Meeting>();

@@ -14,12 +14,15 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
+import org.applab.ledgerlink.business_rules.VslaMeeting;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingStartingCash;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 
 import java.nio.DoubleBuffer;
 
@@ -140,6 +143,17 @@ public class MeetingStartingCashFrag extends SherlockFragment {
             });
         }
 
+        VslaCycle recentCycle = new VslaCycleRepo(context).getMostRecentCycle();
+        Meeting previousMeeting = meetingRepo.getPreviousMeeting(recentCycle.getCycleId(), meetingId);
+        Log.e("CurrentMeeting", String.valueOf(meetingId));
+
+        expectedStartingCash = VslaMeeting.getTotalCashInBox(context, previousMeeting.getMeetingId());
+        lblExpectedStartingCash.setText(String.format("Expected Starting Cash In Box: %,.0f UGX", expectedStartingCash));
+
+        VslaMeeting vslaMeeting = new VslaMeeting(context, previousMeeting.getMeetingId());
+
+        lblCashTakenToBank.setText(String.format("Cash Taken to Bank: %,.0f UGX", vslaMeeting.getCashSavedToBank()));
+
         // Get starting cash for current meeting
         MeetingStartingCash startingCash = meetingRepo.getStartingCash();
         if(startingCash != null){
@@ -156,30 +170,6 @@ public class MeetingStartingCashFrag extends SherlockFragment {
                 txtLoanFromBank.setText(String.valueOf((int)loanFromBank));
             }
             txtActualCashInBoxComment.setText(startingCash.getComment());
-
-            expectedStartingCash = startingCash.getExpectedStartingCash();
-
-            /** If no previous meeting; i.e. fresh Start expected starting Cash = 0;
-             *If GSW has recorded cash then the recorded cash should be shown here as a net
-
-             targetMeetingId = currentMeeting.getMeetingId();
-
-             if (targetMeetingId != -1) {
-             startingCash = meetingRepo.getMeetingStartingCash(targetMeetingId);
-
-             if (startingCash != null) {
-
-             expectedStartingCash = startingCash.getExpectedStartingCash();
-             Log.d("MSC exCah4", String.valueOf(expectedStartingCash));
-             }
-             }
-             }*/
-            Meeting previousMeeting = meetingRepo.getPreviousMeeting();
-            double cashTakenToBank = previousMeeting.getClosingBalanceBank();
-
-            lblExpectedStartingCash.setText(String.format("Expected Starting Cash In Box: %,.0f UGX", expectedStartingCash));
-            //lblActualCashInBox.setText(String.format("Total Cash in Box: %,.0f UGX", actualStartingCash));
-            lblCashTakenToBank.setText(String.format("Cash Taken to Bank: %,.0f UGX", cashTakenToBank));
         }
     }
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:orientation="vertical">
+
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/frmMBorrowFromWelfare_top_control_bar">
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/RegularTextInstructionBold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="BORROW FROM WELFARE"
+        android:id="@+id/lblBorrowWelfare" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/RegularTextInstruction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:text="Select the member below that would like to borrow from Welfare"
+        android:id="@+id/lblReviewBorrowFromWelfareMessage"
+        android:layout_below="@id/lblBorrowWelfare"/>
+
+</RelativeLayout>
+
+<ListView
+    android:id="@+id/lvwBorrowFromWelfareMembers"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:choiceMode="singleChoice"
+    android:layout_below="@id/frmMBorrowFromWelfare_top_control_bar"
+    android:divider="@null"
+    android:dividerHeight="0dp">
+
+</ListView>
+
+<org.applab.ledgerlink.fontutils.TypefaceTextView
+    style="@style/RegularText"
+    android:id="@+id/txtMBorrowFromWelfareEmpty"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/empty_members_list"
+    android:layout_below="@id/frmMBorrowFromWelfare_top_control_bar" />
+
+</RelativeLayout>

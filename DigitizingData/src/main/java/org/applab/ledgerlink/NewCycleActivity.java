@@ -125,10 +125,11 @@ public class NewCycleActivity extends SherlockActivity {
                 selectedCycle = ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle();
             }
             if (selectedCycle != null) {
+                Log.e("LoanFromBankX", String.valueOf(selectedCycle.getOutstandingBankLoanAtSetup()));
                 //displayMessageBox("Testing", "Cycle to Update Found", Utils.MSGBOX_ICON_INFORMATION);
                 //Change the title in edit mode
                 TextView lblNCHeader = (TextView) findViewById(R.id.lblNCHeader);
-                lblNCHeader.setText("Edit the cycle beginning " + Utils.formatDate(selectedCycle.getStartDate(), "dd MMM yyyy") + " and ending " + Utils.formatDate(selectedCycle.getEndDate(), "dd MMM yyyy") + ".");
+                lblNCHeader.setText("Edit the cycle beginning " + Utils.formatDate(selectedCycle.getStartDate(), "dd MM yyyy") + " and ending " + Utils.formatDate(selectedCycle.getEndDate(), "dd MMM yyyy") + ".");
                 //Populate Fields
                 populateDataFields(selectedCycle);
 
@@ -140,15 +141,18 @@ public class NewCycleActivity extends SherlockActivity {
                         //linearLayout = (LinearLayout) findViewById(R.id.sectionNCMiddleCycleStart);
                         linearLayout.setVisibility(View.GONE);
                     } else if (selectedCycle.getInterestAtSetup() == 0 && selectedCycle.getFinesAtSetup() == 0) {
-                        linearLayout.setVisibility(View.GONE);
+                        //linearLayout.setVisibility(View.GONE);
                     } else {
+
                         linearLayout.setVisibility(View.VISIBLE);
                         TextView lblNCMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblNCMiddleCycleInformationHeading);
 
                         TextView txtInterestCollectedSoFar = (TextView) findViewById(R.id.lblNCMiddleCycleInterestCollectedSoFar);
                         TextView txtFinesCollectedSoFar = (TextView) findViewById(R.id.lblNCMiddleCycleFinesCollectedSoFar);
+                        TextView lblNCDisbursedOutstandingBankLoanAmountSoFar = (TextView) findViewById(R.id.lblNCDisbursedOutstandingBankLoanAmountSoFar);
                         txtInterestCollectedSoFar.setText(String.format("%.0f UGX", selectedCycle.getInterestAtSetup()));
                         txtFinesCollectedSoFar.setText(String.format("%.0f UGX", selectedCycle.getFinesAtSetup()));
+                        lblNCDisbursedOutstandingBankLoanAmountSoFar.setText(String.format("%.0f UGX", dummyGSWMeeting.getLoanFromBank()));
 
                         if (isUpdateCycleAction) {
                             EditText txtNCInterestCorrectionComment = (EditText) findViewById(R.id.txtNCMiddleCycleInterestCorrectionComment);
@@ -486,20 +490,29 @@ public class NewCycleActivity extends SherlockActivity {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                saveCycleDataToDb(finalCycle);
+                boolean successflag = saveCycleDataToDb(finalCycle);
+                if(successflag){
+
+                }
             }
         };
         LongTaskRunner.runLongTask(runnable, "Please wait...", "Saving cycle information...", NewCycleActivity.this);
     }
 
-
+    protected void saveDummyMeetingData(VslaCycle cycle){
+        Meeting dummyGSWMeeting = ledgerLinkApplication.getMeetingRepo().getDummyGettingStartedWizardMeeting();
+        dummyGSWMeeting.setLoanFromBank(cycle.getOutstandingBankLoanAtSetup());
+        ledgerLinkApplication.getMeetingRepo().updateMeeting(dummyGSWMeeting);
+    }
 
     private boolean saveCycleDataToDb(VslaCycle cycle) {
         boolean retVal = false;
         if (cycle.getCycleId() != 0) {
             retVal = ledgerLinkApplication.getVslaCycleRepo().updateCycle(cycle);
+            if(retVal){
+                saveDummyMeetingData(cycle);
+            }
         } else {
-
             retVal = ledgerLinkApplication.getVslaCycleRepo().addCycle(cycle);
         }
         boolean successFlg = false;
@@ -737,6 +750,26 @@ public class NewCycleActivity extends SherlockActivity {
                 }
             }
 
+            //Validate outstanding bank loan
+            EditText txtNCOutstandingGroupBankLoan = (EditText) findViewById(R.id.txtNCOutstandingGroupBankLoan);
+            String outstandingBankLoan = txtNCOutstandingGroupBankLoan.getText().toString().trim();
+            if(outstandingBankLoan.length() < 1){
+                if(isUpdateCycleAction){
+                    cycle.setOutstandingBankLoanAtSetup(cycle.getOutstandingBankLoanAtSetup());
+                }else{
+                    cycle.setOutstandingBankLoanAtSetup(0);
+                }
+            }else{
+                double outstandingBankLoanSoFar = Double.parseDouble(outstandingBankLoan);
+                if(outstandingBankLoanSoFar < 0.00){
+                    displayMessageBox(dialogTitle, "Total amount of the outstanding bank loan in current cycle should be zero and above.");
+                    txtNCOutstandingGroupBankLoan.requestFocus();
+                    return false;
+                }else{
+                    cycle.setOutstandingBankLoanAtSetup(outstandingBankLoanSoFar);
+                }
+            }
+
             if (isUpdateCycleAction) {
                 EditText txtNCInterestCorrectionComment = (EditText) findViewById(R.id.txtNCMiddleCycleInterestCorrectionComment);
                 if (null != txtNCInterestCorrectionComment) {
@@ -752,7 +785,6 @@ public class NewCycleActivity extends SherlockActivity {
                     }
                 }
             }
-
 
             //Set the Cycle as Active
             cycle.activate();
@@ -860,48 +892,5 @@ public class NewCycleActivity extends SherlockActivity {
         }
 
     }
-
-    /* Populates the max shares spinner  */
-    /*
-    public void buildMaxSharesSpinner() {
-
-        Spinner cboNCMaxShares = (Spinner) findViewById(R.id.cboNCMaxShares);
-        ArrayList<String> maxSharesArrayList = new ArrayList<String>();
-        maxSharesArrayList.add("select number");
-        for (int i = 1; i <= 100; i++) {
-            maxSharesArrayList.add(i + "");
-        }
-        String[] maxSharesList = maxSharesArrayList.toArray(new String[maxSharesArrayList.size()]);
-        maxSharesArrayList.toArray(maxSharesList);
-        ArrayAdapter<CharSequence> maxSharesAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, maxSharesList) {
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View v = super.getView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-                // ((TextView) v).setTextAppearance(getApplicationContext(), R.style.RegularText);
-
-                return v;
-            }
-
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View v = super.getDropDownView(position, convertView, parent);
-
-                Typeface externalFont = Typeface.createFromAsset(getAssets(), "fonts/roboto-regular.ttf");
-                ((TextView) v).setTypeface(externalFont);
-
-                return v;
-            }
-        };
-
-        maxSharesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cboNCMaxShares.setAdapter(maxSharesAdapter);
-        //cboNCMaxShares.setOnItemSelectedListener(new CustomGenderSpinnerListener());
-
-        // Make the spinner selectable
-        cboNCMaxShares.setFocusable(true);
-        cboNCMaxShares.setFocusableInTouchMode(true);
-        cboNCMaxShares.setClickable(true);
-    }*/
 
 }

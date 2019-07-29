@@ -74,6 +74,7 @@ public class AddMemberActivity extends SherlockActivity {
     protected TextView txtLoanAmount;
     protected TextView txtAMMLoanNextRepaymentDate;
     protected TextView txtAMMLoanNumber;
+    protected TextView txtOutstandingWelfareDueDate;
     protected boolean isGettingStartedMode = false; //flags whether we are in wizard mode
 
     protected LedgerLinkApplication ledgerLinkApplication;
@@ -136,6 +137,28 @@ public class AddMemberActivity extends SherlockActivity {
 
         txtWelfareSoFar = (TextView) findViewById(R.id.txtAMMWelfareCorrection);
 
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, 1);
+
+        txtOutstandingWelfareDueDate = (TextView) findViewById(R.id.txtOutstandingWelfareDueDate);
+        txtOutstandingWelfareDueDate.setText(Utils.formatDate(cal.getTime(), "dd-MMM-yyyy"));
+        txtOutstandingWelfareDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date nextOutstandingWelfareDueDate = Utils.stringToDate(txtOutstandingWelfareDueDate.getText().toString(), "dd-MM-yyyy");
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(nextOutstandingWelfareDueDate);
+                mYear = cal.get(Calendar.YEAR);
+                mMonth = cal.get(Calendar.MONTH);
+                mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+                viewClicked = (TextView) view;
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddMemberActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                datePickerDialog.setTitle("Set the outstanding welfare due date");
+                datePickerDialog.show();
+            }
+        });
+
         txtLoanAmount = (TextView) findViewById(R.id.txtAMMiddleCycleLoansCorrection);
 
         clearDataFields();
@@ -191,8 +214,7 @@ public class AddMemberActivity extends SherlockActivity {
 
 
             //Default next repayment date to a month from now
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.MONTH, 1);
+
             txtAMMLoanNextRepaymentDate.setText(Utils.formatDate(cal.getTime(), "dd-MMM-yyyy"));
 
             mYear = cal.get(Calendar.YEAR);
@@ -236,16 +258,25 @@ public class AddMemberActivity extends SherlockActivity {
         TextView lblAMMiddleCycleSavings = (TextView) findViewById(R.id.lblAMMiddleCycleSavings);
         TextView lblAMMiddleCycleLoans = (TextView) findViewById(R.id.lblAMMiddleCycleLoans);
         TextView lblAMMiddleCycleWelfare = (TextView) findViewById(R.id.lblAMMiddleCycleWelfare);
+        TextView lblAMMiddleCycleOutstandingWelfare = (TextView) findViewById(R.id.lblAMMiddleCycleOutstandingWelfare);
 
         txtAMMLoanNumber.setText(String.valueOf(member.getOutstandingLoanNumberOnSetup()));
 
         lblAMMiddleCycleSavings.setText(String.format("%,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
         lblAMMiddleCycleLoans.setText(String.format("%,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
         lblAMMiddleCycleWelfare.setText(String.format("%,.0f %s", member.getWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
+        lblAMMiddleCycleOutstandingWelfare.setText(String.format("%,.0f %s", member.getOutstandingWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
+
+        if(member.getOutstandingWelfareDueDateOnSetup() != null){
+            txtOutstandingWelfareDueDate.setText(Utils.formatDate(member.getOutstandingWelfareDueDateOnSetup(), "dd-MM-yyyy"));
+        }else{
+            txtOutstandingWelfareDueDate.setText("none");
+            txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
+        }
 
         // populate the next repayment date
         if (member.getDateOfFirstRepayment() != null) {
-            txtAMMLoanNextRepaymentDate.setText(Utils.formatDate(member.getDateOfFirstRepayment(), "dd-MMM-yyyy"));
+            txtAMMLoanNextRepaymentDate.setText(Utils.formatDate(member.getDateOfFirstRepayment(), "dd-MM-yyyy"));
         } else {
             txtAMMLoanNextRepaymentDate.setText("none");
             txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
@@ -665,6 +696,27 @@ public class AddMemberActivity extends SherlockActivity {
             }
         }
 
+        EditText txtOutstandingWelfareAmount = (EditText) findViewById(R.id.txtAMMOutstandingWelfareCorrection);
+        String outstandingWelfareAmount = txtOutstandingWelfareAmount.getText().toString().trim();
+        if(outstandingWelfareAmount.length() < 1){
+            member.setOutstandingWelfareOnSetup(0);
+        }else{
+            double totalOutstandingWelfare = Double.parseDouble(outstandingWelfareAmount);
+            if(totalOutstandingWelfare < 0.00){
+                Utils.createAlertDialogOk(this, dlgTitle, "Total Amount of this Member's outstanding welfare should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                txtOutstandingWelfareAmount.requestFocus();
+                return false;
+            }else{
+                member.setOutstandingWelfareOnSetup(totalOutstandingWelfare);
+                if(totalOutstandingWelfare > 0 && txtOutstandingWelfareDueDate.getText().length() == 0){
+                    Utils.createAlertDialogOk(this, dlgTitle, "The outstanding welfare due date is required", Utils.MSGBOX_ICON_EXCLAMATION);
+                    return false;
+                }else{
+                    member.setOutstandingWelfareDueDateOnSetup(Utils.getDateFromString(txtOutstandingWelfareDueDate.getText().toString(), "dd-MM-yyyy"));
+                }
+            }
+        }
+
         String loanAmount = txtLoanAmount.getText().toString().trim();
         if(loanAmount.length() < 1){
             if (isEditAction) {
@@ -731,26 +783,27 @@ public class AddMemberActivity extends SherlockActivity {
         String dlgTitle = "Loan Error";
         VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(this);
         VslaCycle vslaCycle = vslaCycleRepo.getCurrentCycle();
+        if(vslaCycle != null) {
+            if (loanNo < 1 && outstandingLoan > 0) {
+                DialogMessageBox.show(this, dlgTitle, "The loan number cannot be zero");
+                txtAMMLoanNumber.requestFocus();
+                return false;
+            }
 
-        if(loanNo < 1 && outstandingLoan > 0){
-            DialogMessageBox.show(this, dlgTitle, "The loan number cannot be zero");
-            txtAMMLoanNumber.requestFocus();
-            return false;
-        }
-
-        boolean hasLoanNo = MeetingLoanIssuedRepo.hasLoanNumber(this, vslaCycle.getCycleId(), loanNo);
-        if (hasLoanNo) {
-            if (outstandingLoan > 0.00 || outstandingLoan < 1) {
-                if (isEditAction) {
-                    if (loanNo != member.getOutstandingLoanNumberOnSetup()) {
+            boolean hasLoanNo = MeetingLoanIssuedRepo.hasLoanNumber(this, vslaCycle.getCycleId(), loanNo);
+            if (hasLoanNo) {
+                if (outstandingLoan > 0.00 || outstandingLoan < 1) {
+                    if (isEditAction) {
+                        if (loanNo != member.getOutstandingLoanNumberOnSetup()) {
+                            DialogMessageBox.show(this, dlgTitle, "The loan number " + loanNo + " already exists");
+                            txtAMMLoanNumber.requestFocus();
+                            return false;
+                        }
+                    } else {
                         DialogMessageBox.show(this, dlgTitle, "The loan number " + loanNo + " already exists");
                         txtAMMLoanNumber.requestFocus();
-                        return  false;
+                        return false;
                     }
-                } else {
-                    DialogMessageBox.show(this, dlgTitle, "The loan number " + loanNo + " already exists");
-                    txtAMMLoanNumber.requestFocus();
-                    return false;
                 }
             }
         }

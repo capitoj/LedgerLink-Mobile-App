@@ -29,7 +29,7 @@
             android:layout_alignLeft="@+id/edt_passkey"
             android:layout_alignRight="@+id/edt_passkey"
             android:layout_below="@+id/imgVALogo"
-            android:text="VSLA NAME " />
+            android:text="VSLA NAME" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblActivationLoginMsg"

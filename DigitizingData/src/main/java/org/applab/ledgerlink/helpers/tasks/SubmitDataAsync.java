@@ -101,6 +101,7 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONArray> {
         if(this.isConnected){
             try {
                 if(jsonArray != null) {
+
                     Toast.makeText(this.context, "The meeting data was sent successfully", Toast.LENGTH_LONG).show();
                     for(int i = 0; i < jsonArray.length(); i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);

@@ -33,6 +33,7 @@ public class MeetingWelfareRepo {
     public MeetingWelfareRepo(Context context, int welfareId){
         this.context = context;
         this.welfareId = welfareId;
+        this.meetingWelfare = new MeetingWelfare();
         this.__load();
     }
 
@@ -237,7 +238,6 @@ public class MeetingWelfareRepo {
         boolean performUpdate = false;
         SQLiteDatabase db = null;
         int welfareId = 0;
-        boolean isSaved = false;
         try{
             welfareId = getMemberWelfareId(meetingId, memberId);
             Log.e("SaveWelfare", String.valueOf(welfareId));

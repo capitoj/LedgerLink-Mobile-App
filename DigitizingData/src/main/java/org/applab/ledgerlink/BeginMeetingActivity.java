@@ -62,7 +62,7 @@ public class BeginMeetingActivity extends SherlockActivity {
 
         // Check fore fresh start; no meetings other than GSW
         // if (meetingRepo.getAllNonGSWMeetings().isEmpty()) {
-        if (ledgerLinkApplication.getMeetingRepo().getAllMeetings().isEmpty()) {
+        if (ledgerLinkApplication.getMeetingRepo().getAllMeetings(recentCycle.getCycleId()).isEmpty()) {
             noPriorMeetings = true;
         }
 
@@ -278,7 +278,8 @@ public class BeginMeetingActivity extends SherlockActivity {
                     public void onClick(View v) {
                         MeetingRepo meetingRepo = new MeetingRepo(BeginMeetingActivity.this);
                         serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
-                        List<Meeting> pastMeetings = meetingRepo.getPastMeetings();
+                        VslaCycle recentCycle = ledgerLinkApplication.getVslaCycleRepo().getMostRecentCycle();
+                        List<Meeting> pastMeetings = meetingRepo.getPastMeetings(recentCycle.getCycleId());
                         JSONArray jsonArray = new JSONArray();
                         for(Meeting meeting : pastMeetings){
                             String meetingDataToBeSent = DataFactory.getJSONOutput(BeginMeetingActivity.this, meeting.getMeetingId());

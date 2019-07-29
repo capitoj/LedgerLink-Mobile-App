@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -281,14 +282,27 @@ public class Utils {
     }
 
     public static Date getDateFromString(String date, String format) {
-
-        try {
-            SimpleDateFormat ft = new SimpleDateFormat(format);
-            return ft.parse(date);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(date.length() > 0){
+            try{
+                SimpleDateFormat ft = new SimpleDateFormat(format);
+                return ft.parse(date);
+            }catch(Exception e){
+                Log.e("DateFromStringError", e.getMessage() + " Date>>> " + String.valueOf(date.length()));
+                return new Date();
+            }
+        }else{
             return new Date();
         }
+
+
+//        try {
+//            SimpleDateFormat ft = new SimpleDateFormat(format);
+//            return date != "" ? ft.parse(date) : new Date();
+//        } catch (Exception e) {
+//            Log.e("DateError", date);
+//            e.printStackTrace();
+//            return new Date();
+//        }
         //Parameterized constructor :- Date(int year,int month,int day) creates a Date object and initialize it with given year+1900,  given month and given day.
     }
 

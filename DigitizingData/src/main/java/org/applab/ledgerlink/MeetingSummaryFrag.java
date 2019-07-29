@@ -13,10 +13,12 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 import org.applab.ledgerlink.business_rules.VslaMeeting;
 import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 import org.w3c.dom.Text;
 
 /**
@@ -182,18 +184,27 @@ public class MeetingSummaryFrag extends SherlockFragment {
             double totalLoansRepaidInMeeting = 0.0;
 
             VslaMeeting prevVslaMeeting = new VslaMeeting(getSherlockActivity().getApplicationContext(), previousMeeting.getMeetingId());
+            Log.e("PreMeetingId", String.valueOf(previousMeeting.getLoanFromBank()));
 
             totalMeetingSavings = parentActivity.ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(previousMeeting.getMeetingId());
             txtTotalSavings.setText(String.format("Total Savings: %,.0f UGX", prevVslaMeeting.getTotalSavings()));
 
-            totalLoansRepaidInMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(previousMeeting.getMeetingId());
-            txtTotalRepayments.setText(String.format("Total Loans repaid: %,.0f UGX", prevVslaMeeting.getTotalLoansRepaid()));
+
 
             txtTotalLoanIssues.setText(String.format("Total Loans issued: %,.0f UGX", prevVslaMeeting.getTotalLoansIssued()));
 
             lblMSFLastWelfare.setText(String.format("Total Welfare: %,.0f UGX", prevVslaMeeting.getTotalWelfare()));
+            VslaCycle recentCycle = parentActivity.ledgerLinkApplication.getVslaCycleRepo().getMostRecentCycle();
+            if(parentActivity.ledgerLinkApplication.getMeetingRepo().getAllMeetings(recentCycle.getCycleId()).size() < 3){
+                txtTotalRepayments.setText(String.format("Total Interest earned: %,.0f UGX", currentMeeting.getVslaCycle().getInterestAtSetup()));
+                lblMSFLastFines.setText(String.format("Total Fines: %,.0f UGX", currentMeeting.getVslaCycle().getFinesAtSetup()));
+            }else {
 
-            lblMSFLastFines.setText(String.format("Total Fines: %,.0f UGX", prevVslaMeeting.getTotalFinesPaid()));
+                totalLoansRepaidInMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(previousMeeting.getMeetingId());
+                txtTotalRepayments.setText(String.format("Total Loans repaid: %,.0f UGX", prevVslaMeeting.getTotalLoansRepaid()));
+                lblMSFLastFines.setText(String.format("Total Fines: %,.0f UGX", prevVslaMeeting.getTotalFinesPaid()));
+
+            }
 
             lblMSFLastCashFromBank.setText(String.format("Cash From Bank: %,.0f UGX", prevVslaMeeting.getCashFromBank()));
 

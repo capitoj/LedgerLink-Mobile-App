@@ -18,6 +18,7 @@ import org.applab.ledgerlink.domain.schema.LoanIssueSchema;
 import org.applab.ledgerlink.domain.schema.LoanRepaymentSchema;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
 import org.applab.ledgerlink.domain.schema.MessageChannelsSchema;
+import org.applab.ledgerlink.domain.schema.OutstandingWelfareSchema;
 import org.applab.ledgerlink.domain.schema.SavingSchema;
 import org.applab.ledgerlink.domain.schema.TrainingModuleResponseSchema;
 import org.applab.ledgerlink.domain.schema.TrainingModuleSchema;
@@ -36,7 +37,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String INTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DATABASE_NAME = "ledgerlinkdb";
-    private static final int DATABASE_VERSION = 61;
+    private static final int DATABASE_VERSION = 64;
     private static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
     private static final String DATA_FOLDER = "LedgerLink";
 
@@ -120,6 +121,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         sqlQuery = WelfareSchema.getCreateTableScript();
         db.execSQL(sqlQuery);
 
+        // Create table: OutstandingWelfare
+        sqlQuery = OutstandingWelfareSchema.getCreateTableScript();
+        db.execSQL(sqlQuery);
+
         // Create Table: LoanIssues
         sqlQuery = LoanIssueSchema.getCreateTableScript();
         db.execSQL(sqlQuery);
@@ -183,6 +188,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             Log.e("DatabaseHandler", "Table Welfare Added");
         }
 
+        //Create table: OutstandingWelfare
+        if(!this.hasDbTable(db, OutstandingWelfareSchema.TBL_OUTSTANDING_WELFARE)){
+            sqlQuery = OutstandingWelfareSchema.getCreateTableScript();
+            db.execSQL(sqlQuery);
+            Log.e("DatabaseHandler", "Table Outstanding Welfare Added");
+        }
+
         //Add columns to the meeting table
         if(!this.hasTableColumn(db, MeetingSchema.getTableName(), "BankLoanRepayment"))
             db.execSQL(MeetingSchema.addColumnBankLoanRepayment());
@@ -238,11 +250,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     protected void preLoadFinancialInstitutions(SQLiteDatabase db){
         db.execSQL("delete from " + FinancialInstitutionSchema.getTableName());
         db.execSQL("delete from sqlite_sequence where name = '" + FinancialInstitutionSchema.getTableName() + "'");
-        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Post Bank Uganda", "POST_BANK_UGANDA", "154.0.139.218:9008"});
-        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Centenary Rural Development Bank", "CENTENARY_RURAL_DEVELOPMENT_BANK", "154.0.139.218:9008"});
-        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Finca Uganda Limited", "FINCA_UGANDA_LIMITED", "154.0.139.218:9008"});
-        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Opportunity Bank", "OPPORTUNITY_BANK", "154.0.139.218:9008"});
-        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Rural Finance Initiative", "RURAL_FINANCE_INITIATIVE", "154.0.139.218:9008"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Post Bank Uganda", "POST_BANK_UGANDA", "217.160.25.83:9007"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Centenary Rural Development Bank", "CENTENARY_RURAL_DEVELOPMENT_BANK", "217.160.25.83:9007"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Finca Uganda Limited", "FINCA_UGANDA_LIMITED", "217.160.25.83:9007"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Opportunity Bank", "OPPORTUNITY_BANK", "217.160.25.83:9007"});
+        db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Rural Finance Initiative", "RURAL_FINANCE_INITIATIVE", "217.160.25.83:9007"});
         Log.e("DatabaseHandler", "Preloaded Financial Institutions");
     }
 

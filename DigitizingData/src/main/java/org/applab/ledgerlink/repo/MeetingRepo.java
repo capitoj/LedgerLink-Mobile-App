@@ -136,12 +136,12 @@ public class MeetingRepo {
     }
 
     //Get the previous meeting
-    public Meeting getPreviousMeeting(){
+    public Meeting getPreviousMeeting(int currentCycleId){
         Meeting previousMeeting = new Meeting();
         try{
             SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sql = "select * from Meetings where _id < 3 order by _id desc limit 0,1";
-            Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(meetingID)});
+            String sql = "select * from Meetings where CycleId = ? order by _id desc limit 1,1";
+            Cursor cursor = db.rawQuery(sql, new String[]{String.valueOf(currentCycleId)});
             if(cursor.moveToNext()){
                 previousMeeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
                 VslaCycle vslaCycle = new VslaCycle();
@@ -198,6 +198,22 @@ public class MeetingRepo {
 
     //Legacy Code is below. The legacy code needs to be refactored to exploit dependency injection
 
+    //Add more fields to this method to update the meeting data table
+    public boolean updateMeeting(Meeting meeting){
+        try{
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(MeetingSchema.COL_MT_LOAN_FROM_BANK, meeting.getLoanFromBank());
+            long result = db.update(MeetingSchema.TBL_MEETINGS, values, MeetingSchema.COL_MT_MEETING_ID + " = ?", new String[]{String.valueOf(meeting.getMeetingId())});
+            if(result != -1){
+                return true;
+            }
+        }catch(Exception e){
+            Log.e("UpdateMeeting", e.getMessage());
+        }
+        return false;
+    }
+
     // Should add this meeting, deactivate all other meetings in cycle, and activate this meeting
     public boolean addMeeting(Meeting meeting) {
         SQLiteDatabase db = null;
@@ -211,11 +227,20 @@ public class MeetingRepo {
             values.put(MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD, meeting.isGettingStarted());
             values.put(MeetingSchema.COL_MT_IS_MARKED_FOR_DELETION, 0);
             values.put(MeetingSchema.COL_MT_MEETING_DATE, Utils.formatDateToSqlite(meeting.getMeetingDate()));
+            values.put(MeetingSchema.COL_MT_LOAN_FROM_BANK, meeting.getLoanFromBank());
             if (meeting.getVslaCycle() != null) {
                 values.put(MeetingSchema.COL_MT_CYCLE_ID, meeting.getVslaCycle().getCycleId());
             }
+            String sql = "INSERT INTO " + MeetingSchema.TBL_MEETINGS + " (" + MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD +"," +
+                    MeetingSchema.COL_MT_IS_MARKED_FOR_DELETION + "," +
+                    MeetingSchema.COL_MT_MEETING_DATE + "," +
+                    MeetingSchema.COL_MT_LOAN_FROM_BANK + "," +
+                    MeetingSchema.COL_MT_CYCLE_ID + ") VALUES (?, ?, ?, ?, ?)";
+            //db.execSQL(sql, new String[]{String.valueOf(meeting.isGettingStarted()), String.valueOf(0), Utils.formatDateToSqlite(meeting.getMeetingDate()), String.valueOf(meeting.getLoanFromBank()), String.valueOf(meeting.getVslaCycle().getCycleId())});
             // Inserting Row
             long retVal = db.insert(MeetingSchema.getTableName(), null, values);
+            Meeting targetMeeting = new MeetingRepo(context).getMeetingById(Integer.parseInt(String.valueOf(retVal)));
+            Log.e("InsertMeeting", String.valueOf(targetMeeting.getLoanFromBank()));
 
             if (retVal == -1) {
                 return false;
@@ -286,7 +311,7 @@ public class MeetingRepo {
         }
     }
 
-    public ArrayList<Meeting> getAllMeetings() {
+    public ArrayList<Meeting> getAllMeetings(int currentCycleId) {
         ArrayList<Meeting> meetings = null;
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -299,7 +324,7 @@ public class MeetingRepo {
             String columnList = MeetingSchema.getColumnList();
 
             // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s ORDER BY %s DESC", columnList, MeetingSchema.getTableName(),
+            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d ORDER BY %s DESC", columnList, MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID, currentCycleId,
                     MeetingSchema.COL_MT_MEETING_ID);
             cursor = db.rawQuery(selectQuery, null);
 
@@ -474,10 +499,10 @@ public class MeetingRepo {
     }
 
 
-    public ArrayList<Meeting> getAllMeetingsByDataSentStatus(boolean isDataSent) {
+    public ArrayList<Meeting> getAllMeetingsByDataSentStatus(boolean isDataSent, int currentCycleId) {
         ArrayList<Meeting> filteredMeetings = new ArrayList<Meeting>();
         try {
-            ArrayList<Meeting> meetingsList = this.getAllMeetings();
+            ArrayList<Meeting> meetingsList = this.getAllMeetings(currentCycleId);
             for(Meeting meeting : meetingsList){
                 if(meeting.isMeetingDataSent() == isDataSent){
                     filteredMeetings.add(meeting);
@@ -489,10 +514,10 @@ public class MeetingRepo {
         return filteredMeetings;
     }
 
-    public ArrayList<Meeting> getPastMeetings(){
+    public ArrayList<Meeting> getPastMeetings(int currentCycleId){
         ArrayList<Meeting> oldMeetings = new ArrayList<Meeting>();
         try{
-            ArrayList<Meeting> meetingsList = this.getAllMeetings();
+            ArrayList<Meeting> meetingsList = this.getAllMeetings(currentCycleId);
             for(Meeting meeting : meetingsList){
                 if(!meeting.isMeetingDataSent() && !meeting.isCurrent()){
                     oldMeetings.add(0, meeting);
@@ -831,7 +856,7 @@ public class MeetingRepo {
             String columnList = MeetingSchema.getColumnList();
 
             // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d", columnList, MeetingSchema.getTableName(),
+            String selectQuery = String.format("SELECT * FROM %s WHERE %s=%d", MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_MEETING_ID, meetingId);
             cursor = db.rawQuery(selectQuery, null);
 
@@ -842,6 +867,7 @@ public class MeetingRepo {
                 meeting.setMeetingDate(meetingDate);
                 meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
                 meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD)) == 1);
+                meeting.setLoanFromBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_LOAN_FROM_BANK)));
 
                 //Check for Nulls while loading the VSLA Cycle
                 int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
@@ -897,6 +923,7 @@ public class MeetingRepo {
                 meeting.setMeetingDate(meetingDate);
                 meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
                 meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD)) == 1);
+                meeting.setLoanFromBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_LOAN_FROM_BANK)));
 
                 //Check for Nulls while loading the VSLA Cycle
                 int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
@@ -990,66 +1017,43 @@ public class MeetingRepo {
     }
 
     public Meeting getPreviousMeeting(int vslaCycleId, int meetingId) {
-        SQLiteDatabase db = null;
-        Cursor cursor = null;
-        VslaCycleRepo cycleRepo = null;
-        Meeting meeting = null;
+        Meeting previousMeeting = new Meeting();
 
         try {
-            cycleRepo = new VslaCycleRepo(context);
-            db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String columnList = MeetingSchema.getColumnList();
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String selectQuery = "SELECT * FROM Meetings WHERE CycleId = ? AND _id < ? ORDER BY _id DESC LIMIT 1";
+            Cursor cursor = db.rawQuery(selectQuery, new String[]{String.valueOf(vslaCycleId), String.valueOf(meetingId)});
 
-            // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d AND %s<%d AND %s<>%d ORDER BY %s DESC LIMIT 1",
-                    columnList, MeetingSchema.getTableName(),
-                    MeetingSchema.COL_MT_CYCLE_ID, vslaCycleId,
-                    MeetingSchema.COL_MT_MEETING_ID, meetingId,
-                    MeetingSchema.COL_MT_IS_MARKED_FOR_DELETION, 1,
-                    MeetingSchema.COL_MT_MEETING_ID);
-            cursor = db.rawQuery(selectQuery, null);
+            if(cursor.moveToNext()){
+                previousMeeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
+                VslaCycle vslaCycle = new VslaCycle();
+                vslaCycle.setCycleId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID)));
+                previousMeeting.setVslaCycle(vslaCycle);
+                previousMeeting.setMeetingDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE))));
+                previousMeeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD)) == 1);
+                int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
+                VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(context);
+                previousMeeting.setVslaCycle(vslaCycleRepo.getCycle(cycleId));
+                previousMeeting.setOpeningBalanceBox(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX)));
+                previousMeeting.setOpeningBalanceBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BANK)));
+                previousMeeting.setClosingBalanceBox(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BOX)));
+                previousMeeting.setClosingBalanceBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_SAVED_BANK)));
+                previousMeeting.setLoanFromBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_LOAN_FROM_BANK)));
+                previousMeeting.setBankLoanRepayment(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_BANK_LOAN_REPAYMENT)));
+                previousMeeting.setComment(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_CASH_FROM_BOX_COMMENT)));
 
-            // Get the second row
-            if (cursor != null && cursor.moveToFirst()) {
-                if (cursor.getCount() < 1) {
-                    return null;
-                }
-                if (cursor.moveToLast()) {
-                    meeting = new Meeting();
-                    Date meetingDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
-                    meeting.setMeetingDate(meetingDate);
-                    meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
-                    meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD)) == 1);
-
-                    // Check for Nulls while loading the VSLA Cycle
-                    int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));
-                    meeting.setVslaCycle(cycleRepo.getCycle(cycleId));
-                    if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
-                        meeting.setMeetingDataSent(true);
-                        Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
-                        meeting.setDateSent(dateMeetingDataSent);
-                    } else {
-                        meeting.setMeetingDataSent(false);
-                    }
-                    return meeting;
+                if (cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_DATA_SENT)) == 1) {
+                    previousMeeting.setMeetingDataSent(true);
+                    Date dateMeetingDataSent = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_DATE)));
+                    previousMeeting.setDateSent(dateMeetingDataSent);
                 } else {
-                    return null;
+                    previousMeeting.setMeetingDataSent(false);
                 }
-            } else {
-                return null;
             }
         } catch (Exception ex) {
             Log.e("MeetingRepo.getPreviousMeeting", ex.getMessage());
-            return null;
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-
-            if (db != null) {
-                db.close();
-            }
         }
+        return previousMeeting;
     }
 
     public Meeting getCurrentMeeting(int vslaCycleId) {
@@ -1119,7 +1123,7 @@ public class MeetingRepo {
             String columnList = MeetingSchema.getColumnList();
 
             // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s WHERE %s=%d LIMIT 1", columnList, MeetingSchema.getTableName(),
+            String selectQuery = String.format("SELECT * FROM %s WHERE %s=%d LIMIT 1", MeetingSchema.getTableName(),
                     MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD, 1);
             cursor = db.rawQuery(selectQuery, null);
 
@@ -1130,6 +1134,7 @@ public class MeetingRepo {
                 meeting.setMeetingDate(meetingDate);
                 meeting.setMeetingId(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
                 meeting.setGettingStarted(cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_IS_GETTING_STARTED_WIZARD)) == 1);
+                meeting.setLoanFromBank(cursor.getDouble(cursor.getColumnIndex(MeetingSchema.COL_MT_LOAN_FROM_BANK)));
 
                 //Check for Nulls while loading the VSLA Cycle
                 int cycleId = cursor.getInt(cursor.getColumnIndex(MeetingSchema.COL_MT_CYCLE_ID));

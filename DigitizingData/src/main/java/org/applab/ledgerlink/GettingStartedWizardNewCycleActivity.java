@@ -284,25 +284,26 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
     private boolean saveMiddleCycleData(boolean warnOnHighInterest) {
         boolean successFlg = false;
-        VslaCycle cycle = new VslaCycle();
+        VslaCycle targetCycle = new VslaCycle();
         VslaCycleRepo repo = new VslaCycleRepo(getApplicationContext());
         if (selectedCycle != null) {
-            cycle = selectedCycle;
+            targetCycle = selectedCycle;
         }
 
-        if (validateGettingStartedData(cycle, warnOnHighInterest)) {
+        if (validateGettingStartedData(targetCycle, warnOnHighInterest)) {
             boolean retVal = false;
-            if (cycle.getCycleId() != 0) {
-                retVal = repo.updateCycle(cycle);
+            if (targetCycle.getCycleId() != 0) {
+                retVal = repo.updateCycle(targetCycle);
             } else {
-                retVal = repo.addCycle(cycle);
+                retVal = repo.addCycle(targetCycle);
             }
             if (retVal) {
-                if (cycle.getCycleId() == 0) {
+                if (targetCycle.getCycleId() == 0) {
 
                     //Set this new cycle as the selected one
                     //Retrieve the recently added cycle so as to get the id as well
-                    cycle = repo.getMostRecentCycle();
+                    VslaCycle cycle = repo.getMostRecentCycle();
+                    cycle.setOutstandingBankLoanAtSetup(targetCycle.getOutstandingBankLoanAtSetup());
                     selectedCycle = cycle;
 
                     //TODO: Create Getting started wizard dummy meeting
@@ -427,6 +428,21 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 }
             }
 
+            //validate outstanding bank loan
+            EditText txtNCOutstandingGroupBankLoan = (EditText) findViewById(R.id.txtNCOutstandingGroupBankLoan);
+            String outstandingBankLoanSoFar = txtNCOutstandingGroupBankLoan.getText().toString().trim();
+            if(outstandingBankLoanSoFar.length() < 1){
+                cycle.setOutstandingBankLoanAtSetup(0);
+            }else{
+                double outstandingBankLoan = Double.parseDouble(outstandingBankLoanSoFar);
+                if(outstandingBankLoan < 0.00){
+                    displayMessageBox(dialogTitle, "The outstanding bank loan should be zero and above");
+                    txtNCOutstandingGroupBankLoan.requestFocus();
+                    return false;
+                }else{
+                    cycle.setOutstandingBankLoanAtSetup(outstandingBankLoan);
+                }
+            }
             return true;
         } catch (Exception ex) {
             return false;
@@ -447,10 +463,12 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             // Now populate specific to Getting started wizard
             EditText txtInterestCollectedSoFar = (EditText) findViewById(R.id.txtNCInterestCollectedSoFar);
             EditText txtFinesCollectedSoFar = (EditText) findViewById(R.id.txtNCFinesCollectedSoFar);
+            EditText txtNCOutstandingGroupBankLoan = (EditText) findViewById(R.id.txtNCOutstandingGroupBankLoan);
 
             // TODO: Set the interest and fines for the middle start cycle
             txtInterestCollectedSoFar.setText(Utils.formatRealNumber(cycle.getInterestAtSetup()));
             txtFinesCollectedSoFar.setText(Utils.formatRealNumber(cycle.getFinesAtSetup()));
+            txtNCOutstandingGroupBankLoan.setText(Utils.formatRealNumber(cycle.getOutstandingBankLoanAtSetup()));
 
         } catch (Exception ex) {
 

@@ -16,13 +16,16 @@ import com.actionbarsherlock.app.SherlockFragment;
 import org.applab.ledgerlink.business_rules.VslaMeeting;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingStartingCash;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.MeetingFineRepo;
 import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
 import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
+import org.applab.ledgerlink.repo.MeetingOutstandingWelfareRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.repo.MeetingSavingRepo;
 import org.applab.ledgerlink.repo.MeetingWelfareRepo;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 
 @SuppressWarnings("ALL")
 public class MeetingCashBookFrag extends SherlockFragment {
@@ -121,6 +124,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
         TextView lblFines = (TextView) getSherlockActivity().findViewById(R.id.lblFines);
         TextView lblNewLoans = (TextView) getSherlockActivity().findViewById(R.id.lblNewLoans);
         TextView lblWelfare = (TextView) getSherlockActivity().findViewById(R.id.lblWelfare);
+        TextView lblOutstandingWelfare = (TextView) getSherlockActivity().findViewById(R.id.lblOutstandingWelfare);
         EditText txtCashToBankAmount = (EditText) getSherlockActivity().findViewById(R.id.txtCashToBank);
         EditText txtBankLoanRepayment = (EditText) getSherlockActivity().findViewById(R.id.txtBankLoanRepayment);
 
@@ -153,9 +157,12 @@ public class MeetingCashBookFrag extends SherlockFragment {
             Meeting currentMeeting = meetingRepo.getMeeting();
             if(currentMeeting != null){
                 //Get the cycle that contains the previous meeting in order to get starting cash.
-                double expectedStartingCash = 0.0;
+                VslaCycle recentCycle = parentActivity.ledgerLinkApplication.getVslaCycleRepo().getMostRecentCycle();
+                Meeting previousMeeting = meetingRepo.getPreviousMeeting(recentCycle.getCycleId());
                 MeetingStartingCash startingCash = meetingRepo.getStartingCash();
-                expectedStartingCash = startingCash.getExpectedStartingCash();
+                Meeting prevMeeting = new MeetingRepo(getSherlockActivity().getApplicationContext()).getPreviousMeeting(recentCycle.getCycleId(), meetingId);
+
+                double expectedStartingCash = VslaMeeting.getTotalCashInBox(getSherlockActivity().getApplicationContext(), prevMeeting.getMeetingId());
 
                 MeetingSavingRepo savingRepo = new MeetingSavingRepo(getSherlockActivity().getApplicationContext());
                 double totalSavings = savingRepo.getTotalSavingsInMeeting(meetingId);
@@ -171,6 +178,9 @@ public class MeetingCashBookFrag extends SherlockFragment {
 
                 MeetingWelfareRepo meetingWelfareRepo = new MeetingWelfareRepo(getSherlockActivity().getApplicationContext());
                 double totalWalfare = meetingWelfareRepo.getTotalWelfareInMeeting(meetingId);
+
+                MeetingOutstandingWelfareRepo meetingOutstandingWelfareRepo = new MeetingOutstandingWelfareRepo(getSherlockActivity().getApplicationContext());
+                double totalOutstandingWelfare = meetingOutstandingWelfareRepo.getTotalOutstandingWelfareInMeeting(meetingId);
 
                 double loanFromBank = currentMeeting.getLoanFromBank();
 
@@ -197,6 +207,7 @@ public class MeetingCashBookFrag extends SherlockFragment {
                 lblLoanRepayments.setText(String.format("Loan Repayment %s UGX", totalLoansRepaid));
                 lblFines.setText(String.format("Fines %s UGX", totalFines));
                 lblWelfare.setText(String.format("Welfare %s UGX", totalWalfare));
+                lblOutstandingWelfare.setText(String.format("Outstanding welfare %s UGX", totalOutstandingWelfare));
                 lblNewLoans.setText(String.format("New Loans %s UGX", totalLoansIssued));
                 lblCashFromBank.setText(String.format("Cash From Bank %s UGX", cashFromBank));
                 lblLoanFromBank.setText(String.format("Loan From Bank %s UGX", loanFromBank));

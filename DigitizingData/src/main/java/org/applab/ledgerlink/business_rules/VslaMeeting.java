@@ -1,13 +1,18 @@
 package org.applab.ledgerlink.business_rules;
 
 import android.content.Context;
+import android.util.Log;
 
+import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.repo.MeetingFineRepo;
 import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
 import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
+import org.applab.ledgerlink.repo.MeetingOutstandingWelfareRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.repo.MeetingSavingRepo;
 import org.applab.ledgerlink.repo.MeetingWelfareRepo;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 
 /**
  * Created by JCapito on 10/3/2018.
@@ -62,6 +67,11 @@ public class VslaMeeting {
         return meetingWelfareRepo.getTotalWelfareInMeeting(this.meetingId);
     }
 
+    public double getTotalOutstandingWelfare(){
+        MeetingOutstandingWelfareRepo meetingOutstandingWelfareRepo = new MeetingOutstandingWelfareRepo(this.context);
+        return meetingOutstandingWelfareRepo.getTotalOutstandingWelfareInMeeting(this.meetingId);
+    }
+
     public double getBankLoanRepayment(){
         return this.meetingRepo.getMeeting().getBankLoanRepayment();
     }
@@ -70,10 +80,53 @@ public class VslaMeeting {
         return this.meetingRepo.getMeeting().getClosingBalanceBank();
     }
 
+    //This code needs to be refactored
     public static double getTotalCashInBox(Context context, int meetingId){
-        VslaMeeting vslaMeeting = new VslaMeeting(context, meetingId);
-        double totalCashInBox = (vslaMeeting.getActualStartingCash() + vslaMeeting.getTotalSavings() + vslaMeeting.getTotalLoansRepaid() + vslaMeeting.getTotalFinesPaid() + vslaMeeting.getLoanFromBank() + vslaMeeting.getCashFromBank() + vslaMeeting.getTotalWelfare()) - (vslaMeeting.getTotalLoansIssued() + vslaMeeting.getBankLoanRepayment());
-        return totalCashInBox;
+        MeetingRepo meetingRepo = new MeetingRepo(context);
+        double totalCashInBox = 0.00;
+        VslaCycle recentCycle = new VslaCycleRepo(context).getMostRecentCycle();
+        int noOfMeetings = meetingRepo.getAllMeetings(recentCycle.getCycleId()).size();
+        if(new VslaCycleRepo(context).getCyclesCount() > 1){
+            VslaMeeting vslaMeeting = new VslaMeeting(context, meetingId);
 
+            totalCashInBox = vslaMeeting.getTotalSavings()
+                    + vslaMeeting.getTotalWelfare()
+                    + vslaMeeting.getTotalFinesPaid()
+                    + vslaMeeting.getTotalLoansRepaid()
+                    + vslaMeeting.getLoanFromBank()
+                    + vslaMeeting.getActualStartingCash()
+                    - vslaMeeting.getTotalOutstandingWelfare()
+                    - vslaMeeting.getBankLoanRepayment()
+                    - vslaMeeting.getTotalLoansIssued();
+        }else{
+            if(noOfMeetings < 3){
+                Meeting dummyMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+                VslaMeeting vslaMeeting = new VslaMeeting(context, dummyMeeting.getMeetingId());
+
+                totalCashInBox = dummyMeeting.getVslaCycle().getFinesAtSetup()
+                        + dummyMeeting.getVslaCycle().getInterestAtSetup()
+                        + dummyMeeting.getLoanFromBank()
+                        + dummyMeeting.getSavings()
+                        + vslaMeeting.getTotalSavings()
+                        + vslaMeeting.getTotalWelfare()
+                        + vslaMeeting.getActualStartingCash()
+                        - vslaMeeting.getTotalOutstandingWelfare()
+                        - vslaMeeting.getTotalLoansIssued();
+            }else{
+                VslaMeeting vslaMeeting = new VslaMeeting(context, meetingId);
+
+                totalCashInBox = vslaMeeting.getTotalSavings()
+                        + vslaMeeting.getTotalWelfare()
+                        + vslaMeeting.getTotalFinesPaid()
+                        + vslaMeeting.getTotalLoansRepaid()
+                        + vslaMeeting.getLoanFromBank()
+                        + vslaMeeting.getActualStartingCash()
+                        - vslaMeeting.getTotalOutstandingWelfare()
+                        - vslaMeeting.getBankLoanRepayment()
+                        - vslaMeeting.getTotalLoansIssued();
+            }
+        }
+
+        return totalCashInBox;
     }
 }

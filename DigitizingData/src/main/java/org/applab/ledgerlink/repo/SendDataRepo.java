@@ -2,16 +2,19 @@ package org.applab.ledgerlink.repo;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.applab.ledgerlink.datatransformation.AttendanceDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.FinesDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.LoanDataTransferRecord;
+import org.applab.ledgerlink.datatransformation.OutstandingWelfareDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.RepaymentDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.SavingsDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.WelfareDataTransferRecord;
 import org.applab.ledgerlink.domain.model.FinancialInstitution;
 import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.domain.model.VslaInfo;
@@ -43,6 +46,7 @@ public class SendDataRepo {
     protected ArrayList<RepaymentDataTransferRecord> loanRepayments;
     protected ArrayList<FinesDataTransferRecord> fines;
     protected ArrayList<WelfareDataTransferRecord> welfares;
+    protected ArrayList<OutstandingWelfareDataTransferRecord> outstandingWelfares;
     protected boolean meetingLoaded;
     protected int meetingId;
 
@@ -62,6 +66,7 @@ public class SendDataRepo {
         this.loadLoanRepayment();
         this.loadFines();
         this.loadWelfares();
+        this.loadOutstandingWelfares();
     }
 
     protected void loadVslaInfo(){
@@ -134,6 +139,13 @@ public class SendDataRepo {
         }
     }
 
+    protected void loadOutstandingWelfares(){
+        if(this.meetingLoaded){
+            MeetingOutstandingWelfareRepo meetingOutstandingWelfareRepo = new MeetingOutstandingWelfareRepo(context);
+            this.outstandingWelfares = meetingOutstandingWelfareRepo.getMeetingOutstandingWelfareForAllMembers(meeting.getMeetingId());
+        }
+    }
+
     protected double getTotalFinesPaid(){
         MeetingFineRepo meetingFineRepo = new MeetingFineRepo(context);
         return meetingFineRepo.getTotalFinesPaidInThisMeeting(meeting.getMeetingId());
@@ -167,5 +179,10 @@ public class SendDataRepo {
     protected double getTotalWelfare(){
         MeetingWelfareRepo meetingWelfareRepo = new MeetingWelfareRepo(context);
         return meetingWelfareRepo.getTotalWelfareInMeeting(meeting.getMeetingId());
+    }
+
+    protected double getTotalOutstandingWelfare(){
+        MeetingOutstandingWelfareRepo meetingOutstandingWelfareRepo = new MeetingOutstandingWelfareRepo(context);
+        return meetingOutstandingWelfareRepo.getTotalOutstandingWelfareInMeeting(meeting.getMeetingId());
     }
 }

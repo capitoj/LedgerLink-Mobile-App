@@ -8,6 +8,7 @@ import android.util.Log;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
+import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
 import org.applab.ledgerlink.domain.model.MeetingSaving;
 import org.applab.ledgerlink.domain.model.MeetingWelfare;
 import org.applab.ledgerlink.helpers.Utils;
@@ -242,6 +243,7 @@ public class MemberRepo {
         // Update savings at setup
         MeetingSavingRepo meetingSavingRepo = new MeetingSavingRepo(context);
         MeetingWelfareRepo meetingWelfareRepo = new MeetingWelfareRepo(context);
+        MeetingOutstandingWelfareRepo meetingOutstandingWelfareRepo = new MeetingOutstandingWelfareRepo(context);
         MeetingRepo meetingRepo = new MeetingRepo(context);
         String comment = "";
         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
@@ -267,6 +269,15 @@ public class MemberRepo {
 
             //Save the welfare on setup
             meetingWelfareRepo.saveMemberWelfare(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId(), member.getWelfareOnSetup(), member.getWelfareOnSetupCorrectionComment());
+
+            //Save the outstanding welfare on setup
+            MeetingOutstandingWelfare meetingOutstandingWelfare = new MeetingOutstandingWelfare();
+            meetingOutstandingWelfare.setMeeting(dummyGettingStartedWizardMeeting);
+            meetingOutstandingWelfare.setMember(member);
+            meetingOutstandingWelfare.setAmount(member.getOutstandingWelfareOnSetup());
+            meetingOutstandingWelfare.setExpectedDate(member.getOutstandingWelfareDueDateOnSetup());
+            meetingOutstandingWelfare.setIsCleared(0);
+            meetingOutstandingWelfareRepo.saveMemberOutstandingWelfare(meetingOutstandingWelfare);
         }
 
         return true;
@@ -274,6 +285,7 @@ public class MemberRepo {
 
     // Loads the savings at setup and loans at setup for the member
     public boolean loadMemberGettingStartedWizardValues(Member member) {
+
         MeetingRepo meetingRepo = new MeetingRepo(context);
         Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
 
@@ -297,6 +309,11 @@ public class MemberRepo {
 
         MeetingWelfareRepo meetingWelfareRepo = new MeetingWelfareRepo(context);
         member.setWelfareOnSetup(meetingWelfareRepo.getMemberWelfare(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId()));
+
+        MeetingOutstandingWelfare meetingOutstandingWelfare = new MeetingOutstandingWelfareRepo(context).getMemberOutstandingWelfare(dummyGettingStartedWizardMeeting.getMeetingId(), member.getMemberId());
+        if(meetingOutstandingWelfare != null) {
+            member.setOutstandingWelfareOnSetup(meetingOutstandingWelfare.getAmount());
+        }
         return true;
     }
 
@@ -305,13 +322,13 @@ public class MemberRepo {
         ArrayList<Member> activeMembers = new ArrayList<Member>();
         if(allMembers != null) {
             for (Member member : allMembers) {
-                if(member.isActive()){
-                    activeMembers.add(member);
-                    Log.e("getActiveMembers", "Active " + String.valueOf(meetingDate) + " " + String.valueOf(member.getDateLeft()));
-                }else {
-                    if(meetingDate.equals(member.getDateLeft()) || meetingDate.before(member.getDateLeft())) {
+                if(member.getMemberNo() > 0) {
+                    if (member.isActive()) {
                         activeMembers.add(member);
-                        Log.e("getActiveMembers", "Inactive " + String.valueOf(meetingDate) + " " + String.valueOf(member.getDateLeft()));
+                    } else {
+                        if (meetingDate.equals(member.getDateLeft()) || meetingDate.before(member.getDateLeft())) {
+                            activeMembers.add(member);
+                        }
                     }
                 }
             }
@@ -323,17 +340,19 @@ public class MemberRepo {
     public ArrayList<Member> getAllMembers() {
 
         ArrayList<Member> members = null;
+        ArrayList<Member> inactiveMembers = null;
         SQLiteDatabase db = null;
         Cursor cursor = null;
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
             members = new ArrayList<Member>();
+            inactiveMembers = new ArrayList<Member>();
             String columnList = MemberSchema.getColumnList();
 
             // Select All Query
-            String selectQuery = String.format("SELECT %s FROM %s ORDER BY %s", columnList, MemberSchema.getTableName(),
-                    MemberSchema.COL_M_MEMBER_NO);
+            String selectQuery = String.format("SELECT %s FROM %s ORDER BY %s, %s", columnList, MemberSchema.getTableName(),
+                    MemberSchema.COL_M_MEMBER_NO, MemberSchema.COL_M_SURNAME);
 
             cursor = db.rawQuery(selectQuery, null);
 
@@ -377,13 +396,17 @@ public class MemberRepo {
                     } else {
                         member.setDateOfAdmission(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(MemberSchema.COL_M_DATE_JOINED))));
                     }
-
-                    members.add(member);
+                    if(member.getMemberNo() > 0) {
+                        members.add(member);
+                    }else{
+                        inactiveMembers.add(member);
+                    }
 
                 } while (cursor.moveToNext());
             }
 
             // return the list
+            members.addAll(inactiveMembers);
             return members;
         } catch (Exception ex) {
             ex.printStackTrace();

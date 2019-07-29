@@ -215,10 +215,12 @@ public class MemberDetailsViewActivity extends SherlockActivity {
             TextView lblMDMiddleCycleSavings = (TextView) findViewById(R.id.lblMDMiddleCycleSavings);
             TextView lblMDMiddleCycleWelfare = (TextView) findViewById(R.id.lblMDMiddleCycleWelfare);
             TextView lblMDMiddleCycleLoansOutstanding = (TextView) findViewById(R.id.lblMDMiddleCycleLoansOutstanding);
+            TextView lblMDMiddleCycleOutstandingWelfare = (TextView) findViewById(R.id.lblMDMiddleCycleOutstandingWelfare);
 
             lblMDMiddleCycleSavings.setText(String.format("Total Savings %,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
             lblMDMiddleCycleWelfare.setText(String.format("Total Welfare %,.0f %s", member.getWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
             lblMDMiddleCycleLoansOutstanding.setText(String.format("Loans Outstanding %,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleOutstandingWelfare.setText(String.format("Outstanding Welfare %,.0f %s", member.getOutstandingWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
 
             //Show the heading
             //Get the date of the dummy GSW meeting

@@ -13,9 +13,11 @@ import android.widget.Toast;
 import org.applab.ledgerlink.LoginActivity;
 import org.applab.ledgerlink.MainActivity;
 import org.applab.ledgerlink.R;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.repo.TrainingModuleRepo;
 import org.applab.ledgerlink.repo.TrainingModuleResponseRepo;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 
 /**
@@ -63,7 +65,8 @@ public class BackgroundService extends Service {
 
     protected void launchNotification(){
         MeetingRepo meetingRepo = new MeetingRepo(this.context);
-        int noOfMeetings = meetingRepo.getPastMeetings().size();
+        VslaCycle recentCycle = new VslaCycleRepo(this.context).getMostRecentCycle();
+        int noOfMeetings = meetingRepo.getPastMeetings(recentCycle.getCycleId()).size();
         if(noOfMeetings > 0) {
             PendingIntent pendingIntent = PendingIntent.getActivity(this.context, 0, new Intent(this.context, LoginActivity.class), 0);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this.context);

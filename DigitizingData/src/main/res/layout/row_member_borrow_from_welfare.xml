@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dip">
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/RegularTextListItems"
+        android:id="@+id/txtBorrowFromWelfareFullName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/name_default"/>
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtBorrowFromWelfareTotal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtBorrowFromWelfareFullName"
+        android:text="@string/total_fines_default"
+        android:layout_marginBottom="5dip"/>
+
+</RelativeLayout>

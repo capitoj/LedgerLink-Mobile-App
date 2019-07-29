@@ -260,6 +260,79 @@
             </LinearLayout>
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblAMMiddleCycleWelfareLabel"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Total welfare saved by this member during current cycle so far" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
+                    android:id="@+id/txtAMMWelfareCorrection"
+                    style="@style/NormalEditText"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblAMMWelfareCurrency"
+                    style="@style/InlineTextItem"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="UGX" />
+
+            </LinearLayout>
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblAMMiddleCycleOutstandingWelfareLabel"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Total outstanding welfare borrowed by this member during current cycle" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
+                    android:id="@+id/txtAMMOutstandingWelfareCorrection"
+                    style="@style/NormalEditText"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblAMMOutstandingWelfareCurrency"
+                    style="@style/InlineTextItem"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="UGX" />
+
+            </LinearLayout>
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblOutstandingWelfareDueDateLabel"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="When is the due date of the outstanding welfare" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/txtOutstandingWelfareDueDate"
+                style="@style/NormalEditText"
+                android:layout_width="150dip"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:editable="false"
+                android:focusable="true"
+                android:text="" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblRvwMembersLoanNumber"
                 style="@style/RegularText"
                 android:layout_width="wrap_content"

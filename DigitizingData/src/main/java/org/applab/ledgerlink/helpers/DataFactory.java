@@ -7,6 +7,7 @@ import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.datatransformation.AttendanceDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.FinesDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.LoanDataTransferRecord;
+import org.applab.ledgerlink.datatransformation.OutstandingWelfareDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.RepaymentDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.SavingsDataTransferRecord;
 import org.applab.ledgerlink.datatransformation.WelfareDataTransferRecord;
@@ -81,7 +82,7 @@ public class DataFactory extends SendDataRepo {
                         .key("PhoneNumber").value(member.getPhoneNumber())
                         .key("CyclesCompleted").value(String.valueOf(member.getCyclesCompleted()))
                         .key("IsActive").value(member.isActive())
-                        .key("IsArchived").value(String.valueOf(false))
+                        .key("IsArchived").value(false)
                         .endObject();
             }
             js.endArray();
@@ -113,6 +114,8 @@ public class DataFactory extends SendDataRepo {
                     .key("BankLoanRepayment").value(String.valueOf(this.meeting.getBankLoanRepayment()))
                     .key("AttendanceRate").value(String.valueOf((this.getMembersPresent()/this.getActiveMembers(this.meeting.getMeetingDate())) * 100))
                     .key("SavingsRate").value(String.valueOf((this.getTotalSavings()/(this.getActiveMembers(this.meeting.getMeetingDate()) * this.vslaCycle.getMaxSharesQty() * this.vslaCycle.getSharePrice())) * 100))
+                    .key("Welfare").value(String.valueOf(this.getTotalWelfare()))
+                    .key("OutstandingWelfare").value(String.valueOf(this.getTotalOutstandingWelfare()))
                     .endObject();
         }catch (Exception e){
             e.printStackTrace();
@@ -169,9 +172,9 @@ public class DataFactory extends SendDataRepo {
                         .key("DateDue").value(Utils.formatDate(record.getDateDue(), "yyyy-MM-dd"))
                         .key("Comments").value(record.getComments())
                         .key("DateCleared").value(Utils.formatDate(record.getDateCleared(), "yyyy-MM-dd"))
-                        .key("IsCleared").value(String.valueOf(record.isCleared()))
-                        .key("IsDefaulted").value(String.valueOf(record.isDefaulted()))
-                        .key("IsWrittenOff").value(String.valueOf(record.isWrittenOff()))
+                        .key("IsCleared").value(record.isCleared())
+                        .key("IsDefaulted").value(record.isDefaulted())
+                        .key("IsWrittenOff").value(record.isWrittenOff())
                         .endObject();
             }
             js.endArray();
@@ -217,7 +220,7 @@ public class DataFactory extends SendDataRepo {
                         .key("Amount").value(String.valueOf(record.getAmount()))
                         .key("FineTypeId").value(String.valueOf(record.getFineTypeId()))
                         .key("DateCleared").value(Utils.formatDate(record.getDateCleared(), "yyyy-MM-dd"))
-                        .key("IsCleared").value(String.valueOf(record.isCleared()))
+                        .key("IsCleared").value(record.isCleared())
                         .key("PaidInMeetingId").value(String.valueOf(record.getPaidInMeetingId()))
                         .key("MeetingId").value(String.valueOf(record.getMeetingId()))
                         .endObject();
@@ -249,6 +252,29 @@ public class DataFactory extends SendDataRepo {
         return js;
     }
 
+    private JSONStringer getOutstandingWelfare(JSONStringer js){
+        try{
+            js.key("OutstandingWelfareInfo").array();
+            for(OutstandingWelfareDataTransferRecord record: this.outstandingWelfares){
+                js.object()
+                        .key("OutstandingWelfareId").value(String.valueOf(record.getOutstandingWelfareId()))
+                        .key("MeetingId").value(String.valueOf(record.getMeetingId()))
+                        .key("MemberId").value(String.valueOf(record.getMemberId()))
+                        .key("Amount").value(String.valueOf(record.getAmount()))
+                        .key("ExpectedDate").value(Utils.formatDate(record.getExpectedDate(), "yyyy-MM-dd"))
+                        .key("IsCleared").value(record.getIsCleared())
+                        .key("DateCleared").value(Utils.formatDate(record.getDateCleared(), "yyyy-MM-dd"))
+                        .key("PaidInMeetingId").value(String.valueOf(record.getPaidInMeetingId()))
+                        .key("Comment").value(record.getComment())
+                        .endArray();
+            }
+            js.endArray();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return js;
+    }
+
     public static String getJSONOutput(Context context, int meetingId){
         DataFactory dataFactory = new DataFactory(context, meetingId);
 
@@ -265,6 +291,7 @@ public class DataFactory extends SendDataRepo {
             js = dataFactory.getLoanRepayments(js);
             js = dataFactory.getLoanIssues(js);
             js = dataFactory.getWelfare(js);
+            js = dataFactory.getOutstandingWelfare(js);
             js.endObject();
 
         }catch (Exception e){

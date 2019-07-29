@@ -284,6 +284,35 @@
                     android:text="UGX" />
 
             </LinearLayout>
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblNCOutstandingBankLoan"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Total outstanding bank loan" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dip">
+
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
+                    android:id="@+id/txtNCOutstandingGroupBankLoan"
+                    style="@style/NormalEditText"
+                    android:layout_width="200dip"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCOutstandingBankLoanCurrency"
+                    style="@style/InlineTextItem"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:text="UGX" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

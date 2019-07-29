@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ledger_link_grey"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textColor="@color/ledger_link_white" />
+
+    <FrameLayout
+        android:id="@+id/swiping_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/ledger_link_white">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:background="?selectableItemBackground"
+            android:focusable="false">
+
+            <CheckBox
+                android:id="@+id/chkMemberOutstandingWelfare"
+                style="@style/Checkbox"
+                android:layout_width="30dip"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_below="@id/lblOutstandingWelfareFullName"
+                android:layout_marginLeft="15dip"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/txtMemberOutstandingWelfareAmount"
+                style="@style/ListSubItemsWithCheckbox"
+                android:layout_width="80dip"
+                android:layout_height="match_parent"
+                android:layout_below="@id/lblOutstandingWelfareFullName"
+                android:layout_toRightOf="@id/chkMemberOutstandingWelfare"
+                android:text="XXX UGX" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/txtOutstandingMeetingExpectedDate"
+                style="@style/ListSubItemsWithCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/lblOutstandingWelfareFullName"
+                android:layout_toRightOf="@id/txtMemberOutstandingWelfareAmount"
+                android:text=" XXX " />
+        </RelativeLayout>
+    </FrameLayout>
+</FrameLayout>

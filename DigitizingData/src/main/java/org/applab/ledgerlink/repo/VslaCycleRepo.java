@@ -140,6 +140,7 @@ public class VslaCycleRepo {
         Meeting meeting = new Meeting();
         meeting.setGettingStarted(true);
         meeting.setIsCurrent(true);
+        meeting.setLoanFromBank(currentCycle.getOutstandingBankLoanAtSetup());
         meeting.setVslaCycle(currentCycle);
         //meeting.setMeetingDate(currentCycle.getStartDate());
         //GSW meeting date changed to current date
@@ -354,6 +355,11 @@ public class VslaCycleRepo {
                 double sharedAmount = cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_SHARED_AMOUNT));
                 cycle.end(dateEnded,sharedAmount);
             }
+
+            MeetingRepo meetingRepo = new MeetingRepo(context);
+            Meeting meeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+            Log.e("OutstandingLoanFromBank", String.valueOf(meeting.getLoanFromBank()));
+            cycle.setOutstandingBankLoanAtSetup(meeting.getLoanFromBank());
 
             // return data
             return cycle;

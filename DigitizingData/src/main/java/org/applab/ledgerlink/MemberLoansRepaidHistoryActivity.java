@@ -104,7 +104,12 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
         /** TextView lblMeetingDate = (TextView)findViewById(R.id.lblMLRepayHMeetingDate);
 
          lblMeetingDate.setText(meetingDate); */
-        meetingDate = getIntent().getStringExtra("_meetingDate");
+        try {
+            meetingDate = getIntent().getStringExtra("_meetingDate");
+            Log.e("MeetingDateException", meetingDate);
+        }catch(Exception e){
+            Log.e("MeetingdDateException", e.getMessage());
+        }
 
         TextView lblFullName = (TextView) findViewById(R.id.lblMLRepayHFullName);
         String fullName = getIntent().getStringExtra("_names");
@@ -291,7 +296,11 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
             // If it is not an edit operation then initialize the date. Otherwise, retain the date pulled from db
             if (!isEditOperation) {
                 // If loan repayment is due
-                if (recentLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT))) <= 0) {
+                Log.e("DateException", recentLoan.getDateDue() + " " + meetingDate);
+//                if (recentLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT))) <= 0) {
+//                    initializeDate();
+//                }
+                if (recentLoan.getDateDue().compareTo(targetMeeting.getMeetingDate()) <= 0) {
                     initializeDate();
                 }
 
@@ -321,7 +330,7 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
             // Setup the Default Date. Not sure whether I should block this off when editing a loan repayment
             if (!isEditOperation) {
-                if (recentLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.OTHER_DATE_FIELD_FORMAT))) <= 0) {
+                if (recentLoan.getDateDue().compareTo(targetMeeting.getMeetingDate()) <= 0) {
 
                     //TODO: Set the default Date to be MeetingDate + 1Month, instead of using today's date
                     final Calendar c = Calendar.getInstance();
@@ -689,148 +698,140 @@ public class MemberLoansRepaidHistoryActivity extends SherlockListActivity {
 
     @SuppressWarnings("WeakerAccess")
     public boolean saveMemberLoanRepayment() {
+        if (recentLoan == null) {
+            Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            return false;
+        }
         double theAmount = 0.0;
-
-        try {
-            if (recentLoan == null) {
-                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                return false;
-            }
-
-
-
-            String amount = txtLoanAmount.getText().toString().trim();
-            if (amount.length() < 1) {
-
-                // Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The Loan Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                //txtLoanAmount.requestFocus();
-                // return false;
-                //if savings is blank, default to 0
-                txtLoanAmount.setText("0");
-                amount = "0";
-            }
-
+        String amount = txtLoanAmount.getText().toString().trim();
+        if(amount.length() < 1){
+            txtLoanAmount.setText("0");
+            amount = "0";
+        }
+        try{
             theAmount = Double.parseDouble(amount);
-            if (theAmount < 0.00) {
-                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The Loan Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtLoanAmount.requestFocus();
-                return false;
-            }
+        }catch(Exception ex){
+            Log.e("SaveMemberLoanRepayment", ex.getMessage());
+        }
+        theAmount = Double.parseDouble(amount);
+        if (theAmount < 0.00) {
+            Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The Loan Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            txtLoanAmount.requestFocus();
+            return false;
+        }
 
-            double newBalance = 0.0;
+        double newBalance = 0.0;
+        if (isEditOperation && null != repaymentBeingEdited) {
+            newBalance = repaymentBeingEdited.getBalanceBefore() - theAmount;
+        } else {
+            newBalance = recentLoan.getLoanBalance() - theAmount;
+        }
+
+        double theInterest = 0.0;
+
+        String interest = txtInterest.getText().toString().trim();
+        try{
+            theInterest = Double.parseDouble(interest);
+        }catch(Exception ex){
+            Log.e("SaveMemberLoanRepayment", ex.getMessage());
+        }
+        if (theInterest < 0.00) {
+            Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The Interest Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            txtInterest.requestFocus();
+            return false;
+        }
+
+        double theRollover = newBalance + theInterest;
+
+        //Next Due Date
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+
+        Calendar calNext = Calendar.getInstance();
+        //calNext.add(Calendar.MONTH,1);
+        calNext.add(Calendar.WEEK_OF_YEAR, 4);
+        Date theDateDue = calNext.getTime();
+
+        // Check the date against the Meeting Date, not calendar date
+        String nextDateDue = txtNextDateDue.getText().toString().trim();
+        Date dtNextDateDue = Utils.getDateFromString(nextDateDue, Utils.DATE_FIELD_FORMAT);
+        if (dtNextDateDue.before(targetMeeting.getMeetingDate())) {
+            Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Loan Issue", "The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            txtNextDateDue.setFocusable(true);
+            txtDateDue.requestFocus();
+            return false;
+        } else {
+            theDateDue = dtNextDateDue;
+        }
+
+        String comments = txtComments.getText().toString().trim();
+
+        //Now Save the data
+        //retrieve the LoanId and LoanNo of the most recent uncleared loan
+        int recentLoanId = 0;
+        double balanceBefore = 0.0;
+        Date dtLastDateDue = null;
+        if (null != recentLoan) {
+            recentLoanId = recentLoan.getLoanId();
+
+            //If this is an edit then get the values from the repayment being edited
             if (isEditOperation && null != repaymentBeingEdited) {
-                newBalance = repaymentBeingEdited.getBalanceBefore() - theAmount;
+                balanceBefore = repaymentBeingEdited.getBalanceBefore();
+                dtLastDateDue = repaymentBeingEdited.getLastDateDue();
             } else {
-                newBalance = recentLoan.getLoanBalance() - theAmount;
+                balanceBefore = recentLoan.getLoanBalance();
+                // Last Date Due for Transaction Tracking purposes. Get it from the recent Loan
+                dtLastDateDue = recentLoan.getDateDue();
             }
-            double theInterest = 0.0;
+        } else {
+            // check again: Do not save repayment if there is no existing loan
+            Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The member has no Outstanding Loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            return false;
+        }
 
-            String interest = txtInterest.getText().toString().trim();
-            if (interest.length() < 1) {
-                theInterest = 0.0;
-            } else {
-                theInterest = Double.parseDouble(interest);
-                if (theInterest < 0.00) {
-                    Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The Interest Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtInterest.requestFocus();
-                    return false;
-                }
-            }
+        //Check Over-Payments
+        if (theAmount > balanceBefore) {
+            double overPayment = theAmount - balanceBefore;
+            Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Overpayment", "Overpayment of " + String.valueOf(overPayment) + " UGX. Payment made must not exceed " + String.valueOf(balanceBefore) + " UGX.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            return false;
+        }
 
-            double theRollover = newBalance + theInterest;
-
-            //Next Due Date
-            Calendar cal = Calendar.getInstance();
-            Date today = cal.getTime();
-
-            Calendar calNext = Calendar.getInstance();
-            //calNext.add(Calendar.MONTH,1);
-            calNext.add(Calendar.WEEK_OF_YEAR, 4);
-            Date theDateDue = calNext.getTime();
-
-            // Check the date against the Meeting Date, not calendar date
-            String nextDateDue = txtNextDateDue.getText().toString().trim();
-            Date dtNextDateDue = Utils.getDateFromString(nextDateDue, Utils.DATE_FIELD_FORMAT);
-            if (dtNextDateDue.before(targetMeeting.getMeetingDate())) {
-                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Loan Issue", "The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                txtNextDateDue.setFocusable(true);
-                txtDateDue.requestFocus();
-                return false;
-            } else {
-                theDateDue = dtNextDateDue;
-            }
-
-            String comments = txtComments.getText().toString().trim();
-
-            //Now Save the data
-            //retrieve the LoanId and LoanNo of the most recent uncleared loan
-            int recentLoanId = 0;
-            double balanceBefore = 0.0;
-            Date dtLastDateDue = null;
-            if (null != recentLoan) {
-                recentLoanId = recentLoan.getLoanId();
-
-                //If this is an edit then get the values from the repayment being edited
-                if (isEditOperation && null != repaymentBeingEdited) {
-                    balanceBefore = repaymentBeingEdited.getBalanceBefore();
-                    dtLastDateDue = repaymentBeingEdited.getLastDateDue();
-                } else {
-                    balanceBefore = recentLoan.getLoanBalance();
-                    // Last Date Due for Transaction Tracking purposes. Get it from the recent Loan
-                    dtLastDateDue = recentLoan.getDateDue();
-                }
-            } else {
-                // check again: Do not save repayment if there is no existing loan
-                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The member has no Outstanding Loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                return false;
-            }
-
-            //Check Over-Payments
-            if (theAmount > balanceBefore) {
-                double overPayment = theAmount - balanceBefore;
-                Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Overpayment", "Overpayment of " + String.valueOf(overPayment) + " UGX. Payment made must not exceed " + String.valueOf(balanceBefore) + " UGX.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                return false;
-            }
-
-            //If Amount is Zero, then ensure that the date is due before doing a rollover
-            if (theAmount == 0) {
-                if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
+        //If Amount is Zero, then ensure that the date is due before doing a rollover
+        if (theAmount == 0) {
+            if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
+                if(repaymentBeingEdited.getAmount() == 0) {
                     Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment", "The repayment amount of zero (0 UGX) is not allowed when the loan is not yet due.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                     return false;
                 }
             }
+        }
 
-            // If it is an editing of existing loan repayment, first undo the changes of the former one
-            boolean undoSucceeded = false;
-            if (isEditOperation && repaymentBeingEdited != null) {
-                // Post a Reversal or just edit the figures
-                undoSucceeded = ledgerLinkApplication.getMeetingLoanIssuedRepo().updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() - repaymentBeingEdited.getAmount(), repaymentBeingEdited.getBalanceBefore(), repaymentBeingEdited.getLastDateDue(), meetingDate);
-            }
+        // If it is an editing of existing loan repayment, first undo the changes of the former one
+        boolean undoSucceeded = false;
+        if (isEditOperation && repaymentBeingEdited != null) {
+            // Post a Reversal or just edit the figures
+            undoSucceeded = ledgerLinkApplication.getMeetingLoanIssuedRepo().updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() - repaymentBeingEdited.getAmount(), repaymentBeingEdited.getBalanceBefore(), repaymentBeingEdited.getLastDateDue(), meetingDate);
+        }
 
-            //If it was an edit operation and undo changes failed, then exit
-            if (isEditOperation && !undoSucceeded) {
-                return false;
-            }
-
-            //Otherwise, proceed
-            //saveMemberLoanRepayment(int meetingId, int memberId, int loanId, double amount, double balanceBefore, String comments, double balanceAfter,double interestAmount, double rolloverAmount, Date lastDateDue, Date nextDateDue)//
-            boolean saveRepayment = ledgerLinkApplication.getMeetingLoanRepaymentRepo().saveMemberLoanRepayment(meetingId, memberId, recentLoanId, theAmount, balanceBefore, comments, newBalance, theInterest, theRollover, dtLastDateDue, dtNextDateDue);
-            if (saveRepayment) {
-                //Also update the balances
-                //TODO: Decide whether to update the Interest Paid also: and whether it will be Cummulative Interest or Just current Interest
-                //updateMemberLoanBalances(int loanId, double totalRepaid, double balance, Date newDateDue)
-                // return loanIssuedRepo.updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() + theAmount, theRollover, theDateDue, meetingDate);
-                return ledgerLinkApplication.getMeetingLoanIssuedRepo().updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() + theAmount, theRollover, recentLoan.getDateDue(), meetingDate);
-
-
-            } else {
-                //Saving failed
-                return false;
-            }
-        } catch (Exception ex) {
-            Log.e("MemberLoansRepaidHistory.saveMemberLoanRepayment", ex.getMessage());
+        Log.e("UndoSucceeded", String.valueOf(undoSucceeded));
+        if (isEditOperation && !undoSucceeded) {
             return false;
         }
+
+        boolean saveRepayment = ledgerLinkApplication.getMeetingLoanRepaymentRepo().saveMemberLoanRepayment(meetingId, memberId, recentLoanId, theAmount, balanceBefore, comments, newBalance, theInterest, theRollover, dtLastDateDue, dtNextDateDue);
+        Log.e("SaveRepaymentM", String.valueOf(saveRepayment));
+        boolean updateFlag = false;
+        if (saveRepayment) {
+            Log.e("SaveRepaymentX", String.valueOf(saveRepayment));
+            //Also update the balances
+            //TODO: Decide whether to update the Interest Paid also: and whether it will be Cummulative Interest or Just current Interest
+            //updateMemberLoanBalances(int loanId, double totalRepaid, double balance, Date newDateDue)
+            // return loanIssuedRepo.updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() + theAmount, theRollover, theDateDue, meetingDate);
+            updateFlag = ledgerLinkApplication.getMeetingLoanIssuedRepo().updateMemberLoanBalancesWithMeetingDate(recentLoan.getLoanId(), recentLoan.getTotalRepaid() + theAmount, theRollover, recentLoan.getDateDue(), meetingDate);
+
+        }
+
+        return updateFlag;
     }
 
     //Indicates that we are viewing sent data

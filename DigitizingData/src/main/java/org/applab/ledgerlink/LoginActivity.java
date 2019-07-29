@@ -5,11 +5,14 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.actionbarsherlock.app.ActionBar;
@@ -24,12 +27,16 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.ledgerlink.domain.model.FinancialInstitution;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.helpers.LanguageHelper;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
 import org.applab.ledgerlink.repo.SampleDataBuilderRepo;
+import org.applab.ledgerlink.repo.VslaInfoRepo;
 import org.applab.ledgerlink.service.AlarmReceiver;
 import org.applab.ledgerlink.service.InboundChatReceiver;
 import org.applab.ledgerlink.service.OutboundChatReceiver;
@@ -39,6 +46,9 @@ import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
+import org.w3c.dom.*;
+import java.io.*;
+import javax.xml.parsers.*;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -71,6 +81,8 @@ public class LoginActivity extends SherlockActivity {
         this.context = this;
 
         this.loadBackgroundService();
+
+//        LanguageHelper.getXmlDocument(getApplicationContext(), "ENGLISH");
 
         TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
@@ -305,7 +317,15 @@ public class LoginActivity extends SherlockActivity {
     }
 
     private void activateVlsaUsingPostAsync(String request) {
-        String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
+        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
+        VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
+        FinancialInstitutionRepo financialInstitutionRepo = new FinancialInstitutionRepo(getApplicationContext(), vslaInfo.getFiID());
+        FinancialInstitution financialInstitution = financialInstitutionRepo.getFinancialInstitution();
+//            String baseUrl = "http://127.0.0.1:82";
+        String baseUrl = "http://" + financialInstitution.getIpAddress();
+        String uri = String.format("%s/%s/%s", baseUrl, "DigitizingData", "activate");
+        Log.e("ActivationX", uri);
+//        String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
         new PostTask(this).execute(uri, request);
 
         //Do the other stuff in the Async Task
@@ -379,6 +399,7 @@ public class LoginActivity extends SherlockActivity {
                     .endObject()
                     .toString();
 
+            Log.e("ActivationData", jsonRequest.toString());
             activateVlsaUsingPostAsync(jsonRequest);
         } catch (Exception ex) {
         }

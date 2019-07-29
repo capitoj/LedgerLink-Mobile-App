@@ -1,0 +1,64 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblMemberBorrowFromWelfareHeader"
+            style="@style/RegularTextInstructionBold"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="BORROW FROM WELFARE" />
+
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblMemberBorrowFromWelfareFullName"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lblMemberBorrowFromWelfareHeader"
+            android:text="Full Name"
+
+            />
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblIssueMemberWelfareAmount"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lblMemberBorrowFromWelfareFullName"
+            android:text="@string/amount" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceEditText
+            android:id="@+id/txtIssueMemberWelfareAmount"
+            style="@style/NormalEditText"
+            android:layout_width="200dip"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lblIssueMemberWelfareAmount"
+            android:inputType="number"
+            android:text="" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/lblOutstandingWelfareDueDateLabel"
+            style="@style/RegularText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtIssueMemberWelfareAmount"
+            android:text="When is the due date of the outstanding welfare" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceTextView
+            android:id="@+id/txtOutstandingWelfareDueDate"
+            style="@style/NormalEditText"
+            android:layout_width="150dip"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:editable="false"
+            android:focusable="true"
+            android:layout_below="@id/lblOutstandingWelfareDueDateLabel"
+            android:text="" />
+
+    </RelativeLayout>
+</ScrollView>

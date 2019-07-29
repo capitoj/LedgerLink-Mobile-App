@@ -4,7 +4,7 @@
     android:title="@string/action_settings">
 
     <EditTextPreference
-        android:defaultValue="http://154.0.139.218:9008/DigitizingDataWebService/DigitizingDataRestfulService.svc"
+        android:defaultValue="http://217.160.25.83:9007/DigitizingDataWebService/DigitizingDataRestfulService.svc"
         android:key="prefServerUrl"
         android:summary="Set Internet address for the server that will receive data"
         android:title="Server URL" />

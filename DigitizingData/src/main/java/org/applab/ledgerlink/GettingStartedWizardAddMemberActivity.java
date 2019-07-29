@@ -39,6 +39,7 @@ import java.util.Date;
 public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
     private TextView txtNCGSWLoanNextRepaymentDate;
+    private TextView txtOutstandingWelfareDueDate;
     private TextView txtNCGSWLoanNumber;
 
     @Override
@@ -140,12 +141,39 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 }
         );
 
+        txtOutstandingWelfareDueDate = (TextView) findViewById(R.id.txtOutstandingWelfareDueDate);
+
         txtNCGSWLoanNextRepaymentDate =  (TextView) findViewById(R.id.txtNCGSWLoanNextRepaymentDate);
         txtNCGSWLoanNumber =  (TextView) findViewById(R.id.txtNCGSWOutstandingLoanNumber);
 
         // Default to the next repayment date to a month from now
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, 1);
+
+        txtOutstandingWelfareDueDate.setText(Utils.formatDate(cal.getTime(), "dd-MM-yyyy"));
+
+        mYear = cal.get(Calendar.YEAR);
+        mMonth = cal.get(Calendar.MONTH);
+        mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+        txtOutstandingWelfareDueDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Date nextOutstandingWelfareDueDate = Utils.stringToDate(txtOutstandingWelfareDueDate.getText().toString(), "dd-MM-yyyy");
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(nextOutstandingWelfareDueDate);
+                mYear = cal.get(Calendar.YEAR);
+                mMonth = cal.get(Calendar.MONTH);
+                mDay = cal.get(Calendar.DAY_OF_MONTH);
+
+                viewClicked = (TextView) view;
+                DatePickerDialog datePickerDialog = new DatePickerDialog(GettingStartedWizardAddMemberActivity.this, mDateSetListener, mYear, mMonth, mDay);
+                datePickerDialog.setTitle("Set the outstanding welfare due date");
+                datePickerDialog.show();
+            }
+        });
+
+
         txtNCGSWLoanNextRepaymentDate.setText(Utils.formatDate(cal.getTime(), "dd-MMM-yyyy"));
 
         mYear = cal.get(Calendar.YEAR);
@@ -158,7 +186,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             public void onClick(View view) {
 
                 // The Event Handler to handle both startDate and endDate
-                Date nextRepaymentDate = Utils.stringToDate(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy");
+                Date nextRepaymentDate = Utils.stringToDate(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MM-yyyy");
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(nextRepaymentDate);
                 mYear = cal.get(Calendar.YEAR);
@@ -481,6 +509,42 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 }
             }
 
+            EditText txtWelfareAmount = (EditText) findViewById(R.id.txtAMMWelfareCorrection);
+            String welfareAmount = txtWelfareAmount.getText().toString().trim();
+            if(welfareAmount.length() < 1){
+                member.setWelfareOnSetup(0);
+            }else{
+                double totalWelfareAmount = Double.parseDouble(welfareAmount);
+                if(totalWelfareAmount < 0.00){
+                    displayMessageBox(dlgTitle, "Total Amount of this Member's welfare should be zero and above.");
+                    txtWelfareAmount.requestFocus();
+                    return false;
+                }else{
+                    member.setWelfareOnSetup(totalWelfareAmount);
+                }
+            }
+
+            EditText txtOutstandingWelfareAmount = (EditText) findViewById(R.id.txtAMMOutstandingWelfareCorrection);
+            String outstandingWelfareAmount = txtOutstandingWelfareAmount.getText().toString().trim();
+            if(outstandingWelfareAmount.length() < 1){
+                member.setOutstandingWelfareOnSetup(0);
+            }else{
+                double totalOutstandingWelfare = Double.parseDouble(outstandingWelfareAmount);
+                if(totalOutstandingWelfare < 0.00){
+                    displayMessageBox(dlgTitle, "Total Amount of this Member's outstanding welfare should be zero and above.");
+                    txtOutstandingWelfareAmount.requestFocus();
+                    return false;
+                }else{
+                    member.setOutstandingWelfareOnSetup(totalOutstandingWelfare);
+                    if(totalOutstandingWelfare > 0 && txtOutstandingWelfareDueDate.getText().length() == 0){
+                        displayMessageBox(dlgTitle, "The outstanding welfare due date is required");
+                        return false;
+                    }
+                    member.setOutstandingWelfareDueDateOnSetup(Utils.getDateFromString(txtOutstandingWelfareDueDate.getText().toString(), "dd-MM-yyyy"));
+                }
+            }
+
+
             //Validate Amount of Loan outstanding for this member
             EditText txtLoanAmount = (EditText) findViewById(R.id.txtMDVOutstandingLoanAmount);
             String loanAmount = txtLoanAmount.getText().toString().trim();
@@ -507,7 +571,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
                     }
                     else {
-                        member.setDateOfFirstRepayment(Utils.getDateFromString(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy"));
+                        member.setDateOfFirstRepayment(Utils.getDateFromString(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MM-yyyy"));
                     }
 
                     //set the loan number
@@ -600,6 +664,12 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         txtLoanAmount.setText(String.format("%.0f", member.getOutstandingLoanOnSetup()));
         TextView txtLoanNumber = (TextView) findViewById(R.id.txtNCGSWOutstandingLoanNumber);
         txtLoanNumber.setText(String.valueOf(member.getOutstandingLoanNumberOnSetup()));
+
+        EditText txtAMMWelfareCorrection = (EditText) findViewById(R.id.txtAMMWelfareCorrection);
+        txtAMMWelfareCorrection.setText(String.format("%.0f",member.getWelfareOnSetup()));
+
+        EditText txtOutstandingWelfareAmount = (EditText) findViewById(R.id.txtAMMOutstandingWelfareCorrection);
+        txtOutstandingWelfareAmount.setText(String.format("%.0f", member.getOutstandingWelfareOnSetup()));
 
 
         //populate the next repayment date

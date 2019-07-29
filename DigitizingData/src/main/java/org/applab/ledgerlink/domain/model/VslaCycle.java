@@ -21,6 +21,7 @@ public class VslaCycle {
     private double sharedAmount;
     private double interestAtSetup;
     private double finesAtSetup;
+    private double outstandingBankLoanAtSetup;
     private String interestAtSetupCorrectionComment;
     private String finesAtSetupCorrectionComment;
 
@@ -39,9 +40,10 @@ public class VslaCycle {
         this.interestRate = interestRate;
         setInterestAtSetup(0);
         setFinesAtSetup(0);
+        setOutstandingBankLoanAtSetup(0);
     }
 
-    public VslaCycle(int cycleId, String cycleCode, Date startDate, Date endDate, double sharePrice, double maxSharesQty, double maxStartShare, double interestRate, double interestAtSetup, double finesAtSetup) {
+    public VslaCycle(int cycleId, String cycleCode, Date startDate, Date endDate, double sharePrice, double maxSharesQty, double maxStartShare, double interestRate, double interestAtSetup, double finesAtSetup, double outstandingBankLoanAtSetup) {
         this.cycleId = cycleId;
         this.cycleCode = cycleCode;
         this.startDate = startDate;
@@ -52,6 +54,7 @@ public class VslaCycle {
         this.interestRate = interestRate;
         setInterestAtSetup(interestAtSetup);
         setFinesAtSetup(finesAtSetup);
+        setOutstandingBankLoanAtSetup(outstandingBankLoanAtSetup);
     }
 
     public VslaCycle(int cycleId) {
@@ -169,6 +172,14 @@ public class VslaCycle {
 
     public void setInterestAtSetup(double interestAtSetup) {
         this.interestAtSetup = interestAtSetup;
+    }
+
+    public void setOutstandingBankLoanAtSetup(double outstandingBankLoanAtSetup){
+        this.outstandingBankLoanAtSetup = outstandingBankLoanAtSetup;
+    }
+
+    public double getOutstandingBankLoanAtSetup(){
+        return this.outstandingBankLoanAtSetup;
     }
 
     public String getInterestAtSetupCorrectionComment() {

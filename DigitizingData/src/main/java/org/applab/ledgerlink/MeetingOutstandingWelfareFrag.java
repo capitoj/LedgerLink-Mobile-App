@@ -5,36 +5,37 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 
+import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
-import org.applab.ledgerlink.helpers.MembersSavingsArrayAdapter;
+import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.helpers.adapters.BorrowFromWelfareArrayAdapter;
+import org.applab.ledgerlink.repo.MemberRepo;
 
 import java.util.ArrayList;
-import java.util.Date;
 
-/**
- * Created by Moses on 6/25/13.
- */
-public class MeetingSavingsFrag extends SherlockFragment {
+
+public class MeetingOutstandingWelfareFrag extends SherlockFragment {
     ActionBar actionBar;
     ArrayList<Member> members;
     String meetingDate;
     int meetingId;
     private MeetingActivity parentActivity;
     private RelativeLayout fragmentView;
-    protected MembersSavingsArrayAdapter adapter;
+    LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parentActivity = (MeetingActivity) getSherlockActivity();
-
     }
 
     @Override
@@ -50,19 +51,12 @@ public class MeetingSavingsFrag extends SherlockFragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        fragmentView =  (RelativeLayout)inflater.inflate(R.layout.frag_meeting_savings, container, false);
+        fragmentView =  (RelativeLayout)inflater.inflate(R.layout.fragment_meeting_outstanding_welfare, container, false);
         initializeFragment();
         return fragmentView;
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-        this.populateMembersList();
-    }
-
-    private void initializeFragment()
-    {
+    private void initializeFragment() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         actionBar = getSherlockActivity().getSupportActionBar();
@@ -81,12 +75,12 @@ public class MeetingSavingsFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
-//        TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-//        lblMeetingDate.setText(meetingDate);
+        /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
+         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+         lblMeetingDate.setText(meetingDate); */
         meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-       //Wrap long task in runnable an run asynchronously
-       Runnable populateRunnable = new Runnable()
+        //Wrap long task in runnable an run asynchronously
+        Runnable populateRunnable = new Runnable()
         {
             @Override
             public void run()
@@ -95,59 +89,58 @@ public class MeetingSavingsFrag extends SherlockFragment {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(populateRunnable, "Please wait", "Loading savings information", parentActivity);
+        LongTaskRunner.runLongTask(populateRunnable, "Please wait", "Loading outstanding welfare information", parentActivity);
     }
 
-    //Populate Members List
     private void populateMembersList() {
-        //Load the Main Menu
-//        members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
-        members = parentActivity.ledgerLinkApplication.getMemberRepo().getActiveMembers(Utils.getDateFromString(meetingDate));
+        // Load the Main Menu
+        MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
+        members = memberRepo.getAllMembers();
 
-        //Now get the data via the adapter
-        adapter = new MembersSavingsArrayAdapter(getSherlockActivity().getBaseContext(), members);
+        // Now get the data via the adapter
+        final BorrowFromWelfareArrayAdapter adapter = new BorrowFromWelfareArrayAdapter(parentActivity.getBaseContext(), members);
         adapter.setMeetingId(meetingId);
 
-        //Assign Adapter to ListView
-        //OMM: Since I was unable to do a SherlockListFragment to work
-        //setListAdapter(adapter);
-        final ListView lvwMembers = (ListView)fragmentView.findViewById(R.id.lvwMSavFMembers);
-        final TextView txtEmpty = (TextView)fragmentView.findViewById(R.id.txtMSavFEmpty);
 
-        parentActivity.runOnUiThread(new Runnable()
-        {
+        // Assign Adapter to ListView
+        final ListView lvwMembers = (ListView)fragmentView.findViewById(R.id.lvwBorrowFromWelfareMembers);
+        final TextView txtEmpty = (TextView)fragmentView.findViewById(R.id.txtMBorrowFromWelfareEmpty);
+
+        Runnable runOnUiRunnable = new Runnable() {
             @Override
-            public void run()
-            {
-
+            public void run() {
                 lvwMembers.setEmptyView(txtEmpty);
                 lvwMembers.setAdapter(adapter);
             }
-        });
+        };
 
+        parentActivity.runOnUiThread(runOnUiRunnable);
 
         // listening to single list item on click
         lvwMembers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 //Do not invoke the event when in Read only Mode
-                if(parentActivity.isViewOnly()) {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
-                    Member selectedMember = (Member) members.get(position);
-                    Intent i = new Intent(view.getContext(), MemberSavingHistoryActivity.class);
+                if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+                    Member selectedMember = members.get(position);
+                    Intent i = new Intent(view.getContext(), MemberOutstandingWelfareHistoryActivity.class);
 
                     // Pass on data
-                    i.putExtra("_meetingDate",meetingDate);
+                    i.putExtra("_meetingDate", meetingDate);
                     i.putExtra("_memberId", selectedMember.getMemberId());
-                    i.putExtra("_names", selectedMember.toString());
-                    i.putExtra("_meetingId",meetingId);
+                    i.putExtra("_name", selectedMember.getFullName());
+                    i.putExtra("_meetingId", meetingId);
 
                     startActivity(i);
+                    //finish this list so that it doesnt show up after fining
                 }
             }
         });
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        this.populateMembersList();
     }
 }

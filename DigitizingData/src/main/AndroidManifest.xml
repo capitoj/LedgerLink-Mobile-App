@@ -349,6 +349,9 @@
             android:name=".MODActivity"
             android:label="@string/title_activity_mod" />
         <activity android:name=".MemberWelfareHistoryActivity" />
+        <activity android:name=".BorrowWelfareMeetingActivity" />
+        <activity android:name=".AddBorrowFromWelfareMeetingActivity" />
+        <activity android:name=".MemberOutstandingWelfareHistoryActivity"></activity>
     </application>
 
 </manifest>

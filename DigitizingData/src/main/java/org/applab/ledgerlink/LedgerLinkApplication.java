@@ -7,6 +7,7 @@ import org.applab.ledgerlink.repo.MeetingAttendanceRepo;
 import org.applab.ledgerlink.repo.MeetingFineRepo;
 import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
 import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
+import org.applab.ledgerlink.repo.MeetingOutstandingWelfareRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.repo.MeetingSavingRepo;
 import org.applab.ledgerlink.repo.MeetingWelfareRepo;
@@ -34,8 +35,7 @@ public class LedgerLinkApplication extends Application
     private VslaCycleRepo vslaCycleRepo;
     private VslaInfoRepo vslaInfoRepo;
     private MeetingWelfareRepo meetingWelfareRepo;
-
-
+    private MeetingOutstandingWelfareRepo meetingOutstandingWelfareRepo;
 
     public LedgerLinkApplication() {
       super();
@@ -148,5 +148,12 @@ public class LedgerLinkApplication extends Application
             this.meetingWelfareRepo = new MeetingWelfareRepo(getApplicationContext());
         }
         return this.meetingWelfareRepo;
+    }
+
+    public MeetingOutstandingWelfareRepo getMeetingOutstandingWelfareRepo(){
+        if(this.meetingOutstandingWelfareRepo == null){
+            this.meetingOutstandingWelfareRepo = new MeetingOutstandingWelfareRepo(getApplicationContext());
+        }
+        return this.meetingOutstandingWelfareRepo;
     }
 }

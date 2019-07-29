@@ -34,6 +34,8 @@ public class Member {
     private String savingsOnSetupCorrectionComment;
     private String welfareOnSetupCorrectionComment;
     private String outstandingLoanOnSetupCorrectionComment;
+    private double outstandingWelfareOnSetup;
+    private Date outstandingWelfareDueDateOnSetup;
 
     //This is the date of next repayment of middle start loan
     //TODO: ideally this shouldnt be apart of member defination but what to do?
@@ -295,5 +297,21 @@ public class Member {
 
     public Date getDateLeft(){
         return this.dateLeft;
+    }
+
+    public void setOutstandingWelfareOnSetup(double outstandingWelfareOnSetup){
+        this.outstandingWelfareOnSetup = outstandingWelfareOnSetup;
+    }
+
+    public double getOutstandingWelfareOnSetup(){
+        return this.outstandingWelfareOnSetup;
+    }
+
+    public void setOutstandingWelfareDueDateOnSetup(Date outstandingWelfareDueDateOnSetup){
+        this.outstandingWelfareDueDateOnSetup = outstandingWelfareDueDateOnSetup;
+    }
+
+    public Date getOutstandingWelfareDueDateOnSetup(){
+        return this.outstandingWelfareDueDateOnSetup;
     }
 }

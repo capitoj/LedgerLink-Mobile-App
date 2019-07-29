@@ -24,12 +24,14 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.domain.model.FinancialInstitution;
+import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.helpers.Network;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
 import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
+import org.applab.ledgerlink.repo.VslaInfoRepo;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
@@ -127,7 +129,14 @@ public class ActivationActivity extends SherlockActivity {
     private void activateVlsaUsingPostAsync(String request) {
 
         if(Network.isConnected(getApplicationContext())) {
-            String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
+            VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
+            VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
+            FinancialInstitutionRepo financialInstitutionRepo = new FinancialInstitutionRepo(getApplicationContext(), vslaInfo.getFiID());
+            FinancialInstitution financialInstitution = financialInstitutionRepo.getFinancialInstitution();
+//            String baseUrl = "http://127.0.0.1:82";
+            String baseUrl = "http://" + financialInstitution.getIpAddress();
+            String uri = String.format("%s/%s/%s", baseUrl, "DigitizingData", "activate");
+//            String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
             new PostTask(this).execute(uri, request);
         }else{
             this.saveOfflineVslaInfo();

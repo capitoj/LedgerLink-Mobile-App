@@ -22,6 +22,12 @@
         android:showAsAction="never"
         android:title="Fine Member" />
     <item
+        android:id="@+id/mnuMeetingBorrowWelfare"
+        android:menuCategory="system"
+        android:orderInCategory="31"
+        android:showAsAction="never"
+        android:title="Borrow From Welfare" />
+    <item
         android:id="@+id/mnuMeetingChangeDate"
         android:menuCategory="system"
         android:orderInCategory="32"
