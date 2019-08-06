@@ -26,7 +26,7 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Share Price (UGX)" />
+                    android:text="@string/share_price" />
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtBCSharePrice"
@@ -46,7 +46,7 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Maximum number of shares a member may purchase per meeting" />
+                    android:text="@string/maximum_number_of_stars_member_purchase_per_meeting" />
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtBCMaxShares"
@@ -66,7 +66,7 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Date your cycle will begin" />
+                    android:text="@string/date_cycle_begins" />
 
                 <DatePicker
                     android:id="@+id/dtpBCStartDate"
@@ -84,7 +84,7 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Date your cycle will end" />
+                    android:text="@string/date_cycle_ends" />
 
                 <DatePicker
                     android:id="@+id/dtpBCEndDate"
@@ -109,7 +109,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="50"
-            android:text="Cancel" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/btnBCNext1"
@@ -117,7 +117,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="50"
-            android:text="Save" />
+            android:text="@string/save" />
 
 
     </LinearLayout>

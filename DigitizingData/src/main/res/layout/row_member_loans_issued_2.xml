@@ -17,6 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="30dp"
-        android:text="1,000,000 UGX" />
+        android:text="@string/amount_ioooooo" />
 
 </RelativeLayout>

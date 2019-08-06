@@ -15,5 +15,5 @@
         android:drawableLeft="@drawable/ic_navigation_accept"
         android:drawablePadding="1dip"
         android:gravity="center_vertical"
-        android:text="done" />
+        android:text="@string/done" />
 </FrameLayout>

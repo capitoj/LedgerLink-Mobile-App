@@ -15,7 +15,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dip"
-            android:text="Update register by adding new members and removing those who are no longer a part of your group." />
+            android:text="@string/update_register_by_adding_new_members" />
     </RelativeLayout>
 
     <ListView

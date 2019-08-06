@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:padding="5dp"
                 android:layout_height="wrap_content"
-                android:text="Savings Group Name" />
+                android:text="@string/savings_group_name" />
 
 
 
@@ -35,7 +35,7 @@
                     android:id="@+id/txtGSW_passkey_heading"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Passkey"
+                    android:text="@string/passkey"
 
                     />
 
@@ -45,7 +45,7 @@
                               android:layout_width="wrap_content"
                               android:layout_height="wrap_content"
                               android:gravity="left"
-                              android:text="Enter the passkey you created"
+                              android:text="@string/enter_the_passkey_you_created"
                             />
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberPassword"
                 android:layout_gravity="center_horizontal"
-                android:hint="Enter passkey"
+                android:hint="@string/enter_passkey"
                 android:text="" />
         </LinearLayout>
 

@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="Expected Starting Cash" />
+            android:text="@string/expected_starting_cash_two" />
 
         <!-- Date of Previous meeting, Previous Total Cah in Box , currency -->
         <!--
@@ -33,7 +33,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblExpectedStartingCash"
-            android:text="Cash Taken to Bank 0 UGX" />
+            android:text="@string/cash_taken_to_bank_o" />
 
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -42,7 +42,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblCashTakenToBank"
-            android:text="Actual Cash in the Box" />
+            android:text="@string/actual_cash_in_the_box" />
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtActualStartingCash"
@@ -62,7 +62,7 @@
             android:layout_below="@+id/lblActualStartingCash"
             android:layout_toRightOf="@+id/txtActualStartingCash"
             android:inputType="number"
-            android:text="UGX" />
+            android:text="@string/ugx" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblCashFromBank"
@@ -70,7 +70,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtActualStartingCash"
-            android:text="Cash From Bank" />
+            android:text="@string/cash_from_bank" />
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtCashFromBank"
@@ -89,7 +89,7 @@
             android:layout_below="@+id/lblCashFromBank"
             android:layout_toRightOf="@+id/txtCashFromBank"
             android:inputType="number"
-            android:text="UGX" />
+            android:text="@string/ugx" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblLoanFromBank"
@@ -97,7 +97,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtCashFromBank"
-            android:text="Loan From Bank" />
+            android:text="@string/loan_from_bank" />
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtLoanFromBank"
@@ -116,7 +116,7 @@
             android:layout_below="@+id/lblLoanFromBank"
             android:layout_toRightOf="@+id/txtLoanFromBank"
             android:inputType="number"
-            android:text="UGX" />
+            android:text="@string/ugx" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblStartingCashComment"
@@ -124,7 +124,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtLoanFromBank"
-            android:text="Comment" />
+            android:text="@string/comment" />
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtStartingCashComment"

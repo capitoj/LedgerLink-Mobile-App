@@ -21,7 +21,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="If your cycle has ended, enter the share out date."
+            android:text="@string/if_your_cycle_has_ended"
             android:layout_marginBottom="20dip"/>
 
         <requestFocus />
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/lblECInstruction"
-            android:text="Share Out Date" />
+            android:text="@string/share_out_date" />
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtECShareOutDate"
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@id/txtECShareOutDate"
-            android:text="Share Out Amount" />
+            android:text="@string/share_out_amount" />
 
         <LinearLayout
             android:id="@+id/frmECShareOutAmount"
@@ -101,7 +101,7 @@
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:text="UGX" />
+                android:text="@string/ugx" />
 
         </LinearLayout>
 

@@ -27,7 +27,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtMListOccupation"
-        android:text = "Active"
+        android:text = "@string/active"
         android:paddingRight="@dimen/dp_10"
         android:layout_alignParentRight="true" />
 
@@ -37,7 +37,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtMListStatus"
-        android:text = "Savings - "
+        android:text = "@string/savings_"
         android:paddingRight="@dimen/dp_10"
         android:layout_alignParentRight="true" />
 
@@ -47,7 +47,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtMListTotalSavings"
-        android:text = "Outstanding Loans - "
+        android:text = "@string/outstanding_loans_"
         android:paddingRight="@dimen/dp_10"
         android:layout_alignParentRight="true" />
 
@@ -57,7 +57,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtMListTotalOutstandingLoans"
-        android:text = "Welfare - "
+        android:text = "@string/welfare_"
         android:paddingRight="@dimen/dp_10"
         android:layout_alignParentRight="true" />
 
@@ -67,7 +67,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtMListTotalWelfare"
-        android:text = "Outstanding Welfare - "
+        android:text = "@string/outstanding_welfare_"
         android:paddingRight="@dimen/dp_10"
         android:layout_alignParentRight="true" />
 

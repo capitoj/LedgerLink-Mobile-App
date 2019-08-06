@@ -25,7 +25,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Tap box to tick member as present. Leave boxes empty for absent members. Press and hold name to add comment." />
+            android:text="@string/tap_box_to_tick_member_present" />
 
 
         <ListView

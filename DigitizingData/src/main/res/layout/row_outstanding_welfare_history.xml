@@ -47,7 +47,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/lblOutstandingWelfareFullName"
                 android:layout_toRightOf="@id/chkMemberOutstandingWelfare"
-                android:text="XXX UGX" />
+                android:text="@string/xxx_ugx" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtOutstandingMeetingExpectedDate"
@@ -56,7 +56,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/lblOutstandingWelfareFullName"
                 android:layout_toRightOf="@id/txtMemberOutstandingWelfareAmount"
-                android:text=" XXX " />
+                android:text="@string/xxx" />
         </RelativeLayout>
     </FrameLayout>
 </FrameLayout>

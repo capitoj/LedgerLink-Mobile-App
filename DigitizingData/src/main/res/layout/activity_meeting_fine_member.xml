@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="FINE MEMBER"
+            android:text="@string/fine_member"
             android:id="@+id/lblFineMember" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="Select the member below to add a fine."
+            android:text="@string/select_the_member_below_to_add_a_fine"
             android:id="@+id/lblReviewFinesMessage"
             android:layout_below="@id/lblFineMember"/>
 

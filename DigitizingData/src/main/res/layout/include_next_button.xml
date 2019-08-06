@@ -15,5 +15,5 @@
         android:drawableRight="@drawable/ic_navigation_forward"
         android:drawablePadding="1dip"
         android:gravity="center_vertical"
-        android:text="next" />
+        android:text="@string/next" />
 </FrameLayout>

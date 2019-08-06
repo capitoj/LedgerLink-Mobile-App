@@ -29,7 +29,7 @@
             android:layout_alignLeft="@+id/edt_passkey"
             android:layout_alignRight="@+id/edt_passkey"
             android:layout_below="@+id/imgVALogo"
-            android:text="VSLA NAME" />
+            android:text="@string/vsla_name" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblActivationLoginMsg"
@@ -41,7 +41,7 @@
             android:layout_alignRight="@+id/lbl_vsla_name"
             android:paddingTop="15dip"
             android:layout_marginBottom="@dimen/login_margin"
-            android:text="Activation Message" />
+            android:text="@string/activation_message" />
         <!--
         android:paddingBottom="-5dip"
         android:layout_marginTop="40dip"
@@ -55,7 +55,7 @@
             android:layout_alignLeft="@+id/edt_passkey"
             android:layout_alignRight="@+id/edt_passkey"
             android:layout_below="@+id/lbl_vsla_name"
-            android:text="Passkey" />
+            android:text="@string/passkey" />
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/edt_passkey"
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/btnLogin"
             android:layout_below="@+id/lblPassKeyPrompt"
-            android:hint="Enter Pass Key Here"
+            android:hint="@string/enter_pass_key_here"
             android:inputType="numberPassword"
             android:textAlignment="center"
             tools:ignore="UnusedAttribute" />
@@ -78,7 +78,7 @@
             android:layout_width="@dimen/login_ctrl_width"
             android:layout_height="wrap_content"
             android:layout_below="@id/edt_passkey"
-            android:text="Sign In" />
+            android:text="@string/sign_in" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtHelpInfo"
@@ -112,6 +112,6 @@
             android:layout_marginLeft="1dip"
             android:layout_marginTop="@dimen/login_margin"
             android:layout_marginBottom="1dip"
-            android:text="version number" />
+            android:text="@string/version_number" />
     </RelativeLayout>
 </ScrollView>

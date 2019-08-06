@@ -1,6 +1,8 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.google.com' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
@@ -15,9 +17,13 @@ dependencies {
     compile project(':libraries:aFileChooser')
     compile files('libs/nineoldandroids-2.4.0.jar')
     compile 'com.android.support:support-v4:22.2.1'
+    //compile 'com.android.support:support-v7:23.1.1'
     compile files('libs/commons-lang3-3.5.jar')
     compile files('libs/httpcore-4.4.11.jar')
     compile files('libs/httpclient-4.5.9.jar')
+    //compile "com.ahmedjazzar.rosetta:rosetta:1.0.1"
+    //compile "com.github.metalurgus:LocaleText:0.0.1.1"
+
 }
 
 android {

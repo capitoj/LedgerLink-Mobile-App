@@ -7,7 +7,7 @@
     tools:context="org.applab.ledgerlink.GeneralSupportActivity">
 
     <TextView
-        android:text="General Support"
+        android:text="@string/general_support"
         android:id="@+id/TXTGSHeading"
         android:textSize="14dp"
         android:paddingBottom="@dimen/dp_10"
@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Have you received support?"
+        android:text="@string/have_you_received_support"
         android:layout_below="@+id/GSSeparator"
         android:paddingTop="@dimen/dp_10"
         android:id="@+id/TXTGSQuestion"/>
@@ -40,7 +40,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Comments"
+        android:text="@string/comment"
         android:layout_below="@+id/GSSPINNER"
         android:paddingTop="@dimen/dp_10"
         android:id="@+id/TXTGSComment"/>
