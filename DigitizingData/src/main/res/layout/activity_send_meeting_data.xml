@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Select the Meeting whose data you want to send." />
+            android:text="@string/select_the_meeting" />
     </RelativeLayout>
 
     <ListView

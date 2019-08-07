@@ -11,7 +11,7 @@
             style="@style/RegularTextInstructionBold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="FINE MEMBER" />
+            android:text="@string/fine_member" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblFMessage"
@@ -19,7 +19,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblMemberFinesHeader"
-            android:text="Select type of fine and the amount. Check the box if the member has paid." />
+            android:text="@string/Select_type_of_fine_and_the_amount" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtFMFullName"

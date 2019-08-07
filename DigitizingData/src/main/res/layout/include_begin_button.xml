@@ -15,5 +15,5 @@
         android:drawableLeft="@drawable/ic_action_begin_meeting"
         android:drawablePadding="6dip"
         android:gravity="center_vertical"
-        android:text="begin" />
+        android:text="@string/begin" />
 </FrameLayout>

@@ -30,7 +30,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginRight="5dip"
         android:layout_marginLeft="10dip"
-        android:text="Loan No " />
+        android:text="@string/loan_number_default" />
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLIHAmount"
@@ -40,7 +40,7 @@
         android:layout_marginRight="5dip"
         android:layout_marginLeft="5dip"
         android:layout_toRightOf="@id/txtRLIHLoanNo"
-        android:text="Amount " />
+        android:text="@string/amount" />
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLIHDateTaken"
@@ -50,7 +50,7 @@
         android:layout_marginRight="10dip"
         android:layout_marginLeft="5dip"
         android:layout_toRightOf="@id/txtRLIHAmount"
-        android:text="Date " />
+        android:text="@string/date" />
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRLIHComment"
@@ -61,7 +61,7 @@
         android:layout_marginTop="2dip"
         android:paddingBottom="5dip"
         android:layout_below="@id/txtRLIHLoanNo"
-        android:text="Comments " />
+        android:text="@string/comment" />
     </RelativeLayout>
 
 

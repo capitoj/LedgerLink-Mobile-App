@@ -41,7 +41,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="Amount borrowed" />
+            android:text="@string/amount_borrowed" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -65,7 +65,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:text="@string/operating_currency" />
+                android:text="@string/ugx" />
         </LinearLayout>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -74,7 +74,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="Comment" />
+            android:text="@string/comment" />
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtMLIssuedHComment"
@@ -106,7 +106,7 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Interest Added" />
+            android:text="@string/interest_added" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHInterestDesc"
@@ -114,7 +114,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="0dip"
-            android:text="at 10% every 30 days" />
+            android:text="@string/interest_rate" />
 
         <LinearLayout
             android:id="@+id/frmMLIssuedHInterest"
@@ -138,7 +138,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
-                android:text="@string/operating_currency" />
+                android:text="@string/ugx" />
         </LinearLayout>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -146,7 +146,7 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Outstanding balance(with interest)" />
+            android:text="@string/outstanding_balance_with_interest" />
 
         <LinearLayout
             android:id="@+id/frmMLIssuedHTotal"
@@ -169,7 +169,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:text="@string/operating_currency" />
+                android:text="@string/ugx" />
         </LinearLayout>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -177,7 +177,7 @@
             style="@style/RegularText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Next Payment Date" />
+            android:text="@string/next_payment_date" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtMLIssuedHDateDue"

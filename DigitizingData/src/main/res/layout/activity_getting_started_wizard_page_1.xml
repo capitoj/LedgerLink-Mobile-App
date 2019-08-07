@@ -19,7 +19,7 @@
                 android:id="@+id/txtNCP_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Savings Group Name" />
+                android:text="@string/savings_group_name" />
 
         </LinearLayout>
 
@@ -33,7 +33,7 @@
                 android:id="@+id/txtNCP_header_instruction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Before the first meeting, enter the current cycle’s information such as the star (share) value, and the names, ages, and occupations for each member." />
+                android:text="@string/before_the_first_meeting_enter_the_current_cycle" />
         </LinearLayout>
 
         <LinearLayout
@@ -46,7 +46,7 @@
                 android:id="@+id/txtNCP_header2"
                 android:layout_width="match_parent"
                 android:layout_height="25dip"
-                android:text="Middle Cycle Start" />
+                android:text="@string/middle_cycle_start_smallcap" />
         </LinearLayout>
 
         <LinearLayout

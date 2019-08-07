@@ -4,7 +4,7 @@ buildscript {
         maven { url 'http://repo1.maven.org/maven2' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.3'
     }
 }
 apply plugin: 'com.android.library'
@@ -14,12 +14,12 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
-        minSdkVersion 13
-        targetSdkVersion 15
+        minSdkVersion 19
+        targetSdkVersion 28
     }
     sourceSets {
         main {
@@ -37,5 +37,9 @@ android {
 
     lintOptions{
         abortOnError false
+    }
+
+    dexOptions {
+        preDexLibraries = false
     }
 }

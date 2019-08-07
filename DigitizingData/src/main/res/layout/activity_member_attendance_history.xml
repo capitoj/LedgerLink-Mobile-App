@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dip"
                     android:layout_toRightOf="@id/chkMAHAttendance"
-                    android:text="Member Name" />
+                    android:text="@string/member_name" />
             </RelativeLayout>
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/frmMAH_check"
-                android:text="Comment" />
+                android:text="@string/comment" />
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMAHComment"
@@ -59,7 +59,7 @@
                 android:layout_marginBottom="20dip"
                 android:imeOptions="actionDone"
                 android:inputType="textCapSentences"
-                android:text="OK" />
+                android:text="@string/ok" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMAHSection1"
@@ -67,7 +67,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
                 android:layout_below="@id/txtMAHComment"
-                android:text="Absences" />
+                android:text="@string/absences" />
         </RelativeLayout>
 
         <ListView
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/frmMAH_top_control_bar"
-            android:text="None"
+            android:text="@string/none"
 
             />
 

@@ -47,7 +47,7 @@
                 android:layout_below="@id/lblFineFullName"
                 android:layout_marginLeft="1dip"
                 android:layout_toRightOf="@id/chkMemberFine"
-                android:text="Latecoming" />
+                android:text="@string/latecoming" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMemberFineAmount"
@@ -56,7 +56,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/lblFineFullName"
                 android:layout_toRightOf="@id/lblFineType"
-                android:text="XXX UGX" />
+                android:text="@string/xxx_ugx" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtFineMeetingDate"
@@ -65,7 +65,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/lblFineFullName"
                 android:layout_toRightOf="@id/txtMemberFineAmount"
-                android:text=" XXX " />
+                android:text="@string/xxx" />
         </RelativeLayout>
     </FrameLayout>
 </FrameLayout>

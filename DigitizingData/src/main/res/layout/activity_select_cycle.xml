@@ -16,7 +16,7 @@
             style="@style/RegularTextInstruction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="You have more than one active cycle. Please choose the cycle for the new meeting." />
+            android:text="@string/you_have_more_than_one_active_cycle" />
 
         <ListView
             android:id="@+id/lstSelectCycleToEdit"

@@ -5,6 +5,11 @@
     android:orientation="vertical"
     android:weightSum="100">
 
+
+
+
+
+
     <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularText"
         android:id="@+id/txtMFullNames"

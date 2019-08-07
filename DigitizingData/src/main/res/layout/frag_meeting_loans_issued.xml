@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:text="Total Cash 0 UGX" />
+            android:text="@string/total_cash_o" />
     </RelativeLayout>
 
     <ListView

@@ -20,7 +20,7 @@
                 style="@style/RegularTextInstruction"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter all cycle information then select next." />
+                android:text="@string/enter_all_cycle_information" />
         </LinearLayout>
 
         <LinearLayout
@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:lineSpacingMultiplier="0.8"
-                android:text="Star (Share) value" />
+                android:text="@string/star_value" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblNCShareValueDesc"
@@ -46,7 +46,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dip"
-                android:text="Amount that it costs to buy one share" />
+                android:text="@string/share_amount" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -66,7 +66,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="UGX" />
+                    android:text="@string/ugx" />
             </LinearLayout>
         </LinearLayout>
 
@@ -81,7 +81,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Maximum number of stars (shares) a member may purchase per meeting" />
+                android:text="@string/maximum_number_of_stars_member_purchase_per_meeting" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -116,7 +116,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="Stars" />
+                    android:text="@string/stars" />
             </LinearLayout>
         </LinearLayout>
 
@@ -131,7 +131,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Date your cycle will begin" />
+                android:text="@string/date_cycle_begins" />
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtNCStartDate"
@@ -140,7 +140,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="01-Jul-2013" />
+                android:text="@string/date_demo_begin" />
         </LinearLayout>
 
         <LinearLayout
@@ -154,7 +154,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Date cycle ends" />
+                android:text="@string/date_cycle_ends" />
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtNCEndDate"
@@ -163,7 +163,7 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:focusable="true"
-                android:text="30-Jun-2013" />
+                android:text="@string/date_demo_end" />
         </LinearLayout>
 
         <LinearLayout
@@ -212,7 +212,7 @@
                 style="@style/SubHeadingLowCaps"
                 android:layout_width="match_parent"
                 android:layout_height="25dip"
-                android:text="Middle Cycle Start" />
+                android:text="@string/middle_cycle_start_smallcap" />
 
 
             <LinearLayout
@@ -226,14 +226,14 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="This information was added on 3 Mar 2013 after the cycle started. Here are the interest and fines collected by that day." />
+                    android:text="@string/this_information_was_added_on" />
 
                 <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblNCMiddleCycleInterestCollectedSoFarLabel"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total amount of interest collected during current cycle so far" />
+                    android:text="@string/total_amount_of_interest_collected" />
 
                 <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblNCMiddleCycleInterestCollectedSoFar"
@@ -247,7 +247,7 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Actual amount of interest collected this cycle so far if the original interest was incorrect (you may enter a correction once)" />
+                    android:text="@string/actual_amount_of_interest_collected" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -266,7 +266,7 @@
                         style="@style/InlineTextItem"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:text="UGX" />
+                        android:text="@string/ugx" />
 
                 </LinearLayout>
 
@@ -275,7 +275,7 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Comment" />
+                    android:text="@string/comment" />
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtNCMiddleCycleInterestCorrectionComment"
@@ -290,21 +290,21 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total amount of fines collected during current cycle so far" />
+                    android:text="@string/total_amount_of_fines_collected" />
 
                 <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblNCMiddleCycleFinesCollectedSoFar"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="0 UGX" />
+                    android:text="@string/o_ugx" />
 
                 <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblNCFinesCollectedSoFar"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Actual amount of fines collected this cycle so far if the original fines amount was incorrect (you may enter a correction once)" />
+                    android:text="@string/actual_amount_of_fines_collected" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -323,7 +323,7 @@
                         style="@style/InlineTextItem"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:text="UGX" />
+                        android:text="@string/ugx" />
 
                 </LinearLayout>
 
@@ -332,7 +332,7 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Comment" />
+                    android:text="@string/comment" />
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtNCMiddleCycleFinesCorrectionComment"
@@ -347,21 +347,21 @@
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total outstanding bank loan" />
+                    android:text="@string/total_outstanding_bank_loan" />
 
                 <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblNCDisbursedOutstandingBankLoanAmountSoFar"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="0 UGX"/>
+                    android:text="@string/o_ugx"/>
 
                 <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblNCOutstandingBankLoanSoFar"
                     style="@style/RegularText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:text="Actual outstanding bank loan in this cycle if the original bank loan amount was incorrect (you may enter a correction once)" />
+                    android:text="@string/actual_outstanding_bank_loan" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -380,7 +380,7 @@
                         style="@style/InlineTextItem"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:text="UGX" />
+                        android:text="@string/ugx" />
 
                 </LinearLayout>
             </LinearLayout>

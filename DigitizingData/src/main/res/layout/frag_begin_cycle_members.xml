@@ -26,7 +26,7 @@
             style="@style/LoginButton"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Add New Member" />
+            android:text="@string/add_new_member" />
     </LinearLayout>
 
     <ListView

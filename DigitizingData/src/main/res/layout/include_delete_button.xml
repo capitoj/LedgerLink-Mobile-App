@@ -15,5 +15,5 @@
         android:drawableLeft="@drawable/ic_action_discard"
         android:drawablePadding="1dip"
         android:gravity="center_vertical"
-        android:text="delete" />
+        android:text="@string/delete" />
 </FrameLayout>
