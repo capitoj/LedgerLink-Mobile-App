@@ -3,18 +3,18 @@ package org.applab.ledgerlink;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
 
-public class GettingStartedWizardPageTwo extends SherlockActivity {
+public class GettingStartedWizardPageTwo extends ActionBarActivity{
     private VslaInfo vslaInfo = null;
     LedgerLinkApplication ledgerLinkApplication;
 
@@ -32,14 +32,14 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
         actionBar.setDisplayHomeAsUpEnabled(false);
 
 
-        actionBar.setTitle("Get Started");
+        actionBar.setTitle(R.string.get_started);
 
         vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
 
         TextView savingsGroupName = (TextView) findViewById(R.id.txtNCP_header);
         if(!vslaInfo.isActivated()) {
             //If not activated, show message to avoid displaying "Offline Mode" as vsla name
-            savingsGroupName.setText("(not yet activated)");
+            savingsGroupName.setText(R.string.not_yet_activated);
         }
         else {
 
@@ -92,12 +92,12 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
                 finish();
             }
             else {
-                Utils.createAlertDialogOk(this, "Security", "The Pass Key is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, getString(R.string.security), getString(R.string.passkey_invalid), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
             }
         }
         catch(Exception ex) {
-            Utils.createAlertDialogOk(this, "Security", "The Pass Key could not be validated.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, getString(R.string.security), getString(R.string.passkey_not_be_validated), Utils.MSGBOX_ICON_EXCLAMATION).show();
             if (txtPassKey != null) {
                 txtPassKey.requestFocus();
             }
@@ -107,7 +107,7 @@ public class GettingStartedWizardPageTwo extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.cancel_next, menu);
 
         //menu.findItem(R.id.mnuNCCancel).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS, MenuItem.SHOW_AS_ACTION_WITH_TEXT);

@@ -90,8 +90,8 @@ public class ProfileActivity extends Activity {
         protected void onPreExecute(){
             super.onPreExecute();
             progressDialog = new ProgressDialog(this.context);
-            progressDialog.setTitle("Retrieving VSLA Profile");
-            progressDialog.setMessage("Please wait...");
+            progressDialog.setTitle(getString(R.string.retrieving_vsla_profile));
+            progressDialog.setMessage(getString(R.string.please_wait));
             progressDialog.setProgress(1);
             progressDialog.setCancelable(false);
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -146,35 +146,35 @@ public class ProfileActivity extends Activity {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("GetProfileResult");
                         String vslaName = jsonObject1.getString("VslaName");
                         TextView txtVslaName = (TextView)findViewById(R.id.profileVslaName);
-                        txtVslaName.setText("VSLA Name: " + vslaName);
+                        txtVslaName.setText(getString(R.string.vsla_name_profile) + vslaName);
 
                         String vslaCode = jsonObject1.getString("VslaCode");
                         TextView txtVslaCode = (TextView)findViewById(R.id.profileVslaCode);
-                        txtVslaCode.setText("VSLA Code: " + vslaCode);
+                        txtVslaCode.setText(getString(R.string.vsla_code_profile) + vslaCode);
 
                         String contactPerson = jsonObject1.getString("ContactPerson");
                         TextView txtContactPerson = (TextView)findViewById(R.id.profileContactPerson);
-                        txtContactPerson.setText("Contact Person: " + contactPerson);
+                        txtContactPerson.setText(getString(R.string.contact_person_profile) + contactPerson);
 
                         String phoneNumber = jsonObject1.getString("PhoneNumber");
                         TextView txtPhoneNumber = (TextView)findViewById(R.id.profilePhoneNumber);
-                        txtPhoneNumber.setText("Phone Number: " + phoneNumber);
+                        txtPhoneNumber.setText(getString(R.string.phone_number_profile) + phoneNumber);
 
                         String region = jsonObject1.getString("Region");
                         TextView txtVslaRegion = (TextView)findViewById(R.id.profileVslaRegion);
-                        txtVslaRegion.setText("Region: " + region);
+                        txtVslaRegion.setText(getString(R.string.region_profile) + region);
 
                         String positionInVsla = jsonObject1.getString("PositionInVsla");
                         TextView txtPositionInVsla = (TextView)findViewById(R.id.profilePositionInVsla);
-                        txtPositionInVsla.setText("Position In VSLA: " + positionInVsla);
+                        txtPositionInVsla.setText(getString(R.string.position_vsla_profile) + positionInVsla);
 
                     }catch(Exception e){
                         e.printStackTrace();
-                        DialogMessageBox.show(this.context, "Internal Error", "Ledger Link has suffered an internal error");
+                        DialogMessageBox.show(this.context, getString(R.string.internal_error), getString(R.string.ledger_link_suffered_inernal_error));
                     }
                 }
             }else{
-                DialogMessageBox.show(context, "Error Message", "You are not connected to the internet");
+                DialogMessageBox.show(context, getString(R.string.error_msg), getString(R.string.not_connected_to_internet));
             }
             dismissProgressDialog();
         }

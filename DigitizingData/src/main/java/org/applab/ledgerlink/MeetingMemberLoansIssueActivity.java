@@ -9,13 +9,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MeetingMemberLoansIssueActivity extends SherlockActivity {
+public class MeetingMemberLoansIssueActivity extends ActionBarActivity{
 
     protected Member selectedMember;
     protected ListView listUnpaidLoans;
@@ -43,12 +43,12 @@ public class MeetingMemberLoansIssueActivity extends SherlockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_member_loans_issue);
-        getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         int memberId = getIntent().getIntExtra("_memberId", 0);
         int meetingId = getIntent().getIntExtra("_meetingId", 0);
         MemberRepo memberRepo = new MemberRepo(this);
         selectedMember = memberRepo.getMemberById(memberId);
-        this.getSherlock().getActionBar().setTitle(selectedMember.getFullName());
+        this.getSupportActionBar().setTitle(selectedMember.getFullName());
         MeetingRepo meetingRepo = new MeetingRepo(this, meetingId);
         meeting = meetingRepo.getMeeting();
         this.init();
@@ -92,7 +92,7 @@ public class MeetingMemberLoansIssueActivity extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(getIntent().getStringExtra("_action").equals("loanissue")) {
-            getSupportMenuInflater().inflate(R.menu.menu_meeting_member_loans_issue, menu);
+            getMenuInflater().inflate(R.menu.menu_meeting_member_loans_issue, menu);
             this.menuAction(menu);
         }
         return true;
@@ -124,7 +124,7 @@ public class MeetingMemberLoansIssueActivity extends SherlockActivity {
             viewHistory.putExtra("_action", 0);
             startActivity(viewHistory);
         }else{
-            Toast.makeText(this, "You cannot issue a  new loan to " + selectedMember.getFullName() + " because he does not have a member number", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.cannot_issue_new_loan_to) + selectedMember.getFullName() + getString(R.string.does_not_have_member_no), Toast.LENGTH_LONG).show();
         }
     }
 

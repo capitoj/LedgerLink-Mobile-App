@@ -1,5 +1,6 @@
 package org.applab.ledgerlink;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -12,11 +13,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -28,7 +29,9 @@ import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
 
-public class MemberWelfareHistoryActivity extends SherlockListActivity {
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+
+public class MemberWelfareHistoryActivity extends ListActivity {
 
     private String meetingDate;
     private int memberId;
@@ -85,7 +88,7 @@ public class MemberWelfareHistoryActivity extends SherlockListActivity {
     private void inflateCustomActionBar() {
 
         // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
@@ -93,7 +96,7 @@ public class MemberWelfareHistoryActivity extends SherlockListActivity {
                     @Override
                     public void onClick(View v) {
                         if(saveMemberWelfare(true)) {
-                            Toast.makeText(MemberWelfareHistoryActivity.this, "Welfare entered successfully", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MemberWelfareHistoryActivity.this, R.string.welfare_entered_successfully, Toast.LENGTH_LONG).show();
                             Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                             i.putExtra("_tabToSelect", "welfare");
                             i.putExtra("_meetingDate", meetingDate);
@@ -118,7 +121,7 @@ public class MemberWelfareHistoryActivity extends SherlockListActivity {
                 });
 
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -126,7 +129,7 @@ public class MemberWelfareHistoryActivity extends SherlockListActivity {
         }
 
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setTitle("WELFARE");
+        actionBar.setTitle(R.string.welfare);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
 
@@ -159,7 +162,7 @@ public class MemberWelfareHistoryActivity extends SherlockListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.member_welfare_history, menu);
         return true;
     }
@@ -200,10 +203,10 @@ public class MemberWelfareHistoryActivity extends SherlockListActivity {
                 return true;
             case R.id.mnuMSHSave:
                 if(saveMemberWelfare(true)) {
-                    Toast.makeText(MemberWelfareHistoryActivity.this, "Welfare entered successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MemberWelfareHistoryActivity.this, getString(R.string.welfare_entered_successfully), Toast.LENGTH_LONG).show();
                     i = new Intent(MemberWelfareHistoryActivity.this, MeetingActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.putExtra("_tabToSelect", "welfare");
+                    i.putExtra("_tabToSelect", getString(R.string.welfare_small_cap));
                     i.putExtra("_meetingDate", meetingDate);
                     i.putExtra("_meetingId", meetingId);
                     startActivity(i);

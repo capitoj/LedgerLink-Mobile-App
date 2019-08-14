@@ -9,11 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.helpers.Utils;
@@ -23,7 +23,7 @@ import org.applab.ledgerlink.fontutils.TypefaceManager;
 /**
  * Created by Moses on 7/15/13.
  */
-public class AddFineActivity extends SherlockActivity {
+public class AddFineActivity extends ActionBarActivity{
     private int selectedMemberId;
     private int meetingId;
     private boolean selectedFinishButton = false;
@@ -123,7 +123,7 @@ public class AddFineActivity extends SherlockActivity {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setTitle("New Fine");
+        actionBar.setTitle(R.string.new_fine_main);
 
         // Set to false to remove caret and disable its function; if designer decides otherwise set both to true
         actionBar.setHomeButtonEnabled(false);
@@ -153,7 +153,7 @@ public class AddFineActivity extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.add_fine, menu);
         return true;
     }
@@ -200,9 +200,9 @@ public class AddFineActivity extends SherlockActivity {
             fine = new MeetingFine();
             //Validate: Fine Type
             Spinner cboFineType = (Spinner) findViewById(R.id.cboFMFineType);
-            String dlgTitle = "Add Fine";
+            String dlgTitle = getString(R.string.add_fine_main);
             if (cboFineType.getSelectedItemPosition() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The fine type is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.fine_type_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboFineType.setFocusableInTouchMode(true);
                 cboFineType.requestFocus();
                 return false;
@@ -211,7 +211,7 @@ public class AddFineActivity extends SherlockActivity {
                  * Meantime fix for QA time
                  * */
 
-                 if (selectedFineTypeName.equalsIgnoreCase(getResources().getString(R.string.finetype_other))) {
+                if (selectedFineTypeName.equalsIgnoreCase(getResources().getString(R.string.finetype_other))) {
                     fine.setFineTypeId(1);
                 } else if (selectedFineTypeName.equalsIgnoreCase(getResources().getString(R.string.finetype_latecoming))) {
                     fine.setFineTypeId(2);
@@ -228,13 +228,13 @@ public class AddFineActivity extends SherlockActivity {
             TextView txtMemberFineAmount = (TextView) findViewById(R.id.txtFMFineAmount);
             String memberFineAmount = txtMemberFineAmount.getText().toString().trim();
             if (memberFineAmount.length() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The Fine Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.fine_amount_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtMemberFineAmount.requestFocus();
                 return false;
             } else {
                 double theFineAmount = Double.parseDouble(memberFineAmount);
                 if (theFineAmount <= 0) {
-                    Utils.createAlertDialogOk(this, dlgTitle, "The Fine Amount must be positive.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.fine_amount_must_be_positive), Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtMemberFineAmount.requestFocus();
                     return false;
 

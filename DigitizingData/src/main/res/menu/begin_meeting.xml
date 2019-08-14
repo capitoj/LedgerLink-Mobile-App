@@ -1,9 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.applab.ledgerlink.BeginMeetingActivity" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="org.applab.ledgerlink.BeginMeetingActivity">
     
     <item android:id="@+id/mnuBMBegin"
         android:title="@string/begin"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom" />
 </menu>

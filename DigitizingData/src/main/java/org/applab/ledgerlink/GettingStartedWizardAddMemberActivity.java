@@ -15,10 +15,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
@@ -51,7 +51,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction", false);
         }
         if (getIntent().hasExtra("_id")) {
-            Log.d(getBaseContext().getPackageName(), "Member id " + getIntent().getIntExtra("_id", 0) + " to be loaded");
+            Log.d(getBaseContext().getPackageName(), "Member id " + getIntent().getIntExtra("_id", 0) + getString(R.string.to_be_loaded));
             this.selectedMemberId = getIntent().getIntExtra("_id", 0);
         }
         setContentView(R.layout.activity_member_details_view_gettings_started_wizard);
@@ -62,12 +62,12 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         TypefaceTextView lblAMInstruction = (TypefaceTextView) findViewById(R.id.lblAMInstruction);
         SpannableStringBuilder headingInstruction = new SpannableStringBuilder();
         SpannableStringBuilder plusText = new SpannableStringBuilder("+ ");
-        SpannableStringBuilder nextText = new SpannableStringBuilder("done");
-        headingInstruction.append("Enter each member. Save and add another member by pressing <b>");
+        SpannableStringBuilder nextText = new SpannableStringBuilder(getString(R.string.done));
+        headingInstruction.append(getString(R.string.enter_each_member));
         headingInstruction.append(plusText);
-        headingInstruction.append("</b> or press <b>");
+        headingInstruction.append(getString(R.string.or_press));
         headingInstruction.append(nextText);
-        headingInstruction.append("</b> if you have entered all members.");
+        headingInstruction.append(getString(R.string.if_you_have_entered_all_members));
 
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
@@ -76,7 +76,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         ActionBar actionBar = getSupportActionBar();
         if (isEditAction) {
 
-            actionBar.setTitle("GET STARTED");
+            actionBar.setTitle(getString(R.string.get_started_allcaps));
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
             customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
                     new View.OnClickListener() {
@@ -168,7 +168,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
                 viewClicked = (TextView) view;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(GettingStartedWizardAddMemberActivity.this, mDateSetListener, mYear, mMonth, mDay);
-                datePickerDialog.setTitle("Set the outstanding welfare due date");
+                datePickerDialog.setTitle(getString(R.string.set_outstanding_welfare_due_date));
                 datePickerDialog.show();
             }
         });
@@ -195,14 +195,14 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
                 viewClicked = (TextView) view;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(GettingStartedWizardAddMemberActivity.this, mDateSetListener, mYear, mMonth, mDay);
-                datePickerDialog.setTitle("Set the next repayment date");
+                datePickerDialog.setTitle(getString(R.string.set_next_repayment_date));
                 datePickerDialog.show();
             }
         });
         // actionBar.setTitle("New Member");
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("GET STARTED");
+        actionBar.setTitle(getString(R.string.get_started_allcaps));
 
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
@@ -244,7 +244,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.add_member, menu);
         return true;
     }
@@ -321,17 +321,17 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     //Otherwise they will assume the value of the selectedMember variable because it is not null
                     selectedMember = member;
                     if (selectedFinishButton) {
-                        Toast toast = Toast.makeText(this, "The new member was added successfully.", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(this, getString(R.string.new_member_added_successfully), Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.LEFT, 0, 0);
                         toast.show();
-                        Log.i(getBaseContext().getPackageName(), "Going to start Review members activity");
+                        Log.i(getBaseContext().getPackageName(), getString(R.string.going_to_start_rview_members_activity));
                         Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
                         startActivity(i);
                         Utils._membersAccessedFromNewCycle = false;
                         Utils._membersAccessedFromEditCycle = false;
                         finish();
                     } else {
-                        Toast toast = Toast.makeText(this, "The new member was added successfully. Add another member.", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(this, R.string.new_member_was_add_successfully_add_another_member, Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.LEFT, 0, 0);
                         toast.show();
                         //Clear the Fields and keep adding new records
@@ -343,7 +343,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
 
                 } else {
-                    Toast.makeText(this, "The member was updated successfully.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.members_updated_successfully, Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
                     startActivity(i);
                     finish();
@@ -351,7 +351,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 successFlg = true;
                 //clearDataFields(); //Not needed now
             } else {
-                dlg = Utils.createAlertDialogOk(this, "Add Member", "A problem occurred while adding the new member.", Utils.MSGBOX_ICON_TICK);
+                dlg = Utils.createAlertDialogOk(this, getString(R.string.add_member), getString(R.string.problem_occurred_while_adding_new_member), Utils.MSGBOX_ICON_TICK);
                 dlg.show();
             }
         } else {
@@ -369,9 +369,9 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             }
             // Validate: MemberNo
             Spinner cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
-            String dlgTitle = "Add Member";
+            String dlgTitle = getString(R.string.add_member);
             if (cboAMMemberNo.getSelectedItemPosition() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The member number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.member_no_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAMMemberNo.setFocusableInTouchMode(true);
                 cboAMMemberNo.requestFocus();
                 return false;
@@ -386,7 +386,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             TextView txtSurname = (TextView) findViewById(R.id.txtAMSurname);
             String surname = txtSurname.getText().toString().trim();
             if (surname.length() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.surname_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtSurname.requestFocus();
                 return false;
             } else {
@@ -397,7 +397,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             TextView txtOtherNames = (TextView) findViewById(R.id.txtAMOtherName);
             String otherNames = txtOtherNames.getText().toString().trim();
             if (otherNames.length() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.at_least_one_other_name_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtOtherNames.requestFocus();
                 return false;
             } else {
@@ -408,7 +408,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             //TextView txtGender = (TextView)findViewById(R.id.txtAMGender);
             Spinner cboGender = (Spinner) findViewById(R.id.cboAMGender);
             if (cboGender.getSelectedItemPosition() < 1) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.sex_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboGender.setFocusableInTouchMode(true);
                 cboGender.requestFocus();
                 return false;
@@ -421,7 +421,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             // Validate: Age
             Spinner cboAge = (Spinner) findViewById(R.id.cboAMAge);
             if (cboAge.getSelectedItemPosition() == 0) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.age_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAge.setFocusableInTouchMode(true);
                 cboAge.requestFocus();
                 return false;
@@ -437,7 +437,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             //Validate: Occupation
 
             if(this.cboAMOccupation.getSelectedItemPosition() == 0){
-                Utils.createAlertDialogOk(this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.occupation_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 this.cboAMOccupation.setFocusable(true);
                 this.cboAMOccupation.requestFocus();
                 return false;
@@ -461,7 +461,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             // Validate: Cycles Completed
             Spinner cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
             if (cboAMCycles.getSelectedItemPosition() == 0) {
-                Utils.createAlertDialogOk(this, dlgTitle, "The cycles completed field is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.cycles_completed_field_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAMCycles.setFocusableInTouchMode(true);
                 cboAMCycles.requestFocus();
                 return false;
@@ -470,7 +470,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 String cycles = cboAMCycles.getSelectedItem().toString().trim();
                 Integer theCycles = Integer.parseInt(cycles);
                 if (theCycles > 100) {
-                    Utils.createAlertDialogOk(this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.no_of_completed_cycle_too_high), Utils.MSGBOX_ICON_EXCLAMATION).show();
                     cboAMCycles.requestFocus();
                     return false;
                 }
@@ -483,7 +483,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             //Final Verifications
             //TODO: Trying to use Application context to ensure dialog box does not disappear
             if (!ledgerLinkApplication.getMemberRepo().isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
-                Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.another_member_using_this_member_no), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 cboAMMemberNo.requestFocus();
                 return false;
             }
@@ -501,7 +501,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             } else {
                 double amountSavedSoFar = Double.parseDouble(savings);
                 if (amountSavedSoFar < 0.00) {
-                    displayMessageBox(dlgTitle, "Total Amount this Member has Saved in Current Cycle so far should be zero and above.");
+                    displayMessageBox(dlgTitle, getString(R.string.total_amount_member_has_saved_in_current_cycle_so_far));
                     txtSavingsSoFar.requestFocus();
                     return false;
                 } else {
@@ -516,7 +516,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             }else{
                 double totalWelfareAmount = Double.parseDouble(welfareAmount);
                 if(totalWelfareAmount < 0.00){
-                    displayMessageBox(dlgTitle, "Total Amount of this Member's welfare should be zero and above.");
+                    displayMessageBox(dlgTitle, getString(R.string.total_amount_of_this_member_welfare_be_zero_and_above));
                     txtWelfareAmount.requestFocus();
                     return false;
                 }else{
@@ -531,13 +531,13 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             }else{
                 double totalOutstandingWelfare = Double.parseDouble(outstandingWelfareAmount);
                 if(totalOutstandingWelfare < 0.00){
-                    displayMessageBox(dlgTitle, "Total Amount of this Member's outstanding welfare should be zero and above.");
+                    displayMessageBox(dlgTitle, getString(R.string.total_amount_of_this_member_welfare_be_zero_and_above));
                     txtOutstandingWelfareAmount.requestFocus();
                     return false;
                 }else{
                     member.setOutstandingWelfareOnSetup(totalOutstandingWelfare);
                     if(totalOutstandingWelfare > 0 && txtOutstandingWelfareDueDate.getText().length() == 0){
-                        displayMessageBox(dlgTitle, "The outstanding welfare due date is required");
+                        displayMessageBox(dlgTitle, getString(R.string.outstanding_welfare_due_date_required));
                         return false;
                     }
                     member.setOutstandingWelfareDueDateOnSetup(Utils.getDateFromString(txtOutstandingWelfareDueDate.getText().toString(), "dd-MM-yyyy"));
@@ -556,7 +556,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             } else {
                 double outstandingLoan = Double.parseDouble(loanAmount);
                 if (outstandingLoan < 0.00) {
-                    displayMessageBox(dlgTitle, "Total Amount of this Member's Regular Loan Outstanding should be zero and above.");
+                    displayMessageBox(dlgTitle, getString(R.string.total_amount_of_member_regular_loan_outstanding_be_zero_and_above));
                     txtLoanAmount.requestFocus();
                     return false;
                 } else {
@@ -565,7 +565,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     //set the date of next repayment
                     if(outstandingLoan > 0 && txtNCGSWLoanNextRepaymentDate.getText().length()==0)
                     {
-                        displayMessageBox(dlgTitle, "The next repayment date is required for the outstanding loan");
+                        displayMessageBox(dlgTitle, getString(R.string.next_repayment_date_required_for_outstanding_loan));
                         txtNCGSWLoanNextRepaymentDate.requestFocus();
                         return false;
 
@@ -577,7 +577,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                     //set the loan number
                     if(outstandingLoan > 0.00 && txtNCGSWLoanNumber.getText().length()==0)
                     {
-                        displayMessageBox(dlgTitle, "The loan number is required for the outstanding loan");
+                        displayMessageBox(dlgTitle, getString(R.string.loan_member_required_for_outstanding_loan));
                         txtNCGSWLoanNumber.requestFocus();
                         return false;
                     }
@@ -677,7 +677,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             txtNCGSWLoanNextRepaymentDate.setText(Utils.formatDate(member.getDateOfFirstRepayment(), "dd-MMM-yyyy"));
         }
         else {
-            txtNCGSWLoanNextRepaymentDate.setText("none");
+            txtNCGSWLoanNextRepaymentDate.setText(getString(R.string.none_main));
             txtNCGSWLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
         }
 

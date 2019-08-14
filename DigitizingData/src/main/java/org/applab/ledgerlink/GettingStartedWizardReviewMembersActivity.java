@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -17,10 +18,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 import au.com.bytecode.opencsv.CSVReader;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import org.applab.ledgerlink.domain.model.Meeting;
@@ -37,6 +38,8 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 
 /**
@@ -55,12 +58,12 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         setContentView(R.layout.activity_getting_started_wizard_review_members);
 
         TypefaceTextView reviewSubHeading = (TypefaceTextView) findViewById(R.id.lblRvwMembersSubHeading);
-        SpannableStringBuilder reviewSubHeadingPart = new SpannableStringBuilder("Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may ");
-        SpannableString exitText = new SpannableString("exit ");
+        SpannableStringBuilder reviewSubHeadingPart = new SpannableStringBuilder(getString(R.string.review_and_confirm_all_info_correct));
+        SpannableString exitText = new SpannableString(getString(R.string.exit_));
         exitText.setSpan(new StyleSpan(Typeface.BOLD), 0, exitText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         reviewSubHeadingPart.append(exitText);
-        reviewSubHeadingPart.append("and come back later.");
+        reviewSubHeadingPart.append(getString(R.string.and_come_back_later));
 
         reviewSubHeading.setText(reviewSubHeadingPart);
 
@@ -94,7 +97,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
     /* inflates custom menu bar for review members */
     void inflateCustombar() {
 
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
         customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_exit_enternext_next, null);
@@ -134,7 +137,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 }
         );
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle("GET STARTED");
         actionBar.setHomeButtonEnabled(true);
@@ -153,7 +156,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.review_members, menu);
         return true;
     }
@@ -191,7 +194,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         // Create the ACTION_GET_CONTENT Intent
         Intent getContentIntent = FileUtils.createGetContentIntent();
 
-        Intent intent = Intent.createChooser(getContentIntent, "Choose CSV");
+        Intent intent = Intent.createChooser(getContentIntent, getString(R.string.choose_csv));
         startActivityForResult(intent, PICKFILE_RESULT_CODE);
     }
 
@@ -406,7 +409,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "A record failed", "Data at row " + finalDataRowNo1 +" couldnt be imported. Correct it and perform import again", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                                Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, getString(R.string.record_failed), getString(R.string.data_at_row) + finalDataRowNo1 +getString(R.string.could_not_be_imported), Utils.MSGBOX_ICON_EXCLAMATION).show();
                             }
                         });
                         return;
@@ -433,7 +436,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "Import completed", "Data import has been completed succesfully. " + finalMigratedCount +" members imported during this session.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, getString(R.string.import_completed), getString(R.string.data_import_successfully) + finalMigratedCount +getString(R.string.members_imported_during_session), Utils.MSGBOX_ICON_EXCLAMATION).show();
                     populateMembersList();
                 }
             });
@@ -445,7 +448,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "Failed", "An error occured while importing a record. Last record processed was " + finalDataRowNo, Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, getString(R.string.failed), getString(R.string.error_occured_while_importing_record) + finalDataRowNo, Utils.MSGBOX_ICON_EXCLAMATION).show();
 
                 }
             });

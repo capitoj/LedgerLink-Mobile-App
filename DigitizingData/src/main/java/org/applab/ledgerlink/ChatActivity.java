@@ -19,9 +19,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.MessageChannel;
 import org.applab.ledgerlink.domain.model.VslaInfo;
@@ -36,7 +37,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class ChatActivity extends SherlockActivity {
+public class ChatActivity extends ActionBarActivity{
 
     protected Button btnSendChat;
     protected ListView listChatHistory;
@@ -54,7 +55,7 @@ public class ChatActivity extends SherlockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         context = this;
         messageChannelList = new ArrayList<MessageChannel>();
 
@@ -122,7 +123,7 @@ public class ChatActivity extends SherlockActivity {
                 refreshChatHistory();
                 txtChatBox.setText("");
             }else{
-                Toast.makeText(context, "Not Saved", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.not_saved, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -141,7 +142,7 @@ public class ChatActivity extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.menu_chat, menu);
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
         return true;
     }
 
@@ -155,7 +156,7 @@ public class ChatActivity extends SherlockActivity {
     }
 
     protected void showPreviousWindow(){
-        Toast.makeText(this, "You have clicked back", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.you_have_clicked_back, Toast.LENGTH_LONG).show();
     }
 
     @Override

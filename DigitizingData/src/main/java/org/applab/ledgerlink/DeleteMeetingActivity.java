@@ -5,13 +5,15 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -19,7 +21,7 @@ import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
 
 
-public class DeleteMeetingActivity extends SherlockActivity {
+public class DeleteMeetingActivity extends ActionBarActivity{
     private int meetingId = 0;
     private String meetingDate = "";
     LedgerLinkApplication ledgerLinkApplication;
@@ -54,7 +56,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
 
         TextView lblDMInstructions = (TextView) findViewById(R.id.lblDMInstructions);
 
-        lblDMInstructions.setText(Html.fromHtml("Are you sure you want to delete this meeting? If so, tap <b>Done</b>. The following information will be deleted:"));
+        lblDMInstructions.setText(Html.fromHtml(getString(R.string.are_you_sure_you_want_to_delete_this_metting)));
 
         //Retrieve the target Meeting
         Meeting targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
@@ -147,7 +149,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
                             }
                         }
                         if (cannotBeDeleted) {
-                            Toast.makeText(getApplicationContext(), "The meeting cannot be deleted. It contains meeting data.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.meeting_cannot_be_deleted, Toast.LENGTH_LONG).show();
                             finish();
 
                         } else {
@@ -165,7 +167,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
                             //repaymentRepo.reverseLoanRepaymentsForMeeting(meetingId);
                             ledgerLinkApplication.getMeetingLoanRepaymentRepo().reverseLoanRepaymentsForMeeting(meetingId, meetingDate);
                             ledgerLinkApplication.getMeetingRepo().deleteMeeting(meetingId);
-                            Toast.makeText(getApplicationContext(), "The meeting has been deleted.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.meeting_been_deleted, Toast.LENGTH_LONG).show();
 
 
                             //Now refresh the Begin Meeting screen
@@ -192,7 +194,7 @@ public class DeleteMeetingActivity extends SherlockActivity {
         if (Utils.isExecutingInTrainingMode()) {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
-        actionBar.setTitle("Delete Meeting");
+        actionBar.setTitle(R.string.delete_meeting_main);
 
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeButtonEnabled(false);
@@ -210,15 +212,15 @@ public class DeleteMeetingActivity extends SherlockActivity {
 
 
     @Override
-    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
 
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.delete_meeting, menu);
+        getMenuInflater().inflate(R.menu.delete_meeting, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.

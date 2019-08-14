@@ -1,5 +1,6 @@
 package org.applab.ledgerlink;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -11,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -27,10 +28,12 @@ import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
 
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+
 /**
  * Created by Moses on 7/7/13.
  */
-public class MemberSavingHistoryActivity extends SherlockListActivity {
+public class MemberSavingHistoryActivity extends ListActivity {
     private String meetingDate;
     private int memberId;
     private int meetingId;
@@ -92,7 +95,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
     private void inflateCustomActionBar() {
 
         // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
@@ -100,9 +103,9 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                     @Override
                     public void onClick(View v) {
                         if(saveMemberSaving(true)) {
-                            Toast.makeText(MemberSavingHistoryActivity.this, "Savings entered successfully", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MemberSavingHistoryActivity.this, getString(R.string.savings_entered_successfully), Toast.LENGTH_LONG).show();
                             Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                            i.putExtra("_tabToSelect", "savings");
+                            i.putExtra("_tabToSelect", getString(R.string.savings));
                             i.putExtra("_meetingDate", meetingDate);
                             i.putExtra("_meetingId", meetingId);
                             //startActivity(i);
@@ -116,7 +119,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect", "savings");
+                        i.putExtra("_tabToSelect", getString(R.string.savings));
                         i.putExtra("_meetingDate", meetingDate);
                         i.putExtra("_meetingId", meetingId);
                         //startActivity(i);
@@ -125,7 +128,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                 });
 
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -133,7 +136,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
         }
 
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setTitle("SAVINGS");
+        actionBar.setTitle(R.string.savings_main);
         actionBar.setHomeButtonEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(false);
 
@@ -175,7 +178,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.member_saving_history, menu);
         return true;
     }
@@ -187,7 +190,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MeetingActivity.class);
                 upIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                upIntent.putExtra("_tabToSelect", "savings");
+                upIntent.putExtra("_tabToSelect", getString(R.string.savings));
                 upIntent.putExtra("_meetingDate", meetingDate);
                 upIntent.putExtra("_meetingId", meetingId);
 
@@ -209,7 +212,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             case R.id.mnuMSHCancel:
                 i = new Intent(MemberSavingHistoryActivity.this, MeetingActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i.putExtra("_tabToSelect", "savings");
+                i.putExtra("_tabToSelect", getString(R.string.savings));
                 i.putExtra("_meetingDate", meetingDate);
                 i.putExtra("_meetingId", meetingId);
                 //startActivity(i);
@@ -217,10 +220,10 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
             case R.id.mnuMSHSave:
 
                 if(saveMemberSaving(true)) {
-                    Toast.makeText(MemberSavingHistoryActivity.this,"Savings entered successfully",Toast.LENGTH_LONG).show();
+                    Toast.makeText(MemberSavingHistoryActivity.this, R.string.savings_entered_successfully,Toast.LENGTH_LONG).show();
                     i = new Intent(MemberSavingHistoryActivity.this, MeetingActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.putExtra("_tabToSelect", "savings");
+                    i.putExtra("_tabToSelect", getString(R.string.savings));
                     i.putExtra("_meetingDate", meetingDate);
                     i.putExtra("_meetingId", meetingId);
                     startActivity(i);
@@ -254,7 +257,7 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
 
 
             if (theAmount < 0.0) {
-                    Utils.createAlertDialogOk(MemberSavingHistoryActivity.this, "Savings","The Savings Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(MemberSavingHistoryActivity.this, getString(R.string.savings),getString(R.string.savings_amount_invalid), Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtSaving.requestFocus();
                     return false;
                 }
@@ -265,13 +268,13 @@ public class MemberSavingHistoryActivity extends SherlockListActivity {
                         @Override
                         public void run() {
                             if(saveMemberSaving(false)){
-                                Toast.makeText(MemberSavingHistoryActivity.this,"Savings entered successfully",Toast.LENGTH_LONG).show();
+                                Toast.makeText(MemberSavingHistoryActivity.this, getString(R.string.savings_entered_successfully),Toast.LENGTH_LONG).show();
                                 finish();
                             }
                         }
                     };
-                    String message = "The amount entered " + Utils.formatNumber(theAmount) + " is less than one star, please enter atleast " + Utils.formatNumber(targetMeeting.getVslaCycle().getSharePrice()) + " " + getResources().getString(R.string.operating_currency);
-                    DialogMessageBox.show(this, "Savings", message, runnable);
+                    String message = getString(R.string.amount_entered) + Utils.formatNumber(theAmount) + getString(R.string._is_less_than_one_star) + Utils.formatNumber(targetMeeting.getVslaCycle().getSharePrice()) + " " + getResources().getString(R.string.operating_currency);
+                    DialogMessageBox.show(this, getString(R.string.savings), message, runnable);
 
                 /*
                 Utils.createAlertDialogOk(MemberSavingHistoryActivity.this,

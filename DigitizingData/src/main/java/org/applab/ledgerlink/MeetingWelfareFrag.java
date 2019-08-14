@@ -2,6 +2,7 @@ package org.applab.ledgerlink;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -23,7 +24,7 @@ import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
 
-public class MeetingWelfareFrag extends SherlockFragment {
+public class MeetingWelfareFrag extends Fragment {
 
     ActionBar actionBar;
     ArrayList<Member> members;
@@ -35,7 +36,7 @@ public class MeetingWelfareFrag extends SherlockFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parentActivity = (MeetingActivity) getSherlockActivity();
+        parentActivity = (MeetingActivity) getActivity();
     }
 
     @Override
@@ -60,15 +61,15 @@ public class MeetingWelfareFrag extends SherlockFragment {
     {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        actionBar = getSherlockActivity().getSupportActionBar();
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        String title = "Meeting";
+        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        meetingDate = getActivity().getIntent().getStringExtra("_meetingDate");
+        String title = getString(R.string.meeting);
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
-                title = "Send Data";
+                title = getString(R.string.send_data);
                 break;
             case VIEW_MODE_READ_ONLY:
-                title = "Sent Data";
+                title = getString(R.string.send_data);
                 break;
             default:
                 //title="Meeting";
@@ -76,10 +77,10 @@ public class MeetingWelfareFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
-        /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
-         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        /**TextView lblMeetingDate = (TextView)getActivity()().findViewById(R.id.lblMSavFMeetingDate);
+         meetingDate = getActivity()().getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */
-        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+        meetingId = getActivity().getIntent().getIntExtra("_meetingId", 0);
         //Wrap long task in runnable an run asynchronously
         Runnable populateRunnable = new Runnable()
         {
@@ -90,7 +91,7 @@ public class MeetingWelfareFrag extends SherlockFragment {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(populateRunnable, "Please wait", "Loading welfare information", parentActivity);
+        LongTaskRunner.runLongTask(populateRunnable, getString(R.string.please_wait), getString(R.string.loading_welfare_info), parentActivity);
     }
 
     //Populate Members List
@@ -99,11 +100,11 @@ public class MeetingWelfareFrag extends SherlockFragment {
         members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
 
         //Now get the data via the adapter
-        adapter = new MembersWelfareArrayAdapter(getSherlockActivity().getBaseContext(), members);
+        adapter = new MembersWelfareArrayAdapter(getActivity().getBaseContext(), members);
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
-        //OMM: Since I was unable to do a SherlockListFragment to work
+        //OMM: Since I was unable to do a ListFragment to work
         //setListAdapter(adapter);
         final ListView lvwMembers = (ListView)fragmentView.findViewById(R.id.lvwMSavFMembers);
         final TextView txtEmpty = (TextView)fragmentView.findViewById(R.id.txtMSavFEmpty);
@@ -126,7 +127,7 @@ public class MeetingWelfareFrag extends SherlockFragment {
                                     int position, long id) {
                 //Do not invoke the event when in Read only Mode
                 if(parentActivity.isViewOnly()) {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return;
                 }
                 if(Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {

@@ -8,9 +8,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.helpers.Network;
 import org.applab.ledgerlink.helpers.Utils;
@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import org.json.JSONStringer;
 
 
-public class MODActivity extends SherlockActivity {
+public class MODActivity extends ActionBarActivity{
 
     protected int clickIndex;
     protected Context context;
@@ -35,7 +35,7 @@ public class MODActivity extends SherlockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mod);
-        getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         txtMODAmount = (EditText)findViewById(R.id.txtMODAmount);
         eligibleAmount = 0;
         clickIndex = 0;
@@ -46,7 +46,7 @@ public class MODActivity extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.menu_mod, menu);
+        getMenuInflater().inflate(R.menu.menu_mod, menu);
         setMenuAction(menu);
         return true;
     }
@@ -65,14 +65,14 @@ public class MODActivity extends SherlockActivity {
     protected void switchLayoutView(){
         if(clickIndex == 0){
             if(txtMODAmount.getText().toString().length() == 0){
-                Toast.makeText(context, "Please enter the amount", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.please_enter_amount, Toast.LENGTH_LONG).show();
                 return;
             }
             int amount = Integer.valueOf(txtMODAmount.getText().toString());
             if(Connection.isNetworkConnected(context)) {
                 sendMODApplication(amount);
             }else{
-                Toast.makeText(context, "No data connection detected. Please ensure you have an active internet connection", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, R.string.no_data_connection_detected, Toast.LENGTH_LONG).show();
             }
         }else if(clickIndex == 1){
             if(hashKey.length() > 0){
@@ -86,13 +86,13 @@ public class MODActivity extends SherlockActivity {
     protected void sendMODApplication(int amount){
         String serverUri = String.format("%s/%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "loanapplication", Utils.RandomGenerator.getRandomString());
         JSONStringer js = getMODJSONOutput(amount);
-        new MODSubmissionAsync(context, "Please wait.....").execute(serverUri, String.valueOf(js));
+        new MODSubmissionAsync(context, getString(R.string.please_wait)).execute(serverUri, String.valueOf(js));
     }
 
     protected void sendMODConfirmation(String hashKey){
         String serverUri = String.format("%s/%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "loanconfirmation", Utils.RandomGenerator.getRandomString());
         JSONStringer js = getJSONOutput("HashKey", hashKey);
-        new MODConfirmationAsync(context, "Please wait.....").execute(serverUri, String.valueOf(js));
+        new MODConfirmationAsync(context, getString(R.string.please_wait)).execute(serverUri, String.valueOf(js));
     }
 
     protected JSONStringer getJSONOutput(String key, String value){

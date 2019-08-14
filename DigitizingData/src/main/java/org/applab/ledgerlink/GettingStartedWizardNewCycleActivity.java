@@ -20,9 +20,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -111,7 +111,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
 
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("GET STARTED");
+        actionBar.setTitle(R.string.get_started_allcaps);
 
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
@@ -135,7 +135,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 viewClicked = (TextView) view;
                 settingStartDate = true;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(GettingStartedWizardNewCycleActivity.this, mDateSetListener, mYear, mMonth, mDay);
-                datePickerDialog.setTitle("Set cycle start date");
+                datePickerDialog.setTitle(getString(R.string.set_cycle_start_date));
                 datePickerDialog.show();
             }
         });
@@ -147,14 +147,14 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 viewClicked = (TextView) view;
                 settingStartDate = false;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(GettingStartedWizardNewCycleActivity.this, mDateSetListener, mEndYear, mEndMonth, mEndDay);
-                datePickerDialog.setTitle("Set cycle end date");
+                datePickerDialog.setTitle(getString(R.string.set_cycle_end_date));
                 datePickerDialog.show();
             }
         });
 
         TypefaceTextView headerText = (TypefaceTextView) findViewById(R.id.lblNCHeading);
-        SpannableStringBuilder headingInstruction = new SpannableStringBuilder("Enter all cycle information then press ");
-        SpannableString nextText = new SpannableString("next.");
+        SpannableStringBuilder headingInstruction = new SpannableStringBuilder(getString(R.string.enter_all_cycle_info));
+        SpannableString nextText = new SpannableString(getString(R.string.next_));
         nextText.setSpan(new StyleSpan(Typeface.BOLD), 0,nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         headingInstruction.append(nextText);
@@ -172,9 +172,9 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             if (_isFromReviewMembers) {
                 //TextView heading = (TextView) findViewById(R.id.lblNewCycleHeading);
                 //heading.setText("Review Cycle Information");
-                lblNewCycleHeading.setText("Review Cycle information");
+                lblNewCycleHeading.setText(R.string.review_cycle_info);
                 headerText = (TypefaceTextView) findViewById(R.id.lblNCHeading);
-                headerText.setText("Review and confirm that all information is correct. Correct any errors.");
+                headerText.setText(R.string.review_and_confirm_all_info_correct_any_errors);
             }
 
 
@@ -200,7 +200,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 vslaInfoRepo.updateGettingStartedWizardStage(Utils.GETTING_STARTED_PAGE_REVIEW_CYCLE);
             } else {
                 TextView txtInstructions = (TextView) findViewById(R.id.lblNCHeader);
-                txtInstructions.setText("There is no cycle that is currently running. A New Cycle will be created."
+                txtInstructions.setText(getString(R.string.new_cycle_be_created)
                 );
 
                 //setup default dates
@@ -235,7 +235,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /**final MenuInflater inflater = getSupportMenuInflater();
+        /**final MenuInflater inflater = getMenuInflater();
          inflater.inflate(R.menu.new_cycle, menu);
          //Hide cancel button since it does not exist in GSW
          MenuItem cancelItem = menu.findItem(R.id.mnuNCCancel);
@@ -347,7 +347,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                     finish();
                 }
             } else {
-                displayMessageBox(dialogTitle, "A problem occurred while capturing the Cycle Data. Please try again.");
+                displayMessageBox(dialogTitle, getString(R.string.problem_while_capturing_cycle_data));
             }
         } else {
             if(isCycleValidated) {
@@ -400,7 +400,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             } else {
                 double theInterestCollected = Double.parseDouble(interestCollected);
                 if (theInterestCollected < 0.00) {
-                    displayMessageBox(dialogTitle, "The Interest Collected should be zero and above.");
+                    displayMessageBox(dialogTitle, getString(R.string.interest_collected_be_zero_and_above));
                     txtInterestCollected.requestFocus();
                     return false;
                 } else {
@@ -420,7 +420,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             } else {
                 double theFinesCollected = Double.parseDouble(finesCollected);
                 if (theFinesCollected < 0.00) {
-                    displayMessageBox(dialogTitle, "The Fines Collected should be zero and above.");
+                    displayMessageBox(dialogTitle, getString(R.string.fines_collected_be_zero_and_above));
                     txtFinesCollected.requestFocus();
                     return false;
                 } else {
@@ -436,7 +436,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             }else{
                 double outstandingBankLoan = Double.parseDouble(outstandingBankLoanSoFar);
                 if(outstandingBankLoan < 0.00){
-                    displayMessageBox(dialogTitle, "The outstanding bank loan should be zero and above");
+                    displayMessageBox(dialogTitle, getString(R.string.outstanding_bank_loan_zero_and_above));
                     txtNCOutstandingGroupBankLoan.requestFocus();
                     return false;
                 }else{

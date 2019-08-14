@@ -9,16 +9,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
 import org.applab.ledgerlink.repo.TrainingModuleResponseRepo;
 
 
-public class GeneralSupportActivity extends SherlockActivity {
+public class GeneralSupportActivity extends ActionBarActivity{
 
     protected Spinner spinner;
     protected EditText editText;
@@ -29,7 +29,7 @@ public class GeneralSupportActivity extends SherlockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_general_support);
-        getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         this.context = this;
 
@@ -41,7 +41,7 @@ public class GeneralSupportActivity extends SherlockActivity {
 
     protected void populateDropDown(){
         spinner = (Spinner)findViewById(R.id.GSSPINNER);
-        String[] supportList = new String[]{"Select Item", "NO", "YES"};
+        String[] supportList = new String[]{getString(R.string.select_item), getString(R.string.no_allcaps), getString(R.string.yes_allcaps)};
         ArrayAdapter<CharSequence> adapter = new DropDownAdapter(this, supportList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -56,7 +56,7 @@ public class GeneralSupportActivity extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.menu_general_support, menu);
+        getMenuInflater().inflate(R.menu.menu_general_support, menu);
         setMenuAction(menu);
         return true;
     }
@@ -68,14 +68,14 @@ public class GeneralSupportActivity extends SherlockActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 String hashKey = Utils.RandomGenerator.getRandomString();
                 String selectedTExt = spinner.getSelectedItem().toString();
-                if(!selectedTExt.equals("Select Item")){
+                if(!selectedTExt.equals(getString(R.string.select_item))){
                     String comment = editText.getText().toString();
                     TrainingModuleResponseRepo trainingModuleResponseRepo = new TrainingModuleResponseRepo(context);
                     trainingModuleResponseRepo.save(moduleId, selectedTExt, comment, hashKey);
-                    Toast.makeText(context, "General support response has been saved successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.general_support_response_saved_successfully, Toast.LENGTH_SHORT).show();
                     finish();
                 }else{
-                    Toast.makeText(context, "Please select an item from the drop down", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.select_item_from_drop_down, Toast.LENGTH_SHORT).show();
                 }
                 return true;
             }
