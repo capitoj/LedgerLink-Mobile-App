@@ -1,5 +1,6 @@
 package org.applab.ledgerlink;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -7,9 +8,9 @@ import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
@@ -21,10 +22,12 @@ import org.applab.ledgerlink.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+
 /**
  * Created by Moses on 7/23/13.
  */
-public class ViewSentDataActivity extends SherlockListActivity {
+public class ViewSentDataActivity extends ListActivity {
     private ArrayList<Meeting> meetings;
     TextView txtHeader;
     LedgerLinkApplication ledgerLinkApplication;
@@ -36,7 +39,7 @@ public class ViewSentDataActivity extends SherlockListActivity {
 
         setContentView(R.layout.activity_send_meeting_data);
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -44,13 +47,13 @@ public class ViewSentDataActivity extends SherlockListActivity {
         }
 
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Sent Data");
+        actionBar.setTitle(R.string.sent_data);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Set the appropriate Header Instructional Text
         txtHeader = (TextView) findViewById(R.id.txtSMD_header);
-        txtHeader.setText("Select the Meeting whose data you want to view.");
+        txtHeader.setText(R.string.select_meeting_data_to_view);
 
         //Populate the Meetings
         populateMeetingData();
@@ -66,13 +69,13 @@ public class ViewSentDataActivity extends SherlockListActivity {
 
         if (meetings.isEmpty()) {
             meetings = new ArrayList<Meeting>();
-            txtHeader.setText("All meeting data has been sent");
+            txtHeader.setText(R.string.all_meeting_data_sent);
             if (!unsentMeetings.isEmpty()) {
-                txtHeader.setText("You haven't sent any data yet. " +
-                        "After sending data, you will be able to review each meeting here. " +
-                        "Be sure to send data after each meeting so you do not lose it.");
+                txtHeader.setText(getString(R.string.have_not_sent__any_data_yet) +
+                        getString(R.string.after_sending_data_review_each_meeting) +
+                        getString(R.string.be_sure_to_send_data_after_each_meeting));
             }else{
-                txtHeader.setText("No meetings yet");
+                txtHeader.setText(R.string.no_meeting_yet);
             }
         }
 

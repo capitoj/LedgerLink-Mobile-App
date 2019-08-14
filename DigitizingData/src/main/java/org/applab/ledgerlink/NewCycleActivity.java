@@ -14,9 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
@@ -33,7 +33,7 @@ import java.util.Date;
 /**
  * Created by Moses on 6/27/13.
  */
-public class NewCycleActivity extends SherlockActivity {
+public class NewCycleActivity extends ActionBarActivity{
     ActionBar actionBar;
 
     TextView txtStartDate;
@@ -48,7 +48,7 @@ public class NewCycleActivity extends SherlockActivity {
     int mEndYear;
     int mEndMonth;
     int mEndDay;
-    final String dialogTitle = "New Cycle";
+    final String dialogTitle = getString(R.string.new_cycle);
     private boolean successAlertDialogShown = false;
     boolean isUpdateCycleAction = false;
     private boolean multipleCyclesIndicator = false;
@@ -77,9 +77,9 @@ public class NewCycleActivity extends SherlockActivity {
         inflateCustombar();
 
         if (isUpdateCycleAction) {
-            actionBar.setTitle("Edit Cycle");
+            actionBar.setTitle(getString(R.string.edit_cycle));
         } else {
-            actionBar.setTitle("New Cycle");
+            actionBar.setTitle(getString(R.string.new_cycle));
         }
 
         txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
@@ -96,7 +96,7 @@ public class NewCycleActivity extends SherlockActivity {
                 viewClicked = (TextView) view;
                 settingStartDate = true;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(NewCycleActivity.this, mDateSetListener, mYear, mMonth, mDay);
-                datePickerDialog.setTitle("Set cycle start date");
+                datePickerDialog.setTitle(getString(R.string.set_cycle_start_date));
                 datePickerDialog.show();
             }
         });
@@ -108,7 +108,7 @@ public class NewCycleActivity extends SherlockActivity {
                 viewClicked = (TextView) view;
                 settingStartDate = false;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(NewCycleActivity.this, mDateSetListener, mEndYear, mEndMonth, mEndDay);
-                datePickerDialog.setTitle("Set cycle end date");
+                datePickerDialog.setTitle(getString(R.string.set_cycle_end_date));
                 datePickerDialog.show();
             }
         });
@@ -129,7 +129,7 @@ public class NewCycleActivity extends SherlockActivity {
                 //displayMessageBox("Testing", "Cycle to Update Found", Utils.MSGBOX_ICON_INFORMATION);
                 //Change the title in edit mode
                 TextView lblNCHeader = (TextView) findViewById(R.id.lblNCHeader);
-                lblNCHeader.setText("Edit the cycle beginning " + Utils.formatDate(selectedCycle.getStartDate(), "dd MM yyyy") + " and ending " + Utils.formatDate(selectedCycle.getEndDate(), "dd MMM yyyy") + ".");
+                lblNCHeader.setText(getString(R.string.edit_cycle_beginning) + Utils.formatDate(selectedCycle.getStartDate(), "dd MM yyyy") + " and ending " + Utils.formatDate(selectedCycle.getEndDate(), "dd MMM yyyy") + ".");
                 //Populate Fields
                 populateDataFields(selectedCycle);
 
@@ -170,10 +170,10 @@ public class NewCycleActivity extends SherlockActivity {
                             }
                         }
 
-                        lblNCMiddleCycleInformationHeading.setText("This information was added after the cycle started. Here are the interest and fines collected by that day.");
+                        lblNCMiddleCycleInformationHeading.setText(R.string.info_added_after_cycle_started);
 
                         if (dummyGSWMeeting != null) {
-                            lblNCMiddleCycleInformationHeading.setText("This information was added on " + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are the interest and fines collected by that day.");
+                            lblNCMiddleCycleInformationHeading.setText(getString(R.string.info_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are the interest and fines collected by that day.");
                         }
 
                     }
@@ -196,7 +196,7 @@ public class NewCycleActivity extends SherlockActivity {
                 mEndDay = c.get(Calendar.DAY_OF_MONTH);
             } else {
                 TextView txtInstructions = (TextView) findViewById(R.id.lblNCHeader);
-                txtInstructions.setText("There is no cycle that is currently running. A New Cycle will be created."
+                txtInstructions.setText(R.string.new_cycle_be_created
                 );
 
                 //setup default dates
@@ -204,7 +204,7 @@ public class NewCycleActivity extends SherlockActivity {
 
                 //Convert it to New Cycle operation
                 isUpdateCycleAction = false;
-                actionBar.setTitle("New Cycle");
+                actionBar.setTitle(getString(R.string.new_cycle));
             }
         } else {
             //displayMessageBox("Testing", "Cycle to Update NOT Found", MSGBOX_ICON_INFORMATION);
@@ -259,7 +259,7 @@ public class NewCycleActivity extends SherlockActivity {
                                 };
                                 EditText txtNCInterestRate = (EditText) findViewById(R.id.txtNCInterestRate);
                                 int interestRate = Integer.valueOf(txtNCInterestRate.getText().toString().trim());
-                                DialogMessageBox.show(NewCycleActivity.this, "Warning", Utils.formatNumber(interestRate) + "% is high. Are you sure you entered the correct interest rate", runnable);
+                                DialogMessageBox.show(NewCycleActivity.this, getString(R.string.warning_new_cycle), Utils.formatNumber(interestRate) + getString(R.string.entered_correct_interest_rate), runnable);
                             }
                         }
                     }
@@ -296,7 +296,7 @@ public class NewCycleActivity extends SherlockActivity {
                                         startActivity(intent);
                                     }
                                 };
-                                DialogMessageBox.show(NewCycleActivity.this, "Warning", Utils.formatNumber(selectedCycle.getInterestRate()) + "% is high. Are you sure you entered the correct interest rate", runnable);
+                                DialogMessageBox.show(NewCycleActivity.this, getString(R.string.warning_new_cycle), Utils.formatNumber(selectedCycle.getInterestRate()) + "% is high. Are you sure you entered the correct interest rate", runnable);
                             }
                         }
                     }
@@ -378,7 +378,7 @@ public class NewCycleActivity extends SherlockActivity {
         //TODO work on this to display the proper date depending on what is clicked
         super.onPrepareDialog(id, dialog);
         ((DatePickerDialog) dialog).updateDate(mYear, mMonth, mDay);
-        dialog.setTitle("Set cycle date");
+        dialog.setTitle(R.string.set_cycle_date);
 
     }
 
@@ -422,7 +422,7 @@ public class NewCycleActivity extends SherlockActivity {
 
     /**
      * @Override public boolean onCreateOptionsMenu(Menu menu) {
-     * final MenuInflater inflater = getSupportMenuInflater();
+     * final MenuInflater inflater = getMenuInflater();
      * inflater.inflate(R.menu.new_cycle, menu);
      * return true;
      * }
@@ -496,7 +496,7 @@ public class NewCycleActivity extends SherlockActivity {
                 }
             }
         };
-        LongTaskRunner.runLongTask(runnable, "Please wait...", "Saving cycle information...", NewCycleActivity.this);
+        LongTaskRunner.runLongTask(runnable, getString(R.string.please_wait), getString(R.string.saving_cycle_info), NewCycleActivity.this);
     }
 
     protected void saveDummyMeetingData(VslaCycle cycle){
@@ -570,22 +570,22 @@ public class NewCycleActivity extends SherlockActivity {
             TextView txtSharePrice = (TextView) findViewById(R.id.txtNCSharePrice);
             String sharePrice = txtSharePrice.getText().toString().trim();
             if (sharePrice.length() < 1) {
-                displayMessageBox(dialogTitle, "The Share Price is required.");
+                displayMessageBox(dialogTitle, getString(R.string.share_price_required));
                 txtSharePrice.requestFocus();
                 return false;
             } else {
                 double theSharePrice = Double.parseDouble(sharePrice);
                 if (theSharePrice <= 0.00) {
-                    displayMessageBox(dialogTitle, "The Share Price must be positive.");
+                    displayMessageBox(dialogTitle, getString(R.string.share_price_be_positive));
                     txtSharePrice.requestFocus();
                     return false;
                 } else {
                     if(theSharePrice < 100){
-                        displayMessageBox(dialogTitle, "The Share Price can not be less than 100");
+                        displayMessageBox(dialogTitle, getString(R.string.share_price_not_less_than));
                         txtSharePrice.requestFocus();
                         return false;
                     }else if(theSharePrice > 100000){
-                        displayMessageBox(dialogTitle, "The Share Price can not be more than 100000");
+                        displayMessageBox(dialogTitle, getString(R.string.share_price_more_than));
                         txtSharePrice.requestFocus();
                         return false;
                     }else {
@@ -605,13 +605,13 @@ public class NewCycleActivity extends SherlockActivity {
             // Validate: MaxShareAmount
             EditText txtNCMaxShares = (EditText)findViewById(R.id.txtNCMaxShares);
             if(txtNCMaxShares.getText().toString().length() == 0){
-                Utils.createAlertDialogOk(this, dialogTitle, "The Maximum Share Quantity is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dialogTitle, getString(R.string.maximum_share_quantity_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtNCMaxShares.requestFocus();
                 return false;
             }else{
                 int theMaxShareQty = Integer.valueOf(txtNCMaxShares.getText().toString());
                 if(theMaxShareQty <= 0){
-                    displayMessageBox(dialogTitle, "The Maximum Share Quantity must be positive.");
+                    displayMessageBox(dialogTitle, getString(R.string.maximum_share_quautity_be_positive));
                     txtNCMaxShares.requestFocus();
                     return false;
                 }else{
@@ -661,7 +661,7 @@ public class NewCycleActivity extends SherlockActivity {
             Date dtEnd = Utils.getDateFromString(endDate, Utils.DATE_FIELD_FORMAT);
 
             if (dtEnd.before(cycle.getStartDate())) {
-                displayMessageBox(dialogTitle, "The End Date must be after the Start Date");
+                displayMessageBox(dialogTitle, getString(R.string.end_date_be_after_start_date));
                 txtEndDate.requestFocus();
                 return false;
             } else {
@@ -672,13 +672,13 @@ public class NewCycleActivity extends SherlockActivity {
             TextView txtInterestRate = (TextView) findViewById(R.id.txtNCInterestRate);
             String interestRate = txtInterestRate.getText().toString().trim();
             if (interestRate.length() < 1) {
-                displayMessageBox(dialogTitle, "The Interest Rate is required.");
+                displayMessageBox(dialogTitle, getString(R.string.interest_rate_requred));
                 txtInterestRate.requestFocus();
                 return false;
             } else {
                 double theInterestRate = Double.parseDouble(interestRate);
                 if (theInterestRate < 1 || theInterestRate > 20) {
-                    displayMessageBox(dialogTitle, "The Interest Rate should be between 1% and 20%");
+                    displayMessageBox(dialogTitle, getString(R.string.interest_rate_btn_));
                     txtInterestRate.requestFocus();
                     return false;
                 } else {
@@ -701,7 +701,7 @@ public class NewCycleActivity extends SherlockActivity {
                     if (mostRecentCycle.getDateEnded() != null) {
                         if (cycle.getStartDate().before(mostRecentCycle.getDateEnded())) {
                             Utils.createAlertDialogOk(NewCycleActivity.this, dialogTitle,
-                                    String.format("The start date of this cycle should be after the share-out date of the previous cycle, which was: %s.", Utils.formatDate(mostRecentCycle.getDateEnded())),
+                                    String.format(getString(R.string.start_date_after_share_out_date), Utils.formatDate(mostRecentCycle.getDateEnded())),
                                     Utils.MSGBOX_ICON_EXCLAMATION).show();
                             return false;
                         }
@@ -722,7 +722,7 @@ public class NewCycleActivity extends SherlockActivity {
             } else {
                 double interestSoFar = Double.parseDouble(interest);
                 if (interestSoFar < 0.00) {
-                    displayMessageBox(dialogTitle, "Total amount of Interest collected in Current Cycle so far should be zero and above.");
+                    displayMessageBox(dialogTitle, getString(R.string.total_amount_of_interest_collected_so_far_be_zero_and_above));
                     txtInterestCollectedSoFar.requestFocus();
                     return false;
                 } else {
@@ -742,7 +742,7 @@ public class NewCycleActivity extends SherlockActivity {
             } else {
                 double finesSoFar = Double.parseDouble(fines);
                 if (finesSoFar < 0.00) {
-                    displayMessageBox(dialogTitle, "Total amount of Fines collected in Current Cycle so far should be zero and above.");
+                    displayMessageBox(dialogTitle, getString(R.string.total_aounmt_fine_collected_so_far_be_zero_and_above));
                     txtFinesCollectedSoFar.requestFocus();
                     return false;
                 } else {
@@ -762,7 +762,7 @@ public class NewCycleActivity extends SherlockActivity {
             }else{
                 double outstandingBankLoanSoFar = Double.parseDouble(outstandingBankLoan);
                 if(outstandingBankLoanSoFar < 0.00){
-                    displayMessageBox(dialogTitle, "Total amount of the outstanding bank loan in current cycle should be zero and above.");
+                    displayMessageBox(dialogTitle, getString(R.string.total_amount_outstanding_bank_loan_be_zero_and_above));
                     txtNCOutstandingGroupBankLoan.requestFocus();
                     return false;
                 }else{
@@ -888,7 +888,7 @@ public class NewCycleActivity extends SherlockActivity {
             txtEndDate.setText("");
             txtInterestRate.setText("");
         } catch (Exception ex) {
-            Log.d("NewCycleActivity", "Initialization Failed!");
+            Log.d(getString(R.string.newcycleactivity), getString(R.string.initialization_faile));
         }
 
     }

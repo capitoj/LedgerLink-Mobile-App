@@ -9,10 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 /**
  * Created by Moses on 7/4/13.
  */
-public class SelectCycle extends SherlockActivity {
+public class SelectCycle extends ActionBarActivity{
 
     private VslaCycle selectedCycle = null;
     private RadioGroup grpCycleDates;
@@ -58,7 +58,7 @@ public class SelectCycle extends SherlockActivity {
         if (activeCycles != null && activeCycles.size() == 0) {
             // no cycles
             cyclesListView.setVisibility(View.GONE);
-            txtInstructions.setText("There are no active cycles to modify");
+            txtInstructions.setText(R.string.no_active_cycles_to_modify);
             return;
         }
 
@@ -159,14 +159,14 @@ public class SelectCycle extends SherlockActivity {
 
         String instructions = "";
         if (!isEndCycleAction) {
-            instructions = "Select next to modify the cycle";
+            instructions = getString(R.string.select_next_to_modify_cycle);
             if ((activeCycles != null ? activeCycles.size() : 0) > 1) {
-                instructions = "There is more than one cycle currently running. Select the cycle to edit.";
+                instructions = getString(R.string.more_than_one_cycle_currently_running);
             }
         } else {
-            instructions = "Select next to end the cycle";
+            instructions = getString(R.string.select_next_to_end_the_cycle);
             if ((activeCycles != null ? activeCycles.size() : 0) > 1) {
-                instructions = "There is more than one unfinished cycle. Select the cycle to end.";
+                instructions = getString(R.string.more_than_one_unfinished_cycle);
             }
         }
         txtInstructions.setText(instructions);
@@ -185,7 +185,7 @@ public class SelectCycle extends SherlockActivity {
                     @Override
                     public void onClick(View v) {
                         if (selectedCycle == null) {
-                            Toast.makeText(getApplicationContext(), "Please select the cycle you wish to modify", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.select_cycle_to_modify, Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -216,9 +216,9 @@ public class SelectCycle extends SherlockActivity {
         }
 
         if (isEndCycleAction) {
-            actionBar.setTitle("END CYCLE");
+            actionBar.setTitle(R.string.end_cycle_main);
         } else {
-            actionBar.setTitle("EDIT CYCLE");
+            actionBar.setTitle(R.string.end_cycle_main);
         }
 
         actionBar.setHomeButtonEnabled(true);
@@ -245,7 +245,7 @@ public class SelectCycle extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //final MenuInflater inflater = getSupportMenuInflater();
+        //final MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.meeting_definition, menu);
         //To use custom menu view
         return true;

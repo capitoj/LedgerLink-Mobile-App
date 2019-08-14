@@ -11,8 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -24,7 +24,7 @@ import org.applab.ledgerlink.helpers.adapters.BorrowFromWelfareArrayAdapter;
 
 import java.util.ArrayList;
 
-public class BorrowWelfareMeetingActivity extends SherlockActivity {
+public class BorrowWelfareMeetingActivity extends ActionBarActivity{
 
     String meetingDate;
     int meetingId;
@@ -53,7 +53,7 @@ public class BorrowWelfareMeetingActivity extends SherlockActivity {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(populateRunnable, "Please wait", "Loading outstanding welfare information", this);
+        LongTaskRunner.runLongTask(populateRunnable, getString(R.string.please_wait), getString(R.string.loading_outstanding_welfare_info), this);
     }
 
     private void inflateCustomActionBar() {
@@ -79,7 +79,7 @@ public class BorrowWelfareMeetingActivity extends SherlockActivity {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setTitle("BORROW FROM WELFARE");
+        actionBar.setTitle(R.string.borrow_from_welfare_caps);
 
         // Set to false to remove caret and disable its function; if designer decides otherwise set both to true
         actionBar.setHomeButtonEnabled(false);

@@ -2,13 +2,14 @@ package org.applab.ledgerlink;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by Moses on 6/25/13.
  */
-public class MeetingLoansRepaidFrag extends SherlockFragment {
+public class MeetingLoansRepaidFrag extends Fragment {
     private ArrayList<Member> members;
     private String meetingDate;
     private int meetingId;
@@ -31,7 +32,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parentActivity = (MeetingActivity) getSherlockActivity();
+        parentActivity = (MeetingActivity) getActivity();
         setHasOptionsMenu(true);
     }
 
@@ -71,15 +72,15 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
     private void initializeFragment() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        ActionBar actionBar = getSherlockActivity().getSupportActionBar();
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        String title = "Meeting";
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        meetingDate = getActivity().getIntent().getStringExtra("_meetingDate");
+        String title = getString(R.string.meeting);
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
-                title = "Send Data";
+                title = getString(R.string.send_data);
                 break;
             case VIEW_MODE_READ_ONLY:
-                title = "Sent Data";
+                title = getString(R.string.send_data);
                 break;
             default:
                 //title="Meeting";
@@ -88,7 +89,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
 
-        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+        meetingId = getActivity().getIntent().getIntExtra("_meetingId", 0);
         //Wrap and run long task
         Runnable populatorRunnable = new Runnable() {
             @Override
@@ -98,7 +99,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(populatorRunnable, "Please wait...", "Loading list of loans repaid...", parentActivity);
+        LongTaskRunner.runLongTask(populatorRunnable, getString(R.string.please_wait), getString(R.string.loading_list_of_loans_repaid), parentActivity);
     }
 
     //Populate Members List
@@ -111,7 +112,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
-        //OMM: Since I was unable to do a SherlockListFragment to work
+        //OMM: Since I was unable to do a ListFragment to work
         //setListAdapter(adapter);
         final ListView lvwMembers = (ListView) fragmentView.findViewById(R.id.lvwMLRepayFMembers);
         final TextView txtEmpty = (TextView) fragmentView.findViewById(R.id.txtMLRepayFEmpty);
@@ -152,7 +153,7 @@ public class MeetingLoansRepaidFrag extends SherlockFragment {
                     viewHistory.putExtra("_names", selectedMember.getFullName());
                     viewHistory.putExtra("_meetingDate", meetingDate);
                     viewHistory.putExtra("_meetingId", meetingId);
-                    viewHistory.putExtra("_action", "loanrepayment");
+                    viewHistory.putExtra("_action", getString(R.string.loanrepayment));
                     viewHistory.putExtra("_viewingSentData", parentActivity.isViewingSentData());
                     startActivity(viewHistory);
                 }

@@ -4,10 +4,13 @@ package org.applab.ledgerlink;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.*;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -16,11 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.LayoutParams;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.helpers.Utils;
@@ -33,12 +35,16 @@ import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 /**
  * Created by Moses on 6/13/13.
  * Modified by Joseph Capito 10/12/2015
  */
-public class MainActivity extends SherlockActivity {
+public class MainActivity extends ActionBarActivity {
 
     private final ArrayList<MenuItem> mainMenuItemsGridArray = new ArrayList<MenuItem>();
     private CustomGridViewAdapter customGridAdapter;
@@ -57,7 +63,7 @@ public class MainActivity extends SherlockActivity {
         this.context = this;
 
         actionBar = getSupportActionBar();
-        actionBar.setTitle("Ledger Link");
+        actionBar.setTitle(R.string.ledger_link);
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -72,6 +78,7 @@ public class MainActivity extends SherlockActivity {
         //Display the main menu
         displayMainMenu();
         this.showNotificationForUnsentMeetings();
+
     }
 
     protected void showNotificationForUnsentMeetings(){
@@ -111,12 +118,12 @@ public class MainActivity extends SherlockActivity {
 
 
         //set grid view item
-        mainMenuItemsGridArray.add(new MenuItem("beginMeeting", "MEETING", R.drawable.meeting));
-        mainMenuItemsGridArray.add(new MenuItem("viewSentData", "SENT DATA", R.drawable.sent_data));
-        mainMenuItemsGridArray.add(new MenuItem("reviewMembers", "MEMBERS", R.drawable.members));
-        mainMenuItemsGridArray.add(new MenuItem("updateCycle", "EDIT CYCLE", R.drawable.edit_cycle));
-        mainMenuItemsGridArray.add(new MenuItem("endCycle", "END CYCLE", R.drawable.end_cycle));
-        mainMenuItemsGridArray.add(new MenuItem("beginCycle", "BEGIN NEW CYCLE", R.drawable.new_cycle));
+        mainMenuItemsGridArray.add(new MenuItem(getString(R.string.beginmeeting), getString(R.string.meeting_menu), R.drawable.meeting));
+        mainMenuItemsGridArray.add(new MenuItem(getString(R.string.viewsentdata), getString(R.string.send_data_menu), R.drawable.sent_data));
+        mainMenuItemsGridArray.add(new MenuItem(getString(R.string.reviewmembers), getString(R.string.members_menu), R.drawable.members));
+        mainMenuItemsGridArray.add(new MenuItem(getString(R.string.updatecycle), getString(R.string.edit_cycle_menu), R.drawable.edit_cycle));
+        mainMenuItemsGridArray.add(new MenuItem(getString(R.string.endcycle), getString(R.string.end_cycle_menu), R.drawable.end_cycle));
+        mainMenuItemsGridArray.add(new MenuItem(getString(R.string.begincycle), getString(R.string.begin_new_cycle_menu), R.drawable.new_cycle));
 
 
         //Display the Data Migration Menu if data has not yet been migrated
@@ -140,19 +147,19 @@ public class MainActivity extends SherlockActivity {
                 MenuItem selectedMenu = mainMenuItemsGridArray.get(position);
                 String selectedMenuName = selectedMenu.getMenuName();
 
-                if (selectedMenuName.equalsIgnoreCase("beginMeeting")) {
+                if (selectedMenuName.equalsIgnoreCase(getString(R.string.beginmeeting))) {
                     Intent i = new Intent(getApplicationContext(), BeginMeetingActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
-                } else if (selectedMenuName.equalsIgnoreCase("sendData")) {
+                } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.senddata))) {
                     Intent i = new Intent(getApplicationContext(), SendMeetingDataActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
-                } else if (selectedMenuName.equalsIgnoreCase("viewSentData")) {
+                } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.viewsentdata))) {
                     Intent i = new Intent(getApplicationContext(), ViewSentDataActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
-                } else if (selectedMenuName.equalsIgnoreCase("updateCycle")) {
+                } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.updatecycle))) {
                     //Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
                     //i.putExtra("_isUpdateCycleAction", true);
                     //For multiple active cycles, show activity to allow selecting
@@ -160,25 +167,25 @@ public class MainActivity extends SherlockActivity {
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     i.putExtra("_isEndCycleAction", false);
                     startActivity(i);
-                } else if (selectedMenuName.equalsIgnoreCase("endCycle")) {
+                } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.endcycle))) {
                     //Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
                     Intent i = new Intent(getApplicationContext(), SelectCycle.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     i.putExtra("_isEndCycleAction", true);
                     startActivity(i);
-                } else if (selectedMenuName.equalsIgnoreCase("beginCycle")) {
+                } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.begincycle))) {
                     Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
-                } else if (selectedMenuName.equalsIgnoreCase("reviewMembers")) {
+                } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.reviewmembers))) {
                     Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
-                } else if (selectedMenuName.equalsIgnoreCase("dataMigration")) {
+                } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.datamigration))) {
                     Intent i = new Intent(getApplicationContext(), DataMigrationActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
-                } else if (selectedMenuName.equalsIgnoreCase("help")) {
+                } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.help))) {
 
                 }
             }
@@ -229,22 +236,22 @@ public class MainActivity extends SherlockActivity {
             try {
                 holder.imageItem.setImageBitmap(convertToBitMap(item.getMenuImage()));
                 holder.textDescription.setText(item.getMenuCaption());
-                if(item.getMenuName().equalsIgnoreCase("beginMeeting")){
+                if(item.getMenuName().equalsIgnoreCase(getString(R.string.beginmeeting))){
                     row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_top_left));
                 }
-                if(item.getMenuName().equalsIgnoreCase("viewSentData")){
+                if(item.getMenuName().equalsIgnoreCase(getString(R.string.viewsentdata))){
                     row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_top_right));
                 }
-                if(item.getMenuName().equalsIgnoreCase("reviewMembers")){
+                if(item.getMenuName().equalsIgnoreCase(getString(R.string.reviewmembers))){
                     row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_mid_top_left));
                 }
-                if(item.getMenuName().equalsIgnoreCase("updateCycle")){
+                if(item.getMenuName().equalsIgnoreCase(getString(R.string.updatecycle))){
                     row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_mid_top_right));
                 }
-                if(item.getMenuName().equalsIgnoreCase("endCycle")){
+                if(item.getMenuName().equalsIgnoreCase(getString(R.string.endcycle))){
                     row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_mid_bottom_left));
                 }
-                if(item.getMenuName().equalsIgnoreCase("beginCycle")){
+                if(item.getMenuName().equalsIgnoreCase(getString(R.string.begincycle))){
                     row.setBackgroundColor(((Activity)context).getResources().getColor(R.color.light_blue_mid_bottom_right));
                 }
             } catch (Exception ex) {
@@ -265,35 +272,77 @@ public class MainActivity extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
         return true;
     }
 
-    // This method is called once the menu is selected
+    /** Switch language code **/
+
+    /**
     @Override
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
-        Intent i;
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.mnuMainSettings:
-
-                // Launch preferences activity
-                i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
+            case R.id.english:
+                setLocale("en");
+                Toast.makeText(this, "English", Toast.LENGTH_LONG).show();
                 break;
 
-            case R.id.mnuMainProfile:
-                loadVslaProfile();
+            case R.id.luganda:
+                setLocale("lu");
+                Toast.makeText(this, "Luganda", Toast.LENGTH_LONG).show();
                 break;
-            case R.id.mnuMainChat:
-                loadChatWindow();
-                break;
-            case R.id.mnuMainMOD:
-                loadMODWindow();
+
+            case R.id.luo:
+                setLocale("lo");
+                Toast.makeText(this, "Luo", Toast.LENGTH_LONG).show();
                 break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
+    } **/
+
+    /**
+    public void setLocale(String lang) {
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, MainActivity.class);
+        startActivity(refresh);
+        finish();
+
     }
+    **/
+
+    // This method is called once the menu is selected
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        Intent i;
+//        switch (item.getItemId()) {
+//            case R.id.mnuMainSettings:
+//
+//                // Launch preferences activity
+//                i = new Intent(this, SettingsActivity.class);
+//                startActivity(i);
+//                break;
+//
+//            case R.id.mnuMainProfile:
+//                loadVslaProfile();
+//                break;
+//            case R.id.mnuMainChat:
+//                loadChatWindow();
+//                break;
+//            case R.id.mnuMainMOD:
+//                loadMODWindow();
+//                break;
+//        }
+//        return true;
+//
 
     protected void loadMODWindow(){
         Intent intent = new Intent(context, MODActivity.class);
@@ -310,7 +359,7 @@ public class MainActivity extends SherlockActivity {
             Intent intent = new Intent(context, ProfileActivity.class);
             startActivity(intent);
         }else{
-            DialogMessageBox.show(context, "Connection Alert", "An internet connection could not be detected. Retrieval of the VSLA Profile will require an internet connection");
+            DialogMessageBox.show(context, getString(R.string.connection_alert), getString(R.string.internet_connection_not_detected_vsla_profile_required_internet_connection));
         }
     }
 

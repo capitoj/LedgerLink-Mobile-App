@@ -1,33 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/mnuMainChat"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_vsla_chat" />
 
     <item
         android:id="@+id/mnuMainMOD"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_vsla_mod" />
 
     <item
         android:id="@+id/mnuMainSettings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_settings" />
 
     <item
         android:id="@+id/mnuMainProfile"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_vsla_profile" />
 
     <item
         android:id="@+id/mnuChangePIN"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/action_change_pin" />
+
+    <item
+        android:id="@+id/mnuSwitchLanguage"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/switch_language" />
+
+    <!--<item-->
+        <!--android:id="@+id/english"-->
+        <!--android:orderInCategory="100"-->
+        <!--app:showAsAction="never"-->
+        <!--android:title="English" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/luganda"-->
+        <!--android:orderInCategory="100"-->
+        <!--app:showAsAction="never"-->
+        <!--android:title="Luganda" />-->
+
+    <!--<item-->
+        <!--android:id="@+id/luo"-->
+        <!--android:orderInCategory="100"-->
+        <!--app:showAsAction="never"-->
+        <!--android:title="Luo" />-->
+
 </menu>

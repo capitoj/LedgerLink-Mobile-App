@@ -12,10 +12,13 @@ import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 
 import android.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.DbBackupRestore;
+
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String PREF_KEY_SERVER_URL = "prefServerUrl";
@@ -34,7 +37,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public static final String TITLE_EXECUTION_MODE_TRAINING = "Switch to Actual VSLA Data";
 
 
-    public ActionBar actionBar;
+    public android.support.v7.app.ActionBar actionBar;
     public DbBackupRestore dbBackupRestore;
 
     @Override
@@ -42,7 +45,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        actionBar = getActionBar();
+        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         //actionBar.setHomeButtonEnabled(true);
@@ -56,10 +59,10 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     public void refreshView() {
 
         EditTextPreference prefServerUrl = (EditTextPreference) findPreference("prefServerUrl");
-        prefServerUrl.setSummary("Set Internet address for the server that will receive data\n" + prefServerUrl.getText());
+        prefServerUrl.setSummary(getString(R.string.set_internet_address_for_server_that_receive_data) + prefServerUrl.getText());
 
         EditTextPreference prefHelpLine = (EditTextPreference) findPreference("prefHelpLine");
-        prefHelpLine.setSummary("Set telephone number to call for support\n" + prefHelpLine.getText());
+        prefHelpLine.setSummary(getString(R.string.set_telephone_no_to_call_for_support) + prefHelpLine.getText());
 
         //If the user is in Production Mode and switches to Training Mode then update the title and summary accordingly
         ListPreference runInTrainingModePref = (ListPreference) findPreference(PREF_KEY_EXECUTION_MODE);
@@ -68,15 +71,15 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         if (currentValue.equalsIgnoreCase(PREF_VALUE_EXECUTION_MODE_PROD)) {
             runInTrainingModePref.setTitle(TITLE_EXECUTION_MODE_PROD);
             //runInTrainingModePref.setSummary("You are currently working on Actual VSLA Data. Switch to Training Data to learn how to use the application without destroying members' records.");
-            runInTrainingModePref.setSummary("You are currently NOT in Training Mode. \nAny cycle or meeting information you record will affect the data for your group members. \nTraining Mode is a way to safely practice and explore Ledger Link without affecting your group's data. \nTap to switch to Training Mode to use practice data without affecting your group's data.");
+            runInTrainingModePref.setSummary(getString(R.string.currently_not_in_traininng_mode));
         } else {
             runInTrainingModePref.setTitle(TITLE_EXECUTION_MODE_TRAINING);
-            runInTrainingModePref.setSummary("You are in Training Mode using practice data. \nAny data you enter will not affect your group's data");
+            runInTrainingModePref.setSummary(getString(R.string.training_mode_using_practice_data));
         }
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        actionBar = getActionBar();
+        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
         //  actionBar.setHomeButtonEnabled(true);

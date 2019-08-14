@@ -20,11 +20,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.applab.ledgerlink.domain.model.Meeting;
@@ -48,7 +48,7 @@ import java.util.Date;
 /**
  * Created by Moses on 7/15/13.
  */
-public class AddMemberActivity extends SherlockActivity {
+public class AddMemberActivity extends ActionBarActivity{
     protected Member selectedMember;
     protected int selectedMemberId;
     protected boolean successAlertDialogShown = false;
@@ -154,7 +154,7 @@ public class AddMemberActivity extends SherlockActivity {
 
                 viewClicked = (TextView) view;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddMemberActivity.this, mDateSetListener, mYear, mMonth, mDay);
-                datePickerDialog.setTitle("Set the outstanding welfare due date");
+                datePickerDialog.setTitle(getString(R.string.set_outstanding_welfare_due_date));
                 datePickerDialog.show();
             }
         });
@@ -172,7 +172,7 @@ public class AddMemberActivity extends SherlockActivity {
 
             // Hide comments & set heading
             TextView lblAMMiddleCycleInformationHeading = (TextView) findViewById(R.id.lblAMMiddleCycleInformationHeading);
-            lblAMMiddleCycleInformationHeading.setText("If cycle has started, and your group has held one or more meetings already, enter current totals for member so far.");
+            lblAMMiddleCycleInformationHeading.setText(R.string.if_cycle_has_started_and_your_group_has_held_one_or_more_meetings_already);
 
             TextView lblAMMiddleCycleSavingsCorrectionLabel = (TextView) findViewById(R.id.lblAMMiddleCycleSavingsCorrectionLabel);
             lblAMMiddleCycleSavingsCorrectionLabel.setVisibility(View.GONE);
@@ -238,7 +238,7 @@ public class AddMemberActivity extends SherlockActivity {
 
                 viewClicked = (TextView) view;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddMemberActivity.this, mDateSetListener, mYear, mMonth, mDay);
-                datePickerDialog.setTitle("Set the next repayment date");
+                datePickerDialog.setTitle(getString(R.string.set_next_payment_date));
                 datePickerDialog.show();
             }
         });
@@ -270,7 +270,7 @@ public class AddMemberActivity extends SherlockActivity {
         if(member.getOutstandingWelfareDueDateOnSetup() != null){
             txtOutstandingWelfareDueDate.setText(Utils.formatDate(member.getOutstandingWelfareDueDateOnSetup(), "dd-MM-yyyy"));
         }else{
-            txtOutstandingWelfareDueDate.setText("none");
+            txtOutstandingWelfareDueDate.setText(R.string.none_main);
             txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
         }
 
@@ -278,7 +278,7 @@ public class AddMemberActivity extends SherlockActivity {
         if (member.getDateOfFirstRepayment() != null) {
             txtAMMLoanNextRepaymentDate.setText(Utils.formatDate(member.getDateOfFirstRepayment(), "dd-MM-yyyy"));
         } else {
-            txtAMMLoanNextRepaymentDate.setText("none");
+            txtAMMLoanNextRepaymentDate.setText(R.string.none_main);
             txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
         }
 
@@ -302,11 +302,11 @@ public class AddMemberActivity extends SherlockActivity {
         MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
 
         String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her" : "his";
-        lblAMMiddleCycleInformationHeading.setText("This member’s information was added after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+        lblAMMiddleCycleInformationHeading.setText(getString(R.string.member_info_added_after_cycle_started) + pronoun + getString(R.string.total_saving_and_outstanding_loans_that_day));
 
         Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
         if (dummyGSWMeeting != null) {
-            lblAMMiddleCycleInformationHeading.setText("This member’s information was added on " + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+            lblAMMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
         }
 
         /** if meeting is after 2nd meeting, disable editing outstanding balance*/
@@ -360,7 +360,7 @@ public class AddMemberActivity extends SherlockActivity {
                     }
             );
 
-            actionBar.setTitle("Edit Member");
+            actionBar.setTitle(R.string.edit_member_main);
         } else {
             customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done_next_cancel, null);
             customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
@@ -392,7 +392,7 @@ public class AddMemberActivity extends SherlockActivity {
             );
 
 
-            actionBar.setTitle("New Member");
+            actionBar.setTitle(R.string.new_member_main);
         }
 
         actionBar.setDisplayShowTitleEnabled(true);
@@ -409,7 +409,7 @@ public class AddMemberActivity extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.add_member, menu);
         return true;
     }
@@ -464,7 +464,7 @@ public class AddMemberActivity extends SherlockActivity {
                     selectedMember = member;
 
                     if (selectedFinishButton) {
-                        Toast toast = Toast.makeText(this, "The new member was added successfully.", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(this, R.string.new_member_added_successfully, Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.LEFT, 0, 0);
                         toast.show();
                         if (Utils._membersAccessedFromNewCycle) {
@@ -485,7 +485,7 @@ public class AddMemberActivity extends SherlockActivity {
                         Utils._membersAccessedFromNewCycle = false;
                         Utils._membersAccessedFromEditCycle = false;
                     } else {
-                        Toast toast = Toast.makeText(this, "The new member was added successfully. Add another member.", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(this, R.string.new_member_added_successfully_add_another, Toast.LENGTH_SHORT);
                         toast.setGravity(Gravity.LEFT, 0, 0);
                         toast.show();
                         //Clear the Fields and keep adding new records
@@ -531,7 +531,7 @@ public class AddMemberActivity extends SherlockActivity {
                     dlg.show();
                     */
                 } else {
-                    Toast.makeText(this, "The member was updated successfully.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.member_updated_successfully, Toast.LENGTH_SHORT).show();
                     Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
@@ -562,7 +562,7 @@ public class AddMemberActivity extends SherlockActivity {
                 successFlg = true;
                 //clearDataFields(); //Not needed now
             } else {
-                dlg = Utils.createAlertDialogOk(AddMemberActivity.this, "Add Member", "A problem occurred while adding the new member.", Utils.MSGBOX_ICON_TICK);
+                dlg = Utils.createAlertDialogOk(AddMemberActivity.this, getString(R.string.add_member_main), getString(R.string.problem_occurred_while_adding_new_member), Utils.MSGBOX_ICON_TICK);
                 dlg.show();
             }
         } else {
@@ -573,9 +573,9 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     protected boolean validateData(Member member) {
-        String dlgTitle = "Add Member";
+        String dlgTitle = getString(R.string.add_member_main);
         if(cboAMMemberNo.getSelectedItemPosition() < 1){
-            Utils.createAlertDialogOk(this, dlgTitle, "The member number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.member_no_required_main), Utils.MSGBOX_ICON_EXCLAMATION).show();
             cboAMMemberNo.setFocusableInTouchMode(true);
             cboAMMemberNo.requestFocus();
             return false;
@@ -587,7 +587,7 @@ public class AddMemberActivity extends SherlockActivity {
 
         String surname = txtSurname.getText().toString().trim();
         if(surname.length() < 1){
-            Utils.createAlertDialogOk(this, dlgTitle, "The Surname is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.surname_required_main), Utils.MSGBOX_ICON_EXCLAMATION).show();
             txtSurname.requestFocus();
             return false;
         }
@@ -595,7 +595,7 @@ public class AddMemberActivity extends SherlockActivity {
 
         String otherNames = txtOtherNames.getText().toString().trim();
         if(otherNames.length() < 1){
-            Utils.createAlertDialogOk(this, dlgTitle, "At least one other name is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.one_other_required_main), Utils.MSGBOX_ICON_EXCLAMATION).show();
             txtOtherNames.requestFocus();
             return false;
         }
@@ -604,7 +604,7 @@ public class AddMemberActivity extends SherlockActivity {
         if (cboGender.getSelectedItemPosition() < 1) {
             cboGender.setFocusableInTouchMode(true);
             cboGender.requestFocus();
-            Utils.createAlertDialogOk(this, dlgTitle, "The sex is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.sex_required_main), Utils.MSGBOX_ICON_EXCLAMATION).show();
             return false;
         }
         cboGender.setFocusableInTouchMode(false);
@@ -612,7 +612,7 @@ public class AddMemberActivity extends SherlockActivity {
         member.setGender(gender);
 
         if(cboAMAge.getSelectedItemPosition() == 0){
-            Utils.createAlertDialogOk(this, dlgTitle, "The age is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.age_required_main), Utils.MSGBOX_ICON_EXCLAMATION).show();
             cboAMAge.setFocusableInTouchMode(true);
             cboAMAge.requestFocus();
             return false;
@@ -625,7 +625,7 @@ public class AddMemberActivity extends SherlockActivity {
         member.setDateOfBirth(c.getTime());
 
         if(cboAMOccupation.getSelectedItemPosition() == 0){
-            Utils.createAlertDialogOk(this, dlgTitle, "The Occupation is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.occupation_required_main), Utils.MSGBOX_ICON_EXCLAMATION).show();
             cboAMOccupation.setFocusableInTouchMode(true);
             cboAMOccupation.requestFocus();
             return false;
@@ -642,7 +642,7 @@ public class AddMemberActivity extends SherlockActivity {
         }
 
         if(cboAMCycles.getSelectedItemPosition() == 0){
-            Utils.createAlertDialogOk(this, dlgTitle, "The cycles completed field is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.cycles_completed_field_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
             cboAMCycles.setFocusableInTouchMode(true);
             cboAMCycles.requestFocus();
             return false;
@@ -650,7 +650,7 @@ public class AddMemberActivity extends SherlockActivity {
         String cycles = cboAMCycles.getSelectedItem().toString().trim();
         Integer theCycles = Integer.parseInt(cycles);
         if (theCycles > 100) {
-            Utils.createAlertDialogOk(this, dlgTitle, "The number of completed cycles is too high.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.number_of_completed_cycles_too_high), Utils.MSGBOX_ICON_EXCLAMATION).show();
             cboAMCycles.setFocusableInTouchMode(true);
             cboAMCycles.requestFocus();
             return false;
@@ -671,7 +671,7 @@ public class AddMemberActivity extends SherlockActivity {
         }else{
             double amountSavedSoFar = Double.parseDouble(savings);
             if (amountSavedSoFar < 0.00) {
-                Utils.createAlertDialogOk(this, dlgTitle, "Total Amount this Member has Saved in Current Cycle so far should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.total_amount_member_has_saved_in_current_cycle_so_far), Utils.MSGBOX_ICON_EXCLAMATION);
                 txtSavingsSoFar.requestFocus();
                 return false;
             } else {
@@ -691,7 +691,7 @@ public class AddMemberActivity extends SherlockActivity {
                 double welfareSavedSoFar = Double.parseDouble(welfare);
                 member.setWelfareOnSetup(welfareSavedSoFar);
             }catch (Exception e){
-                Log.e("WelfareOnSetup", e.getMessage());
+                Log.e(getString(R.string.welfare_on_setup), e.getMessage());
                 member.setWelfareOnSetup(0);
             }
         }
@@ -703,13 +703,13 @@ public class AddMemberActivity extends SherlockActivity {
         }else{
             double totalOutstandingWelfare = Double.parseDouble(outstandingWelfareAmount);
             if(totalOutstandingWelfare < 0.00){
-                Utils.createAlertDialogOk(this, dlgTitle, "Total Amount of this Member's outstanding welfare should be zero and above.", Utils.MSGBOX_ICON_EXCLAMATION);
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.total_amount_member_outstanding_welfare_be_zeor_and_above), Utils.MSGBOX_ICON_EXCLAMATION);
                 txtOutstandingWelfareAmount.requestFocus();
                 return false;
             }else{
                 member.setOutstandingWelfareOnSetup(totalOutstandingWelfare);
                 if(totalOutstandingWelfare > 0 && txtOutstandingWelfareDueDate.getText().length() == 0){
-                    Utils.createAlertDialogOk(this, dlgTitle, "The outstanding welfare due date is required", Utils.MSGBOX_ICON_EXCLAMATION);
+                    Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.outstanding_welfare_due_date_required), Utils.MSGBOX_ICON_EXCLAMATION);
                     return false;
                 }else{
                     member.setOutstandingWelfareDueDateOnSetup(Utils.getDateFromString(txtOutstandingWelfareDueDate.getText().toString(), "dd-MM-yyyy"));
@@ -737,21 +737,21 @@ public class AddMemberActivity extends SherlockActivity {
         }else{
             double outstandingLoan = Double.parseDouble(loanAmount);
             if (outstandingLoan < 0.00){
-                DialogMessageBox.show(this, dlgTitle, "Total Amount of this Member's Regular Loan Outstanding should be zero and above.");
+                DialogMessageBox.show(this, dlgTitle, getString(R.string.total_amount_member_regular_loan_outstanding_be_zero_and_above));
                 txtLoanAmount.requestFocus();
             }else{
                 member.setOutstandingLoanOnSetup(outstandingLoan);
 
                 //set the date of next repayment
                 if (outstandingLoan > 0 && txtAMMLoanNextRepaymentDate.getText().length() == 0) {
-                    DialogMessageBox.show(this, dlgTitle, "The next repayment date is required for the outstanding loan");
+                    DialogMessageBox.show(this, dlgTitle, getString(R.string.next_repayment_date_required_for_outstanding_loan));
                     txtAMMLoanNextRepaymentDate.requestFocus();
                     return false;
                 }
 
                 //set the loan number
                 if (outstandingLoan > 0 && txtAMMLoanNumber.getText().length() == 0) {
-                    DialogMessageBox.show(this, dlgTitle, "The loan number is required for the outstanding loan");
+                    DialogMessageBox.show(this, dlgTitle, getString(R.string.loan_number_required_for_outstanding_loan));
                     txtAMMLoanNumber.requestFocus();
                     return false;
                 }else{
@@ -771,7 +771,7 @@ public class AddMemberActivity extends SherlockActivity {
         //Final Verifications
         //TODO: Trying to use Application context to ensure dialog box does not disappear
         if (!ledgerLinkApplication.getMemberRepo().isMemberNoAvailable(member.getMemberNo(), member.getMemberId())) {
-            Utils.createAlertDialogOk(this, dlgTitle, "Another member is using this Member Number.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.another_member_using_this_member_no), Utils.MSGBOX_ICON_EXCLAMATION).show();
             cboAMMemberNo.requestFocus();
             return false;
         }
@@ -780,12 +780,12 @@ public class AddMemberActivity extends SherlockActivity {
     }
 
     protected boolean validateLoanNumber(Member member, int loanNo, double outstandingLoan){
-        String dlgTitle = "Loan Error";
+        String dlgTitle = getString(R.string.loan_error);
         VslaCycleRepo vslaCycleRepo = new VslaCycleRepo(this);
         VslaCycle vslaCycle = vslaCycleRepo.getCurrentCycle();
         if(vslaCycle != null) {
             if (loanNo < 1 && outstandingLoan > 0) {
-                DialogMessageBox.show(this, dlgTitle, "The loan number cannot be zero");
+                DialogMessageBox.show(this, dlgTitle, getString(R.string.loan_no_cannot_be_zero));
                 txtAMMLoanNumber.requestFocus();
                 return false;
             }
@@ -795,12 +795,12 @@ public class AddMemberActivity extends SherlockActivity {
                 if (outstandingLoan > 0.00 || outstandingLoan < 1) {
                     if (isEditAction) {
                         if (loanNo != member.getOutstandingLoanNumberOnSetup()) {
-                            DialogMessageBox.show(this, dlgTitle, "The loan number " + loanNo + " already exists");
+                            DialogMessageBox.show(this, dlgTitle, getString(R.string.loan_no) + loanNo + getString(R.string.already_exist));
                             txtAMMLoanNumber.requestFocus();
                             return false;
                         }
                     } else {
-                        DialogMessageBox.show(this, dlgTitle, "The loan number " + loanNo + " already exists");
+                        DialogMessageBox.show(this, dlgTitle, getString(R.string.loan_no) + loanNo + getString(R.string.already_exist));
                         txtAMMLoanNumber.requestFocus();
                         return false;
                     }
@@ -942,7 +942,7 @@ public class AddMemberActivity extends SherlockActivity {
                 buildMemberNoSpinner();
             }
         };
-        LongTaskRunner.runLongTask(runnable, "Please wait...", "Please wait a moment...", AddMemberActivity.this);
+        LongTaskRunner.runLongTask(runnable, getString(R.string.please_wait), getString(R.string.please_wait_amoment), AddMemberActivity.this);
         //buildMemberNoSpinner();
 
         buildAgeSpinner();
@@ -976,7 +976,7 @@ public class AddMemberActivity extends SherlockActivity {
 
         //Setup the Spinner Items
         cboGender = (Spinner) findViewById(R.id.cboAMGender);
-        String[] genderList = new String[]{"select sex", "Male", "Female"};
+        String[] genderList = new String[]{getString(R.string.select_sex), getString(R.string.male), getString(R.string.female)};
         ArrayAdapter<CharSequence> genderAdapter = new DropDownAdapter(this, genderList);
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboGender.setAdapter(genderAdapter);
@@ -994,10 +994,15 @@ public class AddMemberActivity extends SherlockActivity {
 
     protected void buildOccupationSpinner(){
         cboAMOccupation = (Spinner) findViewById(R.id.cboAMOccupation);
-        String[] professions = new String[]{"Trader", "Farmer", "Shopkeeper", "Fish Monger", "Soldier", "Traditional Healer", "Welder", "Medical Doctor", "Student", "Mason", "Builder", "Boda Boda Rider", "Driver", "Teacher", "Pastor", "Butcher", "Painter", "Nurse", "Barber", "Hair Dresser", "Other", "Accountant", "Engineer", "Police Officer", "Security Guard", "Banker", "Architect"};
+        String[] professions = new String[]{getString(R.string.trader), getString(R.string.farmer)
+                , getString(R.string.shopkeeper), getString(R.string.fish_monger), getString(R.string.soldier), getString(R.string.traditional_healer)
+                , getString(R.string.welder), getString(R.string.medical_doctor), getString(R.string.student), getString(R.string.mason), getString(R.string.builder), getString(R.string.boda_rider), getString(R.string.driver), getString(R.string.teacher)
+                , getString(R.string.pastor), getString(R.string.butcher), getString(R.string.painter), getString(R.string.nurse)
+                , getString(R.string.barber), getString(R.string.hair_dresser), getString(R.string.other), getString(R.string.accountant), getString(R.string.engineer)
+                , getString(R.string.police_officer), getString(R.string.security_guard), getString(R.string.banker), getString(R.string.architect)};
         Arrays.sort(professions);
 
-        professions = ArrayUtils.addAll(new String[]{"Select Profession"}, professions);
+        professions = ArrayUtils.addAll(new String[]{getString(R.string.select_profecssion)}, professions);
 
         ArrayAdapter<CharSequence> occupationAdapter = new DropDownAdapter(this, professions);
         occupationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -1016,14 +1021,14 @@ public class AddMemberActivity extends SherlockActivity {
     protected void buildMemberNoSpinner() {
         cboAMMemberNo = (Spinner) findViewById(R.id.cboAMMemberNo);
         final ArrayList<String> memberNumberArrayList = new ArrayList<String>();
-        memberNumberArrayList.add("select number");
+        memberNumberArrayList.add(getString(R.string.select_number));
         //If we have a selected member, then add the member number to the adapter
         if (selectedMember != null && selectedMember.getMemberNo() != 0) {
             memberNumberArrayList.add(selectedMember.getMemberNo() + "");
         }
 
         for (String mNo : ledgerLinkApplication.getMemberRepo().getListOfAvailableMemberNumbers()) {
-            Log.d(getBaseContext().getPackageName(), "Member number found " + mNo);
+            Log.d(getBaseContext().getPackageName(), getString(R.string.member_no_found) + mNo);
             memberNumberArrayList.add(mNo);
         }
 
@@ -1087,7 +1092,7 @@ public class AddMemberActivity extends SherlockActivity {
 
         cboAMAge = (Spinner) findViewById(R.id.cboAMAge);
         ArrayList<String> ageArrayList = new ArrayList<String>();
-        ageArrayList.add("select age");
+        ageArrayList.add(getString(R.string.select_age));
         for (int i = 12; i <= 80; i++) {
             ageArrayList.add(i + "");
         }
@@ -1112,7 +1117,7 @@ public class AddMemberActivity extends SherlockActivity {
 
         cboAMCycles = (Spinner) findViewById(R.id.cboAMCycles);
         ArrayList<String> cyclesArrayList = new ArrayList<String>();
-        cyclesArrayList.add("select number");
+        cyclesArrayList.add(getString(R.string.select_number));
         for (int i = 0; i <= 20; i++) {
             cyclesArrayList.add(i + "");
         }

@@ -2,7 +2,7 @@
 <resources>
 
     <!-- LedgerLink Theme -->
-    <style name="LedgerLinkTheme" parent="Theme.Sherlock.Light.DarkActionBar">
+    <style name="LedgerLinkTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/LedgerLinkActionBarStyle</item>
         <item name="android:actionBarTabBarStyle">@style/LedgerLinkActionBarTabBarStyle</item>
         <item name="android:actionBarTabTextStyle">@style/LedgerLinkActionBarTabTextStyle</item>
@@ -13,29 +13,29 @@
         <item name="android:textAppearance">@style/LedgerLinkActionBarTextAppearance</item>
     </style>
 
-    <style name="LedgerLinkActionBarStyle" parent="Widget.Sherlock.Light.ActionBar">
+    <style name="LedgerLinkActionBarStyle" parent="Widget.AppCompat.Light.ActionBar">
         <item name="android:background">@color/ledger_link_dark_blue</item>
         <item name="android:titleTextStyle">@style/LedgerLinkActionBarTextAppearance</item>
         <!--  <item name="android:subtitleTextStyle">@android:style/TextAppearance.Holo.Widget.ActionBar.Subtitle</item>-->
     </style>
 
-    <style name="LedgerLinkActionBarTextAppearance" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+    <style name="LedgerLinkActionBarTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <!-- <item name="android:textSize">@dimen/abs__action_bar_title_text_size</item> -->
         <item name="android:textColor">@color/ledger_link_white</item>
     </style>
 
-    <style name="LedgerLinkActionBarSubTitleTextAppearance" parent="TextAppearance.Sherlock.Widget.ActionBar.Subtitle">
+    <style name="LedgerLinkActionBarSubTitleTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
         <item name="android:textColor">@color/ledger_link_white</item>
     </style>
 
-    <style name="LedgerLinkActionBarTabBarStyle" parent="Widget.Sherlock.Light.ActionBar.TabView">
+    <style name="LedgerLinkActionBarTabBarStyle" parent="Widget.AppCompat.Light.ActionBar.TabView">
         <item name="android:divider">@null</item>
         <item name="android:background">@drawable/tab_indicator_ab</item>
         <item name="android:paddingLeft">32dp</item>
         <item name="android:paddingRight">32dp</item>
     </style>
 
-    <style name="LedgerLinkActionBarTabTextStyle" parent="Widget.Sherlock.ActionBar.TabText">
+    <style name="LedgerLinkActionBarTabTextStyle" parent="Widget.AppCompat.ActionBar.TabText">
         <item name="android:textAppearance">@null</item>
         <item name="android:textColor">@color/ledger_link_black</item>
         <item name="android:textSize">13sp</item>

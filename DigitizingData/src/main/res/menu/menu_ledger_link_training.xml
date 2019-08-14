@@ -1,9 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="org.applab.ledgerlink.LedgerLinkTrainingActivity">
     <item
         android:id="@+id/menuDRAccept"
         android:title="Next"
         android:icon="@drawable/ic_navigation_accept"
-        android:showAsAction="always"/>
+        app:showAsAction="always"/>
 </menu>

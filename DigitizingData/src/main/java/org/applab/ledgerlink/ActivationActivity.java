@@ -7,11 +7,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -45,7 +47,8 @@ import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
 
-public class ActivationActivity extends SherlockActivity {
+
+public class ActivationActivity extends ActionBarActivity{
     LedgerLinkApplication ledgerLinkApplication;
     HttpClient client;
     private int httpStatusCode = 0; //To know whether the Request was successful
@@ -79,7 +82,7 @@ public class ActivationActivity extends SherlockActivity {
         //If we are in training mode then show it using a custom View with distinguishable background
         //Assumed that the preferences have been set by now
         if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setTitle("TRAINING MODE");
+            actionBar.setTitle(R.string.traninng_mode_main);
             actionBar.setCustomView(R.layout.activity_main_training_mode);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
@@ -103,6 +106,7 @@ public class ActivationActivity extends SherlockActivity {
                 saveActivatedVslaInfo();
             }
         });
+
     }
 
     protected void getSelectedFinancialInstitution(){
@@ -137,7 +141,7 @@ public class ActivationActivity extends SherlockActivity {
             FinancialInstitution financialInstitution = financialInstitutionRepo.getFinancialInstitution();
 //            String baseUrl = "http://127.0.0.1:82";
             String baseUrl = "http://" + financialInstitution.getIpAddress();
-            String uri = String.format("%s/%s/%s", baseUrl, "DigitizingData", "activate");
+            String uri = String.format("%s/%s/%s", baseUrl, getString(R.string.digitizingdata), getString(R.string.activate));
 //            String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
             new PostTask(this).execute(uri, request);
         }else{
@@ -148,15 +152,15 @@ public class ActivationActivity extends SherlockActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.activation, menu);
+        getMenuInflater().inflate(R.menu.activation, menu);
         return true;
     }
 
     // This method is called once the menu is selected
     @Override
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         Intent i = null;
         switch (item.getItemId()) {
             case R.id.action_settings:
@@ -177,7 +181,7 @@ public class ActivationActivity extends SherlockActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }else{
-            DialogMessageBox.show(this, "Connection Alert", "No internet connection could be established. Data recovery requires an internet connection");
+            DialogMessageBox.show(this, getString(R.string.connection_alert), getString(R.string.no_internet_connection));
         }
     }
 
@@ -189,7 +193,7 @@ public class ActivationActivity extends SherlockActivity {
             financialInstitutions[i] = listFinancialInstutions.get(i).getName();
         }
         Arrays.sort(financialInstitutions);
-        financialInstitutions = ArrayUtils.addAll(new String[]{"Select Financial Institution"}, financialInstitutions);
+        financialInstitutions = ArrayUtils.addAll(new String[]{getString(R.string.select_financial_institution)}, financialInstitutions);
 
         ArrayAdapter<CharSequence> financialInstitutionAdapter = new DropDownAdapter(this, financialInstitutions);
         financialInstitutionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -217,26 +221,26 @@ public class ActivationActivity extends SherlockActivity {
             String confirmPassKey = txtConfirmPassKey.getText().toString().trim();
 
             if (vslaCode.length() <= 0) {
-                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The VSLA Code is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this, getString(R.string.Registation_main), getString(R.string.vsla_code_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtVslaCode.requestFocus();
                 return false;
             }
 
             if (passKey.length() <= 0) {
-                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this, getString(R.string.Registation_main), getString(R.string.pass_key_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return false;
             }
 
             //As per requirements, set the passkey length
             if (passKey.length() <= Integer.parseInt(getResources().getString(R.string.minimum_passkey_length))) {
-                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The passkey should be atleast 5 digits long", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this, getString(R.string.Registation_main), getString(R.string.passkey_atleast_five_digits_long), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return false;
             }
 
             if (!passKey.equalsIgnoreCase(confirmPassKey)) {
-                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The Pass Keys do not match.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this, getString(R.string.Registation_main), getString(R.string.passkeys_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return false;
             }
@@ -261,26 +265,26 @@ public class ActivationActivity extends SherlockActivity {
             String confirmPassKey = txtConfirmPassKey.getText().toString().trim();
 
             if (vslaCode.length() <= 0) {
-                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The VSLA Code is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this, getString(R.string.Registation_main), getString(R.string.vsla_code_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtVslaCode.requestFocus();
                 return;
             }
 
             if (passKey.length() <= 0) {
-                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The Pass Key is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this, getString(R.string.Registation_main), getString(R.string.pass_key_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return;
             }
 
             //As per requirements, set the passkey length
             if (passKey.length() < Integer.parseInt(getResources().getString(R.string.minimum_passkey_length))) {
-                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The passkey should be atleast " + getResources().getString(R.string.minimum_passkey_length) + " digits long", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this, getString(R.string.Registation_main), getString(R.string.passkey_should_be_atleast) + getResources().getString(R.string.minimum_passkey_length) + getString(R.string.digits_long), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return;
             }
 
             if (!passKey.equalsIgnoreCase(confirmPassKey)) {
-                Utils.createAlertDialogOk(ActivationActivity.this, "Registration", "The Pass Keys do not match.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ActivationActivity.this, getString(R.string.Registation_main), getString(R.string.passkeys_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtPassKey.requestFocus();
                 return;
             }
@@ -330,7 +334,7 @@ public class ActivationActivity extends SherlockActivity {
                 } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE) {
                     networkType = "LTE";
                 } else {
-                    networkType = "UNKNOWN";
+                    networkType = getString(R.string.unknown);
                 }
             }
 
@@ -338,16 +342,16 @@ public class ActivationActivity extends SherlockActivity {
             JSONStringer js = new JSONStringer();
             String jsonRequest = js
                     .object()
-                    .key("PhoneImei").value(imei)
-                    .key("SimImsi").value(imsi)
-                    .key("SimSerialNo").value(simSerialNo)
-                            //.key("simOperatorName").value(simOperatorName)
-                    .key("NetworkOperatorName").value(networkOperatorName)
-                            //.key("networkOperator").value(networkOperator)
-                    .key("NetworkType").value(networkType)
-                            //.key("msisdn").value(msisdn)
-                    .key("VslaCode").value(vslaCode)
-                    .key("PassKey").value(passKey)
+                    .key(getString(R.string.phone_imei)).value(imei)
+                    .key(getString(R.string.sim_imsi)).value(imsi)
+                    .key(getString(R.string.sim_serial_no)).value(simSerialNo)
+                    //.key("simOperatorName").value(simOperatorName)
+                    .key(getString(R.string.network_operator_name)).value(networkOperatorName)
+                    //.key("networkOperator").value(networkOperator)
+                    .key(getString(R.string.network_type)).value(networkType)
+                    //.key("msisdn").value(msisdn)
+                    .key(getString(R.string.vsla_code_main)).value(vslaCode)
+                    .key(getString(R.string.passkey_main)).value(passKey)
                     .endObject()
                     .toString();
 
@@ -363,7 +367,7 @@ public class ActivationActivity extends SherlockActivity {
 
         //Use a Weak Reference
         private final WeakReference<ActivationActivity> activationActivityWeakReference;
-        private String message = "Please wait...";
+        private String message = getString(R.string.please_wait);
         private Integer selectedIndex;
 
         //Initialize the Weak reference in the constructor
@@ -378,8 +382,8 @@ public class ActivationActivity extends SherlockActivity {
                 if (activationActivityWeakReference.get() != null && !activationActivityWeakReference.get().isFinishing()) {
                     if (null == progressDialog) {
                         progressDialog = new ProgressDialog(activationActivityWeakReference.get());
-                        progressDialog.setTitle("Registration");
-                        progressDialog.setMessage("Sending registration");
+                        progressDialog.setTitle(getString(R.string.Registation_main));
+                        progressDialog.setMessage(getString(R.string.sending_registration));
                         progressDialog.setMax(10);
                         progressDialog.setProgress(1);
                         progressDialog.setCancelable(false);
@@ -433,7 +437,7 @@ public class ActivationActivity extends SherlockActivity {
                 };
 
                 String responseString = httpClient.execute(httpPost, rh);
-                Log.d("Registration", "Response is " + responseString);
+                Log.d(getString(R.string.Registation_main), getString(R.string.response_is) + responseString);
                 // close the connection
                 httpClient.getConnectionManager().shutdown();
 
@@ -474,27 +478,27 @@ public class ActivationActivity extends SherlockActivity {
 
             try {
                 if (result != null) {
-                    activationSuccessful = result.getBoolean("IsActivated");
-                    vslaName = result.getString("VslaName");
-                    passKey = result.getString("PassKey");
+                    activationSuccessful = result.getBoolean(getString(R.string.is_activated_main));
+                    vslaName = result.getString(getString(R.string.vsla_name_main));
+                    passKey = result.getString(getString(R.string.passkey_main));
                 }
                 if (activationSuccessful && null != vslaName) {
                     retrievedVslaNameSavedSuccessfully = ledgerLinkApplication.getVslaInfoRepo().saveVslaInfo(targetVslaCode, vslaName, passKey, targetFinancialInstitution.getFiID());
                     if (retrievedVslaNameSavedSuccessfully) {
-                        Toast.makeText(ActivationActivity.this, "Congratulations! Registration Completed Successfully.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ActivationActivity.this, R.string.congs_reg_completed, Toast.LENGTH_LONG).show();
                         dismissProgressDialog();
                         Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                        i.putExtra("_wasCalledFromActivation", true);
+                        i.putExtra(getString(R.string._wasCalledFromActivation), true);
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(i);
                         finish();
                     } else {
-                        Toast.makeText(ActivationActivity.this, "Registration failed while writing retrieved VSLA Name on the local database. Try again later.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ActivationActivity.this, R.string.reg_failed_while_writing_retrieved_vsla_name, Toast.LENGTH_LONG).show();
                         dismissProgressDialog();
                     }
                 } else {
                     //Process failed
-                    Toast.makeText(getApplicationContext(), "Registration failed due to internet connection problems. Try again later.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.reg_failed_due_to_internet, Toast.LENGTH_LONG).show();
                     dismissProgressDialog();
                 }
 
@@ -505,7 +509,7 @@ public class ActivationActivity extends SherlockActivity {
 
                     //Then call the login activity
                     Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                    i.putExtra("_wasCalledFromActivation", true);
+                    i.putExtra(getString(R.string._wasCalledFromActivation), true);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     finish();
@@ -513,12 +517,12 @@ public class ActivationActivity extends SherlockActivity {
             } catch (JSONException exJson) {
                 //Process failed
                 exJson.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Registration failed due to invalid Data Format. Try again later.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.reg_failed_due_to_invalid_data_format, Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 //Process failed
-                Toast.makeText(getApplicationContext(), "Registration failed. Try again later.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.reg_failed_try_again_later, Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
             }
         }

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -69,7 +70,7 @@
             android:textAlignment="center"
             tools:ignore="UnusedAttribute" />
 
-        <requestFocus />
+        <requestFocus android:id="@+id/requestFocus" />
 
 
         <org.applab.ledgerlink.fontutils.TypefaceButton
@@ -77,19 +78,23 @@
             style="@style/LoginButton"
             android:layout_width="@dimen/login_ctrl_width"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edt_passkey"
-            android:text="@string/sign_in" />
+            android:text="@string/sign_in"
+            android:layout_below="@+id/edt_passkey"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="13dp" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/txtHelpInfo"
+            android:id="@+id/change_lang"
             style="@style/RegularTextActivationLoginMsg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignLeft="@id/btnLogin"
-            android:layout_below="@id/btnLogin"
-            android:layout_marginTop="@dimen/login_margin"
-            android:text="@string/help_forgot_passkey"
-            android:textSize="14sp" />
+            android:layout_alignStart="@+id/lblActivationLoginMsg"
+            android:layout_below="@+id/btnLogin"
+            android:layout_marginTop="8dp"
+            android:text="Change Language"
+            android:textSize="16sp"
+            android:textStyle="italic" />
+
         <!--  <TextView
               android:id="@+id/lblSISwitchMode"
               android:layout_width="fill_parent"
@@ -103,7 +108,7 @@
               android:textColor="#0000FF"
               android:text="Switch to Training Mode" /> -->
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
+       <!-- <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtVersionInfo"
             style="@style/SmallerRegularText"
             android:layout_width="match_parent"
@@ -112,6 +117,18 @@
             android:layout_marginLeft="1dip"
             android:layout_marginTop="@dimen/login_margin"
             android:layout_marginBottom="1dip"
-            android:text="@string/version_number" />
+            android:text="@string/version_number" />  -->
+
+        <Spinner
+            android:id="@+id/spinner_lang"
+            style="@android:style/Widget.Holo.Light.Spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/change_lang"
+            android:layout_below="@+id/change_lang"
+            android:layout_marginTop="18dp" />
+
+
+
     </RelativeLayout>
 </ScrollView>

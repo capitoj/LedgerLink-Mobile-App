@@ -12,7 +12,7 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 import android.widget.TabWidget;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+ import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
@@ -22,7 +22,7 @@ import java.util.HashMap;
 /**
  * Created by Moses on 6/24/13.
  */
-public class MeetingTabHostActivity extends SherlockFragmentActivity implements TabHost.OnTabChangeListener {
+public class MeetingTabHostActivity extends ActionBarActivity implements TabHost.OnTabChangeListener {
     private TabHost mTabHost;
     private final HashMap<String, TabInfo> mapTabInfo = new HashMap<String, MeetingTabHostActivity.TabInfo>();
     private TabInfo mLastTab = null;
@@ -80,7 +80,7 @@ public class MeetingTabHostActivity extends SherlockFragmentActivity implements 
         setContentView(R.layout.activity_meeting);
         initialiseTabHost(savedInstanceState);
         if (savedInstanceState != null) {
-            mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab")); //set the tab as per the saved state
+            mTabHost.setCurrentTabByTag(savedInstanceState.getString(getString(R.string.tab))); //set the tab as per the saved state
         }
     }
 
@@ -88,7 +88,7 @@ public class MeetingTabHostActivity extends SherlockFragmentActivity implements 
      * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
      */
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString("tab", mTabHost.getCurrentTabTag()); //save the tab selected
+        outState.putString(getString(R.string.tab), mTabHost.getCurrentTabTag()); //save the tab selected
         super.onSaveInstanceState(outState);
     }
 
@@ -99,15 +99,15 @@ public class MeetingTabHostActivity extends SherlockFragmentActivity implements 
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
         TabInfo tabInfo = null;
-        MeetingTabHostActivity.addTab(this, this.mTabHost, this.mTabHost.newTabSpec("summary").setIndicator("Summary", getResources().getDrawable(R.drawable.android)), (tabInfo = new TabInfo("summary", MeetingSummaryFrag.class, args)));
+        MeetingTabHostActivity.addTab(this, this.mTabHost, this.mTabHost.newTabSpec(getString(R.string.summary)).setIndicator(getString(R.string.summary), getResources().getDrawable(R.drawable.android)), (tabInfo = new TabInfo(getString(R.string.summary), MeetingSummaryFrag.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        MeetingTabHostActivity.addTab(this, this.mTabHost, this.mTabHost.newTabSpec("rollCall").setIndicator("Roll Call", getResources().getDrawable(R.drawable.android)), (tabInfo = new TabInfo("rollCall", MeetingRollCallFrag.class, args)));
+        MeetingTabHostActivity.addTab(this, this.mTabHost, this.mTabHost.newTabSpec(getString(R.string.roll_call)).setIndicator(getString(R.string.roll_call), getResources().getDrawable(R.drawable.android)), (tabInfo = new TabInfo(getString(R.string.roll_call), MeetingRollCallFrag.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        MeetingTabHostActivity.addTab(this, this.mTabHost, this.mTabHost.newTabSpec("savings").setIndicator("SavingSchema", getResources().getDrawable(R.drawable.android)), (tabInfo = new TabInfo("savings", MeetingSavingsFrag.class, args)));
+        MeetingTabHostActivity.addTab(this, this.mTabHost, this.mTabHost.newTabSpec(getString(R.string.savings)).setIndicator(getString(R.string.savingschema), getResources().getDrawable(R.drawable.android)), (tabInfo = new TabInfo(getString(R.string.savings), MeetingSavingsFrag.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        MeetingTabHostActivity.addTab(this, this.mTabHost, this.mTabHost.newTabSpec("loansRepaid").setIndicator("Loans Repaid", getResources().getDrawable(R.drawable.android)), (tabInfo = new TabInfo("loansRepaid", MeetingLoansRepaidFrag.class, args)));
+        MeetingTabHostActivity.addTab(this, this.mTabHost, this.mTabHost.newTabSpec(getString(R.string.loansrepaid)).setIndicator(getString(R.string.loans_repaid), getResources().getDrawable(R.drawable.android)), (tabInfo = new TabInfo(getString(R.string.loansrepaid), MeetingLoansRepaidFrag.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        MeetingTabHostActivity.addTab(this, this.mTabHost, this.mTabHost.newTabSpec("loansIssued").setIndicator("Loans Issued", getResources().getDrawable(R.drawable.android)), (tabInfo = new TabInfo("loansIssued", MeetingLoansIssuedFrag.class, args)));
+        MeetingTabHostActivity.addTab(this, this.mTabHost, this.mTabHost.newTabSpec(getString(R.string.loanissued)).setIndicator(getString(R.string.loanissued), getResources().getDrawable(R.drawable.android)), (tabInfo = new TabInfo(getString(R.string.loanissued), MeetingLoansIssuedFrag.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
 
         //
@@ -132,7 +132,7 @@ public class MeetingTabHostActivity extends SherlockFragmentActivity implements 
         }
 
         // Default to first tab
-        this.onTabChanged("savings");
+        this.onTabChanged(getString(R.string.savings));
 
     }
 

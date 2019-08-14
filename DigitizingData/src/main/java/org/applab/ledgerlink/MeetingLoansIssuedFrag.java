@@ -9,8 +9,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.Fragment;
 
 import org.applab.ledgerlink.business_rules.VslaMeeting;
 import org.applab.ledgerlink.domain.model.Meeting;
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 /**
  * Created by Moses on 6/25/13.
  */
-public class MeetingLoansIssuedFrag extends SherlockFragment {
+public class MeetingLoansIssuedFrag extends Fragment {
     private ArrayList<Member> members;
     private String meetingDate;
     private int meetingId;
@@ -48,7 +49,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parentActivity = (MeetingActivity) getSherlockActivity();
+        parentActivity = (MeetingActivity) getActivity();
         //meetingRepo = parentActivity.ledgerLinkApplication.getMeetingRepo();
         savingRepo = parentActivity.ledgerLinkApplication.getMeetingSavingRepo();
         loanIssuedRepo = parentActivity.ledgerLinkApplication.getMeetingLoanIssuedRepo();
@@ -92,15 +93,15 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     private void initializeFragmentView() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        ActionBar actionBar = getSherlockActivity().getSupportActionBar();
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        String title = "Meeting";
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        meetingDate = getActivity().getIntent().getStringExtra("_meetingDate");
+        String title = getString(R.string.meeting);
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
-                title = "Send Data";
+                title = getString(R.string.send_data);
                 break;
             case VIEW_MODE_READ_ONLY:
-                title = "Sent Data";
+                title = getString(R.string.send_data);
                 break;
             default:
                 //  title="Meeting";
@@ -110,18 +111,18 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         actionBar.setSubtitle(meetingDate);
 
 
-        /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
-         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        /**TextView lblMeetingDate = (TextView)getActivity()().findViewById(R.id.lblMLIssuedFMeetingDate);
+         meetingDate = getActivity()().getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */
-        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-        meetingRepo = new MeetingRepo(getSherlockActivity().getApplicationContext(), meetingId);
+        meetingId = getActivity().getIntent().getIntExtra("_meetingId", 0);
+        meetingRepo = new MeetingRepo(getActivity().getApplicationContext(), meetingId);
 
         //Get the Cycle that contains this meeting
         if (null == currentMeeting) {
             currentMeeting = meetingRepo.getMeeting();
         }
 
-        TextView lblTotalCash = (TextView) getSherlockActivity().findViewById(R.id.lblMLIssuedFTotalCash);
+        TextView lblTotalCash = (TextView) getActivity().findViewById(R.id.lblMLIssuedFTotalCash);
 
         populateTotalCash();
         if (null != lblTotalCash) {
@@ -140,7 +141,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(runnable, "Please wait", "Loading list of loans issued...", parentActivity);
+        LongTaskRunner.runLongTask(runnable, getString(R.string.please_wait), getString(R.string.loading_list_of_loans_issued), parentActivity);
     }
 
     //Populate Members List
@@ -149,11 +150,11 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
         members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
 
         //Now get the data via the adapter
-        final MembersLoansIssuedArrayAdapter adapter = new MembersLoansIssuedArrayAdapter(getSherlockActivity().getBaseContext(), members);
+        final MembersLoansIssuedArrayAdapter adapter = new MembersLoansIssuedArrayAdapter(getActivity().getBaseContext(), members);
         adapter.setMeetingId(meetingId);
 
         //Assign Adapter to ListView
-        //OMM: Since I was unable to do a SherlockListFragment to work
+        //OMM: Since I was unable to do a ListFragment to work
         //setListAdapter(adapter);
         final ListView lvwMembers = (ListView) fragmentView.findViewById(R.id.lvwMLIssuedFMembers);
         final TextView txtEmpty = (TextView) fragmentView.findViewById(R.id.txtMLIssuedFEmpty);
@@ -174,7 +175,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
 
                 //Do not invoke the event when in Read only Mode
                 if (parentActivity.isViewOnly()) {
-                    Toast.makeText(getSherlockActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.meeting_is_readonly_warning, Toast.LENGTH_LONG).show();
                     return;
                 }
                 if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
@@ -186,7 +187,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
                     viewHistory.putExtra("_meetingDate", meetingDate);
                     viewHistory.putExtra("_meetingId", meetingId);
                     viewHistory.putExtra("_totalCashInBox", totalCashInBox);
-                    viewHistory.putExtra("_action", "loanissue");
+                    viewHistory.putExtra("_action", getString(R.string.loanissue));
                     startActivity(viewHistory);
 
                     /*
@@ -208,7 +209,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
 
         //Hack to ensure all Items in the List View are visible
         //Utils.setListViewHeightBasedOnChildren(lvwMembers);
-        // TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMLIssuedFMeetingDate);
+        // TextView lblMeetingDate = (TextView)getActivity()().findViewById(R.id.lblMLIssuedFMeetingDate);
         //lblMeetingDate.setFocusable(true);
         //lblMeetingDate.requestFocus();
 
@@ -217,7 +218,7 @@ public class MeetingLoansIssuedFrag extends SherlockFragment {
     private void populateTotalCash() {
 
         try {
-            totalCashInBox = VslaMeeting.getTotalCashInBox(getSherlockActivity().getApplicationContext(), this.meetingId);
+            totalCashInBox = VslaMeeting.getTotalCashInBox(getActivity().getApplicationContext(), this.meetingId);
 
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -10,13 +10,13 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -59,7 +59,7 @@ import java.util.HashMap;
 /**
  * Created by Moses on 6/27/13.
  */
-public class MeetingActivity extends SherlockFragmentActivity implements ActionBar.TabListener {
+public class MeetingActivity extends ActionBarActivity implements ActionBar.TabListener {
     private Meeting currentMeeting;
 
     private static final String STATE_SELECTED_NAVIGATION_ITEM = "selected_navigation_item";
@@ -127,10 +127,10 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         String title = "Meeting";
         if(! getCurrentMeeting().isMeetingDataSent())
         {
-            title = "Send Data";
+            title = getString(R.string.send_data);
         }
         else {
-            title = "Sent Data";
+            title = getString(R.string.send_data);
         }
 //        switch (Utils._meetingDataViewMode) {
 //            case VIEW_MODE_REVIEW:
@@ -147,41 +147,41 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        actionBar.addTab(actionBar.newTab().setTag("rollCall").setText("Register").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setTag("summary").setText("Summary").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setTag("startingCash").setText("Starting Cash").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setTag("savings").setText("Savings").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setTag("welfare").setText("Welfare").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setTag("outstandingWelfare").setText("Outstanding Welfare").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setTag("loansRepaid").setText("Loans Repaid").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setTag("fines").setText("Fines").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setTag("loansIssued").setText("New Loans").setTabListener(this));
-        actionBar.addTab(actionBar.newTab().setTag("cashBook").setText("Cash Book").setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag(getString(R.string.rollcall)).setText(getString(R.string.register_main)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag(getString(R.string.summary)).setText(getString(R.string.summary_main)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag(getString(R.string.startingcash)).setText(getString(R.string.starting_cash)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag(getString(R.string.savings)).setText(getString(R.string.savings)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag(getString(R.string.welfare)).setText(getString(R.string.welfare_main)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag(getString(R.string.outstandingwelfare)).setText(getString(R.string.outstanding_welfare_mai)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag(getString(R.string.loansrepaid)).setText(getString(R.string.loans_repaid)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag(getString(R.string.fines_all_smallcaps)).setText(getString(R.string.fines)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag(getString(R.string.loansissued)).setText(getString(R.string.new_loans)).setTabListener(this));
+        actionBar.addTab(actionBar.newTab().setTag(getString(R.string.cashbook)).setText(getString(R.string.cash_book)).setTabListener(this));
 
         //Do not show the Send Data tab when in READ_ONLY Mode
         if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
-            actionBar.addTab(actionBar.newTab().setTag("sendData").setText("Send Data").setTabListener(this));
+            actionBar.addTab(actionBar.newTab().setTag(getString(R.string.senddata)).setText(getString(R.string.send_data)).setTabListener(this));
         }
 
-        if (getIntent().hasExtra("_tabToSelect")) {
-            String tabTag = getIntent().getStringExtra("_tabToSelect");
-            if (tabTag.equalsIgnoreCase("savings")) {
+        if (getIntent().hasExtra(getString(R.string._tabtoselect))) {
+            String tabTag = getIntent().getStringExtra(getString(R.string._tabtoselect));
+            if (tabTag.equalsIgnoreCase(getString(R.string.savings))) {
                 actionBar.selectTab(actionBar.getTabAt(3));
-            } else if (tabTag.equalsIgnoreCase("startingCash")) {
+            } else if (tabTag.equalsIgnoreCase(getString(R.string.startingcash))) {
                 actionBar.selectTab(actionBar.getTabAt(2));
-            } else if (tabTag.equalsIgnoreCase("loansRepaid")) {
+            } else if (tabTag.equalsIgnoreCase(getString(R.string.loansrepaid))) {
                 actionBar.selectTab(actionBar.getTabAt(6));
-            } else if (tabTag.equalsIgnoreCase("loansIssued")) {
+            } else if (tabTag.equalsIgnoreCase(getString(R.string.loanissued))) {
                 actionBar.selectTab(actionBar.getTabAt(8));
-            } else if (tabTag.equalsIgnoreCase("cashBook")) {
+            } else if (tabTag.equalsIgnoreCase(getString(R.string.cashbook))) {
                 actionBar.selectTab(actionBar.getTabAt(9));
-            } else if (tabTag.equalsIgnoreCase("fines")) {
+            } else if (tabTag.equalsIgnoreCase(getString(R.string.fines))) {
                 actionBar.selectTab(actionBar.getTabAt(7));
-            } else if (tabTag.equalsIgnoreCase("rollCall")) {
+            } else if (tabTag.equalsIgnoreCase(getString(R.string.rollcall))) {
                 actionBar.selectTab(actionBar.getTabAt(0));
-            } else if (tabTag.equalsIgnoreCase("welfare")){
+            } else if (tabTag.equalsIgnoreCase(getString(R.string.welfare_smallcaps))){
                 actionBar.selectTab(actionBar.getTabAt(4));
-            } else if (tabTag.equalsIgnoreCase("outstandingWelfare")){
+            } else if (tabTag.equalsIgnoreCase(getString(R.string.outstandingwelfare))){
                 actionBar.selectTab(actionBar.getTabAt(5));
             }
         }
@@ -196,7 +196,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.meeting, menu);
         if (Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
             menu.findItem(R.id.mnuMeetingFineMember).setEnabled(false);
@@ -285,53 +285,53 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         String selectedTag = (String) tab.getTag();
-        SherlockFragment fragment;
+        Fragment fragment;
 
         mActionMode = null;
 
-        if (selectedTag.equalsIgnoreCase("summary")) {
+        if (selectedTag.equalsIgnoreCase(getString(R.string.summary))) {
             fragment = new MeetingSummaryFrag();
             getSupportFragmentManager().beginTransaction()
                     .replace(android.R.id.content, fragment).commit();
-        } else if (selectedTag.equalsIgnoreCase("rollCall")) {
+        } else if (selectedTag.equalsIgnoreCase(getString(R.string.rollcall))) {
             fragment = new MeetingRollCallFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        } else if (selectedTag.equalsIgnoreCase("startingCash")) {
+        } else if (selectedTag.equalsIgnoreCase(getString(R.string.startingcash))) {
             fragment = new MeetingStartingCashFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        } else if (selectedTag.equalsIgnoreCase("savings")) {
+        } else if (selectedTag.equalsIgnoreCase(getString(R.string.savings))) {
             fragment = new MeetingSavingsFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        } else if (selectedTag.equalsIgnoreCase("loansRepaid")) {
+        } else if (selectedTag.equalsIgnoreCase(getString(R.string.loansrepaid))) {
             fragment = new MeetingLoansRepaidFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        } else if (selectedTag.equalsIgnoreCase("fines")) {
+        } else if (selectedTag.equalsIgnoreCase(getString(R.string.fines))) {
             fragment = new MeetingFinesFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        } else if (selectedTag.equalsIgnoreCase("loansIssued")) {
+        } else if (selectedTag.equalsIgnoreCase(getString(R.string.loansissued))) {
             fragment = new MeetingLoansIssuedFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
-        } else if (selectedTag.equalsIgnoreCase("cashBook")) {
+        } else if (selectedTag.equalsIgnoreCase(getString(R.string.cashbook))) {
             fragment = new MeetingCashBookFrag();
             fragmentTransaction.replace(android.R.id.content, fragment);
 
             //Create an Context Action Bar Menu
             //mActionMode = MeetingActivity.this.startActionMode(cashBookActionModeCallback);
-        } else if (selectedTag.equalsIgnoreCase("sendData")) {
+        } else if (selectedTag.equalsIgnoreCase(getString(R.string.senddata))) {
             try {
                 fragment = new MeetingSendDataFrag();
                 fragmentTransaction.replace(android.R.id.content, fragment);
             }catch(Exception e){
                 Toast.makeText(MeetingActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
-        } else if(selectedTag.equalsIgnoreCase("welfare")) {
+        } else if(selectedTag.equalsIgnoreCase(getString(R.string.welfare))) {
             try {
                 fragment = new MeetingWelfareFrag();
                 fragmentTransaction.replace(android.R.id.content, fragment);
             }catch(Exception e){
                 Toast.makeText(MeetingActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        }else if(selectedTag.equalsIgnoreCase("outstandingWelfare")){
+        }else if(selectedTag.equalsIgnoreCase(getString(R.string.outstandingwelfare))){
             try {
                 fragment = new MeetingOutstandingWelfareFrag();
                 fragmentTransaction.replace(android.R.id.content, fragment);
@@ -390,7 +390,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.mnuMCBFSave:
-                    Toast.makeText(MeetingActivity.this, "Selected menu",
+                    Toast.makeText(MeetingActivity.this, R.string.selected_menu,
                             Toast.LENGTH_LONG).show();
                     mode.finish(); // Action picked, so close the CAB
                     return true;
@@ -437,7 +437,7 @@ public class MeetingActivity extends SherlockFragmentActivity implements ActionB
 //            String baseUrl = "http://127.0.0.1:82";
             String baseUrl = "http://" + financialInstitution.getIpAddress();
 
-            serverUri = String.format("%s/%s/%s", baseUrl, "DigitizingData", "submitdata");
+            serverUri = String.format("%s/%s/%s", baseUrl, getString(R.string.digitizingdata), getString(R.string.submitdata));
             new SubmitDataAsync(this).execute(serverUri, String.valueOf(jsonObject));
         }catch (JSONException e){
             e.printStackTrace();

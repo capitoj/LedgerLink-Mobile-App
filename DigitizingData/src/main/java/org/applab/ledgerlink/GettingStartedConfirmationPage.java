@@ -10,17 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.TypefaceTextView;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.MeetingSavingRepo;
 
-public class GettingStartedConfirmationPage extends SherlockActivity {
+public class GettingStartedConfirmationPage extends ActionBarActivity{
 
 
     private ActionBar actionBar;
@@ -45,18 +45,18 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
         // Set instructions
         TypefaceTextView lblConfirmationText = (TypefaceTextView) findViewById(R.id.lblConfirmationText);
 
-        SpannableString doneText = new SpannableString("done");
+        SpannableString doneText = new SpannableString(getString(R.string.done));
         // doneText.setSpan(new StyleSpan(Typeface.BOLD), 0, doneText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        SpannableString backText = new SpannableString("back");
+        SpannableString backText = new SpannableString(getString(R.string.back));
         // backText.setSpan(new StyleSpan(Typeface.BOLD), 0, backText.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         SpannableStringBuilder instruction = new SpannableStringBuilder();
-        instruction.append("If you are satisfied that all information is correct, please press <b> ");
+        instruction.append(getString(R.string.if_you_satisfied_that_all_info_correct));
         instruction.append(doneText);
-        instruction.append("</b> otherwise press <b>");
+        instruction.append(getString(R.string.otherwise_press));
         instruction.append(backText);
-        instruction.append("</b> to revise information.");
+        instruction.append(getString(R.string.to_revise_info));
 
         lblConfirmationText.setText(Html.fromHtml(instruction.toString()));
 
@@ -106,10 +106,10 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
 
             // Update text
             TextView heading = (TextView) findViewById(R.id.lblConfirmationHeading);
-            heading.setText("Thank you!");
+            heading.setText(R.string.thank_you);
 
             TextView content = (TextView) findViewById(R.id.lblConfirmationText);
-            content.setText("You have entered all information about your savings group and the current cycle. You may now use the phone at every meeting to enter savings and loan activity.");
+            content.setText(R.string.you_have_entered_all_info);
             confirmed = true;
 
             // Enable home button
@@ -169,7 +169,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("GET STARTED");
+        actionBar.setTitle(getString(R.string.get_started_allcaps));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         /** actionBar.setDisplayOptions(
@@ -189,7 +189,7 @@ public class GettingStartedConfirmationPage extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //final MenuInflater inflater = getSupportMenuInflater();
+        //final MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.done_cancel, menu);
 
         return true;

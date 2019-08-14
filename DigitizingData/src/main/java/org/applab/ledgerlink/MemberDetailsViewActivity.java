@@ -15,11 +15,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -35,10 +35,10 @@ import java.util.Calendar;
 /**
  * Created by Moses on 6/26/13.
  */
-public class MemberDetailsViewActivity extends SherlockActivity {
+public class MemberDetailsViewActivity extends ActionBarActivity{
     private ActionBar actionBar;
     private int selectedMemberId = -1;
-    private String selectedMemberNames = "VSLA Member";
+    private String selectedMemberNames = getString(R.string.vsla_member);
     protected Context context;
 
     LedgerLinkApplication ledgerLinkApplication;
@@ -64,7 +64,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
             if (b.containsKey("_names")) {
                 //getString(key, defValue) was added in API 12. Use getString(key), as this will return null if the key doesn't exist.
                 String value = b.getString("_names");
-                selectedMemberNames = (null != value) ? value : "Unknown Member";
+                selectedMemberNames = (null != value) ? value : getString(R.string.unknown_member);
             }
             //Toast.makeText(getBaseContext(),String.format("Member Names: %s",selectedMemberNames),Toast.LENGTH_LONG).show();
             actionBar.setTitle(selectedMemberNames);
@@ -128,7 +128,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.members_details_view, menu);
         return true;
     }
@@ -225,11 +225,11 @@ public class MemberDetailsViewActivity extends SherlockActivity {
             //Show the heading
             //Get the date of the dummy GSW meeting
             String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her" : "his";
-            lblMDMiddleCycleInformationHeading.setText("This member’s information was added after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+            lblMDMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added) + pronoun + getString(R.string.total_savings_and_outstanding_loans));
 
             Meeting dummyGSWMeeting = ledgerLinkApplication.getMeetingRepo().getDummyGettingStartedWizardMeeting();
             if (dummyGSWMeeting != null) {
-                lblMDMiddleCycleInformationHeading.setText("This member’s information was added on " + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+                lblMDMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
             }
 
 
@@ -262,14 +262,14 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     }
 
     private void navigateBack() {
-        String caller = "reviewMembers";
+        String caller = getString(R.string.reviewmembers);
         Intent i;
 
         if (getIntent().hasExtra("_caller")) {
             caller = getIntent().getStringExtra("_caller");
         }
 
-        if (caller.equalsIgnoreCase("newCyclePg2")) {
+        if (caller.equalsIgnoreCase(getString(R.string.new_cycle_pg2))) {
             i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
             startActivity(i);
         } else {
@@ -291,7 +291,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
                     loadEditWindow();
                 }
             };
-            DialogMessageBox.show(context, "Member Reactivation", "Are you sure you would like to reactivate " + member.getSurname() + " " + member.getOtherNames(), runnable);
+            DialogMessageBox.show(context, getString(R.string.member_reactivation), getString(R.string.sure_you_like_reactivate) + member.getSurname() + " " + member.getOtherNames(), runnable);
         }
     }
 
@@ -306,15 +306,15 @@ public class MemberDetailsViewActivity extends SherlockActivity {
     private boolean delete() {
         final Member selMember = ledgerLinkApplication.getMemberRepo().getMemberById(selectedMemberId);
         if (selMember == null) {
-            Utils.createAlertDialogOk(MemberDetailsViewActivity.this, "Remove Member", "System failed to retrieve the member's records.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(MemberDetailsViewActivity.this, getString(R.string.remove_member), getString(R.string.system_failed_to_retrieve_member_records), Utils.MSGBOX_ICON_EXCLAMATION).show();
             return false;
         }
 
         AlertDialog.Builder ad = new AlertDialog.Builder(MemberDetailsViewActivity.this);
-        ad.setTitle("Archive Member");
-        ad.setMessage("Are you sure you would like to archive this member?");
+        ad.setTitle(R.string.archive_member);
+        ad.setMessage(R.string.sure_you_would_like_to_archive_member);
         ad.setPositiveButton(
-                "Yes", new DialogInterface.OnClickListener() {
+                R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
                         MemberRepo memberRepo = new MemberRepo(getApplicationContext(), selectedMemberId);
                         memberRepo.archiveMember();
@@ -324,7 +324,7 @@ public class MemberDetailsViewActivity extends SherlockActivity {
                 }
         );
         ad.setNegativeButton(
-                "No", new DialogInterface.OnClickListener() {
+                R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
 
                     }

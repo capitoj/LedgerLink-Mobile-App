@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/mnuMDVEdit"
           android:title="@string/edit"
           android:orderInCategory="1"
-          android:showAsAction="never"
+          app:showAsAction="never"
           android:icon="@drawable/ic_content_edit"
             />
 
     <item android:id="@+id/mnuMDVDelete"
           android:title="@string/archive"
           android:orderInCategory="2"
-          android:showAsAction="never"
+          app:showAsAction="never"
           android:icon="@drawable/ic_action_discard"
             />
     <item android:id="@+id/mnuMDVBack"
           android:title="@string/back"
           android:orderInCategory="3"
-          android:showAsAction="never"
+          app:showAsAction="never"
           android:icon="@drawable/ic_navigation_back"
             />
 </menu>

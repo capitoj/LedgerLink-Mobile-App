@@ -12,9 +12,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
@@ -27,7 +27,7 @@ import org.applab.ledgerlink.repo.MeetingOutstandingWelfareRepo;
 import java.util.Calendar;
 import java.util.Date;
 
-public class AddBorrowFromWelfareMeetingActivity extends SherlockActivity {
+public class AddBorrowFromWelfareMeetingActivity extends ActionBarActivity{
 
     LedgerLinkApplication ledgerLinkApplication;
     private int selectedMemberId;
@@ -98,7 +98,7 @@ public class AddBorrowFromWelfareMeetingActivity extends SherlockActivity {
 
                 viewClicked = (TextView) view;
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddBorrowFromWelfareMeetingActivity.this, mDateSetListener, mYear, mMonth, mDay);
-                datePickerDialog.setTitle("Set the outstanding welfare due date");
+                datePickerDialog.setTitle(getString(R.string.set_the_outstanding_welfare_due_date));
                 datePickerDialog.show();
             }
         });
@@ -154,7 +154,7 @@ public class AddBorrowFromWelfareMeetingActivity extends SherlockActivity {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setTitle("Borrow From Welfare");
+        actionBar.setTitle(R.string.borrow_from_welfare);
 
         // Set to false to remove caret and disable its function; if designer decides otherwise set both to true
         actionBar.setHomeButtonEnabled(false);
@@ -184,18 +184,18 @@ public class AddBorrowFromWelfareMeetingActivity extends SherlockActivity {
         }
         this.meetingOutstandingWelfare = new MeetingOutstandingWelfare();
 
-        String dlgTitle = "Borrow From Welfare";
+        String dlgTitle = getString(R.string.borrow_from_welfare_main);
 
         EditText txtIssueMemberWelfareAmount = (EditText) findViewById(R.id.txtIssueMemberWelfareAmount);
         String outstandingWelfareAmount = txtIssueMemberWelfareAmount.getText().toString().trim();
         if(outstandingWelfareAmount.length() == 0){
-            Utils.createAlertDialogOk(this, dlgTitle, "The welfare amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.welfare_amount_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
             txtIssueMemberWelfareAmount.requestFocus();
             return false;
         }else{
             double disbursedWelfareAmount = Double.parseDouble(outstandingWelfareAmount);
             if(disbursedWelfareAmount < 1){
-                Utils.createAlertDialogOk(this, dlgTitle, "The welfare amount is invalid", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.welfare_amount_invalid), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtIssueMemberWelfareAmount.requestFocus();
                 return false;
             }else{

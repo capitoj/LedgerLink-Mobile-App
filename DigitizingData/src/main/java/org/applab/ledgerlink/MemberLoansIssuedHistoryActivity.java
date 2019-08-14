@@ -2,6 +2,7 @@ package org.applab.ledgerlink;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -13,11 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
@@ -34,10 +35,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+
 /**
  * Created by Moses on 7/12/13.
  */
-public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
+public class MemberLoansIssuedHistoryActivity extends ListActivity {
     private String meetingDate;
     private int meetingId;
     private int memberId;
@@ -208,7 +211,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                                                      }
 
                                                      if (theAmount == 0.0) {
-                                                         txtDateDue.setText("none");
+                                                         txtDateDue.setText(getString(R.string.none_main));
                                                          lblCurrency.setVisibility(View.GONE);
                                                      } else {
                                                          lblCurrency.setVisibility(View.GONE);
@@ -312,7 +315,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
     private void inflateCustomActionBar() {
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
@@ -322,12 +325,12 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                         if (saveMemberLoan()) {
                             if (currentLoanId > 0) {
                                 if (loanWasDeleted) {
-                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, "The Loan has been cancelled.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_been_cancelled, Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, "The Loan has been edited successfully", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_edited_successfully, Toast.LENGTH_LONG).show();
                                 }
                             } else {
-                                Toast.makeText(MemberLoansIssuedHistoryActivity.this, "New Loan issued successfully", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_issued_successfully, Toast.LENGTH_LONG).show();
                             }
                             goBackToLoansIssuedFragment();
                         }
@@ -345,14 +348,14 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         );
 
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
 
-        actionBar.setTitle("New Loans");
+        actionBar.setTitle(R.string.new_loans);
 
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeButtonEnabled(false);
@@ -382,7 +385,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         Intent i = new Intent(this, MeetingMemberLoansIssueActivity.class);
         i.putExtra("_memberId", this.memberId);
         i.putExtra("_meetingId", this.meetingId);
-        i.putExtra("_action", "loanissue");
+        i.putExtra("_action", getString(R.string.loanissue));
         i.putExtra("_meetingDate", meetingDate);
         i.putExtra("_totalCashInBox", totalCashInBox);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -414,7 +417,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.member_loans_issued_history, menu);
         return true;
     }
@@ -425,7 +428,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MeetingActivity.class);
-                upIntent.putExtra("_tabToSelect", "loansIssued");
+                upIntent.putExtra("_tabToSelect", getString(R.string.loanissued));
                 upIntent.putExtra("_meetingDate", meetingDate);
                 upIntent.putExtra("_meetingId", meetingId);
 
@@ -441,7 +444,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
                 return true;
             case R.id.mnuMLIssuedHCancel:
                 i = new Intent(MemberLoansIssuedHistoryActivity.this, MeetingActivity.class);
-                i.putExtra("_tabToSelect", "loansIssued");
+                i.putExtra("_tabToSelect", getString(R.string.loanissued));
                 i.putExtra("_meetingDate", meetingDate);
                 i.putExtra("_meetingId", meetingId);
                 startActivity(i);
@@ -450,7 +453,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             case R.id.mnuMLIssuedHSave:
                 if (saveMemberLoan()) {
                     i = new Intent(MemberLoansIssuedHistoryActivity.this, MeetingActivity.class);
-                    i.putExtra("_tabToSelect", "loansIssued");
+                    i.putExtra("_tabToSelect", getString(R.string.loanissued));
                     i.putExtra("_meetingDate", meetingDate);
                     i.putExtra("_meetingId", meetingId);
                     startActivity(i);
@@ -478,7 +481,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             String amount = txtLoanAmount.getText().toString().trim();
 
             if (amount.length() < 1) {
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Amount is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.loan_amount_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanAmount.requestFocus();
                 return false;
             } else {
@@ -487,19 +490,19 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
 
                 // Loan Amounts for new loans must be positive
                 if (theAmount < 0.00 && currentLoanId > 0) {
-                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.loan_amount_invalid), Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtLoanAmount.requestFocus();
                     return false;
                 } else if (totalCashInBox > 0) {
                     if (theAmount > totalCashInBox) {
-                        Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "You do not have enough money in the box to meet this loan amount.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                        Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.no_enough_money_inbox_for_loan), Utils.MSGBOX_ICON_EXCLAMATION).show();
                         txtLoanAmount.requestFocus();
                         return false;
                     }
                 } else {
                     if (isEditOperation) {
                         if (theAmount < thePrincipalLoanAmount) {
-                            Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The new amount should be more than the original amount.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                            Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.new_amount_be_more_than_original_amount), Utils.MSGBOX_ICON_EXCLAMATION).show();
                             txtLoanAmount.requestFocus();
                             return false;
                         }
@@ -510,14 +513,14 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             }
             String loanNo = txtLoanNo.getText().toString().trim();
             if (loanNo.length() < 1) {
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Number is required.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.loan_no_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanNo.requestFocus();
                 return false;
             }
 
             theLoanNo = Integer.valueOf(loanNo);
             if(theLoanNo < 0.00){
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The Loan Number is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.loan_no_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanNo.requestFocus();
                 return false;
             }
@@ -526,7 +529,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             int cycleID = meetingRepo.getMeeting().getVslaCycle().getCycleId();
             boolean hasLoanNo = MeetingLoanIssuedRepo.hasLoanNumber(this, cycleID, theLoanNo);
             if(hasLoanNo && theAmount > 0.00){
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "New Loan", "The loan number " + String.valueOf(theLoanNo) + " already exists.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.loan_no) + String.valueOf(theLoanNo) + " already exists.", Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanNo.requestFocus();
                 return false;
             }
@@ -548,7 +551,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             } else {
                 theInterestAmount = Double.parseDouble(interestAmount);
                 if (theInterestAmount < 0.00) {
-                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue", "The Interest Amount is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.loan_issue), getString(R.string.interest_amount_invalid), Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtInterestAmount.requestFocus();
                     return false;
                 }
@@ -559,7 +562,7 @@ public class MemberLoansIssuedHistoryActivity extends SherlockListActivity {
             String dateDue = txtDateDue.getText().toString().trim();
             Date dtDateDue = Utils.getDateFromString(dateDue, Utils.DATE_FIELD_FORMAT);
             if (dtDateDue.before(targetMeeting.getMeetingDate()) || dtDateDue.equals(targetMeeting.getMeetingDate())) {
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, "Loan Issue", "The due date has to be a future date.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.loan_issue), getString(R.string.due_date_be_future_date), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtDateDue.requestFocus();
                 return false;
             } else {

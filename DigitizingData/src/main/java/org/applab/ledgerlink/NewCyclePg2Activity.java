@@ -1,5 +1,6 @@
 package org.applab.ledgerlink;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -10,10 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -24,10 +25,12 @@ import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.util.ArrayList;
 
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+
 /**
  * Created by Moses on 6/28/13.
  */
-public class NewCyclePg2Activity extends SherlockListActivity {
+public class NewCyclePg2Activity extends ListActivity {
     ActionBar actionBar;
     ArrayList<Member> members = null;
     boolean isUpdateCycleAction = false;
@@ -46,10 +49,10 @@ public class NewCyclePg2Activity extends SherlockListActivity {
         }
 
         if(isUpdateCycleAction) {
-            actionBar.setTitle("Edit Cycle");
+            actionBar.setTitle(R.string.edit_cycle);
         }
         else {
-            actionBar.setTitle("New Cycle");
+            actionBar.setTitle(R.string.new_cycle);
         }
 
         //Populate the Members
@@ -61,7 +64,7 @@ public class NewCyclePg2Activity extends SherlockListActivity {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(runnable, "Please wait...", "Loading member list...", NewCyclePg2Activity.this );
+        LongTaskRunner.runLongTask(runnable, getString(R.string.please_wait), getString(R.string.loading_member_list), NewCyclePg2Activity.this );
 
     }
 
@@ -70,7 +73,7 @@ public class NewCyclePg2Activity extends SherlockListActivity {
 
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
 
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
         customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_exit_enternext_done, null);
@@ -124,7 +127,7 @@ public class NewCyclePg2Activity extends SherlockListActivity {
                 }
         );
 
-        actionBar = getSupportActionBar();
+        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
