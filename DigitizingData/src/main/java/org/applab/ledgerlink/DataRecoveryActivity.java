@@ -7,10 +7,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.domain.model.DataRecovery;
 import org.applab.ledgerlink.helpers.Utils;
@@ -20,7 +20,7 @@ import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONObject;
 
 
-public class DataRecoveryActivity extends SherlockActivity {
+public class DataRecoveryActivity extends ActionBarActivity{
 
     protected int clickIndex;
     protected DataRecovery dataRecovery;
@@ -30,7 +30,7 @@ public class DataRecoveryActivity extends SherlockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_recovery);
-        getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         this.clickIndex = 0;
         this.dataRecovery = new DataRecovery();
@@ -39,7 +39,7 @@ public class DataRecoveryActivity extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.menu_data_recovery, menu);
+        getMenuInflater().inflate(R.menu.menu_data_recovery, menu);
         setMenuAction(menu);
         return true;
     }
@@ -57,7 +57,7 @@ public class DataRecoveryActivity extends SherlockActivity {
 
     protected Spinner buildVslaRegions(){
         cboDRVslaRegion = (Spinner) findViewById(R.id.cboDRVslaRegion);
-        String[] vslaRegions = new String[]{"None", "Busia", "Bugiri", "Iganga", "Namayingo"};
+        String[] vslaRegions = new String[]{getString(R.string.none), getString(R.string.busia), getString(R.string.bugiri), getString(R.string.iganga), getString(R.string.namayingo)};
         ArrayAdapter<CharSequence> regionAdapter = new DropDownAdapter(this, vslaRegions);
         regionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cboDRVslaRegion.setAdapter(regionAdapter);
@@ -71,7 +71,7 @@ public class DataRecoveryActivity extends SherlockActivity {
             if (clickIndex == 0) {
                 EditText txtDRVslaCode = (EditText)findViewById(R.id.txtDRVslaCode);
                 if (txtDRVslaCode.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, "Data Recovery", "The Vsla Code is required");
+                    DialogMessageBox.show(this, getString(R.string.action_recovery), getString(R.string.vsla_code_required));
                     txtDRVslaCode.requestFocus();
                     return;
                 }
@@ -83,7 +83,7 @@ public class DataRecoveryActivity extends SherlockActivity {
             } else if (clickIndex == 1) {
                 EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRPassKey);
                 if (txtDRPassKey.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, "Data Recovery", "The Pass Key is required");
+                    DialogMessageBox.show(this, getString(R.string.action_recovery), getString(R.string.pass_key_required));
                     txtDRPassKey.requestFocus();
                     return;
                 }
@@ -95,7 +95,7 @@ public class DataRecoveryActivity extends SherlockActivity {
             } else if (clickIndex == 2) {
                 EditText txtDRVslaName = (EditText)findViewById(R.id.txtDRVslaName);
                 if (txtDRVslaName.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, "Data Recovery", "The Vsla Name is required");
+                    DialogMessageBox.show(this, getString(R.string.action_recovery), getString(R.string.vsla_name_required));
                     txtDRVslaName.requestFocus();
                     return;
                 }
@@ -107,7 +107,7 @@ public class DataRecoveryActivity extends SherlockActivity {
             } else if (clickIndex == 3) {
                 EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRContactPerson);
                 if (txtDRContactPerson.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, "Data Recovery", "The name of the Contact Person is required");
+                    DialogMessageBox.show(this, getString(R.string.action_recovery), getString(R.string.name_contact_person_required));
                     txtDRContactPerson.requestFocus();
                     return;
                 }
@@ -119,7 +119,7 @@ public class DataRecoveryActivity extends SherlockActivity {
             } else if (clickIndex == 4) {
                 EditText txtDRPhoneNumber = (EditText)findViewById(R.id.txtDRPhoneNumber);
                 if (txtDRPhoneNumber.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, "Data Recovery", "The Phone Number of the contact person is required");
+                    DialogMessageBox.show(this, getString(R.string.action_recovery), getString(R.string.phone_no_contact_person_required));
                     txtDRPhoneNumber.requestFocus();
                     return;
                 }
@@ -131,7 +131,7 @@ public class DataRecoveryActivity extends SherlockActivity {
             } else if (clickIndex == 5) {
                 EditText txtDRPositionInVsla = (EditText)findViewById(R.id.txtDRPositionInVsla);
                 if (txtDRPositionInVsla.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, "Data Recovery", "The Position of the contact person is required");
+                    DialogMessageBox.show(this, getString(R.string.action_recovery), getString(R.string.position_contact_person_required));
                     txtDRPositionInVsla.requestFocus();
                     return;
                 }
@@ -144,7 +144,7 @@ public class DataRecoveryActivity extends SherlockActivity {
             } else if (clickIndex == 6) {
                 EditText txtDRNoOfMembers = (EditText)findViewById(R.id.txtDRNoOfMembers);
                 if (txtDRNoOfMembers.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, "Data Recovery", "The number of members in the Vsla Group is required");
+                    DialogMessageBox.show(this, getString(R.string.action_recovery), getString(R.string.no_of_member_in_vsla_group_required));
                     txtDRNoOfMembers.requestFocus();
                     return;
                 }
@@ -155,8 +155,8 @@ public class DataRecoveryActivity extends SherlockActivity {
                 clickIndex++;
             } else if (clickIndex == 7) {
                 String region = cboDRVslaRegion.getSelectedItem().toString();
-                if(region.toLowerCase().equals("none")){
-                    DialogMessageBox.show(this, "Data Recovery", "The Region in which the Vsla was registered is required");
+                if(region.toLowerCase().equals(getString(R.string.none))){
+                    DialogMessageBox.show(this, getString(R.string.action_recovery), getString(R.string.region_which_vsla_registered));
                     cboDRVslaRegion.requestFocus();
                     return;
                 }
@@ -182,8 +182,8 @@ public class DataRecoveryActivity extends SherlockActivity {
                         new DataRecoveryAsync(DataRecoveryActivity.this).execute(serverUri, jsonRequest);
                     }
                 };
-                String warning = "This action will delete all the VSLA information in the phone. Are you sure you would like to proceed with the data recovery for " + dataRecovery.getVslaName();
-                DialogMessageBox.show(this, "Warning!", warning, runnable);
+                String warning = getString(R.string.action_will_delete_all_vsla_info) + dataRecovery.getVslaName();
+                DialogMessageBox.show(this, getString(R.string.warning), warning, runnable);
             }
         }catch (Exception e){
             e.printStackTrace();

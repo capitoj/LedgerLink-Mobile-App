@@ -11,9 +11,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.TrainingModuleRepo;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class LedgerLinkTrainingActivity extends SherlockActivity {
+public class LedgerLinkTrainingActivity extends ActionBarActivity{
 
     protected ListView listView;
     protected List<LedgerLinkTraining> itemList;
@@ -35,7 +35,7 @@ public class LedgerLinkTrainingActivity extends SherlockActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ledger_link_training);
 
-        getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         this.context = this;
         this.moduleId = getIntent().getIntExtra("ModuleId", 0);
@@ -47,12 +47,12 @@ public class LedgerLinkTrainingActivity extends SherlockActivity {
 
     protected void populateListView(){
         itemList = new ArrayList<LedgerLinkTraining>();
-        itemList.add(new LedgerLinkTraining("Day 1: Introduction to Ledger Link"));
-        itemList.add(new LedgerLinkTraining("Day 2: Smart Phone Usage"));
-        itemList.add(new LedgerLinkTraining("Day 3: Ledger Link Review"));
-        itemList.add(new LedgerLinkTraining("Day 4: Sending Data"));
-        itemList.add(new LedgerLinkTraining("Day 5: Data Migration"));
-        itemList.add(new LedgerLinkTraining("Day 6: Ledger Link Assessment"));
+        itemList.add(new LedgerLinkTraining(getString(R.string.intor_to_ledgerlink)));
+        itemList.add(new LedgerLinkTraining(getString(R.string.smarrt_phone_usage)));
+        itemList.add(new LedgerLinkTraining(getString(R.string.ledgerlink_review)));
+        itemList.add(new LedgerLinkTraining(getString(R.string.sending_data)));
+        itemList.add(new LedgerLinkTraining(getString(R.string.data_migation)));
+        itemList.add(new LedgerLinkTraining(getString(R.string.ledgerlink_assessment)));
 
         ArrayAdapter<LedgerLinkTraining> adapter = new LedgerLinkTrainingAdapter(this, itemList);
         listView.setAdapter(adapter);
@@ -61,7 +61,7 @@ public class LedgerLinkTrainingActivity extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.menu_ledger_link_training, menu);
+        getMenuInflater().inflate(R.menu.menu_ledger_link_training, menu);
         setMenuAction(menu);
         return true;
     }
@@ -86,9 +86,9 @@ public class LedgerLinkTrainingActivity extends SherlockActivity {
                     }
                 }
                 if(count == 0){
-                    Toast.makeText(context, "You have not selected any trainings", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.not_selected_any_trainings, Toast.LENGTH_LONG).show();
                 }else{
-                    Toast.makeText(context, "The selected trainings have been saved successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.seleced_trainings_saved_successfully, Toast.LENGTH_LONG).show();
                     finish();
                 }
                 return true;

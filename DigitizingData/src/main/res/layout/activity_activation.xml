@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/white">
 
    <!-- <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -69,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/listVAFinanicalInstitution"
-                android:text="VSLA Number"
+                android:text="@string/vsla_number"
                 android:layout_alignLeft="@+id/txtVAVslaCode"
                 android:layout_alignRight="@+id/txtVAVslaCode"
                 android:paddingTop="2dip"
@@ -80,7 +81,7 @@
                 android:id="@+id/txtVAVslaCode"
                 android:layout_width="265dip"
                 android:layout_height="wrap_content"
-                android:hint="Enter VSLA Number"
+                android:hint="@string/enter_vsla_number"
                 android:inputType="textCapCharacters"
                 android:layout_below="@id/lblVAVslaCode"/>
             <requestFocus />
@@ -91,7 +92,7 @@
                 style="@style/RegularTextLogin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Create a Passkey"
+                android:text="@string/create_a_passkey"
                 android:layout_below="@id/txtVAVslaCode"
                 android:layout_alignRight="@id/txtVAVslaCode"
                 android:layout_alignLeft="@+id/txtVAVslaCode" />
@@ -112,7 +113,7 @@
                 android:layout_width="265dip"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lblVAPassKeyInfo"
-                android:hint="Enter Passkey Here"
+                android:hint="@string/enter_passkey_here"
                 android:inputType="numberPassword"
                 android:textAlignment="center" />
 
@@ -122,9 +123,10 @@
                 android:layout_width="265dip"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtVAPassKey"
-                android:hint="Re-enter Passkey Here"
+                android:hint="@string/re_enter_passkey_here"
                 android:layout_marginTop="20dip"
-                android:inputType="numberPassword" />
+                android:inputType="numberPassword"
+                android:layout_alignEnd="@+id/txtVAPassKey" />
 
             <org.applab.ledgerlink.fontutils.TypefaceButton
                 android:id="@+id/btnVAActivate"
@@ -132,7 +134,7 @@
                 android:layout_width="265dip"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtVAConfirmPassKey"
-                android:text="Register"
+                android:text="@string/register_button"
 
 
                 />
@@ -156,7 +158,7 @@
                 android:layout_marginLeft="1dip"
                 android:layout_marginTop="2dip"
                 android:layout_marginBottom="1dip"
-                android:text="version number" />
+                android:text="@string/version_number" />
 
         </RelativeLayout>
 

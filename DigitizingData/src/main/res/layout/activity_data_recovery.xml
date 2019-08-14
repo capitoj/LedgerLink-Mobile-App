@@ -7,7 +7,7 @@
     tools:context="org.applab.ledgerlink.DataRecoveryActivity">
 
     <TextView
-        android:text="To recover your data, kindly fill in the following information"
+        android:text="@string/to_recover_your_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lblDRTitle"
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lblDRVslaCode"
-        android:text="VSLA Code"
+        android:text="@string/vsla_code"
         android:paddingTop="40dp"
         android:layout_below="@+id/lblDRTitle"/>
     

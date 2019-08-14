@@ -1,16 +1,17 @@
 package org.applab.ledgerlink;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.AdapterView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -21,10 +22,12 @@ import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.util.ArrayList;
 
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+
 /**
  * Created by Moses on 7/16/13.
  */
-public class MembersListActivity extends SherlockListActivity {
+public class MembersListActivity extends ListActivity {
     private ArrayList<Member> members;
     LedgerLinkApplication ledgerLinkApplication;
 
@@ -35,7 +38,7 @@ public class MembersListActivity extends SherlockListActivity {
 
         setContentView(R.layout.activity_members_list);
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -43,7 +46,7 @@ public class MembersListActivity extends SherlockListActivity {
         }
 
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Members");
+        actionBar.setTitle(R.string.members);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -58,14 +61,14 @@ public class MembersListActivity extends SherlockListActivity {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(populateMembers, "Please wait...", "Loading member list...", MembersListActivity.this);
+        LongTaskRunner.runLongTask(populateMembers, getString(R.string.please_wait), getString(R.string.loading_member_list), MembersListActivity.this);
 
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.members_list, menu);
         return true;
     }
@@ -136,7 +139,7 @@ public class MembersListActivity extends SherlockListActivity {
                 b.putInt("_id", selectedMember.getMemberId());
                 b.putString("_names", selectedMember.getFullName());
                 viewMember.putExtras(b);
-                viewMember.putExtra("_caller","reviewMembers");
+                viewMember.putExtra("_caller",getString(R.string.reviewmembers));
                 viewMember.putExtra("_isEditAction",true);
                 startActivity(viewMember);
 

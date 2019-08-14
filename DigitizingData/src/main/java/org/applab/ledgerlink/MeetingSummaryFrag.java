@@ -1,6 +1,7 @@
 package org.applab.ledgerlink;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 
 import org.applab.ledgerlink.business_rules.VslaMeeting;
 import org.applab.ledgerlink.domain.model.Meeting;
@@ -24,14 +25,14 @@ import org.w3c.dom.Text;
 /**
  * Created by Moses on 6/25/13.
  */
-public class MeetingSummaryFrag extends SherlockFragment {
+public class MeetingSummaryFrag extends Fragment {
     private ActionBar actionBar;
     private ScrollView fragmentView;
     MeetingActivity parentActivity;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parentActivity = (MeetingActivity) getSherlockActivity();
+        parentActivity = (MeetingActivity) getActivity();
         setHasOptionsMenu(true);
     }
 
@@ -57,7 +58,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
         super.onActivityCreated(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        actionBar = getSherlockActivity().getSupportActionBar();
+        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
     }
 
@@ -68,41 +69,41 @@ public class MeetingSummaryFrag extends SherlockFragment {
     }
 
     private void populateMeetingSummary() {
-        String meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        String title = "Meeting";
+        String meetingDate = getActivity().getIntent().getStringExtra("_meetingDate");
+        String title = getString(R.string.meeting);
 
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
-                title = "Send Data";
+                title = getString(R.string.send_data);
                 break;
             case VIEW_MODE_READ_ONLY:
-                title = "Sent Data";
+                title = getString(R.string.send_data);
                 break;
             default:
                 break;
         }
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
-        //TextView lblMeetingDate = (TextView) getSherlockActivity().findViewById(R.id.lblMSFMeetingDate);
+        //TextView lblMeetingDate = (TextView) getActivity()().findViewById(R.id.lblMSFMeetingDate);
         // lblMeetingDate.setText(meetingDate);
-        int meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
-        int previousMeetingId = getSherlockActivity().getIntent().getIntExtra("_previousMeetingId", 0);
+        int meetingId = getActivity().getIntent().getIntExtra("_meetingId", 0);
+        int previousMeetingId = getActivity().getIntent().getIntExtra("_previousMeetingId", 0);
 
         //Get the Cycle that contains this meeting
         Meeting currentMeeting = parentActivity.ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
-        //Meeting previousMeeting = new MeetingRepo(getSherlockActivity().getApplicationContext()).getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), meetingId);
+        //Meeting previousMeeting = new MeetingRepo(getActivity()().getApplicationContext()).getPreviousMeeting(currentMeeting.getVslaCycle().getCycleId(), meetingId);
 
 
-        TextView lblMSFCollections = (TextView) getSherlockActivity().findViewById(R.id.lblMSFCollections);
-        TextView lblTotalSavings = (TextView) getSherlockActivity().findViewById(R.id.lblMSFTotalSavings);
-        TextView lblOutstandingLoans = (TextView) getSherlockActivity().findViewById(R.id.lblMSFOutstandingLoans);
-        TextView lblSectionLastMeeting = (TextView) getSherlockActivity().findViewById(R.id.lblMSFSection2);
-        TextView lblMSFLastWelfare = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastWelfare);
-        TextView lblMSFLastFines = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastFines);
-        TextView lblMSFLastCashFromBank = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastCashFromBank);
-        TextView lblMSFLastCashToBank = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastCashToBank);
-        TextView lblMSFLastLoanFromBank = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastLoanFromBank);
-        TextView lblMSFLastBankLoanRepayment = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastBankLoanRepayment);
+        TextView lblMSFCollections = (TextView) getActivity().findViewById(R.id.lblMSFCollections);
+        TextView lblTotalSavings = (TextView) getActivity().findViewById(R.id.lblMSFTotalSavings);
+        TextView lblOutstandingLoans = (TextView) getActivity().findViewById(R.id.lblMSFOutstandingLoans);
+        TextView lblSectionLastMeeting = (TextView) getActivity().findViewById(R.id.lblMSFSection2);
+        TextView lblMSFLastWelfare = (TextView) getActivity().findViewById(R.id.lblMSFLastWelfare);
+        TextView lblMSFLastFines = (TextView) getActivity().findViewById(R.id.lblMSFLastFines);
+        TextView lblMSFLastCashFromBank = (TextView) getActivity().findViewById(R.id.lblMSFLastCashFromBank);
+        TextView lblMSFLastCashToBank = (TextView) getActivity().findViewById(R.id.lblMSFLastCashToBank);
+        TextView lblMSFLastLoanFromBank = (TextView) getActivity().findViewById(R.id.lblMSFLastLoanFromBank);
+        TextView lblMSFLastBankLoanRepayment = (TextView) getActivity().findViewById(R.id.lblMSFLastBankLoanRepayment);
 
         double outstandingLoans = 0.0;
         double totalSavings = 0.0;
@@ -145,12 +146,12 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
 
         // TODO: Get Info about the Last Meeting: Previous Meeting in Current Cycle?
-        TextView txtAttendedCount = (TextView) getSherlockActivity().findViewById(R.id.lblMSFAttended);
-        TextView txtDataSent = (TextView) getSherlockActivity().findViewById(R.id.lblMSFDataSentStatus);
-        TextView txtTotalCollections = (TextView) getSherlockActivity().findViewById(R.id.lblMSFCollections);
-        TextView txtTotalSavings = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastSavings);
-        TextView txtTotalRepayments = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastLoansRepaid);
-        TextView txtTotalLoanIssues = (TextView) getSherlockActivity().findViewById(R.id.lblMSFLastLoansIssued);
+        TextView txtAttendedCount = (TextView) getActivity().findViewById(R.id.lblMSFAttended);
+        TextView txtDataSent = (TextView) getActivity().findViewById(R.id.lblMSFDataSentStatus);
+        TextView txtTotalCollections = (TextView) getActivity().findViewById(R.id.lblMSFCollections);
+        TextView txtTotalSavings = (TextView) getActivity().findViewById(R.id.lblMSFLastSavings);
+        TextView txtTotalRepayments = (TextView) getActivity().findViewById(R.id.lblMSFLastLoansRepaid);
+        TextView txtTotalLoanIssues = (TextView) getActivity().findViewById(R.id.lblMSFLastLoansIssued);
 
 
         //TODO: May be I should retrieve the previous meeting from the previousMeetingId that was sent here by the MeetingDefinitionActivity
@@ -166,7 +167,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
             previousMeeting = currentMeeting;
 
             //Also Rename the Section Marker
-            lblSectionLastMeeting.setText("Current Meeting Summary");
+            lblSectionLastMeeting.setText(R.string.current_meeting_summary);
         }
 
 
@@ -175,7 +176,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
             txtAttendedCount.setText(String.format("Attended: %d", parentActivity.ledgerLinkApplication.getMeetingAttendanceRepo().getAttendanceCountByMeetingId(previousMeeting.getMeetingId())));
 
-            txtDataSent.setText(String.format("Data: %s", (previousMeeting.isMeetingDataSent()) ? "Sent" : "Not Sent"));
+            txtDataSent.setText(String.format("Data: %s", (previousMeeting.isMeetingDataSent()) ? getString(R.string.sent) : getString(R.string.not_sent)));
 
             //TODO: Get Values for the Financials
             double totalMeetingSavings = 0.0;
@@ -183,7 +184,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
             double totalLoansIssuedInMeeting = 0.0;
             double totalLoansRepaidInMeeting = 0.0;
 
-            VslaMeeting prevVslaMeeting = new VslaMeeting(getSherlockActivity().getApplicationContext(), previousMeeting.getMeetingId());
+            VslaMeeting prevVslaMeeting = new VslaMeeting(getActivity().getApplicationContext(), previousMeeting.getMeetingId());
             Log.e("PreMeetingId", String.valueOf(previousMeeting.getLoanFromBank()));
 
             totalMeetingSavings = parentActivity.ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(previousMeeting.getMeetingId());
@@ -219,7 +220,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
 
 
             totalMeetingCollections = totalMeetingSavings + totalLoansRepaidInMeeting;
-            lblMSFCollections.setText(String.format("Total Collections: %,.0f UGX", VslaMeeting.getTotalCashInBox(getSherlockActivity().getApplicationContext(), previousMeeting.getMeetingId())));
+            lblMSFCollections.setText(String.format("Total Collections: %,.0f UGX", VslaMeeting.getTotalCashInBox(getActivity().getApplicationContext(), previousMeeting.getMeetingId())));
 
 
         } else {
@@ -263,7 +264,7 @@ public class MeetingSummaryFrag extends SherlockFragment {
                     parent.removeView(txtTotalLoanIssues);
 
                     //Also Remove the Section Marker
-                    TextView lblSectionLastMeeting = (TextView)getSherlockActivity().findViewById(R.id.lblMSFSection2);
+                    TextView lblSectionLastMeeting = (TextView)getActivity().findViewById(R.id.lblMSFSection2);
                     parent.removeView(lblSectionLastMeeting);
                 }
             }*/

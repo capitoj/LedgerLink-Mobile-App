@@ -7,14 +7,14 @@
     tools:context="org.applab.ledgerlink.MODActivity">
 
     <TextView
-        android:text="Mobile Overdraft Results"
+        android:text="@string/mobile_overdraft_results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lblMODHeader"
         android:padding="5dp"/>
 
     <TextView
-        android:text="The following are your application results"
+        android:text="@string/application_results"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lblMODResult"

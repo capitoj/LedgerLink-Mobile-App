@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:lineSpacingMultiplier="1.0"
             android:layout_marginBottom="-10dip"
-            android:text="Review Members"
+            android:text="@string/review_members"
             android:focusable="true"
             android:textStyle="bold" />
         <requestFocus/>
@@ -42,14 +42,14 @@
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total savings this cycle" />
+            android:text="@string/total_savings_this_cycle" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblRvwMembersTotalLoan"
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total loans outstanding" />
+            android:text="@string/total_loans_outstanding" />
 
 
         <ListView

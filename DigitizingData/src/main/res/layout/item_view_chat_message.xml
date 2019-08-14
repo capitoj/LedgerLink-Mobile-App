@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Text Message"
+        android:text="@string/text_message"
         android:textSize="14dp"
         android:textStyle="bold"
         android:id="@+id/txtChatUsername"
@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Text Message"
+        android:text="@string/text_message"
         android:textSize="16dp"
         android:id="@+id/txtChatMessage"
         android:layout_below="@+id/txtChatUsername" />

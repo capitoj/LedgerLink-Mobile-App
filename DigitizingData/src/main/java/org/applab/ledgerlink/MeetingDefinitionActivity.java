@@ -1,5 +1,6 @@
 package org.applab.ledgerlink;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -16,10 +17,10 @@ import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
@@ -35,7 +36,7 @@ import java.util.Date;
 /**
  * Created by Moses on 7/4/13.
  */
-public class MeetingDefinitionActivity extends SherlockActivity {
+public class MeetingDefinitionActivity extends ActionBarActivity{
 
     private TextView viewClicked;
     public static final int Date_dialog_id = 1;
@@ -150,7 +151,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         //sb.append("If necessary, tap date to select a date in the past. You may not select a date in the future.");
 
         TextView txtInstructions = (TextView)findViewById(R.id.lblMDHeader);
-        txtInstructions.setText(Html.fromHtml("View the date below and tap it to change if it is not the correct meeting date. (You may not select a date in the future.) Press next to begin the meeting."));
+        txtInstructions.setText(Html.fromHtml(getString(R.string.press_next_to_begin_meetingg)));
 
         TextView txtMeetingDate = (TextView) findViewById(R.id.txtMDMeetingDate);
         viewClicked = txtMeetingDate;
@@ -225,7 +226,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         if (Utils.isExecutingInTrainingMode()) {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
-        actionBar.setTitle("Meeting");
+        actionBar.setTitle(getString(R.string.meeting));
 
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
                         | ActionBar.DISPLAY_SHOW_TITLE
@@ -284,7 +285,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //final MenuInflater inflater = getSupportMenuInflater();
+        //final MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.meeting_definition, menu);
         //To use custom menu view
         return true;
@@ -367,7 +368,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             return true;
         }
         else {
-            Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting","There was a problem while setting up the meeting",Utils.MSGBOX_ICON_EXCLAMATION).show();
+            Utils.createAlertDialogOk(MeetingDefinitionActivity.this,getString(R.string.being_meeting),getString(R.string.problem_while_setting_up_meeting),Utils.MSGBOX_ICON_EXCLAMATION).show();
             return false;
         }
 
@@ -384,6 +385,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
         return validateMeeting(meeting) && ledgerLinkApplication.getMeetingRepo().addMeeting(meeting);
     }
 
+    @SuppressLint("LongLogTag")
     private boolean validateMeeting(Meeting meeting){
         try {
             if(null == meeting) {
@@ -395,7 +397,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
                 meeting.setVslaCycle(selectedCycle);
             }
             else {
-                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting", "The Current Cycle could not be determined. Please choose a cycle.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,getString(R.string.being_meeting), getString(R.string.current_cycle_could_not_determined), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtMeetingDate.requestFocus();
                 return false;
             }
@@ -406,7 +408,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             Date dt = Utils.getDateFromString(meetingDate,Utils.DATE_FIELD_FORMAT);
 
             if (dt.after(new Date())) {
-                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting", "The Meeting date cannot be in the future.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,getString(R.string.being_meeting), getString(R.string.meeting_date_cannot_be_in_future), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtMeetingDate.requestFocus();
                 return false;
             }
@@ -436,7 +438,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             //Further Validations
             //check that meeting is with the boundaries of the current cycle
             if(meeting.getMeetingDate().before(selectedCycle.getStartDate()) || meeting.getMeetingDate().after(selectedCycle.getEndDate())) {
-                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting",
+                Utils.createAlertDialogOk(MeetingDefinitionActivity.this,getString(R.string.being_meeting),
                         String.format("The Meeting Date has to be within the current cycle i.e. %s and %s",Utils.formatDate(selectedCycle.getStartDate()), Utils.formatDate(selectedCycle.getEndDate())),
                         Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtMeetingDate.requestFocus();
@@ -446,7 +448,7 @@ public class MeetingDefinitionActivity extends SherlockActivity {
             //Ensure the current date is later than the date of the most recent meeting
             if(null != mostRecent) {
                 if(meeting.getMeetingDate().before(mostRecent.getMeetingDate())) {
-                    Utils.createAlertDialogOk(MeetingDefinitionActivity.this,"Begin Meeting",
+                    Utils.createAlertDialogOk(MeetingDefinitionActivity.this,getString(R.string.being_meeting),
                             String.format("The Meeting Date has to be after the date of the last meeting: %s", Utils.formatDate(mostRecent.getMeetingDate())),
                             Utils.MSGBOX_ICON_EXCLAMATION).show();
                     //txtMeetingDate.requestFocus();

@@ -12,9 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.TrainingModule;
 import org.applab.ledgerlink.repo.TrainingModuleRepo;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TrainingModuleActivity extends SherlockActivity {
+public class TrainingModuleActivity extends ActionBarActivity{
 
     protected ListView listView;
     protected List<TrainingModule> itemList;
@@ -35,7 +35,7 @@ public class TrainingModuleActivity extends SherlockActivity {
         setContentView(R.layout.activity_training_module);
         this.context = this;
 
-        getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         this.listView = (ListView)findViewById(R.id.lvTModules);
         this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,7 +81,7 @@ public class TrainingModuleActivity extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.menu_training_module, menu);
+        getMenuInflater().inflate(R.menu.menu_training_module, menu);
         return true;
     }
 

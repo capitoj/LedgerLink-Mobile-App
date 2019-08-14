@@ -6,18 +6,23 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.design.widget.FloatingActionButton;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -52,11 +57,16 @@ import javax.xml.parsers.*;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import android.support.v7.app.ActionBarActivity;
 
 //import android.view.Menu;
 //import android.view.Menu;
 
-public class LoginActivity extends SherlockActivity {
+public class LoginActivity extends ActionBarActivity{
 
     LedgerLinkApplication ledgerLinkApplication;
     private VslaInfo vslaInfo = null;
@@ -84,8 +94,8 @@ public class LoginActivity extends SherlockActivity {
 
 //        LanguageHelper.getXmlDocument(getApplicationContext(), "ENGLISH");
 
-        TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
-        versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
+        //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
+        //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -106,7 +116,7 @@ public class LoginActivity extends SherlockActivity {
             }
         };
         //Load this as long running task
-        LongTaskRunner.runLongTask(dataLoader, "Please wait...", "Please wait as LedgerLink refreshes the test training data...", LoginActivity.this);
+        LongTaskRunner.runLongTask(dataLoader, getString(R.string.please_wait), getString(R.string.ledgerlink_refreshes_test_training_data), LoginActivity.this);
 
 
         //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblSISwitchMode);
@@ -119,7 +129,7 @@ public class LoginActivity extends SherlockActivity {
         //If we are in training mode then show it using a custom View with distinguishable background
         //Assumed that the preferences have been set by now
         if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setTitle("TRAINING MODE");
+            actionBar.setTitle(R.string.training_mode);
             actionBar.setCustomView(R.layout.activity_main_training_mode);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
@@ -147,9 +157,9 @@ public class LoginActivity extends SherlockActivity {
             if (!vslaInfo.isActivated()) {
                 if (vslaInfo.isOffline()) {
                     if (wasCalledFromActivation) {
-                        notActivatedStatusMessage = "We weren't able to send your registration because of a network problem. We've saved it and will try to send it later.";
+                        notActivatedStatusMessage = getString(R.string.unable_to_send_reg_network_problems);
                     } else {
-                        notActivatedStatusMessage = "We weren't able to send your registration last time because of a network problem. We've saved it and will try to send it when you sign in now.";
+                        notActivatedStatusMessage = getString(R.string.unable_to_send_reg_network_problems_last_time);
                     }
                 } else {
                     //If it is not Activated and is not in Offline Mode, force activation
@@ -205,12 +215,72 @@ public class LoginActivity extends SherlockActivity {
                         activateVslaAndSignIn();
                     }
                 } else {
-                    Utils.createAlertDialogOk(LoginActivity.this, "Security", "The Pass Key is invalid.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(LoginActivity.this, getString(R.string.security), getString(R.string.passkey_invalid), Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtPassKey.requestFocus();
                 }
             }
         });
+
+        /** Change lanugage spinner**/
+
+        Spinner spinnerLang = (Spinner) findViewById(R.id.spinner_lang);
+
+        //spinnerLang.setOnItemSelectedListener(this);
+
+        // Lanugage list
+        List<String> categories = new ArrayList<String>();
+        categories.add("English");
+        categories.add("Luganda");
+        categories.add("Luo");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        // attaching data adapter to spinner
+        spinnerLang.setAdapter(dataAdapter);
+
+        spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                if (pos == 1) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected English", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("en");
+                } else if (pos == 2) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected Luganda", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("lu");
+                } else if (pos == 3) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected Luo", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("lo");
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+                // TODO Auto-generated method stub
+
+            }
+        });
     }
+
+    /** Change lanugage spinner**/
+
+    public void setLocale(String lang) {
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, LoginActivity.class);
+        startActivity(refresh);
+        finish();
+
+    }
+
 
     protected void loadBackgroundService(){
         /*
@@ -239,13 +309,13 @@ public class LoginActivity extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.login, menu);
+        getMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
 
     // This method is called once the menu is selected
     @Override
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
         switch (item.getItemId()) {
             case R.id.action_settings:
@@ -256,7 +326,7 @@ public class LoginActivity extends SherlockActivity {
             case R.id.action_about:
                 // Launch about dialog
                 AboutDialog about = new AboutDialog(this);
-                about.setTitle("About LedgerLink");
+                about.setTitle(R.string.about_ledgerlink);
                 about.show();
                 break;
             case R.id.action_recovery:
@@ -278,7 +348,7 @@ public class LoginActivity extends SherlockActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }else{
-            DialogMessageBox.show(this, "Connection Alert", "No internet connection could be established. Data recovery requires an internet connection");
+            DialogMessageBox.show(this, getString(R.string.connection_alert), getString(R.string.no_internet_connection_be_established));
         }
     }
 
@@ -378,7 +448,7 @@ public class LoginActivity extends SherlockActivity {
                 } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE) {
                     networkType = "LTE";
                 } else {
-                    networkType = "UNKNOWN";
+                    networkType = getString(R.string.unknown_allcaps);
                 }
             }
 
@@ -410,7 +480,7 @@ public class LoginActivity extends SherlockActivity {
 
         //Use a Weak Reference
         private final WeakReference<LoginActivity> loginActivityWeakReference;
-        private String message = "Please wait...";
+        private String message = getString(R.string.please_wait);
 
         //Initialize the Weak reference in the constructor
         public PostTask(LoginActivity loginActivity) {
@@ -424,8 +494,8 @@ public class LoginActivity extends SherlockActivity {
                 if (loginActivityWeakReference.get() != null && !loginActivityWeakReference.get().isFinishing()) {
                     if (null == progressDialog) {
                         progressDialog = new ProgressDialog(loginActivityWeakReference.get());
-                        progressDialog.setTitle("Login");
-                        progressDialog.setMessage("Logging you in..");
+                        progressDialog.setTitle(getString(R.string.login));
+                        progressDialog.setMessage(getString(R.string.logging_you_in));
                         progressDialog.setMax(10);
                         progressDialog.setProgress(1);
                         progressDialog.setCancelable(false);
@@ -514,29 +584,29 @@ public class LoginActivity extends SherlockActivity {
 
             try {
                 if (result != null) {
-                    activationSuccessful = result.getBoolean("IsActivated");
-                    vslaName = result.getString("VslaName");
-                    passKey = result.getString("PassKey");
+                    activationSuccessful = result.getBoolean(getString(R.string.is_activated_main));
+                    vslaName = result.getString(getString(R.string.vsla_name_main));
+                    passKey = result.getString(getString(R.string.passkey_main));
                 }
                 if (activationSuccessful && null != vslaName) {
                     retrievedVslaNameSavedSuccessfully = ledgerLinkApplication.getVslaInfoRepo().saveVslaInfo(targetVslaCode, vslaName, passKey, vslaInfo.getFiID());
                     if (retrievedVslaNameSavedSuccessfully) {
-                        Toast.makeText(LoginActivity.this, "Congratulations! Registration Completed Successfully.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, getString(R.string.congs_reg_completed), Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(LoginActivity.this, "Registration failed while writing retrieved VSLA Name on the local database. Try again later.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, getString(R.string.reg_failed_while_writing_retrieved_vsla_name), Toast.LENGTH_LONG).show();
                     }
                 } else {
                     //Process failed
-                    Toast.makeText(getApplicationContext(), "Registration failed due to internet connection problems. Try again later.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.reg_failed_due_to_internet), Toast.LENGTH_LONG).show();
                     dismissProgressDialog();
                 }
             } catch (JSONException exJson) {
                 //Process failed
-                Toast.makeText(getApplicationContext(), "Registration failed due to invalid Data Format. Try again later.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.reg_failed_due_to_invalid_data_format), Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
             } catch (Exception ex) {
                 //Process failed
-                Toast.makeText(getApplicationContext(), "Registration failed. Try again later.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.reg_failed_try_again_later), Toast.LENGTH_LONG).show();
                 dismissProgressDialog();
             }
 

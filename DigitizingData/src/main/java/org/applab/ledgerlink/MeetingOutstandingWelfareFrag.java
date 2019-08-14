@@ -2,6 +2,7 @@ package org.applab.ledgerlink;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -24,7 +25,7 @@ import org.applab.ledgerlink.repo.MemberRepo;
 import java.util.ArrayList;
 
 
-public class MeetingOutstandingWelfareFrag extends SherlockFragment {
+public class MeetingOutstandingWelfareFrag extends Fragment {
     ActionBar actionBar;
     ArrayList<Member> members;
     String meetingDate;
@@ -35,7 +36,7 @@ public class MeetingOutstandingWelfareFrag extends SherlockFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parentActivity = (MeetingActivity) getSherlockActivity();
+        parentActivity = (MeetingActivity) getActivity();
     }
 
     @Override
@@ -59,15 +60,15 @@ public class MeetingOutstandingWelfareFrag extends SherlockFragment {
     private void initializeFragment() {
 
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        actionBar = getSherlockActivity().getSupportActionBar();
-        meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
-        String title = "Meeting";
+        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        meetingDate = getActivity().getIntent().getStringExtra("_meetingDate");
+        String title = getString(R.string.meeting);
         switch(Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
-                title = "Send Data";
+                title = getString(R.string.send_data);
                 break;
             case VIEW_MODE_READ_ONLY:
-                title = "Sent Data";
+                title = getString(R.string.send_data);
                 break;
             default:
                 //title="Meeting";
@@ -75,10 +76,10 @@ public class MeetingOutstandingWelfareFrag extends SherlockFragment {
         }
         actionBar.setTitle(title);
         actionBar.setSubtitle(meetingDate);
-        /**TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
-         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        /**TextView lblMeetingDate = (TextView)getActivity()().findViewById(R.id.lblMSavFMeetingDate);
+         meetingDate = getActivity()().getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */
-        meetingId = getSherlockActivity().getIntent().getIntExtra("_meetingId", 0);
+        meetingId = getActivity().getIntent().getIntExtra("_meetingId", 0);
         //Wrap long task in runnable an run asynchronously
         Runnable populateRunnable = new Runnable()
         {
@@ -89,7 +90,7 @@ public class MeetingOutstandingWelfareFrag extends SherlockFragment {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(populateRunnable, "Please wait", "Loading outstanding welfare information", parentActivity);
+        LongTaskRunner.runLongTask(populateRunnable, getString(R.string.please_wait), getString(R.string.loading_outstanding_welfare_info), parentActivity);
     }
 
     private void populateMembersList() {

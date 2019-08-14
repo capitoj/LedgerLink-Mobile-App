@@ -8,8 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -26,7 +26,7 @@ import java.util.Date;
 /**
  * Created by Moses on 6/25/13.
  */
-public class MeetingRollCallFrag extends SherlockFragment {
+public class MeetingRollCallFrag extends Fragment {
     ActionBar actionBar;
     ArrayList<Member> members = null;
     int meetingId;
@@ -37,7 +37,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parentActivity = (MeetingActivity) getSherlockActivity();
+        parentActivity = (MeetingActivity) getActivity();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
         }
         fragmentView = (ScrollView) inflater.inflate(R.layout.frag_meeting_rollcall, container, false);
         reloadFragmentInfo();
-        context = getSherlockActivity().getApplicationContext();
+        context = getActivity().getApplicationContext();
 
         return fragmentView;
     }
@@ -71,15 +71,15 @@ public class MeetingRollCallFrag extends SherlockFragment {
         if (meetingId != 0) {
             selectedMeeting = parentActivity.ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
             //title = String.format("Meeting    %s", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
-            title = "Meeting";
+            title = getString(R.string.meeting);
 
         }
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
-                title = "Send Data";
+                title = getString(R.string.send_data);
                 break;
             case VIEW_MODE_READ_ONLY:
-                title = "Sent Data";
+                title = getString(R.string.send_data);
                 break;
             default:
                 //title="Meeting";
@@ -97,7 +97,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(loaderRunnable, "Please wait..", "Loading member list", parentActivity);
+        LongTaskRunner.runLongTask(loaderRunnable, getString(R.string.please_wait), getString(R.string.loading_member_list), parentActivity);
     }
 
     @Override
@@ -155,7 +155,7 @@ public class MeetingRollCallFrag extends SherlockFragment {
             public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
                 //Do not invoke the event when in Read only Mode
                 if (parentActivity.isViewOnly()) {
-                    Toast.makeText(parentActivity.getBaseContext(), "Values for this past meeting cannot be modified at this time", Toast.LENGTH_LONG).show();
+                    Toast.makeText(parentActivity.getBaseContext(), R.string.values_for_this_meeting_cannot_modify, Toast.LENGTH_LONG).show();
                     return true;
                 }
                 if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {

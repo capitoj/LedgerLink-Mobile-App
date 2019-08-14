@@ -1,14 +1,15 @@
 package org.applab.ledgerlink;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.View;
 import android.widget.AdapterView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
@@ -22,10 +23,12 @@ import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
 
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+
 /**
  * Created by Moses on 7/23/13.
  */
-public class SendMeetingDataActivity extends SherlockListActivity {
+public class SendMeetingDataActivity extends ListActivity {
     private ArrayList<Meeting> meetings;
     LedgerLinkApplication ledgerLinkApplication;
 
@@ -36,7 +39,7 @@ public class SendMeetingDataActivity extends SherlockListActivity {
 
         setContentView(R.layout.activity_send_meeting_data);
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -44,7 +47,7 @@ public class SendMeetingDataActivity extends SherlockListActivity {
         }
 
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("Send Data");
+        actionBar.setTitle("getString(R.string.send_data)");
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 

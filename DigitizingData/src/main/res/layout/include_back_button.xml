@@ -15,5 +15,5 @@
         android:drawableLeft="@drawable/ic_navigation_back"
         android:drawablePadding="1dip"
         android:gravity="center_vertical"
-        android:text="back" />
+        android:text="@string/back" />
 </FrameLayout>

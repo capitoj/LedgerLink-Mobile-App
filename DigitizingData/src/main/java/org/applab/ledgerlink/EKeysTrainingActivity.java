@@ -10,9 +10,9 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.TrainingModuleResponseRepo;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class EKeysTrainingActivity extends SherlockActivity {
+public class EKeysTrainingActivity extends ActionBarActivity{
 
     protected ListView listView;
     protected List<EkeysTraining> itemList;
@@ -32,7 +32,7 @@ public class EKeysTrainingActivity extends SherlockActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ekeys_training);
-        getSherlock().getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         this.listView = (ListView)findViewById(R.id.LVEKTraining);
         this.moduleId = getIntent().getIntExtra("ModuleId", 0);
         this.context = this;
@@ -42,12 +42,12 @@ public class EKeysTrainingActivity extends SherlockActivity {
 
     protected void populateListView(){
         itemList = new ArrayList<EkeysTraining>();
-        itemList.add(new EkeysTraining("Day 1: Introduction to eKeys"));
-        itemList.add(new EkeysTraining("Day 2: Phone & Mobile Money Usage"));
-        itemList.add(new EkeysTraining("Day 3: Airtel Weza Review"));
-        itemList.add(new EkeysTraining("Day 4: eKeys Review"));
-        itemList.add(new EkeysTraining("Day 5: Group Submission and Sensitization"));
-        itemList.add(new EkeysTraining("Day 6: eKeys Assessment"));
+        itemList.add(new EkeysTraining(getString(R.string.intro_to_ekeys)));
+        itemList.add(new EkeysTraining(getString(R.string.phone_mobile_money_usage)));
+        itemList.add(new EkeysTraining(getString(R.string.airtel_weza_review)));
+        itemList.add(new EkeysTraining(getString(R.string.ekeys_review)));
+        itemList.add(new EkeysTraining(getString(R.string.group_submission_and_sensitization)));
+        itemList.add(new EkeysTraining(getString(R.string.ekey_assessment)));
 
         ArrayAdapter<EkeysTraining> adapter = new EkeysTrainingAdapter(this, itemList);
         listView.setAdapter(adapter);
@@ -57,7 +57,7 @@ public class EKeysTrainingActivity extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.menu_ekeys_training, menu);
+        getMenuInflater().inflate(R.menu.menu_ekeys_training, menu);
         setMenuAction(menu);
         return true;
     }
@@ -82,10 +82,10 @@ public class EKeysTrainingActivity extends SherlockActivity {
                     }
                 }
                 if(count > 0){
-                    Toast.makeText(context, "The selected trainings have been saved successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.selected_trainings_saved_successfully, Toast.LENGTH_LONG).show();
                     finish();
                 }else{
-                    Toast.makeText(context, "You have not selected any trainings", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.you_have_not_selected_any_trainings, Toast.LENGTH_LONG).show();
                 }
                 return true;
             }

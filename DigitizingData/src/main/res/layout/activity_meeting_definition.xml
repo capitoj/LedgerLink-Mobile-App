@@ -21,7 +21,7 @@
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="You have more than one active cycle. Please choose the cycle for the new meeting."
+            android:text="@string/you_have_more_than_one_active_cycle"
             android:id="@+id/lblMDMultipleCycles" />
 
         <RadioGroup
@@ -37,7 +37,7 @@
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="View the date below and tap to change if it is not the correct meeting date. (You may not pick a date in the future.) When it is correct, tap the arrow above to begin the meeting."
+            android:text="@string/view_the_date_below_and_tap_to_change_if_it_is_not_the_correct_meeting_date"
             android:id="@+id/lblMDHeader"/>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView

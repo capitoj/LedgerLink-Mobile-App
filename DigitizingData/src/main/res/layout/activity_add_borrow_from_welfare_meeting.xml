@@ -11,7 +11,7 @@
             style="@style/RegularTextInstructionBold"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="BORROW FROM WELFARE" />
+            android:text="@string/borrow_from_wellfare" />
 
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -20,7 +20,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblMemberBorrowFromWelfareHeader"
-            android:text="Full Name"
+            android:text="@string/full_name"
 
             />
 
@@ -47,7 +47,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/txtIssueMemberWelfareAmount"
-            android:text="When is the due date of the outstanding welfare" />
+            android:text="@string/when_due_date_of_outstanding_welfare" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtOutstandingWelfareDueDate"

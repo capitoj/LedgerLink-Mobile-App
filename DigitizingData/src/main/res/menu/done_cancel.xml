@@ -1,14 +1,16 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item android:id="@+id/mnuAMCancel"
           android:title="@string/cancel"
           android:orderInCategory="0"
-          android:showAsAction="always"
+          app:showAsAction="always"
           android:icon="@drawable/ic_navigation_cancel"
             />
     <item android:id="@+id/mnuAMDone"
           android:title="@string/done"
           android:orderInCategory="1"
-          android:showAsAction="always"
+          app:showAsAction="always"
 
             />
 </menu>

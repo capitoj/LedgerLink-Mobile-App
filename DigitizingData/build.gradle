@@ -1,6 +1,8 @@
 buildscript {
     repositories {
         mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.google.com' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
@@ -11,13 +13,15 @@ apply plugin: 'com.android.application'
 
 dependencies {
     compile files('libs/opencsv-2.4.jar')
-    compile project(':libraries:ActionBarSherlock-4.3.1')
     compile project(':libraries:aFileChooser')
     compile files('libs/nineoldandroids-2.4.0.jar')
-    compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.android.support:support-v4:25.3.1'
     compile files('libs/commons-lang3-3.5.jar')
     compile files('libs/httpcore-4.4.11.jar')
     compile files('libs/httpclient-4.5.9.jar')
+    compile 'com.android.support:support-v13:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:23.1.1'
 }
 
 android {

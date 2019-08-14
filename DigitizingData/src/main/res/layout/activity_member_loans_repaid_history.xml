@@ -58,7 +58,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="5.5"
-                    android:text="Loan Number"
+                    android:text="@string/loan_number"
                     android:textAlignment="textEnd"
                     tools:ignore="UnusedAttribute" />
 
@@ -78,7 +78,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Amount paid" />
+                android:text="@string/amount_paid" />
 
             <LinearLayout
                 android:id="@+id/frmMLRepayHAmount"
@@ -102,7 +102,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
-                    android:text="UGX" />
+                    android:text="@string/ugx" />
             </LinearLayout>
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -110,7 +110,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Comments" />
+                android:text="@string/comments" />
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMLRepayHComment"
@@ -125,7 +125,7 @@
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:text="NEW BALANCE" />
+                android:text="@string/new_balance" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHInstruction2"
@@ -139,7 +139,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Outstanding after payment" />
+                android:text="@string/outstanding_after_payment" />
 
 
             <LinearLayout
@@ -165,7 +165,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="UGX" />
+                    android:text="@string/ugx" />
             </LinearLayout>
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -173,7 +173,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Interest Added" />
+                android:text="@string/interest_added" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMLRepayHInterestDesc"
@@ -181,7 +181,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dip"
-                android:text="at 10% every 30 days" />
+                android:text="@string/interest_rate" />
 
             <LinearLayout
                 android:id="@+id/frmMLRepayHInterest"
@@ -205,7 +205,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
-                    android:text="UGX" />
+                    android:text="@string/ugx" />
             </LinearLayout>
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -213,7 +213,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Outstanding balance(with interest)" />
+                android:text="@string/outstanding_balance_with_interest" />
 
             <LinearLayout
                 android:id="@+id/frmMLRepayHTotal"
@@ -236,7 +236,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="UGX" />
+                    android:text="@string/ugx" />
             </LinearLayout>
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -244,7 +244,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Next payment date" />
+                android:text="@string/next_payment_date" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtMLRepayHDateDue"
@@ -265,7 +265,7 @@
                     style="@style/SubHeading"
                     android:layout_width="fill_parent"
                     android:layout_height="25dip"
-                    android:text="PAYMENT HISTORY" />
+                    android:text="@string/payment_history" />
 
                 <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
                      android:id="@+id/lblMLRepayHOutstandingLoans"
@@ -297,7 +297,7 @@
                     android:layout_marginLeft="5dip"
                     android:layout_marginRight="5dip"
                     android:layout_marginTop="5dip"
-                    android:text="Cycle 14-NOV-2013 to 13-NOV-2014" />
+                    android:text="@string/cycle_nov" />
 
                 <ListView
                     android:id="@android:id/list"
@@ -316,7 +316,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dip"
-                    android:text="No previous payments" />
+                    android:text="@string/no_previous_payments" />
 
             </LinearLayout>
         </LinearLayout>

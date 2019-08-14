@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
+import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
 
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
@@ -18,10 +18,12 @@ import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.util.ArrayList;
 
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+
 /**
  * Created by Moses on 6/25/13.
  */
-public class MeetingFinesFrag extends SherlockFragment {
+public class MeetingFinesFrag extends Fragment {
     private ArrayList<Member> members;
     private String meetingDate;
     private int meetingId;
@@ -30,7 +32,7 @@ public class MeetingFinesFrag extends SherlockFragment {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parentActivity = (MeetingActivity) getSherlockActivity();
+        parentActivity = (MeetingActivity) getActivity();
 
     }
     @Override
@@ -58,13 +60,13 @@ public class MeetingFinesFrag extends SherlockFragment {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         ActionBar actionBar = parentActivity.getSupportActionBar();
         meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
-        String title = String.format("Meeting");
+        String title = String.format(getString(R.string.meeting));
         switch (Utils._meetingDataViewMode) {
             case VIEW_MODE_REVIEW:
-                title = "Send Data";
+                title = getString(R.string.send_data);
                 break;
             case VIEW_MODE_READ_ONLY:
-                title = "Sent Data";
+                title = getString(R.string.send_data);
                 break;
             default:
                 // title="Meeting";
@@ -86,7 +88,7 @@ public class MeetingFinesFrag extends SherlockFragment {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(runnable, "Please wait", "Loading list of fines...", parentActivity);
+        LongTaskRunner.runLongTask(runnable, getString(R.string.please_wait), getString(R.string.loading_list_of_fines), parentActivity);
     }
 
     @Override

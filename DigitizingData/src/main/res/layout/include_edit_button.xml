@@ -15,5 +15,5 @@
         android:drawableLeft="@drawable/ic_content_edit"
         android:drawablePadding="1dip"
         android:gravity="center_vertical"
-        android:text="edit" />
+        android:text="@string/edit" />
 </FrameLayout>

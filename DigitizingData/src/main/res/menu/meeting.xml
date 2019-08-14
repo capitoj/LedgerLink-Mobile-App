@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- <item android:id="@+id/mnuSMDSend"
            android:title="Send"
            android:menuCategory="system"
@@ -19,25 +20,25 @@
         android:id="@+id/mnuMeetingFineMember"
         android:menuCategory="system"
         android:orderInCategory="31"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="Fine Member" />
     <item
         android:id="@+id/mnuMeetingBorrowWelfare"
         android:menuCategory="system"
         android:orderInCategory="31"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="Borrow From Welfare" />
     <item
         android:id="@+id/mnuMeetingChangeDate"
         android:menuCategory="system"
         android:orderInCategory="32"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="Change Meeting Date" />
     <item
         android:id="@+id/mnuMeetingDelete"
         android:menuCategory="system"
         android:orderInCategory="33"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="Delete Meeting" />
 
   <!--  <item

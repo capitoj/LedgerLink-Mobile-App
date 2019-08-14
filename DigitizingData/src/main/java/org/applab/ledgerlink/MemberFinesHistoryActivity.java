@@ -1,5 +1,6 @@
 package org.applab.ledgerlink;
 
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -11,11 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
@@ -27,11 +28,13 @@ import org.applab.ledgerlink.helpers.MemberFineRecord;
 
 import java.util.ArrayList;
 
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+
 
 /**
  * Created by Moses on 7/7/13.
  */
-public class MemberFinesHistoryActivity extends SherlockListActivity {
+public class MemberFinesHistoryActivity extends ListActivity {
     private String meetingDate;
     private int memberId;
     private int meetingId;
@@ -115,7 +118,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
     private void inflateActionBar() {
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back, null);
         customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
@@ -123,7 +126,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect", "fines");
+                        i.putExtra("_tabToSelect", getString(R.string.fines));
                         i.putExtra("_meetingDate", meetingDate);
                         i.putExtra("_meetingId", meetingId);
                         //startActivity(i);
@@ -133,13 +136,13 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         );
 
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
-        actionBar.setTitle("Fines");
+        actionBar.setTitle(getString(R.string.fines));
 
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeButtonEnabled(false);
@@ -174,7 +177,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.member_fine_history, menu);
         return true;
     }
@@ -186,7 +189,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent upIntent = new Intent(this, MeetingActivity.class);
-                upIntent.putExtra("_tabToSelect", "fines");
+                upIntent.putExtra("_tabToSelect", getString(R.string.fines));
                 upIntent.putExtra("_meetingDate", meetingDate);
                 upIntent.putExtra("_meetingId", meetingId);
 
@@ -209,7 +212,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                 return true;
             case R.id.mnuMFBack:
                 i = new Intent(MemberFinesHistoryActivity.this, MeetingActivity.class);
-                i.putExtra("_tabToSelect", "fines");
+                i.putExtra("_tabToSelect", getString(R.string.fines));
                 i.putExtra("_meetingDate", meetingDate);
                 i.putExtra("_meetingId", meetingId);
                 startActivity(i);
@@ -418,7 +421,7 @@ public class MemberFinesHistoryActivity extends SherlockListActivity {
                     fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_disorder));
                     break;
                 default:
-                    fineRecord.setFineTypeName("Unknown");
+                    fineRecord.setFineTypeName(getString(R.string.unknown));
             }
             holder.txtFineType.setText(fineRecord.getFineTypeName());
             holder.paidStatusCheckBox.setChecked(fineRecord.getStatus() != 0);

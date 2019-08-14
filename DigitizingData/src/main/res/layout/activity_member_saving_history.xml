@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
-            android:text="Amount" />
+            android:text="@string/amount" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -53,7 +53,7 @@
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="UGX" />
+                android:text="@string/ugx" />
         </LinearLayout>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -61,7 +61,7 @@
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
-            android:text="HISTORY" />
+            android:text="@string/history" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSHTotalSavings"
@@ -69,7 +69,7 @@
             android:textSize="17sp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Total Savings 15,000 UGX" />
+            android:text="@string/total_saving_range" />
 
         <ListView
             android:id="@android:id/list"
@@ -85,7 +85,7 @@
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No History" />
+            android:text="@string/no_history" />
 
     </LinearLayout>
 </ScrollView>

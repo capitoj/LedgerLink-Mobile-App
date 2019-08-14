@@ -8,11 +8,13 @@ import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -30,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class BeginMeetingActivity extends SherlockActivity {
+public class BeginMeetingActivity extends ActionBarActivity{
     private ArrayList<Meeting> pastMeetings = null;
     private static ProgressDialog progressDialog = null;
     private static int targetMeetingId = 0;
@@ -85,8 +87,8 @@ public class BeginMeetingActivity extends SherlockActivity {
             if (pastMeetings.size() > 0) {
 
                 //Setup the Instruction
-                sb = new StringBuilder("Press <b>Send</b> to send all data for all existing meetings or <b>Begin</b> to begin a new meeting.");
-                sb.append("You will not be able to edit the current meeting after beginning a new meeting.");
+                sb = new StringBuilder(getString(R.string.press_send_to_send_all_data));
+                sb.append(getString(R.string.you_will_not_be_able_to_edit_the_current_meeting));
                 tvInstructionsHeader.setText(Html.fromHtml(sb.toString()));
 
                 //Quick-fix for Determining the Most recent Meeting whose data is not sent
@@ -149,7 +151,7 @@ public class BeginMeetingActivity extends SherlockActivity {
 
 
                 // Display the default Instructions
-                sb = new StringBuilder("Press <b>Begin</b> to begin a new meeting.");
+                sb = new StringBuilder(getString(R.string.press_begin_new_meeting));
 
             }
         }
@@ -171,7 +173,7 @@ public class BeginMeetingActivity extends SherlockActivity {
             grpCurrentMeeting.setVisibility(View.GONE);
 
             //Display the default Instructions
-            sb = new StringBuilder("Press <b>Begin</b> to begin a new meeting.");
+            sb = new StringBuilder(getString(R.string.press_begin_new_meeting));
 
         }
 
@@ -252,14 +254,14 @@ public class BeginMeetingActivity extends SherlockActivity {
         if (currentMeetings.size() > 1) {
             //Set the title to plural
             TextView currentMeetingsSectionHeading = (TextView) findViewById(R.id.lblBMSection1);
-            currentMeetingsSectionHeading.setText("CURRENT MEETINGS");
+            currentMeetingsSectionHeading.setText(R.string.current_meetings);
         }
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-        //final MenuInflater inflater = getSupportMenuInflater();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //final MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.begin_meeting, menu);
         return true;
     }
@@ -339,7 +341,7 @@ public class BeginMeetingActivity extends SherlockActivity {
         if (Utils.isExecutingInTrainingMode()) {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
-        actionBar.setTitle("Meeting");
+        actionBar.setTitle(R.string.meeting_main);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -355,7 +357,7 @@ public class BeginMeetingActivity extends SherlockActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -378,7 +380,7 @@ public class BeginMeetingActivity extends SherlockActivity {
     public void sendMeetingData(int meetingId) {
         //If no network, hide send meeting button
         if (!Utils.isNetworkConnected(getApplicationContext())) {
-            Toast.makeText(DatabaseHandler.databaseContext, "Can not send information because mobile data or internet connection is not available.", Toast.LENGTH_LONG).show();
+            Toast.makeText(DatabaseHandler.databaseContext, R.string.can_not_send_info_bse_mobile_data_or_internet_disabled, Toast.LENGTH_LONG).show();
             return;
         }
         //TODO: Confirm this later. Does not support multiple cycles

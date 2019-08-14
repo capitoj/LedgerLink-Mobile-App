@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.helpers.Utils;
@@ -20,7 +20,7 @@ import org.applab.ledgerlink.helpers.MembersFinesArrayAdapter;
 
 import java.util.ArrayList;
 
-public class FineMemberMeetingActivity extends SherlockActivity {
+public class FineMemberMeetingActivity extends ActionBarActivity{
     ActionBar actionBar;
     ArrayList<Member> members;
     String meetingDate;
@@ -44,8 +44,8 @@ public class FineMemberMeetingActivity extends SherlockActivity {
         inflateCustomActionBar();
 
 
-        /** TextView lblMeetingDate = (TextView)getSherlockActivity().findViewById(R.id.lblMSavFMeetingDate);
-         meetingDate = getSherlockActivity().getIntent().getStringExtra("_meetingDate");
+        /** TextView lblMeetingDate = (TextView)getActivity()().findViewById(R.id.lblMSavFMeetingDate);
+         meetingDate = getActivity()().getIntent().getStringExtra("_meetingDate");
          lblMeetingDate.setText(meetingDate); */
 
        /** TextView lblReviewFinesMessage = (TextView) findViewById(R.id.lblReviewFinesMessage);
@@ -81,7 +81,7 @@ public class FineMemberMeetingActivity extends SherlockActivity {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
         actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setTitle("FINE MEMBER");
+        actionBar.setTitle(R.string.fine_member_allcaps);
 
         // Set to false to remove caret and disable its function; if designer decides otherwise set both to true
         actionBar.setHomeButtonEnabled(false);

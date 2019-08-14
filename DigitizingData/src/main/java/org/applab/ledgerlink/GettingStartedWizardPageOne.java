@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -21,7 +21,7 @@ import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.fontutils.TypefaceTextView;
 import org.applab.ledgerlink.helpers.Utils;
 
-public class GettingStartedWizardPageOne  extends SherlockActivity {
+public class GettingStartedWizardPageOne  extends ActionBarActivity{
     LedgerLinkApplication ledgerLinkApplication;
 
     @Override
@@ -61,7 +61,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
                 });
 
         actionBar.setDisplayHomeAsUpEnabled(false);
-        actionBar.setTitle("Get started");
+        actionBar.setTitle(getString(R.string.get_started));
        /** actionBar.setDisplayOptions(
                 ActionBar.DISPLAY_SHOW_CUSTOM,
                 ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
@@ -86,8 +86,8 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
         }
 
         TypefaceTextView txtGSW_info = (TypefaceTextView) findViewById(R.id.txtGSW_info);
-        SpannableStringBuilder txtGSWInfoText = new SpannableStringBuilder("If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.\n\nAre you prepared to enter all member and cycle information now? If so you may get started by tapping ");
-        SpannableString nextText = new SpannableString("next.");
+        SpannableStringBuilder txtGSWInfoText = new SpannableStringBuilder(getString(R.string.if_not_beginnign_of_cycle));
+        SpannableString nextText = new SpannableString(getString(R.string.next_));
         nextText.setSpan(new StyleSpan(Typeface.BOLD), 0, nextText.length()-1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         txtGSWInfoText.append(nextText);
@@ -119,7 +119,7 @@ public class GettingStartedWizardPageOne  extends SherlockActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        final MenuInflater inflater = getSupportMenuInflater();
+        final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.getting_started_wizard_page_one_menu, menu);
         return true;
 

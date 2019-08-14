@@ -28,7 +28,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Member number" />
+                android:text="@string/member_number" />
 
             <Spinner
                 android:id="@+id/cboAMMemberNo"
@@ -58,7 +58,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Surname" />
+                android:text="@string/surname" />
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMSurname"
@@ -80,7 +80,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Other name" />
+                android:text="@string/other_name" />
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMOtherName"
@@ -102,7 +102,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Sex (M/F)" />
+                android:text="@string/sex_m_f" />
 
             <Spinner
                 android:id="@+id/cboAMGender"
@@ -124,7 +124,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Age" />
+                android:text="@string/age" />
 
 
             <Spinner
@@ -148,7 +148,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="What does this member do to make money?" />
+                android:text="@string/what_member_does_to_make_money" />
 
             <Spinner
                 android:id="@+id/cboAMOccupation"
@@ -179,7 +179,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Phone number" />
+                android:text="@string/phone_number" />
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMPhoneNo"
@@ -201,7 +201,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Number of cycles member completed" />
+                android:text="@string/number_of_cycles_member_completed" />
 
             <Spinner
                 android:id="@+id/cboAMCycles"
@@ -223,21 +223,21 @@
                 style="@style/SubHeadingLowCaps"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:text="Middle Cycle Start" />
+                android:text="@string/middle_cycle_start_smallcap" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMiddleStartPrompt"
                 style="@style/RegularTextInstruction"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="If current cycle has started, and your group has held one or more meetings already, enter current totals for member so far." />
+                android:text="@string/if_current_cycle_has_started_an_your_group_has_held_one_or_more_meetings_already" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/lblMDVAmountSavedInCurrentCycle"
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Total amount this member has saved in current cycle so far" />
+                android:text="@string/total_amount_this_member_has_saved_in_current_cycle_so_far" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -256,7 +256,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="UGX" />
+                    android:text="string/@ugx" />
             </LinearLayout>
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -264,7 +264,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Total welfare saved by this member during current cycle so far" />
+                android:text="@string/total_welfare_saved_by_this_member_during_current_cycle_so_far" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -283,7 +283,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="UGX" />
+                    android:text="@string/ugx" />
 
             </LinearLayout>
 
@@ -292,7 +292,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Total outstanding welfare borrowed by this member during current cycle" />
+                android:text="@string/total_outstanding_welfare_borrowed_by_this_member_during_current_cycle" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -311,7 +311,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="UGX" />
+                    android:text="@string/ugx" />
 
             </LinearLayout>
 
@@ -320,7 +320,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="When is the due date of the outstanding welfare" />
+                android:text="@string/when_is_the_due_date_of_the_outstanding_welfare" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtOutstandingWelfareDueDate"
@@ -337,7 +337,7 @@
                 style="@style/RegularText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loan number for this member's regular loan outstanding" />
+                android:text="@string/loan_number_for_this_members_regular_loan_outstanding" />
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtNCGSWOutstandingLoanNumber"
@@ -351,7 +351,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Total amount of this member's regular loan outstanding" />
+                android:text="@string/total_amount_of_this_members_regular_loan_outstanding" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -370,7 +370,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="UGX" />
+                    android:text="@string/ugx" />
             </LinearLayout>
 
 
@@ -379,7 +379,7 @@
                 style="@style/RegularText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="When is the next repayment expected for this loan" />
+                android:text="@string/when_is_the_next_repayment_expected_for_this_loan" />
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtNCGSWLoanNextRepaymentDate"

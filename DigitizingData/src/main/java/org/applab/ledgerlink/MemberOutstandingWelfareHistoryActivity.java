@@ -1,6 +1,7 @@
 package org.applab.ledgerlink;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -18,8 +19,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockListActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
@@ -33,7 +34,9 @@ import org.applab.ledgerlink.repo.VslaCycleRepo;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MemberOutstandingWelfareHistoryActivity extends SherlockListActivity {
+import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+
+public class MemberOutstandingWelfareHistoryActivity extends ListActivity {
 
     LedgerLinkApplication ledgerLinkApplication;
     private String meetingDate;
@@ -89,7 +92,7 @@ public class MemberOutstandingWelfareHistoryActivity extends SherlockListActivit
     private void inflateActionBar() {
         // BEGIN_INCLUDE (inflate_set_custom_view)
         // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
+        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back, null);
         customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
@@ -97,7 +100,7 @@ public class MemberOutstandingWelfareHistoryActivity extends SherlockListActivit
                     @Override
                     public void onClick(View v) {
                         Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect", "outstandingWelfare");
+                        i.putExtra("_tabToSelect", getString(R.string.outstandingwelfare));
                         i.putExtra("_meetingDate", meetingDate);
                         i.putExtra("_meetingId", meetingId);
                         //startActivity(i);
@@ -107,13 +110,13 @@ public class MemberOutstandingWelfareHistoryActivity extends SherlockListActivit
         );
 
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
-        actionBar.setTitle("Fines");
+        actionBar.setTitle(R.string.fines_smallcaps);
 
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeButtonEnabled(false);
@@ -192,7 +195,7 @@ public class MemberOutstandingWelfareHistoryActivity extends SherlockListActivit
                                                 @Override
                                                 public void onClick(View v) {
                                                     if ((meetingOutstandingWelfare.getIsCleared() == 1) && (!(meetingOutstandingWelfare.getPaidInMeeting().getMeetingId() == meetingId))) {
-                                                        Toast.makeText(context, "The selected outstanding welfare has already been paid", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(context, R.string.selescted_outstanding_welfare_already_paid, Toast.LENGTH_LONG).show();
                                                     }
                                                 }
                                             }
@@ -232,7 +235,7 @@ public class MemberOutstandingWelfareHistoryActivity extends SherlockListActivit
             holder.position = position;
 
             if(meetingOutstandingWelfare.getExpectedDate() != null) {
-                holder.txtOWExpectedDate.setText(String.format("Due date - " + Utils.formatDate(meetingOutstandingWelfare.getExpectedDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                holder.txtOWExpectedDate.setText(String.format(getString(R.string.due_date_) + Utils.formatDate(meetingOutstandingWelfare.getExpectedDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
             }
             holder.txtOWAmount.setText(String.format("%,.0f UGX", meetingOutstandingWelfare.getAmount()));
             holder.paidStatusCheckBox.setChecked(meetingOutstandingWelfare.getIsCleared() != 0);

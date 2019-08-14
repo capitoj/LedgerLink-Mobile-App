@@ -15,7 +15,7 @@ android:orientation="vertical">
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="BORROW FROM WELFARE"
+        android:text="@string/borrow_from_wellfare"
         android:id="@+id/lblBorrowWelfare" />
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -23,7 +23,7 @@ android:orientation="vertical">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:text="Select the member below that would like to borrow from Welfare"
+        android:text="@string/select_the_member_below_that_would_like_to_borrow_from_welfare"
         android:id="@+id/lblReviewBorrowFromWelfareMessage"
         android:layout_below="@id/lblBorrowWelfare"/>
 

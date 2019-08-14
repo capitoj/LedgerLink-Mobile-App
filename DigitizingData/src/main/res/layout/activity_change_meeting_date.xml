@@ -20,7 +20,7 @@
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="View the date below and tap to change if it is not the correct meeting date."
+            android:text="@string/view_the_date_below_and_tap_to_change"
             android:id="@+id/lblCMDInstructions1" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
