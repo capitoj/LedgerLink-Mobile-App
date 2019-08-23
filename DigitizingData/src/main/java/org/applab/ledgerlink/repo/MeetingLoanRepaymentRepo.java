@@ -868,4 +868,40 @@ public class MeetingLoanRepaymentRepo {
             }
         }
     }
+
+    public double getTotalInterestEarnedInCycle(int cycleId){
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        double loansEarned = 0.00;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sumQuery = String.format("SELECT SUM(%s) AS TotalInterestEarned FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
+                    LoanRepaymentSchema.COL_LR_AMOUNT, LoanRepaymentSchema.getTableName(),
+                    LoanRepaymentSchema.COL_LR_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
+                    MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID,cycleId);
+            cursor = db.rawQuery(sumQuery, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                loansEarned = cursor.getDouble(cursor.getColumnIndex("TotalInterestEarned"));
+            }
+
+            return loansEarned;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingLoanRepaymentRepo.getTotalInterestEarnedInCycle", ex.getMessage());
+            return 0;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
 }

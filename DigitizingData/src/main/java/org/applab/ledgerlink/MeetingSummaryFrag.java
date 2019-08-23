@@ -139,9 +139,9 @@ public class MeetingSummaryFrag extends Fragment {
 
         lblOutstandingLoans.setText(String.format("Loans Outstanding: %,.0f UGX", outstandingLoans));
         lblTotalSavings.setText(String.format("Total Savings: %,.0f UGX", totalSavings));
-        // lblCycleStartDate.setText(String.format("From: %s", startDate));
-        // lblCycleEndDate.setText(String.format("To: %s", endDate));
-        // lblIssuedLoans.setText(String.format("Loans Issued: %,.0f UGX", issuedLoans));
+        //lblCycleStartDate.setText(String.format("From: %s", startDate));
+        //lblCycleEndDate.setText(String.format("To: %s", endDate));
+        //lblIssuedLoans.setText(String.format("Loans Issued: %,.0f UGX", issuedLoans));
         //lblCashInBank.setText(String.format("Total Cash In Bank: %s", "Not Available"));
 
 

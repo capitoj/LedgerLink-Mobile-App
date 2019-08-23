@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -44,7 +45,7 @@ import android.util.DisplayMetrics;
  * Created by Moses on 6/13/13.
  * Modified by Joseph Capito 10/12/2015
  */
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private final ArrayList<MenuItem> mainMenuItemsGridArray = new ArrayList<MenuItem>();
     private CustomGridViewAdapter customGridAdapter;
@@ -124,7 +125,10 @@ public class MainActivity extends ActionBarActivity {
         mainMenuItemsGridArray.add(new MenuItem(getString(R.string.updatecycle), getString(R.string.edit_cycle_menu), R.drawable.edit_cycle));
         mainMenuItemsGridArray.add(new MenuItem(getString(R.string.endcycle), getString(R.string.end_cycle_menu), R.drawable.end_cycle));
         mainMenuItemsGridArray.add(new MenuItem(getString(R.string.begincycle), getString(R.string.begin_new_cycle_menu), R.drawable.new_cycle));
-
+    //Adding the share out module
+        mainMenuItemsGridArray.add(new MenuItem(getString(R.string.shareout), getString(R.string.share_out_menu), R.drawable.members));
+    // Testing lists
+        mainMenuItemsGridArray.add(new MenuItem(getString(R.string.lists), getString(R.string.lists_menu), R.drawable.members));
 
         //Display the Data Migration Menu if data has not yet been migrated
         /** if (null != vslaInfo) {
@@ -179,6 +183,10 @@ public class MainActivity extends ActionBarActivity {
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.reviewmembers))) {
                     Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.shareout))) {
+                    Intent i = new Intent(getApplicationContext(), ShareOutActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.datamigration))) {

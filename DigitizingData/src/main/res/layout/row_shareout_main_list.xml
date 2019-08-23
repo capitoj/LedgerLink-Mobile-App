@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/RegularTextListItems"
+        android:id="@+id/txtMListFullName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/name_default" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalWelfare"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListFullName"
+        android:text = "@string/welfare_"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListShareOut"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListTotalWelfare"
+        android:text = "@string/share_out"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalSaving"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListShareOut"
+        android:text = "Total Savings"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalFine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListTotalSaving"
+        android:text = "Total Fine"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalRepaid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListTotalFine"
+        android:text = "Total Repaid"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalEarnings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListTotalRepaid"
+        android:text = "Total Earnings"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListShareValue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListTotalEarnings"
+        android:text = "Share Value"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListCycleNoOfStar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListShareValue"
+        android:text = "Cycle No of Stars"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalMembersSavings"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListCycleNoOfStar"
+        android:text = "Cycle No of Stars"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListMembersNoOfStars"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListTotalMembersSavings"
+        android:text = "Members Cycle No of Stars"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListNewShareValue"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListMembersNoOfStars"
+        android:text = "New Share Value"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+
+</RelativeLayout>

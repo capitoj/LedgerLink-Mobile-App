@@ -160,7 +160,19 @@
         <activity
             android:name=".MembersListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
             android:label="@string/title_activity_members_list"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.applab.ledgerlink.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ShareOutActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:label="@string/title_activity_shareout_list"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
             <meta-data
@@ -211,6 +223,7 @@
         <activity
             android:name=".GettingStartedWizardNewCycleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
             android:label="@string/title_activity_gettings_started_wizard_add_cycle"
             android:parentActivityName=".GettingStartedWizardPageOne"
             android:screenOrientation="portrait">
@@ -351,6 +364,7 @@
         <activity android:name=".BorrowWelfareMeetingActivity" />
         <activity android:name=".AddBorrowFromWelfareMeetingActivity" />
         <activity android:name=".MemberOutstandingWelfareHistoryActivity"></activity>
+
     </application>
 
 </manifest>
