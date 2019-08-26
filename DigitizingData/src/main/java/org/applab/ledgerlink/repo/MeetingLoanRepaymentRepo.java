@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by Moses on 7/9/13.
  */
@@ -869,27 +871,24 @@ public class MeetingLoanRepaymentRepo {
         }
     }
 
-    public double getTotalInterestEarnedInCycle(int cycleId){
+    public double getTotalInterestCollectedInCycle(int currentCycleId){
         SQLiteDatabase db = null;
         Cursor cursor = null;
-        double loansEarned = 0.00;
+        double loansInterestCollected = 0.00;
 
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sumQuery = String.format("SELECT SUM(%s) AS TotalInterestEarned FROM %s WHERE %s IN (SELECT %s FROM %s WHERE %s=%d)",
-                    LoanRepaymentSchema.COL_LR_AMOUNT, LoanRepaymentSchema.getTableName(),
-                    LoanRepaymentSchema.COL_LR_MEETING_ID, MeetingSchema.COL_MT_MEETING_ID,
-                    MeetingSchema.getTableName(), MeetingSchema.COL_MT_CYCLE_ID,cycleId);
-            cursor = db.rawQuery(sumQuery, null);
+            String sql = "select SUM(InterestAmount) AS TotalInterestAmount from ( select RANDOM() Identifier, InterestAmount from LoanRepayments where MeetingId In (select _id from Meetings where CycleId = ?) union select RANDOM() Identifier, InterestAmount from LoanIssues where MeetingId in (select _id from Meetings where CycleId = ?))";
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(currentCycleId), String.valueOf(currentCycleId)});
 
-            if (cursor != null && cursor.moveToFirst()) {
-                loansEarned = cursor.getDouble(cursor.getColumnIndex("TotalInterestEarned"));
+             if (cursor != null && cursor.moveToFirst()) {
+                 loansInterestCollected = cursor.getDouble(cursor.getColumnIndex("TotalInterestAmount"));
             }
-
-            return loansEarned;
+            Log.e("getTotalInterestCollectedInCycle: ", String.valueOf(loansInterestCollected));
+            return loansInterestCollected;
         }
         catch (Exception ex) {
-            Log.e("MeetingLoanRepaymentRepo.getTotalInterestEarnedInCycle", ex.getMessage());
+            Log.e("MeetingLoanRepaymentRepo.getTotalInterestCollectedInCycle", ex.getMessage());
             return 0;
         }
         finally {

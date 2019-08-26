@@ -83,8 +83,11 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
                     double totalFine = new MeetingFineRepo(context).getTotalFinesPaidInCycle(targetCycleId);
                     txtTotalFine.setText("Total Fine : " + Utils.formatNumber(totalFine) + " UGX");
                     // total repaid in cycle
-                    double totalTotalRepaid = new MeetingLoanRepaymentRepo(context).getTotalLoansRepaidInCycle(targetCycleId);
-                    txtTotalRepaid.setText("Total Repaid : " + Utils.formatNumber(totalTotalRepaid) + " UGX");
+                    //double totalTotalRepaid = new MeetingLoanRepaymentRepo(context).getTotalLoansRepaidInCycle(targetCycleId);
+                    //txtTotalRepaid.setText("Total Repaid : " + Utils.formatNumber(totalTotalRepaid) + " UGX");
+                    // total interest collected in cycle
+                    long totalTotalRepaid = (long) new MeetingLoanRepaymentRepo(context).getTotalInterestCollectedInCycle(targetCycleId);
+                    txtTotalRepaid.setText("Total Interest Collected : " + Utils.formatNumber(totalTotalRepaid) + " UGX");
                     //total earnings
                     double totalEarnings = totalSavings + totalFine + totalTotalRepaid;
                     txtTotalEarnings.setText("Total Earnings : " + Utils.formatNumber(totalEarnings) + " UGX");
