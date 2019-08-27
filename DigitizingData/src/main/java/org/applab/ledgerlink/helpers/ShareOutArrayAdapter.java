@@ -41,8 +41,7 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
         try {
             //Here I populate the ListView Row with data.
             //I will handle the itemClick event in the ListView view on the actual fragment
-            LayoutInflater inflater = (LayoutInflater)context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View rowView = inflater.inflate(R.layout.row_shareout_main_list, parent, false);
 
@@ -86,7 +85,7 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
                     //double totalTotalRepaid = new MeetingLoanRepaymentRepo(context).getTotalLoansRepaidInCycle(targetCycleId);
                     //txtTotalRepaid.setText("Total Repaid : " + Utils.formatNumber(totalTotalRepaid) + " UGX");
                     // total interest collected in cycle
-                    long totalTotalRepaid = (long) new MeetingLoanRepaymentRepo(context).getTotalInterestCollectedInCycle(targetCycleId);
+                    double totalTotalRepaid = new MeetingLoanRepaymentRepo(context).getTotalInterestCollectedInCycle(targetCycleId);
                     txtTotalRepaid.setText("Total Interest Collected : " + Utils.formatNumber(totalTotalRepaid) + " UGX");
                     //total earnings
                     double totalEarnings = totalSavings + totalFine + totalTotalRepaid;
@@ -100,8 +99,8 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
                     // member's savings
                     double totalMembersSavings = new MeetingSavingRepo(context).getMemberTotalSavingsInCycle(targetCycleId, memb.getMemberId());
                     txtTotalMembersSavings.setText("Member's Savings : " + Utils.formatNumber(totalMembersSavings) + " UGX");
-                    // member's no. of starsT
-                    double membersNoOfStars = totalMembersSavings / shareValue;
+                    // member's no. of stars
+                    int membersNoOfStars = (int) (totalMembersSavings / shareValue);
                     txtMembersNoOfStars.setText("Member's No  of Stars : " + Utils.formatNumber(membersNoOfStars) + " STARS");
                     // New share value
                     double newShareValue = totalEarnings / cycleNoOfStars;

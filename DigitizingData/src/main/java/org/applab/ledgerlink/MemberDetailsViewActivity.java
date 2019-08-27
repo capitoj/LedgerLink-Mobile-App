@@ -108,22 +108,22 @@ public class MemberDetailsViewActivity extends AppCompatActivity{
                 });
 
 
-        actionBar = getSupportActionBar();
+        //actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
-        }
-
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-        );
-        actionBar.setDisplayShowCustomEnabled(true);
+//        if (Utils.isExecutingInTrainingMode()) {
+//            actionBar.setIcon(R.drawable.icon_training_mode);
+//        }
+//
+//        actionBar.setDisplayShowTitleEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//
+//        actionBar.setCustomView(customActionBarView,
+//                new ActionBar.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+//        );
+//        actionBar.setDisplayShowCustomEnabled(true);
 
     }
 

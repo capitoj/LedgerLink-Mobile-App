@@ -172,8 +172,8 @@ public class MainActivity extends AppCompatActivity {
                     i.putExtra("_isEndCycleAction", false);
                     startActivity(i);
                 } else if (selectedMenuName.equalsIgnoreCase(getString(R.string.endcycle))) {
-                    //Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
-                    Intent i = new Intent(getApplicationContext(), SelectCycle.class);
+                    Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+                    //Intent i = new Intent(getApplicationContext(), SelectCycle.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     i.putExtra("_isEndCycleAction", true);
                     startActivity(i);

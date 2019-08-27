@@ -65,6 +65,7 @@
         <activity
             android:name=".MemberDetailsViewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
             android:label="Member Details"
             android:screenOrientation="portrait" />
         <activity
@@ -191,8 +192,9 @@
         </activity>
         <activity
             android:name=".ViewSentDataActivity"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="View Sent Data"
+            android:label="@string/sent_data"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MemberAttendanceHistoryActivity"
