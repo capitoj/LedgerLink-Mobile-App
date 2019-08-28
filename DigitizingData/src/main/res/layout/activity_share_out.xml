@@ -25,7 +25,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:choiceMode="singleChoice"
-        android:layout_below="@id/frmMList_top_control_bar" />
+        android:layout_below="@id/frmMList_top_control_bar">
+
+    </ListView>
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularText"

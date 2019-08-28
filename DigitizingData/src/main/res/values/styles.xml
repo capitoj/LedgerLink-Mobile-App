@@ -75,5 +75,4 @@
     <item name="@android:windowEnterAnimation">@anim/elv_popup_show</item>
     <item name="@android:windowExitAnimation">@anim/elv_popup_hide</item> </style>
 
-
 </resources>

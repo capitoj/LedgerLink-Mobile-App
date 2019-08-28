@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,7 +36,7 @@ import java.util.Calendar;
 /**
  * Created by Moses on 6/26/13.
  */
-public class MemberDetailsViewActivity extends ActionBarActivity{
+public class MemberDetailsViewActivity extends AppCompatActivity{
     private ActionBar actionBar;
     private int selectedMemberId = -1;
     private String selectedMemberNames = getString(R.string.vsla_member);
@@ -107,22 +108,22 @@ public class MemberDetailsViewActivity extends ActionBarActivity{
                 });
 
 
-        actionBar = getSupportActionBar();
+        //actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
-        }
-
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-        );
-        actionBar.setDisplayShowCustomEnabled(true);
+//        if (Utils.isExecutingInTrainingMode()) {
+//            actionBar.setIcon(R.drawable.icon_training_mode);
+//        }
+//
+//        actionBar.setDisplayShowTitleEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//
+//        actionBar.setCustomView(customActionBarView,
+//                new ActionBar.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+//        );
+//        actionBar.setDisplayShowCustomEnabled(true);
 
     }
 

@@ -1,7 +1,7 @@
 package org.applab.ledgerlink;
 
-import android.app.Activity;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -13,26 +13,24 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.MembersArrayAdapter;
+import org.applab.ledgerlink.helpers.ShareOutArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.util.ArrayList;
 
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 /**
  * Created by Moses on 7/16/13.
  */
-public class MembersListActivity extends ListActivity {
+public class ShareOutActivity extends ListActivity {
     private ArrayList<Member> members;
     LedgerLinkApplication ledgerLinkApplication;
+    Context context;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +62,7 @@ public class MembersListActivity extends ListActivity {
                 populateMembersList();
             }
         };
-        LongTaskRunner.runLongTask(populateMembers, getString(R.string.please_wait), getString(R.string.loading_member_list), MembersListActivity.this);
+        LongTaskRunner.runLongTask(populateMembers, getString(R.string.please_wait), getString(R.string.loading_member_list), ShareOutActivity.this);
 
 
     }
@@ -91,10 +89,10 @@ public class MembersListActivity extends ListActivity {
                     NavUtils.navigateUpTo(this, upIntent);
                 }
                 return true;
-           /** case R.id.mnuMListDone:
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
-                return true; */
+            /** case R.id.mnuMListDone:
+             Intent i = new Intent(getApplicationContext(), MainActivity.class);
+             startActivity(i);
+             return true; */
             case R.id.mnuMListAdd:
                 Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -114,14 +112,15 @@ public class MembersListActivity extends ListActivity {
         }
 
         //Now get the data via the adapter
-        final MembersArrayAdapter adapter = new MembersArrayAdapter(getBaseContext(), members);
+        final ShareOutArrayAdapter adapter = new ShareOutArrayAdapter(getBaseContext(), members);
 
         //Assign Adapter to ListView
         runOnUiThread(new Runnable()
         {
             @Override
             public void run()
-            {setListAdapter(adapter);
+            {
+                setListAdapter(adapter);
             }
         });
 
@@ -132,18 +131,10 @@ public class MembersListActivity extends ListActivity {
                                     int position, long id) {
 
                 // Launching new Activity on selecting single List Item
-                Member selectedMember = members.get(position);
-                Intent viewMember = new Intent(view.getContext(), MemberDetailsViewActivity.class);
-                viewMember.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                Member selectedMember = members.get(position);
+//                Intent viewMember = new Intent(view.getContext(), MemberDetailsViewActivity.class);
+//                viewMember.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                // Pass on data
-                Bundle b = new Bundle();
-                b.putInt("_id", selectedMember.getMemberId());
-                b.putString("_names", selectedMember.getFullName());
-                viewMember.putExtras(b);
-                viewMember.putExtra("_caller",getString(R.string.reviewmembers));
-                viewMember.putExtra("_isEditAction",true);
-                startActivity(viewMember);
 
             }
         });
