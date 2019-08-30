@@ -884,7 +884,6 @@ public class MeetingLoanRepaymentRepo {
              if (cursor != null && cursor.moveToFirst()) {
                  loansInterestCollected = cursor.getDouble(cursor.getColumnIndex("TotalInterestAmount"));
             }
-            Log.e("getTotalInterestCollectedInCycle: ", String.valueOf(loansInterestCollected));
             return loansInterestCollected;
         }
         catch (Exception ex) {

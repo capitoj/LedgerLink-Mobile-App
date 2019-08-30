@@ -336,6 +336,21 @@ public class MemberRepo {
         return activeMembers;
     }
 
+    public ArrayList<Member> getActiveMembers(){
+        ArrayList<Member> allMembers = this.getAllMembers();
+        ArrayList<Member> activeMembers = new ArrayList<Member>();
+        if(allMembers != null) {
+            for (Member member : allMembers) {
+                if(member.getMemberNo() > 0) {
+                    if (member.isActive()) {
+                        activeMembers.add(member);
+                    }
+                }
+            }
+        }
+        return activeMembers;
+    }
+
 
     public ArrayList<Member> getAllMembers() {
 
