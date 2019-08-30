@@ -172,7 +172,6 @@
         <activity
             android:name=".ShareOutActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
             android:label="@string/title_activity_shareout_list"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
