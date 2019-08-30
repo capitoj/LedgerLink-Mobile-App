@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -33,7 +34,7 @@ import java.util.Date;
 /**
  * Created by Moses on 6/27/13.
  */
-public class NewCycleActivity extends ActionBarActivity{
+public class NewCycleActivity extends AppCompatActivity{
     ActionBar actionBar;
 
     TextView txtStartDate;

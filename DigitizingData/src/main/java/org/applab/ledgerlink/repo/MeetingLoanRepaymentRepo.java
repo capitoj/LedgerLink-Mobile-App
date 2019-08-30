@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by Moses on 7/9/13.
  */
@@ -868,4 +870,36 @@ public class MeetingLoanRepaymentRepo {
             }
         }
     }
+
+    public double getTotalInterestCollectedInCycle(int currentCycleId){
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        double loansInterestCollected = 0.00;
+
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = "select SUM(InterestAmount) AS TotalInterestAmount from ( select RANDOM() Identifier, InterestAmount from LoanRepayments where MeetingId In (select _id from Meetings where CycleId = ?) union select RANDOM() Identifier, InterestAmount from LoanIssues where MeetingId in (select _id from Meetings where CycleId = ?))";
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(currentCycleId), String.valueOf(currentCycleId)});
+
+             if (cursor != null && cursor.moveToFirst()) {
+                 loansInterestCollected = cursor.getDouble(cursor.getColumnIndex("TotalInterestAmount"));
+            }
+            return loansInterestCollected;
+        }
+        catch (Exception ex) {
+            Log.e("MeetingLoanRepaymentRepo.getTotalInterestCollectedInCycle", ex.getMessage());
+            return 0;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
 }

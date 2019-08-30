@@ -1,5 +1,6 @@
 package org.applab.ledgerlink;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -38,17 +41,17 @@ public class MembersListActivity extends ListActivity {
 
         setContentView(R.layout.activity_members_list);
 
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        //ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
+            //actionBar.setIcon(R.drawable.icon_training_mode);
         }
 
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(R.string.members);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setDisplayShowTitleEnabled(true);
+        //actionBar.setTitle(R.string.members);
+        //actionBar.setHomeButtonEnabled(true);
+        //actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Populate the Members
         //Run this as long running task
@@ -118,8 +121,7 @@ public class MembersListActivity extends ListActivity {
         {
             @Override
             public void run()
-            {
-                setListAdapter(adapter);
+            {setListAdapter(adapter);
             }
         });
 

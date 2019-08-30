@@ -789,6 +789,12 @@
     <string name="meeting_cannot_be_deleted">The meeting cannot be deleted. It contains meeting data.</string>
     <string name="are_you_sure_you_want_to_delete_this_metting"><![CDATA[Are you sure you want to delete this meeting? If so, tap <b>Done</b>. The following information will be deleted:]]></string>
     <string name="switch_language">Switch Language</string>
+    <string name="shareout">shareout</string>
+    <string name="share_out_menu">SHARE OUT</string>
+    <string name="title_activity_shareout_list">Share Out</string>
+    <string name="share_out">share_out_</string>
+    <string name="lists">lists</string>
+    <string name="lists_menu">Lists</string>
 
 
 </resources>
