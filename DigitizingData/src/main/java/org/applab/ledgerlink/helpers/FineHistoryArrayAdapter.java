@@ -119,7 +119,7 @@ public class FineHistoryArrayAdapter extends ArrayAdapter<MemberFineRecord> {
                         fineRecord.setFineTypeName(context.getResources().getString(R.string.finetype_disorder));
                         break;
                     default:
-                        fineRecord.setFineTypeName("Unknown");
+                        fineRecord.setFineTypeName(context.getResources().getString(R.string.unknown_smallcaps));
                 }
                 txtFineType.setText(fineRecord.getFineTypeName());
                 chkMemberFineStatus.setChecked(fineRecord.getStatus() != 0);

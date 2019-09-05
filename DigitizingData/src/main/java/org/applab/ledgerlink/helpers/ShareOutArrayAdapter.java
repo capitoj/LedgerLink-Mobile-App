@@ -79,40 +79,29 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
                     int targetCycleId = new VslaCycleRepo(context).getCurrentCycle().getCycleId();
                     // total  members welfare
                     double totalWelfare = new MeetingWelfareRepo(context).getMemberTotalWelfareInCycle(targetCycleId, memb.getMemberId());
-                    txtWelfare.setText("Welfare : " + Utils.formatNumber(totalWelfare) + " UGX");
+                    txtWelfare.setText(context.getResources().getString(R.string.welfare_asof) + Utils.formatNumber(totalWelfare) + " UGX");
                     // total savings in cycle
                     totalSavings = new MeetingSavingRepo(context).getTotalSavingsInCycle(targetCycleId);
-                    //txtTotalSavings.setText("Total Savings : " + Utils.formatNumber(totalSavings) + " UGX");
                     //total fines in cycle
                     totalFine = new MeetingFineRepo(context).getTotalFinesPaidInCycle(targetCycleId);
-                    //txtTotalFine.setText("Total Fine : " + Utils.formatNumber(totalFine) + " UGX");
-                    // total repaid in cycle
-                    //double totalTotalRepaid = new MeetingLoanRepaymentRepo(context).getTotalLoansRepaidInCycle(targetCycleId);
-                    //txtTotalRepaid.setText("Total Repaid : " + Utils.formatNumber(totalTotalRepaid) + " UGX");
                     // total interest collected in cycle
                     totalInterest = new MeetingLoanRepaymentRepo(context).getTotalInterestCollectedInCycle(targetCycleId);
-                    //txtTotalRepaid.setText("Total Interest Collected : " + Utils.formatNumber(totalInterest) + " UGX");
                     //total earnings
                     totalEarnings = totalSavings + totalFine + totalInterest;
-                    //txtTotalEarnings.setText("Total Earnings : " + Utils.formatNumber(totalEarnings) + " UGX");
                     // Share value
                     double shareValue = new VslaCycleRepo(context).getCycle(targetCycleId).getSharePrice();
-                    //txtShareValue.setText("Share Value : " + Utils.formatNumber(shareValue) + " UGX");
                     //Cycle's No. of stars
                     double cycleNoOfStars = totalSavings / shareValue;
-                    //txtCycleNoOfStar.setText("Cycle No of stars : " + Utils.formatNumber(cycleNoOfStars) + " STARS");
                     // member's savings
                     double totalMembersSavings = new MeetingSavingRepo(context).getMemberTotalSavingsInCycle(targetCycleId, memb.getMemberId());
-                    //txtTotalMembersSavings.setText("Member's Savings : " + Utils.formatNumber(totalMembersSavings) + " UGX");
                     // member's no. of stars
                     int membersNoOfStars = (int) (totalMembersSavings / shareValue);
-                    txtMembersNoOfStars.setText("Stars Saved : " + Utils.formatNumber(membersNoOfStars) + " Stars");
+                    txtMembersNoOfStars.setText(context.getResources().getString(R.string.stars_saved) + Utils.formatNumber(membersNoOfStars) + context.getResources().getString(R.string.stars));
                     // New share value
                     newShareValue = totalEarnings / cycleNoOfStars;
-                    //txtNewShareValue.setText("new Share Value : " + Utils.formatNumber(newShareValue) + " UGX");
                     // share out amount
                     double shareOutAmount = membersNoOfStars * newShareValue;
-                    txtShareOut.setText("Share Out : " + Utils.formatNumber(shareOutAmount) + " UGX");
+                    txtShareOut.setText(context.getResources().getString(R.string.share_out_x) + Utils.formatNumber(shareOutAmount) + " UGX");
                 }
             }
             else {

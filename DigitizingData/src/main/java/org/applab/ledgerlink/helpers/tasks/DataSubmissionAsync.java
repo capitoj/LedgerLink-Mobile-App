@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.helpers.Network;
 
 /**
@@ -22,7 +24,7 @@ public class DataSubmissionAsync extends AsyncTask<String, String, String> {
         this.context = context;
         this.isConnected = false;
         this.progressDialog = null;
-        this.progressText = "Performing Data Submission";
+        this.progressText = context.getResources().getString(R.string.performing_data_submission);
         this.showProgressDialog = false;
     }
 
@@ -39,7 +41,7 @@ public class DataSubmissionAsync extends AsyncTask<String, String, String> {
         super.onPreExecute();
         progressDialog = new ProgressDialog(this.context);
         progressDialog.setTitle(progressText);
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setMessage(context.getResources().getString(R.string.please_wait));
         progressDialog.setProgress(1);
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

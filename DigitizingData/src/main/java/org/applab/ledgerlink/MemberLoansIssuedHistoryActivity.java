@@ -125,7 +125,7 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
             //cycle = vslaCycleRepo.getCycle(targetCycleId);
             // Get current cycle interest rate
             //lblInterestDesc.setText(String.format("at %.0f%% every 30 days", cycle.getInterestRate()));
-            lblInterestDesc.setText(String.format("at %.0f%% every 30 days", targetMeeting.getVslaCycle().getInterestRate()));
+            lblInterestDesc.setText(String.format("at %.0f%% "+getString(R.string.every_30_days), targetMeeting.getVslaCycle().getInterestRate()));
         }
 
         if(getIntent().getIntExtra("_action", 0) == 1) {
@@ -529,7 +529,7 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
             int cycleID = meetingRepo.getMeeting().getVslaCycle().getCycleId();
             boolean hasLoanNo = MeetingLoanIssuedRepo.hasLoanNumber(this, cycleID, theLoanNo);
             if(hasLoanNo && theAmount > 0.00){
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.loan_no) + String.valueOf(theLoanNo) + " already exists.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.loan_no) + String.valueOf(theLoanNo) + getString(R.string.already_exist), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanNo.requestFocus();
                 return false;
             }

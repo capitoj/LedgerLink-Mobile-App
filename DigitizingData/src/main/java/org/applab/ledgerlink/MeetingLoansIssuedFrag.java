@@ -126,7 +126,7 @@ public class MeetingLoansIssuedFrag extends Fragment {
 
         populateTotalCash();
         if (null != lblTotalCash) {
-            lblTotalCash.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
+            lblTotalCash.setText(String.format(getString(R.string.total_cash_inbox_x)+" %,.0f UGX", totalCashInBox));
         }
 
 

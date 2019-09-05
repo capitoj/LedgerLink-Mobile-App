@@ -301,12 +301,12 @@ public class AddMemberActivity extends ActionBarActivity{
         //Get the date of the dummy GSW meeting
         MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
 
-        String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her" : "his";
+        String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? getString(R.string.her) : getString(R.string.his);
         lblAMMiddleCycleInformationHeading.setText(getString(R.string.member_info_added_after_cycle_started) + pronoun + getString(R.string.total_saving_and_outstanding_loans_that_day));
 
         Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
         if (dummyGSWMeeting != null) {
-            lblAMMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+            lblAMMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), getString(R.string.date_format)) + getString(R.string.after_cycle_started_here_are) + pronoun + getString(R.string.total_savind_and_outstanding_loans_that_day));
         }
 
         /** if meeting is after 2nd meeting, disable editing outstanding balance*/

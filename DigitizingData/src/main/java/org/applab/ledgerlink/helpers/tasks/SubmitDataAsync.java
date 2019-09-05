@@ -15,6 +15,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.SendMeetingDataActivity;
 import org.applab.ledgerlink.helpers.Network;
 import org.applab.ledgerlink.repo.MeetingRepo;
@@ -47,8 +48,8 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONArray> {
     protected void onPreExecute(){
         super.onPreExecute();
         progressDialog = new ProgressDialog(this.context);
-        progressDialog.setTitle("Performing Data Submission");
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setTitle(context.getResources().getString(R.string.performing_data_submission));
+        progressDialog.setMessage(context.getResources().getString(R.string.please_wait));
         progressDialog.setProgress(1);
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -97,12 +98,12 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONArray> {
 
     @Override
     protected void onPostExecute(JSONArray jsonArray){
-        String dialogTitle = "Warning";
+        String dialogTitle = context.getResources().getString(R.string.warning);
         if(this.isConnected){
             try {
                 if(jsonArray != null) {
 
-                    Toast.makeText(this.context, "The meeting data was sent successfully", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this.context, context.getResources().getString(R.string.meeting_data_sent_successfully), Toast.LENGTH_LONG).show();
                     for(int i = 0; i < jsonArray.length(); i++){
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         if(jsonObject.getInt("StatusCode") == 0){
@@ -115,13 +116,13 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONArray> {
                     Intent intent = new Intent(this.context, SendMeetingDataActivity.class);
                     this.context.startActivity(intent);
                 }else{
-                    DialogMessageBox.show(this.context, dialogTitle, "The remote server encountered an internal error. There was not response from the server");
+                    DialogMessageBox.show(this.context, dialogTitle, context.getResources().getString(R.string.no_response_from_server));
                 }
             }catch(Exception e){
-                DialogMessageBox.show(this.context, dialogTitle, "Ledger Link has encountered an error. Kindly get in touch with your support agent " + e.getMessage());
+                DialogMessageBox.show(this.context, dialogTitle, context.getResources().getString(R.string.get_in_touch_with_support_agent)+ e.getMessage());
             }
         } else {
-            DialogMessageBox.show(this.context, dialogTitle, "The meeting information was not successfully submitted because the remote server could not be reached. Kindly check to ensure that you have an internet connection");
+            DialogMessageBox.show(this.context, dialogTitle, context.getResources().getString(R.string.meeting_info_not_successfully_submitted));
         }
         this.dismissProgressDialog();
     }

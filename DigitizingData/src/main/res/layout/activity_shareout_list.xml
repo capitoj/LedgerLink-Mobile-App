@@ -18,21 +18,21 @@
             style="@style/SubHeading"
             android:layout_width="fill_parent"
             android:layout_height="25dip"
-            android:text="SHARE OUT DETAILS" />
+            android:text="@string/share_out_details" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/lblHeaderTotalSavings"
-            android:text="Total Savings"/>
+            android:text="@string/total_savings"/>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             style="@style/RegularTextInstruction"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/lblHeaderTotalInterest"
-            android:text="Total Interest"
+            android:text="@string/total_interest"
             android:layout_below="@+id/lblHeaderTotalSavings"/>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -40,7 +40,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/lblHeaderTotalFines"
-            android:text="Total Fines"
+            android:text="@string/total_fines"
             android:layout_below="@+id/lblHeaderTotalInterest" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -48,7 +48,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/lblHeaderTotalEarnings"
-            android:text="Total Earnings"
+            android:text="@string/total_earnings"
             android:layout_below="@+id/lblHeaderTotalFines" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -56,7 +56,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/lblHeaderNewShareValue"
-            android:text="New Share Value"
+            android:text="@string/new_share_value"
             android:layout_below="@+id/lblHeaderTotalEarnings" />
 
     </LinearLayout>
@@ -70,7 +70,7 @@
                 style="@style/SubHeading"
                 android:layout_width="fill_parent"
                 android:layout_height="25dip"
-                android:text="MEMBER'S SHARE OUT" />
+                android:text="@string/members_share_out" />
 
 
             <ListView

@@ -1,6 +1,7 @@
 package org.applab.ledgerlink.helpers;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,7 +56,7 @@ public class AttendanceArrayAdapter extends ArrayAdapter<AttendanceRecord> {
                 if (attendanceRecord.getPresent()==0) {
                     txtComments.setText(attendanceRecord.getComment());
                     txtMeetingDate.setText(position + 1 + ". " + Utils.formatDate(attendanceRecord.getMeetingDate(), Utils.DATE_FIELD_FORMAT));
-                    txtAttendance.setText("Absent");
+                    txtAttendance.setText(context.getResources().getString(R.string.absent));
                     // txtAttendance.setText((attendanceRecord.getPresent() == 1) ? "Present" : "Absent");
                 }
             }

@@ -77,7 +77,7 @@ public class BorrowFromWelfareArrayAdapter extends ArrayAdapter<Member> {
                 outstandingWelfare = meetingOutstandingWelfareRepo.getMemberTotalWelfareOutstandingInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
 
-            txtTotalFines.setText(String.format("Outstanding Welfare: %,.0f UGX", outstandingWelfare));
+            txtTotalFines.setText(String.format(context.getResources().getString(R.string.outstanding_welfare_x)+" %,.0f UGX", outstandingWelfare));
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

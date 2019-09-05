@@ -218,19 +218,19 @@ public class MemberDetailsViewActivity extends AppCompatActivity{
             TextView lblMDMiddleCycleLoansOutstanding = (TextView) findViewById(R.id.lblMDMiddleCycleLoansOutstanding);
             TextView lblMDMiddleCycleOutstandingWelfare = (TextView) findViewById(R.id.lblMDMiddleCycleOutstandingWelfare);
 
-            lblMDMiddleCycleSavings.setText(String.format("Total Savings %,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
-            lblMDMiddleCycleWelfare.setText(String.format("Total Welfare %,.0f %s", member.getWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
-            lblMDMiddleCycleLoansOutstanding.setText(String.format("Loans Outstanding %,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
-            lblMDMiddleCycleOutstandingWelfare.setText(String.format("Outstanding Welfare %,.0f %s", member.getOutstandingWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleSavings.setText(String.format(getString(R.string.total_saving_x)+" %,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleWelfare.setText(String.format(getString(R.string.total_welfare_x)+" %,.0f %s", member.getWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleLoansOutstanding.setText(String.format(getString(R.string.loans_outstanding_x)+" %,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleOutstandingWelfare.setText(String.format(getString(R.string.outstanding_welfare_x)+" %,.0f %s", member.getOutstandingWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
 
             //Show the heading
             //Get the date of the dummy GSW meeting
-            String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her" : "his";
+            String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? getString(R.string.her) : getString(R.string.his) ;
             lblMDMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added) + pronoun + getString(R.string.total_savings_and_outstanding_loans));
 
             Meeting dummyGSWMeeting = ledgerLinkApplication.getMeetingRepo().getDummyGettingStartedWizardMeeting();
             if (dummyGSWMeeting != null) {
-                lblMDMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+                lblMDMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), getString(R.string.date_format)) + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
             }
 
 

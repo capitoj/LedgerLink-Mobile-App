@@ -103,7 +103,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
 
                 //Display it
                 //TextView tvMostRecentUnsentMeeting = (TextView) findViewById(R.id.lblBMCurrentMeetingDate);
-                //tvMostRecentUnsentMeeting.setText(Utils.formatDate(mostRecentUnsentMeeting.getMeetingDate(), "dd MMM yyyy"));
+                //tvMostRecentUnsentMeeting.setText(Utils.formatDate(mostRecentUnsentMeeting.getMeetingDate(), getString(R.string.date_format)));
 
                 // Set onclick event for the current meeting
                 final Meeting finalMostRecentUnsentMeeting = mostRecentUnsentMeeting;
@@ -119,7 +119,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
 //                        i.putExtra("_currentMeetingId", finalMostRecentUnsentMeeting.getMeetingId());
 //                        //make the view mode modifiable
 //                        i.putExtra("_viewOnly", false);
-//                        i.putExtra("_meetingDate", Utils.formatDate(finalMostRecentUnsentMeeting.getMeetingDate(), "dd MMM yyyy"));
+//                        i.putExtra("_meetingDate", Utils.formatDate(finalMostRecentUnsentMeeting.getMeetingDate(), getString(R.string.date_format)));
 //                        startActivity(i);
 //                    }
 //                });
@@ -213,7 +213,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
                 Meeting meeting = pastMeetings.get(position);
                 //Do as you wish with this meeting
                 Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
+                i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), getString(R.string.date_format)));
                 i.putExtra("_meetingId", meeting.getMeetingId());
                 i.putExtra("_viewOnly", true);  //viewing past meeetings should be read only
                 startActivity(i);
@@ -243,7 +243,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
                 Meeting meeting = currentMeetings.get(position);
                 //Do as you wish with this meeting
                 Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
+                i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), getString(R.string.date_format)));
                 i.putExtra("_meetingId", meeting.getMeetingId());
                 i.putExtra("_currentMeetingId", meeting.getMeetingId());
                 i.putExtra("_viewOnly", false);  //viewing current meetings should not be read only
@@ -280,7 +280,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         MeetingRepo meetingRepo = new MeetingRepo(BeginMeetingActivity.this);
-                        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
+                        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", getString(R.string.submitdata));
                         VslaCycle recentCycle = ledgerLinkApplication.getVslaCycleRepo().getMostRecentCycle();
                         List<Meeting> pastMeetings = meetingRepo.getPastMeetings(recentCycle.getCycleId());
                         JSONArray jsonArray = new JSONArray();
@@ -296,7 +296,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject();
                         try {
                             jsonObject.put("FileSubmission", jsonArray);
-                            serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
+                            serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", getString(R.string.submitdata));
                             new SubmitDataAsync(BeginMeetingActivity.this).execute(serverUri, String.valueOf(jsonObject));
                         }catch (Exception e){
                             e.printStackTrace();

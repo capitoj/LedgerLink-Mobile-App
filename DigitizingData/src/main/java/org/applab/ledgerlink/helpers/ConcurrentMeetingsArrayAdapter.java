@@ -47,7 +47,7 @@ public class ConcurrentMeetingsArrayAdapter extends ArrayAdapter<Meeting> {
             //Assign Values to the Widgets
             String meetingDate = "";
             if (values.get(position).isGettingStarted()) {
-                meetingDate = String.format("%s (Migration)", Utils.formatDate(values.get(position).getMeetingDate(), "dd MMM yyyy"));
+                meetingDate = String.format("%s "+context.getResources().getString(R.string.migration), Utils.formatDate(values.get(position).getMeetingDate(), "dd MMM yyyy"));
 
             } else {
                 meetingDate = String.format("%s ", Utils.formatDate(values.get(position).getMeetingDate(), "dd MMM yyyy"));

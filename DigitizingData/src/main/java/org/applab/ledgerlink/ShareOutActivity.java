@@ -98,15 +98,15 @@ public class ShareOutActivity extends AppCompatActivity {
         TextView txtNewShareValue = (TextView) findViewById(R.id.lblHeaderNewShareValue);
 
         double totalSavings = ShareOutArrayAdapter.getTotalSaving();
-        txtTotalSaving.setText("Total Savings :"  + Utils.formatNumber(totalSavings) + " UGX");
+        txtTotalSaving.setText(getString(R.string.total_savings)  + Utils.formatNumber(totalSavings) + " UGX");
         double totalInterest = ShareOutArrayAdapter.getTotalInterest();
-        txtTotalInterest.setText("Total Interest : "  + Utils.formatNumber(totalInterest) + " UGX");
+        txtTotalInterest.setText(getString(R.string.total_interest) + Utils.formatNumber(totalInterest) + " UGX");
         double totalFine = ShareOutArrayAdapter.getTotalFine();
-        txtTotalFines.setText("Total Fines : " + Utils.formatNumber(totalFine) + " UGX");
+        txtTotalFines.setText(getString(R.string.total_fines) + Utils.formatNumber(totalFine) + " UGX");
         double totalEarnings = ShareOutArrayAdapter.getTotalEarnings();
-        txtTotalEarnings.setText("Total Earnings : " + Utils.formatNumber(totalEarnings) + " UGX");
+        txtTotalEarnings.setText(getString(R.string.total_earnings) + Utils.formatNumber(totalEarnings) + " UGX");
         double newShareValue = ShareOutArrayAdapter.getNewShareValue();
-        txtNewShareValue.setText("New Share Value : " + Utils.formatNumber(newShareValue) + " UGX");
+        txtNewShareValue.setText(getString(R.string.new_share_value) + Utils.formatNumber(newShareValue) + " UGX");
 
     }
 

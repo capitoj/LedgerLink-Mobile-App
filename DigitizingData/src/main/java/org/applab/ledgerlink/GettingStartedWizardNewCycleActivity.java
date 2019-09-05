@@ -310,8 +310,8 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                     retVal = repo.createGettingStartedDummyMeeting(selectedCycle);
 
                     if (!retVal) {
-                        Log.d(getApplicationContext().getPackageName(), "Failed to create the dummy data import meeting");
-                        Toast.makeText(this, "An error occured while saving the information", Toast.LENGTH_LONG).show();
+                        Log.d(getApplicationContext().getPackageName(), getString(R.string.failed_dummy_data_import_meeting));
+                        Toast.makeText(this, R.string.error_occured_while_saving_info, Toast.LENGTH_LONG).show();
                     }
 
                     //displayMessageBox(dialogTitle, "The New Cycle has been added Successfully.", Utils.MSGBOX_ICON_TICK);
@@ -353,7 +353,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             if(isCycleValidated) {
                 EditText txtNCInterestRate = (EditText) findViewById(R.id.txtNCInterestRate);
                 String interestRate = txtNCInterestRate.getText().toString().trim();
-                showDialogMsgBox("Warning", Utils.formatNumber(Double.parseDouble(interestRate)) + "% is high. Are you sure you entered the correct interest rate");
+                showDialogMsgBox(getString(R.string.warning), Utils.formatNumber(Double.parseDouble(interestRate)) + "% "+ getString(R.string.is_high_sure_this_correct_value));
                 // displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
             }
         }
