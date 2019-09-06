@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,7 +36,7 @@ import java.util.Calendar;
 /**
  * Created by Moses on 6/26/13.
  */
-public class MemberDetailsViewActivity extends ActionBarActivity{
+public class MemberDetailsViewActivity extends AppCompatActivity{
     private ActionBar actionBar;
     private int selectedMemberId = -1;
     private String selectedMemberNames = getString(R.string.vsla_member);
@@ -107,22 +108,22 @@ public class MemberDetailsViewActivity extends ActionBarActivity{
                 });
 
 
-        actionBar = getSupportActionBar();
+        //actionBar = getSupportActionBar();
 
         // Swap in training mode icon if in training mode
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
-        }
-
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-        );
-        actionBar.setDisplayShowCustomEnabled(true);
+//        if (Utils.isExecutingInTrainingMode()) {
+//            actionBar.setIcon(R.drawable.icon_training_mode);
+//        }
+//
+//        actionBar.setDisplayShowTitleEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//
+//        actionBar.setCustomView(customActionBarView,
+//                new ActionBar.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+//        );
+//        actionBar.setDisplayShowCustomEnabled(true);
 
     }
 
@@ -217,19 +218,19 @@ public class MemberDetailsViewActivity extends ActionBarActivity{
             TextView lblMDMiddleCycleLoansOutstanding = (TextView) findViewById(R.id.lblMDMiddleCycleLoansOutstanding);
             TextView lblMDMiddleCycleOutstandingWelfare = (TextView) findViewById(R.id.lblMDMiddleCycleOutstandingWelfare);
 
-            lblMDMiddleCycleSavings.setText(String.format("Total Savings %,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
-            lblMDMiddleCycleWelfare.setText(String.format("Total Welfare %,.0f %s", member.getWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
-            lblMDMiddleCycleLoansOutstanding.setText(String.format("Loans Outstanding %,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
-            lblMDMiddleCycleOutstandingWelfare.setText(String.format("Outstanding Welfare %,.0f %s", member.getOutstandingWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleSavings.setText(String.format(getString(R.string.total_saving_x)+" %,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleWelfare.setText(String.format(getString(R.string.total_welfare_x)+" %,.0f %s", member.getWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleLoansOutstanding.setText(String.format(getString(R.string.loans_outstanding_x)+" %,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
+            lblMDMiddleCycleOutstandingWelfare.setText(String.format(getString(R.string.outstanding_welfare_x)+" %,.0f %s", member.getOutstandingWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
 
             //Show the heading
             //Get the date of the dummy GSW meeting
-            String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her" : "his";
+            String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? getString(R.string.her) : getString(R.string.his) ;
             lblMDMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added) + pronoun + getString(R.string.total_savings_and_outstanding_loans));
 
             Meeting dummyGSWMeeting = ledgerLinkApplication.getMeetingRepo().getDummyGettingStartedWizardMeeting();
             if (dummyGSWMeeting != null) {
-                lblMDMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+                lblMDMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), getString(R.string.date_format)) + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
             }
 
 

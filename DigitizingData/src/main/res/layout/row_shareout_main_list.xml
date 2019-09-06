@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/RegularTextListItems"
+        android:id="@+id/txtMListFullName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:text="@string/name_default" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListMembersNoOfStars"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListFullName"
+        android:text = "Stars Saved"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListTotalWelfare"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListMembersNoOfStars"
+        android:text = "@string/welfare_"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        style="@style/ListSmallSubItems"
+        android:id="@+id/txtMListShareOut"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtMListTotalWelfare"
+        android:text = "@string/share_out"
+        android:paddingRight="@dimen/dp_10"
+        android:layout_alignParentRight="true" />
+
+
+
+</RelativeLayout>

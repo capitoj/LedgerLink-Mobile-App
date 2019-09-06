@@ -230,8 +230,8 @@ public class LoginActivity extends ActionBarActivity{
         // Lanugage list
         List<String> categories = new ArrayList<String>();
         categories.add("English");
-        categories.add("Luganda");
         categories.add("Luo");
+        categories.add("Luganda");
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         // attaching data adapter to spinner
@@ -247,14 +247,14 @@ public class LoginActivity extends ActionBarActivity{
                     setLocale("en");
                 } else if (pos == 2) {
                     Toast.makeText(parent.getContext(),
-                            "You have selected Luganda", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("lu");
-                } else if (pos == 3) {
-                    Toast.makeText(parent.getContext(),
-                            "You have selected Luo", Toast.LENGTH_SHORT)
+                            "You have selected Arabic", Toast.LENGTH_SHORT)
                             .show();
                     setLocale("lo");
+                } else if (pos == 3) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected Bari", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("lu");
                 }
             }
 

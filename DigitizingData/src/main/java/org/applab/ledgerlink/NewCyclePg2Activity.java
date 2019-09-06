@@ -111,12 +111,12 @@ public class NewCyclePg2Activity extends ListActivity {
                     @Override
                     public void onClick(View v) {
                         if(isUpdateCycleAction) {
-                            Toast toast = Toast.makeText(getBaseContext(), "You have successfully edited cycle", Toast.LENGTH_LONG);
+                            Toast toast = Toast.makeText(getBaseContext(), R.string.successfully_edited_cycle, Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.LEFT,0,0);
                             toast.show();
                         }
                         else {
-                            Toast toast = Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG);
+                            Toast toast = Toast.makeText(getBaseContext(), R.string.successfully_started_new_cycle, Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.LEFT,0,0);
                             toast.show();
                         }
@@ -135,7 +135,7 @@ public class NewCyclePg2Activity extends ListActivity {
         }
 
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("NEW CYCLE");
+        actionBar.setTitle(R.string.new_cyccle_allcaps);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -176,12 +176,12 @@ public class NewCyclePg2Activity extends ListActivity {
             case R.id.mnuNCPg2Done:
 
                 if(isUpdateCycleAction) {
-                    Toast toast = Toast.makeText(getBaseContext(), "You have successfully edited cycle", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(getBaseContext(), R.string.successfully_edited_cycle, Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.LEFT,0,0);
                     toast.show();
                 }
                 else {
-                    Toast toast = Toast.makeText(getBaseContext(), "You have successfully started a new cycle", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(getBaseContext(), R.string.successfully_started_new_cycle, Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.LEFT,0,0);
                     toast.show();
                 }

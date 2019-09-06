@@ -109,26 +109,26 @@ public class MembersLoansRepaidArrayAdapter extends ArrayAdapter<Member> {
             // MemberLoanRepaid
             MemberLoanRepaymentRecord memberLoan;
             if (recentLoan == null) {
-                txtBalance.setText("No outstanding loans");
+                txtBalance.setText(context.getResources().getString(R.string.no_outstanding_loans));
                 txtDateDue.setVisibility(View.GONE);
             } else {
 
                 if ((recentLoan.getLoanBalance() == 0.0) && ((recentLoan.getDateCleared() != null ? recentLoan.getDateCleared().compareTo(targetMeeting.getMeetingDate()) : 0) < 0)) {
-                    txtBalance.setText("No outstanding loans");
+                    txtBalance.setText(context.getResources().getString(R.string.no_outstanding_loans));
                     txtDateDue.setVisibility(View.GONE);
                 } else {
                     // Get Member Loan Repayment Details
                     //txtBalance.setText(String.format("Outstanding loan %,.0f UGX", outstandingLoan));
-                    txtBalance.setText(String.format("Outstanding loan %,.0f UGX", recentLoan.getLoanBalance()));
+                    txtBalance.setText(String.format(context.getResources().getString(R.string.outstanding_loan)+" %,.0f UGX", recentLoan.getLoanBalance()));
 
                     if (recentLoan.getLoanBalance() == 0.0) {
                         txtDateDue.setText("");
                     } else {
                         memberLoan = loansRepaidRepo.getMemberLoanRepaymentRecord(selectedMember.getMemberId());
                         if (memberLoan != null) {
-                            txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(memberLoan.getNextDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                            txtDateDue.setText(String.format(context.getResources().getString(R.string.date_due)+" %s", Utils.formatDate(memberLoan.getNextDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
                         } else {
-                            txtDateDue.setText(String.format("Date Due %s", Utils.formatDate(recentLoan.getDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                            txtDateDue.setText(String.format(context.getResources().getString(R.string.date_due)+" %s", Utils.formatDate(recentLoan.getDateDue(), Utils.OTHER_DATE_FIELD_FORMAT)));
                         }
                     }
                 }

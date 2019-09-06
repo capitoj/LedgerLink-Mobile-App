@@ -149,11 +149,11 @@ public class MeetingStartingCashFrag extends Fragment {
         Log.e("CurrentMeeting", String.valueOf(meetingId));
 
         expectedStartingCash = VslaMeeting.getTotalCashInBox(context, previousMeeting.getMeetingId());
-        lblExpectedStartingCash.setText(String.format("Expected Starting Cash In Box: %,.0f UGX", expectedStartingCash));
+        lblExpectedStartingCash.setText(String.format(getString(R.string.expected_starting_cash_inbox)+" %,.0f UGX", expectedStartingCash));
 
         VslaMeeting vslaMeeting = new VslaMeeting(context, previousMeeting.getMeetingId());
 
-        lblCashTakenToBank.setText(String.format("Cash Taken to Bank: %,.0f UGX", vslaMeeting.getCashSavedToBank()));
+        lblCashTakenToBank.setText(String.format(getString(R.string.cash_taken_to_bank_x)+" %,.0f UGX", vslaMeeting.getCashSavedToBank()));
 
         // Get starting cash for current meeting
         MeetingStartingCash startingCash = meetingRepo.getStartingCash();

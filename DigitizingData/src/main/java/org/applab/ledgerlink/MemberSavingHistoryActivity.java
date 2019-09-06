@@ -74,7 +74,7 @@ public class MemberSavingHistoryActivity extends ListActivity {
         if(targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
             double totalSavings = ledgerLinkApplication.getMeetingSavingRepo().getMemberTotalSavingsInCycle(targetCycleId, memberId);
-            txtTotalSavings.setText(String.format("Total Savings  %,.0f UGX\n", totalSavings));
+            txtTotalSavings.setText(String.format(getString(R.string.total_saving_x)+"  %,.0f UGX\n", totalSavings));
         }
 
         //Fill-out the Savings Amount in case it exists

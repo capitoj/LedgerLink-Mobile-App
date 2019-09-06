@@ -82,8 +82,8 @@ public class MembersWelfareArrayAdapter extends ArrayAdapter<Member> {
                 totalWelfare = this.meetingWelfareRepo.getMemberTotalWelfareInCycle(this.targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
                 Log.e("MemberWelfareInCycle", String.valueOf(totalWelfare));
             }
-            txtTodaysWelfare.setText(String.format("Today's welfare: %,.0f UGX", todaysWelfare));
-            txtTotalWelfare.setText(String.format("Total welfare: %,.0f UGX", totalWelfare));
+            txtTodaysWelfare.setText(String.format(context.getResources().getString(R.string.todays_welfare)+" %,.0f UGX", todaysWelfare));
+            txtTotalWelfare.setText(String.format(context.getResources().getString(R.string.total_welfare_x)+" %,.0f UGX", totalWelfare));
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

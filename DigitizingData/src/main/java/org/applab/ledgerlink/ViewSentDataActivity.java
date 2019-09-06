@@ -39,17 +39,17 @@ public class ViewSentDataActivity extends ListActivity {
 
         setContentView(R.layout.activity_send_meeting_data);
 
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        //ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
+           // actionBar.setIcon(R.drawable.icon_training_mode);
         }
 
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(R.string.sent_data);
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setDisplayShowTitleEnabled(true);
+        //actionBar.setTitle(R.string.sent_data);
+        //actionBar.setHomeButtonEnabled(true);
+        //actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Set the appropriate Header Instructional Text
         txtHeader = (TextView) findViewById(R.id.txtSMD_header);

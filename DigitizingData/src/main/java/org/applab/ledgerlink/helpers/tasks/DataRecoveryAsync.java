@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.domain.model.VslaInfo;
@@ -44,8 +45,8 @@ public class DataRecoveryAsync extends AsyncTask<String, String, JSONObject> {
     protected void onPreExecute(){
         super.onPreExecute();
         progressDialog = new ProgressDialog(this.context);
-        progressDialog.setTitle("Performing Data Recovery");
-        progressDialog.setMessage("Please wait...");
+        progressDialog.setTitle(context.getResources().getString(R.string.performing_data_recovery));
+        progressDialog.setMessage(context.getResources().getString(R.string.please_wait));
         progressDialog.setProgress(1);
         progressDialog.setCancelable(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -107,7 +108,7 @@ public class DataRecoveryAsync extends AsyncTask<String, String, JSONObject> {
             }
         }else{
             this.dismissProgressDialog();
-            DialogMessageBox.show(this.context, "VSLA Data Recovery", "The VSLA information could not be downloaded because the remote server could not be reached. Kindly check to ensure that you have an internet connection");
+            DialogMessageBox.show(this.context, context.getString(R.string.vsla_data_recovery), context.getString(R.string.vsla_data_details));
         }
     }
 

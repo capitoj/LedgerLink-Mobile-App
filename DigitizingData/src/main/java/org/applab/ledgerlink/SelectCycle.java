@@ -97,8 +97,8 @@ public class SelectCycle extends ActionBarActivity{
 //        if(activeCycles != null) {
 //            for(VslaCycle cycle: activeCycles) {
 //                RadioButton radCycle = new RadioButton(this);
-//                String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), "dd MMM yyyy"),
-//                        Utils.formatDate(cycle.getEndDate(), "dd MMM yyyy"));
+//                String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), getString(R.string.date_format)),
+//                        Utils.formatDate(cycle.getEndDate(), getString(R.string.date_format)));
 //                radCycle.setText(cycleDates);
 //                radCycle.setId(cycle.getCycleId());
 //                //radCycle.setTextColor();

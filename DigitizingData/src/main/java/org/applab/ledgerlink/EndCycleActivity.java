@@ -95,8 +95,8 @@ public class EndCycleActivity extends ActionBarActivity{
         /**if(activeCycles != null) {
          for(VslaCycle cycle: activeCycles) {
          RadioButton radCycle = new RadioButton(this);
-         String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), "dd MMM yyyy"),
-         Utils.formatDate(cycle.getEndDate(), "dd MMM yyyy"));
+         String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), getString(R.string.date_format)),
+         Utils.formatDate(cycle.getEndDate(), getString(R.string.date_format)));
          radCycle.setText(cycleDates);
          radCycle.setId(cycle.getCycleId());
          //radCycle.setTextColor();
@@ -140,7 +140,7 @@ public class EndCycleActivity extends ActionBarActivity{
         if (selectedCycle != null) {
             //displayMessageBox("Testing", "Cycle to Update Found", Utils.MSGBOX_ICON_INFORMATION);
             //Change the title in edit mode
-            txtInstructions.setText(getString(R.string.enter_share_out_date_for_cycle_begining) + Utils.formatDate(selectedCycle.getStartDate(), "dd MMM yyyy") + " and ending " + Utils.formatDate(selectedCycle.getEndDate(), "dd MMM yyyy") + ".");
+            txtInstructions.setText(getString(R.string.enter_share_out_date_for_cycle_begining) + Utils.formatDate(selectedCycle.getStartDate(), getString(R.string.date_format)) + " and ending " + Utils.formatDate(selectedCycle.getEndDate(), getString(R.string.date_format)) + ".");
 
             txtShareOutDate.setText(Utils.formatDate(selectedCycle.getEndDate(), "dd-MMM-yyyy"));
 
@@ -335,7 +335,7 @@ public class EndCycleActivity extends ActionBarActivity{
                 AlertDialog dlg = Utils.createAlertDialog(EndCycleActivity.this, getString(R.string.cycle_ended_successfully), Utils.MSGBOX_ICON_TICK);
 
                 // Setting OK Button for the Dialog Box
-                dlg.setButton("OK", new DialogInterface.OnClickListener() {
+                dlg.setButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (successAlertDialogShown) {
                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
