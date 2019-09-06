@@ -411,8 +411,8 @@ public class ActivationActivity extends ActionBarActivity{
 
                 //passes the results to a string builder/entity
                 StringEntity se = new StringEntity(params[1]);
-                Log.d("URI", "URI is " + params[0]);
-                Log.d("Request", "Request is " + params[1]);
+                Log.d("URI", getString(R.string.url_is) + params[0]);
+                Log.d(getString(R.string.request), getString(R.string.request_is) + params[1]);
                 //sets the post request as the resulting string
                 httpPost.setEntity(se);
                 httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");

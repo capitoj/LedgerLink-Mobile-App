@@ -181,7 +181,7 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
         // Get the Interest Rate for the Current Cycle
         if (targetMeeting != null && targetMeeting.getVslaCycle() != null) {
             interestRate = targetMeeting.getVslaCycle().getInterestRate();
-            lblInterestDesc.setText(String.format("at %.0f%% every 30 days", interestRate));
+            lblInterestDesc.setText(String.format("at %.0f%% "+ getString(R.string.every_30_days), interestRate));
         }
 
         LinearLayout frmLoanRecord = (LinearLayout) findViewById(R.id.frmMLRepayHLoanRecord);
@@ -366,7 +366,7 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
         {
             targetCycleId = targetMeeting.getVslaCycle().getCycleId();
             VslaCycle cycle = ledgerLinkApplication.getVslaCycleRepo().getCycle(targetCycleId);
-            txtCycleSpan.setText(String.format("Cycle %s to %s", Utils.formatDate(cycle.getStartDate(), Utils.DATE_FIELD_FORMAT), Utils.formatDate(cycle.getEndDate(), Utils.DATE_FIELD_FORMAT)));
+            txtCycleSpan.setText(String.format(getString(R.string.cycle)+" %s" +getString(R.string.to)+" %s", Utils.formatDate(cycle.getStartDate(), Utils.DATE_FIELD_FORMAT), Utils.formatDate(cycle.getEndDate(), Utils.DATE_FIELD_FORMAT)));
             // outstandingLoans = loanIssuedRepo.getTotalOutstandingLoansByMemberInCycle(targetCycleId, memberId);
             // loanIssue = loanIssuedRepo.getOutstandingLoansByMemberInCycle(targetCycleId, memberId);
         }
@@ -534,8 +534,8 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
                                                                     double rolloverAmount = theInterestAmount + theCurLoanBalanceAmount;
                                                                     txtRolloverAmount.setText(String.format("%,.0f UGX", rolloverAmount));
                                                                     if (rolloverAmount < 0) {
-                                                                        txtRolloverAmount.setText(String.format("%,.0f UGX overpayment", rolloverAmount));
-                                                                        txtDateDue.setText("none");
+                                                                        txtRolloverAmount.setText(String.format("%,.0f UGX "+ getString(R.string.overpayment), rolloverAmount));
+                                                                        txtDateDue.setText(getString(R.string.none));
                                                                     }
                                                                 }
                                                             }

@@ -200,19 +200,19 @@ public class MeetingCashBookFrag extends Fragment {
                 double totalCashInBox = VslaMeeting.getTotalCashInBox(getActivity().getApplicationContext(), this.meetingId);
 
                 String comment = currentMeeting.getComment();
-                lblTotalCashInBox.setText(String.format("Total Cash In Box %s UGX", totalCashInBox));
-                lblExpectedStartingCash.setText(String.format("Expected Starting Cash %s UGX", expectedStartingCash));
-                lblActualStartingCash.setText(String.format("Actual Starting Cash %s UGX", actualStartingCash));
-                lblCashDifference.setText(String.format("Difference %s UGX", expectedStartingCash - actualStartingCash));
-                lblCashBookComment.setText(String.format("Comment %s", comment));
-                lblSavings.setText(String.format("Savings %s", totalSavings));
-                lblLoanRepayments.setText(String.format("Loan Repayment %s UGX", totalLoansRepaid));
-                lblFines.setText(String.format("Fines %s UGX", totalFines));
-                lblWelfare.setText(String.format("Welfare %s UGX", totalWalfare));
-                lblOutstandingWelfare.setText(String.format("Outstanding welfare %s UGX", totalOutstandingWelfare));
-                lblNewLoans.setText(String.format("New Loans %s UGX", totalLoansIssued));
-                lblCashFromBank.setText(String.format("Cash From Bank %s UGX", cashFromBank));
-                lblLoanFromBank.setText(String.format("Loan From Bank %s UGX", loanFromBank));
+                lblTotalCashInBox.setText(String.format(getString(R.string.total_cash_inbox_x)+" %s UGX", totalCashInBox));
+                lblExpectedStartingCash.setText(String.format(getString(R.string.expected_starting_cash_x)+" %s UGX", expectedStartingCash));
+                lblActualStartingCash.setText(String.format(getString(R.string.actual_starting_cash_x)+" %s UGX", actualStartingCash));
+                lblCashDifference.setText(String.format(getString(R.string.difference_x)+" %s UGX", expectedStartingCash - actualStartingCash));
+                lblCashBookComment.setText(String.format(getString(R.string.comment)+" %s", comment));
+                lblSavings.setText(String.format(getString(R.string.savings_x)+" %s", totalSavings));
+                lblLoanRepayments.setText(String.format(getString(R.string.loan_repayments_x)+" %s UGX", totalLoansRepaid));
+                lblFines.setText(String.format(getString(R.string.fine_x)+" %s UGX", totalFines));
+                lblWelfare.setText(String.format(getString(R.string.welfare_x)+" %s UGX", totalWalfare));
+                lblOutstandingWelfare.setText(String.format(getString(R.string.outstanding_welfare_x)+" %s UGX", totalOutstandingWelfare));
+                lblNewLoans.setText(String.format(getString(R.string.new_loan_x)+" %s UGX", totalLoansIssued));
+                lblCashFromBank.setText(String.format(getString(R.string.cash_from_bank)+" %s UGX", cashFromBank));
+                lblLoanFromBank.setText(String.format(getString(R.string.loan_from_bank)+" %s UGX", loanFromBank));
                 txtCashToBankAmount.setText(String.valueOf((int)cashToBank));
                 txtBankLoanRepayment.setText(String.valueOf((int)bankLoanRepayment));
             }

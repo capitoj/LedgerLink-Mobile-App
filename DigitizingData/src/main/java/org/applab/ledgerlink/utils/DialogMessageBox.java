@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import org.applab.ledgerlink.R;
+
 /**
  * Created by Joseph Capito on 7/31/2015.
  */
@@ -28,8 +30,8 @@ public class DialogMessageBox implements DialogInterface.OnClickListener {
         builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
         builder.setMessage(message);
-        builder.setNegativeButton("Cancel", this);
-        builder.setPositiveButton("Continue", this);
+        builder.setNegativeButton(context.getResources().getString(R.string.cancel_dialog), this);
+        builder.setPositiveButton(context.getResources().getString(R.string.continue_dialog), this);
 
         alertDialog = builder.create();
     }
@@ -42,9 +44,9 @@ public class DialogMessageBox implements DialogInterface.OnClickListener {
         builder.setMessage(message);
 
         if(!hideCancel)
-            builder.setNegativeButton("Cancel", this);
+            builder.setNegativeButton(context.getResources().getString(R.string.cancel_dialog), this);
 
-        builder.setPositiveButton("Continue", this);
+        builder.setPositiveButton(context.getResources().getString(R.string.continue_dialog), this);
 
         alertDialog = builder.create();
     }

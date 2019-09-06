@@ -107,9 +107,9 @@ public class MeetingSendDataFrag extends Fragment {
         loadFragmentInformation(selectedMeetingId);
 
         //Set title
-       // actionBar.setTitle("MEETING "+Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+       // actionBar.setTitle("MEETING "+Utils.formatDate(selectedMeeting.getMeetingDate(), getString(R.string.date_format)));
         actionBar.setTitle(R.string.meeting_cap);
-        actionBar.setSubtitle(Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+        actionBar.setSubtitle(Utils.formatDate(selectedMeeting.getMeetingDate(), getString(R.string.date_format)));
         Log.i(getString(R.string.senddatafrag), getString(R.string.no_of_unsent_meeting) + numberOfPastUnsentMeetings);
 
         LinearLayout layoutMSDUnsentPastMeetings = (LinearLayout) getActivity().findViewById(R.id.layoutMSDUnsentPastMeetings);
@@ -122,7 +122,7 @@ public class MeetingSendDataFrag extends Fragment {
         if(activeMeetings != null) {
             if(activeMeetings.size()>0) {
                 TextView txtMSDFragCurrentMeetingDetails = (TextView) getActivity()().findViewById(R.id.txtMSDFragCurrentMeetingDetails);
-                txtMSDFragCurrentMeetingDetails.setText(Utils.formatDate(activeMeetings.get(0).getMeetingDate(), "dd MMM yyyy"));
+                txtMSDFragCurrentMeetingDetails.setText(Utils.formatDate(activeMeetings.get(0).getMeetingDate(), getString(R.string.date_format)));
 
                 txtMSDFragCurrentMeetingDetails.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -147,7 +147,7 @@ public class MeetingSendDataFrag extends Fragment {
 
         if(parentActivity.getCurrentMeeting() != null) {
             TextView txtMSDFragCurrentMeetingDetails = (TextView) getActivity().findViewById(R.id.txtMSDFragCurrentMeetingDetails);
-            txtMSDFragCurrentMeetingDetails.setText(Utils.formatDate(parentActivity.getCurrentMeeting().getMeetingDate(), "dd MMM yyyy"));
+            txtMSDFragCurrentMeetingDetails.setText(Utils.formatDate(parentActivity.getCurrentMeeting().getMeetingDate(), getString(R.string.date_format)));
 
             txtMSDFragCurrentMeetingDetails.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -158,7 +158,7 @@ public class MeetingSendDataFrag extends Fragment {
                     //make the view mode modifiable
 
                     getActivity().getIntent().putExtra("_viewOnly", false);
-                    getActivity().getIntent().putExtra("_meetingDate", Utils.formatDate(parentActivity.getCurrentMeeting().getMeetingDate(), "dd MMM yyyy"));
+                    getActivity().getIntent().putExtra("_meetingDate", Utils.formatDate(parentActivity.getCurrentMeeting().getMeetingDate(), getString(R.string.date_format)));
                     getActivity().getIntent().getExtras();
                     viewingCurrentMeeting = true;
                     refreshFragmentView();
@@ -284,7 +284,7 @@ public class MeetingSendDataFrag extends Fragment {
                 getActivity().getIntent().putExtra("_meetingId", selectedMeetingId);
                 //make the view read only
                 getActivity().getIntent().putExtra("_viewOnly", true);
-                getActivity().getIntent().putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
+                getActivity().getIntent().putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), getString(R.string.date_format)));
                 //viewingCurrentMeeting = false;
 
                 //Load this meeting details
@@ -299,12 +299,12 @@ public class MeetingSendDataFrag extends Fragment {
     public void populateSelectedMeetingSummary() {
 
         //TODO: We are relying on tab indexes to select the tabs, this may break when the orders are changed we may consider finding a way of selecting by tab text
-        parentActivity.getIntent().putExtra("_meetingDate", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+        parentActivity.getIntent().putExtra("_meetingDate", Utils.formatDate(selectedMeeting.getMeetingDate(), getString(R.string.date_format)));
         parentActivity.getIntent().putExtra("_meetingId",selectedMeeting.getMeetingId());
         //parentActivity.getIntent().putExtra("_viewOnly",true);
 
         TextView lblMSDFragRollcall = (TextView) getActivity().findViewById(R.id.lblMSDFragRollcall);
-        lblMSDFragRollcall.setText(String.format("Roll Call %d/%d", selectedMeetingAttendance, numberOfMembers));
+        lblMSDFragRollcall.setText(String.format(getString(R.string.roll_call)+" %d/%d", selectedMeetingAttendance, numberOfMembers));
         //Onclick load roll call viewing current meeting
         lblMSDFragRollcall.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,7 +314,7 @@ public class MeetingSendDataFrag extends Fragment {
         });
 
         TextView lblMSDFragSavings = (TextView) getActivity().findViewById(R.id.lblMSDFragSavings);
-        lblMSDFragSavings.setText(String.format("Savings %,.0f UGX", totalSavingsInSelectedMeeting));
+        lblMSDFragSavings.setText(String.format(getString(R.string.savings_x)+" %,.0f UGX", totalSavingsInSelectedMeeting));
         lblMSDFragSavings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -323,7 +323,7 @@ public class MeetingSendDataFrag extends Fragment {
         });
 
         TextView lblMSDFragLoanPayments = (TextView) getActivity().findViewById(R.id.lblMSDFragLoanPayments);
-        lblMSDFragLoanPayments.setText(String.format("Loan Payments %,.0f UGX", totalLoansRepaidInSelectedMeeting));
+        lblMSDFragLoanPayments.setText(String.format(getString(R.string.loan_payments)+" %,.0f UGX", totalLoansRepaidInSelectedMeeting));
         lblMSDFragLoanPayments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -332,7 +332,7 @@ public class MeetingSendDataFrag extends Fragment {
         });
 
         TextView lblMSDFragFines = (TextView) getActivity().findViewById(R.id.lblMSDFragFines);
-        lblMSDFragFines.setText(String.format("Fines %,.0f UGX", totalFinesInSelectedMeeting));
+        lblMSDFragFines.setText(String.format(getString(R.string.fine_x)+" %,.0f UGX", totalFinesInSelectedMeeting));
         lblMSDFragFines.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -341,7 +341,7 @@ public class MeetingSendDataFrag extends Fragment {
         });
 
         TextView lblMSDFragNewLoans = (TextView) getActivity().findViewById(R.id.lblMSDFragNewLoans);
-        lblMSDFragNewLoans.setText(String.format("New Loans %,.0f UGX", totalLoansIssuedInSelectedMeeting));
+        lblMSDFragNewLoans.setText(String.format(getString(R.string.new_loan_x)+" %,.0f UGX", totalLoansIssuedInSelectedMeeting));
         lblMSDFragNewLoans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -350,7 +350,7 @@ public class MeetingSendDataFrag extends Fragment {
         });
 
         TextView lblMSDFragWelfare = (TextView) getActivity().findViewById(R.id.lblMSDFragWelfare);
-        lblMSDFragWelfare.setText(String.format("Welfare %,.0f UGX", totalWelfareInSelectedMeeting));
+        lblMSDFragWelfare.setText(String.format(getString(R.string.welfare_x)+" %,.0f UGX", totalWelfareInSelectedMeeting));
         lblMSDFragWelfare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

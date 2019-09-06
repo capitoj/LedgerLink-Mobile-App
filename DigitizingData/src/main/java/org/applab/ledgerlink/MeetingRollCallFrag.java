@@ -70,7 +70,7 @@ public class MeetingRollCallFrag extends Fragment {
         String title = "Meeting";
         if (meetingId != 0) {
             selectedMeeting = parentActivity.ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
-            //title = String.format("Meeting    %s", Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+            //title = String.format("Meeting    %s", Utils.formatDate(selectedMeeting.getMeetingDate(), getString(R.string.date_format)));
             title = getString(R.string.meeting);
 
         }
@@ -86,7 +86,7 @@ public class MeetingRollCallFrag extends Fragment {
                 break;
         }
         actionBar.setTitle(title);
-        actionBar.setSubtitle(Utils.formatDate(selectedMeeting.getMeetingDate(), "dd MMM yyyy"));
+        actionBar.setSubtitle(Utils.formatDate(selectedMeeting.getMeetingDate(), getString(R.string.date_format)));
         //TextView lblMeetingDate = (TextView)parentActivity.findViewById(R.id.lblMRCFMeetingDate);
         //meetingDate = parentActivity.getIntent().getStringExtra("_meetingDate");
         //TODO: Get the Meeting Id from meetingRepo.getCurrentMeeting();

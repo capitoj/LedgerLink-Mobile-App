@@ -1,5 +1,6 @@
 package org.applab.ledgerlink;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -130,7 +131,7 @@ public class NewCycleActivity extends AppCompatActivity{
                 //displayMessageBox("Testing", "Cycle to Update Found", Utils.MSGBOX_ICON_INFORMATION);
                 //Change the title in edit mode
                 TextView lblNCHeader = (TextView) findViewById(R.id.lblNCHeader);
-                lblNCHeader.setText(getString(R.string.edit_cycle_beginning) + Utils.formatDate(selectedCycle.getStartDate(), "dd MM yyyy") + " and ending " + Utils.formatDate(selectedCycle.getEndDate(), "dd MMM yyyy") + ".");
+                lblNCHeader.setText(getString(R.string.edit_cycle_beginning) + Utils.formatDate(selectedCycle.getStartDate(), "dd MM yyyy") + " and ending " + Utils.formatDate(selectedCycle.getEndDate(), getString(R.string.date_format)) + ".");
                 //Populate Fields
                 populateDataFields(selectedCycle);
 
@@ -174,7 +175,7 @@ public class NewCycleActivity extends AppCompatActivity{
                         lblNCMiddleCycleInformationHeading.setText(R.string.info_added_after_cycle_started);
 
                         if (dummyGSWMeeting != null) {
-                            lblNCMiddleCycleInformationHeading.setText(getString(R.string.info_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are the interest and fines collected by that day.");
+                            lblNCMiddleCycleInformationHeading.setText(getString(R.string.info_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), getString(R.string.date_format)) + " after the cycle started. Here are the interest and fines collected by that day.");
                         }
 
                     }
@@ -561,6 +562,7 @@ public class NewCycleActivity extends AppCompatActivity{
         return successFlg;
     }
 
+    @SuppressLint("StringFormatInvalid")
     boolean validateData(VslaCycle cycle) {
         try {
             if (null == cycle) {

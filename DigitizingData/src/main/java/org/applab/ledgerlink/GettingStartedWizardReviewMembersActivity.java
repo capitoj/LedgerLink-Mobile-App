@@ -73,19 +73,19 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         //Set cycle start date in label
         Date startDate = dummyGettingStartedWizardMeeting.getMeetingDate();
         TextView lblRvwMembersDate = (TextView) findViewById(R.id.lblRvwMembersDate);
-        lblRvwMembersDate.setText("As of " + Utils.formatDate(startDate));
+        lblRvwMembersDate.setText(getString(R.string.as_of) + Utils.formatDate(startDate));
 
 
 
         //Set savings in GSW meeting
         double totalSavings = ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
         TextView lblRvwMembersTotalSavings = (TextView) findViewById(R.id.lblRvwMembersTotalSavings);
-        lblRvwMembersTotalSavings.setText(String.format("Total savings this cycle %,.0f %s", totalSavings,
+        lblRvwMembersTotalSavings.setText(String.format(getString(R.string.total_savings_this_cycle)+" %,.0f %s", totalSavings,
                 getResources().getString(R.string.operating_currency)));
 
         //Set loans issued in GSW meeting
         TextView lblRvwMembersTotalLoan = (TextView) findViewById(R.id.lblRvwMembersTotalLoan);
-        lblRvwMembersTotalLoan.setText(String.format("Total loans outstanding %,.0f %s",
+        lblRvwMembersTotalLoan.setText(String.format(getString(R.string.total_loans_outstanding)+" %,.0f %s",
                 ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(dummyGettingStartedWizardMeeting.getMeetingId()),
                 getResources().getString(R.string.operating_currency)));
 
@@ -139,7 +139,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
         ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("GET STARTED");
+        actionBar.setTitle(getString(R.string.get_started_allcaps));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -208,7 +208,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
                     // Get the File path from the Uri
                     String filePath = FileUtils.getPath(this, uri);
-                    Log.d("File chosen", "Chosen file "+filePath);
+                    Log.d(getString(R.string.file_chosen), getString(R.string.chosen_file)+filePath);
                     attemptToImportFromCsv(filePath);
                 }
                 break;
@@ -230,13 +230,13 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                         }
                     }
                 },
-                "Importing members",
-                        "Please wait while member information is imported from the CSV file",
+                getString(R.string.importing_members),
+                        getString(R.string.please_wait_member_info_imported_from_csv),
                         GettingStartedWizardReviewMembersActivity.this);
 
             }
         };
-        Utils.showDialogAndRunAction(this, "Import members from CSV?", "You are about to import member information from the file \""+filename+"\"\nPress continue to start", importer);
+        Utils.showDialogAndRunAction(this, getString(R.string.import_members_from_csv), getString(R.string.about_to_import_member_info)+filename+getString(R.string.press_continue_to_start), importer);
     }
 
     private void importCsv(String csvFile) {
@@ -248,7 +248,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "File missing", "CSV File \"LLMembers.csv\" wasn't found. Please place this file in the LedgerLink folder and try again", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, getString(R.string.file_missing), getString(R.string.csv_file_wasnt_found), Utils.MSGBOX_ICON_EXCLAMATION).show();
 
                 }
             });
@@ -312,9 +312,9 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
                     //Gender
                     if (gender.length() > 0) {
-                        member.setGender((gender.startsWith("M") ? "Male" : "Female"));
+                        member.setGender((gender.startsWith("M") ? getString(R.string.male) : getString(R.string.female)));
                     } else {
-                        member.setGender("Female");
+                        member.setGender(getString(R.string.female));
                     }
 
                     //Date Of Birth
@@ -416,7 +416,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                     }
 
                     //Done with this member
-                    Log.d("CSV import ", "Imported member "+memberNo);
+                    Log.d(getString(R.string.csv_import), getString(R.string.imported_members)+memberNo);
                     //Toast.makeText(getApplicationContext(), String.format("Member of data record %d was migrated successfully.", dataRowNo), Toast.LENGTH_SHORT).show();
 
                     //Increment the migrated count
@@ -466,7 +466,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         }
         //Now get the data via the adapter
         final GettingStartedWizardMembersArrayAdapter adapter = new GettingStartedWizardMembersArrayAdapter(getBaseContext(), members);
-        Log.d(getBaseContext().getPackageName(), members.size() + " members loaded");
+        Log.d(getBaseContext().getPackageName(), members.size() + getString(R.string.members_loaded));
         //Assign Adapter to ListView
         //Assign Adapter to ListView
         runOnUiThread(new Runnable() {

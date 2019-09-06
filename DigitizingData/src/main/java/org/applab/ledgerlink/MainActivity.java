@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
 
     /** Switch language code **/
 
-    /**
+
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -299,20 +299,25 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "English", Toast.LENGTH_LONG).show();
                 break;
 
-            case R.id.luganda:
-                setLocale("lu");
-                Toast.makeText(this, "Luganda", Toast.LENGTH_LONG).show();
+            case R.id.arabic:
+                setLocale("ar");
+                Toast.makeText(this, "Arabic", Toast.LENGTH_LONG).show();
                 break;
 
-            case R.id.luo:
-                setLocale("lo");
-                Toast.makeText(this, "Luo", Toast.LENGTH_LONG).show();
+            case R.id.bari:
+                setLocale("ba");
+                Toast.makeText(this, "Bari", Toast.LENGTH_LONG).show();
+                break;
+
+            case R.id.acholi:
+                setLocale("ac");
+                Toast.makeText(this, "Acholi", Toast.LENGTH_LONG).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
-    } **/
+    }
 
-    /**
+
     public void setLocale(String lang) {
         Locale myLocale = new Locale(lang);
         Resources res = getResources();
@@ -325,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
         finish();
 
     }
-    **/
+
 
     // This method is called once the menu is selected
 //    @Override

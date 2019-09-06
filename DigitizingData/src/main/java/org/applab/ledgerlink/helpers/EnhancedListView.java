@@ -16,6 +16,7 @@ package org.applab.ledgerlink.helpers;
  * limitations under the License.
  */
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
@@ -882,6 +883,7 @@ public class EnhancedListView extends ListView {
      * items will be shown. If only one deletion can be undone, the title of this deletion (or a default
      * string in case the title is {@code null}) will be shown.
      */
+    @SuppressLint("StringFormatInvalid")
     private void changePopupText() {
         String msg = null;
         if(mUndoActions.size() > 1) {

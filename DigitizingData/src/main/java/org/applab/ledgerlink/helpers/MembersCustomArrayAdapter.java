@@ -53,11 +53,11 @@ public class MembersCustomArrayAdapter extends ArrayAdapter<Member> {
             txtFullNames.setText(values.get(position).toString());
             String occupation = values.get(position).getOccupation();
             if(null == occupation || occupation.trim().length() <= 0) {
-                occupation = "No Occupation";
+                occupation = context.getResources().getString(R.string.no_occupation);
             }
             String phoneNo = values.get(position).getPhoneNumber();
             if(null == phoneNo || phoneNo.trim().length() <= 0) {
-                phoneNo = "No Phone";
+                phoneNo = context.getResources().getString(R.string.no_phone);
             }
             //txtPhoneNo.setText(phoneNo);
             txtOccupation.setText(occupation);
