@@ -22,11 +22,12 @@
         android:text="@string/number_of_members"/>
 
     <EditText
+        android:id="@+id/txtDRNoOfMembers"
+        style="@style/CustomEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lblDRNoOfMembers"
-        android:id="@+id/txtDRNoOfMembers"
-        android:paddingTop="20dp"
-        android:inputType="number"/>
+        android:inputType="number"
+        android:paddingTop="20dp" />
 
 </RelativeLayout>

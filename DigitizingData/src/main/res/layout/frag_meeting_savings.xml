@@ -2,36 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/gery_background">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/frmMSavF_top_control_bar">
 
-       <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:paddingLeft="5dp"
-            android:text="01-JUL-2013"
-            android:id="@+id/lblMSavFMeetingDate"
-            android:layout_gravity="center" /> -->
-
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/lvwMSavFMembers"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:choiceMode="singleChoice"
-        android:layout_below="@id/frmMSavF_top_control_bar"
-        android:divider="@null"
-        android:dividerHeight="0dp">
+        <ListView
+            android:id="@+id/lvwMSavFMembers"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/frmMSavF_top_control_bar"
+            android:choiceMode="singleChoice"
+            android:dividerHeight="2dp"
+            android:elevation="2dp">
 
-    </ListView>
+        </ListView>
+
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularText"

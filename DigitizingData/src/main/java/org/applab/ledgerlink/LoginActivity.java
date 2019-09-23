@@ -5,24 +5,29 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -33,27 +38,21 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.domain.model.FinancialInstitution;
-import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.domain.model.VslaInfo;
+import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.LanguageHelper;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
 import org.applab.ledgerlink.repo.SampleDataBuilderRepo;
 import org.applab.ledgerlink.repo.VslaInfoRepo;
-import org.applab.ledgerlink.service.AlarmReceiver;
 import org.applab.ledgerlink.service.InboundChatReceiver;
 import org.applab.ledgerlink.service.OutboundChatReceiver;
-import org.applab.ledgerlink.service.TrainingModuleReceiver;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
-import org.w3c.dom.*;
-import java.io.*;
-import javax.xml.parsers.*;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -61,12 +60,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import android.support.v7.app.ActionBarActivity;
-
 //import android.view.Menu;
 //import android.view.Menu;
 
-public class LoginActivity extends ActionBarActivity{
+public class LoginActivity extends AppCompatActivity {
 
     LedgerLinkApplication ledgerLinkApplication;
     private VslaInfo vslaInfo = null;
@@ -92,10 +89,11 @@ public class LoginActivity extends ActionBarActivity{
 
         this.loadBackgroundService();
 
-//        LanguageHelper.getXmlDocument(getApplicationContext(), "ENGLISH");
-
         //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
+        //
+        TextView ForgotPassKeyText = (TextView) findViewById(R.id.txtForgetPassKey);
+        ForgotPassKeyText.setText(getApplicationContext().getResources().getString(R.string.forgot_passkey));
 
         ActionBar actionBar = getSupportActionBar();
 
@@ -123,7 +121,7 @@ public class LoginActivity extends ActionBarActivity{
 
         ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
         imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
-        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.logo_width), (int) this.getResources().getDimension(R.dimen.logo_height)));
+        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.login_logo_width), (int) this.getResources().getDimension(R.dimen.login_logo_height)));
 
 
         //If we are in training mode then show it using a custom View with distinguishable background
@@ -189,15 +187,16 @@ public class LoginActivity extends ActionBarActivity{
         String vslaName = "";
 
         // Activation Information placeholder
-        TextView activationLoginMsg = (TextView) findViewById(R.id.lblActivationLoginMsg);
+        //TextView activationLoginMsg = (TextView) findViewById(R.id.lblActivationLoginMsg);
 
         if (vslaInfo != null && vslaInfo.isActivated()) {
             vslaName = vslaInfo.getVslaName();
             txtVslaName.setText(vslaName);
-            activationLoginMsg.setVisibility(View.GONE);
+            //activationLoginMsg.setVisibility(View.GONE);
         } else {
             txtVslaName.setVisibility(View.INVISIBLE);
-            activationLoginMsg.setText(notActivatedStatusMessage);
+            DialogMessageBox.show(this, getString(R.string.activation_message), getString(R.string.unable_to_send_reg_network_problems));
+            //activationLoginMsg.setText(notActivatedStatusMessage);
             lblPasskey.setVisibility(View.INVISIBLE);
         }
 
@@ -220,6 +219,7 @@ public class LoginActivity extends ActionBarActivity{
                 }
             }
         });
+
 
         /** Change lanugage spinner**/
 
@@ -262,6 +262,16 @@ public class LoginActivity extends ActionBarActivity{
 
                 // TODO Auto-generated method stub
 
+            }
+        });
+
+        /** Forgot Passkey OnClick**/
+        ForgotPassKeyText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), PassKeyRecoveryActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
             }
         });
     }

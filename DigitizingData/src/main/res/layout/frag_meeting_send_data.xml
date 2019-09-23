@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
@@ -85,6 +86,13 @@
 
    </LinearLayout>
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardElevation="5dp"
+        app:cardPreventCornerOverlap="false">
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="fill_parent"
                   android:layout_height="match_parent"
@@ -95,8 +103,10 @@
         <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/SubHeading"
                 android:id="@+id/txtMSDFragCurrentMeetingHeading"
-                android:layout_width="fill_parent"
-                android:layout_height="25dip"
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="0dp"
+            android:gravity="center_vertical"
                 android:text="@string/current_meeting" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -114,7 +124,14 @@
 
      </LinearLayout>
 
+    </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardElevation="5dp"
+        app:cardPreventCornerOverlap="false">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="fill_parent"
@@ -126,9 +143,11 @@
         <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/SubHeading"
                 android:id="@+id/txtMSDFragPastMeetingsHeading"
-                android:layout_width="fill_parent"
-                android:layout_height="25dip"
-                android:text="@string/unsent_past_meetings" />
+            android:layout_width="fill_parent"
+            android:layout_height="35dp"
+            android:layout_marginTop="0dp"
+            android:gravity="center_vertical"
+            android:text="@string/unsent_past_meetings" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
                 style="@style/RegularText"
@@ -142,14 +161,12 @@
                 android:id="@+id/lstMSDPastMeetingList"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:choiceMode="singleChoice"
-    />
+                android:choiceMode="singleChoice" />
 
 
     </LinearLayout>
 
-
-
+    </android.support.v7.widget.CardView>
 
 
 </LinearLayout>

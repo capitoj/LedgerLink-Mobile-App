@@ -17,5 +17,8 @@
     <!-- The touch slop you need to cause a swipe instead of a scroll -->
     <dimen name="elv_touch_slop">32dp</dimen>
 
+    <dimen name="login_logo_width">260dip</dimen>
+    <dimen name="login_logo_height">100dip</dimen>
+
 
 </resources>

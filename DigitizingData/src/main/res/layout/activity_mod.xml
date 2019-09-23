@@ -14,11 +14,12 @@
         android:padding="5dp"/>
 
     <EditText
+        android:id="@+id/txtMODAmount"
+        style="@style/CustomEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtMODAmount"
         android:layout_below="@+id/lblMODAmount"
         android:inputType="number"
-        android:padding="5dp"/>
+        android:padding="5dp" />
 
 </RelativeLayout>

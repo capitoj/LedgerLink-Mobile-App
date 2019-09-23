@@ -7,12 +7,12 @@
     android:layout_weight="1">
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
-        style="@style/ActionBarMenuItemText"
+        style="@style/ActionBarItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingRight="1dip"
-        android:drawableLeft="@drawable/ic_content_edit"
+        android:drawableLeft="@drawable/ic_edit"
         android:drawablePadding="1dip"
         android:gravity="center_vertical"
         android:text="@string/edit" />

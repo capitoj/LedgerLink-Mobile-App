@@ -21,12 +21,13 @@
         android:layout_below="@+id/lblDRTitle"
         android:text="@string/vsla_region"/>
 
-    <Spinner
+    <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/cboDRVslaRegion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/lblDRVslaRegion"
-        android:layout_width="fill_parent"
-        android:layout_height="10dp"
-        android:spinnerMode="dropdown"
-        android:paddingTop="20dp"/>
+        android:background="@drawable/spinner_background"
+        android:paddingTop="20dp"
+        android:spinnerMode="dropdown" />
 
 </RelativeLayout>

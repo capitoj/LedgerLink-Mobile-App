@@ -7,9 +7,14 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,12 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.applab.ledgerlink.domain.model.Meeting;
@@ -48,7 +47,7 @@ import java.util.Date;
 /**
  * Created by Moses on 7/15/13.
  */
-public class AddMemberActivity extends ActionBarActivity{
+public class AddMemberActivity extends AppCompatActivity {
     protected Member selectedMember;
     protected int selectedMemberId;
     protected boolean successAlertDialogShown = false;

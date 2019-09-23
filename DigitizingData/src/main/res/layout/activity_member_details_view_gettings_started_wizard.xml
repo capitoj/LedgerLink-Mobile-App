@@ -30,13 +30,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/member_number" />
 
-            <Spinner
+            <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/cboAMMemberNo"
                 style="@style/NormalEditText"
                 android:layout_width="200dip"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dip"
+                android:layout_weight="0.5"
+                android:background="@drawable/spinner_background"
                 android:spinnerMode="dropdown" />
+
             <!--<org.applab.digitizingdata.fontutils.TypefaceEditText-->
             <!--style="@style/NormalEditText"-->
             <!--android:id="@+id/txtAMMemberNo"-->
@@ -62,8 +65,8 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMSurname"
-                style="@style/NormalEditText"
-                android:layout_width="fill_parent"
+                style="@style/CustomEditText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
                 android:text="" />
@@ -84,8 +87,8 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMOtherName"
-                style="@style/NormalEditText"
-                android:layout_width="fill_parent"
+                style="@style/CustomEditText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
                 android:text="" />
@@ -106,7 +109,7 @@
 
             <Spinner
                 android:id="@+id/cboAMGender"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="200dip"
                 android:layout_height="wrap_content"
                 android:prompt="@string/add_member_gender_prompt"
@@ -129,7 +132,7 @@
 
             <Spinner
                 android:id="@+id/cboAMAge"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="200dip"
                 android:layout_height="wrap_content"
                 android:prompt="@string/add_member_gender_prompt"
@@ -152,7 +155,7 @@
 
             <Spinner
                 android:id="@+id/cboAMOccupation"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="200dip"
                 android:layout_height="wrap_content"
                 android:prompt="@string/add_member_profession_prompt"
@@ -161,7 +164,7 @@
             <!--
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMOccupation"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textCapWords"
@@ -183,7 +186,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtAMPhoneNo"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="phone"
@@ -205,7 +208,7 @@
 
             <Spinner
                 android:id="@+id/cboAMCycles"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="200dip"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown" />
@@ -246,7 +249,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtMDVAmountSavedInCurrentCycle"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="200dip"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -256,7 +259,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
-                    android:text="string/@ugx" />
+                    android:text="@string/ugx" />
             </LinearLayout>
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -272,7 +275,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtAMMWelfareCorrection"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="200dip"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -300,7 +303,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtAMMOutstandingWelfareCorrection"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="200dip"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -324,7 +327,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtOutstandingWelfareDueDate"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="150dip"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -341,7 +344,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtNCGSWOutstandingLoanNumber"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="100dip"
                 android:layout_height="wrap_content"
                 android:inputType="number" />
@@ -360,7 +363,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtMDVOutstandingLoanAmount"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="200dip"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -383,7 +386,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
                 android:id="@+id/txtNCGSWLoanNextRepaymentDate"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="150dip"
                 android:layout_height="wrap_content"
                 android:clickable="true"
