@@ -110,7 +110,6 @@ public class ShareOutActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //final MenuInflater inflater = getMenuInflater();

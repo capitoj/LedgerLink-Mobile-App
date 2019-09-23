@@ -121,6 +121,7 @@
     <string name="loan_history">LOAN HISTORY</string>
     <string name="no_outsanding_loans">No outstanding loans</string>
     <string name="title_activity_data_recovery">Data Recovery</string>
+	<string name="title_activity_passkey_recovery">PassKey Recovery</string>
     <string name="title_activity_training_module">Training Modules</string>
     <string name="title_activity_profile">VSLA Profile</string>
     <string name="action_change_pin">Change PIN</string>
@@ -158,13 +159,13 @@
 	<string name="fine_member">FINE MEMBER</string>
 	<string name="Select_type_of_fine_and_the_amount">Select type of fine and the amount. Check the box if the member has paid.</string>
 	<string name="x_required">(\'\*\' = required)</string>
-	<string name="member_number_x">Member Number *</string>
+	<string name="member_number_x">Member No. *</string>
 	<string name="surname_x">Surname *</string>
 	<string name="other_name_x">Other Names *</string>
 	<string name="sex_m_f_x">Sex(M/F) *</string>
 	<string name="what_member_does_to_make_money">What does this member do to make money?</string>
 	<string name="phone_number">Phone number</string>
-	<string name="number_of_cycles_member_completed">Number of cycles member completed</string>
+	<string name="number_of_cycles_member_completed">Cycles completed</string>
 	<string name="middle_cycle_start">MIDDLE CYCLE START</string>
 	<string name="this_members_information_was_added">This member’s information was added on 3 Mar 2013 after the cycle started. Here are his total savings and outstanding loans on that day.</string>
 	<string name="total_amount_member_has_saved_so_far">Total amount this member has saved during current cycle so far</string>
@@ -181,6 +182,7 @@
 	<string name="place_the_csv_file_containing_the_vsla_data">Place the CSV file containing the VSLA Data on to the phone storage. Ensure it is named: vslaMigrationInfo.csv then tap the button below.</string>
 	<string name="import_csv_to_database">Import CSV to Database</string>
 	<string name="to_recover_your_data">To recover your data, kindly fill in the following information</string>
+	<string name="to_recover_your_passkey">To recover your passkey, kindly fill in the following information</string>
 	<string name="vsla_code">VSLA Code</string>
 	<string name="contact_person">Contact Person</string>
 	<string name="number_of_members">Number Of Members</string>
@@ -213,7 +215,7 @@
 	<string name="ok">Ok</string>
 	<string name="absences">Absences</string>
 	<string name="none">None</string>
-	<string name="member_number">Member Number</string>
+	<string name="member_number">Member No.</string>
 	<string name="ioo">100</string>
 	<string name="surname">Surname</string>
 	<string name="muhahala">Muhahala</string>
@@ -892,5 +894,7 @@
     <string name="share_out_details">SHARE OUT DETAILS</string>
     <string name="total_savings">Total Savings</string>
     <string name="members_share_out">MEMBER\'S SHARE OUT</string>
+    <string name="forgot_passkey">Forgot PassKey</string>
+    <string name="forget_passkey">Forget PassKey</string>
 
 </resources>

@@ -1,40 +1,27 @@
 package org.applab.ledgerlink;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
-import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.EnhancedListView;
 import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 public class MemberOutstandingWelfareHistoryActivity extends ListActivity {
 
@@ -50,7 +37,7 @@ public class MemberOutstandingWelfareHistoryActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        inflateActionBar();
+        //inflateActionBar();
 
         setContentView(R.layout.activity_member_outstanding_welfare_history);
 
@@ -89,48 +76,48 @@ public class MemberOutstandingWelfareHistoryActivity extends ListActivity {
         mListView.setAdapter(adapter);
     }
 
-    private void inflateActionBar() {
-        // BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back, null);
-        customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect", getString(R.string.outstandingwelfare));
-                        i.putExtra("_meetingDate", meetingDate);
-                        i.putExtra("_meetingId", meetingId);
-                        //startActivity(i);
-                        finish();
-                    }
-                }
-        );
-
-
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-
-        // Swap in training mode icon if in training mode
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
-        }
-        actionBar.setTitle(R.string.fines_smallcaps);
-
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-        );
-
-        actionBar.setDisplayShowCustomEnabled(true);
-
-    }
+//    private void inflateActionBar() {
+//        // BEGIN_INCLUDE (inflate_set_custom_view)
+//        // Inflate a "Done/Cancel" custom action bar view.
+//        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
+//                .getSystemService(LAYOUT_INFLATER_SERVICE);
+//        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back, null);
+//        customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+//                        i.putExtra("_tabToSelect", getString(R.string.outstandingwelfare));
+//                        i.putExtra("_meetingDate", meetingDate);
+//                        i.putExtra("_meetingId", meetingId);
+//                        //startActivity(i);
+//                        finish();
+//                    }
+//                }
+//        );
+//
+//
+//        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//
+//        // Swap in training mode icon if in training mode
+//        if (Utils.isExecutingInTrainingMode()) {
+//            actionBar.setIcon(R.drawable.icon_training_mode);
+//        }
+//        actionBar.setTitle(R.string.fines_smallcaps);
+//
+//        actionBar.setDisplayShowTitleEnabled(false);
+//        actionBar.setHomeButtonEnabled(false);
+//        actionBar.setDisplayHomeAsUpEnabled(false);
+//
+//        actionBar.setCustomView(customActionBarView,
+//                new ActionBar.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+//        );
+//
+//        actionBar.setDisplayShowCustomEnabled(true);
+//
+//    }
 
     public class MemberOutstandingWelfareHistoryAdapter extends ArrayAdapter<MeetingOutstandingWelfare> {
 

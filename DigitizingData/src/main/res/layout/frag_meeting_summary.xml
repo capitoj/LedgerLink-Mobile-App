@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gery_background">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -10,37 +12,27 @@
         android:layout_marginBottom="50dip"
         android:orientation="vertical">
 
-        <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
-             style="@style/RegularText"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:paddingLeft="5dp"
-             android:text="01-JUL-2013"
-             android:id="@+id/lblMSFMeetingDate"
-             android:layout_gravity="center" /> -->
-        <!--
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:paddingLeft="5dp"
-                    android:textSize="18sp"
-                    android:text=""
-                    android:id="@+id/lblMSFInstructions"
-                    android:layout_gravity="center"/>
-                    -->
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardPastMeeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false">
 
-        <!-- <View style="@style/Divider"/> -->
-    <LinearLayout android:layout_width="match_parent"
+             <LinearLayout android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   android:orientation="vertical"
                   android:id="@+id/lblMSFPastmeetingSection">
+
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFSection2"
             style="@style/SubHeading"
             android:layout_width="match_parent"
-            android:layout_height="25dip"
+            android:layout_height="35dp"
+            android:layout_marginTop="0dp"
+            android:gravity="center_vertical"
             android:text="@string/past_meeting"/>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -129,80 +121,32 @@
             android:text="@string/bank_loan_repayment_is"
             android:layout_marginBottom="20dip"/>
 
-        <!--
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:textSize="16sp"
-                android:text="Fines: 0 UGX"
-                android:id="@+id/lblMSFLastFines"
-                android:layout_gravity="left"/>
 
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:textSize="16sp"
-                android:text="Welfare: 0 UGX"
-                android:id="@+id/lblMSFLastWelfare"
-                android:layout_gravity="left"/>
-
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:paddingLeft="5dp"
-                android:textSize="18sp"
-                android:text="Costs Incurred: 0 UGX"
-                android:id="@+id/lblMSFCosts"
-                android:layout_gravity="left"/>
-
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:paddingLeft="5dp"
-                android:textSize="18sp"
-                android:text="Cash Kept In Box: 0 UGX"
-                android:id="@+id/lblMSFCashInBox"
-                android:layout_gravity="left"/>
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:paddingLeft="5dp"
-                android:textSize="18sp"
-                android:text="Cash Taken To Bank: 0 UGX"
-                android:id="@+id/lblMSFCashToBank"
-                android:layout_gravity="left"/>
-      -->
         </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardCurrentTotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/lblMSFCurrentTotalSection">
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFSection1"
             style="@style/SubHeading"
             android:layout_width="fill_parent"
-            android:layout_height="25dip"
+            android:layout_height="35dp"
+            android:layout_marginTop="0dp"
+            android:gravity="center_vertical"
             android:text="@string/current_totals" />
 
-        <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
-             style="@style/RegularText"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:paddingLeft="5dp"
-             android:text="From: 02-Jul-2013"
-             android:id="@+id/lblMSFCycleStartDate"/>
-
-         <org.applab.digitizingdata.fontutils.TypefaceTextView
-             style="@style/RegularText"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:paddingLeft="5dp"
-             android:text="To: 30-Jun-2014"
-             android:id="@+id/lblMSFCycleEndDate"/> -->
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSFTotalSavings"
@@ -219,26 +163,8 @@
             android:text="@string/loans_outstanding_iss"
             android:layout_marginBottom="30dip"/>
 
-        <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
-             style="@style/RegularText"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:paddingLeft="5dp"
-             android:text="Loans Issued: 1,500,000 UGX"
-             android:id="@+id/lblMSFIssuedLoans"/> -->
-
-
-        <!--
-        <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:paddingLeft="5dp"
-                android:textSize="18sp"
-                android:text="Total Cash In Bank: 500,000 UGX"
-                android:id="@+id/lblMSFCashInBank"
-                android:layout_gravity="left"/>
-                -->
+        </LinearLayout>
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 </ScrollView>

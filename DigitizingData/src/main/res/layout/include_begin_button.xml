@@ -7,13 +7,13 @@
     android:layout_weight="1">
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
-        style="@style/ActionBarMenuItemText"
+        style="@style/ActionBarItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingRight="3dip"
-        android:drawableLeft="@drawable/ic_action_begin_meeting"
+        android:drawableLeft="@drawable/begin_meeting"
         android:drawablePadding="6dip"
         android:gravity="center_vertical"
-        android:text="@string/begin" />
+        android:text="@string/begin"/>
 </FrameLayout>

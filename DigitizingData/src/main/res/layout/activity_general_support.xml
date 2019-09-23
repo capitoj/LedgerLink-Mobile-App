@@ -29,13 +29,16 @@
         android:paddingTop="@dimen/dp_10"
         android:id="@+id/TXTGSQuestion"/>
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/GSSPINNER"
-        android:layout_below="@+id/TXTGSQuestion"
         android:paddingTop="@dimen/dp_10"
-        android:layout_alignParentLeft="true" />
+        android:layout_below="@+id/TXTGSQuestion"
+        android:layout_alignParentStart="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:background="@drawable/spinner_background"
+        android:gravity="left"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,10 +49,11 @@
         android:id="@+id/TXTGSComment"/>
 
     <EditText
+        android:id="@+id/EditGSComment"
+        style="@style/CustomEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp_10"
         android:layout_below="@+id/TXTGSComment"
-        android:id="@+id/EditGSComment"/>
+        android:paddingTop="@dimen/dp_10" />
 
 </RelativeLayout>

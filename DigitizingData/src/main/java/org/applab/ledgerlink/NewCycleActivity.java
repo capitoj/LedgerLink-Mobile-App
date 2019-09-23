@@ -9,24 +9,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.view.MenuItem;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
-import org.applab.ledgerlink.repo.SendDataRepo;
+import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.Calendar;
@@ -50,7 +51,7 @@ public class NewCycleActivity extends AppCompatActivity{
     int mEndYear;
     int mEndMonth;
     int mEndDay;
-    final String dialogTitle = getString(R.string.new_cycle);
+    final String dialogTitle = "New Cycle";
     private boolean successAlertDialogShown = false;
     boolean isUpdateCycleAction = false;
     private boolean multipleCyclesIndicator = false;
@@ -82,6 +83,7 @@ public class NewCycleActivity extends AppCompatActivity{
             actionBar.setTitle(getString(R.string.edit_cycle));
         } else {
             actionBar.setTitle(getString(R.string.new_cycle));
+
         }
 
         txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
@@ -222,11 +224,10 @@ public class NewCycleActivity extends AppCompatActivity{
     /* inflates custom menu bar for review members */
     void inflateCustombar() {
 
-        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-
+        final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
         actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {

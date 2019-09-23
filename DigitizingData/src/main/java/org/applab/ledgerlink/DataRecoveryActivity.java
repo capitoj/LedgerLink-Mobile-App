@@ -2,15 +2,12 @@ package org.applab.ledgerlink;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
-
-import android.view.Menu;
-import android.view.MenuItem;
-
-import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.domain.model.DataRecovery;
 import org.applab.ledgerlink.helpers.Utils;
@@ -20,7 +17,7 @@ import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONObject;
 
 
-public class DataRecoveryActivity extends ActionBarActivity{
+public class DataRecoveryActivity extends AppCompatActivity {
 
     protected int clickIndex;
     protected DataRecovery dataRecovery;

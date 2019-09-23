@@ -20,13 +20,14 @@
         android:text="@string/vsla_code"
         android:paddingTop="40dp"
         android:layout_below="@+id/lblDRTitle"/>
-    
+
     <EditText
+        android:id="@+id/txtDRVslaCode"
+        style="@style/CustomEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txtDRVslaCode"
         android:layout_below="@+id/lblDRVslaCode"
         android:inputType="textCapCharacters"
-        android:paddingTop="20dp"/>
+        android:paddingTop="20dp" />
 
 </RelativeLayout>
