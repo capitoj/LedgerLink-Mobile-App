@@ -96,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         ForgotPassKeyText.setText(getApplicationContext().getResources().getString(R.string.forgot_passkey));
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         //TODO: Setting of Preferences is done in the first Activity that is launched.
         //Load the default Shared Preferences

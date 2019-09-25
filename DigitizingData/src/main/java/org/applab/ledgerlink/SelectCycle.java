@@ -209,6 +209,7 @@ public class SelectCycle extends ActionBarActivity{
         customActionBarView.findViewById(R.id.actionbar_next).setVisibility(View.GONE);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {

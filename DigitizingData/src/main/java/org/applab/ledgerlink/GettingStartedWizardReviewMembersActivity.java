@@ -178,8 +178,11 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 //                return true;
 
             case R.id.mnuNext:
-                Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+                Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+                i.putExtra("_isUpdateCycleAction", true);
+                i.putExtra("_isFromReviewMembers", true);
                 startActivity(i);
+                finish();
                 return true;
 
             case R.id.mnuImportFromCsv:

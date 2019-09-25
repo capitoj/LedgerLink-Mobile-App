@@ -167,6 +167,7 @@ public class MemberAttendanceHistoryActivity extends ListActivity {
 //
 //       // android.support.v7.app.ActionBar actionBar = getSupportActionBar();
 //        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//        //actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 //
 //        // Swap in training mode icon if in training mode
 //        if (Utils.isExecutingInTrainingMode()) {
