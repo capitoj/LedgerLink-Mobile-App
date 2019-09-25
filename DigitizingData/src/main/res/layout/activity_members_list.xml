@@ -5,6 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/actionBarMembersList"
+        layout="@layout/header_members_list" />
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -16,27 +20,28 @@
         android:id="@+id/cardCurrentMeeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/actionBarMembersList"
         android:layout_margin="10dp"
         app:cardElevation="5dp"
         app:cardPreventCornerOverlap="false">
 
-    <ListView
-        style="@style/List"
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:choiceMode="singleChoice"
-        android:layout_below="@id/frmMList_top_control_bar">
+        <ListView
+            android:id="@android:id/list"
+            style="@style/List"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/frmMList_top_control_bar"
+            android:choiceMode="singleChoice">
 
-    </ListView>
+        </ListView>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/RegularText"
             android:id="@android:id/empty"
+            style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/empty_members_list"
-            android:layout_below="@id/frmMList_top_control_bar" />
+            android:layout_below="@id/frmMList_top_control_bar"
+            android:text="@string/empty_members_list" />
 
     </android.support.v7.widget.CardView>
 

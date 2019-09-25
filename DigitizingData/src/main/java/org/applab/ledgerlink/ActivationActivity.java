@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -71,14 +72,15 @@ public class ActivationActivity extends AppCompatActivity {
         //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
 
-
-        //ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+        //actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         this.buildFinancialInstitutionSpinner();
 
         ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
         imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
-        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.logo_width), (int) this.getResources().getDimension(R.dimen.logo_height)));
+        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.reg_width), (int) this.getResources().getDimension(R.dimen.reg_height)));
 
         Button btnActivate = (Button) findViewById(R.id.btnVAActivate);
         btnActivate.setOnClickListener(new View.OnClickListener() {
@@ -141,17 +143,17 @@ public class ActivationActivity extends AppCompatActivity {
     // This method is called once the menu is selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        Intent i = null;
-//        switch (item.getItemId()) {
-//            case R.id.action_settings:
-//                // Launch preferences activity
-//                i = new Intent(this, SettingsActivity.class);
-//                startActivity(i);
-//                break;
-//            case R.id.action_recovery:
-//                this.launchDataRecovery();
-//                break;
-//        }
+        Intent i = null;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // Launch preferences activity
+                i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                break;
+            case R.id.action_recovery:
+                this.launchDataRecovery();
+                break;
+        }
         return true;
     }
 

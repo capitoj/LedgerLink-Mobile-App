@@ -91,7 +91,7 @@
         </activity>
         <activity
             android:name=".NewCycleActivity"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:theme="@style/CycleActionBarTheme"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="New Cycle"
             android:screenOrientation="portrait" />
@@ -112,7 +112,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MemberSavingHistoryActivity"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:theme="@style/ListActivityTheme"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Savings History"
             android:screenOrientation="portrait" />
@@ -121,7 +121,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Fines History"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"/>
+            android:theme="@style/ListActivityTheme"/>
         <activity
             android:name=".FineMemberMeetingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -136,7 +136,7 @@
             android:name=".MemberLoansIssuedHistoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"/>
+            android:theme="@style/ListActivityTheme"/>
         <activity
             android:name=".MemberLoansRepaidHistoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -164,7 +164,6 @@
         <activity
             android:name=".MembersListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
             android:label="@string/title_activity_members_list"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">
@@ -194,7 +193,7 @@
         </activity>
         <activity
             android:name=".ViewSentDataActivity"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:theme="@style/ListActivityTheme"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/sent_data"
             android:screenOrientation="portrait" />
@@ -202,7 +201,7 @@
             android:name=".MemberAttendanceHistoryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_member_attendance_history"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:theme="@style/ListActivityTheme"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
@@ -223,7 +222,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".GettingStartedWizardReviewMembersActivity"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:theme="@style/ListActivityTheme"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_gettings_started_wizard_review_members"
             android:screenOrientation="portrait" />
@@ -270,7 +269,7 @@
         <activity
             android:name=".SettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:theme="@style/ListActivityTheme"
             android:label="@string/title_activity_settings"
             android:screenOrientation="portrait" />
         <activity
@@ -372,11 +371,11 @@
             android:name=".MODActivity"
             android:label="@string/title_activity_mod" />
         <activity android:name=".MemberWelfareHistoryActivity"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"/>
+            android:theme="@style/ListActivityTheme"/>
         <activity android:name=".BorrowWelfareMeetingActivity" />
         <activity android:name=".AddBorrowFromWelfareMeetingActivity" />
         <activity android:name=".MemberOutstandingWelfareHistoryActivity"
-            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"/>
+            android:theme="@style/ListActivityTheme"/>
 
     </application>
 

@@ -74,6 +74,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView = null;
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
         if (isEditAction) {
 
             actionBar.setTitle(getString(R.string.get_started_allcaps));

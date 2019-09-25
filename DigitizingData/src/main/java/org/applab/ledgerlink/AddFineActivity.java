@@ -117,6 +117,7 @@ public class AddFineActivity extends ActionBarActivity{
 
         // actionbar with logo
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {

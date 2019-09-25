@@ -206,6 +206,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:layout_marginLeft="3dp"
                     android:text="%" />
             </LinearLayout>
         </LinearLayout>
@@ -255,6 +256,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:layout_marginLeft="3dp"
                     android:text="@string/ugx" />
 
             </LinearLayout>
@@ -283,6 +285,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:layout_marginLeft="3dp"
                     android:text="@string/ugx" />
 
             </LinearLayout>
@@ -311,6 +314,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:layout_marginLeft="3dp"
                     android:text="@string/ugx" />
 
             </LinearLayout>
