@@ -22,11 +22,12 @@
         android:text="@string/phone_number"/>
 
     <EditText
+        android:id="@+id/txtDRPhoneNumber"
+        style="@style/CustomEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lblDRPhoneNumber"
-        android:id="@+id/txtDRPhoneNumber"
         android:inputType="phone"
-        android:paddingTop="20dp"/>
+        android:paddingTop="20dp" />
 
 </RelativeLayout>

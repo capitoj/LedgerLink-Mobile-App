@@ -35,7 +35,7 @@
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="As of" />
+            android:text="@string/as_of" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblRvwMembersTotalSavings"

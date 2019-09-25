@@ -2,7 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/gery_background">
 
     <LinearLayout
         android:id="@+id/frmMRCF_top_control_bar"
@@ -10,14 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
-             style="@style/RegularText"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"
-             android:paddingLeft="5dp"
-             android:text="01-JUL-2013"
-             android:id="@+id/lblMRCFMeetingDate"
-             android:layout_gravity="center" /> -->
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMRCFInstructions"
@@ -27,16 +21,26 @@
             android:layout_gravity="center"
             android:text="@string/tap_box_to_tick_member_present" />
 
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardCurrentMeeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:contentPadding="10dp">
 
-        <ListView
-            android:id="@+id/lvwMRCFMembers"
-            style="@style/List"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:choiceMode="singleChoice">
+            <ListView
+                android:id="@+id/lvwMRCFMembers"
+                style="@style/List"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:choiceMode="singleChoice"
+                android:dividerHeight="2dp"
+                android:elevation="2dp">
 
-        </ListView>
-
+            </ListView>
+        </android.support.v7.widget.CardView>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lvwMRCFEmpty"
@@ -45,6 +49,4 @@
             android:layout_height="wrap_content"
             android:text="@string/empty_members_list" />
     </LinearLayout>
-
-
 </ScrollView>

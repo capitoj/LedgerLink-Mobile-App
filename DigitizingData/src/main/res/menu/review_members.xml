@@ -1,9 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/mnuNext"
+        android:title="Next"
+        android:orderInCategory="0"
+        app:showAsAction="never" />
+
     <item android:id="@+id/mnuImportFromCsv"
           android:title="Import from CSV"
           android:orderInCategory="0"
-          app:showAsAction="never"
-            />
+          app:showAsAction="never" />
 
 </menu>

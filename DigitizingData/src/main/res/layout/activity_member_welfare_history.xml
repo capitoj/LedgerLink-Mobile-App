@@ -38,7 +38,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMSHAmount"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="150dip"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
@@ -53,6 +53,7 @@
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:text="@string/ugx" />
         </LinearLayout>
 

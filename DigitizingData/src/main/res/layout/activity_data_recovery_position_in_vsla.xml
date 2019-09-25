@@ -22,11 +22,12 @@
         android:text="@string/poition_in_vsla"/>
 
     <EditText
+        android:id="@+id/txtDRPositionInVsla"
+        style="@style/CustomEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lblDRPositionInVsla"
-        android:id="@+id/txtDRPositionInVsla"
         android:inputType="textCapWords"
-        android:paddingTop="20dp"/>
+        android:paddingTop="20dp" />
 
 </RelativeLayout>

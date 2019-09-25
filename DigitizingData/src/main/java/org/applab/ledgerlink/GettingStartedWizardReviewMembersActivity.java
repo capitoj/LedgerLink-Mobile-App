@@ -5,23 +5,18 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.TextView;
-import au.com.bytecode.opencsv.CSVReader;
-import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.TextView;
+
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import org.applab.ledgerlink.domain.model.Meeting;
@@ -30,8 +25,8 @@ import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.fontutils.TypefaceTextView;
 import org.applab.ledgerlink.helpers.GettingStartedWizardMembersArrayAdapter;
-import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
+import org.applab.ledgerlink.helpers.Utils;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -39,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+import au.com.bytecode.opencsv.CSVReader;
 
 
 /**
@@ -54,7 +49,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        inflateCustombar();
+        //inflateCustombar();
         setContentView(R.layout.activity_getting_started_wizard_review_members);
 
         TypefaceTextView reviewSubHeading = (TypefaceTextView) findViewById(R.id.lblRvwMembersSubHeading);
@@ -95,62 +90,62 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
     }
 
     /* inflates custom menu bar for review members */
-    void inflateCustombar() {
-
-        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customActionBarView = null;
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_exit_enternext_next, null);
-        customActionBarView.findViewById(R.id.actionbar_exit).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
-                        //startActivity(i);
-                        finish();
-                    }
-                }
-        );
-
-        customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
-                }
-        );
-
-
-        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
-                        i.putExtra("_isUpdateCycleAction", true);
-                        i.putExtra("_isFromReviewMembers", true);
-                        startActivity(i);
-                        finish();
-                    }
-                }
-        );
-
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(getString(R.string.get_started_allcaps));
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-        );
-
-        actionBar.setDisplayShowCustomEnabled(true);
-    }
+//    void inflateCustombar() {
+//
+//        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
+//                .getSystemService(LAYOUT_INFLATER_SERVICE);
+//        View customActionBarView = null;
+//        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_exit_enternext_next, null);
+//        customActionBarView.findViewById(R.id.actionbar_exit).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        //Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
+//                        //startActivity(i);
+//                        finish();
+//                    }
+//                }
+//        );
+//
+//        customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+//                        startActivity(i);
+//                        finish();
+//                    }
+//                }
+//        );
+//
+//
+//        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+//                        i.putExtra("_isUpdateCycleAction", true);
+//                        i.putExtra("_isFromReviewMembers", true);
+//                        startActivity(i);
+//                        finish();
+//                    }
+//                }
+//        );
+//
+//        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//        actionBar.setDisplayShowTitleEnabled(true);
+//        actionBar.setTitle(getString(R.string.get_started_allcaps));
+//        actionBar.setHomeButtonEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//
+//        actionBar.setCustomView(customActionBarView,
+//                new ActionBar.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+//        );
+//
+//        actionBar.setDisplayShowCustomEnabled(true);
+//    }
 
 
     @Override
@@ -177,9 +172,17 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
              i.putExtra("_isUpdateCycleAction", true);
              startActivity(i);
              return true; */
-            case R.id.mnuMListAdd:
-                Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+//            case R.id.mnuMListAdd:
+//                Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+//                startActivity(i);
+//                return true;
+
+            case R.id.mnuNext:
+                Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+                i.putExtra("_isUpdateCycleAction", true);
+                i.putExtra("_isFromReviewMembers", true);
                 startActivity(i);
+                finish();
                 return true;
 
             case R.id.mnuImportFromCsv:

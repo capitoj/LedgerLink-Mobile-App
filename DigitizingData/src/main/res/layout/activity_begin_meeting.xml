@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/frmBM_top_control_bar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/gery_background">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -19,75 +21,112 @@
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/grpBMCurrentMeeting"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <org.applab.ledgerlink.fontutils.TypefaceTextView
-                android:id="@+id/lblBMSection1"
-                style="@style/SubHeading"
-                android:layout_width="fill_parent"
-                android:layout_height="25dip"
-                android:text="@string/current_meeting" />
-
-            <org.applab.ledgerlink.fontutils.TypefaceTextView
-                android:id="@+id/lblBMInstructionCurrent"
-                style="@style/RegularTextInstruction"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/edit_before_sending_intruction" />
-
-
-            <ListView
-                android:id="@+id/lstBMCurrentMeetings"
-                style="@style/RegularTextListItems"
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardCurrentMeeting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dip"
-                android:layout_marginRight="20dip"
-                android:layout_marginBottom="10dip"
-                android:choiceMode="singleChoice"
-                android:dividerHeight="2dip"/>
+                android:layout_margin="10dp"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="false">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblBMSection1"
+                        style="@style/SubHeading"
+                        android:layout_width="fill_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/current_meeting" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblBMInstructionCurrent"
+                        style="@style/RegularTextInstruction"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/edit_before_sending_intruction" />
 
 
+                    <ListView
+                        android:id="@+id/lstBMCurrentMeetings"
+                        style="@style/RegularTextListItems"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dip"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginRight="20dip"
+                        android:choiceMode="singleChoice"
+                        android:dividerHeight="2dp"
+                        android:elevation="2dp" />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
 
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/grpBMPastMeetings"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <org.applab.ledgerlink.fontutils.TypefaceTextView
-                android:id="@+id/lblBMSection2"
-                style="@style/SubHeading"
-                android:layout_width="fill_parent"
-                android:layout_height="25dip"
-                android:text="@string/unsent_past_meeting" />
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardUnsentPastMeeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false">
 
-            <org.applab.ledgerlink.fontutils.TypefaceTextView
-                android:id="@+id/lblBMInstructionPast"
-                style="@style/RegularTextInstruction"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/review_before_sending_instruction" />
-
-            <org.applab.ledgerlink.fontutils.TypefaceTextView
-                android:id="@+id/lblBMWarning"
-                style="@style/RegularTextInstruction"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/send_meetings_reminder" />
-
-            <ListView
-                android:id="@+id/lstBMPastMeetingList"
-                style="@style/RegularTextListItems"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:choiceMode="singleChoice"
-                android:dividerHeight="2dip"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        </LinearLayout>
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblBMSection2"
+                    style="@style/SubHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="35dip"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/unsent_past_meeting" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblBMInstructionPast"
+                    style="@style/RegularTextInstruction"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/review_before_sending_instruction" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblBMWarning"
+                    style="@style/RegularTextInstruction"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/send_meetings_reminder" />
+
+                <ListView
+                    android:id="@+id/lstBMPastMeetingList"
+                    style="@style/RegularTextListItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip"
+                    android:choiceMode="singleChoice"
+                    android:dividerHeight="2dip"
+                    android:elevation="2dp" />
+
+                </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
     </LinearLayout>
 </ScrollView>

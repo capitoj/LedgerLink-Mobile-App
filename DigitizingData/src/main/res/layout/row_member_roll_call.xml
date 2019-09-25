@@ -35,16 +35,16 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
+
         <CheckBox
+            android:id="@+id/chkRMRCallAttendance"
             android:layout_width="30dip"
             android:layout_height="30dip"
-            android:text=""
-            android:id="@+id/chkRMRCallAttendance"
-            android:focusable="false"
-            android:layout_marginTop="10dip"
-            android:focusableInTouchMode="false"
             android:layout_alignParentLeft="true"
-            />
+            android:layout_marginTop="10dip"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="" />
         </RelativeLayout>
     </LinearLayout>
 

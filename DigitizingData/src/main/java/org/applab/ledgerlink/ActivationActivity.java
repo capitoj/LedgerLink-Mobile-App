@@ -3,21 +3,23 @@ package org.applab.ledgerlink;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.ArrayUtils;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -30,9 +32,9 @@ import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.domain.model.FinancialInstitution;
 import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Network;
 import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
 import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
 import org.applab.ledgerlink.repo.VslaInfoRepo;
@@ -48,7 +50,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class ActivationActivity extends ActionBarActivity{
+public class ActivationActivity extends AppCompatActivity {
     LedgerLinkApplication ledgerLinkApplication;
     HttpClient client;
     private int httpStatusCode = 0; //To know whether the Request was successful
@@ -67,38 +69,18 @@ public class ActivationActivity extends ActionBarActivity{
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_activation);
 
-        TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
-        versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
-
+        //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
+        //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+        //actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         this.buildFinancialInstitutionSpinner();
 
         ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
         imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
-        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.logo_width), (int) this.getResources().getDimension(R.dimen.logo_height)));
-
-        //If we are in training mode then show it using a custom View with distinguishable background
-        //Assumed that the preferences have been set by now
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setTitle(R.string.traninng_mode_main);
-            actionBar.setCustomView(R.layout.activity_main_training_mode);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(false);
-        } else {
-            actionBar.hide();
-        }
-
-        if (Build.VERSION.SDK_INT <= 10) {
-            actionBar.show();
-        }
-        if (Build.VERSION.SDK_INT >= 14) {
-            if (ViewConfiguration.get(this).hasPermanentMenuKey()) {
-                actionBar.show();
-
-            }
-        }
+        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.reg_width), (int) this.getResources().getDimension(R.dimen.reg_height)));
 
         Button btnActivate = (Button) findViewById(R.id.btnVAActivate);
         btnActivate.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +136,7 @@ public class ActivationActivity extends ActionBarActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activation, menu);
+        //getMenuInflater().inflate(R.menu.activation, menu);
         return true;
     }
 

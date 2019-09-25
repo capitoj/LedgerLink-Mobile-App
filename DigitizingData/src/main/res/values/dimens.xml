@@ -6,6 +6,8 @@
     <dimen name="view_height">119dp</dimen>
     <dimen name="logo_width">260dip</dimen>
     <dimen name="logo_height">100dip</dimen>
+    <dimen name="reg_width">260dip</dimen>
+    <dimen name="reg_height">80dip</dimen>
     <dimen name="login_margin">2dp</dimen>
     <dimen name="profile_padding">20dp</dimen>
 
@@ -16,6 +18,9 @@
     <dimen name="elv_undo_bottom_offset">15dp</dimen>
     <!-- The touch slop you need to cause a swipe instead of a scroll -->
     <dimen name="elv_touch_slop">32dp</dimen>
+
+    <dimen name="login_logo_width">260dip</dimen>
+    <dimen name="login_logo_height">100dip</dimen>
 
 
 </resources>

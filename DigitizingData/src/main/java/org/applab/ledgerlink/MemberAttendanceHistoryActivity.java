@@ -6,16 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -25,8 +23,6 @@ import org.applab.ledgerlink.helpers.AttendanceRecord;
 import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
-
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 /**
  * Created by Moses on 7/25/13.
@@ -47,7 +43,7 @@ public class MemberAttendanceHistoryActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        inflateCustomActionBar();
+        //inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_attendance_history);
 
@@ -128,77 +124,80 @@ public class MemberAttendanceHistoryActivity extends ListActivity {
 
     }
 
-    private void inflateCustomActionBar() {
-
-// BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
-        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (saveAttendanceComment()) {
-                            Toast.makeText(MemberAttendanceHistoryActivity.this, R.string.comment_entered_successfully, Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                            i.putExtra("_tabToSelect", getString(R.string.rollcall));
-                            i.putExtra("_meetingDate", meetingDate);
-                            i.putExtra("_meetingId", meetingId);
-                            startActivity(i);
-                            finish();
-                        }
-
-                    }
-                }
-        );
-        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect", getString(R.string.rollcall));
-                        i.putExtra("_meetingDate", meetingDate);
-                        i.putExtra("_meetingId", meetingId);
-                        startActivity(i);
-                        finish();
-                    }
-                }
-        );
-
-
-       // android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-
-        // Swap in training mode icon if in training mode
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
-        }
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setTitle("Roll Call");
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-        );
-
-        actionBar.setDisplayShowCustomEnabled(true);
-
-        /** actionBar.setDisplayOptions(
-         ActionBar.DISPLAY_SHOW_CUSTOM,
-         ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-         | ActionBar.DISPLAY_SHOW_TITLE
-         );
-         actionBar.setCustomView(customActionBarView,
-         new ActionBar.LayoutParams(
-         ViewGroup.LayoutParams.MATCH_PARENT,
-         ViewGroup.LayoutParams.MATCH_PARENT)
-         ); */
-        // END_INCLUDE (inflate_set_custom_view)
-    }
+//    private void inflateCustomActionBar() {
+//
+//// BEGIN_INCLUDE (inflate_set_custom_view)
+//        // Inflate a "Done/Cancel" custom action bar view.
+//        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
+//                .getSystemService(LAYOUT_INFLATER_SERVICE);
+//
+//        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
+//        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if (saveAttendanceComment()) {
+//                            Toast.makeText(MemberAttendanceHistoryActivity.this, R.string.comment_entered_successfully, Toast.LENGTH_LONG).show();
+//                            Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+//                            i.putExtra("_tabToSelect", getString(R.string.rollcall));
+//                            i.putExtra("_meetingDate", meetingDate);
+//                            i.putExtra("_meetingId", meetingId);
+//                            startActivity(i);
+//                            finish();
+//                        }
+//
+//                    }
+//                }
+//        );
+//
+//        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+//                        i.putExtra("_tabToSelect", getString(R.string.rollcall));
+//                        i.putExtra("_meetingDate", meetingDate);
+//                        i.putExtra("_meetingId", meetingId);
+//                        startActivity(i);
+//                        finish();
+//                    }
+//                }
+//        );
+//
+//
+//       // android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+//        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//        //actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
+//
+//        // Swap in training mode icon if in training mode
+//        if (Utils.isExecutingInTrainingMode()) {
+//            actionBar.setIcon(R.drawable.icon_training_mode);
+//        }
+//        actionBar.setDisplayShowTitleEnabled(false);
+//        actionBar.setTitle("Roll Call");
+//        actionBar.setHomeButtonEnabled(false);
+//        actionBar.setDisplayHomeAsUpEnabled(false);
+//
+//        actionBar.setCustomView(customActionBarView,
+//                new ActionBar.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+//        );
+//
+//        actionBar.setDisplayShowCustomEnabled(true);
+//
+//        /** actionBar.setDisplayOptions(
+//         ActionBar.DISPLAY_SHOW_CUSTOM,
+//         ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+//         | ActionBar.DISPLAY_SHOW_TITLE
+//         );
+//         actionBar.setCustomView(customActionBarView,
+//         new ActionBar.LayoutParams(
+//         ViewGroup.LayoutParams.MATCH_PARENT,
+//         ViewGroup.LayoutParams.MATCH_PARENT)
+//         ); */
+//        // END_INCLUDE (inflate_set_custom_view)
+//    }
 
     private void populateAttendanceData() {
         ArrayList<AttendanceRecord> attendances = ledgerLinkApplication.getMeetingAttendanceRepo().getMemberAbsenceHistoryInCycle(cycleId, memberId, meetingId);
@@ -215,6 +214,7 @@ public class MemberAttendanceHistoryActivity extends ListActivity {
 
         //Hack to ensure all Items in the List View are visible
         Utils.setListViewHeightBasedOnChildren(getListView());
+
     }
 
     @Override

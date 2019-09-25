@@ -29,6 +29,7 @@ public class GettingStartedWizardPageTwo extends ActionBarActivity{
         setContentView(R.layout.activity_getting_started_wizard_passcode_validation);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
         actionBar.setDisplayHomeAsUpEnabled(false);
 
 
