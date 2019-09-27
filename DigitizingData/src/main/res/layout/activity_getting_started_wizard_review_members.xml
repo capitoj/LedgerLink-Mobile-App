@@ -4,6 +4,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 <!--android:id="@+id/frmMList_top_control_bar"-->
+
+    <include layout="@layout/actionbar_custom_view_review_members"
+        android:id="@+id/actionBarReviewMember"/>
+
     <LinearLayout
 
         android:layout_width="fill_parent"
