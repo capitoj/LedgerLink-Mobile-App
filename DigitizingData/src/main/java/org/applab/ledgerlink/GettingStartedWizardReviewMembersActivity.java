@@ -52,6 +52,30 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         //inflateCustombar();
         setContentView(R.layout.activity_getting_started_wizard_review_members);
 
+        View actionBar =findViewById(R.id.actionBarReviewMember);
+        TextView actionBarActionNext = actionBar.findViewById(R.id.nextAction);
+        TextView actionBarActionBack = actionBar.findViewById(R.id.backAction);
+
+        actionBarActionNext.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+
+            }
+        });
+
+        actionBarActionBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+
+            }
+        });
+
         TypefaceTextView reviewSubHeading = (TypefaceTextView) findViewById(R.id.lblRvwMembersSubHeading);
         SpannableStringBuilder reviewSubHeadingPart = new SpannableStringBuilder(getString(R.string.review_and_confirm_all_info_correct));
         SpannableString exitText = new SpannableString(getString(R.string.exit_));
