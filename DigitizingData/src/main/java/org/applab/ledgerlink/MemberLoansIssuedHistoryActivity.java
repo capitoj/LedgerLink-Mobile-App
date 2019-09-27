@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
@@ -75,6 +76,36 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
         //inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_loans_issued_history);
+
+        View actionBar = findViewById(R.id.memberLoanIssuedHistory);
+        TextView actionBarActionDone = actionBar.findViewById(R.id.actionDone);
+        TextView actionBarActioncancel = actionBar.findViewById(R.id.actionCancel);
+
+        actionBarActionDone.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if (saveMemberLoan()) {
+                    if (currentLoanId > 0) {
+                        if (loanWasDeleted) {
+                            Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_been_cancelled, Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_edited_successfully, Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_issued_successfully, Toast.LENGTH_LONG).show();
+                    }
+                    goBackToLoansIssuedFragment();
+                }
+
+            }
+        });
+
+        actionBarActioncancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                goBackToLoansIssuedFragment();
+            }
+        });
 
         // TextView lblMeetingDate = (TextView) findViewById(R.id.lblMLIssuedHMeetingDate);
         meetingDate = getIntent().getStringExtra("_meetingDate");
@@ -180,111 +211,111 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
         }
 
         txtLoanAmount.addTextChangedListener(new TextWatcher() {
-                                                 @Override
-                                                 public void afterTextChanged(Editable s) {
+                 @Override
+                 public void afterTextChanged(Editable s) {
 
-                                                 }
+                 }
 
-                                                 @Override
-                                                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                 @Override
+                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                                 }
+                 }
 
-                                                 @Override
-                                                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+                 @Override
+                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                                                     // Compute the Interest
-                                                     double theAmount = 0.0;
-                                                     try {
-                                                         if (s.toString().length() <= 0) {
-                                                             lblCurrency.setVisibility(View.VISIBLE);
-                                                             txtTotalLoanAmount.setText("");
-                                                             return;
-                                                         }
-                                                         theAmount = Double.parseDouble(s.toString());
-                                                     } catch (Exception ex) {
-                                                         return;
-                                                     }
+                     // Compute the Interest
+                     double theAmount = 0.0;
+                     try {
+                         if (s.toString().length() <= 0) {
+                             lblCurrency.setVisibility(View.VISIBLE);
+                             txtTotalLoanAmount.setText("");
+                             return;
+                         }
+                         theAmount = Double.parseDouble(s.toString());
+                     } catch (Exception ex) {
+                         return;
+                     }
 
-                                                     if (theAmount == 0.0) {
-                                                         txtDateDue.setText(getString(R.string.none_main));
-                                                         lblCurrency.setVisibility(View.GONE);
-                                                     } else {
-                                                         lblCurrency.setVisibility(View.GONE);
-                                                         updateDisplay();
-                                                     }
+                     if (theAmount == 0.0) {
+                         txtDateDue.setText(getString(R.string.none_main));
+                         lblCurrency.setVisibility(View.GONE);
+                     } else {
+                         lblCurrency.setVisibility(View.GONE);
+                         updateDisplay();
+                     }
 
-                                                     double interestAmount = (interestRate * 0.01 * theAmount);
-                                                     double totalAmount = theAmount + interestAmount;
-                                                     if (isEditOperation) {
+                     double interestAmount = (interestRate * 0.01 * theAmount);
+                     double totalAmount = theAmount + interestAmount;
+                     if (isEditOperation) {
 
-                                                         // Deal with topup
-                                                         if ((memberLoan != null ? memberLoan.getMeeting().getMeetingId() : 0) != meetingId) {
-                                                             if (theAmount > memberLoan.getPrincipalAmount()) {
-                                                                 loanTopUp = theAmount - memberLoan.getPrincipalAmount();
-                                                                 interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
-                                                                 /** Roll over?
-                                                                  * if(memberLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT))) <= 0) {
-                                                                  interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
+                         // Deal with topup
+                         if ((memberLoan != null ? memberLoan.getMeeting().getMeetingId() : 0) != meetingId) {
+                             if (theAmount > memberLoan.getPrincipalAmount()) {
+                                 loanTopUp = theAmount - memberLoan.getPrincipalAmount();
+                                 interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
+                                 /** Roll over?
+                                  * if(memberLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT))) <= 0) {
+                                  interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
 
-                                                                  } */
-                                                                 totalAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getLoanBalance() + loanTopUp;
+                                  } */
+                                 totalAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getLoanBalance() + loanTopUp;
 
-                                                             }
-                                                             if (memberLoan.getPrincipalAmount() == theAmount) {
-                                                                 interestAmount = memberLoan.getInterestAmount();
-                                                                 totalAmount = memberLoan.getLoanBalance();
-                                                                 txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
-                                                             }
-                                                         }
+                             }
+                             if (memberLoan.getPrincipalAmount() == theAmount) {
+                                 interestAmount = memberLoan.getInterestAmount();
+                                 totalAmount = memberLoan.getLoanBalance();
+                                 txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
+                             }
+                         }
 
 
-                                                     }
+                     }
 
-                                                     // Set new values
-                                                     txtInterestAmount.setText(String.format("%.0f", interestAmount));
-                                                     txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
+                     // Set new values
+                     txtInterestAmount.setText(String.format("%.0f", interestAmount));
+                     txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
 
-                                                     //Have this value redundantly stored for future use
-                                                     theCurLoanAmount = theAmount;
-                                                     // Store for later validation
-                                                 }
-                                             }
+                     //Have this value redundantly stored for future use
+                     theCurLoanAmount = theAmount;
+                     // Store for later validation
+                 }
+             }
         );
 
 
         // Now deal with Loan Interest Manual Changes
         txtInterestAmount.addTextChangedListener(new
 
-                                                         TextWatcher() {
-                                                             @Override
-                                                             public void afterTextChanged(Editable s) {
+             TextWatcher() {
+                 @Override
+                 public void afterTextChanged(Editable s) {
 
-                                                             }
+                 }
 
-                                                             @Override
-                                                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                 @Override
+                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                                             }
+                 }
 
-                                                             @Override
-                                                             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                 @Override
+                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                                                                 // Compute the Interest
-                                                                 double theInterestAmount = 0.0;
-                                                                 try {
-                                                                     if (s.toString().length() <= 0) {
-                                                                         return;
-                                                                     }
-                                                                     theInterestAmount = Double.parseDouble(s.toString());
-                                                                 } catch (Exception ex) {
-                                                                     return;
-                                                                 }
+                     // Compute the Interest
+                     double theInterestAmount = 0.0;
+                     try {
+                         if (s.toString().length() <= 0) {
+                             return;
+                         }
+                         theInterestAmount = Double.parseDouble(s.toString());
+                     } catch (Exception ex) {
+                         return;
+                     }
 
-                                                                 double totalAmount = theInterestAmount + theCurLoanAmount;
-                                                                 txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
-                                                             }
-                                                         }
+                     double totalAmount = theInterestAmount + theCurLoanAmount;
+                     txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
+                 }
+             }
         );
 
 

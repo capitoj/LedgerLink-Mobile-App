@@ -2,6 +2,7 @@ package org.applab.ledgerlink;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
@@ -40,6 +41,22 @@ public class MemberOutstandingWelfareHistoryActivity extends ListActivity {
         //inflateActionBar();
 
         setContentView(R.layout.activity_member_outstanding_welfare_history);
+
+        View actionBar = findViewById(R.id.memberOutstandingWelfareHistory);
+        TextView actionBarActionBack = actionBar.findViewById(R.id.actionBack);
+
+        actionBarActionBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                i.putExtra("_tabToSelect", getString(R.string.outstandingwelfare));
+                i.putExtra("_meetingDate", meetingDate);
+                i.putExtra("_meetingId", meetingId);
+                //startActivity(i);
+                finish();
+            }
+        });
+
 
         meetingDate = getIntent().getStringExtra("_meetingDate");
 

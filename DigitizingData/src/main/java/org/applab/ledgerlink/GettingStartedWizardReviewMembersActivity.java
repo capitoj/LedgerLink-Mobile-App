@@ -69,9 +69,11 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         actionBarActionBack.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+                i.putExtra("_isUpdateCycleAction", true);
+                i.putExtra("_isFromReviewMembers", true);
                 startActivity(i);
+                finish();
 
             }
         });

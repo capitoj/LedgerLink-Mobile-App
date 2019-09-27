@@ -8,6 +8,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <include layout="@layout/actionbar_custom_view_meeting_back_action"
+            android:id="@+id/memberOutstandingWelfareHistory"/>
+
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMemberOutstandingWelfareHeader"
             style="@style/RegularTextInstructionBold"

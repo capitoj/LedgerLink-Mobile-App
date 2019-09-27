@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -46,6 +47,37 @@ public class MemberAttendanceHistoryActivity extends ListActivity {
         //inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_attendance_history);
+
+        View actionBar = findViewById(R.id.memberAttendanceHistory);
+        TextView actionBarActionDone = actionBar.findViewById(R.id.actionDone);
+        TextView actionBarActioncancel = actionBar.findViewById(R.id.actionCancel);
+
+        actionBarActionDone.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if (saveAttendanceComment()) {
+                    Toast.makeText(MemberAttendanceHistoryActivity.this, R.string.comment_entered_successfully, Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                    i.putExtra("_tabToSelect", getString(R.string.rollcall));
+                    i.putExtra("_meetingDate", meetingDate);
+                    i.putExtra("_meetingId", meetingId);
+                    startActivity(i);
+                    finish();
+                }
+            }
+        });
+
+        actionBarActioncancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                    i.putExtra("_tabToSelect", getString(R.string.rollcall));
+                    i.putExtra("_meetingDate", meetingDate);
+                    i.putExtra("_meetingId", meetingId);
+                    startActivity(i);
+                    finish();
+            }
+        });
 
         if (getIntent().hasExtra("_cycleId")) {
             this.cycleId = getIntent().getIntExtra("_cycleId", 0);
