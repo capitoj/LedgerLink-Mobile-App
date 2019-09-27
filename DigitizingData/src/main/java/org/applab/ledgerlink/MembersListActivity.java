@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -34,7 +35,31 @@ public class MembersListActivity extends ListActivity {
 
         setContentView(R.layout.activity_members_list);
 
-       // ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        View actionBar = findViewById(R.id.actionBarMemberList);
+        TextView actionBarActionAddMembers = actionBar.findViewById(R.id.addMembers);
+        TextView actionBarActionBack = actionBar.findViewById(R.id.backAction);
+
+        actionBarActionAddMembers.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+
+            }
+        });
+
+        actionBarActionBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+
+            }
+        });
+
+        // ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -61,6 +86,7 @@ public class MembersListActivity extends ListActivity {
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

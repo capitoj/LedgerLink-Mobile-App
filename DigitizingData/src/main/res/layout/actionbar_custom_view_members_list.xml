@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:layout_gravity="top"
+    android:background="@color/ledger_link_dark_blue"
+    android:baselineAligned="true"
+    android:clickable="true"
+    android:orientation="horizontal">
+
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/backAction"
+        style="@style/ActionBarItem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|start"
+        android:layout_weight=".18"
+        android:clickable="true"
+        android:drawableLeft="@drawable/icons_back"
+        android:drawablePadding="1dip"
+        android:gravity="center_vertical"
+        android:paddingRight="3dip"
+        android:scaleType="fitCenter"
+        android:text="@string/back"
+        android:textColor="@color/white"
+        android:onClick="backAction"/>
+
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/addMembers"
+        style="@style/ActionBarItem"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|start"
+        android:layout_weight=".14"
+        android:drawablePadding="1dip"
+        android:drawableRight="@drawable/ic_social_add_person"
+        android:gravity="center_vertical"
+        android:paddingRight="3dip"
+        android:onClick="addMembers"/>
+
+</LinearLayout>

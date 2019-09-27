@@ -7,8 +7,7 @@
     android:focusable="true"
     android:orientation="horizontal"
     android:showDividers="middle"
-    android:gravity="right"
-   >
+    android:gravity="right">
 
     <include
         layout="@layout/include_exit_button"
