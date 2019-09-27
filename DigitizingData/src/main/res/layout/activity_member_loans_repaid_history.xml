@@ -88,7 +88,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtMLRepayHAmount"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
@@ -101,6 +101,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:layout_weight="5"
                     android:text="@string/ugx" />
             </LinearLayout>
@@ -114,7 +115,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMLRepayHComment"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
@@ -164,6 +165,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
                     android:layout_weight="4"
                     android:text="@string/ugx" />
             </LinearLayout>
@@ -191,7 +193,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtMLRepayHInterest"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,37 @@ public class MemberWelfareHistoryActivity extends ListActivity {
         //inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_welfare_history);
+
+        View actionBar = findViewById(R.id.memberWelfareHistory);
+        TextView actionBarActionDone = actionBar.findViewById(R.id.actionDone);
+        TextView actionBarActioncancel = actionBar.findViewById(R.id.actionCancel);
+
+        actionBarActionDone.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if(saveMemberWelfare(true)) {
+                    Toast.makeText(MemberWelfareHistoryActivity.this, R.string.welfare_entered_successfully, Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                    i.putExtra("_tabToSelect", "welfare");
+                    i.putExtra("_meetingDate", meetingDate);
+                    i.putExtra("_meetingId", meetingId);
+                    //startActivity(i);
+                    finish();
+                }
+            }
+        });
+
+        actionBarActioncancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                i.putExtra("_tabToSelect", "welfare");
+                i.putExtra("_meetingDate", meetingDate);
+                i.putExtra("_meetingId", meetingId);
+                //startActivity(i);
+                finish();
+            }
+        });
 
         TextView lblFullNames = (TextView)findViewById(R.id.lblMSHFullNames);
         String fullNames = getIntent().getStringExtra("_names");

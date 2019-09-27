@@ -15,16 +15,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center|start"
+        android:layout_margin="5dp"
         android:layout_weight=".18"
         android:clickable="true"
         android:drawableLeft="@drawable/icons_back"
         android:drawablePadding="1dip"
         android:gravity="center_vertical"
+        android:onClick="backAction"
         android:paddingRight="3dip"
         android:scaleType="fitCenter"
         android:text="@string/back"
-        android:textColor="@color/white"
-        android:onClick="backAction"/>
+        android:textColor="@color/white" />
 
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -33,11 +34,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center|start"
+        android:layout_margin="5dp"
         android:layout_weight=".14"
         android:drawablePadding="1dip"
         android:drawableRight="@drawable/ic_social_add_person"
         android:gravity="center_vertical"
-        android:paddingRight="3dip"
-        android:onClick="addMembers"/>
+        android:onClick="addMembers"
+        android:paddingRight="3dip" />
 
 </LinearLayout>
