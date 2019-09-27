@@ -9,10 +9,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <include layout="@layout/actionbar_custom_view_meeting_activity"
+            android:id="@+id/memberAttendanceHistory"/>
+
         <RelativeLayout
             android:id="@+id/frmMAH_top_control_bar"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/memberAttendanceHistory">
 
             <RelativeLayout
                 android:id="@+id/frmMAH_check"

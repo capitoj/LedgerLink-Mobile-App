@@ -341,6 +341,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
+        //actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ledger_link_light_blue)));
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {

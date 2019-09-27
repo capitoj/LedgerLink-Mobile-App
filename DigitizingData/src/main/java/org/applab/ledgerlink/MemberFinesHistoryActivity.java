@@ -51,6 +51,22 @@ public class MemberFinesHistoryActivity extends ListActivity {
 
         setContentView(R.layout.activity_member_fines_history);
 
+        View actionBar = findViewById(R.id.memberFineHistory);
+        TextView actionBarActionBack = actionBar.findViewById(R.id.actionBack);
+
+        actionBarActionBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                    i.putExtra("_tabToSelect", getString(R.string.fines));
+                    i.putExtra("_meetingDate", meetingDate);
+                    i.putExtra("_meetingId", meetingId);
+                    //startActivity(i);
+                    finish();
+            }
+        });
+
+
         meetingDate = getIntent().getStringExtra("_meetingDate");
 
         TextView lblFullName = (TextView) findViewById(R.id.lblFineFullName);
