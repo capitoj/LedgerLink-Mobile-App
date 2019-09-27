@@ -342,22 +342,13 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
 
     //Closes this fragment and goes back to the loans issued fragment
     private void goBackToLoansIssuedFragment() {
-        /*
         Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
         i.putExtra("_tabToSelect", "loansIssued");
         i.putExtra("_meetingDate", meetingDate);
         i.putExtra("_meetingId", meetingId);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //startActivity(i);
-        finish();*/
-        Intent i = new Intent(this, MeetingMemberLoansIssueActivity.class);
-        i.putExtra("_memberId", this.memberId);
-        i.putExtra("_meetingId", this.meetingId);
-        i.putExtra("_action", getString(R.string.loanissue));
-        i.putExtra("_meetingDate", meetingDate);
-        i.putExtra("_totalCashInBox", totalCashInBox);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+        finish();
     }
 
     private void populateLoanIssueHistory() {

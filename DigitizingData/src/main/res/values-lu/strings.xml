@@ -201,7 +201,7 @@
     <string name="enter_passkey">Enter passkey</string>
     <string name="review_members">Review Members</string>
     <string name="review_and_confirm_that_all_information_is_correct">Review and confirm that all information is correct. Press the member’s name to correct an entry. If you wish to review it later, you may exit and come back later.</string>
-    <string name="as_of">As of</string>
+    <string name="as_of">As of </string>
     <string name="total_savings_this_cycle">Total savings this cycle</string>
     <string name="total_loans_outstanding">Total loans outstanding</string>
     <string name="ledger_link_training">Ledger Link Training</string>

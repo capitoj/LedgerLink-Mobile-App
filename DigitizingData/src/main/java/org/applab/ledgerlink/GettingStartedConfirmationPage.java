@@ -117,7 +117,7 @@ public class GettingStartedConfirmationPage extends AppCompatActivity {
 
 
             //TODO: hide back menu button
-            customActionBarView.findViewById(R.id.actionbar_back).setVisibility(View.GONE);
+//            customActionBarView.findViewById(R.id.actionbar_back).setVisibility(View.GONE);
             customActionBarView.findViewById(R.id.actionbar_done).setVisibility(View.GONE);
 
 
@@ -155,20 +155,21 @@ public class GettingStartedConfirmationPage extends AppCompatActivity {
                 }
         );
 
-        customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getBaseContext(), GettingStartedWizardReviewMembersActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
-                }
-        );
+//        customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent i = new Intent(getBaseContext(), GettingStartedWizardReviewMembersActivity.class);
+//                        startActivity(i);
+//                        finish();
+//                    }
+//                }
+//        );
 
 
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
         actionBar.setTitle(getString(R.string.get_started_allcaps));
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
