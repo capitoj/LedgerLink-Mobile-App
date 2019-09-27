@@ -416,129 +416,129 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
         EditText txtRepaymentAmount = (EditText) findViewById(R.id.txtMLRepayHAmount);
         txtRepaymentAmount.addTextChangedListener(new
 
-                                                          TextWatcher() {
-                                                              @Override
-                                                              public void afterTextChanged(Editable s) {
+          TextWatcher() {
+              @Override
+              public void afterTextChanged(Editable s) {
 
-                                                              }
+              }
 
-                                                              @Override
-                                                              public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+              @Override
+              public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                                              }
+              }
 
-                                                              @Override
-                                                              public void onTextChanged(CharSequence s, int start, int before, int count) {
+              @Override
+              public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                                                                  // Compute the Interest
-                                                                  double theRepayAmount = 0.0;
-                                                                  try {
-                                                                      if (s.toString().length() <= 0) {
-                                                                          lblMLRepayHCurrencyTotal.setVisibility(View.VISIBLE);
-                                                                          lblMLRepayHLBCurrency.setVisibility(View.VISIBLE);
-                                                                          txtLoanBalance.setText("");
-                                                                          txtRolloverAmount.setText("");
-                                                                          return;
-                                                                      }
-                                                                      theRepayAmount = Double.parseDouble(s.toString());
-                                                                  } catch (Exception ex) {
-                                                                      return;
-                                                                  }
+                  // Compute the Interest
+                  double theRepayAmount = 0.0;
+                  try {
+                      if (s.toString().length() <= 0) {
+                          lblMLRepayHCurrencyTotal.setVisibility(View.VISIBLE);
+                          lblMLRepayHLBCurrency.setVisibility(View.VISIBLE);
+                          txtLoanBalance.setText("");
+                          txtRolloverAmount.setText("");
+                          return;
+                      }
+                      theRepayAmount = Double.parseDouble(s.toString());
+                  } catch (Exception ex) {
+                      return;
+                  }
 
-                                                                  //Compute the Balance
-                                                                  if (isEditOperation && null != repaymentBeingEdited) {
-                                                                      theCurLoanBalanceAmount = repaymentBeingEdited.getBalanceBefore() - theRepayAmount;
-                                                                  } else {
-                                                                      theCurLoanBalanceAmount = recentLoan.getLoanBalance() - theRepayAmount;
-                                                                  }
-                                                                  txtLoanBalance.setText(String.format("%,.0f UGX", theCurLoanBalanceAmount));
-                                                                  double interestAmount = 0;
-                                                                  // If meeting date is before loan due date then default interest to 0
-                                                                  if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
-                                                                      editTextInterestRate.setText("0");
-                                                                  } else {
-                                                                      interestAmount = (interestRate * 0.01 * theCurLoanBalanceAmount);
-                                                                      editTextInterestRate.setText(String.format("%.0f", interestAmount));
-                                                                  }
-                                                                  double rolloverAmount = theCurLoanBalanceAmount + interestAmount;
-                                                                  txtRolloverAmount.setText(String.format("%,.0f UGX", rolloverAmount));
-                                                                  Toast.makeText(MemberLoansRepaidHistoryActivity.this, String.valueOf(theCurLoanBalanceAmount), Toast.LENGTH_SHORT).show();
-                                                                  /*
-                                                                  // If balance = 0, then next due date field should be blank
-                                                                  if (theCurLoanBalanceAmount == 0) {
-                                                                      String dtNextDateDue = txtDateDue.getText().toString().trim();
-                                                                      Date nextDateDue = Utils.getDateFromString(dtNextDateDue, Utils.DATE_FIELD_FORMAT);
-                                                                      if (nextDateDue.after(targetMeeting.getMeetingDate())) {
-                                                                          txtDateDue.setText("none");
-                                                                      } else {
-                                                                          txtDateDue.setText("");
-                                                                      }
-                                                                      lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
-                                                                      lblMLRepayHLBCurrency.setVisibility(View.GONE);
-                                                                      txtDateDue.setEnabled(false);
-                                                                      editTextInterestRate.setEnabled(false);
-                                                                  } else if (theCurLoanBalanceAmount < 0) {
-                                                                      double zeroInterest = 0.0;
-                                                                      double zeroLoanBalance = 0.0;
-                                                                      editTextInterestRate.setText(String.format("%.0f", zeroInterest));
-                                                                      txtRolloverAmount.setText(String.format("%,.0f UGX overpayment", Math.abs(theCurLoanBalanceAmount)));
-                                                                      txtLoanBalance.setText(String.format("%,.0f UGX", zeroLoanBalance));
-                                                                      txtDateDue.setText("none");
-                                                                      lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
-                                                                      lblMLRepayHLBCurrency.setVisibility(View.GONE);
-                                                                  } else if (theCurLoanBalanceAmount > 0) {
-                                                                      lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
-                                                                      lblMLRepayHLBCurrency.setVisibility(View.GONE);
-                                                                      if (recentLoan.getDateDue().after(targetMeeting.getMeetingDate())) {
-                                                                          txtDateDue.setText(Utils.formatDate(recentLoan.getDateDue()));
-                                                                      } else {
-                                                                          initializeDate();
-                                                                      }
-                                                                  }
-                                                                  // Have this value redundantly stored for future use
-                                                                  theCurLoanRepayAmount = theRepayAmount;
-                                                                  */
-                                                              }
-                                                          }
+                  //Compute the Balance
+                  if (isEditOperation && null != repaymentBeingEdited) {
+                      theCurLoanBalanceAmount = repaymentBeingEdited.getBalanceBefore() - theRepayAmount;
+                  } else {
+                      theCurLoanBalanceAmount = recentLoan.getLoanBalance() - theRepayAmount;
+                  }
+                  txtLoanBalance.setText(String.format("%,.0f UGX", theCurLoanBalanceAmount));
+                  double interestAmount = 0;
+                  // If meeting date is before loan due date then default interest to 0
+                  if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
+                      editTextInterestRate.setText("0");
+                  } else {
+                      interestAmount = (interestRate * 0.01 * theCurLoanBalanceAmount);
+                      editTextInterestRate.setText(String.format("%.0f", interestAmount));
+                  }
+                  double rolloverAmount = theCurLoanBalanceAmount + interestAmount;
+                  txtRolloverAmount.setText(String.format("%,.0f UGX", rolloverAmount));
+                  Toast.makeText(MemberLoansRepaidHistoryActivity.this, String.valueOf(theCurLoanBalanceAmount), Toast.LENGTH_SHORT).show();
+                  /*
+                  // If balance = 0, then next due date field should be blank
+                  if (theCurLoanBalanceAmount == 0) {
+                      String dtNextDateDue = txtDateDue.getText().toString().trim();
+                      Date nextDateDue = Utils.getDateFromString(dtNextDateDue, Utils.DATE_FIELD_FORMAT);
+                      if (nextDateDue.after(targetMeeting.getMeetingDate())) {
+                          txtDateDue.setText("none");
+                      } else {
+                          txtDateDue.setText("");
+                      }
+                      lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
+                      lblMLRepayHLBCurrency.setVisibility(View.GONE);
+                      txtDateDue.setEnabled(false);
+                      editTextInterestRate.setEnabled(false);
+                  } else if (theCurLoanBalanceAmount < 0) {
+                      double zeroInterest = 0.0;
+                      double zeroLoanBalance = 0.0;
+                      editTextInterestRate.setText(String.format("%.0f", zeroInterest));
+                      txtRolloverAmount.setText(String.format("%,.0f UGX overpayment", Math.abs(theCurLoanBalanceAmount)));
+                      txtLoanBalance.setText(String.format("%,.0f UGX", zeroLoanBalance));
+                      txtDateDue.setText("none");
+                      lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
+                      lblMLRepayHLBCurrency.setVisibility(View.GONE);
+                  } else if (theCurLoanBalanceAmount > 0) {
+                      lblMLRepayHCurrencyTotal.setVisibility(View.GONE);
+                      lblMLRepayHLBCurrency.setVisibility(View.GONE);
+                      if (recentLoan.getDateDue().after(targetMeeting.getMeetingDate())) {
+                          txtDateDue.setText(Utils.formatDate(recentLoan.getDateDue()));
+                      } else {
+                          initializeDate();
+                      }
+                  }
+                  // Have this value redundantly stored for future use
+                  theCurLoanRepayAmount = theRepayAmount;
+                  */
+              }
+          }
         );
 
         // Now deal with Loan Interest Manual Changes
         EditText txtNewInterestAmount = (EditText) findViewById(R.id.txtMLRepayHInterest);
         txtNewInterestAmount.addTextChangedListener(new
 
-                                                            TextWatcher() {
-                                                                @Override
-                                                                public void afterTextChanged(Editable s) {
+            TextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
 
-                                                                }
+                }
 
-                                                                @Override
-                                                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                                                }
+                }
 
-                                                                @Override
-                                                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                                                                    // Compute the Interest
-                                                                    double theInterestAmount = 0.0;
-                                                                    try {
-                                                                        if (s.toString().length() <= 0) {
-                                                                            return;
-                                                                        }
-                                                                        theInterestAmount = Double.parseDouble(s.toString());
-                                                                    } catch (Exception ex) {
-                                                                        return;
-                                                                    }
+                    // Compute the Interest
+                    double theInterestAmount = 0.0;
+                    try {
+                        if (s.toString().length() <= 0) {
+                            return;
+                        }
+                        theInterestAmount = Double.parseDouble(s.toString());
+                    } catch (Exception ex) {
+                        return;
+                    }
 
-                                                                    double rolloverAmount = theInterestAmount + theCurLoanBalanceAmount;
-                                                                    txtRolloverAmount.setText(String.format("%,.0f UGX", rolloverAmount));
-                                                                    if (rolloverAmount < 0) {
-                                                                        txtRolloverAmount.setText(String.format("%,.0f UGX "+ getString(R.string.overpayment), rolloverAmount));
-                                                                        txtDateDue.setText(getString(R.string.none));
-                                                                    }
-                                                                }
-                                                            }
+                    double rolloverAmount = theInterestAmount + theCurLoanBalanceAmount;
+                    txtRolloverAmount.setText(String.format("%,.0f UGX", rolloverAmount));
+                    if (rolloverAmount < 0) {
+                        txtRolloverAmount.setText(String.format("%,.0f UGX "+ getString(R.string.overpayment), rolloverAmount));
+                        txtDateDue.setText(getString(R.string.none));
+                    }
+                }
+            }
         );
     }
 
@@ -597,6 +597,7 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
 
 
         ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {

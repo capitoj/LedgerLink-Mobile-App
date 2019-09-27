@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,37 @@ public class MemberSavingHistoryActivity extends ListActivity {
         //inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_saving_history);
+
+        View actionBar = findViewById(R.id.memberSavingHistory);
+        TextView actionBarActionDone = actionBar.findViewById(R.id.actionDone);
+        TextView actionBarActioncancel = actionBar.findViewById(R.id.actionCancel);
+
+        actionBarActionDone.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if(saveMemberSaving(true)) {
+                    Toast.makeText(MemberSavingHistoryActivity.this, getString(R.string.savings_entered_successfully), Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                    i.putExtra("_tabToSelect", getString(R.string.savings));
+                    i.putExtra("_meetingDate", meetingDate);
+                    i.putExtra("_meetingId", meetingId);
+                    //startActivity(i);
+                    finish();
+                }
+            }
+        });
+
+        actionBarActioncancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                i.putExtra("_tabToSelect", getString(R.string.savings));
+                i.putExtra("_meetingDate", meetingDate);
+                i.putExtra("_meetingId", meetingId);
+                //startActivity(i);
+                finish();
+            }
+        });
 
       /**  TextView lblMeetingDate = (TextView)findViewById(R.id.lblMSHMeetingDate);
         meetingDate = getIntent().getStringExtra("_meetingDate");

@@ -18,29 +18,40 @@
         android:layout_margin="5dp"
         android:layout_weight=".18"
         android:clickable="true"
-        android:drawableLeft="@drawable/icons_back"
+        android:drawableLeft="@drawable/ic_ledgerlink_icona"
         android:drawablePadding="1dip"
         android:gravity="center_vertical"
         android:onClick="backAction"
         android:paddingRight="3dip"
-        android:scaleType="fitCenter"
-        android:text="@string/back"
-        android:textColor="@color/white" />
-
+        android:scaleType="fitCenter" />
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
-        android:id="@+id/nextAction"
+        android:id="@+id/actionCancel"
         style="@style/ActionBarItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|start"
         android:layout_margin="5dp"
         android:drawablePadding="1dip"
-        android:drawableRight="@drawable/icons_next"
+        android:drawableRight="@drawable/ic_canel"
         android:gravity="center_vertical"
-        android:onClick="nextAction"
         android:paddingRight="3dip"
-        android:text="Next"
+        android:text="@string/cancel"
+        android:textColor="@color/white" />
+
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/actionDone"
+        style="@style/ActionBarItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|start"
+        android:layout_margin="5dp"
+        android:drawablePadding="1dip"
+        android:drawableRight="@drawable/ic_done"
+        android:gravity="center_vertical"
+        android:paddingRight="3dip"
+        android:text="@string/done"
         android:textColor="@color/white" />
 
 </LinearLayout>
