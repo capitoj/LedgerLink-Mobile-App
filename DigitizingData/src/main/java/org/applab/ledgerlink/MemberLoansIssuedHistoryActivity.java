@@ -308,65 +308,6 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
         }
     }
 
-//    private void inflateCustomActionBar() {
-//        // BEGIN_INCLUDE (inflate_set_custom_view)
-//        // Inflate a "Done/Cancel" custom action bar view.
-//        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
-//                .getSystemService(LAYOUT_INFLATER_SERVICE);
-//        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
-//        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (saveMemberLoan()) {
-//                            if (currentLoanId > 0) {
-//                                if (loanWasDeleted) {
-//                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_been_cancelled, Toast.LENGTH_LONG).show();
-//                                } else {
-//                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_edited_successfully, Toast.LENGTH_LONG).show();
-//                                }
-//                            } else {
-//                                Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_issued_successfully, Toast.LENGTH_LONG).show();
-//                            }
-//                            goBackToLoansIssuedFragment();
-//                        }
-//
-//                    }
-//                }
-//        );
-//        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        goBackToLoansIssuedFragment();
-//                    }
-//                }
-//        );
-//
-//
-//        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-//
-//        // Swap in training mode icon if in training mode
-//        if (Utils.isExecutingInTrainingMode()) {
-//            actionBar.setIcon(R.drawable.icon_training_mode);
-//        }
-//
-//        actionBar.setTitle(R.string.new_loans);
-//
-//        actionBar.setDisplayShowTitleEnabled(false);
-//        actionBar.setHomeButtonEnabled(false);
-//        actionBar.setDisplayHomeAsUpEnabled(false);
-//
-//        actionBar.setCustomView(customActionBarView,
-//                new ActionBar.LayoutParams(
-//                        ViewGroup.LayoutParams.WRAP_CONTENT,
-//                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-//        );
-//
-//        actionBar.setDisplayShowCustomEnabled(true);
-//
-//        // END_INCLUDE (inflate_set_custom_view)
-//    }
 
     //Closes this fragment and goes back to the loans issued fragment
     private void goBackToLoansIssuedFragment() {

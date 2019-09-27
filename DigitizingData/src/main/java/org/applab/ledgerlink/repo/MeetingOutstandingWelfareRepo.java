@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.applab.ledgerlink.datatransformation.OutstandingWelfareDataTransferRecord;
+import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
 import org.applab.ledgerlink.domain.schema.OutstandingWelfareSchema;
@@ -33,6 +34,7 @@ public class MeetingOutstandingWelfareRepo {
 
     public MeetingOutstandingWelfareRepo(Context context, int outstandingWelfareId) {
         this.context = context;
+        this.meetingOutstandingWelfare = null;
         this.outstandingWelfareId = outstandingWelfareId;
         this.__load();
     }
@@ -42,16 +44,20 @@ public class MeetingOutstandingWelfareRepo {
         Cursor cursor = null;
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sql = String.format("SELECT * FROM %s WHERE %s=%d", OutstandingWelfareSchema.TBL_OUTSTANDING_WELFARE, OutstandingWelfareSchema.COL_OW_ID, this.outstandingWelfareId);
-            cursor = db.rawQuery(sql, null);
+            String sql = "SELECT * FROM OutstandingWelfare WHERE _id = ?";
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(this.outstandingWelfareId)});
             if (cursor != null) {
                 if (cursor.moveToNext()) {
                     this.meetingOutstandingWelfare = new MeetingOutstandingWelfare();
                     this.meetingOutstandingWelfare.setOutstandingWelfareId(cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_ID)));
-                    this.meetingOutstandingWelfare.setExpectedDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE))));
+                    if(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE)) != null) {
+                        this.meetingOutstandingWelfare.setExpectedDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE))));
+                    }
                     this.meetingOutstandingWelfare.setAmount(cursor.getDouble(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_AMOUNT)));
                     this.meetingOutstandingWelfare.setIsCleared(cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_IS_CLEARED)));
-                    this.meetingOutstandingWelfare.setDateCleared(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_DATE_CLEARED))));
+                    if(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_DATE_CLEARED)) != null) {
+                        this.meetingOutstandingWelfare.setDateCleared(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_DATE_CLEARED))));
+                    }
                     this.meetingOutstandingWelfare.setComment(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_COMMENT)));
 
                     MeetingRepo meetingRepo = new MeetingRepo(this.context, cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_MEETING_ID)));
@@ -83,11 +89,12 @@ public class MeetingOutstandingWelfareRepo {
         Cursor cursor = null;
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sql = String.format("SELECT SUM(%s)AS TotalWelfareOutstanding FROM %s WHERE %s=%d AND %s=%d AND %s IN (SELECT %s FROM %s WHERE %s=%d)",
+            String sql = String.format("SELECT SUM(%s)AS TotalWelfareOutstanding FROM %s WHERE %s=%d AND %s=%d AND %s>%d AND %s IN (SELECT %s FROM %s WHERE %s=%d)",
                     OutstandingWelfareSchema.COL_OW_AMOUNT,
                     OutstandingWelfareSchema.TBL_OUTSTANDING_WELFARE,
                     OutstandingWelfareSchema.COL_OW_MEMBER_ID, memberId,
                     OutstandingWelfareSchema.COL_OW_IS_CLEARED, 0,
+                    OutstandingWelfareSchema.COL_OW_AMOUNT, 0,
                     OutstandingWelfareSchema.COL_OW_MEETING_ID,
                     MeetingSchema.COL_MT_MEETING_ID,
                     MeetingSchema.TBL_MEETINGS,
@@ -123,9 +130,7 @@ public class MeetingOutstandingWelfareRepo {
                 if (cursor.moveToNext()) {
                     this.meetingOutstandingWelfare = new MeetingOutstandingWelfare();
                     this.meetingOutstandingWelfare.setOutstandingWelfareId(cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_ID)));
-                    if (cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE)) != null) {
-                        this.meetingOutstandingWelfare.setExpectedDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE))));
-                    }
+//                    this.meetingOutstandingWelfare.setExpectedDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE))));
                     this.meetingOutstandingWelfare.setAmount(cursor.getDouble(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_AMOUNT)));
                     this.meetingOutstandingWelfare.setIsCleared(cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_IS_CLEARED)));
                     if (cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_DATE_CLEARED)) != null) {
@@ -191,7 +196,7 @@ public class MeetingOutstandingWelfareRepo {
                     MeetingOutstandingWelfare meetingOutstandingWelfare = new MeetingOutstandingWelfare();
                     meetingOutstandingWelfare.setOutstandingWelfareId(cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_ID)));
                     if (cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE)) != null) {
-                        meetingOutstandingWelfare.setExpectedDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE))));
+//                        meetingOutstandingWelfare.setExpectedDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE))));
                     }
                     meetingOutstandingWelfare.setAmount(cursor.getDouble(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_AMOUNT)));
                     meetingOutstandingWelfare.setIsCleared(cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_IS_CLEARED)));
@@ -245,30 +250,37 @@ public class MeetingOutstandingWelfareRepo {
         return welfareId;
     }
 
+    public int getOutstandingWelfareId(int cycleId, int memberId){
+        int outstandingWelfareId = 0;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try{
+            String sql = "select a._id from OutstandingWelfare a inner join Meetings b on a.MeetingId = b._id where a.MemberId = ? and b.CycleId = ? and a.IsCleared = 0 and a.Amount > 0 limit 1";
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(memberId), String.valueOf(cycleId)});
+            if(cursor != null){
+                if(cursor.moveToNext()){
+                    outstandingWelfareId = cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_ID));
+                }
+            }
+        }catch(Exception ex){
+            Log.e("OutstandingWelfareId", ex.getMessage());
+        }finally {
+            cursor.close();
+            db.close();
+        }
+
+        return outstandingWelfareId;
+    }
+
     public void saveMemberOutstandingWelfare(MeetingOutstandingWelfare meetingOutstandingWelfare) {
-        boolean performUpdate = false;
         SQLiteDatabase db = null;
         try {
-            int outstandingWelfareId = getMemberOutstandingWelfareId(meetingOutstandingWelfare.getMeeting().getMeetingId(), meetingOutstandingWelfare.getMember().getMemberId());
-            if (outstandingWelfareId > 0) {
-                performUpdate = true;
-            }
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            if (performUpdate) {
-                String sql = "UPDATE " + OutstandingWelfareSchema.TBL_OUTSTANDING_WELFARE + " SET " + OutstandingWelfareSchema.COL_OW_MEETING_ID + " = ?, " +
-                        OutstandingWelfareSchema.COL_OW_MEMBER_ID + " = ?, " +
-                        OutstandingWelfareSchema.COL_OW_AMOUNT + " = ?, " +
-                        OutstandingWelfareSchema.COL_OW_EXPECTED_DATE + " = ?, " +
-                        OutstandingWelfareSchema.COL_OW_COMMENT + " = ? WHERE " +
-                        OutstandingWelfareSchema.COL_OW_ID + " = ?";
-                db.execSQL(sql, new String[]{
-                        String.valueOf(meetingOutstandingWelfare.getMeeting().getMeetingId()),
-                        String.valueOf(meetingOutstandingWelfare.getMember().getMemberId()),
-                        String.valueOf(meetingOutstandingWelfare.getAmount()),
-                        Utils.formatDateToSqlite(meetingOutstandingWelfare.getExpectedDate()),
-                        meetingOutstandingWelfare.getComment(),
-                        String.valueOf(outstandingWelfareId)});
-            } else {
+            Meeting meeting = new MeetingRepo(context, meetingOutstandingWelfare.getMeeting().getMeetingId()).getMeeting();
+            int outstandingWelfareId = getOutstandingWelfareId(meeting.getVslaCycle().getCycleId(), meetingOutstandingWelfare.getMember().getMemberId());
+            if(outstandingWelfareId == 0){
+                String dateCleared = meetingOutstandingWelfare.getDateCleared() == null ? "" : Utils.formatDateToSqlite(meetingOutstandingWelfare.getDateCleared());
                 String sql = "INSERT INTO " + OutstandingWelfareSchema.TBL_OUTSTANDING_WELFARE + " (" +
                         OutstandingWelfareSchema.COL_OW_MEETING_ID + "," +
                         OutstandingWelfareSchema.COL_OW_MEMBER_ID + "," +
@@ -284,13 +296,14 @@ public class MeetingOutstandingWelfareRepo {
                         String.valueOf(meetingOutstandingWelfare.getAmount()),
                         Utils.formatDateToSqlite(meetingOutstandingWelfare.getExpectedDate()),
                         String.valueOf(meetingOutstandingWelfare.getIsCleared()),
-                        Utils.formatDateToSqlite(meetingOutstandingWelfare.getDateCleared()),
+                        dateCleared,
                         String.valueOf(meetingOutstandingWelfare.getPaidInMeeting()),
                         meetingOutstandingWelfare.getComment()});
             }
-        } catch (Exception e) {
+
+        }catch (Exception e) {
             Log.e("SaveOutstandingWelfare", e.getMessage());
-        } finally {
+        }finally {
             db.close();
         }
     }

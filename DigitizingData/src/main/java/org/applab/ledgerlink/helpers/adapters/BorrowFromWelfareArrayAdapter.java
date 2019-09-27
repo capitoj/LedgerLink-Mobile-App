@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
 import org.applab.ledgerlink.domain.model.Member;
+import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.MeetingFineRepo;
 import org.applab.ledgerlink.repo.MeetingOutstandingWelfareRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
@@ -53,18 +55,20 @@ public class BorrowFromWelfareArrayAdapter extends ArrayAdapter<Member> {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            rowView = inflater.inflate(R.layout.row_member_fines, parent, false);
+            rowView = inflater.inflate(R.layout.row_member_loans_repaid, parent, false);
             if (null == meetingRepo) {
                 meetingRepo = new MeetingRepo(getContext());
             }
 
             //Get the Widgets
-            final TextView txtFullName = (TextView) rowView.findViewById(R.id.txtFineFullName);
-            final TextView txtTotalFines = (TextView) rowView.findViewById(R.id.txtFineTotal);
+            final TextView txtFullName = (TextView) rowView.findViewById(R.id.txtRMLRepayFullName);
+            final TextView txtTotalFines = (TextView) rowView.findViewById(R.id.txtRMLRepayBalance);
+            final TextView txtDueDate = (TextView) rowView.findViewById(R.id.txtRMLRepayDateDue);
 
             // Set typeface
             txtFullName.setTypeface(typeface);
             txtTotalFines.setTypeface(typeface);
+            txtDueDate.setTypeface(typeface);
 
             //Assign Values to the Widgets
             Member member = values.get(position);
@@ -74,7 +78,14 @@ public class BorrowFromWelfareArrayAdapter extends ArrayAdapter<Member> {
             targetMeeting = meetingRepo.getMeetingById(meetingId);
             double outstandingWelfare = 0.0;
             if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
-                outstandingWelfare = meetingOutstandingWelfareRepo.getMemberTotalWelfareOutstandingInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+                int outstandingWelfareId = meetingOutstandingWelfareRepo.getMemberOutstandingWelfareId(meetingId, member.getMemberId());
+                if(outstandingWelfareId > 0){
+                    MeetingOutstandingWelfare meetingOutstandingWelfare = new MeetingOutstandingWelfareRepo(context, outstandingWelfareId).getMeetingOutstandingWelfare();
+                    outstandingWelfare = meetingOutstandingWelfare.getAmount();
+                    txtDueDate.setText(String.format(context.getResources().getString(R.string.date_due)+" %s", Utils.formatDate(meetingOutstandingWelfare.getExpectedDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                }else{
+                    txtDueDate.setText("Due Date: None");
+                }
             }
 
             txtTotalFines.setText(String.format(context.getResources().getString(R.string.outstanding_welfare_x)+" %,.0f UGX", outstandingWelfare));

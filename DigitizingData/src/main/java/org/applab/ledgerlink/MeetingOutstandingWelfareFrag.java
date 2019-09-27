@@ -96,7 +96,7 @@ public class MeetingOutstandingWelfareFrag extends Fragment {
     private void populateMembersList() {
         // Load the Main Menu
         MemberRepo memberRepo = new MemberRepo(parentActivity.getBaseContext());
-        members = memberRepo.getAllMembers();
+        members = memberRepo.getActiveMembers();
 
         // Now get the data via the adapter
         final BorrowFromWelfareArrayAdapter adapter = new BorrowFromWelfareArrayAdapter(parentActivity.getBaseContext(), members);
