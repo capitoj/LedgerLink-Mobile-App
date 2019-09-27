@@ -99,7 +99,7 @@ public class VslaMeeting {
                     - vslaMeeting.getBankLoanRepayment()
                     - vslaMeeting.getTotalLoansIssued();
         }else{
-            if(noOfMeetings < 3){
+            if(noOfMeetings < 2){
                 Meeting dummyMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
                 VslaMeeting vslaMeeting = new VslaMeeting(context, dummyMeeting.getMeetingId());
 
@@ -114,7 +114,6 @@ public class VslaMeeting {
                         - vslaMeeting.getTotalLoansIssued();
             }else{
                 VslaMeeting vslaMeeting = new VslaMeeting(context, meetingId);
-
                 totalCashInBox = vslaMeeting.getTotalSavings()
                         + vslaMeeting.getTotalWelfare()
                         + vslaMeeting.getTotalFinesPaid()

@@ -33,6 +33,7 @@ import org.applab.ledgerlink.domain.model.FinancialInstitution;
 import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Network;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
@@ -114,25 +115,17 @@ public class ActivationActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private void activateVlsaUsingPostAsync(String request) {
+    private void activateVlsaUsingPostAsync(String jsonRequest) {
 
         if(Network.isConnected(getApplicationContext())) {
-            VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
-            VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
-            FinancialInstitutionRepo financialInstitutionRepo = new FinancialInstitutionRepo(getApplicationContext(), vslaInfo.getFiID());
-            FinancialInstitution financialInstitution = financialInstitutionRepo.getFinancialInstitution();
-//            String baseUrl = "http://127.0.0.1:82";
-            String baseUrl = "http://" + financialInstitution.getIpAddress();
-            String uri = String.format("%s/%s/%s", baseUrl, getString(R.string.digitizingdata), getString(R.string.activate));
-//            String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
-            new PostTask(this).execute(uri, request);
+            ActivateRunnable activateRunnable = new ActivateRunnable(jsonRequest);
+            LongTaskRunner.runLongTask(activateRunnable, getString(R.string.please_wait), "Saving online.....", ActivationActivity.this);
         }else{
-            this.saveOfflineVslaInfo();
+            ActivateRunnable activateRunnable = new ActivateRunnable();
+            LongTaskRunner.runLongTask(activateRunnable, getString(R.string.please_wait), "Saving offline.....", ActivationActivity.this);
         }
-
-        //Do the other stuff in the Async Task
     }
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -337,12 +330,46 @@ public class ActivationActivity extends AppCompatActivity {
                     .endObject()
                     .toString();
 
-
             activateVlsaUsingPostAsync(jsonRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
+    private class ActivateRunnable implements Runnable{
+
+        private String jsonRequest;
+
+        public ActivateRunnable(){
+            this.jsonRequest = null;
+        }
+
+        public ActivateRunnable(String jsonRequest){
+            this.jsonRequest = jsonRequest;
+        }
+
+        public void run(){
+            if(jsonRequest == null){
+                if(saveOfflineVslaInfo()){
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                }
+            }else{
+                VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
+                VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
+                FinancialInstitutionRepo financialInstitutionRepo = new FinancialInstitutionRepo(getApplicationContext(), vslaInfo.getFiID());
+                FinancialInstitution financialInstitution = financialInstitutionRepo.getFinancialInstitution();
+//              String baseUrl = "http://127.0.0.1:82";
+                String baseUrl = "http://" + financialInstitution.getIpAddress();
+                String uri = String.format("%s/%s/%s", baseUrl, getString(R.string.digitizingdata), getString(R.string.activate));
+//              String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
+                new PostTask(ActivationActivity.this).execute(uri, jsonRequest);
+            }
+        }
+    }
+
+
 
     // The definition of our task class
     private class PostTask extends AsyncTask<String, Integer, JSONObject> {

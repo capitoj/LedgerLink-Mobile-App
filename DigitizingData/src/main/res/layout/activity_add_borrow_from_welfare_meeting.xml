@@ -51,7 +51,7 @@
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtOutstandingWelfareDueDate"
-            style="@style/NormalEditText"
+            style="@style/TextAccentColor"
             android:layout_width="150dip"
             android:layout_height="wrap_content"
             android:layout_below="@id/lblOutstandingWelfareDueDateLabel"

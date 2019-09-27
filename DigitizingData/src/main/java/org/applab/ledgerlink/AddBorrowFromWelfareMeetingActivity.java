@@ -23,6 +23,7 @@ import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.MeetingOutstandingWelfareRepo;
+import org.applab.ledgerlink.repo.MeetingRepo;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -34,6 +35,7 @@ public class AddBorrowFromWelfareMeetingActivity extends ActionBarActivity{
     private int meetingId;
     private MeetingOutstandingWelfare meetingOutstandingWelfare;
     private boolean selectedFinishButton = false;
+    private Meeting meeting = null;
 
     private TextView txtOutstandingWelfareDueDate;
 
@@ -54,7 +56,7 @@ public class AddBorrowFromWelfareMeetingActivity extends ActionBarActivity{
 
     protected void updateDisplay() {
         if (viewClicked != null) {
-            viewClicked.setText(String.format("%02d", mDay) + "-" + Utils.getMonthNameAbbrev(mMonth + 1) + "-" + mYear);
+            viewClicked.setText(String.format("%02d", mDay) + "-" + Utils.getMonthNameAbbrev(mMonth) + "-" + mYear);
         }
     }
 
@@ -70,6 +72,9 @@ public class AddBorrowFromWelfareMeetingActivity extends ActionBarActivity{
 
         if (getIntent().hasExtra("_meetingId")) {
             this.meetingId = getIntent().getIntExtra("_meetingId", 0);
+            if(this.meetingId != 0){
+                this.meeting = new MeetingRepo(ledgerLinkApplication, this.meetingId).getMeeting();
+            }
         }
 
         String fullName = getIntent().getStringExtra("_name");
@@ -82,7 +87,7 @@ public class AddBorrowFromWelfareMeetingActivity extends ActionBarActivity{
         lblMemberBorrowFromWelfareFullName.setText(fullName);
 
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, 1);
+        cal.add(Calendar.DAY_OF_MONTH, 14);
 
         txtOutstandingWelfareDueDate = (TextView) findViewById(R.id.txtOutstandingWelfareDueDate);
         txtOutstandingWelfareDueDate.setText(Utils.formatDate(cal.getTime(), "dd-MMM-yyyy"));
@@ -107,12 +112,13 @@ public class AddBorrowFromWelfareMeetingActivity extends ActionBarActivity{
     }
 
     protected void populateMemberOutstandingWelfare(){
-        MeetingOutstandingWelfare meetingOutstandingWelfare = new MeetingOutstandingWelfareRepo(getApplicationContext()).getMemberOutstandingWelfare(meetingId, selectedMemberId);
-        if(meetingOutstandingWelfare != null){
+        int meetingOutstandingWelfareId = new MeetingOutstandingWelfareRepo(ledgerLinkApplication).getOutstandingWelfareId(this.meeting.getVslaCycle().getCycleId(), this.selectedMemberId);
+        if(meetingOutstandingWelfareId > 0){
+            this.meetingOutstandingWelfare = new MeetingOutstandingWelfareRepo(ledgerLinkApplication, meetingOutstandingWelfareId).getMeetingOutstandingWelfare();
             EditText txtIssueMemberWelfareAmount = (EditText) findViewById(R.id.txtIssueMemberWelfareAmount);
             txtIssueMemberWelfareAmount.setText(Utils.formatRealNumber(meetingOutstandingWelfare.getAmount()));
-
             txtOutstandingWelfareDueDate.setText(Utils.formatDate(meetingOutstandingWelfare.getExpectedDate()));
+
         }
     }
 
@@ -183,7 +189,9 @@ public class AddBorrowFromWelfareMeetingActivity extends ActionBarActivity{
         if(member == null){
             return false;
         }
-        this.meetingOutstandingWelfare = new MeetingOutstandingWelfare();
+        if(this.meetingOutstandingWelfare == null) {
+            this.meetingOutstandingWelfare = new MeetingOutstandingWelfare();
+        }
 
         String dlgTitle = getString(R.string.borrow_from_welfare_main);
 
