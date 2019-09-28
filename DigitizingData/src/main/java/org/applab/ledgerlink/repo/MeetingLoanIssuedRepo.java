@@ -137,6 +137,40 @@ public class MeetingLoanIssuedRepo {
         }
     }
 
+    public MeetingLoanIssued getOutstandingLoanByMemberInCycle(int cycleId, int memberId){
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        MeetingLoanIssued meetingLoanIssued = null;
+        try{
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = "select * from LoanIssues where MemberId = ? and Balance > 0 and MeetingId in (select _id from Meetings where CycleId = ?) limit 1";
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(memberId), String.valueOf(cycleId)});
+            if(cursor != null){
+                if(cursor.moveToNext()){
+                    meetingLoanIssued = new MeetingLoanIssued();
+                    meetingLoanIssued.setLoanId(cursor.getInt(cursor.getColumnIndex(LoanIssueSchema.COL_LI_LOAN_ID)));
+                    meetingLoanIssued.setLoanNo(cursor.getInt(cursor.getColumnIndex(LoanIssueSchema.COL_LI_LOAN_NO)));
+                    meetingLoanIssued.setLoanBalance(cursor.getDouble(cursor.getColumnIndex(LoanIssueSchema.COL_LI_BALANCE)));
+                    meetingLoanIssued.setInterestAmount(cursor.getDouble(cursor.getColumnIndex(LoanIssueSchema.COL_LI_INTEREST_AMOUNT)));
+                    if (cursor.getString(cursor.getColumnIndex("DateDue")) != null) {
+                        Date dateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateDue")));
+                        meetingLoanIssued.setDateDue(dateDue);
+                    }
+                    if (cursor.getString(cursor.getColumnIndex("DateCleared")) != null) {
+                        Date dateDue = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex("DateCleared")));
+                        meetingLoanIssued.setDateCleared(dateDue);
+                    }
+                }
+            }
+        }catch (Exception e){
+            Log.e("OutstandingLoan", e.getMessage());
+        }finally{
+            cursor.close();
+            db.close();
+        }
+        return meetingLoanIssued;
+    }
+
     public MeetingLoanIssued getTotalOutstandingLoansByMemberInCycle(int cycleId, int memberId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;
@@ -170,10 +204,6 @@ public class MeetingLoanIssuedRepo {
                 }
                 loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
             }
-
-            return loan;
-
-            //return loanBalance;
         } catch (Exception ex) {
             Log.e("MeetingLoanIssuedRepo.getTotalOutstandingLoansByMemberInCycle", ex.getMessage());
             return null;
@@ -187,6 +217,7 @@ public class MeetingLoanIssuedRepo {
                 db.close();
             }
         }
+        return loan;
     }
 
     public MeetingLoanIssued getOutstandingLoansByMemberInCycle(int cycleId, int memberId) {

@@ -11,14 +11,20 @@ import android.widget.*;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 
+import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.MembersLoansRepaidArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
+import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
+import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Moses on 6/25/13.
@@ -29,6 +35,7 @@ public class MeetingLoansRepaidFrag extends Fragment {
     private int meetingId;
     private MeetingActivity parentActivity;
     private RelativeLayout fragmentView;
+    protected List<MeetingLoanIssued> loansIssued;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,24 +145,25 @@ public class MeetingLoansRepaidFrag extends Fragment {
                 }
                 if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = members.get(position);
-                    /*
-                    Intent viewHistory = new Intent(view.getContext(), MemberLoansRepaidHistoryActivity.class);
-
-                    // Pass on data
-                    viewHistory.putExtra("_memberId", selectedMember.getMemberId());
-                    viewHistory.putExtra("_names", selectedMember.getFullName());
-                    viewHistory.putExtra("_meetingDate", meetingDate);
-                    viewHistory.putExtra("_meetingId", meetingId);
-                    viewHistory.putExtra("_viewingSentData", parentActivity.isViewingSentData());
-                    */
-                    Intent viewHistory = new Intent(view.getContext(), MeetingMemberLoansIssueActivity.class);
-                    viewHistory.putExtra("_memberId", selectedMember.getMemberId());
-                    viewHistory.putExtra("_names", selectedMember.getFullName());
-                    viewHistory.putExtra("_meetingDate", meetingDate);
-                    viewHistory.putExtra("_meetingId", meetingId);
-                    viewHistory.putExtra("_action", getString(R.string.loanrepayment));
-                    viewHistory.putExtra("_viewingSentData", parentActivity.isViewingSentData());
-                    startActivity(viewHistory);
+                    Meeting selectedMeeting = new MeetingRepo(parentActivity.getApplicationContext(), meetingId).getMeeting();
+                    new MeetingLoanIssuedRepo(parentActivity.getApplicationContext()).getMemberLoanId(selectedMember.getMemberId());
+                    MeetingLoanIssued recentLoan = new MeetingLoanIssuedRepo(parentActivity.getApplicationContext()).getOutstandingLoanByMemberInCycle(selectedMeeting.getVslaCycle().getCycleId(), selectedMember.getMemberId());
+                    if(recentLoan != null){
+                        if(recentLoan.getLoanBalance() > 0) {
+                            Intent viewHistory = new Intent(view.getContext(), MemberLoansRepaidHistoryActivity.class);
+                            viewHistory.putExtra("_memberId", selectedMember.getMemberId());
+                            viewHistory.putExtra("_names", selectedMember.getFullName());
+                            viewHistory.putExtra("_meetingDate", meetingDate);
+                            viewHistory.putExtra("_meetingId", meetingId);
+                            viewHistory.putExtra("_viewingSentData", parentActivity.isViewingSentData());
+                            viewHistory.putExtra("_loanId", recentLoan.getLoanId());
+                            startActivity(viewHistory);
+                        }else{
+                            Toast.makeText(parentActivity.getBaseContext(), selectedMember.getFullName() + " does not have an outstanding loan", Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(parentActivity.getBaseContext(), "Ledger Link encountered an internal error. Please contact the systems admin", Toast.LENGTH_LONG).show();
+                    }
                 }
 
             }
