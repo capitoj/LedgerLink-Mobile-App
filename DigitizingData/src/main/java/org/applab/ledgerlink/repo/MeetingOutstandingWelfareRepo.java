@@ -175,6 +175,36 @@ public class MeetingOutstandingWelfareRepo {
         }
     }
 
+    public MeetingOutstandingWelfare getOutstandingMemberWelfare(int cycleId, int memberId){
+        SQLiteDatabase db = null;
+        MeetingOutstandingWelfare meetingOutstandingWelfare = null;
+        Cursor cursor = null;
+        try{
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = "select * from OutstandingWelfare where MemberId = ? and IsCleared = 0 and Amount > 0 and MeetingId in (select _id from Meetings where CycleId = ?) limit 1";
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(memberId), String.valueOf(cycleId)});
+            if(cursor != null){
+                if(cursor.moveToNext()){
+                    meetingOutstandingWelfare = new MeetingOutstandingWelfare();
+                    meetingOutstandingWelfare.setOutstandingWelfareId(cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_ID)));
+                    meetingOutstandingWelfare.setAmount(cursor.getDouble(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_AMOUNT)));
+                    if(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE)) != null){
+                        Date expectedDate = Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE)));
+                        meetingOutstandingWelfare.setExpectedDate(expectedDate);
+                    }
+                    meetingOutstandingWelfare.setIsCleared(cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_IS_CLEARED)));
+                }
+            }
+        }catch(Exception e){
+            Log.e("OutstandingWelfareX", e.getMessage());
+        }finally{
+            cursor.close();
+            db.close();
+        }
+
+        return meetingOutstandingWelfare;
+    }
+
     public ArrayList<MeetingOutstandingWelfare> getMemberOutstandingWelfareHistory(int cycleId, int memberId) {
 
         ArrayList<MeetingOutstandingWelfare> meetingOutstandingWelfares = new ArrayList<MeetingOutstandingWelfare>();
@@ -280,7 +310,6 @@ public class MeetingOutstandingWelfareRepo {
             Meeting meeting = new MeetingRepo(context, meetingOutstandingWelfare.getMeeting().getMeetingId()).getMeeting();
             int outstandingWelfareId = getOutstandingWelfareId(meeting.getVslaCycle().getCycleId(), meetingOutstandingWelfare.getMember().getMemberId());
             if(outstandingWelfareId == 0){
-                String dateCleared = meetingOutstandingWelfare.getDateCleared() == null ? "" : Utils.formatDateToSqlite(meetingOutstandingWelfare.getDateCleared());
                 String sql = "INSERT INTO " + OutstandingWelfareSchema.TBL_OUTSTANDING_WELFARE + " (" +
                         OutstandingWelfareSchema.COL_OW_MEETING_ID + "," +
                         OutstandingWelfareSchema.COL_OW_MEMBER_ID + "," +
@@ -295,9 +324,9 @@ public class MeetingOutstandingWelfareRepo {
                         String.valueOf(meetingOutstandingWelfare.getMember().getMemberId()),
                         String.valueOf(meetingOutstandingWelfare.getAmount()),
                         Utils.formatDateToSqlite(meetingOutstandingWelfare.getExpectedDate()),
-                        String.valueOf(meetingOutstandingWelfare.getIsCleared()),
-                        dateCleared,
-                        String.valueOf(meetingOutstandingWelfare.getPaidInMeeting()),
+                        String.valueOf(0),
+                        null,
+                        String.valueOf(0),
                         meetingOutstandingWelfare.getComment()});
             }
 

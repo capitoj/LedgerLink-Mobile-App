@@ -13,13 +13,18 @@ import android.widget.TextView;
 
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.widget.Toast;
 
+import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.adapters.BorrowFromWelfareArrayAdapter;
+import org.applab.ledgerlink.repo.MeetingOutstandingWelfareRepo;
+import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.repo.MemberRepo;
 
 import java.util.ArrayList;
@@ -123,17 +128,25 @@ public class MeetingOutstandingWelfareFrag extends Fragment {
                                     int position, long id) {
                 //Do not invoke the event when in Read only Mode
                 if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
+
                     Member selectedMember = members.get(position);
-                    Intent i = new Intent(view.getContext(), MemberOutstandingWelfareHistoryActivity.class);
+                    MeetingOutstandingWelfareRepo meetingOutstandingWelfareRepo = new MeetingOutstandingWelfareRepo(parentActivity.getApplicationContext());
+                    Meeting targetMeeting = new MeetingRepo(parentActivity.getApplicationContext(), meetingId).getMeeting();
+                    MeetingOutstandingWelfare meetingOutstandingWelfare = meetingOutstandingWelfareRepo.getOutstandingMemberWelfare(targetMeeting.getVslaCycle().getCycleId(), selectedMember.getMemberId());
+                    if(meetingOutstandingWelfare != null) {
+                        Intent i = new Intent(view.getContext(), MemberOutstandingWelfareHistoryActivity.class);
 
-                    // Pass on data
-                    i.putExtra("_meetingDate", meetingDate);
-                    i.putExtra("_memberId", selectedMember.getMemberId());
-                    i.putExtra("_name", selectedMember.getFullName());
-                    i.putExtra("_meetingId", meetingId);
+                        // Pass on data
+                        i.putExtra("_meetingDate", meetingDate);
+                        i.putExtra("_memberId", selectedMember.getMemberId());
+                        i.putExtra("_name", selectedMember.getFullName());
+                        i.putExtra("_meetingId", meetingId);
 
-                    startActivity(i);
-                    //finish this list so that it doesnt show up after fining
+                        startActivity(i);
+                        //finish this list so that it doesnt show up after fining
+                    }else{
+                        Toast.makeText(parentActivity.getApplicationContext(), selectedMember.getFullName() + " does not have an outstanding welfare", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
