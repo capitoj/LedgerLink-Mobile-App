@@ -33,34 +33,4 @@
         app:showAsAction="never"
         android:title="@string/action_change_pin" />
 
-    <item
-        android:id="@+id/mnuSwitchLanguage"
-        android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="@string/switch_language" />
-
-    <item
-        android:id="@+id/english"
-        android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="English" />
-
-    <item
-        android:id="@+id/arabic"
-        android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="Arabic" />
-
-    <item
-        android:id="@+id/bari"
-        android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="Bari" />
-
-    <item
-        android:id="@+id/acholi"
-        android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="Acholi" />
-
 </menu>

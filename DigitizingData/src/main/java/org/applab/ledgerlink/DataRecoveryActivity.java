@@ -74,11 +74,11 @@ public class DataRecoveryActivity extends AppCompatActivity {
                 }
                 dataRecovery.setVslaCode(txtDRVslaCode.getText().toString().trim());
                 setContentView(R.layout.activity_data_recovery_passkey);
-                EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRPassKey);
+                EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRNoOfMeetings);
                 txtDRPassKey.setText(dataRecovery.getPassKey());
                 clickIndex++;
             } else if (clickIndex == 1) {
-                EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRPassKey);
+                EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRNoOfMeetings);
                 if (txtDRPassKey.getText().toString().trim().length() < 1) {
                     DialogMessageBox.show(this, getString(R.string.action_recovery), getString(R.string.pass_key_required));
                     txtDRPassKey.requestFocus();
@@ -98,11 +98,11 @@ public class DataRecoveryActivity extends AppCompatActivity {
                 }
                 dataRecovery.setVslaName(txtDRVslaName.getText().toString().trim());
                 setContentView(R.layout.activity_data_recovery_contact_person);
-                EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRContactPerson);
+                EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRNoOfCycle);
                 txtDRContactPerson.setText(dataRecovery.getContactPerson());
                 clickIndex++;
             } else if (clickIndex == 3) {
-                EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRContactPerson);
+                EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRNoOfCycle);
                 if (txtDRContactPerson.getText().toString().trim().length() < 1) {
                     DialogMessageBox.show(this, getString(R.string.action_recovery), getString(R.string.name_contact_person_required));
                     txtDRContactPerson.requestFocus();
@@ -202,7 +202,7 @@ public class DataRecoveryActivity extends AppCompatActivity {
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }else if(clickIndex == 1){
-            EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRPassKey);
+            EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRNoOfMeetings);
             dataRecovery.setPassKey(txtDRPassKey.getText().toString());
 
             setContentView(R.layout.activity_data_recovery);
@@ -214,11 +214,11 @@ public class DataRecoveryActivity extends AppCompatActivity {
             dataRecovery.setVslaName(txtDRVslaName.getText().toString());
 
             setContentView(R.layout.activity_data_recovery_passkey);
-            EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRPassKey);
+            EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRNoOfMeetings);
             txtDRPassKey.setText(dataRecovery.getPassKey());
             clickIndex--;
         }else if(clickIndex == 3){
-            EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRContactPerson);
+            EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRNoOfCycle);
             dataRecovery.setContactPerson(txtDRContactPerson.getText().toString());
 
             setContentView(R.layout.activity_data_recovery_vsla_name);
@@ -230,7 +230,7 @@ public class DataRecoveryActivity extends AppCompatActivity {
             dataRecovery.setPhoneNumber(txtDRPhoneNumber.getText().toString());
 
             setContentView(R.layout.activity_data_recovery_contact_person);
-            EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRContactPerson);
+            EditText txtDRContactPerson = (EditText)findViewById(R.id.txtDRNoOfCycle);
             txtDRContactPerson.setText(dataRecovery.getContactPerson());
             clickIndex--;
         }else if(clickIndex == 5){

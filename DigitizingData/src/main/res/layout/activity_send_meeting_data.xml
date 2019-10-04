@@ -4,10 +4,14 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <include layout="@layout/actionbar_custom_view_sent_data"
+    android:id="@+id/actionBarSentData"/>
+
     <RelativeLayout
         android:id="@+id/frmSMD_top_control_bar"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actionBarSentData">
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/txtSMD_header"

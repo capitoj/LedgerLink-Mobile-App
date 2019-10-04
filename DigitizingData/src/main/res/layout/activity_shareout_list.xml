@@ -10,6 +10,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <include layout="@layout/actionbar_custom_view_members_shareout"
+            android:id="@+id/actionBarShareOut"/>
+
         <android.support.v7.widget.CardView
             android:id="@+id/cardShareOutDetails"
             android:layout_width="match_parent"
@@ -18,7 +21,8 @@
             app:cardElevation="5dp"
             app:cardPreventCornerOverlap="false"
             app:contentPadding="0dp"
-            app:contentPaddingBottom="10dp">
+            app:contentPaddingBottom="10dp"
+            android:layout_below="@+id/actionBarShareOut">
 
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
