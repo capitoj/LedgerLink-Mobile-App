@@ -55,12 +55,12 @@ public class ActivationActivity extends AppCompatActivity {
     LedgerLinkApplication ledgerLinkApplication;
     HttpClient client;
     private int httpStatusCode = 0; //To know whether the Request was successful
-    private boolean activationSuccessful = false;
-    private String targetVslaCode = null; //fake-fix
-    private String securityPasskey = null;
-    private ProgressDialog progressDialog = null;
-    private Spinner dropdownFinancialInstitution = null;
-    private FinancialInstitution targetFinancialInstitution = null;
+    private boolean activationSuccessful;
+    private String targetVslaCode; //fake-fix
+    private String securityPasskey;
+    private ProgressDialog progressDialog;
+    private Spinner dropdownFinancialInstitution;
+    private FinancialInstitution targetFinancialInstitution;
 
 
     @Override
@@ -69,6 +69,10 @@ public class ActivationActivity extends AppCompatActivity {
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_activation);
+
+        activationSuccessful = false;
+
+        progressDialog = null;
 
         //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
@@ -330,7 +334,16 @@ public class ActivationActivity extends AppCompatActivity {
                     .endObject()
                     .toString();
 
-            activateVlsaUsingPostAsync(jsonRequest);
+            if(Network.isConnected(getApplicationContext())) {
+                ActivateRunnable activateRunnable = new ActivateRunnable(jsonRequest);
+                LongTaskRunner.runLongTask(activateRunnable, getString(R.string.please_wait), "Activating online.....", ActivationActivity.this);
+            }else{
+                ActivateRunnable activateRunnable = new ActivateRunnable();
+                LongTaskRunner.runLongTask(activateRunnable, getString(R.string.please_wait), "Saving offline.....", ActivationActivity.this);
+            }
+
+
+//            activateVlsaUsingPostAsync(jsonRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -349,21 +362,15 @@ public class ActivationActivity extends AppCompatActivity {
         }
 
         public void run(){
+
             if(jsonRequest == null){
-                if(saveOfflineVslaInfo()){
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                }
+                ledgerLinkApplication.getVslaInfoRepo().saveOfflineVslaInfo(targetVslaCode, securityPasskey, targetFinancialInstitution.getFiID());
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }else{
-                VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
-                VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
-                FinancialInstitutionRepo financialInstitutionRepo = new FinancialInstitutionRepo(getApplicationContext(), vslaInfo.getFiID());
-                FinancialInstitution financialInstitution = financialInstitutionRepo.getFinancialInstitution();
-//              String baseUrl = "http://127.0.0.1:82";
-                String baseUrl = "http://" + financialInstitution.getIpAddress();
+                String baseUrl = "http://" + targetFinancialInstitution.getIpAddress();
                 String uri = String.format("%s/%s/%s", baseUrl, getString(R.string.digitizingdata), getString(R.string.activate));
-//              String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
                 new PostTask(ActivationActivity.this).execute(uri, jsonRequest);
             }
         }
@@ -387,24 +394,6 @@ public class ActivationActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            try {
-                if (activationActivityWeakReference.get() != null && !activationActivityWeakReference.get().isFinishing()) {
-                    if (null == progressDialog) {
-                        progressDialog = new ProgressDialog(activationActivityWeakReference.get());
-                        progressDialog.setTitle(getString(R.string.Registation_main));
-                        progressDialog.setMessage(getString(R.string.sending_registration));
-                        progressDialog.setMax(10);
-                        progressDialog.setProgress(1);
-                        progressDialog.setCancelable(false);
-                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        progressDialog.show();
-                    }
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                assert progressDialog != null;
-                progressDialog.setMessage(ex.getMessage());
-            }
         }
 
         @Override
@@ -412,21 +401,19 @@ public class ActivationActivity extends AppCompatActivity {
             JSONObject result = null;
             String uri = params[0];
             try {
-                //instantiates httpclient to make request
+//                //instantiates httpclient to make request
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-
-                //url with the post data
+//
+//                //url with the post data
                 HttpPost httpPost = new HttpPost(uri);
 
                 //passes the results to a string builder/entity
                 StringEntity se = new StringEntity(params[1]);
-                Log.d("URI", getString(R.string.url_is) + params[0]);
-                Log.d(getString(R.string.request), getString(R.string.request_is) + params[1]);
                 //sets the post request as the resulting string
                 httpPost.setEntity(se);
                 httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                // Response handler
+//
+//                // Response handler
                 ResponseHandler<String> rh = new ResponseHandler<String>() {
                     // invoked when client receives response
                     public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
@@ -441,13 +428,14 @@ public class ActivationActivity extends AppCompatActivity {
 
                         // write the response byte array to a string buffer
                         out.append(new String(b, 0, b.length));
+                        Log.e("OutputX", out.toString());
                         return out.toString();
                     }
                 };
-
+//
                 String responseString = httpClient.execute(httpPost, rh);
-                Log.d(getString(R.string.Registation_main), getString(R.string.response_is) + responseString);
-                // close the connection
+//                Log.d(getString(R.string.Registation_main), getString(R.string.response_is) + responseString);
+//                // close the connection
                 httpClient.getConnectionManager().shutdown();
 
                 if (httpStatusCode == 200) //sucess
@@ -475,11 +463,12 @@ public class ActivationActivity extends AppCompatActivity {
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             //updateProgressBar(values[0]);
-            progressDialog.setProgress(values[0]);
+//            progressDialog.setProgress(values[0]);
         }
 
         @Override
         protected void onPostExecute(JSONObject result) {
+            Log.e("ResultX", String.valueOf(result));
             String vslaName = null;
             String passKey = null;
             super.onPostExecute(result);
@@ -495,7 +484,7 @@ public class ActivationActivity extends AppCompatActivity {
                     retrievedVslaNameSavedSuccessfully = ledgerLinkApplication.getVslaInfoRepo().saveVslaInfo(targetVslaCode, vslaName, passKey, targetFinancialInstitution.getFiID());
                     if (retrievedVslaNameSavedSuccessfully) {
                         Toast.makeText(ActivationActivity.this, R.string.congs_reg_completed, Toast.LENGTH_LONG).show();
-                        dismissProgressDialog();
+//                        dismissProgressDialog();
                         Intent i = new Intent(getBaseContext(), LoginActivity.class);
                         i.putExtra(getString(R.string._wasCalledFromActivation), true);
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -503,12 +492,12 @@ public class ActivationActivity extends AppCompatActivity {
                         finish();
                     } else {
                         Toast.makeText(ActivationActivity.this, R.string.reg_failed_while_writing_retrieved_vsla_name, Toast.LENGTH_LONG).show();
-                        dismissProgressDialog();
+//                        dismissProgressDialog();
                     }
                 } else {
                     //Process failed
                     Toast.makeText(getApplicationContext(), R.string.reg_failed_due_to_internet, Toast.LENGTH_LONG).show();
-                    dismissProgressDialog();
+//                    dismissProgressDialog();
                 }
 
                 //In case activation failed
@@ -527,23 +516,23 @@ public class ActivationActivity extends AppCompatActivity {
                 //Process failed
                 exJson.printStackTrace();
                 Toast.makeText(getApplicationContext(), R.string.reg_failed_due_to_invalid_data_format, Toast.LENGTH_LONG).show();
-                dismissProgressDialog();
+//                dismissProgressDialog();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 //Process failed
                 Toast.makeText(getApplicationContext(), R.string.reg_failed_try_again_later, Toast.LENGTH_LONG).show();
-                dismissProgressDialog();
+//                dismissProgressDialog();
             }
         }
 
         //Dismisses the currently showing progress dialog
-        private void dismissProgressDialog() {
-            if (progressDialog != null) {
-                progressDialog.dismiss();
-                //set it to null
-                progressDialog = null;
-            }
-        }
+//        private void dismissProgressDialog() {
+//            if (progressDialog != null) {
+//                progressDialog.dismiss();
+//                //set it to null
+//                progressDialog = null;
+//            }
+//        }
     }
 
 }
