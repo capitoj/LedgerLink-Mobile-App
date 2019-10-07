@@ -229,12 +229,13 @@ public class LoginActivity extends AppCompatActivity {
         //spinnerLang.setOnItemSelectedListener(this);
 
         // Lanugage list
-        List<String> categories = new ArrayList<String>();
-        categories.add("English");
-        categories.add("Luo");
-        categories.add("Luganda");
+        List<String> languages = new ArrayList<String>();
+        languages.add("English");
+        languages.add("Acholi");
+        languages.add("Arabic");
+        languages.add("Bari");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, languages);
         // attaching data adapter to spinner
         spinnerLang.setAdapter(dataAdapter);
 
@@ -248,14 +249,20 @@ public class LoginActivity extends AppCompatActivity {
                     setLocale("en");
                 } else if (pos == 2) {
                     Toast.makeText(parent.getContext(),
+                            "You have selected Acholi", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("ac");
+                } else if (pos == 3) {
+                    Toast.makeText(parent.getContext(),
                             "You have selected Arabic", Toast.LENGTH_SHORT)
                             .show();
-                    setLocale("lo");
-                } else if (pos == 3) {
+                    setLocale("ar");
+                }
+                else if (pos == 4) {
                     Toast.makeText(parent.getContext(),
                             "You have selected Bari", Toast.LENGTH_SHORT)
                             .show();
-                    setLocale("lu");
+                    setLocale("ba");
                 }
             }
 
@@ -280,16 +287,15 @@ public class LoginActivity extends AppCompatActivity {
     /** Change lanugage spinner**/
 
     public void setLocale(String lang) {
-        Locale myLocale = new Locale(lang);
+        Locale locale = new Locale(lang);
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
+        conf.locale = locale;
         res.updateConfiguration(conf, dm);
         Intent refresh = new Intent(this, LoginActivity.class);
         startActivity(refresh);
         finish();
-
     }
 
 

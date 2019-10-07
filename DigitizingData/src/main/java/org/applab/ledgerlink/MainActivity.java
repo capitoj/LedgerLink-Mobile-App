@@ -14,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
@@ -189,30 +188,10 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.english:
-                setLocale("en");
-                Toast.makeText(this, "English", Toast.LENGTH_LONG).show();
-                break;
-
-            case R.id.arabic:
-                setLocale("ar");
-                Toast.makeText(this, "Arabic", Toast.LENGTH_LONG).show();
-                break;
-
-            case R.id.bari:
-                setLocale("ba");
-                Toast.makeText(this, "Bari", Toast.LENGTH_LONG).show();
-                break;
-
-            case R.id.acholi:
-                setLocale("ac");
-                Toast.makeText(this, "Acholi", Toast.LENGTH_LONG).show();
-                break;
-
             case R.id.mnuMainSettings:
                 // Launch preferences activity
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
+                Intent setting = new Intent(this, SettingsActivity.class);
+                startActivity(setting);
                 break;
             case R.id.mnuMainProfile:
                 loadVslaProfile();
@@ -222,6 +201,10 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.mnuMainMOD:
                 loadMODWindow();
+                break;
+            case R.id.mnuChangePIN:
+                Intent pin = new Intent(this, PassKeyRecoveryActivity.class);
+                startActivity(pin);
                 break;
         }
         return super.onOptionsItemSelected(item);

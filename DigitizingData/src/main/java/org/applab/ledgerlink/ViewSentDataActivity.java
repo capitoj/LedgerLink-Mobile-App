@@ -5,24 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.view.MenuItem;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.SendMeetingDataArrayAdapter;
+import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
-
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 /**
  * Created by Moses on 7/23/13.
@@ -38,6 +34,19 @@ public class ViewSentDataActivity extends ListActivity {
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
         setContentView(R.layout.activity_send_meeting_data);
+
+        View actionBar = findViewById(R.id.actionBarSentData);
+        TextView actionBarActionBack = actionBar.findViewById(R.id.backAction);
+
+        actionBarActionBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+
+            }
+        });
 
         //ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 

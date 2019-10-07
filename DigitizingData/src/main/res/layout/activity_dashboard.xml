@@ -141,7 +141,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:text="Add Cycle"
+                                android:text="@string/new_cycle"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -166,7 +166,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:text="Edit Cycle"
+                                android:text="@string/edit_cycle"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -191,7 +191,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:text="End Cycle"
+                                android:text="@string/end_cycle"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>

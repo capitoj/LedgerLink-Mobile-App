@@ -779,6 +779,7 @@
     <string name="meeting_cannot_be_deleted">لا يمكن حذف الاجتماع. أنه يحتوي على بيانات الاجتماع.</string>
     <string name="are_you_sure_you_want_to_delete_this_metting"></string>
     <string name="switch_language">تبديل اللغة</string>
+    <string name="end_cycle">نهاية دورة</string>
 
 
 </resources>
