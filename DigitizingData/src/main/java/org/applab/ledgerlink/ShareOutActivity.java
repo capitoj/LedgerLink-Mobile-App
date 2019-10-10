@@ -1,11 +1,12 @@
 package org.applab.ledgerlink;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by Moses on 7/16/13.
  */
-public class ShareOutActivity extends AppCompatActivity {
+public class ShareOutActivity extends Activity {
     private ArrayList<Member> members;
     Context context;
     int meetingId;
@@ -35,14 +36,26 @@ public class ShareOutActivity extends AppCompatActivity {
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_shareout_list);
+
+        View actionBar = findViewById(R.id.actionBarShareOut);
+        TextView actionBarActionBack = actionBar.findViewById(R.id.backAction);
+
+        actionBarActionBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+
+            }
+        });
+
         refreshActivityView();
 
 
-        Runnable populateShareOutList = new Runnable()
-        {
+        Runnable populateShareOutList = new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 populateShareOutDetails();
             }
         };
@@ -58,7 +71,7 @@ public class ShareOutActivity extends AppCompatActivity {
         //populate the list
         populateShareOutList();
         //add LayoutParams
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
     }
 
@@ -72,7 +85,7 @@ public class ShareOutActivity extends AppCompatActivity {
         // Now get the data via the adapter
         members = ledgerLinkApplication.getMemberRepo().getActiveMembers();
 
-        if(members == null) {
+        if (members == null) {
             members = new ArrayList<Member>();
         }
 
@@ -80,7 +93,7 @@ public class ShareOutActivity extends AppCompatActivity {
         final ShareOutArrayAdapter adapter = new ShareOutArrayAdapter(getBaseContext(), members);
 
         // listening to single list item on click
-        ListView shareOutListView = (ListView) findViewById(R.id.lstShareOutList);
+        ListView shareOutListView = findViewById(R.id.lstShareOutList);
         shareOutListView.setAdapter(adapter);
         Utils.setListViewHeightBasedOnChildren(shareOutListView);
     }
@@ -98,7 +111,7 @@ public class ShareOutActivity extends AppCompatActivity {
         TextView txtNewShareValue = (TextView) findViewById(R.id.lblHeaderNewShareValue);
 
         double totalSavings = ShareOutArrayAdapter.getTotalSaving();
-        txtTotalSaving.setText(getString(R.string.total_savings)  + Utils.formatNumber(totalSavings) + " UGX");
+        txtTotalSaving.setText(getString(R.string.total_savings) + Utils.formatNumber(totalSavings) + " UGX");
         double totalInterest = ShareOutArrayAdapter.getTotalInterest();
         txtTotalInterest.setText(getString(R.string.total_interest) + Utils.formatNumber(totalInterest) + " UGX");
         double totalFine = ShareOutArrayAdapter.getTotalFine();
@@ -118,10 +131,9 @@ public class ShareOutActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
- // Handle action bar item clicks here. The action bar will
+        // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         //NOT necessary since we are not using custom view

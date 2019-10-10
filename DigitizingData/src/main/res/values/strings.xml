@@ -808,7 +808,7 @@
     <string name="shareout">shareout</string>
     <string name="share_out_menu">SHARE OUT</string>
     <string name="title_activity_shareout_list">Share Out</string>
-    <string name="share_out">share_out_</string>
+    <string name="share_out">Share Out</string>
     <string name="lists">lists</string>
     <string name="lists_menu">Lists</string>
     <string name="url_is">URI is</string>
@@ -896,5 +896,10 @@
     <string name="members_share_out">MEMBER\'S SHARE OUT</string>
     <string name="forgot_passkey">Forgot PassKey</string>
     <string name="forget_passkey">Forget PassKey</string>
+    <string name="no_of_meeting_required">No of meeting required</string>
+    <string name="no_of_meetings">No. of meetings</string>
+    <string name="no_of_complete_cycle">No. of Complete Cycle</string>
+    <string name="no_of_complete_cycle_required">No. of Completed Cycle Required</string>
+    <string name="end_cycle">End Cycle</string>
 
 </resources>
