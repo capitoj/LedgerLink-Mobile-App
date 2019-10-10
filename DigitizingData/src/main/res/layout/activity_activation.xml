@@ -151,6 +151,39 @@
 
         </android.support.v7.widget.CardView>
 
+        <LinearLayout
+            android:id="@+id/switchLang"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/cardLogin"
+            android:layout_below="@+id/cardLogin"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/change_lang"
+                style="@style/RegularTextActivationLoginMsg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_weight="0.5"
+                android:gravity="left"
+                android:paddingTop="0dp"
+                android:text="@string/change_language"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinner_lang"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/spinner_background"
+                android:gravity="left"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+
 
     </RelativeLayout>
 
