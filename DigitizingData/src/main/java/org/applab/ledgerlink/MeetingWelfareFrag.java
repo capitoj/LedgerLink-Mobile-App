@@ -97,7 +97,7 @@ public class MeetingWelfareFrag extends Fragment {
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
+        members = parentActivity.ledgerLinkApplication.getMemberRepo().getActiveMembers();
 
         //Now get the data via the adapter
         adapter = new MembersWelfareArrayAdapter(getActivity().getBaseContext(), members);

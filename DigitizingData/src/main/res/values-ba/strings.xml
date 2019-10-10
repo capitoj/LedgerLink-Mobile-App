@@ -190,7 +190,7 @@
     <string name="enter_passkey">tolupkoi ngaet</string>
     <string name="review_members">mete ngutulu \'do</string>
     <string name="review_and_confirm_that_all_information_is_correct">mete \'do ko \'di\'dike adi wuresi giri kgwon a gwak. I gayerju na lele ngo tanye karin ti ngutu lo. Ko do mindyo meddya \'do a bot, do bubulo ngerdya ko wete bot ni</string>
-    <string name="as_of">kwa laga</string>
+    <string name="as_of">kwa laga </string>
     <string name="total_savings_this_cycle">kenet giri ti \'de\'ya ti kulo yapalin ropesi</string>
     <string name="total_loans_outstanding">kenet giri ti kurjo (gurut) pitono </string>
     <string name="ledger_link_training">togolet I loki na Ledger Link</string>

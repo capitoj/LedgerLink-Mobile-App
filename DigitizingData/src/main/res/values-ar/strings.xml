@@ -191,7 +191,7 @@
     <string name="enter_passkey">أدخل مفتاح المرور</string>
     <string name="review_members">مراجعة الأعضاء</string>
     <string name="review_and_confirm_that_all_information_is_correct">مراجعة وتأكيد أن جميع المعلومات صحيحة. اضغط على اسم العضو لتصحيح إدخال. إذا كنت ترغب في مراجعته لاحقًا ، فيمكنك الخروج والعودة لاحقًا.</string>
-    <string name="as_of">اعتبارا من</string>
+    <string name="as_of"> اعتبارا من</string>
     <string name="total_savings_this_cycle">مجموع المدخرات في هذه الدورة</string>
     <string name="total_loans_outstanding">إجمالي القروض القائمة</string>
     <string name="ledger_link_training">ليدجر لينك التدريب</string>

@@ -98,23 +98,51 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_loans_repaid_history);
 
         getFieldsFromLayout();
 
+        View actionBar = findViewById(R.id.memberLoanRepaymentHistory);
+        TextView actionBarActionDone = actionBar.findViewById(R.id.actionDone);
+        TextView actionBarActionCancel = actionBar.findViewById(R.id.actionCancel);
+
+        actionBarActionDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(saveMemberLoanRepayment()) {
+                    Toast.makeText(MemberLoansRepaidHistoryActivity.this, R.string.loan_repayment_entered_successfully, Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                    i.putExtra("_tabToSelect", getString(R.string.loansrepaid));
+                    i.putExtra("_meetingDate", meetingDate);
+                    i.putExtra("_meetingId", meetingId);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    finish();
+                }
+            }
+        });
+
+        actionBarActionCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                i.putExtra("_tabToSelect",  getString(R.string.loansrepaid));
+                i.putExtra("_meetingDate", meetingDate);
+                i.putExtra("_meetingId", meetingId);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
+            }
+        });
+
         /** TextView lblMeetingDate = (TextView)findViewById(R.id.lblMLRepayHMeetingDate);
 
          lblMeetingDate.setText(meetingDate); */
-        try {
+
+        if(getIntent().hasExtra("_meetingDate")){
             meetingDate = getIntent().getStringExtra("_meetingDate");
-            Log.e("MeetingDateException", meetingDate);
-        }catch(Exception e){
-            Log.e("MeetingdDateException", e.getMessage());
         }
 
-        TextView lblFullName = (TextView) findViewById(R.id.lblMLRepayHFullName);
+        TextView lblFullName = findViewById(R.id.lblMLRepayHFullName);
         String fullName = getIntent().getStringExtra("_names");
         lblFullName.setText(fullName);
 
@@ -129,7 +157,9 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
         if(getIntent().hasExtra("_loanId")){
             this.loanId = getIntent().getIntExtra("_loanId", 0);
         }
+
         targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingId);
+
         recentLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getMemberLoan(this.loanId);
     }
 
@@ -546,88 +576,6 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
     private void showSentDataContent() {
         lblMLRepayHInstruction.setText(Utils.formatDate(targetMeeting.getMeetingDate())); //Set date in comments field
     }
-
-    private void inflateCustomActionBar() {
-        // BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
-        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (recentLoan == null) {
-                            //Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, "Repayment","The member does not have an outstanding loan.", Utils.MSGBOX_ICON_EXCLAMATION).show();
-                            Intent i = new Intent(getApplicationContext(), MeetingMemberLoansIssueActivity.class);
-                            i.putExtra("_tabToSelect", getString(R.string.loansrepaid));
-                            i.putExtra("_meetingDate", meetingDate);
-                            i.putExtra("_meetingId", meetingId);
-                            //startActivity(i);
-                            finish();
-                        } else if (saveMemberLoanRepayment()) {
-                            Toast.makeText(MemberLoansRepaidHistoryActivity.this, R.string.loan_repayment_entered_successfully, Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(getApplicationContext(), MeetingMemberLoansIssueActivity.class);
-                            i.putExtra("_tabToSelect", getString(R.string.loansrepaid));
-                            i.putExtra("_meetingDate", meetingDate);
-                            i.putExtra("_meetingId", meetingId);
-                            i.putExtra("_action", getString(R.string.loanrepayment));
-                            i.putExtra("_memberId", memberId);
-                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(i);
-                            //finish();
-                        }
-
-                    }
-                }
-        );
-        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect",  getString(R.string.loansrepaid));
-                        i.putExtra("_meetingDate", meetingDate);
-                        i.putExtra("_meetingId", meetingId);
-                        //startActivity(i);
-                        finish();
-                    }
-                }
-        );
-
-
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
-
-        // Swap in training mode icon if in training mode
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
-        }
-
-        actionBar.setTitle(R.string.repayments);
-
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-        );
-
-        actionBar.setDisplayShowCustomEnabled(true);
-        /**  actionBar.setDisplayOptions(
-         ActionBar.DISPLAY_SHOW_CUSTOM,
-         ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-         | ActionBar.DISPLAY_SHOW_TITLE);
-         actionBar.setCustomView(customActionBarView,
-         new ActionBar.LayoutParams(
-         ViewGroup.LayoutParams.MATCH_PARENT,
-         ViewGroup.LayoutParams.MATCH_PARENT)); */
-        // END_INCLUDE (inflate_set_custom_view)
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -8,8 +8,11 @@
         android:id="@+id/frmMLRepayHFullName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:weightSum="1">
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/memberLoanRepaymentHistory"
+            layout="@layout/actionbar_custom_view_meeting_activity" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLRepayHFullName"

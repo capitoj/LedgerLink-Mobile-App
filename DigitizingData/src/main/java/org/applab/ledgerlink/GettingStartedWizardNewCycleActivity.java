@@ -333,7 +333,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 */
                 // Pass on the flag indicating whether this is an Update operation
                 Intent i;
-                if (isUpdateCycleAction && _isFromReviewMembers) {
+                if (isUpdateCycleAction && !_isFromReviewMembers) {
 
                     // Go to confirmation activity
                     i = new Intent(getApplicationContext(), GettingStartedConfirmationPage.class);

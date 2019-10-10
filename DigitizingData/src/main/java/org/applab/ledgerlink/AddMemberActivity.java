@@ -429,12 +429,12 @@ public class AddMemberActivity extends AppCompatActivity {
                     NavUtils.navigateUpTo(this, upIntent);
                 }
                 return true;
-            case R.id.mnuAMNext:
-                //Toast.makeText(getBaseContext(), "You have successfully added a new member", Toast.LENGTH_LONG).show();
-                return saveMemberData();
-            case R.id.mnuAMFinished:
-                selectedFinishButton = true;
-                return saveMemberData();
+//            case R.id.mnuAMNext:
+//                //Toast.makeText(getBaseContext(), "You have successfully added a new member", Toast.LENGTH_LONG).show();
+//                return saveMemberData();
+//            case R.id.mnuAMFinished:
+//                selectedFinishButton = true;
+//                return saveMemberData();
         }
         return true;
     }

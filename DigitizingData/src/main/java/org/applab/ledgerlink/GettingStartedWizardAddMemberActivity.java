@@ -105,18 +105,18 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                         }
                     }
             );
-            customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
-                            i.putExtra("_isFromReviewMembers", false);
-                            startActivity(i);
-                            finish();
-                        }
-                    }
-            );
+//            customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
+//                    new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//
+//                            Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+//                            i.putExtra("_isFromReviewMembers", false);
+//                            startActivity(i);
+//                            finish();
+//                        }
+//                    }
+//            );
         }
         customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
                 new View.OnClickListener() {
@@ -246,7 +246,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         final MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.add_member, menu);
+//        inflater.inflate(R.menu.add_member, menu);
         return true;
     }
 
