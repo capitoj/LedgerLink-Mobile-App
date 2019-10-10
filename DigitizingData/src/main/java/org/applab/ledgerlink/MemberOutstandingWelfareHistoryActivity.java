@@ -47,9 +47,9 @@ public class MemberOutstandingWelfareHistoryActivity extends ListActivity {
 
         TextView actionBarActionBack = actionBar.findViewById(R.id.actionBack);
 
-        actionBarActionBack.setOnClickListener(new View.OnClickListener(){
+        actionBarActionBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                 i.putExtra("_tabToSelect", getString(R.string.outstandingwelfare));
                 i.putExtra("_meetingDate", meetingDate);
@@ -77,7 +77,7 @@ public class MemberOutstandingWelfareHistoryActivity extends ListActivity {
         }
 
         String fullName = getIntent().getStringExtra("_name");
-        TextView lblOutstandingWelfareFullName = (TextView)findViewById(R.id.lblOutstandingWelfareFullName);
+        TextView lblOutstandingWelfareFullName = (TextView) findViewById(R.id.lblOutstandingWelfareFullName);
         lblOutstandingWelfareFullName.setText(1 + ". " + fullName);
 
         mListView = (EnhancedListView) findViewById(android.R.id.list);
@@ -199,7 +199,7 @@ public class MemberOutstandingWelfareHistoryActivity extends ListActivity {
 
             holder.position = position;
 
-            if(meetingOutstandingWelfare.getExpectedDate() != null) {
+            if (meetingOutstandingWelfare.getExpectedDate() != null) {
                 holder.txtOWExpectedDate.setText(String.format(getString(R.string.due_date_) + Utils.formatDate(meetingOutstandingWelfare.getExpectedDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
             }
             holder.txtOWAmount.setText(String.format("%,.0f UGX", meetingOutstandingWelfare.getAmount()));

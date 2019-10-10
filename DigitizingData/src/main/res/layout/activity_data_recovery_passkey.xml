@@ -23,7 +23,7 @@
         android:layout_below="@+id/lblDRTitle"/>
 
     <EditText
-        android:id="@+id/txtDRPassKey"
+        android:id="@+id/txtDRNoOfMeetings"
         style="@style/CustomEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

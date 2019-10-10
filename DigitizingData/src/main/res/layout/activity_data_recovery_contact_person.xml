@@ -22,7 +22,7 @@
         android:paddingTop="40dp"/>
 
     <EditText
-        android:id="@+id/txtDRContactPerson"
+        android:id="@+id/txtDRNoOfCycle"
         style="@style/CustomEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
