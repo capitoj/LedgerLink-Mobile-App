@@ -2,15 +2,19 @@ package org.applab.ledgerlink;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,7 +34,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.domain.model.FinancialInstitution;
-import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
@@ -38,7 +41,6 @@ import org.applab.ledgerlink.helpers.Network;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
 import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
-import org.applab.ledgerlink.repo.VslaInfoRepo;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
@@ -47,8 +49,10 @@ import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 
 public class ActivationActivity extends AppCompatActivity {
@@ -94,7 +98,71 @@ public class ActivationActivity extends AppCompatActivity {
             }
         });
 
+        /** Change lanugage spinner**/
+
+        Spinner spinnerLang = (Spinner) findViewById(R.id.spinner_lang);
+
+        //spinnerLang.setOnItemSelectedListener(this);
+
+        // Lanugage list
+        List<String> languages = new ArrayList<String>();
+        languages.add("English");
+        languages.add("Acholi");
+        languages.add("Arabic");
+        languages.add("Bari");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, languages);
+        // attaching data adapter to spinner
+        spinnerLang.setAdapter(dataAdapter);
+
+        spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                if (pos == 1) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected English", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("en");
+                } else if (pos == 2) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected Acholi", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("ac");
+                } else if (pos == 3) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected Arabic", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("ar");
+                }
+                else if (pos == 4) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected Bari", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("ba");
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+                // TODO Auto-generated method stub
+
+            }
+        });
+
     }
+
+    public void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = locale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, LoginActivity.class);
+        startActivity(refresh);
+        finish();
+    }
+
 
     protected void getSelectedFinancialInstitution(){
         List<FinancialInstitution> listFinancialInstutions = FinancialInstitutionRepo.getFinancialInstitutions(this);

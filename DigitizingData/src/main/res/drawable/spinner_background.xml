@@ -17,9 +17,12 @@
             </item>
         </layer-list>
     </item>
+
     <item>
-        <bitmap android:gravity="bottom|left"
-            android:src="@drawable/ic_action_next_item"/>
+        <layer-list>
+            <item android:drawable="@drawable/drop_down_arrow"
+                android:gravity="center|right"/>
+        </layer-list>
     </item>
 
 </selector>

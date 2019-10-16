@@ -453,7 +453,7 @@
     <string name="welfare_on_setup">GwilingetITetenet</string>
     <string name="press_send_to_send_all_data"></string>
     <string name="you_will_not_be_able_to_edit_the_current_meeting">do ti bulo tetendya na momoret I mukok nagon do a \'dolikindya nene momoret na luduk. </string>
-    <string name="press_begin_new_meeting"></string>
+    <string name="press_begin_new_meeting">tanye \'Dolikindye I \'dolikindya na momoret na luduk</string>
     <string name="current_meetings">MOMORESI TI TINADE</string>
     <string name="meeting_main">momoret</string>
     <string name="can_not_send_info_bse_mobile_data_or_internet_disabled">ba jukin sondu na roron kogwon rereket na internet bayin</string>
@@ -491,7 +491,7 @@
     <string name="name_contact_person_required">karin ti ngutu lolulu\'ngu  kune \'de\'dekarikin</string>
     <string name="vsla_name_required">karin ti VSLA kune \'de\'dekarikin (mimiyolo)</string>
     <string name="passkey_required">ngaet lo \'de\'dekarikin (mimiyolo)</string>
-    <string name="are_you_sure_you_want_to_delete_meeting"></string>
+    <string name="are_you_sure_you_want_to_delete_meeting">"do 'diri mindyo siyadu na momoret? Ku sona, tanye Jo.  Kune wuresi I sisiyaji kango. "</string>
     <string name="saving_asof">de\'ya:</string>
     <string name="loans_asof">kurjo (gurut) lo ko ropaki:</string>
     <string name="fines_asof">ringesi:</string>
@@ -575,7 +575,7 @@
     <string name="fines_smallcaps">ringesi</string>
     <string name="selescted_outstanding_welfare_already_paid">pitono ti gwilinget na ko nyume kune ropaki jo</string>
     <string name="due_date_">perok tutungesi</string>
-    <string name="if_payment_not_due_and_no_payment_made"></string>
+    <string name="if_payment_not_due_and_no_payment_made">"ko ropet nyu 'BAYIN nyona 'do ko ropet a ko tiki, tanye Ngerji. Ko ropet nyu nyona ko 'bayin ropaki tolupoki 0 (bayin) I kenet na gurut na roropaki. "</string>
     <string name="member_doesnot_have_outstanding_loan">lo ngutu \'bak gurut pitono</string>
     <string name="loansrepaid">kurjo lo ko ropaki jo</string>
     <string name="loan_repayment_entered_successfully">ropesi ti gurut a tolupokin a na\'but</string>
@@ -638,9 +638,9 @@
     <string name="meeting_cap">MOMORET</string>
     <string name="senddatafrag">SondiWuresiLokoGbendyu</string>
     <string name="no_of_unsent_meeting">kenet na momoresi nagon \'ba sonyodyi gwon a </string>
-    <string name="data_netork_is_available_1"></string>
+    <string name="data_netork_is_available_1">"rereket na birya gwon kata. Do bubulo meddya na wuresi kilo ka ni a do koti tanye Sondi anyen Sondu wuresi ti momoret ti tinade ko ti 'beron ling. "</string>
     <string name="data_netork_is_available_2"></string>
-    <string name="data_netork_is_available_3"></string>
+    <string name="data_netork_is_available_3">"rereket na birya (ragaraga) 'bayin. Iti I pirit nagon gwon ko rereket na birya anyen sondu wuresi ti momoret. Do koti bubulo sondu na wuresi ti momoret a bot ko tandyu na momoret I koji duma. "</string>
     <string name="unset_meeting_count">momoret nagon \'ba sonyo \'de\'dekarikin</string>
     <string name="loading_savings_info">lo ga\'yu wuresi ti \'de\'ya</string>
     <string name="values_for_this_meeting_cannot_modify">ngo \'bulit ti momoret na ko langu ti bulo tetena \'do I na dignit. </string>
@@ -729,9 +729,8 @@
     <string name="interest_collected_be_zero_and_above">ti \'dulit na ko \'duma gwe a \'bayin ko ki</string>
     <string name="fines_collected_be_zero_and_above">ti ringesi na ko \'duma gwe a \'bayin ko ki</string>
     <string name="outstanding_bank_loan_zero_and_above">ti kurjo (gurut) pitono ti juru (gugu) gwe a \'bayin ko ki</string>
-    <string name="enter_each_member"></string>
+    <string name="enter_each_member">tolupoki ngutu ling. \'dele ko \'yalaki lele ngutu ko tandyu na</string>
     <string name="or_press"></string>
-    <string name="if_you_have_entered_all_members"></string>
     <string name="to_be_loaded">lo mindyo \'yalaki</string>
     <string name="set_next_repayment_date">tetenakindye perok ropesi kule </string>
     <string name="going_to_start_rview_members_activity">iti I memeddya na kita na ngutulu </string>
@@ -748,9 +747,9 @@
     <string name="total_amount_of_this_member_welfare_be_zero_and_above">ti kenet giri ti gurut ti gwilinget ti lo\'ngutu gwe a \'bayin ko ki</string>
     <string name="total_amount_of_member_regular_loan_outstanding_be_zero_and_above">ti kenet giri ti kurjo (gurut) ti lo\'ngutu nagon a pitono gwe a \'bayin ko ki.  </string>
     <string name="loan_member_required_for_outstanding_loan">kenet na kurjo (gurut) nagon a pitono \'de\'dekarikin</string>
-    <string name="if_you_satisfied_that_all_info_correct"></string>
+    <string name="if_you_satisfied_that_all_info_correct">ko do a yimono adi kune kulya giri gwon gwak, to tanye</string>
     <string name="otherwise_press"></string>
-    <string name="to_revise_info"></string>
+    <string name="to_revise_info">"I meddya 'do na wuresi. "</string>
     <string name="thank_you">Iyete (tinate)!</string>
     <string name="you_have_entered_all_info">do a tolupokindyo jo wuresi giri ti \'de\'ya ko ti yapalin ropesi ti tinade I loki na teng inot. Do kirut bubulo to\'kitaju singilari (simu) kasu I momoresi giri I tolupokindyo na \'de\'ya ko kule kitayesi ti Kurjo (gurut). </string>
     <string name="select_item">Nyumundye Kapatyo</string>
@@ -766,7 +765,7 @@
     <string name="share_out_required">perok ngare ka\'ngo \'de\'dekarikin</string>
     <string name="share_out_amount_be_positive">ti kenet na gurut na ngara ka\'ngo gwe a na\'but</string>
     <string name="intro_to_ekeys">Lor lo 1: kweyet I eKeys</string>
-    <string name="phone_mobile_money_usage"></string>
+    <string name="phone_mobile_money_usage">lor 2: singilari (simu) ko tokitaju na Mobile Money</string>
     <string name="airtel_weza_review">Lor lo 3: meta \'do na Airtel Weza</string>
     <string name="ekeys_review">Lor lo 4: meta \'do na eKeys</string>
     <string name="group_submission_and_sensitization">Lor lo 5: tikindya ko kwekindya na teng</string>
@@ -774,7 +773,7 @@
     <string name="selected_trainings_saved_successfully">togolesi na ko nyume kune \'dela jo.   </string>
     <string name="you_have_not_selected_any_trainings">Do a ko wulundyo togolesi kwong</string>
     <string name="meeting_cannot_be_deleted">momoret na ti bulo siyaji. Lepeng gwon ko wuresi ti sidaet. </string>
-    <string name="are_you_sure_you_want_to_delete_this_metting"></string>
+    <string name="are_you_sure_you_want_to_delete_this_metting">"do 'diri mindyo siyadu na momoret? Ku sona, tanye Jo.  Kune wuresi I sisiyaji kango. "</string>
     <string name="switch_language">Nyumundye Kutuk</string>
 
 
@@ -865,5 +864,8 @@
     <string name="share_out_details">NGARE KANGO WURESI</string>
     <string name="total_savings">momoret na \'de\'ya</string>
     <string name="end_cycle">Tutunge Yapalin Ropesi</string>
+    <string name="total_saving">momoret na \'de\'ya:</string>
+    <string name="welfare_o">Gwilinget 0 UGX</string>
+    <string name="shareout">ngare kango</string>
 
 </resources>

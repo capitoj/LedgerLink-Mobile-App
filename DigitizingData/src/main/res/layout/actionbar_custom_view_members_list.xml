@@ -37,7 +37,7 @@
         android:layout_margin="5dp"
         android:layout_weight=".14"
         android:drawablePadding="1dip"
-        android:drawableRight="@drawable/ic_social_add_person"
+        android:drawableRight="@drawable/ic_add_user"
         android:gravity="center_vertical"
         android:onClick="addMembers"
         android:paddingRight="3dip" />
