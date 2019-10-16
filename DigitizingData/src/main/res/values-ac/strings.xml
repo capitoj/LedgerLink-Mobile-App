@@ -440,7 +440,7 @@
     <string name="welfare_on_setup">Cene mi peko ma gi keto kany</string>
     <string name="press_send_to_send_all_data"></string>
     <string name="you_will_not_be_able_to_edit_the_current_meeting">Pe i twero yubu coke manyen ka coke manyen ocako</string>
-    <string name="press_begin_new_meeting"></string>
+    <string name="press_begin_new_meeting">Dii cako ka itye ki miti mi cako coke manyen.</string>
     <string name="current_meetings">Coke ma cok-cok ni</string>
     <string name="meeting_main">COKE MA COK-COK</string>
     <string name="can_not_send_info_bse_mobile_data_or_internet_disabled">  Pe twero cwalo lok pi en intanet pe tye ka tic maber.</string>
@@ -761,7 +761,7 @@
     <string name="selected_trainings_saved_successfully">Pwony magi kwanyo ogwoke maber</string>
     <string name="you_have_not_selected_any_trainings">Pe i kwanyo pwony mo keken</string>
     <string name="meeting_cannot_be_deleted">Pe itwero lok ikum coke man. Tye ki lok ik coke.</string>
-    <string name="are_you_sure_you_want_to_delete_this_metting">Ka ma omyero gi kwany iye lok obedo tye. Itwero neno lok ma piny ni ka man dii cwal coke ma kum bedi man coke macon.</string>
+    <string name="are_you_sure_you_want_to_delete_this_metting">Itye ki miti mi kwanyo coke man? Ka itye ka miro/mito, dii otum. Lok man bi kwanye cen:</string>
     <string name="switch_language">Ket/lok lep muke</string>
 
     <string name="share_out_menu">Cene ma omyero gipok</string>
@@ -843,6 +843,7 @@
     <string name="vsla_data_recovery">Kite mi kelo ikum boli cup (VSLA) ma orwenyo</string>
     <string name="shareout">Cene ma omyero gi pok:</string>
     <string name="end_cycle">Tyek lawala</string>
+    <string name="welfare_x">Cene mi peko</string>
 
 
 </resources>
