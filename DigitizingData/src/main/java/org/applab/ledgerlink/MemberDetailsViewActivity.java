@@ -79,14 +79,14 @@ MemberDetailsViewActivity extends AppCompatActivity{
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
         final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back_edit_delete, null);
-        customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        navigateBack();
-                        finish();
-                    }
-                });
+//        customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        navigateBack();
+//                        finish();
+//                    }
+//                });
         customActionBarView.findViewById(R.id.actionbar_edit).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
