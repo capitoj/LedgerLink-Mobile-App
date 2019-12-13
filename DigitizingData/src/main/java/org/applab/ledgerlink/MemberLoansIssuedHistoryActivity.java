@@ -29,6 +29,7 @@ import org.applab.ledgerlink.helpers.MemberLoanIssueRecord;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -114,6 +115,9 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
         TextView lblFullNames = (TextView) findViewById(R.id.lblMLIssuedHFullName);
         String fullNames = getIntent().getStringExtra("_names");
         lblFullNames.setText(fullNames);
+        int interestTypeValue = VslaCycleRepo.getInterestTypevalue();
+        TextView txtTestingInsterestType = findViewById(R.id.testingInsterestType);
+        txtTestingInsterestType.setText("Interest Type Value" + VslaCycleRepo.getInterestTypevalue() + " Value");
 
         issuedHistorySection = (LinearLayout) findViewById(R.id.frmMLIssuedHHistory);
 
@@ -247,30 +251,47 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
 
                      double interestAmount = (interestRate * 0.01 * theAmount);
                      double totalAmount = theAmount + interestAmount;
-                     if (isEditOperation) {
 
-                         // Deal with topup
-                         if ((memberLoan != null ? memberLoan.getMeeting().getMeetingId() : 0) != meetingId) {
-                             if (theAmount > memberLoan.getPrincipalAmount()) {
-                                 loanTopUp = theAmount - memberLoan.getPrincipalAmount();
-                                 interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
-                                 /** Roll over?
-                                  * if(memberLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT))) <= 0) {
-                                  interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
+                     if(VslaCycleRepo.getInterestTypevalue() == 0){
+                         // Flat Rate
+                         if (isEditOperation) {
 
-                                  } */
-                                 totalAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getLoanBalance() + loanTopUp;
+                             // Deal with topup
+                             if ((memberLoan != null ? memberLoan.getMeeting().getMeetingId() : 0) != meetingId) {
+                                 if (theAmount > memberLoan.getPrincipalAmount()) {
+                                     loanTopUp = theAmount - memberLoan.getPrincipalAmount();
+                                     interestAmount = (interestRate * 50 * loanTopUp);
+                                     totalAmount = (interestRate * 50 * loanTopUp) + loanTopUp;
 
-                             }
-                             if (memberLoan.getPrincipalAmount() == theAmount) {
-                                 interestAmount = memberLoan.getInterestAmount();
-                                 totalAmount = memberLoan.getLoanBalance();
-                                 txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
+                                 }
+                                 if (memberLoan.getPrincipalAmount() == theAmount) {
+                                     interestAmount = 2000;
+                                     totalAmount = 3000;
+                                     txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
+                                 }
                              }
                          }
+                     } else if (VslaCycleRepo.getInterestTypevalue() == 1){
+                         // Reducing Rate
+                         if (isEditOperation) {
 
+                             // Deal with topup
+                             if ((memberLoan != null ? memberLoan.getMeeting().getMeetingId() : 0) != meetingId) {
+                                 if (theAmount > memberLoan.getPrincipalAmount()) {
+                                     loanTopUp = theAmount - memberLoan.getPrincipalAmount();
+                                     interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
+                                     totalAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getLoanBalance() + loanTopUp;
 
+                                 }
+                                 if (memberLoan.getPrincipalAmount() == theAmount) {
+                                     interestAmount = memberLoan.getInterestAmount();
+                                     totalAmount = memberLoan.getLoanBalance();
+                                     txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
+                                 }
+                             }
+                         }
                      }
+
 
                      // Set new values
                      txtInterestAmount.setText(String.format("%.0f", interestAmount));

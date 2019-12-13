@@ -9,8 +9,8 @@ import android.util.Log;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.domain.schema.VslaCycleSchema;
-import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.DatabaseHandler;
+import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,7 +20,7 @@ import java.util.Date;
  * Created by Moses on 7/3/13.
  */
 public class VslaCycleRepo {
-    private Context context;
+    private static Context context;
 
     public VslaCycleRepo() {
     }
@@ -48,6 +48,7 @@ public class VslaCycleRepo {
             values.put(VslaCycleSchema.COL_VC_MAX_SHARE_QTY, cycle.getMaxSharesQty());
             values.put(VslaCycleSchema.COL_VC_MAX_START_SHARE, cycle.getMaxStartShare());
             values.put(VslaCycleSchema.COL_VC_SHARE_PRICE, cycle.getSharePrice());
+            values.put(VslaCycleSchema.COL_VC_TYPE_OF_INTEREST, cycle.getTypeOfInterest());
             values.put(VslaCycleSchema.COL_VC_IS_ACTIVE, (cycle.isActive()) ? 1 : 0);
 
             //Adding portion to save GSW data
@@ -198,6 +199,7 @@ public class VslaCycleRepo {
             cycle.setInterestRate(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_INTEREST_RATE)));
             cycle.setSharePrice(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_SHARE_PRICE)));
             cycle.setMaxSharesQty(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_SHARE_QTY)));
+            //cycle.setTypeOfInterest((int) cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_TYPE_OF_INTEREST)));
             cycle.setMaxStartShare(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_MAX_START_SHARE)));
             cycle.setInterestAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_INTEREST_AT_SETUP)));
             cycle.setFinesAtSetup(cursor.getDouble(cursor.getColumnIndex(VslaCycleSchema.COL_VC_FINES_AT_SETUP)));
@@ -528,6 +530,7 @@ public class VslaCycleRepo {
             }
             values.put(VslaCycleSchema.COL_VC_END_DATE, Utils.formatDateToSqlite(cycle.getEndDate()));
             values.put(VslaCycleSchema.COL_VC_INTEREST_RATE, cycle.getInterestRate());
+            values.put(VslaCycleSchema.COL_VC_TYPE_OF_INTEREST, cycle.getTypeOfInterest());
             values.put(VslaCycleSchema.COL_VC_MAX_SHARE_QTY, cycle.getMaxSharesQty());
             values.put(VslaCycleSchema.COL_VC_MAX_START_SHARE, cycle.getMaxStartShare());
             values.put(VslaCycleSchema.COL_VC_SHARE_PRICE, cycle.getSharePrice());
@@ -634,7 +637,40 @@ public class VslaCycleRepo {
         }
     }
 
+    public static int getInterestTypevalue() {
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        int interestTypevalue = 0;
 
+        try {
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String query = String.format("SELECT TypeOfInterest FROM VslaCycles WHERE IsActive = 1",
+                    VslaCycleSchema.COL_VC_TYPE_OF_INTEREST, VslaCycleSchema.getTableName());
+            cursor = db.rawQuery(query, null);
+
+
+            if (cursor != null && cursor.moveToFirst()) {
+                interestTypevalue = cursor.getInt(cursor.getColumnIndex(VslaCycleSchema.COL_VC_TYPE_OF_INTEREST));
+            }
+
+            return interestTypevalue;
+
+        }
+        catch (Exception ex) {
+            Log.e("VslaCycleRepo.getInterestTypevalue", ex.getMessage());
+            return interestTypevalue;
+        }
+        finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
 
 
 }
