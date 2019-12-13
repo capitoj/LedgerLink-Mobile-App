@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
@@ -40,7 +41,14 @@ public class SendMeetingDataActivity extends ListActivity {
         setContentView(R.layout.activity_send_meeting_data);
 
 //        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-        View actionBar = findViewById(R.id.actionBarMemberList);
+        View actionBar = findViewById(R.id.actionBarSentData);
+        TextView actionBarActionBack = actionBar.findViewById(R.id.backAction);
+        actionBarActionBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         // Swap in training mode icon if in training mode
 //        if (Utils.isExecutingInTrainingMode()) {

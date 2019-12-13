@@ -53,7 +53,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public static String pathToDatabaseFolder(Context context) {
-        String absoluteFilePath = DATABASE_NAME;
+        String absoluteFilePath = Utils.isExecutingInTrainingMode() ? TRAINING_DATABASE_NAME : DATABASE_NAME;
         if(DatabaseHandler.isSDCardMounted()){
             File[] fileList = new File("/storage/").listFiles();
             int cursor = 0;
