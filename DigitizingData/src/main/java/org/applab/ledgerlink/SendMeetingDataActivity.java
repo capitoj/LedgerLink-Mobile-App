@@ -39,17 +39,18 @@ public class SendMeetingDataActivity extends ListActivity {
 
         setContentView(R.layout.activity_send_meeting_data);
 
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        View actionBar = findViewById(R.id.actionBarMemberList);
 
         // Swap in training mode icon if in training mode
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
-        }
-
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("getString(R.string.send_data)");
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+//        if (Utils.isExecutingInTrainingMode()) {
+//            actionBar.setIcon(R.drawable.icon_training_mode);
+//        }
+//
+//        actionBar.setDisplayShowTitleEnabled(true);
+//        actionBar.setTitle("getString(R.string.send_data)");
+//        actionBar.setHomeButtonEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Populate the Meetings
         populateMeetingData();
