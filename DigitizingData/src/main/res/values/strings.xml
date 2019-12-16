@@ -749,9 +749,9 @@
     <string name="not_yet_activated">(not yet activated)</string>
     <string name="passkey_not_be_validated">The Pass Key could not be validated.</string>
     <string name="if_not_beginnign_of_cycle">If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.  Are you prepared to enter all member and cycle information now? If so you may get started by tapping</string>
-    <string name="next_">next.</string>
+    <string name="next_"> next.</string>
     <string name="get_started_allcaps">GET STARTED</string>
-    <string name="enter_all_cycle_info">Enter all cycle information then press </string>
+    <string name="enter_all_cycle_info">Enter all cycle information then press</string>
     <string name="review_cycle_info">Review Cycle information</string>
     <string name="review_and_confirm_all_info_correct_any_errors">Review and confirm that all information is correct. Correct any errors.</string>
     <string name="problem_while_capturing_cycle_data">A problem occurred while capturing the Cycle Data. Please try again.</string>
