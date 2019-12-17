@@ -542,11 +542,12 @@
     <string name="currently_not_in_traininng_mode">You are currently NOT in Training Mode.  Any cycle or meeting information you record will affect the data for your group members.  Training Mode is a way to safely practice and explore Ledger Link without affecting your group\'s data.  Tap to switch to Training Mode to use practice data without affecting your group\'s data.</string>
     <string name="training_mode_using_practice_data">You are in Training Mode using practice data.  Any data you enter will not affect your group\'s data</string>
     <string name="no_active_cycles_to_modify">There are no active cycles to modify</string>
-    <string name="select_next_to_modify_cycle">Select next to modify the cycle</string>
+    <string name="select_next_to_modify_cycle">Please select cycle to modify</string>
     <string name="more_than_one_cycle_currently_running">There is more than one cycle currently running. Select the cycle to edit.</string>
     <string name="select_next_to_end_the_cycle">Select next to end the cycle</string>
     <string name="more_than_one_unfinished_cycle">There is more than one unfinished cycle. Select the cycle to end.</string>
     <string name="select_cycle_to_modify">Please select the cycle you wish to modify</string>
+    <string name="select_cycle_to_edit">Select cycle to modify</string>
     <string name="end_cycle_main">END CYCLE</string>
     <string name="retrieving_vsla_profile">Retrieving VSLA Profile</string>
     <string name="internal_error">Internal Error</string>
@@ -901,7 +902,12 @@
     <string name="no_of_complete_cycle">No. of Complete Cycle</string>
     <string name="no_of_complete_cycle_required">No. of Completed Cycle Required</string>
     <string name="end_cycle">End Cycle</string>
+    <string name="activate_cycle">Activate Cycle</string>
     <string name="type_of_interest">Type Of Interest</string>
     <string name="add_type_of_interest_prompt">Type Of Interest</string>
+    <string name="current_cycle">Current Cycle</string>
+    <string name="modify_cycle_instruction">Please tap on the cycle to modify</string>
+    <string name="past_cycle">Past Cycles</string>
+    <string name="past_cycle_instruction">You can not modify past cycles but you may review activities</string>
 
 </resources>

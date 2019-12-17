@@ -7,13 +7,13 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -431,43 +431,31 @@ public class NewCycleActivity extends AppCompatActivity{
         }
     }
 
-    /**
-     * @Override public boolean onCreateOptionsMenu(Menu menu) {
-     * final MenuInflater inflater = getMenuInflater();
-     * inflater.inflate(R.menu.new_cycle, menu);
-     * return true;
-     * }
-     */
+
+      @Override
+      public boolean onCreateOptionsMenu(Menu menu) {
+          if (isUpdateCycleAction) {
+              final MenuInflater inflater = getMenuInflater();
+              inflater.inflate(R.menu.modify_cycle, menu);
+          }
+          return true;
+      }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent upIntent = new Intent(this, MainActivity.class);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    // This activity is not part of the application's task, so
-                    // create a new task
-                    // with a synthesized back stack.
-                    TaskStackBuilder
-                            .from(this)
-                            .addNextIntent(new Intent(this, MainActivity.class))
-                            .addNextIntent(upIntent).startActivities();
-                    finish();
-                } else {
-                    // This activity is part of the application's task, so simply
-                    // navigate up to the hierarchical parent activity.
-                    NavUtils.navigateUpTo(this, upIntent);
-                }
-                return true;
-            /**  case R.id.mnuNCCancel:
-             i = new Intent(getApplicationContext(), MainActivity.class);
-             startActivity(i);
-             return true;
-             case R.id.mnuNCNext:
-             //First Save the Cycle Dates
-             //If successful move to next activity
-             return saveCycleData();
-             */
+        if (isUpdateCycleAction) {
+            switch (item.getItemId()) {
+                case R.id.mnuEndCycle:
+                    Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.putExtra("_isEndCycleAction", true);
+                    startActivity(i);
+                    return true;
+                case R.id.mnuActivateCycle:
+                    return true;
+            }
+
         }
         return true;
 

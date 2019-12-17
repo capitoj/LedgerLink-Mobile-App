@@ -170,6 +170,25 @@ public class VslaCycleRepo {
         return activeCycles;
     }
 
+    //Return cycles that are inactive
+    public ArrayList<VslaCycle> getInActiveCycles() {
+        ArrayList<VslaCycle> inActiveCycles = null;
+
+        try {
+            inActiveCycles = new ArrayList<VslaCycle>();
+            for(VslaCycle cycle: getAllCycles()) {
+                if(!cycle.isActive() && cycle.isEnded()) {
+                    inActiveCycles.add(cycle);
+                }
+            }
+        }
+        catch(Exception ex) {
+            Log.e("VslaCycleRepo.getInActiveCycles", ex.getMessage());
+        }
+
+        return inActiveCycles;
+    }
+
     // Getting single Cycle
     public VslaCycle getCycle(int cycleId) {
 
