@@ -909,5 +909,10 @@
     <string name="modify_cycle_instruction">Please tap on the cycle to modify</string>
     <string name="past_cycle">Past Cycles</string>
     <string name="past_cycle_instruction">You can not modify past cycles but you may review activities</string>
+    <string name="last_star_value">Stare (Share) value:</string>
+    <string name="maximum_number_of_stars">Maximum  No. of Stars:</string>
+    <string name="date_cycle_began">Cycle Began:</string>
+    <string name="date_cycle_ended">Cycle Ended:</string>
+    <string name="cycle_loan_interest">Loan Interest:</string>
 
 </resources>

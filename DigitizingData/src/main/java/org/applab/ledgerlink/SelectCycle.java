@@ -94,7 +94,7 @@ public class SelectCycle extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 } else {
-                    Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+                    Intent i = new Intent(getApplicationContext(), CycleSummaryActivity.class);
                     i.putExtra("_isUpdateCycleAction", true);
                     i.putExtra("_inactiveCycles", inactiveCycles);
                     i.putExtra("_cycleId", selectedCycle.getCycleId());
