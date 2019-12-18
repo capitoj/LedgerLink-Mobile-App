@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/frmBM_top_control_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gery_background">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!--<org.applab.ledgerlink.fontutils.TypefaceTextView-->
+            <!--android:id="@+id/lblBMHeader"-->
+            <!--style="@style/RegularTextInstruction"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Cycle Heading" />-->
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/grpBMCurrentMeeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardCurrentMeeting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="false">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblBMSection1"
+                        style="@style/SubHeading"
+                        android:layout_width="fill_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_vertical"
+                        android:text="Cycle Summary" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblHeaderShareValue"
+                        style="@style/RegularTextInstruction"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/star_value" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblHeaderMaxNumberStars"
+                        style="@style/RegularTextInstruction"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lblHeaderShareValue"
+                        android:text="@string/maximum_number_of_stars_member_purchase_per_meeting" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblHeaderDateCycleBegins"
+                        style="@style/RegularTextInstruction"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lblHeaderMaxNumberStars"
+                        android:text="@string/date_cycle_begins" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblHeaderDateCycleEnd"
+                        style="@style/RegularTextInstruction"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lblHeaderDateCycleBegins"
+                        android:text="@string/date_cycle_ends" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblHeaderLoanInterest"
+                        style="@style/RegularTextInstruction"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lblHeaderDateCycleEnd"
+                        android:text="@string/loan_interest" />
+
+
+                    <ListView
+                        android:id="@+id/lstBMCurrentMeetings"
+                        style="@style/RegularTextListItems"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dip"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginRight="20dip"
+                        android:choiceMode="singleChoice"
+                        android:dividerHeight="2dp"
+                        android:elevation="2dp" />
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/grpBMPastMeetings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardUnsentPastMeeting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblBMSection2"
+                    style="@style/SubHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="35dip"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center_vertical"
+                    android:text="Cycle Meetings" />
+
+                <ListView
+                    android:id="@+id/lstBMPastMeetingList"
+                    style="@style/RegularTextListItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip"
+                    android:dividerHeight="2dip"
+                    android:elevation="2dp" />
+
+                </LinearLayout>
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
