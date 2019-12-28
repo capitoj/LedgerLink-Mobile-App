@@ -13,13 +13,13 @@
         android:id="@+id/lblDRTitle"
         android:textSize="16dp"/>
 
-    <TextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="40dp"
         android:id="@+id/lblDRPassKey"
         android:layout_below="@+id/lblDRTitle"
-        android:text="@string/passkey"/>
+        android:text="@string/enter_new_passkey"/>
 
     <EditText
         android:id="@+id/txtDRPassKey"
@@ -29,5 +29,54 @@
         android:layout_below="@+id/lblDRPassKey"
         android:inputType="numberPassword"
         android:paddingTop="20dp" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:id="@+id/lblDRConfirmPassKey"
+        android:layout_below="@+id/txtDRPassKey"
+        android:text="@string/comfirm_new_passkey"/>
+
+    <EditText
+        android:id="@+id/txtDRComfirmPassKey"
+        style="@style/CustomEditText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblDRConfirmPassKey"
+        android:inputType="numberPassword"
+        android:paddingTop="20dp" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/idVslaName"
+        android:layout_below="@+id/txtDRComfirmPassKey"
+        style="@style/RegularTextInstruction"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/idNoMeeting"
+        android:layout_below="@+id/idVslaName"
+        style="@style/RegularTextInstruction"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/idNoMembers"
+        android:layout_below="@+id/idNoMeeting"
+        style="@style/RegularTextInstruction"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/idNoCycle"
+        android:layout_below="@+id/idNoMembers"
+        style="@style/RegularTextInstruction"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
 
 </RelativeLayout>

@@ -291,7 +291,7 @@ public class LoginActivity extends AppCompatActivity {
         ForgotPassKeyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), PassKeyRecoveryActivity.class);
+                Intent i = new Intent(getApplicationContext(), PassKeyResetActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }
