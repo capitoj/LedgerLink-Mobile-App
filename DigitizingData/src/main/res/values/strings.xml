@@ -904,8 +904,10 @@
     <string name="type_of_interest">Type Of Interest</string>
     <string name="add_type_of_interest_prompt">Type Of Interest</string>
     <string name="action_passkey">PassKey Recovery</string>
-    <string name="action_reset_passkey">This will completely reset the PassKey</string>
+    <string name="action_reset_passkey">This action will completely reset the PassKey</string>
     <string name="enter_new_passkey">Enter New PassKey</string>
     <string name="comfirm_new_passkey">Confirm New PassKey</string>
+    <string name="error_details_donot_match">Details do not match!</string>
+    <string name="reset_passkey">Reset PassKey</string>
 
 </resources>
