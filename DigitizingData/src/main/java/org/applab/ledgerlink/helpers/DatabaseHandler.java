@@ -37,7 +37,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String INTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DATABASE_NAME = "ledgerlinkdb";
-    private static final int DATABASE_VERSION = 64;
+    private static final int DATABASE_VERSION = 65;
     private static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
     private static final String DATA_FOLDER = "LedgerLink";
 
