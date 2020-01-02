@@ -74,7 +74,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if(! databaseStorageDir.exists()) {
             databaseStorageDir.mkdir();
         }
-        return databaseStorageDir.getAbsolutePath() + File.separator + DATABASE_NAME;
+        String databaseName = Utils.isExecutingInTrainingMode() ? TRAINING_DATABASE_NAME : DATABASE_NAME;
+        return databaseStorageDir.getAbsolutePath() + File.separator + databaseName;
     }
 
     public void onCreate(SQLiteDatabase db) {
