@@ -1,11 +1,14 @@
 package org.applab.ledgerlink;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v13.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -78,6 +81,11 @@ public class ActivationActivity extends AppCompatActivity {
 
         progressDialog = null;
 
+        // Android request permission modal
+        ActivityCompat.requestPermissions(ActivationActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
+
         //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
 
@@ -106,6 +114,7 @@ public class ActivationActivity extends AppCompatActivity {
 
         // Lanugage list
         List<String> languages = new ArrayList<String>();
+        languages.add("Select Language");
         languages.add("English");
         languages.add("Acholi");
         languages.add("Arabic");
@@ -151,6 +160,34 @@ public class ActivationActivity extends AppCompatActivity {
 
     }
 
+    /** Android request permission  **/
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(ActivationActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
     public void setLocale(String lang) {
         Locale locale = new Locale(lang);
         Resources res = getResources();
@@ -162,7 +199,6 @@ public class ActivationActivity extends AppCompatActivity {
         startActivity(refresh);
         finish();
     }
-
 
     protected void getSelectedFinancialInstitution(){
         List<FinancialInstitution> listFinancialInstutions = FinancialInstitutionRepo.getFinancialInstitutions(this);
@@ -443,8 +479,6 @@ public class ActivationActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
     // The definition of our task class
     private class PostTask extends AsyncTask<String, Integer, JSONObject> {

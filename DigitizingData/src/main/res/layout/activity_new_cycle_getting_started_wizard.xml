@@ -209,6 +209,32 @@
                     android:layout_marginLeft="3dp"
                     android:text="%" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dip"
+                android:orientation="vertical">
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCInterestType"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/type_of_interest" />
+
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/cboAMTypeOfInterest"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/spinner_background"
+                    android:gravity="left"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout

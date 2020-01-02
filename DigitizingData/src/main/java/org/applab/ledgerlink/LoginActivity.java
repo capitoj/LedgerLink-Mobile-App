@@ -1,16 +1,19 @@
 package org.applab.ledgerlink;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.support.v13.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -88,6 +91,11 @@ public class LoginActivity extends AppCompatActivity {
         this.context = this;
 
         this.loadBackgroundService();
+        
+        // Android request permission modal
+        ActivityCompat.requestPermissions(LoginActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
 
         //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
@@ -229,7 +237,8 @@ public class LoginActivity extends AppCompatActivity {
         //spinnerLang.setOnItemSelectedListener(this);
 
         // Lanugage list
-        List<String> languages = new ArrayList<String>();
+        List<String> languages = new ArrayList<String>();languages.add("Select Language");
+
         languages.add("English");
         languages.add("Acholi");
         languages.add("Arabic");
@@ -239,6 +248,11 @@ public class LoginActivity extends AppCompatActivity {
         // attaching data adapter to spinner
         spinnerLang.setAdapter(dataAdapter);
 
+        //Make the spinner selectable
+        spinnerLang.setFocusable(true);
+        spinnerLang.setClickable(true);
+
+
         spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
@@ -247,7 +261,7 @@ public class LoginActivity extends AppCompatActivity {
                             "You have selected English", Toast.LENGTH_SHORT)
                             .show();
                     setLocale("en");
-                } else if (pos == 2) {
+                }else if (pos == 2) {
                     Toast.makeText(parent.getContext(),
                             "You have selected Acholi", Toast.LENGTH_SHORT)
                             .show();
@@ -282,6 +296,35 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+
+    /** Android request permission  **/
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(LoginActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     /** Change lanugage spinner**/
