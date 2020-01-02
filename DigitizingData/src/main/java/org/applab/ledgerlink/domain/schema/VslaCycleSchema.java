@@ -25,6 +25,7 @@ public class VslaCycleSchema {
     public static final String COL_VC_FINES_AT_SETUP_COMMENT = "FinesAtSetupComment";    //Fines collected so far in case of Mid-CYcle Setup
     public static final String COL_VC_OUTSTANDING_BANK_LOAN_AT_SETUP = "OutstandingBankLoanAtSetup";
     public static final String COL_VC_OUTSTANDING_BANK_LOAN_AT_SETUP_COMMENT = "OutstandingBankLoanAtSetupComment";
+    public static final String COL_VC_TYPE_OF_INTEREST = "TypeOfInterest";
 
     public static String getCreateTableScript() {
         StringBuffer sb = null;
@@ -47,7 +48,8 @@ public class VslaCycleSchema {
         sb.append(COL_VC_INTEREST_AT_SETUP + " NUMERIC ,");
         sb.append(COL_VC_INTEREST_AT_SETUP_COMMENT + " TEXT ,");
         sb.append(COL_VC_FINES_AT_SETUP + " NUMERIC ,");
-        sb.append(COL_VC_FINES_AT_SETUP_COMMENT + " TEXT");
+        sb.append(COL_VC_FINES_AT_SETUP_COMMENT + " TEXT ,");
+        sb.append(COL_VC_TYPE_OF_INTEREST + " TEXT DEFAULT 0");
         sb.append(")");
 
         return sb.toString();

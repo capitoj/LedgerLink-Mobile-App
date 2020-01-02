@@ -21,6 +21,11 @@
             android:layout_height="wrap_content"
             android:text="@string/full_name" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/testingInsterestType"/>
+
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHLoanNo"
             style="@style/RegularText"

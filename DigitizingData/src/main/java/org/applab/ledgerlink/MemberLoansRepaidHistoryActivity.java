@@ -11,31 +11,29 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LoanRepaymentHistoryArrayAdapter;
 import org.applab.ledgerlink.helpers.MemberLoanRepaymentRecord;
 import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 /**
  * Created by Moses on 7/13/13.
@@ -390,7 +388,7 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
         TextView txtCycleSpan = (TextView) findViewById(R.id.lblMLRepayHCycleSpan);
 
         double outstandingLoans = 0.0;
-        MeetingLoanIssued loanIssue = new MeetingLoanIssued();
+        final MeetingLoanIssued loanIssue = new MeetingLoanIssued();
         if ((recentLoan != null) && (targetMeeting != null && targetMeeting.getVslaCycle() != null))
 
         {
@@ -482,14 +480,34 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
                       theCurLoanBalanceAmount = recentLoan.getLoanBalance() - theRepayAmount;
                   }
                   txtLoanBalance.setText(String.format("%,.0f UGX", theCurLoanBalanceAmount));
+
                   double interestAmount = 0;
-                  // If meeting date is before loan due date then default interest to 0
-                  if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
-                      editTextInterestRate.setText("0");
-                  } else {
-                      interestAmount = (interestRate * 0.01 * theCurLoanBalanceAmount);
-                      editTextInterestRate.setText(String.format("%.0f", interestAmount));
+                  // Flat Interest Rate //
+                  if (VslaCycleRepo.getInterestTypevalue() == 0){
+                      // If meeting date is before loan due date then default interest to 0
+                      if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
+                          editTextInterestRate.setText("0");
+                      }else if(theCurLoanBalanceAmount <= 0){
+                          // If the balance is zero, outstanding loan balance is zero
+                          editTextInterestRate.setText("0");
+                      } else{
+                          //.getUnclearedLoanIssuedToMember(memberId);
+                          MeetingLoanIssued memberLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getMemberLoan(getIntent().getIntExtra("_loanId", 0));
+                          //interestAmount = memberLoan.getInterestAmount();
+                          interestAmount = (interestRate * 0.01 * memberLoan.getPrincipalAmount());
+                          editTextInterestRate.setText(String.format("%.0f", interestAmount));
+                      }
+                  // Reducing Interest Rate //
+                  } else if(VslaCycleRepo.getInterestTypevalue() == 1){
+                      // If meeting date is before loan due date then default interest to 0
+                      if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
+                          editTextInterestRate.setText("0");
+                      } else{
+                          interestAmount = (interestRate * 0.01 * theCurLoanBalanceAmount);
+                          editTextInterestRate.setText(String.format("%.0f", interestAmount));
+                      }
                   }
+
                   double rolloverAmount = theCurLoanBalanceAmount + interestAmount;
                   txtRolloverAmount.setText(String.format("%,.0f UGX", rolloverAmount));
                   Toast.makeText(MemberLoansRepaidHistoryActivity.this, String.valueOf(theCurLoanBalanceAmount), Toast.LENGTH_SHORT).show();

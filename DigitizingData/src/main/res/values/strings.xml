@@ -749,7 +749,7 @@
     <string name="not_yet_activated">(not yet activated)</string>
     <string name="passkey_not_be_validated">The Pass Key could not be validated.</string>
     <string name="if_not_beginnign_of_cycle">If it is not the beginning of a cycle, you will also need to enter the number of stars (shares) bought so far during the current cycle and the amount of loans outstanding for each member.  Are you prepared to enter all member and cycle information now? If so you may get started by tapping</string>
-    <string name="next_">next.</string>
+    <string name="next_"> next.</string>
     <string name="get_started_allcaps">GET STARTED</string>
     <string name="enter_all_cycle_info">Enter all cycle information then press</string>
     <string name="review_cycle_info">Review Cycle information</string>
@@ -892,7 +892,7 @@
     <string name="meeting_info_not_successfully_submitted">The meeting information was not successfully submitted because the remote server could not be reached. Kindly check to ensure that you have an internet connection</string>
     <string name="change_language">Change Language</string>
     <string name="share_out_details">SHARE OUT DETAILS</string>
-    <string name="total_savings">Total Savings</string>
+    <string name="total_savings">Total Savings: </string>
     <string name="members_share_out">MEMBER\'S SHARE OUT</string>
     <string name="forgot_passkey">Forgot PassKey</string>
     <string name="forget_passkey">Forget PassKey</string>
@@ -901,5 +901,7 @@
     <string name="no_of_complete_cycle">No. of Complete Cycle</string>
     <string name="no_of_complete_cycle_required">No. of Completed Cycle Required</string>
     <string name="end_cycle">End Cycle</string>
+    <string name="type_of_interest">Type Of Interest</string>
+    <string name="add_type_of_interest_prompt">Type Of Interest</string>
 
 </resources>

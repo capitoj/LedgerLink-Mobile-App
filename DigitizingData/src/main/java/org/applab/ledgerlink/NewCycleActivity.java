@@ -17,9 +17,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.applab.ledgerlink.domain.model.Meeting;
@@ -28,10 +31,13 @@ import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Moses on 6/27/13.
@@ -56,6 +62,7 @@ public class NewCycleActivity extends AppCompatActivity{
     boolean isUpdateCycleAction = false;
     private boolean multipleCyclesIndicator = false;
     private boolean isCycleValidated = false;
+    protected Spinner cboInterestType;
 
     LedgerLinkApplication ledgerLinkApplication;
 
@@ -219,6 +226,7 @@ public class NewCycleActivity extends AppCompatActivity{
 
         // Populate Max Shares Spinner
         //buildMaxSharesSpinner();
+        buildInterestTypeSpinner();
     }
 
     /* inflates custom menu bar for review members */
@@ -635,7 +643,7 @@ public class NewCycleActivity extends AppCompatActivity{
                 int theMaxShareQty = Integer.valueOf(maxShareQty);
                 if (theMaxShareQty <= 0) {
                     displayMessageBox(dialogTitle, "The Maximum Share Quantity must be positive.");
-                    cboMaxShareQty.requestFocus();
+                    tcboMaxShareQty.requestFocus();
                     return false;
                 } else {
                     cycle.setMaxSharesQty(theMaxShareQty);
@@ -690,9 +698,26 @@ public class NewCycleActivity extends AppCompatActivity{
                 }
             }
 
+
+            // Validate Type of Interest
+
             //Check that the Cycle Start Date does not overlap with the date the previous cycle ended
             //First, get the most recent cycle
-             VslaCycle mostRecentCycle = ledgerLinkApplication.getVslaCycleRepo().getMostRecentUnEndedCycle();
+
+
+            // Validate Interest Type Data
+            cboInterestType = (Spinner) findViewById(R.id.cboAMTypeOfInterest);
+            if(cboInterestType.getSelectedItemPosition() == 0) {
+                cycle.setTypeOfInterest(0);
+                cboInterestType.setFocusableInTouchMode(true);
+                cboInterestType.requestFocus();
+            }else if(cboInterestType.getSelectedItemPosition() == 1){
+                cycle.setTypeOfInterest(1);
+                cboInterestType.setFocusableInTouchMode(true);
+                cboInterestType.requestFocus();
+            }
+
+            VslaCycle mostRecentCycle = ledgerLinkApplication.getVslaCycleRepo().getMostRecentUnEndedCycle();
 
             if (null != mostRecentCycle) {
                 if (isUpdateCycleAction && mostRecentCycle.getCycleId() == cycle.getCycleId()) {
@@ -854,6 +879,27 @@ public class NewCycleActivity extends AppCompatActivity{
             TextView txtInterestRate = (TextView) findViewById(R.id.txtNCInterestRate);
 
             txtSharePrice.setText(Utils.formatRealNumber(cycle.getSharePrice()));
+
+            final Spinner cboInterestType = (Spinner) findViewById(R.id.cboAMTypeOfInterest);
+                cboInterestType.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        cboInterestType.setSelection(VslaCycleRepo.getInterestTypevalue());
+                    }
+                });
+//            if (cycle.getTypeOfInterest() == 0){
+//                cboInterestType.setSelection(Integer.parseInt("Flat Rate"));
+//            } else if (cycle.getTypeOfInterest() == 1) {
+//                cboInterestType.setSelection(Integer.parseInt("Reducing Rate"));
+//            }
+
+//            cboInterestType.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Utils.setSpinnerSelection(String.valueOf(cycle.getTypeOfInterest()), cboInterestType);
+//                }
+//            });
+
             //Fix... select spinner on post creation
             //fix for failure to select these values
             /*
@@ -876,10 +922,12 @@ public class NewCycleActivity extends AppCompatActivity{
 
     protected void clearDataFields() {
         //buildMaxSharesSpinner();
+        buildInterestTypeSpinner();
         try {
             // Now populate
             TextView txtSharePrice = (TextView) findViewById(R.id.txtNCSharePrice);
             //Spinner cboMaxShareQty = (Spinner) findViewById(R.id.cboNCMaxShares);
+            Spinner cboInterestType = (Spinner) findViewById(R.id.cboAMTypeOfInterest);
             EditText txtNCMaxShares = (EditText)findViewById(R.id.txtNCMaxShares);
             TextView txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
             TextView txtEndDate = (TextView) findViewById(R.id.txtNCEndDate);
@@ -888,12 +936,48 @@ public class NewCycleActivity extends AppCompatActivity{
             txtSharePrice.setText("");
             txtNCMaxShares.setText("");
             //cboMaxShareQty.setSelection(0);
+            cboInterestType.setSelection(0);
             txtStartDate.setText("");
             txtEndDate.setText("");
             txtInterestRate.setText("");
         } catch (Exception ex) {
             Log.d(getString(R.string.newcycleactivity), getString(R.string.initialization_faile));
         }
+
+    }
+
+    protected void buildInterestTypeSpinner() {
+
+        //Setup the Spinner Items
+        cboInterestType = (Spinner) findViewById(R.id.cboAMTypeOfInterest);
+        List<String> InterestTypes = new ArrayList<String>();
+        //final String[] InterestTypes = new String[]{"Flat Rate", "Reducing Rate"};
+        InterestTypes.add("Flat Rate");
+        InterestTypes.add("Reducing Rate");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, InterestTypes);
+        // attaching data adapter to spinner
+        cboInterestType.setAdapter(dataAdapter);
+
+        //Make the spinner selectable
+        cboInterestType.setFocusable(true);
+        cboInterestType.setClickable(true);
+
+        cboInterestType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                if (pos == 0) {
+                    //InterestTypes.equals(0);
+                } else if (pos == 1) {
+                    //InterestTypes.equals(1);
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+                // TODO Auto-generated method stub
+
+            }
+        });
 
     }
 

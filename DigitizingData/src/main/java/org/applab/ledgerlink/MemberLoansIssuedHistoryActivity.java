@@ -247,6 +247,7 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
 
                      double interestAmount = (interestRate * 0.01 * theAmount);
                      double totalAmount = theAmount + interestAmount;
+
                      if (isEditOperation) {
 
                          // Deal with topup
@@ -254,11 +255,6 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
                              if (theAmount > memberLoan.getPrincipalAmount()) {
                                  loanTopUp = theAmount - memberLoan.getPrincipalAmount();
                                  interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
-                                 /** Roll over?
-                                  * if(memberLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT))) <= 0) {
-                                  interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
-
-                                  } */
                                  totalAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getLoanBalance() + loanTopUp;
 
                              }
@@ -268,8 +264,6 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
                                  txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
                              }
                          }
-
-
                      }
 
                      // Set new values

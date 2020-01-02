@@ -1,15 +1,12 @@
 package org.applab.ledgerlink.helpers;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
 
-import org.applab.ledgerlink.domain.model.TrainingModule;
 import org.applab.ledgerlink.domain.schema.AttendanceSchema;
 import org.applab.ledgerlink.domain.schema.FinancialInstitutionSchema;
 import org.applab.ledgerlink.domain.schema.FineSchema;
@@ -17,6 +14,7 @@ import org.applab.ledgerlink.domain.schema.FineTypeSchema;
 import org.applab.ledgerlink.domain.schema.LoanIssueSchema;
 import org.applab.ledgerlink.domain.schema.LoanRepaymentSchema;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
+import org.applab.ledgerlink.domain.schema.MemberSchema;
 import org.applab.ledgerlink.domain.schema.MessageChannelsSchema;
 import org.applab.ledgerlink.domain.schema.OutstandingWelfareSchema;
 import org.applab.ledgerlink.domain.schema.SavingSchema;
@@ -24,14 +22,9 @@ import org.applab.ledgerlink.domain.schema.TrainingModuleResponseSchema;
 import org.applab.ledgerlink.domain.schema.TrainingModuleSchema;
 import org.applab.ledgerlink.domain.schema.VslaCycleSchema;
 import org.applab.ledgerlink.domain.schema.VslaInfoSchema;
-import org.applab.ledgerlink.SettingsActivity;
-import org.applab.ledgerlink.domain.schema.MemberSchema;
 import org.applab.ledgerlink.domain.schema.WelfareSchema;
-import org.applab.ledgerlink.repo.TrainingModuleRepo;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -157,20 +150,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //If the database already exists
 
-        //Create Table: TrainingModule
+//        //Create Table: TrainingModule
         String sqlQuery = null;
-        if(!this.hasDbTable(db, TrainingModuleSchema.getTableName())) {
-            sqlQuery = TrainingModuleSchema.getCreateTableScript();
-            db.execSQL(sqlQuery);
-            Log.e("DatabaseHandler", "Table TrainingModule Added");
-            preLoadTrainingModule(db);
-        }
+//        if(!this.hasDbTable(db, TrainingModuleSchema.getTableName())) {
+//            sqlQuery = TrainingModuleSchema.getCreateTableScript();
+//            db.execSQL(sqlQuery);
+//            Log.e("DatabaseHandler", "Table TrainingModule Added");
+//            preLoadTrainingModule(db);
+//        }
+//
+//        //Create Table: TrainingModuleResponse
+//        if(!this.hasDbTable(db, TrainingModuleResponseSchema.getTableName())) {
+//            sqlQuery = TrainingModuleResponseSchema.getCreateTableScript();
+//            db.execSQL(sqlQuery);
+//            Log.e("DatabaseHandler", "Table TrainingModuleResponse Added");
+//        }
 
-        //Create Table: TrainingModuleResponse
-        if(!this.hasDbTable(db, TrainingModuleResponseSchema.getTableName())) {
-            sqlQuery = TrainingModuleResponseSchema.getCreateTableScript();
-            db.execSQL(sqlQuery);
-            Log.e("DatabaseHandler", "Table TrainingModuleResponse Added");
+        if(this.hasDbTable(db, VslaCycleSchema.getTableName())){
+            if(!this.hasTableColumn(db, VslaCycleSchema.getTableName(), VslaCycleSchema.COL_VC_TYPE_OF_INTEREST)) {
+                sqlQuery = "Alter table " + VslaCycleSchema.getTableName() + " add column " + VslaCycleSchema.COL_VC_TYPE_OF_INTEREST + " TEXT DEFAULT 0";
+                db.execSQL(sqlQuery);
+                Log.e("DatabaseHandler", "Column type of interest added");
+            }
         }
 
         //Create table: FinancialInstitution
