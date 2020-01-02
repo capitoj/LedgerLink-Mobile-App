@@ -118,8 +118,7 @@ public class PassKeyRecoveryActivity extends AppCompatActivity {
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
-                        //String serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "forgotPassKey");
-                        //new forgotPassKeyAsync(PassKeyRecoveryActivity.this).execute(serverUri, jsonRequest);
+                        // update passkey
                     }
                 };
                 String warning = getString(R.string.action_will_delete_all_vsla_info) + forgotPassKey.getVslaName();

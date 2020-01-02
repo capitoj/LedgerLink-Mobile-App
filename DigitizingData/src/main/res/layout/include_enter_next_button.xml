@@ -6,13 +6,16 @@
     android:layout_height="match_parent"
     android:layout_weight="1">
 
+
+
+
     <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/ActionBarItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingLeft="1dip"
         android:layout_gravity="center"
-        android:drawableLeft="@drawable/ic_social_add_person"
+        android:drawableLeft="@drawable/ic_add_user"
         android:drawablePadding="1dip"
         android:gravity="center_vertical"/>
 </FrameLayout>
