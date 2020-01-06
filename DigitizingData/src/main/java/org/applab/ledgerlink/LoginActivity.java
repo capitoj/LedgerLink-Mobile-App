@@ -63,9 +63,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-//import android.view.Menu;
-//import android.view.Menu;
-
 public class LoginActivity extends AppCompatActivity {
 
     LedgerLinkApplication ledgerLinkApplication;
@@ -140,6 +137,8 @@ public class LoginActivity extends AppCompatActivity {
             actionBar.setCustomView(R.layout.activity_main_training_mode);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
+            TextView txtVslaName = (TextView) findViewById(R.id.lbl_vsla_name);
+            txtVslaName.setVisibility(View.GONE);
 
             //Set the label of the link
             //         tvSwitchMode.setText("Switch To Actual VSLA Data");

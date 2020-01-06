@@ -909,5 +909,6 @@
     <string name="comfirm_new_passkey">Confirm New PassKey</string>
     <string name="error_details_donot_match">Details do not match!</string>
     <string name="reset_passkey">Reset PassKey</string>
+    <string name="total_share_out_amount">Total Share Out Amount:</string>
 
 </resources>

@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -104,22 +108,57 @@ public class ShareOutActivity extends Activity {
         //to populate the share out details
         //Now get the data via the adapter
 
+        TextView txtNewShareValue = (TextView) findViewById(R.id.lblHeaderNewShareValue);
         TextView txtTotalSaving = (TextView) findViewById(R.id.lblHeaderTotalSavings);
         TextView txtTotalInterest = (TextView) findViewById(R.id.lblHeaderTotalInterest);
         TextView txtTotalFines = (TextView) findViewById(R.id.lblHeaderTotalFines);
-        TextView txtTotalEarnings = (TextView) findViewById(R.id.lblHeaderTotalEarnings);
-        TextView txtNewShareValue = (TextView) findViewById(R.id.lblHeaderNewShareValue);
+        EditText txtTotalEarnings = (EditText) findViewById(R.id.lblHeaderTotalEarnings);
 
         double totalSavings = ShareOutArrayAdapter.getTotalSaving();
-        txtTotalSaving.setText(getString(R.string.total_savings) + Utils.formatNumber(totalSavings) + " UGX");
+        txtTotalSaving.setText(getString(R.string.total_savings) + " " + Utils.formatNumber(totalSavings) + " UGX");
         double totalInterest = ShareOutArrayAdapter.getTotalInterest();
-        txtTotalInterest.setText(getString(R.string.total_interest) + Utils.formatNumber(totalInterest) + " UGX");
+        txtTotalInterest.setText(getString(R.string.total_interest) + " " + Utils.formatNumber(totalInterest) + " UGX");
         double totalFine = ShareOutArrayAdapter.getTotalFine();
-        txtTotalFines.setText(getString(R.string.total_fines) + Utils.formatNumber(totalFine) + " UGX");
+        txtTotalFines.setText(getString(R.string.total_fines) + " " + Utils.formatNumber(totalFine) + " UGX");
         double totalEarnings = ShareOutArrayAdapter.getTotalEarnings();
-        txtTotalEarnings.setText(getString(R.string.total_earnings) + Utils.formatNumber(totalEarnings) + " UGX");
+        txtTotalEarnings.setText(Utils.formatNumber(totalEarnings));
         double newShareValue = ShareOutArrayAdapter.getNewShareValue();
-        txtNewShareValue.setText(getString(R.string.new_share_value) + Utils.formatNumber(newShareValue) + " UGX");
+        txtNewShareValue.setText(getString(R.string.new_share_value) + " " + Utils.formatNumber(newShareValue) + " UGX");
+
+        txtTotalEarnings.addTextChangedListener(new
+
+        TextWatcher() {
+          @Override
+          public void afterTextChanged(Editable s) {
+
+          }
+
+          @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+          }
+
+          @Override
+          public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+              // Compute the Interest
+              double totalEarnings = 0.0;
+              try {
+                  if (s.toString().length() <= 0) {
+                      return;
+                  }
+                  totalEarnings = Double.parseDouble(s.toString());
+              } catch (Exception ex) {
+                  return;
+              }
+
+              //Compute the Members's Share Out Amount
+
+              Toast.makeText(ShareOutActivity.this, String.valueOf(totalEarnings), Toast.LENGTH_SHORT).show();
+
+          }
+        }
+        );
 
     }
 

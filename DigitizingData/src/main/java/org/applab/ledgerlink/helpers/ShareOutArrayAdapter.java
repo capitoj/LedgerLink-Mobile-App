@@ -79,7 +79,7 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
                     int targetCycleId = new VslaCycleRepo(context).getCurrentCycle().getCycleId();
                     // total  members welfare
                     double totalWelfare = new MeetingWelfareRepo(context).getMemberTotalWelfareInCycle(targetCycleId, memb.getMemberId());
-                    txtWelfare.setText(context.getResources().getString(R.string.welfare_asof) + Utils.formatNumber(totalWelfare) + " UGX");
+                    txtWelfare.setText(context.getResources().getString(R.string.welfare_asof) + " " + Utils.formatNumber(totalWelfare) + " UGX");
                     // total savings in cycle
                     totalSavings = new MeetingSavingRepo(context).getTotalSavingsInCycle(targetCycleId);
                     //total fines in cycle
@@ -96,12 +96,12 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
                     double totalMembersSavings = new MeetingSavingRepo(context).getMemberTotalSavingsInCycle(targetCycleId, memb.getMemberId());
                     // member's no. of stars
                     int membersNoOfStars = (int) (totalMembersSavings / shareValue);
-                    txtMembersNoOfStars.setText(context.getResources().getString(R.string.stars_saved) + Utils.formatNumber(membersNoOfStars) + context.getResources().getString(R.string.stars));
+                    txtMembersNoOfStars.setText(context.getResources().getString(R.string.stars_saved) + " " + Utils.formatNumber(membersNoOfStars) + " " + context.getResources().getString(R.string.stars));
                     // New share value
                     newShareValue = totalEarnings / cycleNoOfStars;
                     // share out amount
                     double shareOutAmount = membersNoOfStars * newShareValue;
-                    txtShareOut.setText(context.getResources().getString(R.string.share_out_x) + Utils.formatNumber(shareOutAmount) + " UGX");
+                    txtShareOut.setText(context.getResources().getString(R.string.share_out_x) + " " + Utils.formatNumber(shareOutAmount) + " UGX");
                 }
             }
             else {
