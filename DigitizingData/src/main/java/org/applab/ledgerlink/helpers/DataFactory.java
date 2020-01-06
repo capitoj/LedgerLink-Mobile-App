@@ -266,7 +266,7 @@ public class DataFactory extends SendDataRepo {
                         .key("DateCleared").value(Utils.formatDate(record.getDateCleared(), "yyyy-MM-dd"))
                         .key("PaidInMeetingId").value(String.valueOf(record.getPaidInMeetingId()))
                         .key("Comment").value(record.getComment())
-                        .endArray();
+                        .endObject();
             }
             js.endArray();
         }catch(Exception e){
