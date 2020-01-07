@@ -45,18 +45,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 //        actionBar.setDisplayHomeAsUpEnabled(true);
 //        actionBar.setHomeButtonEnabled(true);
 
-//        View actionBar = findViewById(R.id.actionBarShareOut);
-//        TextView actionBarActionBack = actionBar.findViewById(R.id.backAction);
-//
-//        actionBarActionBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-//                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(i);
-//
-//            }
-//        });
+
 
 
         addPreferencesFromResource(R.xml.preferences);
@@ -92,18 +81,6 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
 //        actionBar.setDisplayHomeAsUpEnabled(true);
 //        actionBar.setHomeButtonEnabled(true);
 
-//        View actionBar = findViewById(R.id.actionBarShareOut);
-//        TextView actionBarActionBack = actionBar.findViewById(R.id.backAction);
-//
-//        actionBarActionBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-//                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(i);
-//
-//            }
-//        });
 
         refreshView();
         if (key.equals(PREF_KEY_REFRESH_TRAINING_DATA)) {
