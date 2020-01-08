@@ -91,7 +91,10 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="3"
-                        android:inputType="number"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:inputType="none"
+                        android:focusableInTouchMode="false"
                         android:text=""
                         android:textAlignment="viewEnd" />
 

@@ -910,5 +910,7 @@
     <string name="error_details_donot_match">Details do not match!</string>
     <string name="reset_passkey">Reset PassKey</string>
     <string name="total_share_out_amount">Total Share Out Amount:</string>
+    <string name="you_about_to_change_shareout_amount">You are about to change ShareOut Amount, Please enter the new amount below.</string>
+    <string name="enter_share_out_amount">Enter ShareOut Amount</string>
 
 </resources>
