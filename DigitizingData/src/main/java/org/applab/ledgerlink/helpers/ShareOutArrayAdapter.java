@@ -28,6 +28,7 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
     public static double totalFine;
     public static double totalEarnings;
     public static double newShareValue;
+    public static double cycleNoOfStars;
     Context context;
     ArrayList<Member> values;
     int position;
@@ -88,10 +89,11 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
                     totalInterest = new MeetingLoanRepaymentRepo(context).getTotalInterestCollectedInCycle(targetCycleId);
                     //total earnings
                     totalEarnings = totalSavings + totalFine + totalInterest;
+
                     // Share value
                     double shareValue = new VslaCycleRepo(context).getCycle(targetCycleId).getSharePrice();
                     //Cycle's No. of stars
-                    double cycleNoOfStars = totalSavings / shareValue;
+                    cycleNoOfStars = totalSavings / shareValue;
                     // member's savings
                     double totalMembersSavings = new MeetingSavingRepo(context).getMemberTotalSavingsInCycle(targetCycleId, memb.getMemberId());
                     // member's no. of stars
@@ -144,5 +146,9 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
 
     public static double getNewShareValue() {
         return newShareValue;
+    }
+
+    public static double getNoOfCycleStars() {
+        return cycleNoOfStars;
     }
 }
