@@ -28,6 +28,7 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
     public static double totalFine;
     public static double totalEarnings;
     public static double newShareValue;
+    public static double cycleNoOfStars;
     Context context;
     ArrayList<Member> values;
     int position;
@@ -79,7 +80,7 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
                     int targetCycleId = new VslaCycleRepo(context).getCurrentCycle().getCycleId();
                     // total  members welfare
                     double totalWelfare = new MeetingWelfareRepo(context).getMemberTotalWelfareInCycle(targetCycleId, memb.getMemberId());
-                    txtWelfare.setText(context.getResources().getString(R.string.welfare_asof) + Utils.formatNumber(totalWelfare) + " UGX");
+                    txtWelfare.setText(context.getResources().getString(R.string.welfare_asof) + " " + Utils.formatNumber(totalWelfare) + " UGX");
                     // total savings in cycle
                     totalSavings = new MeetingSavingRepo(context).getTotalSavingsInCycle(targetCycleId);
                     //total fines in cycle
@@ -88,20 +89,21 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
                     totalInterest = new MeetingLoanRepaymentRepo(context).getTotalInterestCollectedInCycle(targetCycleId);
                     //total earnings
                     totalEarnings = totalSavings + totalFine + totalInterest;
+
                     // Share value
                     double shareValue = new VslaCycleRepo(context).getCycle(targetCycleId).getSharePrice();
                     //Cycle's No. of stars
-                    double cycleNoOfStars = totalSavings / shareValue;
+                    cycleNoOfStars = totalSavings / shareValue;
                     // member's savings
                     double totalMembersSavings = new MeetingSavingRepo(context).getMemberTotalSavingsInCycle(targetCycleId, memb.getMemberId());
                     // member's no. of stars
                     int membersNoOfStars = (int) (totalMembersSavings / shareValue);
-                    txtMembersNoOfStars.setText(context.getResources().getString(R.string.stars_saved) + Utils.formatNumber(membersNoOfStars) + context.getResources().getString(R.string.stars));
+                    txtMembersNoOfStars.setText(context.getResources().getString(R.string.stars_saved) + " " + Utils.formatNumber(membersNoOfStars) + " " + context.getResources().getString(R.string.stars));
                     // New share value
                     newShareValue = totalEarnings / cycleNoOfStars;
                     // share out amount
                     double shareOutAmount = membersNoOfStars * newShareValue;
-                    txtShareOut.setText(context.getResources().getString(R.string.share_out_x) + Utils.formatNumber(shareOutAmount) + " UGX");
+                    txtShareOut.setText(context.getResources().getString(R.string.share_out_x) + " " + Utils.formatNumber(shareOutAmount) + " UGX");
                 }
             }
             else {
@@ -144,5 +146,9 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
 
     public static double getNewShareValue() {
         return newShareValue;
+    }
+
+    public static double getNoOfCycleStars() {
+        return cycleNoOfStars;
     }
 }

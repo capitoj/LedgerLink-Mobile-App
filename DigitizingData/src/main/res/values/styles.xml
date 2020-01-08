@@ -140,7 +140,7 @@
     <item name="@android:windowExitAnimation">@anim/elv_popup_hide</item> </style>
 
     <style name="ListActivityTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:colorBackground">@color/gery_background</item>
+        <item name="android:colorBackground">@color/ledger_link_dark_blue</item>
     </style>
 
 

@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 loadMODWindow();
                 break;
             case R.id.mnuChangePIN:
-                Intent pin = new Intent(this, PassKeyRecoveryActivity.class);
+                Intent pin = new Intent(this, PassKeyResetActivity.class);
                 startActivity(pin);
                 break;
         }

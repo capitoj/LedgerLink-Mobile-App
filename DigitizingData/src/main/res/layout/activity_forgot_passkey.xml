@@ -13,7 +13,7 @@
         android:id="@+id/lblDRTitle"
         android:textSize="16dp"/>
 
-    <TextView
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/lblDRVslaName"
