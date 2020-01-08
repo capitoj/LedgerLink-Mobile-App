@@ -6,10 +6,11 @@
     android:layout_height="match_parent">
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
-        style="@style/TrainingModeBanner"
         android:id="@+id/lblMainTitle"
+        style="@style/TrainingModeBanner"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/in_training_mode" />
+        android:text="@string/in_training_mode"
+        android:textSize="20sp" />
 </LinearLayout>

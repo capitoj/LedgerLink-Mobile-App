@@ -3,6 +3,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/action_settings">
 
+
     <EditTextPreference
         android:defaultValue="http://217.160.25.83:9007/DigitizingDataWebService/DigitizingDataRestfulService.svc"
         android:key="prefServerUrl"

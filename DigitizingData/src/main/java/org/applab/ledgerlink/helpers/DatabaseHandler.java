@@ -46,7 +46,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public static String pathToDatabaseFolder(Context context) {
-        String absoluteFilePath = DATABASE_NAME;
+        String absoluteFilePath = Utils.isExecutingInTrainingMode() ? TRAINING_DATABASE_NAME : DATABASE_NAME;
         if(DatabaseHandler.isSDCardMounted()){
             File[] fileList = new File("/storage/").listFiles();
             int cursor = 0;
@@ -74,7 +74,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if(! databaseStorageDir.exists()) {
             databaseStorageDir.mkdir();
         }
-        return databaseStorageDir.getAbsolutePath() + File.separator + DATABASE_NAME;
+        String databaseName = Utils.isExecutingInTrainingMode() ? TRAINING_DATABASE_NAME : DATABASE_NAME;
+        return databaseStorageDir.getAbsolutePath() + File.separator + databaseName;
     }
 
     public void onCreate(SQLiteDatabase db) {

@@ -182,7 +182,7 @@
 	<string name="place_the_csv_file_containing_the_vsla_data">Place the CSV file containing the VSLA Data on to the phone storage. Ensure it is named: vslaMigrationInfo.csv then tap the button below.</string>
 	<string name="import_csv_to_database">Import CSV to Database</string>
 	<string name="to_recover_your_data">To recover your data, kindly fill in the following information</string>
-	<string name="to_recover_your_passkey">To recover your passkey, kindly fill in the following information</string>
+	<string name="to_recover_your_passkey">To reset your passkey, kindly fill in the following information</string>
 	<string name="vsla_code">VSLA Code</string>
 	<string name="contact_person">Contact Person</string>
 	<string name="number_of_members">Number Of Members</string>
@@ -903,5 +903,12 @@
     <string name="end_cycle">End Cycle</string>
     <string name="type_of_interest">Type Of Interest</string>
     <string name="add_type_of_interest_prompt">Type Of Interest</string>
+    <string name="action_passkey">PassKey Recovery</string>
+    <string name="action_reset_passkey">This action will completely reset the PassKey</string>
+    <string name="enter_new_passkey">Enter New PassKey</string>
+    <string name="comfirm_new_passkey">Confirm New PassKey</string>
+    <string name="error_details_donot_match">Details do not match!</string>
+    <string name="reset_passkey">Reset PassKey</string>
+    <string name="total_share_out_amount">Total Share Out Amount:</string>
 
 </resources>
