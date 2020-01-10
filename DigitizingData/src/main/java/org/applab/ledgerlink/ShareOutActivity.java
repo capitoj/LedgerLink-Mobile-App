@@ -21,6 +21,7 @@ import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.ShareOutArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,7 @@ public class ShareOutActivity extends Activity {
     private ArrayList<Member> members;
     Context context;
     int meetingId;
+    public static double enteredShareOutAmount;
 
     LedgerLinkApplication ledgerLinkApplication;
 
@@ -126,45 +128,36 @@ public class ShareOutActivity extends Activity {
         double newShareValue = ShareOutArrayAdapter.getNewShareValue();
         txtNewShareValue.setText(getString(R.string.new_share_value) + " " + Utils.formatNumber(newShareValue) + " UGX");
 
+
         txtTotalEarnings.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(MotionEvent.ACTION_UP == event.getAction()) {
-                    //uDialogMessageBox.show(ShareOutActivity.this, "Warning", "Are you sure about this ShareOut Amount");
-
                     // Creating alert Dialog with one Button
                     AlertDialog.Builder alertDialog = new AlertDialog.Builder(ShareOutActivity.this);
                     // Get the layout inflater
                     final View customLayout = getLayoutInflater().inflate(R.layout.dialog_shareout, null);
                     alertDialog.setView(customLayout);
 
-                    // Setting Dialog Title
-                    //alertDialog.setTitle("Warning!");
-
-                    // Setting Dialog Message
-                    //alertDialog.setMessage("Are you sure you want to change the ShareOut Amount");
-                    // final EditText input = new EditText(this);
-                    //alertDialog.setView(input);
-
                     // Setting Positive "Okay" Button
                     alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,int which) {
-                                    // Write your code here to execute after dialog
-                                    Toast.makeText(getApplicationContext(),"Password Matched", Toast.LENGTH_SHORT).show();
-                                    // do something with the data coming from the AlertDialog
-
                                     // send data from the AlertDialog to the Activity
-//                                    EditText editText = customLayout.findViewById(R.id.editText);
-//                                    sendDialogDataToActivity(editText.getText().toString());
-//                                    private void sendDialogDataToActivity(String data) {
-//                                        Toast.makeText(this, data, Toast.LENGTH_SHORT).show();
-//                                    }
+                                    final EditText editShareOutAmount = customLayout.findViewById(R.id.enterShareOutAmount);
+                                    if(editShareOutAmount.getText().toString().trim().length() < 1){
+                                        DialogMessageBox.show(ShareOutActivity.this, "Enter ShareOut Amount", "ShareOut Amount Required");
+                                        editShareOutAmount.requestFocus();
+                                        return;
+                                    }
+                                    enteredShareOutAmount = Double.parseDouble(editShareOutAmount.getText().toString());
+                                    recreate();
+                                    Toast.makeText(ShareOutActivity.this, String.valueOf(enteredShareOutAmount), Toast.LENGTH_SHORT).show();
+                                    //txtTotalEarnings.setText(Utils.formatNumber(enteredShareOutAmount));
                                 }
                             });
                     // Setting Negative "Cancel" Button
                     alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // Write your code here to execute after dialog
                                     dialog.cancel();
                                 }
                             });
@@ -178,103 +171,6 @@ public class ShareOutActivity extends Activity {
                 return true;
             }
         });
-
-//        txtTotalEarnings.setOnClickListener(new View.OnClickListener() {
-//            //@SuppressWarnings("deprecation")
-//            public void onClick(final View view) {
-//
-//
-//            }
-//
-//        });
-
-//        txtTotalEarnings.setTag(false);
-//        txtTotalEarnings.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus){
-//                txtTotalEarnings.setTag(true);
-//            }
-//        });
-
-        //txtTotalEarnings.setTag(false);
-        //final boolean editingShareOutAmount = false;
-//        txtTotalEarnings.addTextChangedListener(new TextWatcher() {
-//
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                // Compute the New Members' ShareOut Amount
-//                double editedTotalEarnings;
-//                try {
-//                    if (s.toString().length() <= 0) {
-//
-//                        return;
-//                    }
-//                    editedTotalEarnings = Double.parseDouble(s.toString());
-//                } catch (Exception ex) {
-//                    return;
-//                }
-//
-//                double cycleNoOfStars = ShareOutArrayAdapter.getNoOfCycleStars();
-//                double editedShareValue = editedTotalEarnings / cycleNoOfStars;
-//                txtNewShareValue.setText(String.format("%,.0f UGX", editedShareValue));
-//                txtTotalEarnings.setTag(true);
-//
-////                Runnable runnable = new Runnable() {
-////                    @Override
-////                    public void run() {
-////                        Intent intent = new Intent(getApplicationContext(), ShareOutActivity.class);
-////                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////                        startActivity(intent);
-////
-////                    }
-////                };
-////
-////                String warning = "Are you sure about this amount?";
-////                DialogMessageBox.show(ShareOutActivity.this, getString(R.string.warning), warning, runnable);
-//                DialogMessageBox.show(ShareOutActivity.this, "Warning", "Are you sure about this ShareOut Amount");
-//
-//            }
-//
-//          @Override
-//          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//          }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                // Compute the New Members' ShareOut Amount
-//                double editedTotalEarnings;
-//                try {
-//                    if (s.toString().length() <= 0) {
-//                        return;
-//                    }
-//                    editedTotalEarnings = Double.parseDouble(s.toString());
-//                } catch (Exception ex) {
-//                    return;
-//                }
-//
-//                double cycleNoOfStars = ShareOutArrayAdapter.getNoOfCycleStars();
-//                double editedShareValue = editedTotalEarnings / cycleNoOfStars;
-//                txtNewShareValue.setText(String.format("%,.0f UGX", editedShareValue));
-//                txtTotalEarnings.setTag(true);
-//
-////                Runnable runnable = new Runnable() {
-////                    @Override
-////                    public void run() {
-////                        Intent intent = new Intent(getApplicationContext(), ShareOutActivity.class);
-////                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////                        startActivity(intent);
-////
-////                    }
-////                };
-////
-////                String warning = "Are you sure about this amount?";
-////                DialogMessageBox.show(ShareOutActivity.this, getString(R.string.warning), warning, runnable);
-//                DialogMessageBox.show(ShareOutActivity.this, "Warning", "Are you sure about this ShareOut Amount");
-//
-//            }
-//        });
 
     }
 
@@ -295,6 +191,18 @@ public class ShareOutActivity extends Activity {
 
         return true;
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        finishAffinity();
+        startActivity(new Intent(ShareOutActivity.this, MainActivity.class));
+
+    }
+
+    public static double getEnteredShareOutAmount() {
+
+        return enteredShareOutAmount;
     }
 
 
