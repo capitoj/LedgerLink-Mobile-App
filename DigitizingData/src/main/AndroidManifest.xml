@@ -368,6 +368,7 @@
         <activity android:name=".BorrowWelfareMeetingActivity" />
         <activity android:name=".AddBorrowFromWelfareMeetingActivity" />
         <activity android:name=".MemberOutstandingWelfareHistoryActivity" />
+        <activity android:name=".TestingActivity" />
 
     </application>
 

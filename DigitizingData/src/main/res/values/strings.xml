@@ -32,7 +32,7 @@
     <string name="image_content_desc">icon</string>
     <string name="title_activity_delete_meeting">DeleteMeetingActivity</string>
     <string name="about_legal">All rights reserved. Not liable for any damage incurred from use of this software.</string>
-    <string name="about_version">Version 2016112501</string>
+    <string name="about_version">Version 2020011401</string>
     <string name="action_about">About</string>
     <string name="action_recovery">Data Recovery</string>
     <string name="register">REGISTER</string>
@@ -910,5 +910,6 @@
     <string name="error_details_donot_match">Details do not match!</string>
     <string name="reset_passkey">Reset PassKey</string>
     <string name="total_share_out_amount">Total Share Out Amount:</string>
+    <string name="please_confirm_passkey">Please Confirm PassKey</string>
 
 </resources>

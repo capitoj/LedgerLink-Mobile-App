@@ -57,36 +57,4 @@
         <!--android:layout_marginTop="16dp"-->
         <!--android:text="@string/reset_passkey" />-->
 
-    <!--<org.applab.ledgerlink.fontutils.TypefaceTextView-->
-        <!--android:id="@+id/idVslaName"-->
-        <!--android:layout_below="@+id/txtDRComfirmPassKey"-->
-        <!--style="@style/RegularTextInstruction"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text=""/>-->
-
-    <!--<org.applab.ledgerlink.fontutils.TypefaceTextView-->
-        <!--android:id="@+id/idNoMeeting"-->
-        <!--android:layout_below="@+id/idVslaName"-->
-        <!--style="@style/RegularTextInstruction"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text=""/>-->
-
-    <!--<org.applab.ledgerlink.fontutils.TypefaceTextView-->
-        <!--android:id="@+id/idNoMembers"-->
-        <!--android:layout_below="@+id/idNoMeeting"-->
-        <!--style="@style/RegularTextInstruction"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text=""/>-->
-
-    <!--<org.applab.ledgerlink.fontutils.TypefaceTextView-->
-        <!--android:id="@+id/idNoCycle"-->
-        <!--android:layout_below="@+id/idNoMembers"-->
-        <!--style="@style/RegularTextInstruction"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text=""/>-->
-
 </RelativeLayout>
