@@ -84,7 +84,7 @@ private final Typeface typeface;
             int attended = attendanceRepo.getMemberAttendanceCountInCycle(currentCycle.getCycleId(),memberId, 1);
             int missed = attendanceRepo.getMemberAttendanceCountInCycle(currentCycle.getCycleId(),memberId, 0);
 
-            txtAttendance.setText(String.format("Attended %d. Missed %d",attended, missed));
+            txtAttendance.setText(String.format(context.getResources().getString(R.string.attended)+" %d." +context.getResources().getString(R.string.missed)+ "%d",attended, missed));
 
             //Do not invoke the event when in Read only Mode
             if(Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY || viewOnly) {
@@ -123,7 +123,7 @@ private final Typeface typeface;
                         int attended = attendanceRepo.getMemberAttendanceCountInCycle(currentCycle.getCycleId(),memberId, 1);
                         int missed = attendanceRepo.getMemberAttendanceCountInCycle(currentCycle.getCycleId(),memberId, 0);
 
-                        txtAttendance.setText(String.format("Attended %d. Missed %d",attended, missed));
+                        txtAttendance.setText(String.format(context.getResources().getString(R.string.attended)+" %d." +context.getResources().getString(R.string.missed)+ "%d",attended, missed));
                     }
                 }
             });

@@ -7,9 +7,14 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,12 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.applab.ledgerlink.domain.model.Meeting;
@@ -48,7 +47,7 @@ import java.util.Date;
 /**
  * Created by Moses on 7/15/13.
  */
-public class AddMemberActivity extends ActionBarActivity{
+public class AddMemberActivity extends AppCompatActivity {
     protected Member selectedMember;
     protected int selectedMemberId;
     protected boolean successAlertDialogShown = false;
@@ -301,12 +300,12 @@ public class AddMemberActivity extends ActionBarActivity{
         //Get the date of the dummy GSW meeting
         MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
 
-        String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? "her" : "his";
+        String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? getString(R.string.her) : getString(R.string.his);
         lblAMMiddleCycleInformationHeading.setText(getString(R.string.member_info_added_after_cycle_started) + pronoun + getString(R.string.total_saving_and_outstanding_loans_that_day));
 
         Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
         if (dummyGSWMeeting != null) {
-            lblAMMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), "dd MMM yyyy") + " after the cycle started. Here are " + pronoun + " total savings and outstanding loans on that day.");
+            lblAMMiddleCycleInformationHeading.setText(getString(R.string.member_info_was_added_on) + Utils.formatDate(dummyGSWMeeting.getMeetingDate(), getString(R.string.date_format)) + getString(R.string.after_cycle_started_here_are) + pronoun + getString(R.string.total_savind_and_outstanding_loans_that_day));
         }
 
         /** if meeting is after 2nd meeting, disable editing outstanding balance*/
@@ -332,6 +331,7 @@ public class AddMemberActivity extends ActionBarActivity{
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
         View customActionBarView;
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -377,7 +377,8 @@ public class AddMemberActivity extends ActionBarActivity{
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            saveMemberData();
+                            saveMemberDataAdd();
+
                         }
                     }
             );
@@ -429,12 +430,12 @@ public class AddMemberActivity extends ActionBarActivity{
                     NavUtils.navigateUpTo(this, upIntent);
                 }
                 return true;
-            case R.id.mnuAMNext:
-                //Toast.makeText(getBaseContext(), "You have successfully added a new member", Toast.LENGTH_LONG).show();
-                return saveMemberData();
-            case R.id.mnuAMFinished:
-                selectedFinishButton = true;
-                return saveMemberData();
+//            case R.id.mnuAMNext:
+//                //Toast.makeText(getBaseContext(), "You have successfully added a new member", Toast.LENGTH_LONG).show();
+//                return saveMemberData();
+//            case R.id.mnuAMFinished:
+//                selectedFinishButton = true;
+//                return saveMemberData();
         }
         return true;
     }
@@ -571,6 +572,140 @@ public class AddMemberActivity extends ActionBarActivity{
 
         return successFlg;
     }
+
+    protected boolean saveMemberDataAdd() {
+        boolean successFlg = false;
+        AlertDialog dlg;
+
+        Member member = new Member();
+        if (selectedMember != null) {
+            member = selectedMember;
+        }
+
+        if (validateData(member)) {
+            boolean retVal;
+            if (member.getMemberId() != 0) {
+                retVal = ledgerLinkApplication.getMemberRepo().updateMember(member);
+            } else {
+                retVal = ledgerLinkApplication.getMemberRepo().addMember(member);
+
+            }
+            if (retVal) {
+                if (member.getMemberId() == 0) {
+                    //Set this new entity as the selected one
+                    //Due to this ensure empty fields are explicitly set to null or default value
+                    //Otherwise they will assume the value of the selectedMember variable because it is not null
+                    selectedMember = member;
+
+                    if (selectedFinishButton) {
+                        Toast toast = Toast.makeText(this, R.string.new_member_added_successfully, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.LEFT, 0, 0);
+                        toast.show();
+                        if (Utils._membersAccessedFromNewCycle) {
+                            Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+                            i.putExtra("_isUpdateCycleAction", false);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                        } else if (Utils._membersAccessedFromEditCycle) {
+                            Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+                            i.putExtra("_isUpdateCycleAction", true);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                        } else {
+                            Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                        }
+                        Utils._membersAccessedFromNewCycle = false;
+                        Utils._membersAccessedFromEditCycle = false;
+                    } else {
+                        Toast toast = Toast.makeText(this, R.string.new_member_added_successfully_add_another, Toast.LENGTH_SHORT);
+                        toast.setGravity(Gravity.LEFT, 0, 0);
+                        toast.show();
+                        //Clear the Fields and keep adding new records
+                        clearDataFields();
+                    }
+
+                    selectedFinishButton = false;
+
+                    /*
+                    dlg = Utils.createAlertDialog(AddMemberActivity.this,"Add Member","The new member was added successfully.", Utils.MSGBOX_ICON_TICK);
+                    // Setting OK Button
+                    dlg.setButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(successAlertDialogShown) {
+                                if(selectedFinishButton) {
+                                    if(Utils._membersAccessedFromNewCycle) {
+                                        Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+                                        i.putExtra("_isUpdateCycleAction", false);
+                                        startActivity(i);
+                                    }
+                                    else if(Utils._membersAccessedFromEditCycle) {
+                                        Intent i = new Intent(getApplicationContext(), NewCyclePg2Activity.class);
+                                        i.putExtra("_isUpdateCycleAction", true);
+                                        startActivity(i);
+                                    }
+                                    else {
+                                        Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                                        startActivity(i);
+                                    }
+                                    Utils._membersAccessedFromNewCycle = false;
+                                    Utils._membersAccessedFromEditCycle = false;
+                                }
+                                else {
+                                    //Clear the Fields and keep adding new records
+                                    clearDataFields();
+                                }
+
+                                selectedFinishButton = false;
+                                successAlertDialogShown = false;
+                            }
+                        }
+                    });
+                    dlg.show();
+                    */
+                } else {
+                    Toast.makeText(this, R.string.member_updated_successfully, Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+
+                    /*
+                    dlg = Utils.createAlertDialog(AddMemberActivity.this,"Edit Member","The member was updated successfully.", Utils.MSGBOX_ICON_TICK);
+                    // Setting OK Button
+                    dlg.setButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(successAlertDialogShown) {
+                                Intent i = new Intent(getApplicationContext(), MembersListActivity.class);
+                                startActivity(i);
+                                successAlertDialogShown = false;
+                            }
+                        }
+                    });
+                    dlg.show();
+                    */
+                }
+
+                /*
+                if(dlg.isShowing()) {
+                    //Flag that ready to goto Next
+                    successAlertDialogShown = true;
+                }
+                */
+
+                successFlg = true;
+                //clearDataFields(); //Not needed now
+            } else {
+                dlg = Utils.createAlertDialogOk(AddMemberActivity.this, getString(R.string.add_member_main), getString(R.string.problem_occurred_while_adding_new_member), Utils.MSGBOX_ICON_TICK);
+                dlg.show();
+            }
+        } else {
+            //displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
+        }
+
+        return successFlg;
+    }
+
 
     protected boolean validateData(Member member) {
         String dlgTitle = getString(R.string.add_member_main);

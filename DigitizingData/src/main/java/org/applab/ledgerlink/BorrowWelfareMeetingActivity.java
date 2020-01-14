@@ -3,6 +3,7 @@ package org.applab.ledgerlink;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.Toast;
 
+import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
@@ -21,6 +24,8 @@ import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.MembersFinesArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.adapters.BorrowFromWelfareArrayAdapter;
+import org.applab.ledgerlink.repo.MeetingOutstandingWelfareRepo;
+import org.applab.ledgerlink.repo.MeetingRepo;
 
 import java.util.ArrayList;
 
@@ -97,7 +102,7 @@ public class BorrowWelfareMeetingActivity extends ActionBarActivity{
     // Populate Members List
     private void populateMembersList() {
         // Load the Main Menu
-        members = ledgerLinkApplication.getMemberRepo().getAllMembers();
+        members = ledgerLinkApplication.getMemberRepo().getActiveMembers();
 
         // Now get the data via the adapter
         final BorrowFromWelfareArrayAdapter adapter = new BorrowFromWelfareArrayAdapter(getBaseContext(), members);
@@ -125,17 +130,23 @@ public class BorrowWelfareMeetingActivity extends ActionBarActivity{
                 //Do not invoke the event when in Read only Mode
                 if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = members.get(position);
-                    Intent i = new Intent(view.getContext(), AddBorrowFromWelfareMeetingActivity.class);
+                    Meeting meeting = new MeetingRepo(getApplicationContext(), meetingId).getMeeting();
+                    double outstandingAmount = new MeetingOutstandingWelfareRepo(getApplicationContext()).getMemberTotalWelfareOutstandingInCycle(meeting.getVslaCycle().getCycleId(), selectedMember.getMemberId());
+                    if(outstandingAmount > 0){
+                        Toast.makeText(getApplicationContext(), selectedMember.getFullName() + " has an outstanding welfare amount of " + outstandingAmount,Toast.LENGTH_LONG).show();
+                    }else {
+                        Intent i = new Intent(view.getContext(), AddBorrowFromWelfareMeetingActivity.class);
 
-                    // Pass on data
-                    i.putExtra("_meetingDate", meetingDate);
-                    i.putExtra("_memberId", selectedMember.getMemberId());
-                    i.putExtra("_name", selectedMember.getFullName());
-                    i.putExtra("_meetingId", meetingId);
+                        // Pass on data
+                        i.putExtra("_meetingDate", meetingDate);
+                        i.putExtra("_memberId", selectedMember.getMemberId());
+                        i.putExtra("_name", selectedMember.getFullName());
+                        i.putExtra("_meetingId", meetingId);
 
-                    startActivity(i);
-                    //finish this list so that it doesnt show up after fining
-                    finish();
+                        startActivity(i);
+                        //finish this list so that it doesnt show up after fining
+                        finish();
+                    }
                 }
             }
         });

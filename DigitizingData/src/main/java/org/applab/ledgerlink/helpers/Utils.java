@@ -24,6 +24,7 @@ import org.applab.ledgerlink.GettingStartedWizardAddMemberActivity;
 import org.applab.ledgerlink.GettingStartedWizardNewCycleActivity;
 import org.applab.ledgerlink.GettingStartedWizardPageOne;
 import org.applab.ledgerlink.GettingStartedWizardReviewMembersActivity;
+import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.SettingsActivity;
 
 import java.text.DecimalFormat;
@@ -507,7 +508,7 @@ public class Utils {
         // Setting Dialog Title
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
-        alertDialog.setPositiveButton("Continue", new DialogInterface.OnClickListener()
+        alertDialog.setPositiveButton(context.getResources().getString(R.string.continue_dialog), new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)
@@ -516,7 +517,7 @@ public class Utils {
             }
         });
 
-        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+        alertDialog.setNegativeButton(context.getResources().getString(R.string.cancel_dialog), new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialogInterface, int i)

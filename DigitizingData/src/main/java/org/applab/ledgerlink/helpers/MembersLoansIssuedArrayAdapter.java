@@ -103,7 +103,7 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
                 loansIssued = loansIssuedRepo.getOutstandingMemberLoans(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
             if (loansIssued == null || loansIssued.size() == 0) {
-                txtOutstanding.setText("No outstanding loans");
+                txtOutstanding.setText(context.getResources().getString(R.string.no_outstanding_loans));
 
             } else {
                 double loanBalance = 0.0;
@@ -111,10 +111,10 @@ public class MembersLoansIssuedArrayAdapter extends ArrayAdapter<Member> {
                     loanBalance += loanIssue.getLoanBalance();
                 }
                 if(loanBalance == 0.0){
-                    txtOutstanding.setText("No outstanding loans");
+                    txtOutstanding.setText(context.getResources().getString(R.string.no_outstanding_loans));
                 }
                 if(loanBalance > 0.0){
-                    txtOutstanding.setText(String.format("Outstanding loan  %,.0f UGX", loanBalance));
+                    txtOutstanding.setText(String.format(context.getResources().getString(R.string.outstanding_loan)+"  %,.0f UGX", loanBalance));
                 }
 
                 /*

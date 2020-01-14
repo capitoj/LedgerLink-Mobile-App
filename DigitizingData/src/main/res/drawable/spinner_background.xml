@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape>
+                    <corners android:radius="3dp"/>
+                    <padding
+                        android:bottom="8dp"
+                        android:left="10dp"
+                        android:right="10dp"
+                        android:top="8dp"/>
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/ledger_link_light_blue"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <item>
+        <layer-list>
+            <item android:drawable="@drawable/drop_down_arrow"
+                android:gravity="center|right"/>
+        </layer-list>
+    </item>
+
+</selector>

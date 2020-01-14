@@ -24,6 +24,8 @@ public class VslaCycle {
     private double outstandingBankLoanAtSetup;
     private String interestAtSetupCorrectionComment;
     private String finesAtSetupCorrectionComment;
+    private int typeOfInterest;
+    protected int noOfCycles;
 
     public VslaCycle() {
 
@@ -205,4 +207,21 @@ public class VslaCycle {
     public void setFinesAtSetupCorrectionComment(String finesAtSetupCorrectionComment) {
         this.finesAtSetupCorrectionComment = finesAtSetupCorrectionComment;
     }
+
+    public void setTypeOfInterest(int typeOfInerest){
+        this.typeOfInterest = typeOfInerest;
+    }
+
+    public int getTypeOfInterest(){
+        return this.typeOfInterest;
+    }
+
+    public void setNoOfCycles(int noOfCycles){
+        this.noOfCycles = noOfCycles;
+    }
+
+    public int getNoOfCycles(){
+        return this.noOfCycles;
+    }
+
 }

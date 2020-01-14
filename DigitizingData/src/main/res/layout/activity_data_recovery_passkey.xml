@@ -23,11 +23,12 @@
         android:layout_below="@+id/lblDRTitle"/>
 
     <EditText
+        android:id="@+id/txtDRNoOfMeetings"
+        style="@style/CustomEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lblDRPassKey"
-        android:id="@+id/txtDRPassKey"
         android:inputType="numberPassword"
-        android:paddingTop="20dp"/>
+        android:paddingTop="20dp" />
 
 </RelativeLayout>

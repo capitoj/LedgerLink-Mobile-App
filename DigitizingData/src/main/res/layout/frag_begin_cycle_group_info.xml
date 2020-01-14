@@ -30,7 +30,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtBCSharePrice"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords" />
@@ -50,7 +50,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtBCMaxShares"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />

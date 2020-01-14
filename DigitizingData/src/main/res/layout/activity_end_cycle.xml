@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gery_background">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -14,96 +16,92 @@
         <!--  android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         -->
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblECInstruction"
-            style="@style/RegularTextInstruction"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:text="@string/if_your_cycle_has_ended"
-            android:layout_marginBottom="20dip"/>
-
-        <requestFocus />
-
-       <!-- <ListView
-            android:id="@+id/lstCyclesToEnd"
-            style="@style/RegularTextDateListItems"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
-            android:choiceMode="singleChoice"
-            android:dividerHeight="2dip">
-
-
-        </ListView> -->
-
-
-        <!--   <RadioGroup
-               android:id="@+id/grpECExistingCycles"
-               style="@style/RegularText"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_below="@id/lblECInstruction"
-               android:layout_marginBottom="10dip"
-               android:layout_marginTop="10dip"
-               android:orientation="vertical"></RadioGroup>
-        -->
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblECShareOutDate"
-            style="@style/RegularText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/lblECInstruction"
-            android:text="@string/share_out_date" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceEditText
-            android:id="@+id/txtECShareOutDate"
-            style="@style/NormalEditText"
-            android:layout_width="150dip"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/lblECShareOutDate"
-            android:layout_marginBottom="10dip"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="30-Jun-2013" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblECShareOutAmount"
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/txtECShareOutDate"
-            android:text="@string/share_out_amount" />
-
         <LinearLayout
-            android:id="@+id/frmECShareOutAmount"
-            android:layout_width="fill_parent"
+            android:id="@+id/layoutEndCycle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lblECShareOutAmount"
-            android:layout_marginBottom="20dip"
-            android:weightSum="4">
-
-            <org.applab.ledgerlink.fontutils.TypefaceEditText
-                android:id="@+id/txtECShareOutAmount"
-                style="@style/NormalEditText"
-                android:layout_width="200dip"
-                android:layout_height="fill_parent"
-                android:inputType="number"
-                android:text="" />
+            android:orientation="vertical">
 
             <org.applab.ledgerlink.fontutils.TypefaceTextView
-                android:id="@+id/lblECCurrency"
-                style="@style/InlineTextItem"
+                android:id="@+id/lblECInstruction"
+                style="@style/RegularTextInstruction"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:text="@string/ugx" />
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="20dip"
+                android:text="@string/if_your_cycle_has_ended" />
 
+            <requestFocus />
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardEndCycle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="10dp"
+                app:contentPadding="10dp">
+
+                <LinearLayout
+                    android:id="@+id/layoutMembersDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblECShareOutDate"
+                        style="@style/RegularText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/share_out_date" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceEditText
+                        android:id="@+id/txtECShareOutDate"
+                        style="@style/CustomEditText"
+                        android:layout_width="150dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dip"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:text="30-Jun-2013" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblECShareOutAmount"
+                        style="@style/RegularText"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/share_out_amount" />
+
+                    <LinearLayout
+                        android:id="@+id/frmECShareOutAmount"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dip"
+                        android:weightSum="1">
+
+                        <org.applab.ledgerlink.fontutils.TypefaceEditText
+                            android:id="@+id/txtECShareOutAmount"
+                            style="@style/CustomEditText"
+                            android:layout_width="350dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:inputType="number"
+                            android:text="" />
+
+                        <org.applab.ledgerlink.fontutils.TypefaceTextView
+                            android:id="@+id/lblECCurrency"
+                            style="@style/InlineTextItem"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="0.5"
+                            android:text="@string/ugx" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            `
         </LinearLayout>
-
     </RelativeLayout>
 </ScrollView>

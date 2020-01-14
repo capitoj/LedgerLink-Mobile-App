@@ -131,12 +131,12 @@ public class ChangeMeetingDateActivity extends ActionBarActivity{
                                 cannotBeModified = false;
                             }
                             else {
-                                Toast.makeText(getApplicationContext(), String.format("Sorry, you may only edit the date of the most recent meeting in this cycle dated: %s.", Utils.formatDate(mostRecent.getMeetingDate())), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), String.format(getString(R.string.sorry_you_may_only_edit_day_of_recent_meeting) + "%s.", Utils.formatDate(mostRecent.getMeetingDate())), Toast.LENGTH_LONG).show();
                                 return;
                             }
                         }
                         if(cannotBeModified) {
-                            Toast.makeText(getApplicationContext(),"The meeting date cannot be modified due to data integrity reasons.",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(),getString(R.string.meeting_date_cannot_be_modified),Toast.LENGTH_LONG).show();
                             finish();
 
                         }
@@ -146,7 +146,7 @@ public class ChangeMeetingDateActivity extends ActionBarActivity{
                             oldMeetingDate = targetMeeting.getMeetingDate();
                             if(validateMeetingDate(targetMeeting)) {
                                 ledgerLinkApplication.getMeetingRepo().updateMeetingDate(meetingId, targetMeeting.getMeetingDate());
-                                Toast.makeText(getApplicationContext(),"The meeting date has been modified.",Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(),getString(R.string.meeting_date_been_modified),Toast.LENGTH_LONG).show();
 
                                 Intent i = new Intent(getApplicationContext(),BeginMeetingActivity.class);
                                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -166,13 +166,14 @@ public class ChangeMeetingDateActivity extends ActionBarActivity{
 
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
 
-        actionBar.setTitle("Change Meeting Date");
+        actionBar.setTitle(getString(R.string.change_meeting_date));
 
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setHomeButtonEnabled(false);
@@ -262,7 +263,7 @@ public class ChangeMeetingDateActivity extends ActionBarActivity{
             Date dt = Utils.getDateFromString(meetingDate,Utils.DATE_FIELD_FORMAT);
 
             if (dt.after(new Date())) {
-                Utils.createAlertDialogOk(ChangeMeetingDateActivity.this,"Change Meeting Date", "The Meeting date cannot be in the future.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(ChangeMeetingDateActivity.this,getString(R.string.change_meeting_date), getString(R.string.meeting_date_cannot_be_in_future), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 return false;
             }
             else {
@@ -272,8 +273,8 @@ public class ChangeMeetingDateActivity extends ActionBarActivity{
             //Further Validations
             //check that meeting is with the boundaries of the current cycle
             if(meeting.getMeetingDate().before(meeting.getVslaCycle().getStartDate()) || meeting.getMeetingDate().after(meeting.getVslaCycle().getEndDate())) {
-                Utils.createAlertDialogOk(ChangeMeetingDateActivity.this,"Change Meeting Date",
-                        String.format("The Meeting Date has to be within the current cycle i.e. %s and %s",Utils.formatDate(meeting.getVslaCycle().getStartDate()), Utils.formatDate(meeting.getVslaCycle().getEndDate())),
+                Utils.createAlertDialogOk(ChangeMeetingDateActivity.this,getString(R.string.change_meeting_date),
+                        String.format(getString(R.string.meeting_date_within_current_cycle)+" i.e. %s" + getString(R.string.and) + "%s",Utils.formatDate(meeting.getVslaCycle().getStartDate()), Utils.formatDate(meeting.getVslaCycle().getEndDate())),
                         Utils.MSGBOX_ICON_EXCLAMATION).show();
                 return false;
             }
@@ -304,8 +305,8 @@ public class ChangeMeetingDateActivity extends ActionBarActivity{
 
             if(predecessor != null) {
                 if(meeting.getMeetingDate().before(predecessor.getMeetingDate())) {
-                    Utils.createAlertDialogOk(ChangeMeetingDateActivity.this,"Change Meeting Date",
-                            String.format("The Meeting Date has to be later than %s",Utils.formatDate(predecessor.getMeetingDate())),
+                    Utils.createAlertDialogOk(ChangeMeetingDateActivity.this,getString(R.string.change_meeting_date),
+                            String.format(getString(R.string.meeting_date_later_than) + "%s",Utils.formatDate(predecessor.getMeetingDate())),
                             Utils.MSGBOX_ICON_EXCLAMATION).show();
                     return false;
                 }
@@ -313,8 +314,8 @@ public class ChangeMeetingDateActivity extends ActionBarActivity{
 
             if(successor != null) {
                 if(meeting.getMeetingDate().after(successor.getMeetingDate())){
-                    Utils.createAlertDialogOk(ChangeMeetingDateActivity.this,"Change Meeting Date",
-                            String.format("The Meeting Date has to be earlier than %s",Utils.formatDate(successor.getMeetingDate())),
+                    Utils.createAlertDialogOk(ChangeMeetingDateActivity.this,getString(R.string.change_meeting_date),
+                            String.format(getString(R.string.meeting_date_earlier_than) + "%s",Utils.formatDate(successor.getMeetingDate())),
                             Utils.MSGBOX_ICON_EXCLAMATION).show();
                     return false;
                 }

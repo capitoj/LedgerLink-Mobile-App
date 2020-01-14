@@ -121,7 +121,7 @@ public class MeetingActivity extends ActionBarActivity implements ActionBar.TabL
             actionBar.setIcon(R.drawable.icon_training_mode);
         }
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         // String title = String.format("Meeting    %s", meetingDate);
         String title = "Meeting";

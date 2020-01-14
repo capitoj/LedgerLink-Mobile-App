@@ -55,7 +55,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
         Log.v(TAG, "onClick called");
        if (arg0 == btnimport) {
-           if(btnimport.getText().toString().equalsIgnoreCase("Finished")) {
+           if(btnimport.getText().toString().equalsIgnoreCase(getString(R.string.finished))) {
                Intent mainMenu = new Intent(getApplicationContext(), MainActivity.class);
                startActivity(mainMenu);
                return;
@@ -73,7 +73,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                  VslaCycle mostRecentCycle = ledgerLinkApplication.getVslaCycleRepo().getMostRecentCycle();
                 if(null == mostRecentCycle) {
                     //Toast that there is no Cycle
-                    Toast.makeText(getApplicationContext(),"There is no existing cycle.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),getString(R.string.no_existing_cycle), Toast.LENGTH_LONG).show();
                     return;
                 }
 
@@ -95,7 +95,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
                     if(recentMeeting == null) {
                         //Toast that there are problems
-                        Toast.makeText(getApplicationContext(),"Meeting could not be Created to setup the Loans and Savings", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),getString(R.string.meeting_could_not_be_created_to_setup_loans_and_savings), Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -165,10 +165,10 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
                             //Gender
                             if(gender.length() > 0) {
-                                member.setGender((gender.startsWith("M") ? "Male" : "Female"));
+                                member.setGender((gender.startsWith("M") ? getString(R.string.male) : getString(R.string.female)));
                             }
                             else {
-                                member.setGender("Female");
+                                member.setGender(getString(R.string.female));
                             }
 
                             //Date Of Birth
@@ -232,7 +232,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
                             //Continue only if we have added the member
                             if(null == recentMember) {
-                                Toast.makeText(getApplicationContext(),String.format("Member on data record %d could not be migrated.", dataRowNo), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),String.format(getString(R.string.member_on_data_record_d) +" %d"+ getString(R.string.could_not_be_migrated), dataRowNo), Toast.LENGTH_SHORT).show();
                                 skippedCount++;
                                 continue;
                             }
@@ -264,13 +264,13 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                             }
 
                             //Done with this member
-                            Toast.makeText(getApplicationContext(),String.format("Member of data record %d was migrated successfully.", dataRowNo), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),String.format(getString(R.string.member_on_data_record_d) +" %d"+ getString(R.string.was_migrated_successfully), dataRowNo), Toast.LENGTH_SHORT).show();
 
                             //Increment the migrated count
                             migratedCount++;
                         }
                         catch(Exception exMember){
-                            Toast.makeText(getApplicationContext(),String.format("An error has occurred. Skipping member on data record %d", dataRowNo), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),String.format(getString(R.string.error_has_occurred_skipping_member_on_data_record) +" %d", dataRowNo), Toast.LENGTH_SHORT).show();
                             skippedCount++;
                             if(skippedCount > 1) {
                                 skippedRows.concat(String.format(", %d", dataRowNo));
@@ -282,16 +282,16 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                     }
 
                     //Final Results: Total Records in File include the HEADER row so reduce by 1
-                    String result = String.format("Records Found: %d | Migrated: %d | Failed: %d", dataRowNo, migratedCount, skippedCount);
+                    String result = String.format(getString(R.string.records_found) +" %d | "+ getString(R.string.migrated) +" %d |"+ getString(R.string.failed) +": %d", dataRowNo, migratedCount, skippedCount);
 
                     //in case some records were skipped
-                    String skippedRecs = String.format("The Skipped Records were: %s", skippedRows);
+                    String skippedRecs = String.format(getString(R.string.skipped_records_were) +" %s", skippedRows);
 
                     //TODO: Replace this with Actual TextView
                     Toast.makeText(getApplicationContext(),result, Toast.LENGTH_SHORT).show();
                     lblMigrationResult.setVisibility(View.VISIBLE);
                     //btnimport.setVisibility(View.GONE);
-                    lblMigrationResult.setText("Result:" + String.valueOf(result));
+                    lblMigrationResult.setText(getString(R.string.result) + String.valueOf(result));
 
                     if(skippedCount > 0) {
                         Toast.makeText(getApplicationContext(),skippedRecs, Toast.LENGTH_SHORT).show();
@@ -301,7 +301,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
                     ledgerLinkApplication.getVslaInfoRepo().updateDataMigrationStatusFlag();
 
                     //TODO: Only do this if there were no records skipped
-                    btnimport.setText("Finished");
+                    btnimport.setText(getString(R.string.finished));
                 }
                 catch (IOException e) {
                     e.printStackTrace();
@@ -309,7 +309,7 @@ public class DataMigrationActivity extends Activity implements OnClickListener {
 
             }
             catch (FileNotFoundException e) {
-                Toast.makeText(getApplicationContext(),String.format("The Data File: %s could not be located.", file), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),String.format(getString(R.string.data_file)+ " %s"+ getString(R.string.could_not_be_located), file), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }

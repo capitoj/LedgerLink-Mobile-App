@@ -4,12 +4,76 @@
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
-    <style name="AppBaseTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
-        <!--
+    <style name="AppBaseTheme"
+            parent="@style/Theme.AppCompat.Light.DarkActionBar">
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
         -->
+
+    </style>
+
+    <style name="CustomActionBarTheme"
+        parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:colorBackground">@color/gery_background</item>
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionBarTabBarStyle">@style/MyActionBarTab</item>
+        <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>0
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarTabTextStyle">@style/MyActionBarTabText</item>
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="colorAccent">@color/ledger_link_light_blue</item>
+    </style>
+
+    <!-- ActionBar Style -->
+    <style name="MyActionBar"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/ledger_link_dark_blue</item>
+        <item name="android:titleTextStyle">@color/white</item>
+        <!-- Support library compatibility -->
+        <item name="background">@color/ledger_link_dark_blue</item>
+        <item name="titleTextStyle">@color/white</item>
+    </style>
+
+    <!-- ActionBar Style -->
+    <style name="MyActionBarTab"
+        parent="@style/Widget.AppCompat.Light.ActionBar.TabBar">
+        <item name="android:background">@color/ledger_link_dark_blue</item>
+        <item name="android:titleTextStyle">@color/white</item>
+        <!-- Support library compatibility -->
+        <item name="background">@color/ledger_link_dark_blue</item>
+        <item name="titleTextStyle">@color/white</item>
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="MyActionBarTitleText"
+        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:color">@color/white</item>
+    </style>
+
+    <!-- ActionBar tabs texts -->
+    <style name="MyActionBarTabText"
+        parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="CycleActionBarTheme"
+        parent="@style/Theme.AppCompat.Light">
+        <item name="android:colorBackground">@color/gery_background</item>
+        <item name="android:actionBarStyle">@style/CycleActionBar</item>
+        <!-- Support library compatibility -->
+        <item name="actionBarStyle">@style/CycleActionBar</item>
+    </style>
+
+    <!-- Cycle ActionBar Style -->
+    <style name="CycleActionBar"
+        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/ledger_link_dark_blue</item>
+        <item name="android:titleTextStyle">@color/white</item>
+        <!-- Support library compatibility -->
+        <item name="background">@color/ledger_link_dark_blue</item>
+        <item name="titleTextStyle">@color/white</item>
     </style>
 
     <!-- Application theme. -->
@@ -74,5 +138,10 @@
     <style name="elv_fade_animation">
     <item name="@android:windowEnterAnimation">@anim/elv_popup_show</item>
     <item name="@android:windowExitAnimation">@anim/elv_popup_hide</item> </style>
+
+    <style name="ListActivityTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+        <item name="android:colorBackground">@color/ledger_link_dark_blue</item>
+    </style>
+
 
 </resources>

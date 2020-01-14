@@ -80,7 +80,7 @@ public class MembersFinesArrayAdapter extends ArrayAdapter<Member> {
                 outstandingFines  = fineRepo.getMemberTotalFinesOutstandingInCycle(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
             }
 
-            txtTotalFines.setText(String.format("Outstanding Fines: %,.0f UGX", outstandingFines));
+            txtTotalFines.setText(String.format(context.getResources().getString(R.string.outstanding_fines)+" %,.0f UGX", outstandingFines));
             return rowView;
         } catch (Exception ex) {
             Log.e("Errors:", "getView:> " + ((ex.getMessage() == null) ? "Generic Exception" : ex.getMessage()));

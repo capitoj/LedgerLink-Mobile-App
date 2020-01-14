@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gery_background">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -21,7 +23,20 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/enter_all_cycle_information" />
+
         </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardNewCycle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="10dp">
+
+    <LinearLayout
+        android:id="@+id/layoutMembersDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -55,7 +70,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtNCSharePrice"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="200dip"
                     android:layout_height="fill_parent"
                     android:inputType="number"
@@ -66,6 +81,7 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:layout_marginLeft="5dp"
                     android:text="@string/ugx" />
             </LinearLayout>
         </LinearLayout>
@@ -89,33 +105,19 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtNCMaxShares"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="200dip"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:text="" />
 
-                <!--
-                <org.applab.ledgerlink.fontutils.TypefaceEditText
-                     style="@style/NormalEditText"
-                     android:id="@+id/txtNCMaxShares"
-                     android:layout_width="300dip"
-                     android:layout_height="wrap_content"
-                     android:inputType="number"
-                     android:layout_weight="7" />-->
-
-                <!--<Spinner
-                    android:id="@+id/cboNCMaxShares"
-                    style="@style/RegularText"
-                    android:layout_width="210dip"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown" />-->
 
                 <org.applab.ledgerlink.fontutils.TypefaceTextView
                     android:id="@+id/lblNCSpace1"
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:layout_marginLeft="5dp"
                     android:text="@string/stars" />
             </LinearLayout>
         </LinearLayout>
@@ -135,7 +137,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtNCStartDate"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="150dip"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -158,7 +160,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtNCEndDate"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="150dip"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -185,7 +187,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtNCInterestRate"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -195,8 +197,36 @@
                     style="@style/InlineTextItem"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
+                    android:layout_marginLeft="5dp"
                     android:text="%" />
             </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dip"
+                android:orientation="vertical">
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblNCInterestType"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/type_of_interest" />
+
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/cboAMTypeOfInterest"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/spinner_background"
+                    android:gravity="left"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -256,7 +286,7 @@
 
                     <org.applab.ledgerlink.fontutils.TypefaceEditText
                         android:id="@+id/txtNCInterestCollectedSoFar"
-                        style="@style/NormalEditText"
+                        style="@style/CustomEditText"
                         android:layout_width="200dip"
                         android:layout_height="wrap_content"
                         android:inputType="number" />
@@ -279,7 +309,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtNCMiddleCycleInterestCorrectionComment"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
@@ -313,7 +343,7 @@
 
                     <org.applab.ledgerlink.fontutils.TypefaceEditText
                         android:id="@+id/txtNCFinesCollectedSoFar"
-                        style="@style/NormalEditText"
+                        style="@style/CustomEditText"
                         android:layout_width="200dip"
                         android:layout_height="wrap_content"
                         android:inputType="number" />
@@ -336,7 +366,7 @@
 
                 <org.applab.ledgerlink.fontutils.TypefaceEditText
                     android:id="@+id/txtNCMiddleCycleFinesCorrectionComment"
-                    style="@style/NormalEditText"
+                    style="@style/CustomEditText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
@@ -370,7 +400,7 @@
 
                     <org.applab.ledgerlink.fontutils.TypefaceEditText
                         android:id="@+id/txtNCOutstandingGroupBankLoan"
-                        style="@style/NormalEditText"
+                        style="@style/CustomEditText"
                         android:layout_width="200dip"
                         android:layout_height="wrap_content"
                         android:inputType="number" />
@@ -385,5 +415,8 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
+        </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </ScrollView>

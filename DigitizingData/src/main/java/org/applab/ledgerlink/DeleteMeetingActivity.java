@@ -71,19 +71,19 @@ public class DeleteMeetingActivity extends ActionBarActivity{
             double totalWelfare = 0.0;
 
             totalMeetingSavings = ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(meetingId);
-            txtSavings.setText(String.format("Savings: %,.0f %s", totalMeetingSavings, getResources().getString(R.string.operating_currency)));
+            txtSavings.setText(String.format(getString(R.string.saving_asof)+" %,.0f %s", totalMeetingSavings, getResources().getString(R.string.operating_currency)));
 
             totalLoansRepaidInMeeting = ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(meetingId);
-            txtLoanRepayments.setText(String.format("Loans repaid: %,.0f %s", totalLoansRepaidInMeeting, getResources().getString(R.string.operating_currency)));
+            txtLoanRepayments.setText(String.format(getString(R.string.loans_asof)+" %,.0f %s", totalLoansRepaidInMeeting, getResources().getString(R.string.operating_currency)));
 
             totalFinesCollected = ledgerLinkApplication.getMeetingFineRepo().getTotalFinesPaidInThisMeeting(meetingId);
-            txtFines.setText(String.format("Fines: %,.0f %s", totalFinesCollected, getResources().getString(R.string.operating_currency)));
+            txtFines.setText(String.format(getString(R.string.fines_asof)+" %,.0f %s", totalFinesCollected, getResources().getString(R.string.operating_currency)));
 
             totalLoansIssuedInMeeting = ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(meetingId);
-            txtLoanIssues.setText(String.format("Loans issued: %,.0f %s", totalLoansIssuedInMeeting, getResources().getString(R.string.operating_currency)));
+            txtLoanIssues.setText(String.format(getString(R.string.loans_isued_asof)+" %,.0f %s", totalLoansIssuedInMeeting, getResources().getString(R.string.operating_currency)));
 
             totalWelfare = ledgerLinkApplication.getMeetingWelfareRepo().getTotalWelfareInMeeting(meetingId);
-            txtWelfeare.setText(String.format("Welfare: %,.0f %s", totalWelfare, getResources().getString(R.string.operating_currency)));
+            txtWelfeare.setText(String.format(getString(R.string.welfare_asof)+" %,.0f %s", totalWelfare, getResources().getString(R.string.operating_currency)));
         } else {
             txtAttendedCount.setText("");
             txtFines.setText("");
@@ -144,7 +144,7 @@ public class DeleteMeetingActivity extends ActionBarActivity{
                             if (mostRecent.getMeetingId() == meetingId) {
                                 cannotBeDeleted = false;
                             } else {
-                                Toast.makeText(getApplicationContext(), String.format("Sorry, first delete the most recent meeting in this cycle dated: %s.", Utils.formatDate(mostRecent.getMeetingDate())), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), String.format(getString(R.string.sorry_first_delete_recent_meeting_in_cycle)+" %s.", Utils.formatDate(mostRecent.getMeetingDate())), Toast.LENGTH_LONG).show();
                                 return;
                             }
                         }
@@ -189,6 +189,7 @@ public class DeleteMeetingActivity extends ActionBarActivity{
 
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {

@@ -5,13 +5,13 @@
     <item android:id="@+id/mnuMSHCancel"
         android:title="@string/cancel"
         android:orderInCategory="1"
-        app:showAsAction="never"
+        app:showAsAction="always|ifRoom"
         android:icon="@drawable/ic_navigation_cancel"   />
 
     <item android:id="@+id/mnuMSHSave"
         android:title="@string/save"
         android:orderInCategory="11"
-        app:showAsAction="never"
+        app:showAsAction="always"
         android:icon="@drawable/ic_navigation_accept"
         />
 </menu>

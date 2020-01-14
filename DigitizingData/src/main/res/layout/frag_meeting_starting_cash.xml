@@ -1,140 +1,162 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Auto entered from figure left in the box at the end of previous meeting: The differnce of cash in bank and cash in box-->
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblExpectedStartingCash"
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/expected_starting_cash_two" />
-
-        <!-- Date of Previous meeting, Previous Total Cah in Box , currency -->
-        <!--
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblTotalCashInBox"
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lblExpectedStartingCash"
-            android:text="4 Mar 2014 Total Cash in Box 1,000,000 UGX" />-->
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblCashTakenToBank"
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lblExpectedStartingCash"
-            android:text="@string/cash_taken_to_bank_o" />
+    <!-- Auto entered from figure left in the box at the end of previous meeting: The differnce of cash in bank and cash in box-->
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/lblExpectedStartingCash"
+        style="@style/RegularText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/expected_starting_cash_two" />
 
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblActualStartingCash"
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lblCashTakenToBank"
-            android:text="@string/actual_cash_in_the_box" />
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/lblCashTakenToBank"
+        style="@style/RegularText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblExpectedStartingCash"
+        android:text="@string/cash_taken_to_bank_o" />
 
-        <org.applab.ledgerlink.fontutils.TypefaceEditText
-            android:id="@+id/txtActualStartingCash"
-            style="@style/NormalEditText"
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lblActualStartingCash"
-            android:inputType="number"
-            android:text="" />
-
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblStartingCashCurrency"
-            style="@style/RegularText"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lblActualStartingCash"
-            android:layout_toRightOf="@+id/txtActualStartingCash"
-            android:inputType="number"
-            android:text="@string/ugx" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblCashFromBank"
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtActualStartingCash"
-            android:text="@string/cash_from_bank" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceEditText
-            android:id="@+id/txtCashFromBank"
-            style="@style/NormalEditText"
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lblCashFromBank"
-            android:inputType="number"
-            android:text="" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblCashFromBankCurrency"
-            style="@style/RegularText"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lblCashFromBank"
-            android:layout_toRightOf="@+id/txtCashFromBank"
-            android:inputType="number"
-            android:text="@string/ugx" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblLoanFromBank"
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtCashFromBank"
-            android:text="@string/loan_from_bank" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceEditText
-            android:id="@+id/txtLoanFromBank"
-            style="@style/NormalEditText"
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lblLoanFromBank"
-            android:inputType="number"
-            android:text="" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblLoanFromBankCurrency"
-            style="@style/RegularText"
-            android:layout_width="115dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/lblLoanFromBank"
-            android:layout_toRightOf="@+id/txtLoanFromBank"
-            android:inputType="number"
-            android:text="@string/ugx" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            android:id="@+id/lblStartingCashComment"
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtLoanFromBank"
-            android:text="@string/comment" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceEditText
-            android:id="@+id/txtStartingCashComment"
-            style="@style/NormalEditText"
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardStartingCash"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/lblStartingCashComment"
-            android:inputType="textMultiLine" />
+            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:contentPadding="4dp">
 
-    </RelativeLayout>
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp">
+
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblActualStartingCash"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:text="@string/actual_cash_in_the_box" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
+                    android:id="@+id/txtActualStartingCash"
+                    style="@style/CustomEditText"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/lblActualStartingCash"
+                    android:layout_below="@+id/lblActualStartingCash"
+                    android:layout_marginLeft="0dp"
+                    android:inputType="number"
+                    android:text="" />
+
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblStartingCashCurrency"
+                    style="@style/RegularText"
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lblActualStartingCash"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/txtActualStartingCash"
+                    android:inputType="number"
+                    android:text="@string/ugx" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblCashFromBank"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtActualStartingCash"
+                    android:text="@string/cash_from_bank" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
+                    android:id="@+id/txtCashFromBank"
+                    style="@style/CustomEditText"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/lblCashFromBank"
+                    android:layout_below="@+id/lblCashFromBank"
+                    android:layout_marginLeft="0dp"
+                    android:inputType="number"
+                    android:text="" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblCashFromBankCurrency"
+                    style="@style/RegularText"
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lblCashFromBank"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/txtCashFromBank"
+                    android:inputType="number"
+                    android:text="@string/ugx" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblLoanFromBank"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtCashFromBank"
+                    android:text="@string/loan_from_bank" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
+                    android:id="@+id/txtLoanFromBank"
+                    style="@style/CustomEditText"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/lblLoanFromBank"
+                    android:layout_below="@+id/lblLoanFromBank"
+                    android:layout_marginLeft="0dp"
+                    android:inputType="number"
+                    android:text="" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblLoanFromBankCurrency"
+                    style="@style/RegularText"
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lblLoanFromBank"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/txtLoanFromBank"
+                    android:inputType="number"
+                    android:text="@string/ugx" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblStartingCashComment"
+                    style="@style/RegularText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtLoanFromBank"
+                    android:text="@string/comment" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceEditText
+                    android:id="@+id/txtStartingCashComment"
+                    style="@style/CustomEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lblStartingCashComment"
+                    android:inputType="textMultiLine" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
 </ScrollView>
 
 

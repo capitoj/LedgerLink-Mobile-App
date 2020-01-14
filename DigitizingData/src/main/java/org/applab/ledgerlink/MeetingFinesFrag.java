@@ -2,23 +2,25 @@ package org.applab.ledgerlink;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.MembersFinesArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.domain.model.Member;
-import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.util.ArrayList;
-
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 /**
  * Created by Moses on 6/25/13.
@@ -101,7 +103,7 @@ public class MeetingFinesFrag extends Fragment {
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
+        members = parentActivity.ledgerLinkApplication.getMemberRepo().getActiveMembers();
 
         //Now get the data via the adapter
         final MembersFinesArrayAdapter adapter = new MembersFinesArrayAdapter(parentActivity.getBaseContext(), members);

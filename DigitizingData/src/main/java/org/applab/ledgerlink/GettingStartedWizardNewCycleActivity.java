@@ -7,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -14,28 +15,29 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.support.v7.app.ActionBar;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.fontutils.TypefaceTextView;
 import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.repo.MemberRepo;
-import org.applab.ledgerlink.repo.SendDataRepo;
 import org.applab.ledgerlink.repo.VslaCycleRepo;
 import org.applab.ledgerlink.repo.VslaInfoRepo;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 /**
@@ -123,6 +125,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
         // Populate Max Shares Spinner
         //super.buildMaxSharesSpinner();
+        super.buildInterestTypeSpinner();
 
         txtStartDate = (TextView) findViewById(R.id.txtNCStartDate);
         txtEndDate = (TextView) findViewById(R.id.txtNCEndDate);
@@ -232,7 +235,6 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         /**final MenuInflater inflater = getMenuInflater();
@@ -253,7 +255,6 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
         menu.clear();
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -310,8 +311,8 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                     retVal = repo.createGettingStartedDummyMeeting(selectedCycle);
 
                     if (!retVal) {
-                        Log.d(getApplicationContext().getPackageName(), "Failed to create the dummy data import meeting");
-                        Toast.makeText(this, "An error occured while saving the information", Toast.LENGTH_LONG).show();
+                        Log.d(getApplicationContext().getPackageName(), getString(R.string.failed_dummy_data_import_meeting));
+                        Toast.makeText(this, R.string.error_occured_while_saving_info, Toast.LENGTH_LONG).show();
                     }
 
                     //displayMessageBox(dialogTitle, "The New Cycle has been added Successfully.", Utils.MSGBOX_ICON_TICK);
@@ -333,7 +334,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 */
                 // Pass on the flag indicating whether this is an Update operation
                 Intent i;
-                if (isUpdateCycleAction && _isFromReviewMembers) {
+                if (isUpdateCycleAction && !_isFromReviewMembers) {
 
                     // Go to confirmation activity
                     i = new Intent(getApplicationContext(), GettingStartedConfirmationPage.class);
@@ -353,7 +354,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
             if(isCycleValidated) {
                 EditText txtNCInterestRate = (EditText) findViewById(R.id.txtNCInterestRate);
                 String interestRate = txtNCInterestRate.getText().toString().trim();
-                showDialogMsgBox("Warning", Utils.formatNumber(Double.parseDouble(interestRate)) + "% is high. Are you sure you entered the correct interest rate");
+                showDialogMsgBox(getString(R.string.warning), Utils.formatNumber(Double.parseDouble(interestRate)) + "% "+ getString(R.string.is_high_sure_this_correct_value));
                 // displayMessageBox(dialogTitle, "Validation Failed! Please check your entries and try again.", MSGBOX_ICON_EXCLAMATION);
             }
         }
@@ -428,6 +429,18 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
                 }
             }
 
+            // Validate Interest Type data
+            cboInterestType = (Spinner) findViewById(R.id.cboAMTypeOfInterest);
+            if(cboInterestType.getSelectedItemPosition() == 0) {
+                cycle.setTypeOfInterest(0);
+                cboInterestType.setFocusableInTouchMode(true);
+                cboInterestType.requestFocus();
+            }else if(cboInterestType.getSelectedItemPosition() == 1){
+                cycle.setTypeOfInterest(1);
+                cboInterestType.setFocusableInTouchMode(true);
+                cboInterestType.requestFocus();
+            }
+
             //validate outstanding bank loan
             EditText txtNCOutstandingGroupBankLoan = (EditText) findViewById(R.id.txtNCOutstandingGroupBankLoan);
             String outstandingBankLoanSoFar = txtNCOutstandingGroupBankLoan.getText().toString().trim();
@@ -477,6 +490,7 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
 
     protected void clearDataFields() {
         super.clearDataFields();
+        buildInterestTypeSpinner();
         //buildMaxSharesSpinner();
         try {
 
@@ -491,4 +505,45 @@ public class GettingStartedWizardNewCycleActivity extends NewCycleActivity {
         }
 
     }
+
+    protected void buildInterestTypeSpinner() {
+
+        //Setup the Spinner Items
+        cboInterestType = (Spinner) findViewById(R.id.cboAMTypeOfInterest);
+
+        List<String> InterestTypes = new ArrayList<String>();
+        InterestTypes.add("Flat Rate");
+        InterestTypes.add("Reducing Rate");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, InterestTypes);
+        // attaching data adapter to spinner
+        cboInterestType.setAdapter(dataAdapter);
+
+        //Make the spinner selectable
+        cboInterestType.setFocusable(true);
+        cboInterestType.setClickable(true);
+
+        cboInterestType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                if (pos == 0) {
+//                    Toast.makeText(parent.getContext(),
+//                            "You have selected Flat Rate", Toast.LENGTH_SHORT)
+//                            .show();
+                } else if (pos == 1) {
+//                    Toast.makeText(parent.getContext(),
+//                            "You have selected Reducing Rate", Toast.LENGTH_SHORT)
+//                            .show();
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+    }
+
+
 }

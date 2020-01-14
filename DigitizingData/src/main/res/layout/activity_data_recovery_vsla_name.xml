@@ -22,11 +22,12 @@
         android:paddingTop="40dp"/>
 
     <EditText
+        android:id="@+id/txtDRVslaName"
+        style="@style/CustomEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lblDRVslaName"
-        android:id="@+id/txtDRVslaName"
         android:inputType="textCapWords"
-        android:paddingTop="20dp"/>
+        android:paddingTop="20dp" />
 
 </RelativeLayout>

@@ -1,12 +1,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <!-- Cash in Box in currently running meeting -->
         <org.applab.ledgerlink.fontutils.TypefaceTextView
@@ -16,157 +16,239 @@
             android:layout_height="wrap_content"
             android:text="@string/total_cash_inbox" />
 
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false">
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/SubHeading"
-            android:layout_width="fill_parent"
-            android:layout_height="25dip"
-            android:text="@string/starting_cash"
-            android:id="@+id/lblCashCollected"
-            android:layout_gravity="left" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblExpectedStartingCash"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/expected_starting_cash" />
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblActualStartingCash"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/actual_starting_cash" />
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblCashDifference"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/difference" />
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblCashFromBank"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/o_ugx" />
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblLoanFromBank"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/o_ugx" />
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblCashBookComment"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/comment" />
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/SubHeading"
-            android:layout_width="fill_parent"
-            android:layout_height="25dip"
-            android:text="@string/meeting_activity"
-            android:id="@+id/lblMeetingActivity"
-            android:layout_gravity="left" />
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblCashCollected"
+                    style="@style/SubHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/starting_cash" />
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblSavings"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/saving_o" />
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblLoanRepayments"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/loan_repayments_o" />
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblFines"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/fine_o" />
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblNewLoans"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/new_loan_o" />
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblWelfare"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/welfare_o" />
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblExpectedStartingCash"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/expected_starting_cash" />
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/ListSmallSubItems"
-            android:id="@+id/lblOutstandingWelfare"
-            android:layout_width="fill_parent"
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblActualStartingCash"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/actual_starting_cash" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblCashDifference"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/difference" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblCashFromBank"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/o_ugx" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblLoanFromBank"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/o_ugx" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblCashBookComment"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/comment" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/outstanding_welfare_o" />
+            android:layout_margin="10dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false">
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/SubHeading"
-            android:layout_width="fill_parent"
-            android:layout_height="25dip"
-            android:text="@string/cash_to_bank"
-            android:id="@+id/lblCashToBank"
-            android:layout_gravity="left" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:id="@+id/lblCashToBankMessage"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/total_cash_inbox_instrustions" />
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblMeetingActivity"
+                    style="@style/SubHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/meeting_activity" />
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:id="@+id/lblCashToBankAmount"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/cash_to_bank" />
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblSavings"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/saving_o" />
 
-        <org.applab.ledgerlink.fontutils.TypefaceEditText
-            style="@style/NormalEditText"
-            android:id="@+id/txtCashToBank"
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="0" />
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblLoanRepayments"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/loan_repayments_o" />
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/SubHeading"
-            android:layout_width="fill_parent"
-            android:layout_height="25dip"
-            android:text="@string/bank_loan_repayment"
-            android:id="@+id/lblBankLoanRepayment"
-            android:layout_gravity="left" />
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblFines"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fine_o" />
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:id="@+id/lblBankLOanRepaymentMessage"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/total_cash_inbox_instrustions_two" />
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblNewLoans"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/new_loan_o" />
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/RegularText"
-            android:id="@+id/lblBankLoanRepaymentAmount"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/bank_loan_repayment" />
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblWelfare"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/welfare_o" />
 
-        <org.applab.ledgerlink.fontutils.TypefaceEditText
-            style="@style/NormalEditText"
-            android:id="@+id/txtBankLoanRepayment"
-            android:layout_width="200dip"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="0" />
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblOutstandingWelfare"
+                    style="@style/ListSmallSubItems"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/outstanding_welfare_o" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardElevation="5dp"
+        app:cardPreventCornerOverlap="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblCashToBank"
+                style="@style/SubHeading"
+                android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="0dp"
+                android:gravity="center_vertical"
+                android:text="@string/cash_to_bank" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblCashToBankMessage"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/total_cash_inbox_instrustions" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblCashToBankAmount"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cash_to_bank" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
+                android:id="@+id/txtCashToBank"
+                style="@style/CustomEditText"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="0" />
+
+        </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardElevation="5dp"
+        app:cardPreventCornerOverlap="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:orientation="vertical">
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblBankLoanRepayment"
+                style="@style/SubHeading"
+                android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="left"
+                android:layout_marginTop="0dp"
+                android:gravity="center_vertical"
+                android:text="@string/bank_loan_repayment" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblBankLOanRepaymentMessage"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/total_cash_inbox_instrustions_two" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceTextView
+                android:id="@+id/lblBankLoanRepaymentAmount"
+                style="@style/RegularText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/bank_loan_repayment" />
+
+            <org.applab.ledgerlink.fontutils.TypefaceEditText
+                android:id="@+id/txtBankLoanRepayment"
+                style="@style/CustomEditText"
+                android:layout_width="200dip"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:text="0" />
+
+        </LinearLayout>
+        </android.support.v7.widget.CardView>
+
     </LinearLayout>
 </ScrollView>
 

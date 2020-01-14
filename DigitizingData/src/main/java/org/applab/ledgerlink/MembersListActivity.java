@@ -1,31 +1,25 @@
 package org.applab.ledgerlink;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.view.View;
-import android.widget.AdapterView;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.TextView;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.MembersArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.helpers.LongTaskRunner;
 
 import java.util.ArrayList;
-
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 /**
  * Created by Moses on 7/16/13.
@@ -41,17 +35,41 @@ public class MembersListActivity extends ListActivity {
 
         setContentView(R.layout.activity_members_list);
 
-        //ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+        View actionBar = findViewById(R.id.actionBarMemberList);
+        TextView actionBarActionAddMembers = actionBar.findViewById(R.id.addMembers);
+        TextView actionBarActionBack = actionBar.findViewById(R.id.backAction);
+
+        actionBarActionAddMembers.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+
+            }
+        });
+
+        actionBarActionBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+
+            }
+        });
+
+        // ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
             //actionBar.setIcon(R.drawable.icon_training_mode);
         }
 
-        //actionBar.setDisplayShowTitleEnabled(true);
-        //actionBar.setTitle(R.string.members);
-        //actionBar.setHomeButtonEnabled(true);
-        //actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setDisplayShowTitleEnabled(true);
+//        actionBar.setTitle(R.string.members);
+//        actionBar.setHomeButtonEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
 
         //Populate the Members
         //Run this as long running task
@@ -68,6 +86,7 @@ public class MembersListActivity extends ListActivity {
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -91,10 +110,10 @@ public class MembersListActivity extends ListActivity {
                     NavUtils.navigateUpTo(this, upIntent);
                 }
                 return true;
-           /** case R.id.mnuMListDone:
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
-                return true; */
+            /** case R.id.mnuMListDone:
+             Intent i = new Intent(getApplicationContext(), MainActivity.class);
+             startActivity(i);
+             return true; */
             case R.id.mnuMListAdd:
                 Intent i = new Intent(getApplicationContext(), AddMemberActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

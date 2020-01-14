@@ -2,31 +2,33 @@ package org.applab.ledgerlink;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 
 import org.applab.ledgerlink.business_rules.VslaMeeting;
 import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
+import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
+import org.applab.ledgerlink.helpers.MembersLoansIssuedArrayAdapter;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.MeetingFineRepo;
 import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
 import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.repo.MeetingSavingRepo;
-import org.applab.ledgerlink.domain.model.MeetingStartingCash;
-import org.applab.ledgerlink.domain.model.Member;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.LongTaskRunner;
-import org.applab.ledgerlink.helpers.MembersLoansIssuedArrayAdapter;
 
 import java.util.ArrayList;
 
@@ -38,7 +40,7 @@ public class MeetingLoansIssuedFrag extends Fragment {
     private String meetingDate;
     private int meetingId;
     private MeetingActivity parentActivity;
-    private View fragmentView;
+    private RelativeLayout fragmentView;
     private MeetingRepo meetingRepo;
     private MeetingSavingRepo savingRepo = null;
     private MeetingLoanRepaymentRepo repaymentRepo = null;
@@ -56,7 +58,6 @@ public class MeetingLoansIssuedFrag extends Fragment {
         repaymentRepo = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo();
         fineRepo = parentActivity.ledgerLinkApplication.getMeetingFineRepo();
 
-
     }
 
     @Override
@@ -72,7 +73,7 @@ public class MeetingLoansIssuedFrag extends Fragment {
             // the view hierarchy; it would just never be used.
             return null;
         }
-        fragmentView = inflater.inflate(R.layout.frag_meeting_loans_issued, container, false);
+        fragmentView = (RelativeLayout) inflater.inflate(R.layout.frag_meeting_loans_issued, container, false);
 
         return fragmentView;
     }
@@ -126,7 +127,7 @@ public class MeetingLoansIssuedFrag extends Fragment {
 
         populateTotalCash();
         if (null != lblTotalCash) {
-            lblTotalCash.setText(String.format("Total Cash In Box %,.0f UGX", totalCashInBox));
+            lblTotalCash.setText(String.format(getString(R.string.total_cash_inbox_x)+" %,.0f UGX", totalCashInBox));
         }
 
 
@@ -147,7 +148,7 @@ public class MeetingLoansIssuedFrag extends Fragment {
     //Populate Members List
     private void populateMembersList() {
         //Load the Main Menu
-        members = parentActivity.ledgerLinkApplication.getMemberRepo().getAllMembers();
+        members = parentActivity.ledgerLinkApplication.getMemberRepo().getActiveMembers();
 
         //Now get the data via the adapter
         final MembersLoansIssuedArrayAdapter adapter = new MembersLoansIssuedArrayAdapter(getActivity().getBaseContext(), members);
@@ -181,27 +182,34 @@ public class MeetingLoansIssuedFrag extends Fragment {
                 if (Utils._meetingDataViewMode != Utils.MeetingDataViewMode.VIEW_MODE_READ_ONLY) {
                     Member selectedMember = members.get(position);
 
-                    Intent viewHistory = new Intent(view.getContext(), MeetingMemberLoansIssueActivity.class);
-                    viewHistory.putExtra("_memberId", selectedMember.getMemberId());
-                    viewHistory.putExtra("_names", selectedMember.toString());
-                    viewHistory.putExtra("_meetingDate", meetingDate);
-                    viewHistory.putExtra("_meetingId", meetingId);
-                    viewHistory.putExtra("_totalCashInBox", totalCashInBox);
-                    viewHistory.putExtra("_action", getString(R.string.loanissue));
-                    startActivity(viewHistory);
+//                    Intent viewHistory = new Intent(view.getContext(), MeetingMemberLoansIssueActivity.class);
+//                    viewHistory.putExtra("_memberId", selectedMember.getMemberId());
+//                    viewHistory.putExtra("_names", selectedMember.toString());
+//                    viewHistory.putExtra("_meetingDate", meetingDate);
+//                    viewHistory.putExtra("_meetingId", meetingId);
+//                    viewHistory.putExtra("_totalCashInBox", totalCashInBox);
+//                    viewHistory.putExtra("_action", getString(R.string.loanissue));
+//                    startActivity(viewHistory);
 
-                    /*
-                    Intent viewHistory = new Intent(view.getContext(), MemberLoansIssuedHistoryActivity.class);
+                    MeetingLoanIssuedRepo meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(getContext());
+                    MeetingLoanIssued meetingLoanIssued = meetingLoanIssuedRepo.getTotalOutstandingLoansByMemberInCycle(currentMeeting.getVslaCycle().getCycleId(), selectedMember.getMemberId());
+                    if(meetingLoanIssued.getLoanBalance() > 0) {
+                        Toast.makeText(getActivity().getApplicationContext(), selectedMember.getFullName() + " has an outstanding loan balance of " + meetingLoanIssued.getLoanBalance(), Toast.LENGTH_LONG).show();
+                    }else{
 
-                    // Pass on data
-                    viewHistory.putExtra("_memberId", selectedMember.getMemberId());
-                    viewHistory.putExtra("_names", selectedMember.toString());
-                    viewHistory.putExtra("_meetingDate", meetingDate);
-                    viewHistory.putExtra("_meetingId", meetingId);
-                    viewHistory.putExtra("_totalCashInBox", totalCashInBox);
-
-                    startActivity(viewHistory);
-                    */
+                        if(selectedMember.getMemberNo() > 0) {
+                            Intent viewHistory = new Intent(view.getContext(), MemberLoansIssuedHistoryActivity.class);
+                            // Pass on data
+                            viewHistory.putExtra("_memberId", selectedMember.getMemberId());
+                            viewHistory.putExtra("_names", selectedMember.toString());
+                            viewHistory.putExtra("_meetingDate", meetingDate);
+                            viewHistory.putExtra("_meetingId", meetingId);
+                            viewHistory.putExtra("_totalCashInBox", totalCashInBox);
+                            startActivity(viewHistory);
+                        }else{
+                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.cannot_issue_new_loan_to) + selectedMember.getFullName() + getString(R.string.does_not_have_member_no), Toast.LENGTH_LONG).show();
+                        }
+                    }
                 }
 
             }

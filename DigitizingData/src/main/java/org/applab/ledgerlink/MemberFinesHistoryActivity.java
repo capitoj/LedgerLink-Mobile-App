@@ -7,28 +7,27 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.EnhancedListView;
-import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.MemberFineRecord;
+import org.applab.ledgerlink.helpers.Utils;
 
 import java.util.ArrayList;
-
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 
 /**
@@ -48,9 +47,25 @@ public class MemberFinesHistoryActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        inflateActionBar();
+        //inflateActionBar();
 
         setContentView(R.layout.activity_member_fines_history);
+
+        View actionBar = findViewById(R.id.memberFineHistory);
+        TextView actionBarActionBack = actionBar.findViewById(R.id.actionBack);
+
+        actionBarActionBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+                    i.putExtra("_tabToSelect", getString(R.string.fines));
+                    i.putExtra("_meetingDate", meetingDate);
+                    i.putExtra("_meetingId", meetingId);
+                    //startActivity(i);
+                    finish();
+            }
+        });
+
 
         meetingDate = getIntent().getStringExtra("_meetingDate");
 
@@ -115,48 +130,48 @@ public class MemberFinesHistoryActivity extends ListActivity {
 
     }
 
-    private void inflateActionBar() {
-        // BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back, null);
-        customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                        i.putExtra("_tabToSelect", getString(R.string.fines));
-                        i.putExtra("_meetingDate", meetingDate);
-                        i.putExtra("_meetingId", meetingId);
-                        //startActivity(i);
-                        finish();
-                    }
-                }
-        );
-
-
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-
-        // Swap in training mode icon if in training mode
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
-        }
-        actionBar.setTitle(getString(R.string.fines));
-
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-        );
-
-        actionBar.setDisplayShowCustomEnabled(true);
-
-    }
+//    private void inflateActionBar() {
+//        // BEGIN_INCLUDE (inflate_set_custom_view)
+//        // Inflate a "Done/Cancel" custom action bar view.
+//        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
+//                .getSystemService(LAYOUT_INFLATER_SERVICE);
+//        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_back, null);
+//        customActionBarView.findViewById(R.id.actionbar_back).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
+//                        i.putExtra("_tabToSelect", getString(R.string.fines));
+//                        i.putExtra("_meetingDate", meetingDate);
+//                        i.putExtra("_meetingId", meetingId);
+//                        //startActivity(i);
+//                        finish();
+//                    }
+//                }
+//        );
+//
+//
+//        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//
+//        // Swap in training mode icon if in training mode
+//        if (Utils.isExecutingInTrainingMode()) {
+//            actionBar.setIcon(R.drawable.icon_training_mode);
+//        }
+//        actionBar.setTitle(getString(R.string.fines));
+//
+//        actionBar.setDisplayShowTitleEnabled(false);
+//        actionBar.setHomeButtonEnabled(false);
+//        actionBar.setDisplayHomeAsUpEnabled(false);
+//
+//        actionBar.setCustomView(customActionBarView,
+//                new ActionBar.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+//        );
+//
+//        actionBar.setDisplayShowCustomEnabled(true);
+//
+//    }
 
     private void populateFineHistory() {
         ArrayList<MemberFineRecord> fines = ledgerLinkApplication.getMeetingFineRepo().getMemberFineHistoryInCycle(targetCycleId, memberId);

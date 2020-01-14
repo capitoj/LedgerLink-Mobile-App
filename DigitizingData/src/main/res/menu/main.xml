@@ -33,28 +33,4 @@
         app:showAsAction="never"
         android:title="@string/action_change_pin" />
 
-    <item
-        android:id="@+id/mnuSwitchLanguage"
-        android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="@string/switch_language" />
-
-    <!--<item-->
-        <!--android:id="@+id/english"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="never"-->
-        <!--android:title="English" />-->
-
-    <!--<item-->
-        <!--android:id="@+id/luganda"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="never"-->
-        <!--android:title="Luganda" />-->
-
-    <!--<item-->
-        <!--android:id="@+id/luo"-->
-        <!--android:orderInCategory="100"-->
-        <!--app:showAsAction="never"-->
-        <!--android:title="Luo" />-->
-
 </menu>

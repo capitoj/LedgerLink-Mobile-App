@@ -1,23 +1,32 @@
 package org.applab.ledgerlink;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
+import android.support.v13.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.apache.commons.lang3.ArrayUtils;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -28,14 +37,13 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.domain.model.FinancialInstitution;
-import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
+import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Network;
 import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
 import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
-import org.applab.ledgerlink.repo.VslaInfoRepo;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
@@ -44,20 +52,22 @@ import org.json.JSONStringer;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 
-public class ActivationActivity extends ActionBarActivity{
+public class ActivationActivity extends AppCompatActivity {
     LedgerLinkApplication ledgerLinkApplication;
     HttpClient client;
     private int httpStatusCode = 0; //To know whether the Request was successful
-    private boolean activationSuccessful = false;
-    private String targetVslaCode = null; //fake-fix
-    private String securityPasskey = null;
-    private ProgressDialog progressDialog = null;
-    private Spinner dropdownFinancialInstitution = null;
-    private FinancialInstitution targetFinancialInstitution = null;
+    private boolean activationSuccessful;
+    private String targetVslaCode; //fake-fix
+    private String securityPasskey;
+    private ProgressDialog progressDialog;
+    private Spinner dropdownFinancialInstitution;
+    private FinancialInstitution targetFinancialInstitution;
 
 
     @Override
@@ -67,38 +77,27 @@ public class ActivationActivity extends ActionBarActivity{
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_activation);
 
-        TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
-        versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
+        activationSuccessful = false;
 
+        progressDialog = null;
+
+        // Android request permission modal
+        ActivityCompat.requestPermissions(ActivationActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
+
+        //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
+        //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+        //actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         this.buildFinancialInstitutionSpinner();
 
         ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
         imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
-        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.logo_width), (int) this.getResources().getDimension(R.dimen.logo_height)));
-
-        //If we are in training mode then show it using a custom View with distinguishable background
-        //Assumed that the preferences have been set by now
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setTitle(R.string.traninng_mode_main);
-            actionBar.setCustomView(R.layout.activity_main_training_mode);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(false);
-        } else {
-            actionBar.hide();
-        }
-
-        if (Build.VERSION.SDK_INT <= 10) {
-            actionBar.show();
-        }
-        if (Build.VERSION.SDK_INT >= 14) {
-            if (ViewConfiguration.get(this).hasPermanentMenuKey()) {
-                actionBar.show();
-
-            }
-        }
+        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.reg_width), (int) this.getResources().getDimension(R.dimen.reg_height)));
 
         Button btnActivate = (Button) findViewById(R.id.btnVAActivate);
         btnActivate.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +106,98 @@ public class ActivationActivity extends ActionBarActivity{
             }
         });
 
+        /** Change lanugage spinner**/
+
+        Spinner spinnerLang = (Spinner) findViewById(R.id.spinner_lang);
+
+        //spinnerLang.setOnItemSelectedListener(this);
+
+        // Lanugage list
+        List<String> languages = new ArrayList<String>();
+        languages.add("Select Language");
+        languages.add("English");
+        languages.add("Acholi");
+        languages.add("Arabic");
+        languages.add("Bari");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, languages);
+        // attaching data adapter to spinner
+        spinnerLang.setAdapter(dataAdapter);
+
+        spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                if (pos == 1) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected English", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("en");
+                } else if (pos == 2) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected Acholi", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("ac");
+                } else if (pos == 3) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected Arabic", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("ar");
+                }
+                else if (pos == 4) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected Bari", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("ba");
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+    }
+
+    /** Android request permission  **/
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(ActivationActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    public void setLocale(String lang) {
+        Locale locale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = locale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, LoginActivity.class);
+        startActivity(refresh);
+        finish();
     }
 
     protected void getSelectedFinancialInstitution(){
@@ -132,29 +223,21 @@ public class ActivationActivity extends ActionBarActivity{
         super.onBackPressed();
     }
 
-    private void activateVlsaUsingPostAsync(String request) {
+    private void activateVlsaUsingPostAsync(String jsonRequest) {
 
         if(Network.isConnected(getApplicationContext())) {
-            VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
-            VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
-            FinancialInstitutionRepo financialInstitutionRepo = new FinancialInstitutionRepo(getApplicationContext(), vslaInfo.getFiID());
-            FinancialInstitution financialInstitution = financialInstitutionRepo.getFinancialInstitution();
-//            String baseUrl = "http://127.0.0.1:82";
-            String baseUrl = "http://" + financialInstitution.getIpAddress();
-            String uri = String.format("%s/%s/%s", baseUrl, getString(R.string.digitizingdata), getString(R.string.activate));
-//            String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
-            new PostTask(this).execute(uri, request);
+            ActivateRunnable activateRunnable = new ActivateRunnable(jsonRequest);
+            LongTaskRunner.runLongTask(activateRunnable, getString(R.string.please_wait), "Saving online.....", ActivationActivity.this);
         }else{
-            this.saveOfflineVslaInfo();
+            ActivateRunnable activateRunnable = new ActivateRunnable();
+            LongTaskRunner.runLongTask(activateRunnable, getString(R.string.please_wait), "Saving offline.....", ActivationActivity.this);
         }
-
-        //Do the other stuff in the Async Task
     }
-
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activation, menu);
+        //getMenuInflater().inflate(R.menu.activation, menu);
         return true;
     }
 
@@ -355,10 +438,45 @@ public class ActivationActivity extends ActionBarActivity{
                     .endObject()
                     .toString();
 
+            if(Network.isConnected(getApplicationContext())) {
+                ActivateRunnable activateRunnable = new ActivateRunnable(jsonRequest);
+                LongTaskRunner.runLongTask(activateRunnable, getString(R.string.please_wait), "Activating online.....", ActivationActivity.this);
+            }else{
+                ActivateRunnable activateRunnable = new ActivateRunnable();
+                LongTaskRunner.runLongTask(activateRunnable, getString(R.string.please_wait), "Saving offline.....", ActivationActivity.this);
+            }
 
-            activateVlsaUsingPostAsync(jsonRequest);
+
+//            activateVlsaUsingPostAsync(jsonRequest);
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private class ActivateRunnable implements Runnable{
+
+        private String jsonRequest;
+
+        public ActivateRunnable(){
+            this.jsonRequest = null;
+        }
+
+        public ActivateRunnable(String jsonRequest){
+            this.jsonRequest = jsonRequest;
+        }
+
+        public void run(){
+
+            if(jsonRequest == null){
+                ledgerLinkApplication.getVslaInfoRepo().saveOfflineVslaInfo(targetVslaCode, securityPasskey, targetFinancialInstitution.getFiID());
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }else{
+                String baseUrl = "http://" + targetFinancialInstitution.getIpAddress();
+                String uri = String.format("%s/%s/%s", baseUrl, getString(R.string.digitizingdata), getString(R.string.activate));
+                new PostTask(ActivationActivity.this).execute(uri, jsonRequest);
+            }
         }
     }
 
@@ -378,24 +496,6 @@ public class ActivationActivity extends ActionBarActivity{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            try {
-                if (activationActivityWeakReference.get() != null && !activationActivityWeakReference.get().isFinishing()) {
-                    if (null == progressDialog) {
-                        progressDialog = new ProgressDialog(activationActivityWeakReference.get());
-                        progressDialog.setTitle(getString(R.string.Registation_main));
-                        progressDialog.setMessage(getString(R.string.sending_registration));
-                        progressDialog.setMax(10);
-                        progressDialog.setProgress(1);
-                        progressDialog.setCancelable(false);
-                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                        progressDialog.show();
-                    }
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                assert progressDialog != null;
-                progressDialog.setMessage(ex.getMessage());
-            }
         }
 
         @Override
@@ -403,21 +503,19 @@ public class ActivationActivity extends ActionBarActivity{
             JSONObject result = null;
             String uri = params[0];
             try {
-                //instantiates httpclient to make request
+//                //instantiates httpclient to make request
                 DefaultHttpClient httpClient = new DefaultHttpClient();
-
-                //url with the post data
+//
+//                //url with the post data
                 HttpPost httpPost = new HttpPost(uri);
 
                 //passes the results to a string builder/entity
                 StringEntity se = new StringEntity(params[1]);
-                Log.d("URI", "URI is " + params[0]);
-                Log.d("Request", "Request is " + params[1]);
                 //sets the post request as the resulting string
                 httpPost.setEntity(se);
                 httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                // Response handler
+//
+//                // Response handler
                 ResponseHandler<String> rh = new ResponseHandler<String>() {
                     // invoked when client receives response
                     public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
@@ -432,13 +530,14 @@ public class ActivationActivity extends ActionBarActivity{
 
                         // write the response byte array to a string buffer
                         out.append(new String(b, 0, b.length));
+                        Log.e("OutputX", out.toString());
                         return out.toString();
                     }
                 };
-
+//
                 String responseString = httpClient.execute(httpPost, rh);
-                Log.d(getString(R.string.Registation_main), getString(R.string.response_is) + responseString);
-                // close the connection
+//                Log.d(getString(R.string.Registation_main), getString(R.string.response_is) + responseString);
+//                // close the connection
                 httpClient.getConnectionManager().shutdown();
 
                 if (httpStatusCode == 200) //sucess
@@ -466,11 +565,12 @@ public class ActivationActivity extends ActionBarActivity{
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             //updateProgressBar(values[0]);
-            progressDialog.setProgress(values[0]);
+//            progressDialog.setProgress(values[0]);
         }
 
         @Override
         protected void onPostExecute(JSONObject result) {
+            Log.e("ResultX", String.valueOf(result));
             String vslaName = null;
             String passKey = null;
             super.onPostExecute(result);
@@ -486,7 +586,7 @@ public class ActivationActivity extends ActionBarActivity{
                     retrievedVslaNameSavedSuccessfully = ledgerLinkApplication.getVslaInfoRepo().saveVslaInfo(targetVslaCode, vslaName, passKey, targetFinancialInstitution.getFiID());
                     if (retrievedVslaNameSavedSuccessfully) {
                         Toast.makeText(ActivationActivity.this, R.string.congs_reg_completed, Toast.LENGTH_LONG).show();
-                        dismissProgressDialog();
+//                        dismissProgressDialog();
                         Intent i = new Intent(getBaseContext(), LoginActivity.class);
                         i.putExtra(getString(R.string._wasCalledFromActivation), true);
                         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -494,12 +594,12 @@ public class ActivationActivity extends ActionBarActivity{
                         finish();
                     } else {
                         Toast.makeText(ActivationActivity.this, R.string.reg_failed_while_writing_retrieved_vsla_name, Toast.LENGTH_LONG).show();
-                        dismissProgressDialog();
+//                        dismissProgressDialog();
                     }
                 } else {
                     //Process failed
                     Toast.makeText(getApplicationContext(), R.string.reg_failed_due_to_internet, Toast.LENGTH_LONG).show();
-                    dismissProgressDialog();
+//                    dismissProgressDialog();
                 }
 
                 //In case activation failed
@@ -518,23 +618,23 @@ public class ActivationActivity extends ActionBarActivity{
                 //Process failed
                 exJson.printStackTrace();
                 Toast.makeText(getApplicationContext(), R.string.reg_failed_due_to_invalid_data_format, Toast.LENGTH_LONG).show();
-                dismissProgressDialog();
+//                dismissProgressDialog();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 //Process failed
                 Toast.makeText(getApplicationContext(), R.string.reg_failed_try_again_later, Toast.LENGTH_LONG).show();
-                dismissProgressDialog();
+//                dismissProgressDialog();
             }
         }
 
         //Dismisses the currently showing progress dialog
-        private void dismissProgressDialog() {
-            if (progressDialog != null) {
-                progressDialog.dismiss();
-                //set it to null
-                progressDialog = null;
-            }
-        }
+//        private void dismissProgressDialog() {
+//            if (progressDialog != null) {
+//                progressDialog.dismiss();
+//                //set it to null
+//                progressDialog = null;
+//            }
+//        }
     }
 
 }

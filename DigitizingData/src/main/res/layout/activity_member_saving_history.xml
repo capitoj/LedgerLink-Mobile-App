@@ -9,6 +9,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <include layout="@layout/actionbar_custom_view_meeting_activity"
+            android:id="@+id/memberSavingHistory"/>
+
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSHFullNames"
             style="@style/RegularTextListItems"
@@ -16,13 +19,6 @@
             android:layout_height="wrap_content"
             android:text="Moses Oscar Muhahala" />
 
-       <!-- <org.applab.digitizingdata.fontutils.TypefaceTextView
-            android:id="@+id/lblMSHMeetingDate"
-            style="@style/RegularText"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dip"
-            android:text="01-JUL-2013" /> -->
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMSHAmount"
@@ -38,7 +34,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMSHAmount"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="150dip"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
@@ -53,6 +49,7 @@
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
                 android:text="@string/ugx" />
         </LinearLayout>
 
@@ -77,8 +74,7 @@
             android:layout_height="wrap_content"
             android:choiceMode="singleChoice"
             android:divider="@null"
-            android:dividerHeight="0dp"
-            />
+            android:dividerHeight="0dp" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@android:id/empty"

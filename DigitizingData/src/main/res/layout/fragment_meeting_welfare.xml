@@ -2,14 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/frmMSavF_top_control_bar">
-
-    </RelativeLayout>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/gery_background">
 
     <ListView
         android:id="@+id/lvwMSavFMembers"
@@ -18,9 +13,8 @@
         android:choiceMode="singleChoice"
         android:layout_below="@id/frmMSavF_top_control_bar"
         android:divider="@null"
-        android:dividerHeight="0dp">
-
-    </ListView>
+        android:dividerHeight="2dp"
+        android:elevation="2dp"/>
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
         style="@style/RegularText"
@@ -29,5 +23,6 @@
         android:layout_height="wrap_content"
         android:text="@string/empty_members_list"
         android:layout_below="@id/frmMSavF_top_control_bar" />
+
 
 </RelativeLayout>

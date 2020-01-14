@@ -2,20 +2,22 @@ package org.applab.ledgerlink;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -28,6 +30,7 @@ import org.applab.ledgerlink.helpers.tasks.SubmitDataAsync;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -103,7 +106,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
 
                 //Display it
                 //TextView tvMostRecentUnsentMeeting = (TextView) findViewById(R.id.lblBMCurrentMeetingDate);
-                //tvMostRecentUnsentMeeting.setText(Utils.formatDate(mostRecentUnsentMeeting.getMeetingDate(), "dd MMM yyyy"));
+                //tvMostRecentUnsentMeeting.setText(Utils.formatDate(mostRecentUnsentMeeting.getMeetingDate(), getString(R.string.date_format)));
 
                 // Set onclick event for the current meeting
                 final Meeting finalMostRecentUnsentMeeting = mostRecentUnsentMeeting;
@@ -119,7 +122,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
 //                        i.putExtra("_currentMeetingId", finalMostRecentUnsentMeeting.getMeetingId());
 //                        //make the view mode modifiable
 //                        i.putExtra("_viewOnly", false);
-//                        i.putExtra("_meetingDate", Utils.formatDate(finalMostRecentUnsentMeeting.getMeetingDate(), "dd MMM yyyy"));
+//                        i.putExtra("_meetingDate", Utils.formatDate(finalMostRecentUnsentMeeting.getMeetingDate(), getString(R.string.date_format)));
 //                        startActivity(i);
 //                    }
 //                });
@@ -213,7 +216,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
                 Meeting meeting = pastMeetings.get(position);
                 //Do as you wish with this meeting
                 Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
+                i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), getString(R.string.date_format)));
                 i.putExtra("_meetingId", meeting.getMeetingId());
                 i.putExtra("_viewOnly", true);  //viewing past meeetings should be read only
                 startActivity(i);
@@ -243,7 +246,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
                 Meeting meeting = currentMeetings.get(position);
                 //Do as you wish with this meeting
                 Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
-                i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), "dd MMM yyyy"));
+                i.putExtra("_meetingDate", Utils.formatDate(meeting.getMeetingDate(), getString(R.string.date_format)));
                 i.putExtra("_meetingId", meeting.getMeetingId());
                 i.putExtra("_currentMeetingId", meeting.getMeetingId());
                 i.putExtra("_viewOnly", false);  //viewing current meetings should not be read only
@@ -280,7 +283,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         MeetingRepo meetingRepo = new MeetingRepo(BeginMeetingActivity.this);
-                        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
+                        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", getString(R.string.submitdata));
                         VslaCycle recentCycle = ledgerLinkApplication.getVslaCycleRepo().getMostRecentCycle();
                         List<Meeting> pastMeetings = meetingRepo.getPastMeetings(recentCycle.getCycleId());
                         JSONArray jsonArray = new JSONArray();
@@ -296,7 +299,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject();
                         try {
                             jsonObject.put("FileSubmission", jsonArray);
-                            serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "submitdata");
+                            serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", getString(R.string.submitdata));
                             new SubmitDataAsync(BeginMeetingActivity.this).execute(serverUri, String.valueOf(jsonObject));
                         }catch (Exception e){
                             e.printStackTrace();
@@ -337,6 +340,8 @@ public class BeginMeetingActivity extends AppCompatActivity {
 
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
+        //actionBar.setStackedBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ledger_link_light_blue)));
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {

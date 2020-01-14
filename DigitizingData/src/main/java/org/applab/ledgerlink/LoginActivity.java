@@ -1,28 +1,36 @@
 package org.applab.ledgerlink;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v13.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -33,27 +41,21 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.domain.model.FinancialInstitution;
-import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.domain.model.VslaInfo;
+import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
-import org.applab.ledgerlink.helpers.LanguageHelper;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
 import org.applab.ledgerlink.repo.SampleDataBuilderRepo;
 import org.applab.ledgerlink.repo.VslaInfoRepo;
-import org.applab.ledgerlink.service.AlarmReceiver;
 import org.applab.ledgerlink.service.InboundChatReceiver;
 import org.applab.ledgerlink.service.OutboundChatReceiver;
-import org.applab.ledgerlink.service.TrainingModuleReceiver;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;
-import org.w3c.dom.*;
-import java.io.*;
-import javax.xml.parsers.*;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -61,12 +63,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import android.support.v7.app.ActionBarActivity;
-
-//import android.view.Menu;
-//import android.view.Menu;
-
-public class LoginActivity extends ActionBarActivity{
+public class LoginActivity extends AppCompatActivity {
 
     LedgerLinkApplication ledgerLinkApplication;
     private VslaInfo vslaInfo = null;
@@ -91,13 +88,20 @@ public class LoginActivity extends ActionBarActivity{
         this.context = this;
 
         this.loadBackgroundService();
-
-//        LanguageHelper.getXmlDocument(getApplicationContext(), "ENGLISH");
+        
+        // Android request permission modal
+        ActivityCompat.requestPermissions(LoginActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
 
         //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
+        //
+        TextView ForgotPassKeyText = (TextView) findViewById(R.id.txtForgetPassKey);
+        ForgotPassKeyText.setText(getApplicationContext().getResources().getString(R.string.forgot_passkey));
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         //TODO: Setting of Preferences is done in the first Activity that is launched.
         //Load the default Shared Preferences
@@ -123,7 +127,7 @@ public class LoginActivity extends ActionBarActivity{
 
         ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
         imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
-        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.logo_width), (int) this.getResources().getDimension(R.dimen.logo_height)));
+        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.login_logo_width), (int) this.getResources().getDimension(R.dimen.login_logo_height)));
 
 
         //If we are in training mode then show it using a custom View with distinguishable background
@@ -133,6 +137,8 @@ public class LoginActivity extends ActionBarActivity{
             actionBar.setCustomView(R.layout.activity_main_training_mode);
             actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowHomeEnabled(false);
+            TextView txtVslaName = (TextView) findViewById(R.id.lbl_vsla_name);
+            txtVslaName.setVisibility(View.GONE);
 
             //Set the label of the link
             //         tvSwitchMode.setText("Switch To Actual VSLA Data");
@@ -189,15 +195,16 @@ public class LoginActivity extends ActionBarActivity{
         String vslaName = "";
 
         // Activation Information placeholder
-        TextView activationLoginMsg = (TextView) findViewById(R.id.lblActivationLoginMsg);
+        //TextView activationLoginMsg = (TextView) findViewById(R.id.lblActivationLoginMsg);
 
         if (vslaInfo != null && vslaInfo.isActivated()) {
             vslaName = vslaInfo.getVslaName();
             txtVslaName.setText(vslaName);
-            activationLoginMsg.setVisibility(View.GONE);
+            //activationLoginMsg.setVisibility(View.GONE);
         } else {
             txtVslaName.setVisibility(View.INVISIBLE);
-            activationLoginMsg.setText(notActivatedStatusMessage);
+            DialogMessageBox.show(this, getString(R.string.activation_message), getString(R.string.unable_to_send_reg_network_problems));
+            //activationLoginMsg.setText(notActivatedStatusMessage);
             lblPasskey.setVisibility(View.INVISIBLE);
         }
 
@@ -221,6 +228,7 @@ public class LoginActivity extends ActionBarActivity{
             }
         });
 
+
         /** Change lanugage spinner**/
 
         Spinner spinnerLang = (Spinner) findViewById(R.id.spinner_lang);
@@ -228,14 +236,21 @@ public class LoginActivity extends ActionBarActivity{
         //spinnerLang.setOnItemSelectedListener(this);
 
         // Lanugage list
-        List<String> categories = new ArrayList<String>();
-        categories.add("English");
-        categories.add("Luganda");
-        categories.add("Luo");
+        List<String> languages = new ArrayList<String>();languages.add("Select Language");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+        languages.add("English");
+        languages.add("Acholi");
+        languages.add("Arabic");
+        languages.add("Bari");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, languages);
         // attaching data adapter to spinner
         spinnerLang.setAdapter(dataAdapter);
+
+        //Make the spinner selectable
+        spinnerLang.setFocusable(true);
+        spinnerLang.setClickable(true);
+
 
         spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -245,16 +260,22 @@ public class LoginActivity extends ActionBarActivity{
                             "You have selected English", Toast.LENGTH_SHORT)
                             .show();
                     setLocale("en");
-                } else if (pos == 2) {
+                }else if (pos == 2) {
                     Toast.makeText(parent.getContext(),
-                            "You have selected Luganda", Toast.LENGTH_SHORT)
+                            "You have selected Acholi", Toast.LENGTH_SHORT)
                             .show();
-                    setLocale("lu");
+                    setLocale("ac");
                 } else if (pos == 3) {
                     Toast.makeText(parent.getContext(),
-                            "You have selected Luo", Toast.LENGTH_SHORT)
+                            "You have selected Arabic", Toast.LENGTH_SHORT)
                             .show();
-                    setLocale("lo");
+                    setLocale("ar");
+                }
+                else if (pos == 4) {
+                    Toast.makeText(parent.getContext(),
+                            "You have selected Bari", Toast.LENGTH_SHORT)
+                            .show();
+                    setLocale("ba");
                 }
             }
 
@@ -264,21 +285,59 @@ public class LoginActivity extends ActionBarActivity{
 
             }
         });
+
+        /** Forgot Passkey OnClick**/
+        ForgotPassKeyText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), PassKeyResetActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+            }
+        });
+    }
+
+
+    /** Android request permission  **/
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(LoginActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     /** Change lanugage spinner**/
 
     public void setLocale(String lang) {
-        Locale myLocale = new Locale(lang);
+        Locale locale = new Locale(lang);
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
+        conf.locale = locale;
         res.updateConfiguration(conf, dm);
         Intent refresh = new Intent(this, LoginActivity.class);
         startActivity(refresh);
         finish();
-
     }
 
 

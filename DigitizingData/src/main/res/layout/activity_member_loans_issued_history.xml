@@ -7,7 +7,12 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
+
+        <include
+            android:id="@+id/memberLoanIssuedHistory"
+            layout="@layout/actionbar_custom_view_meeting_activity" />
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHFullName"
@@ -15,6 +20,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/full_name" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/testingInsterestType"/>
 
         <org.applab.ledgerlink.fontutils.TypefaceTextView
             android:id="@+id/lblMLIssuedHLoanNo"
@@ -26,7 +36,7 @@
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtMLIssuedHLoanNo"
-            style="@style/NormalEditText"
+            style="@style/CustomEditText"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dip"
@@ -50,7 +60,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMLIssuedHAmount"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
@@ -64,6 +74,7 @@
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="3dp"
                 android:layout_weight="5"
                 android:text="@string/ugx" />
         </LinearLayout>
@@ -78,7 +89,7 @@
 
         <org.applab.ledgerlink.fontutils.TypefaceEditText
             android:id="@+id/txtMLIssuedHComment"
-            style="@style/NormalEditText"
+            style="@style/CustomEditText"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dip"
@@ -124,7 +135,7 @@
 
             <org.applab.ledgerlink.fontutils.TypefaceEditText
                 android:id="@+id/txtMLIssuedHInterest"
-                style="@style/NormalEditText"
+                style="@style/CustomEditText"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="5"
@@ -137,6 +148,7 @@
                 style="@style/InlineTextItem"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
                 android:layout_weight="5"
                 android:text="@string/ugx" />
         </LinearLayout>

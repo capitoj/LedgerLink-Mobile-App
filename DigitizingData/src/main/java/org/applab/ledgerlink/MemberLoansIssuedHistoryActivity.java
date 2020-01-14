@@ -9,33 +9,30 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
-import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LoansIssuedHistoryArrayAdapter;
 import org.applab.ledgerlink.helpers.MemberLoanIssueRecord;
+import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 /**
  * Created by Moses on 7/12/13.
@@ -76,9 +73,39 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        inflateCustomActionBar();
+        //inflateCustomActionBar();
 
         setContentView(R.layout.activity_member_loans_issued_history);
+
+        View actionBar = findViewById(R.id.memberLoanIssuedHistory);
+        TextView actionBarActionDone = actionBar.findViewById(R.id.actionDone);
+        TextView actionBarActioncancel = actionBar.findViewById(R.id.actionCancel);
+
+        actionBarActionDone.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                if (saveMemberLoan()) {
+                    if (currentLoanId > 0) {
+                        if (loanWasDeleted) {
+                            Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_been_cancelled, Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_edited_successfully, Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_issued_successfully, Toast.LENGTH_LONG).show();
+                    }
+                    goBackToLoansIssuedFragment();
+                }
+
+            }
+        });
+
+        actionBarActioncancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                goBackToLoansIssuedFragment();
+            }
+        });
 
         // TextView lblMeetingDate = (TextView) findViewById(R.id.lblMLIssuedHMeetingDate);
         meetingDate = getIntent().getStringExtra("_meetingDate");
@@ -125,7 +152,7 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
             //cycle = vslaCycleRepo.getCycle(targetCycleId);
             // Get current cycle interest rate
             //lblInterestDesc.setText(String.format("at %.0f%% every 30 days", cycle.getInterestRate()));
-            lblInterestDesc.setText(String.format("at %.0f%% every 30 days", targetMeeting.getVslaCycle().getInterestRate()));
+            lblInterestDesc.setText(String.format("at %.0f%% "+getString(R.string.every_30_days), targetMeeting.getVslaCycle().getInterestRate()));
         }
 
         if(getIntent().getIntExtra("_action", 0) == 1) {
@@ -184,111 +211,105 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
         }
 
         txtLoanAmount.addTextChangedListener(new TextWatcher() {
-                                                 @Override
-                                                 public void afterTextChanged(Editable s) {
+                 @Override
+                 public void afterTextChanged(Editable s) {
 
-                                                 }
+                 }
 
-                                                 @Override
-                                                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                 @Override
+                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                                 }
+                 }
 
-                                                 @Override
-                                                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+                 @Override
+                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                                                     // Compute the Interest
-                                                     double theAmount = 0.0;
-                                                     try {
-                                                         if (s.toString().length() <= 0) {
-                                                             lblCurrency.setVisibility(View.VISIBLE);
-                                                             txtTotalLoanAmount.setText("");
-                                                             return;
-                                                         }
-                                                         theAmount = Double.parseDouble(s.toString());
-                                                     } catch (Exception ex) {
-                                                         return;
-                                                     }
+                     // Compute the Interest
+                     double theAmount = 0.0;
+                     try {
+                         if (s.toString().length() <= 0) {
+                             lblCurrency.setVisibility(View.VISIBLE);
+                             txtTotalLoanAmount.setText("");
+                             return;
+                         }
+                         theAmount = Double.parseDouble(s.toString());
+                     } catch (Exception ex) {
+                         return;
+                     }
 
-                                                     if (theAmount == 0.0) {
-                                                         txtDateDue.setText(getString(R.string.none_main));
-                                                         lblCurrency.setVisibility(View.GONE);
-                                                     } else {
-                                                         lblCurrency.setVisibility(View.GONE);
-                                                         updateDisplay();
-                                                     }
+                     if (theAmount == 0.0) {
+                         txtDateDue.setText(getString(R.string.none_main));
+                         lblCurrency.setVisibility(View.GONE);
+                     } else {
+                         lblCurrency.setVisibility(View.GONE);
+                         updateDisplay();
+                     }
 
-                                                     double interestAmount = (interestRate * 0.01 * theAmount);
-                                                     double totalAmount = theAmount + interestAmount;
-                                                     if (isEditOperation) {
+                     double interestAmount = (interestRate * 0.01 * theAmount);
+                     double totalAmount = theAmount + interestAmount;
 
-                                                         // Deal with topup
-                                                         if ((memberLoan != null ? memberLoan.getMeeting().getMeetingId() : 0) != meetingId) {
-                                                             if (theAmount > memberLoan.getPrincipalAmount()) {
-                                                                 loanTopUp = theAmount - memberLoan.getPrincipalAmount();
-                                                                 interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
-                                                                 /** Roll over?
-                                                                  * if(memberLoan.getDateDue().compareTo((Utils.getDateFromString(meetingDate, Utils.DATE_FIELD_FORMAT))) <= 0) {
-                                                                  interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
+                     if (isEditOperation) {
 
-                                                                  } */
-                                                                 totalAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getLoanBalance() + loanTopUp;
+                         // Deal with topup
+                         if ((memberLoan != null ? memberLoan.getMeeting().getMeetingId() : 0) != meetingId) {
+                             if (theAmount > memberLoan.getPrincipalAmount()) {
+                                 loanTopUp = theAmount - memberLoan.getPrincipalAmount();
+                                 interestAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getInterestAmount();
+                                 totalAmount = (interestRate * 0.01 * loanTopUp) + memberLoan.getLoanBalance() + loanTopUp;
 
-                                                             }
-                                                             if (memberLoan.getPrincipalAmount() == theAmount) {
-                                                                 interestAmount = memberLoan.getInterestAmount();
-                                                                 totalAmount = memberLoan.getLoanBalance();
-                                                                 txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
-                                                             }
-                                                         }
+                             }
+                             if (memberLoan.getPrincipalAmount() == theAmount) {
+                                 interestAmount = memberLoan.getInterestAmount();
+                                 totalAmount = memberLoan.getLoanBalance();
+                                 txtDateDue.setText(Utils.formatDate(memberLoan.getDateDue(), "dd-MMM-yyyy"));
+                             }
+                         }
+                     }
 
+                     // Set new values
+                     txtInterestAmount.setText(String.format("%.0f", interestAmount));
+                     txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
 
-                                                     }
-
-                                                     // Set new values
-                                                     txtInterestAmount.setText(String.format("%.0f", interestAmount));
-                                                     txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
-
-                                                     //Have this value redundantly stored for future use
-                                                     theCurLoanAmount = theAmount;
-                                                     // Store for later validation
-                                                 }
-                                             }
+                     //Have this value redundantly stored for future use
+                     theCurLoanAmount = theAmount;
+                     // Store for later validation
+                 }
+             }
         );
 
 
         // Now deal with Loan Interest Manual Changes
         txtInterestAmount.addTextChangedListener(new
 
-                                                         TextWatcher() {
-                                                             @Override
-                                                             public void afterTextChanged(Editable s) {
+             TextWatcher() {
+                 @Override
+                 public void afterTextChanged(Editable s) {
 
-                                                             }
+                 }
 
-                                                             @Override
-                                                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                 @Override
+                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                                                             }
+                 }
 
-                                                             @Override
-                                                             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                 @Override
+                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                                                                 // Compute the Interest
-                                                                 double theInterestAmount = 0.0;
-                                                                 try {
-                                                                     if (s.toString().length() <= 0) {
-                                                                         return;
-                                                                     }
-                                                                     theInterestAmount = Double.parseDouble(s.toString());
-                                                                 } catch (Exception ex) {
-                                                                     return;
-                                                                 }
+                     // Compute the Interest
+                     double theInterestAmount = 0.0;
+                     try {
+                         if (s.toString().length() <= 0) {
+                             return;
+                         }
+                         theInterestAmount = Double.parseDouble(s.toString());
+                     } catch (Exception ex) {
+                         return;
+                     }
 
-                                                                 double totalAmount = theInterestAmount + theCurLoanAmount;
-                                                                 txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
-                                                             }
-                                                         }
+                     double totalAmount = theInterestAmount + theCurLoanAmount;
+                     txtTotalLoanAmount.setText(String.format("%.0f UGX", totalAmount));
+                 }
+             }
         );
 
 
@@ -312,84 +333,16 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
         }
     }
 
-    private void inflateCustomActionBar() {
-        // BEGIN_INCLUDE (inflate_set_custom_view)
-        // Inflate a "Done/Cancel" custom action bar view.
-        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_done, null);
-        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (saveMemberLoan()) {
-                            if (currentLoanId > 0) {
-                                if (loanWasDeleted) {
-                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_been_cancelled, Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_edited_successfully, Toast.LENGTH_LONG).show();
-                                }
-                            } else {
-                                Toast.makeText(MemberLoansIssuedHistoryActivity.this, R.string.loan_issued_successfully, Toast.LENGTH_LONG).show();
-                            }
-                            goBackToLoansIssuedFragment();
-                        }
-
-                    }
-                }
-        );
-        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        goBackToLoansIssuedFragment();
-                    }
-                }
-        );
-
-
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-
-        // Swap in training mode icon if in training mode
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setIcon(R.drawable.icon_training_mode);
-        }
-
-        actionBar.setTitle(R.string.new_loans);
-
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(false);
-
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-        );
-
-        actionBar.setDisplayShowCustomEnabled(true);
-
-        // END_INCLUDE (inflate_set_custom_view)
-    }
 
     //Closes this fragment and goes back to the loans issued fragment
     private void goBackToLoansIssuedFragment() {
-        /*
         Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
         i.putExtra("_tabToSelect", "loansIssued");
         i.putExtra("_meetingDate", meetingDate);
         i.putExtra("_meetingId", meetingId);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         //startActivity(i);
-        finish();*/
-        Intent i = new Intent(this, MeetingMemberLoansIssueActivity.class);
-        i.putExtra("_memberId", this.memberId);
-        i.putExtra("_meetingId", this.meetingId);
-        i.putExtra("_action", getString(R.string.loanissue));
-        i.putExtra("_meetingDate", meetingDate);
-        i.putExtra("_totalCashInBox", totalCashInBox);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+        finish();
     }
 
     private void populateLoanIssueHistory() {
@@ -529,7 +482,7 @@ public class MemberLoansIssuedHistoryActivity extends ListActivity {
             int cycleID = meetingRepo.getMeeting().getVslaCycle().getCycleId();
             boolean hasLoanNo = MeetingLoanIssuedRepo.hasLoanNumber(this, cycleID, theLoanNo);
             if(hasLoanNo && theAmount > 0.00){
-                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.loan_no) + String.valueOf(theLoanNo) + " already exists.", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                Utils.createAlertDialogOk(MemberLoansIssuedHistoryActivity.this, getString(R.string.new_loan), getString(R.string.loan_no) + String.valueOf(theLoanNo) + getString(R.string.already_exist), Utils.MSGBOX_ICON_EXCLAMATION).show();
                 txtLoanNo.requestFocus();
                 return false;
             }

@@ -11,14 +11,9 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 
-import android.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.DbBackupRestore;
-
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String PREF_KEY_SERVER_URL = "prefServerUrl";
@@ -45,10 +40,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        //actionBar.setHomeButtonEnabled(true);
+//        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//        assert actionBar != null;
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
+
+
 
 
         addPreferencesFromResource(R.xml.preferences);
@@ -79,10 +76,11 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        //  actionBar.setHomeButtonEnabled(true);
+//        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//        assert actionBar != null;
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
+
 
         refreshView();
         if (key.equals(PREF_KEY_REFRESH_TRAINING_DATA)) {

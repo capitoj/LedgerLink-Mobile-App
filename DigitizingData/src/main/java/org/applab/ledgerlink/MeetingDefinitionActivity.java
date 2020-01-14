@@ -72,8 +72,8 @@ public class MeetingDefinitionActivity extends ActionBarActivity{
         if(activeCycles != null) {
             for(VslaCycle cycle: activeCycles) {
                 RadioButton radCycle = new RadioButton(this);
-                String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), "dd MMM yyyy"),
-                        Utils.formatDate(cycle.getEndDate(), "dd MMM yyyy"));
+                String cycleDates = String.format("%s - %s", Utils.formatDate(cycle.getStartDate(), getString(R.string.date_format)),
+                        Utils.formatDate(cycle.getEndDate(), getString(R.string.date_format)));
                 radCycle.setText(cycleDates);
                 radCycle.setId(cycle.getCycleId());
                 //radCycle.setTextColor();
@@ -221,6 +221,7 @@ public class MeetingDefinitionActivity extends ActionBarActivity{
                     }
                 });
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         // Swap in training mode icon if in training mode
         if (Utils.isExecutingInTrainingMode()) {
@@ -354,7 +355,7 @@ public class MeetingDefinitionActivity extends ActionBarActivity{
             Utils._meetingDataViewMode = Utils.MeetingDataViewMode.VIEW_MODE_CAPTURE;
 
             i = new Intent(getApplicationContext(), MeetingActivity.class);
-            i.putExtra("_meetingDate",Utils.formatDate(currentMeeting.getMeetingDate(), "dd MMM yyyy"));
+            i.putExtra("_meetingDate",Utils.formatDate(currentMeeting.getMeetingDate(), getString(R.string.date_format)));
             i.putExtra("_meetingId",currentMeeting.getMeetingId());
             i.putExtra("_currentMeetingId",currentMeeting.getMeetingId());
             i.putExtra("_viewOnly", false);
@@ -439,7 +440,7 @@ public class MeetingDefinitionActivity extends ActionBarActivity{
             //check that meeting is with the boundaries of the current cycle
             if(meeting.getMeetingDate().before(selectedCycle.getStartDate()) || meeting.getMeetingDate().after(selectedCycle.getEndDate())) {
                 Utils.createAlertDialogOk(MeetingDefinitionActivity.this,getString(R.string.being_meeting),
-                        String.format("The Meeting Date has to be within the current cycle i.e. %s and %s",Utils.formatDate(selectedCycle.getStartDate()), Utils.formatDate(selectedCycle.getEndDate())),
+                        String.format(getString(R.string.meeting_date_within_current_cycle)+" i.e. %s"+ getString(R.string.and)+"%s",Utils.formatDate(selectedCycle.getStartDate()), Utils.formatDate(selectedCycle.getEndDate())),
                         Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtMeetingDate.requestFocus();
                 return false;
@@ -449,7 +450,7 @@ public class MeetingDefinitionActivity extends ActionBarActivity{
             if(null != mostRecent) {
                 if(meeting.getMeetingDate().before(mostRecent.getMeetingDate())) {
                     Utils.createAlertDialogOk(MeetingDefinitionActivity.this,getString(R.string.being_meeting),
-                            String.format("The Meeting Date has to be after the date of the last meeting: %s", Utils.formatDate(mostRecent.getMeetingDate())),
+                            String.format(getString(R.string.meeting_date_after_date_of_last_meeting)+" %s", Utils.formatDate(mostRecent.getMeetingDate())),
                             Utils.MSGBOX_ICON_EXCLAMATION).show();
                     //txtMeetingDate.requestFocus();
                     return false;

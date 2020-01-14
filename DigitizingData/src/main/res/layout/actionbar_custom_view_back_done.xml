@@ -8,13 +8,13 @@
     android:showDividers="middle"
     android:gravity="right">
 
-    <include
-        layout="@layout/include_back_button"
-        android:layout_width="70dip"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="6dip"
-        android:layout_marginRight="3dip"
-        android:layout_marginTop="6dip" />
+    <!--<include-->
+        <!--layout="@layout/include_back_button"-->
+        <!--android:layout_width="70dip"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginBottom="6dip"-->
+        <!--android:layout_marginRight="3dip"-->
+        <!--android:layout_marginTop="6dip" />-->
 
     <include
         layout="@layout/include_done_button"

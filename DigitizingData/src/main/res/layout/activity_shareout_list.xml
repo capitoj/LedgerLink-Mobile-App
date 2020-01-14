@@ -1,87 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/frmBM_top_control_bar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gery_background">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        <include layout="@layout/actionbar_custom_view_members_shareout"
+            android:id="@+id/actionBarShareOut"/>
 
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/SubHeading"
-            android:layout_width="fill_parent"
-            android:layout_height="25dip"
-            android:text="SHARE OUT DETAILS" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/RegularTextInstruction"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lblHeaderTotalSavings"
-            android:text="Total Savings"/>
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/RegularTextInstruction"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lblHeaderTotalInterest"
-            android:text="Total Interest"
-            android:layout_below="@+id/lblHeaderTotalSavings"/>
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/RegularTextInstruction"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lblHeaderTotalFines"
-            android:text="Total Fines"
-            android:layout_below="@+id/lblHeaderTotalInterest" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/RegularTextInstruction"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lblHeaderTotalEarnings"
-            android:text="Total Earnings"
-            android:layout_below="@+id/lblHeaderTotalFines" />
-
-        <org.applab.ledgerlink.fontutils.TypefaceTextView
-            style="@style/RegularTextInstruction"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lblHeaderNewShareValue"
-            android:text="New Share Value"
-            android:layout_below="@+id/lblHeaderTotalEarnings" />
-
-    </LinearLayout>
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardShareOutDetails"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:contentPadding="0dp"
+            app:contentPaddingBottom="10dp"
+            android:layout_below="@+id/actionBarShareOut">
 
-            <org.applab.ledgerlink.fontutils.TypefaceTextView
-                style="@style/SubHeading"
-                android:layout_width="fill_parent"
-                android:layout_height="25dip"
-                android:text="MEMBER'S SHARE OUT" />
 
-
-            <ListView
-                android:id="@+id/lstShareOutList"
-                style="@style/RegularTextListItems"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dip"
-                android:choiceMode="singleChoice"
-                android:dividerHeight="2dip"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    style="@style/SubHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/share_out_details" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblHeaderNewShareValue"
+                    style="@style/RegularTextInstruction"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/new_share_value" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblHeaderTotalSavings"
+                    style="@style/RegularTextInstruction"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lblHeaderNewShareValue"
+                    android:text="@string/total_savings" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblHeaderTotalInterest"
+                    style="@style/RegularTextInstruction"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lblHeaderTotalSavings"
+                    android:text="@string/total_interest" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblHeaderTotalFines"
+                    style="@style/RegularTextInstruction"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lblHeaderTotalInterest"
+                    android:text="@string/total_fines" />
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    android:id="@+id/lblHeadTotalEarnings"
+                    style="@style/RegularTextInstruction"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:text="@string/total_share_out_amount"
+                    android:textAlignment="center" />
+
+                <LinearLayout
+                    android:id="@+id/frmMLRepayHAmount"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/lblHeaderTotalFines"
+                    android:weightSum="10">
+
+                    <org.applab.ledgerlink.fontutils.TypefaceEditText
+                        android:id="@+id/lblHeaderTotalEarnings"
+                        style="@style/CustomEditText"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:inputType="none"
+                        android:focusableInTouchMode="false"
+                        android:text=""
+                        android:textAlignment="viewEnd" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblMLCurrency"
+                        style="@style/InlineTextItem"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="7"
+                        android:text="@string/ugx" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardMemberShareOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:contentPadding="0dp"
+            app:contentPaddingBottom="10dp">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <org.applab.ledgerlink.fontutils.TypefaceTextView
+                    style="@style/SubHeading"
+                    android:layout_width="fill_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="0dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/members_share_out" />
+
+
+                <ListView
+                    android:id="@+id/lstShareOutList"
+                    style="@style/RegularTextListItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dip"
+                    android:choiceMode="singleChoice"
+                    android:dividerHeight="2dip" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 </ScrollView>

@@ -5,23 +5,18 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.TextView;
-import au.com.bytecode.opencsv.CSVReader;
-import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.TextView;
+
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import org.applab.ledgerlink.domain.model.Meeting;
@@ -30,8 +25,8 @@ import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.fontutils.TypefaceTextView;
 import org.applab.ledgerlink.helpers.GettingStartedWizardMembersArrayAdapter;
-import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
+import org.applab.ledgerlink.helpers.Utils;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -39,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
+import au.com.bytecode.opencsv.CSVReader;
 
 
 /**
@@ -54,8 +49,34 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        inflateCustombar();
+        //inflateCustombar();
         setContentView(R.layout.activity_getting_started_wizard_review_members);
+
+        View actionBar =findViewById(R.id.actionBarReviewMember);
+        TextView actionBarActionNext = actionBar.findViewById(R.id.nextAction);
+        TextView actionBarActionBack = actionBar.findViewById(R.id.backAction);
+
+        actionBarActionNext.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+
+            }
+        });
+
+        actionBarActionBack.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+                i.putExtra("_isUpdateCycleAction", true);
+                i.putExtra("_isFromReviewMembers", true);
+                startActivity(i);
+                finish();
+
+            }
+        });
 
         TypefaceTextView reviewSubHeading = (TypefaceTextView) findViewById(R.id.lblRvwMembersSubHeading);
         SpannableStringBuilder reviewSubHeadingPart = new SpannableStringBuilder(getString(R.string.review_and_confirm_all_info_correct));
@@ -73,19 +94,19 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         //Set cycle start date in label
         Date startDate = dummyGettingStartedWizardMeeting.getMeetingDate();
         TextView lblRvwMembersDate = (TextView) findViewById(R.id.lblRvwMembersDate);
-        lblRvwMembersDate.setText("As of " + Utils.formatDate(startDate));
+        lblRvwMembersDate.setText(getString(R.string.as_of) + Utils.formatDate(startDate));
 
 
 
         //Set savings in GSW meeting
         double totalSavings = ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(dummyGettingStartedWizardMeeting.getMeetingId());
         TextView lblRvwMembersTotalSavings = (TextView) findViewById(R.id.lblRvwMembersTotalSavings);
-        lblRvwMembersTotalSavings.setText(String.format("Total savings this cycle %,.0f %s", totalSavings,
+        lblRvwMembersTotalSavings.setText(String.format(getString(R.string.total_savings_this_cycle)+" %,.0f %s", totalSavings,
                 getResources().getString(R.string.operating_currency)));
 
         //Set loans issued in GSW meeting
         TextView lblRvwMembersTotalLoan = (TextView) findViewById(R.id.lblRvwMembersTotalLoan);
-        lblRvwMembersTotalLoan.setText(String.format("Total loans outstanding %,.0f %s",
+        lblRvwMembersTotalLoan.setText(String.format(getString(R.string.total_loans_outstanding)+" %,.0f %s",
                 ledgerLinkApplication.getMeetingLoanIssuedRepo().getTotalLoansIssuedInMeeting(dummyGettingStartedWizardMeeting.getMeetingId()),
                 getResources().getString(R.string.operating_currency)));
 
@@ -95,62 +116,62 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
     }
 
     /* inflates custom menu bar for review members */
-    void inflateCustombar() {
-
-        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
-                .getSystemService(LAYOUT_INFLATER_SERVICE);
-        View customActionBarView = null;
-        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_exit_enternext_next, null);
-        customActionBarView.findViewById(R.id.actionbar_exit).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
-                        //startActivity(i);
-                        finish();
-                    }
-                }
-        );
-
-        customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
-                }
-        );
-
-
-        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
-                        i.putExtra("_isUpdateCycleAction", true);
-                        i.putExtra("_isFromReviewMembers", true);
-                        startActivity(i);
-                        finish();
-                    }
-                }
-        );
-
-        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle("GET STARTED");
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        actionBar.setCustomView(customActionBarView,
-                new ActionBar.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
-        );
-
-        actionBar.setDisplayShowCustomEnabled(true);
-    }
+//    void inflateCustombar() {
+//
+//        final LayoutInflater inflater = (LayoutInflater) ((ActionBarActivity)getActivity()).getSupportActionBar().getThemedContext()
+//                .getSystemService(LAYOUT_INFLATER_SERVICE);
+//        View customActionBarView = null;
+//        customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_exit_enternext_next, null);
+//        customActionBarView.findViewById(R.id.actionbar_exit).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        //Intent i = new Intent(getApplicationContext(), GettingStartedWizardReviewMembersActivity.class);
+//                        //startActivity(i);
+//                        finish();
+//                    }
+//                }
+//        );
+//
+//        customActionBarView.findViewById(R.id.actionbar_enter_next).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+//                        startActivity(i);
+//                        finish();
+//                    }
+//                }
+//        );
+//
+//
+//        customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+//                        i.putExtra("_isUpdateCycleAction", true);
+//                        i.putExtra("_isFromReviewMembers", true);
+//                        startActivity(i);
+//                        finish();
+//                    }
+//                }
+//        );
+//
+//        ActionBar actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//        actionBar.setDisplayShowTitleEnabled(true);
+//        actionBar.setTitle(getString(R.string.get_started_allcaps));
+//        actionBar.setHomeButtonEnabled(true);
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//
+//        actionBar.setCustomView(customActionBarView,
+//                new ActionBar.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.RIGHT | Gravity.CENTER_VERTICAL)
+//        );
+//
+//        actionBar.setDisplayShowCustomEnabled(true);
+//    }
 
 
     @Override
@@ -177,9 +198,17 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
              i.putExtra("_isUpdateCycleAction", true);
              startActivity(i);
              return true; */
-            case R.id.mnuMListAdd:
-                Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+//            case R.id.mnuMListAdd:
+//                Intent i = new Intent(getApplicationContext(), GettingStartedWizardAddMemberActivity.class);
+//                startActivity(i);
+//                return true;
+
+            case R.id.mnuNext:
+                Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
+                i.putExtra("_isUpdateCycleAction", true);
+                i.putExtra("_isFromReviewMembers", true);
                 startActivity(i);
+                finish();
                 return true;
 
             case R.id.mnuImportFromCsv:
@@ -208,7 +237,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
                     // Get the File path from the Uri
                     String filePath = FileUtils.getPath(this, uri);
-                    Log.d("File chosen", "Chosen file "+filePath);
+                    Log.d(getString(R.string.file_chosen), getString(R.string.chosen_file)+filePath);
                     attemptToImportFromCsv(filePath);
                 }
                 break;
@@ -230,13 +259,13 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                         }
                     }
                 },
-                "Importing members",
-                        "Please wait while member information is imported from the CSV file",
+                getString(R.string.importing_members),
+                        getString(R.string.please_wait_member_info_imported_from_csv),
                         GettingStartedWizardReviewMembersActivity.this);
 
             }
         };
-        Utils.showDialogAndRunAction(this, "Import members from CSV?", "You are about to import member information from the file \""+filename+"\"\nPress continue to start", importer);
+        Utils.showDialogAndRunAction(this, getString(R.string.import_members_from_csv), getString(R.string.about_to_import_member_info)+filename+getString(R.string.press_continue_to_start), importer);
     }
 
     private void importCsv(String csvFile) {
@@ -248,7 +277,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, "File missing", "CSV File \"LLMembers.csv\" wasn't found. Please place this file in the LedgerLink folder and try again", Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(GettingStartedWizardReviewMembersActivity.this, getString(R.string.file_missing), getString(R.string.csv_file_wasnt_found), Utils.MSGBOX_ICON_EXCLAMATION).show();
 
                 }
             });
@@ -312,9 +341,9 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
 
                     //Gender
                     if (gender.length() > 0) {
-                        member.setGender((gender.startsWith("M") ? "Male" : "Female"));
+                        member.setGender((gender.startsWith("M") ? getString(R.string.male) : getString(R.string.female)));
                     } else {
-                        member.setGender("Female");
+                        member.setGender(getString(R.string.female));
                     }
 
                     //Date Of Birth
@@ -416,7 +445,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                     }
 
                     //Done with this member
-                    Log.d("CSV import ", "Imported member "+memberNo);
+                    Log.d(getString(R.string.csv_import), getString(R.string.imported_members)+memberNo);
                     //Toast.makeText(getApplicationContext(), String.format("Member of data record %d was migrated successfully.", dataRowNo), Toast.LENGTH_SHORT).show();
 
                     //Increment the migrated count
@@ -466,7 +495,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
         }
         //Now get the data via the adapter
         final GettingStartedWizardMembersArrayAdapter adapter = new GettingStartedWizardMembersArrayAdapter(getBaseContext(), members);
-        Log.d(getBaseContext().getPackageName(), members.size() + " members loaded");
+        Log.d(getBaseContext().getPackageName(), members.size() + getString(R.string.members_loaded));
         //Assign Adapter to ListView
         //Assign Adapter to ListView
         runOnUiThread(new Runnable() {

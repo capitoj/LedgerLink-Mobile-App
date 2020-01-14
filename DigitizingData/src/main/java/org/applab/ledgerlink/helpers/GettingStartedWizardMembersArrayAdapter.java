@@ -64,8 +64,8 @@ public class GettingStartedWizardMembersArrayAdapter extends MembersArrayAdapter
             double numberOfStars = Math.floor(member.getSavingsOnSetup() / mostRecentCycle.getSharePrice());
             if(member != null) {
                 txtFullName.setText(member.toString());
-                txtSavings.setText(String.format("Savings %s UGX - %.0f Star", numberFormat.format(member.getSavingsOnSetup()) , numberOfStars) + (numberOfStars>=2 ? "s" : ""));
-                txtLoans.setText(String.format("Outstanding Loan %s UGX",numberFormat.format(member.getOutstandingLoanOnSetup())));
+                txtSavings.setText(String.format(context.getResources().getString(R.string.savings_x)+" %s UGX - %.0f "+context.getResources().getString(R.string.star), numberFormat.format(member.getSavingsOnSetup()) , numberOfStars) + (numberOfStars>=2 ? "s" : ""));
+                txtLoans.setText(String.format(context.getResources().getString(R.string.outstanding_loan)+" %s UGX",numberFormat.format(member.getOutstandingLoanOnSetup())));
             }
             else {
                 txtFullName.setText("");

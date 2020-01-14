@@ -22,12 +22,13 @@
         android:paddingTop="40dp"/>
 
     <EditText
+        android:id="@+id/txtDRNoOfCycle"
+        style="@style/CustomEditText"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lblDRContactPerson"
-        android:id="@+id/txtDRContactPerson"
         android:inputType="textCapWords"
-        android:paddingTop="20dp"/>/>
+        android:paddingTop="20dp" />/>
 
 
 </RelativeLayout>

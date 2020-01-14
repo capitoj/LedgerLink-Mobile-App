@@ -137,8 +137,8 @@ public class MeetingSummaryFrag extends Fragment {
 
 
 
-        lblOutstandingLoans.setText(String.format("Loans Outstanding: %,.0f UGX", outstandingLoans));
-        lblTotalSavings.setText(String.format("Total Savings: %,.0f UGX", totalSavings));
+        lblOutstandingLoans.setText(String.format(getString(R.string.outstanding_loans)+" %,.0f UGX", outstandingLoans));
+        lblTotalSavings.setText(String.format(getString(R.string.total_saving_x)+" %,.0f UGX", totalSavings));
         //lblCycleStartDate.setText(String.format("From: %s", startDate));
         //lblCycleEndDate.setText(String.format("To: %s", endDate));
         //lblIssuedLoans.setText(String.format("Loans Issued: %,.0f UGX", issuedLoans));
@@ -172,11 +172,11 @@ public class MeetingSummaryFrag extends Fragment {
 
 
         if (null != previousMeeting) {
-            lblSectionLastMeeting.setText(String.format("PAST MEETING: %s", Utils.formatDate(previousMeeting.getMeetingDate())));
+            lblSectionLastMeeting.setText(String.format(getString(R.string.past_meeting_allcaps)+" %s", Utils.formatDate(previousMeeting.getMeetingDate())));
 
-            txtAttendedCount.setText(String.format("Attended: %d", parentActivity.ledgerLinkApplication.getMeetingAttendanceRepo().getAttendanceCountByMeetingId(previousMeeting.getMeetingId())));
+            txtAttendedCount.setText(String.format(getString(R.string.attended)+" %d", parentActivity.ledgerLinkApplication.getMeetingAttendanceRepo().getAttendanceCountByMeetingId(previousMeeting.getMeetingId())));
 
-            txtDataSent.setText(String.format("Data: %s", (previousMeeting.isMeetingDataSent()) ? getString(R.string.sent) : getString(R.string.not_sent)));
+            txtDataSent.setText(String.format(getString(R.string.data)+" %s", (previousMeeting.isMeetingDataSent()) ? getString(R.string.sent) : getString(R.string.not_sent)));
 
             //TODO: Get Values for the Financials
             double totalMeetingSavings = 0.0;
@@ -188,39 +188,39 @@ public class MeetingSummaryFrag extends Fragment {
             Log.e("PreMeetingId", String.valueOf(previousMeeting.getLoanFromBank()));
 
             totalMeetingSavings = parentActivity.ledgerLinkApplication.getMeetingSavingRepo().getTotalSavingsInMeeting(previousMeeting.getMeetingId());
-            txtTotalSavings.setText(String.format("Total Savings: %,.0f UGX", prevVslaMeeting.getTotalSavings()));
+            txtTotalSavings.setText(String.format(getString(R.string.total_saving_x)+": %,.0f UGX", prevVslaMeeting.getTotalSavings()));
 
 
 
-            txtTotalLoanIssues.setText(String.format("Total Loans issued: %,.0f UGX", prevVslaMeeting.getTotalLoansIssued()));
+            txtTotalLoanIssues.setText(String.format(getString(R.string.total_loan_issued)+" %,.0f UGX", prevVslaMeeting.getTotalLoansIssued()));
 
-            lblMSFLastWelfare.setText(String.format("Total Welfare: %,.0f UGX", prevVslaMeeting.getTotalWelfare()));
+            lblMSFLastWelfare.setText(String.format(getString(R.string.total_welfare_x)+": %,.0f UGX", prevVslaMeeting.getTotalWelfare()));
             VslaCycle recentCycle = parentActivity.ledgerLinkApplication.getVslaCycleRepo().getMostRecentCycle();
             if(parentActivity.ledgerLinkApplication.getMeetingRepo().getAllMeetings(recentCycle.getCycleId()).size() < 3){
-                txtTotalRepayments.setText(String.format("Total Interest earned: %,.0f UGX", currentMeeting.getVslaCycle().getInterestAtSetup()));
-                lblMSFLastFines.setText(String.format("Total Fines: %,.0f UGX", currentMeeting.getVslaCycle().getFinesAtSetup()));
+                txtTotalRepayments.setText(String.format(getString(R.string.total_interest_earned)+" %,.0f UGX", currentMeeting.getVslaCycle().getInterestAtSetup()));
+                lblMSFLastFines.setText(String.format(getString(R.string.total_fines)+" %,.0f UGX", currentMeeting.getVslaCycle().getFinesAtSetup()));
             }else {
 
                 totalLoansRepaidInMeeting = parentActivity.ledgerLinkApplication.getMeetingLoanRepaymentRepo().getTotalLoansRepaidInMeeting(previousMeeting.getMeetingId());
-                txtTotalRepayments.setText(String.format("Total Loans repaid: %,.0f UGX", prevVslaMeeting.getTotalLoansRepaid()));
-                lblMSFLastFines.setText(String.format("Total Fines: %,.0f UGX", prevVslaMeeting.getTotalFinesPaid()));
+                txtTotalRepayments.setText(String.format(getString(R.string.total_loans_repaid)+" %,.0f UGX", prevVslaMeeting.getTotalLoansRepaid()));
+                lblMSFLastFines.setText(String.format(getString(R.string.total_fines)+" %,.0f UGX", prevVslaMeeting.getTotalFinesPaid()));
 
             }
 
-            lblMSFLastCashFromBank.setText(String.format("Cash From Bank: %,.0f UGX", prevVslaMeeting.getCashFromBank()));
+            lblMSFLastCashFromBank.setText(String.format(getString(R.string.cash_from_bank)+" %,.0f UGX", prevVslaMeeting.getCashFromBank()));
 
-            lblMSFLastCashToBank.setText(String.format("Cash Taken To Bank: %,.0f UGX", prevVslaMeeting.getCashSavedToBank()));
+            lblMSFLastCashToBank.setText(String.format(getString(R.string.cash_taken_to_bank_x)+" %,.0f UGX", prevVslaMeeting.getCashSavedToBank()));
 
-            lblMSFLastLoanFromBank.setText(String.format("Loan From Bank: %,.0f UGX", prevVslaMeeting.getLoanFromBank()));
+            lblMSFLastLoanFromBank.setText(String.format(getString(R.string.loan_from_bank)+" %,.0f UGX", prevVslaMeeting.getLoanFromBank()));
 
-            lblMSFLastBankLoanRepayment.setText(String.format("Bank Loan Repayment: %,.0f UGX", prevVslaMeeting.getBankLoanRepayment()));
+            lblMSFLastBankLoanRepayment.setText(String.format(getString(R.string.bank_loan_repayment)+": %,.0f UGX", prevVslaMeeting.getBankLoanRepayment()));
 
        /**     double finesCollected = fineRepo.getTotalFinesInCycle(previousMeeting.getVslaCycle().getCycleId());
             txtFines.setText(String.format("Fines: %,.0f UGX", finesCollected)); */
 
 
             totalMeetingCollections = totalMeetingSavings + totalLoansRepaidInMeeting;
-            lblMSFCollections.setText(String.format("Total Collections: %,.0f UGX", VslaMeeting.getTotalCashInBox(getActivity().getApplicationContext(), previousMeeting.getMeetingId())));
+            lblMSFCollections.setText(String.format(getString(R.string.total_collections)+" %,.0f UGX", VslaMeeting.getTotalCashInBox(getActivity().getApplicationContext(), previousMeeting.getMeetingId())));
 
 
         } else {

@@ -39,7 +39,7 @@ public class GettingStartedWizardPageOne  extends ActionBarActivity{
         View customActionBarView = null;
 
         ActionBar actionBar = getSupportActionBar();
-
+        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
         //For test purposes, create vsla info if not exists
         /* VslaInfoRepo repo = new VslaInfoRepo(getBaseContext());
