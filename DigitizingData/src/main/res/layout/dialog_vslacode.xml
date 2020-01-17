@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/dialogVslaCodeInst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:hint="@string/vsla_code_instrustion"
+        android:textSize="20dp" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceEditText
+        android:id="@+id/enterVslaCodeAmount"
+        style="@style/CustomEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif"
+        android:hint="@string/enter_vsla_code"
+        android:inputType="number" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
+
+        <org.applab.ledgerlink.fontutils.TypefaceButton
+            android:id="@+id/saveDialogVslaCode"
+            style="@style/LoginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:text="Save" />
+
+        <org.applab.ledgerlink.fontutils.TypefaceButton
+            android:id="@+id/cancelDialogVslaCode"
+            style="@style/LoginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:text="Cancel" />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -377,6 +377,12 @@ public class LoginActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
         switch (item.getItemId()) {
+            case R.id.action_edit_vslacole:
+                // Launch Edit Vsla code dialog
+                VslaCodeDialog editVslaCode = new VslaCodeDialog(this);
+                editVslaCode.setTitle(R.string.edit_vslacode);
+                editVslaCode.show();
+                break;
             case R.id.action_settings:
                 // Launch preferences activity
                 i = new Intent(this, SettingsActivity.class);

@@ -910,5 +910,9 @@
     <string name="error_details_donot_match">Details do not match!</string>
     <string name="reset_passkey">Reset PassKey</string>
     <string name="total_share_out_amount">Total Share Out Amount:</string>
+    <string name="action_edit_vslacole">Edit Vsla Code</string>
+    <string name="vsla_code_instrustion">Please note, you can only edit the Vsla Code when it not yet activited.</string>
+    <string name="enter_vsla_code">Enter Vsla Code</string>
+    <string name="edit_vslacode">Edit Vsla Code</string>
 
 </resources>
