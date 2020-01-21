@@ -109,6 +109,7 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
             @Override
             public void onClick(View view) {
                 if(saveMemberLoanRepayment()) {
+
                     Toast.makeText(MemberLoansRepaidHistoryActivity.this, R.string.loan_repayment_entered_successfully, Toast.LENGTH_LONG).show();
                     Intent i = new Intent(getApplicationContext(), MeetingActivity.class);
                     i.putExtra("_tabToSelect", getString(R.string.loansrepaid));
@@ -487,9 +488,11 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
                       // If meeting date is before loan due date then default interest to 0
                       if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
                           editTextInterestRate.setText("0");
+                          interestAmount = 0;
                       }else if(theCurLoanBalanceAmount <= 0){
                           // If the balance is zero, outstanding loan balance is zero
                           editTextInterestRate.setText("0");
+                          interestAmount = 0;
                       } else{
                           //.getUnclearedLoanIssuedToMember(memberId);
                           MeetingLoanIssued memberLoan = ledgerLinkApplication.getMeetingLoanIssuedRepo().getMemberLoan(getIntent().getIntExtra("_loanId", 0));
@@ -502,6 +505,7 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
                       // If meeting date is before loan due date then default interest to 0
                       if (targetMeeting.getMeetingDate().before(recentLoan.getDateDue())) {
                           editTextInterestRate.setText("0");
+                          interestAmount = 0;
                       } else{
                           interestAmount = (interestRate * 0.01 * theCurLoanBalanceAmount);
                           editTextInterestRate.setText(String.format("%.0f", interestAmount));
@@ -668,6 +672,12 @@ public class MemberLoansRepaidHistoryActivity extends ListActivity {
 
     @SuppressWarnings("WeakerAccess")
     public boolean saveMemberLoanRepayment() {
+        if(txtLoanAmountFld.length() <= 0){
+            Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, getString(R.string.repayment), getString(R.string.amount_paid_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
+            txtLoanAmountFld.requestFocus();
+            return false;
+        }
+
         if (recentLoan == null) {
             Utils.createAlertDialogOk(MemberLoansRepaidHistoryActivity.this, getString(R.string.repayment), getString(R.string.member_does_not_have_outstanding_loan), Utils.MSGBOX_ICON_EXCLAMATION).show();
             return false;

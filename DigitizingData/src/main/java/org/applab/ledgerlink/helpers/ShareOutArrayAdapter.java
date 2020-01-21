@@ -9,13 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.R;
+import org.applab.ledgerlink.ShareOutActivity;
+import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.repo.MeetingFineRepo;
+import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
 import org.applab.ledgerlink.repo.MeetingSavingRepo;
 import org.applab.ledgerlink.repo.MeetingWelfareRepo;
 import org.applab.ledgerlink.repo.VslaCycleRepo;
-import org.applab.ledgerlink.repo.MeetingLoanRepaymentRepo;
 
 import java.util.ArrayList;
 
@@ -88,8 +89,12 @@ public class ShareOutArrayAdapter extends ArrayAdapter<Member> {
                     // total interest collected in cycle
                     totalInterest = new MeetingLoanRepaymentRepo(context).getTotalInterestCollectedInCycle(targetCycleId);
                     //total earnings
-                    totalEarnings = totalSavings + totalFine + totalInterest;
-
+                    double enteredShareOutAmount = ShareOutActivity.getEnteredShareOutAmount();
+                    if(enteredShareOutAmount <= 0){
+                        totalEarnings = totalSavings + totalFine + totalInterest;
+                    }else {
+                        totalEarnings = enteredShareOutAmount;
+                    }
                     // Share value
                     double shareValue = new VslaCycleRepo(context).getCycle(targetCycleId).getSharePrice();
                     //Cycle's No. of stars
