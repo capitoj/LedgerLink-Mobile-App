@@ -2,16 +2,18 @@ package org.applab.ledgerlink;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -31,6 +33,7 @@ public class ShareOutActivity extends Activity {
     private ArrayList<Member> members;
     Context context;
     int meetingId;
+    public static double enteredShareOutAmount;
 
     LedgerLinkApplication ledgerLinkApplication;
 
@@ -125,91 +128,47 @@ public class ShareOutActivity extends Activity {
         double newShareValue = ShareOutArrayAdapter.getNewShareValue();
         txtNewShareValue.setText(getString(R.string.new_share_value) + " " + Utils.formatNumber(newShareValue) + " UGX");
 
-//        txtTotalEarnings.setTag(false);
-//        txtTotalEarnings.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus){
-//                txtTotalEarnings.setTag(true);
-//            }
-//        });
 
-        txtTotalEarnings.setTag(false);
-        final boolean editingShareOutAmount = false;
-        txtTotalEarnings.addTextChangedListener(new TextWatcher() {
-
-
+        txtTotalEarnings.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Compute the New Members' ShareOut Amount
-                double editedTotalEarnings;
-                try {
-                    if (s.toString().length() <= 0) {
+            public boolean onTouch(View v, MotionEvent event) {
+                if(MotionEvent.ACTION_UP == event.getAction()) {
+                    // Creating alert Dialog with one Button
+                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(ShareOutActivity.this);
+                    // Get the layout inflater
+                    final View customLayout = getLayoutInflater().inflate(R.layout.dialog_shareout, null);
+                    alertDialog.setView(customLayout);
 
-                        return;
-                    }
-                    editedTotalEarnings = Double.parseDouble(s.toString());
-                } catch (Exception ex) {
-                    return;
+                    // Setting Positive "Okay" Button
+                    alertDialog.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int which) {
+                                    // send data from the AlertDialog to the Activity
+                                    final EditText editShareOutAmount = customLayout.findViewById(R.id.enterShareOutAmount);
+                                    if(editShareOutAmount.getText().toString().trim().length() < 1){
+                                        DialogMessageBox.show(ShareOutActivity.this, "Enter ShareOut Amount", "ShareOut Amount Required");
+                                        editShareOutAmount.requestFocus();
+                                        return;
+                                    }
+                                    enteredShareOutAmount = Double.parseDouble(editShareOutAmount.getText().toString());
+                                    recreate();
+                                    Toast.makeText(ShareOutActivity.this, String.valueOf(enteredShareOutAmount), Toast.LENGTH_SHORT).show();
+                                    //txtTotalEarnings.setText(Utils.formatNumber(enteredShareOutAmount));
+                                }
+                            });
+                    // Setting Negative "Cancel" Button
+                    alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    // closed
+
+                    // Showing Alert Message
+                    alertDialog.show();
                 }
 
-                double cycleNoOfStars = ShareOutArrayAdapter.getNoOfCycleStars();
-                double editedShareValue = editedTotalEarnings / cycleNoOfStars;
-                txtNewShareValue.setText(String.format("%,.0f UGX", editedShareValue));
-                txtTotalEarnings.setTag(true);
-
-//                Runnable runnable = new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Intent intent = new Intent(getApplicationContext(), ShareOutActivity.class);
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                        startActivity(intent);
-//
-//                    }
-//                };
-//
-//                String warning = "Are you sure about this amount?";
-//                DialogMessageBox.show(ShareOutActivity.this, getString(R.string.warning), warning, runnable);
-                DialogMessageBox.show(ShareOutActivity.this, "Warning", "Are you sure about this ShareOut Amount");
-
-            }
-
-          @Override
-          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-          }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Compute the New Members' ShareOut Amount
-                double editedTotalEarnings;
-                try {
-                    if (s.toString().length() <= 0) {
-                        return;
-                    }
-                    editedTotalEarnings = Double.parseDouble(s.toString());
-                } catch (Exception ex) {
-                    return;
-                }
-
-                double cycleNoOfStars = ShareOutArrayAdapter.getNoOfCycleStars();
-                double editedShareValue = editedTotalEarnings / cycleNoOfStars;
-                txtNewShareValue.setText(String.format("%,.0f UGX", editedShareValue));
-                txtTotalEarnings.setTag(true);
-
-//                Runnable runnable = new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Intent intent = new Intent(getApplicationContext(), ShareOutActivity.class);
-//                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                        startActivity(intent);
-//
-//                    }
-//                };
-//
-//                String warning = "Are you sure about this amount?";
-//                DialogMessageBox.show(ShareOutActivity.this, getString(R.string.warning), warning, runnable);
-                DialogMessageBox.show(ShareOutActivity.this, "Warning", "Are you sure about this ShareOut Amount");
-
+                return true;
             }
         });
 
@@ -232,6 +191,18 @@ public class ShareOutActivity extends Activity {
 
         return true;
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        finishAffinity();
+        startActivity(new Intent(ShareOutActivity.this, MainActivity.class));
+
+    }
+
+    public static double getEnteredShareOutAmount() {
+
+        return enteredShareOutAmount;
     }
 
 
