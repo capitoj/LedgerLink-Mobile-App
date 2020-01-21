@@ -2,12 +2,10 @@ package org.applab.ledgerlink;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.widget.EditText;
 
 import org.applab.ledgerlink.domain.model.DataRecovery;
 import org.applab.ledgerlink.domain.model.VslaInfo;
-import org.applab.ledgerlink.repo.VslaInfoRepo;
 
 /**
  * Created by Ayvan
@@ -15,25 +13,25 @@ import org.applab.ledgerlink.repo.VslaInfoRepo;
  */
 public class VslaCodeDialog extends Dialog {
     protected DataRecovery dataRecovery;
+    LedgerLinkApplication ledgerLinkApplication;
+    private VslaInfo vslaInfo = null;
 
     public VslaCodeDialog(Context context) {
         super(context);
         Context mContext = context;
+        this.setContentView(R.layout.dialog_vslacode);
         this.dataRecovery = new DataRecovery();
-
-
-}
-    @Override
- public void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.dialog_vslacode);
+        ledgerLinkApplication = (LedgerLinkApplication) getContext();
 
         EditText txtVslaCode = (EditText)findViewById(R.id.enterVslaCodeAmount);
+        VslaInfo vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
+        //String vslaName = vslaInfo.getVslaName();
+        String vslaCode = vslaInfo.getVslaCode();
 
-        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo();
-        VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
-        txtVslaCode.setText(vslaInfo.getVslaCode());
+        //VslaInfoRepo vslaInfoRepo = new VslaInfoRepo();
+        //VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
+        txtVslaCode.setText(vslaCode);
         //dataRecovery.setVslaCode(txtVslaCode.getText().toString().trim());
-
 
     }
 }
