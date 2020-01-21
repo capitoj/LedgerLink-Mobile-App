@@ -397,6 +397,11 @@ public class LoginActivity extends AppCompatActivity {
                 i = new Intent(this, TrainingModuleActivity.class);
                 startActivity(i);
                 break;
+            case R.id.testing:
+                //Launch the testing
+                i = new Intent(this, TestingActivity.class);
+                startActivity(i);
+                break;
         }
         return true;
     }

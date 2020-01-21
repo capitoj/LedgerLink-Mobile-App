@@ -27,6 +27,7 @@ public class Meeting {
     private double loanFromBank;
     private double bankLoanRepayment;
     private String comment;
+    private int noOfMeeting;
 
     //flag of whether this is a Getting started wizard meeting
     private boolean isGettingStarted;
@@ -234,4 +235,5 @@ public class Meeting {
     public void setGettingStarted(boolean gettingStarted) {
         isGettingStarted = gettingStarted;
     }
+
 }

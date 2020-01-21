@@ -1,5 +1,6 @@
 package org.applab.ledgerlink;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,7 @@ public class PassKeyResetActivity extends AppCompatActivity {
     protected PassKeyReset forgotPassKey;
     LedgerLinkApplication ledgerLinkApplication;
     Meeting meeting;
+    Context context;
 
 
     @Override
@@ -116,17 +118,6 @@ public class PassKeyResetActivity extends AppCompatActivity {
             // Get No. of Cycle Completed
             else if (clickIndex == 3) {
                 EditText txtDRNoOfCycle = (EditText)findViewById(R.id.txtDRNoOfCycle);
-                VslaInfo vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
-
-                String txtVslaName = forgotPassKey.getVslaName();
-                String txtNoMeeting = forgotPassKey.getNoOfMeetings();
-                String txtNoMembers = forgotPassKey.getNoOfMembers();
-                String txtNoCycleCompleted = forgotPassKey.getNoOfCyclesCompleted();
-                String vslaName = vslaInfo.getVslaName();
-                int noOfMeetings = 2;
-                int noOfMembers = 2;
-                int noOfCyclesCompleted = 2;
-
                 if (txtDRNoOfCycle.getText().toString().trim().length() < 1) {
                     DialogMessageBox.show(this, getString(R.string.action_passkey), getString(R.string.no_of_complete_cycle_required));
                     txtDRNoOfCycle.requestFocus();
@@ -134,41 +125,52 @@ public class PassKeyResetActivity extends AppCompatActivity {
                 }
 
                 // Check if the input details match the Vsla Info
-                if (!txtVslaName.equalsIgnoreCase(vslaName) && !txtNoMeeting.equalsIgnoreCase(String.valueOf(noOfMeetings)) && !txtNoMembers.equalsIgnoreCase(String.valueOf(noOfMembers)) && !txtNoCycleCompleted.equalsIgnoreCase(String.valueOf(noOfCyclesCompleted))) {
+
+                VslaInfo vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
+                //VslaCycle recentCycle = new VslaCycleRepo(context).getMostRecentCycle();
+                String vslaName = vslaInfo.getVslaName(); // Get Vsla Name
+                //int noOfMeetings = ledgerLinkApplication.getMeetingRepo().getAllMeetings(recentCycle.getCycleId()).size(); // Get No. of Meetings
+                int noOfMeetings = TestingActivity.getNoOfMeeting();
+                int noOfMembers = ledgerLinkApplication.getMemberRepo().getAllMembers().size(); // Get No. of Members
+                int noOfCyclesCompleted = ledgerLinkApplication.getVslaCycleRepo().getCompletedCycles().size(); // Get No. of Completed Cycles
+
+                if(!vslaName.equalsIgnoreCase(forgotPassKey.getVslaName()) ){
                     Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
+                    return;
                 }
+
+                int resetNoMeeting = Integer.parseInt(forgotPassKey.getNoOfMeetings());
+                if(noOfMeetings != resetNoMeeting){
+                    Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    return;
+                }
+
+                int resetNoMembers = Integer.parseInt(forgotPassKey.getNoOfMembers());
+                if(noOfMembers != resetNoMembers){
+                    Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    return;
+                }
+
+                int resetNoCycleCompleted = Integer.parseInt(forgotPassKey.getNoOfCyclesCompleted());
+                if(noOfCyclesCompleted != resetNoCycleCompleted){
+                    Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    return;
+                }
+
+                // Check if the input details match the Vsla Info
+//                if ( !txtVslaName.equalsIgnoreCase(vslaName) && !(txtNoMeeting == noOfMeetings) && !(txtNoMembers == noOfMembers) && !(txtNoCycleCompleted == noOfCyclesCompleted)) {
+//                    Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
+////                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+////                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+////                    startActivity(intent);
+//                    return;
+//                }
 
                 forgotPassKey.setNoOfCyclesCompleted(txtDRNoOfCycle.getText().toString().trim());
                 setContentView(R.layout.activity_forgot_passkey_passkey);
                 EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRPassKey);
                 txtDRPassKey.setText(forgotPassKey.getPassKey());
                 clickIndex++;
-
-//                // For debugging purpose
-//                TextView txtVslaName = (TextView) findViewById(R.id.idVslaName);
-//                TextView txtNoMeeting = (TextView) findViewById(R.id.idNoMeeting);
-//                TextView txtNoMembers = (TextView) findViewById(R.id.idNoMembers);
-//                TextView txtNoCycle = (TextView) findViewById(R.id.idNoCycle);
-//
-//                //VslaName
-//
-//                txtVslaName.setText(vslaInfo.getVslaName());
-//                //txtVslaName.setText(forgotPassKey.getVslaName());
-//                //No. of meeting
-//                ArrayList<Member> members = ledgerLinkApplication.getMemberRepo().getAllMembers();
-//                //txtNoMeeting.setText(forgotPassKey.getNoOfMeetings());
-//                txtNoMeeting.setText(members.size());
-//                //No.of Members
-//                txtNoMembers.setText(forgotPassKey.getNoOfMembers());
-//                //No. of complete Cycle
-//                ArrayList<VslaCycle> completedCycles = ledgerLinkApplication.getVslaCycleRepo().getCompletedCycles();
-//                //txtNoCycle.setText(forgotPassKey.getNoOfCyclesCompleted());
-//                txtNoCycle.setText(completedCycles.size());
-//
-//                //end debugging code
 
             }
             // Reset Passkey
@@ -192,12 +194,17 @@ public class PassKeyResetActivity extends AppCompatActivity {
                     txtPassKey.requestFocus();
                     return;
                 }
-
-                if (!passKey.equalsIgnoreCase(confirmPassKey)) {
+                // Check if the passkey match
+                if (confirmPassKey.length() <= 0) {
+                    Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.please_confirm_passkey), Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    txtPassKey.requestFocus();
+                    return;
+                } else if (!passKey.equalsIgnoreCase(confirmPassKey)) {
                     Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.passkeys_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtPassKey.requestFocus();
                     return;
                 }
+
 
                 Runnable runnable = new Runnable() {
                     @Override
