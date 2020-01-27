@@ -11,6 +11,7 @@ import org.applab.ledgerlink.domain.schema.AttendanceSchema;
 import org.applab.ledgerlink.domain.schema.LoanIssueSchema;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
 import org.applab.ledgerlink.domain.schema.VslaCycleSchema;
+import org.applab.ledgerlink.domain.schema.VslaInfoSchema;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.SettingsActivity;
 import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
@@ -129,6 +130,9 @@ public class SampleDataBuilderRepo {
 
             //Delete the Members
             db.execSQL(String.format("DELETE FROM %s", MemberSchema.getTableName()));
+
+            //Delete the Vsla info
+            db.execSQL(String.format("DELETE FROM %s", VslaInfoSchema.getTableName()));
 
             return true;
         }
