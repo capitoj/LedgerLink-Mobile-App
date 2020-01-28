@@ -14,7 +14,6 @@ import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.helpers.Utils;
-import org.applab.ledgerlink.repo.MeetingFineRepo;
 import org.applab.ledgerlink.repo.MeetingOutstandingWelfareRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
 
@@ -78,9 +77,8 @@ public class BorrowFromWelfareArrayAdapter extends ArrayAdapter<Member> {
             targetMeeting = meetingRepo.getMeetingById(meetingId);
             double outstandingWelfare = 0.0;
             if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
-                int outstandingWelfareId = meetingOutstandingWelfareRepo.getMemberOutstandingWelfareId(meetingId, member.getMemberId());
-                if(outstandingWelfareId > 0){
-                    MeetingOutstandingWelfare meetingOutstandingWelfare = new MeetingOutstandingWelfareRepo(context, outstandingWelfareId).getMeetingOutstandingWelfare();
+                MeetingOutstandingWelfare meetingOutstandingWelfare = meetingOutstandingWelfareRepo.getOutstandingMemberWelfare(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+                if(meetingOutstandingWelfare.getOutstandingWelfareId() > 1){
                     outstandingWelfare = meetingOutstandingWelfare.getAmount();
                     txtDueDate.setText(String.format(context.getResources().getString(R.string.date_due)+" %s", Utils.formatDate(meetingOutstandingWelfare.getExpectedDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
                 }else{

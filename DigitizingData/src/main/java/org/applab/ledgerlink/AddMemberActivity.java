@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -35,6 +36,7 @@ import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
 import org.applab.ledgerlink.repo.MeetingLoanIssuedRepo;
+import org.applab.ledgerlink.repo.MeetingOutstandingWelfareRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
 import org.applab.ledgerlink.repo.VslaCycleRepo;
 import org.applab.ledgerlink.utils.DialogMessageBox;
@@ -75,6 +77,9 @@ public class AddMemberActivity extends AppCompatActivity {
     protected TextView txtAMMLoanNumber;
     protected TextView txtOutstandingWelfareDueDate;
     protected boolean isGettingStartedMode = false; //flags whether we are in wizard mode
+    private Meeting targetMeeting = null;
+    private MeetingRepo meetingRepo;
+    private MeetingOutstandingWelfareRepo meetingOutstandingWelfareRepo;
 
     protected LedgerLinkApplication ledgerLinkApplication;
 
@@ -264,14 +269,26 @@ public class AddMemberActivity extends AppCompatActivity {
         lblAMMiddleCycleSavings.setText(String.format("%,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
         lblAMMiddleCycleLoans.setText(String.format("%,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
         lblAMMiddleCycleWelfare.setText(String.format("%,.0f %s", member.getWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
-        lblAMMiddleCycleOutstandingWelfare.setText(String.format("%,.0f %s", member.getOutstandingWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
 
-        if(member.getOutstandingWelfareDueDateOnSetup() != null){
-            txtOutstandingWelfareDueDate.setText(Utils.formatDate(member.getOutstandingWelfareDueDateOnSetup(), "dd-MM-yyyy"));
-        }else{
-            txtOutstandingWelfareDueDate.setText(R.string.none_main);
-            txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
+
+        targetMeeting = meetingRepo.getMeetingById(meetingId);
+        if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
+            MeetingOutstandingWelfare meetingOutstandingWelfare = meetingOutstandingWelfareRepo.getOutstandingMemberWelfare(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
+            if(meetingOutstandingWelfare.getOutstandingWelfareId() > 1){
+                lblAMMiddleCycleOutstandingWelfare.setText(String.format("%,.0f %s", meetingOutstandingWelfare.getAmount(), getResources().getString(R.string.operating_currency)));
+                txtOutstandingWelfareDueDate.setText(Utils.formatDate(meetingOutstandingWelfare.getExpectedDate(), Utils.OTHER_DATE_FIELD_FORMAT));
+             }else{
+                lblAMMiddleCycleOutstandingWelfare.setText(String.format("%,.0f %s", "0", getResources().getString(R.string.operating_currency)));
+                txtOutstandingWelfareDueDate.setText("Due Date: None");
+            }
         }
+//        if(member.getOutstandingWelfareDueDateOnSetup() != null){
+//
+//            txtOutstandingWelfareDueDate.setText(Utils.formatDate(member.getOutstandingWelfareDueDateOnSetup(), "dd-MM-yyyy"));
+//        }else{
+//            txtOutstandingWelfareDueDate.setText(R.string.none_main);
+//            txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
+//        }
 
         // populate the next repayment date
         if (member.getDateOfFirstRepayment() != null) {
