@@ -6,10 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
+import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.domain.schema.AttendanceSchema;
 import org.applab.ledgerlink.domain.schema.LoanIssueSchema;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
 import org.applab.ledgerlink.domain.schema.VslaCycleSchema;
+import org.applab.ledgerlink.domain.schema.VslaInfoSchema;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.SettingsActivity;
 import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
@@ -28,6 +30,29 @@ import java.util.Calendar;
  */
 public class SampleDataBuilderRepo {
     private static Context appContext;
+
+    public static boolean insertTrainingData(Context context) {
+
+        //confirm that we are on the training database
+        appContext = context;
+        if(null == context) {
+            return false;
+        }
+
+        //VERY VERY CRITICAL STEP
+        if(!Utils.isExecutingInTrainingMode()) {
+            return false;
+        }
+
+        //Proceed
+        boolean insertSucceeded = false;
+        if(deleteAllRecords()) {
+            insertSucceeded = insertRecords();
+        }
+
+        return insertSucceeded;
+    }
+
 
     public static boolean refreshTrainingData(Context context) {
 
@@ -106,6 +131,9 @@ public class SampleDataBuilderRepo {
             //Delete the Members
             db.execSQL(String.format("DELETE FROM %s", MemberSchema.getTableName()));
 
+            //Delete the Vsla info
+            db.execSQL(String.format("DELETE FROM %s", VslaInfoSchema.getTableName()));
+
             return true;
         }
         catch(Exception ex) {
@@ -118,7 +146,7 @@ public class SampleDataBuilderRepo {
         }
     }
 
-    private static boolean insertRecords(){
+    public static boolean insertRecords(){
         try {
             if(null == appContext) {
                 return false;
@@ -147,6 +175,15 @@ public class SampleDataBuilderRepo {
 
             //Retrieve the new Cycle. Need to declare an add method in the repo that returns an object
             cycle = vslaCycleRepo.getMostRecentCycle();
+
+            // Add vsla info
+            VslaInfo vslainfo = new VslaInfo();
+            vslainfo.setVslaName("Training");
+            vslainfo.setVslaCode("123456");
+            vslainfo.setPassKey("123456");
+
+            VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(appContext);
+            vslaInfoRepo.saveVslaInfo("Training", "123456", "123456", 1);
 
             //Add Members
             addMember(1,"Bwire","Justine","Male",33,"Farmer",1);
