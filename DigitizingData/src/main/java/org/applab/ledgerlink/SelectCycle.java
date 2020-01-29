@@ -4,20 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.*;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
-import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
+import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.VslaCyclesArrayAdapter;
 
 import java.util.ArrayList;
@@ -26,12 +30,13 @@ import java.util.ArrayList;
 /**
  * Created by Moses on 7/4/13.
  */
-public class SelectCycle extends ActionBarActivity{
+public class SelectCycle extends AppCompatActivity {
 
     private VslaCycle selectedCycle = null;
     private RadioGroup grpCycleDates;
     private boolean isEndCycleAction;
     private boolean multipleCycles = false;
+    private boolean inactiveCycles = false;
     LedgerLinkApplication ledgerLinkApplication;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,7 @@ public class SelectCycle extends ActionBarActivity{
 
         //Retrieve all the active cycles
         ListView cyclesListView = (ListView) findViewById(R.id.lstSelectCycleToEdit);
+        ListView inactiveCyclesListView = (ListView) findViewById(R.id.lstInactiveCycles);
         TextView txtInstructions = (TextView) findViewById(R.id.lblMDMultipleCycles);
 
         ArrayList<VslaCycle> activeCycles = ledgerLinkApplication.getVslaCycleRepo().getActiveCycles();
@@ -61,6 +67,42 @@ public class SelectCycle extends ActionBarActivity{
             txtInstructions.setText(R.string.no_active_cycles_to_modify);
             return;
         }
+
+        ArrayList<VslaCycle> inActiveCycles = ledgerLinkApplication.getVslaCycleRepo().getInActiveCycles();
+        if (inActiveCycles != null && inActiveCycles.size() == 0) {
+            // no cycles
+            inactiveCyclesListView.setVisibility(View.GONE);
+            txtInstructions.setText(R.string.no_active_cycles_to_modify);
+            return;
+        }
+
+
+        final VslaCyclesArrayAdapter inactive = new VslaCyclesArrayAdapter(getBaseContext(), inActiveCycles);
+        inactiveCyclesListView.setAdapter(inactive);
+        inactiveCyclesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                selectedCycle = inactive.getItem(position);
+
+                inactiveCycles = true;
+                if (isEndCycleAction) {
+
+                    Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+                    i.putExtra("_inactiveCycles", inactiveCycles);
+                    i.putExtra("_cycleId", selectedCycle.getCycleId());
+                    startActivity(i);
+                    finish();
+                } else {
+                    Intent i = new Intent(getApplicationContext(), CycleSummaryActivity.class);
+                    i.putExtra("_isUpdateCycleAction", true);
+                    i.putExtra("_inactiveCycles", inactiveCycles);
+                    i.putExtra("_cycleId", selectedCycle.getCycleId());
+                    startActivity(i);
+                    finish();
+                }
+            }
+        });
 
 
         final VslaCyclesArrayAdapter adapter = new VslaCyclesArrayAdapter(getBaseContext(), activeCycles);
@@ -119,29 +161,31 @@ public class SelectCycle extends ActionBarActivity{
         if (activeCycles != null && activeCycles.size() > 0) {
             //Populate Fields
             if (activeCycles.size() == 1) {
-
+                multipleCycles = true;
+                inactiveCycles = true;
                 // Just launch the modifying or ending activity
-                if (selectedCycle == null) {
-                    selectedCycle = activeCycles.get(0);
-                }
-
-                if (isEndCycleAction) {
-                    Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
-                    i.putExtra("_cycleId", selectedCycle.getCycleId());
-                    i.putExtra("_multipleCycles", multipleCycles);
-                    startActivity(i);
-                    finish();
-                } else {
-                    Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
-                    i.putExtra("_isUpdateCycleAction", true);
-                    i.putExtra("_cycleId", selectedCycle.getCycleId());
-                    i.putExtra("_multipleCycles", multipleCycles);
-                    startActivity(i);
-                    finish();
-                }
+//                if (selectedCycle == null) {
+//                    selectedCycle = activeCycles.get(0);
+//                }
+//
+//                if (isEndCycleAction) {
+//                    Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+//                    i.putExtra("_cycleId", selectedCycle.getCycleId());
+//                    i.putExtra("_multipleCycles", multipleCycles);
+//                    startActivity(i);
+//                    finish();
+//                } else {
+//                    Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+//                    i.putExtra("_isUpdateCycleAction", true);
+//                    i.putExtra("_cycleId", selectedCycle.getCycleId());
+//                    i.putExtra("_multipleCycles", multipleCycles);
+//                    startActivity(i);
+//                    finish();
+//                }
 
             } else {
                 multipleCycles = true;
+                inactiveCycles = true;
             }
         } else {
 
@@ -179,7 +223,7 @@ public class SelectCycle extends ActionBarActivity{
         // Inflate a "Done/Cancel" custom action bar view.
         final LayoutInflater inflater = (LayoutInflater) getSupportActionBar().getThemedContext()
                 .getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_cancel_next, null);
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_add_next, null);
         customActionBarView.findViewById(R.id.actionbar_next).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -197,11 +241,19 @@ public class SelectCycle extends ActionBarActivity{
                     }
                 }
         );
-        customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+        customActionBarView.findViewById(R.id.actionbar_add).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        finish();
+                        ArrayList<VslaCycle> activeCycles = ledgerLinkApplication.getVslaCycleRepo().getActiveCycles();
+                        if (activeCycles != null && activeCycles.size() == 1){
+                           //DialogMessageBox.show(getApplicationContext(), "Warning", "There's an active cycle currently running, please end the current cycle to create a new one");
+                            Toast.makeText(getApplicationContext(), "There's an active cycle currently running, please end the current cycle to create a new one", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+                            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(i);
+                        }
                     }
                 }
         );
@@ -219,11 +271,12 @@ public class SelectCycle extends ActionBarActivity{
         if (isEndCycleAction) {
             actionBar.setTitle(R.string.end_cycle_main);
         } else {
-            actionBar.setTitle(R.string.end_cycle_main);
+            actionBar.setTitle(R.string.cycle);
         }
 
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(R.string.cycle);
 
         actionBar.setCustomView(customActionBarView,
                 new ActionBar.LayoutParams(
