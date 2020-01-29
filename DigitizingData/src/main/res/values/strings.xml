@@ -901,6 +901,7 @@
     <string name="no_of_complete_cycle">No. of Complete Cycle</string>
     <string name="no_of_complete_cycle_required">No. of Completed Cycle Required</string>
     <string name="end_cycle">End Cycle</string>
+    <string name="activate_cycle">Activate Cycle</string>
     <string name="type_of_interest">Type Of Interest</string>
     <string name="add_type_of_interest_prompt">Type Of Interest</string>
     <string name="action_passkey">PassKey Recovery</string>
@@ -921,5 +922,8 @@
     <string name="date_cycle_began">Cycle Began:</string>
     <string name="date_cycle_ended">Cycle Ended:</string>
     <string name="cycle_loan_interest">Loan Interest:</string>
+    <string name="you_about_to_change_shareout_amount">You are about to change ShareOut Amount, Please enter the new amount below.</string>
+    <string name="enter_share_out_amount">Enter ShareOut Amount</string>
+    <string name="amount_paid_required">Amount paid required</string>
 
 </resources>
