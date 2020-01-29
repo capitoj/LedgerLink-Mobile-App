@@ -80,6 +80,18 @@
                 android:value="org.applab.ledgerlink.BeginMeetingActivity" />
         </activity>
         <activity
+            android:name=".CycleSummaryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="Meeting"
+            android:parentActivityName=".CycleSummaryActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:screenOrientation="portrait"
+                android:value="org.applab.ledgerlink.CycleSummaryActivity" />
+        </activity>
+        <activity
             android:name=".EndCycleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_end_cycle"

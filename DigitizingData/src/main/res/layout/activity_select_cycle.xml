@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/frmMAH_top_control_bar"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
@@ -18,18 +19,115 @@
             android:layout_height="wrap_content"
             android:text="@string/you_have_more_than_one_active_cycle" />
 
-        <ListView
-            android:id="@+id/lstSelectCycleToEdit"
-            style="@style/RegularTextDateListItems"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/grpBMCurrentMeeting"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
-            android:choiceMode="singleChoice"
-            android:dividerHeight="2dip">
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardCurrentMeeting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="false">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblBMSection1"
+                        style="@style/SubHeading"
+                        android:layout_width="fill_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/current_cycle" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblBMInstructionCurrent"
+                        style="@style/RegularTextInstruction"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/modify_cycle_instruction" />
+
+                    <ListView
+                        android:id="@+id/lstSelectCycleToEdit"
+                        style="@style/RegularTextDateListItems"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dip"
+                        android:choiceMode="singleChoice"
+                        android:dividerHeight="2dip"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginRight="20dip"
+                        android:elevation="2dp">
+
+                    </ListView>
 
 
-        </ListView>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
 
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/grpBMPastCycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardPastCycle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                app:cardElevation="5dp"
+                app:cardPreventCornerOverlap="false">
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:orientation="vertical"
+                    android:paddingBottom="10dp">
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblBMPastCycle"
+                        style="@style/SubHeading"
+                        android:layout_width="fill_parent"
+                        android:layout_height="35dp"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/past_cycle" />
+
+                    <org.applab.ledgerlink.fontutils.TypefaceTextView
+                        android:id="@+id/lblBMInstructionPastCycle"
+                        style="@style/RegularTextInstruction"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/past_cycle_instruction" />
+
+                    <ListView
+                        android:id="@+id/lstInactiveCycles"
+                        style="@style/RegularTextDateListItems"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dip"
+                        android:choiceMode="singleChoice"
+                        android:dividerHeight="2dip"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginRight="20dip"
+                        android:elevation="2dp">
+
+                    </ListView>
+
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
