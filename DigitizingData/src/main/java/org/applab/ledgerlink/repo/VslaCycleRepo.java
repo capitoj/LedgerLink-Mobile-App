@@ -189,6 +189,25 @@ public class VslaCycleRepo {
         return inActiveCycles;
     }
 
+    //Return cycles that are that completed
+    public ArrayList<VslaCycle> getCompletedCycles() {
+        ArrayList<VslaCycle> completedCycles = null;
+
+        try {
+            completedCycles = new ArrayList<VslaCycle>();
+            for(VslaCycle cycle: getAllCycles()) {
+                if(cycle.isEnded()) {
+                    completedCycles.add(cycle);
+                }
+            }
+        }
+        catch(Exception ex) {
+            Log.e("VslaCycleRepo.getCompletedCycles", ex.getMessage());
+        }
+
+        return completedCycles;
+    }
+
     // Getting single Cycle
     public VslaCycle getCycle(int cycleId) {
 
