@@ -185,7 +185,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_shareout_list"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:noHistory="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.applab.ledgerlink.MainActivity" />
@@ -308,7 +309,7 @@
             android:label="@string/title_activity_data_recovery"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".PassKeyRecoveryActivity"
+            android:name=".PassKeyResetActivity"
             android:label="@string/title_activity_passkey_recovery"
             android:screenOrientation="portrait" />
         <activity
@@ -380,6 +381,7 @@
         <activity android:name=".BorrowWelfareMeetingActivity" />
         <activity android:name=".AddBorrowFromWelfareMeetingActivity" />
         <activity android:name=".MemberOutstandingWelfareHistoryActivity" />
+        <activity android:name=".TestingActivity" />
 
     </application>
 

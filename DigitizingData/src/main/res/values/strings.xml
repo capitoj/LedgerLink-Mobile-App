@@ -32,7 +32,7 @@
     <string name="image_content_desc">icon</string>
     <string name="title_activity_delete_meeting">DeleteMeetingActivity</string>
     <string name="about_legal">All rights reserved. Not liable for any damage incurred from use of this software.</string>
-    <string name="about_version">Version 2016112501</string>
+    <string name="about_version">Version 2020011401</string>
     <string name="action_about">About</string>
     <string name="action_recovery">Data Recovery</string>
     <string name="register">REGISTER</string>
@@ -182,7 +182,7 @@
 	<string name="place_the_csv_file_containing_the_vsla_data">Place the CSV file containing the VSLA Data on to the phone storage. Ensure it is named: vslaMigrationInfo.csv then tap the button below.</string>
 	<string name="import_csv_to_database">Import CSV to Database</string>
 	<string name="to_recover_your_data">To recover your data, kindly fill in the following information</string>
-	<string name="to_recover_your_passkey">To recover your passkey, kindly fill in the following information</string>
+	<string name="to_recover_your_passkey">To reset your passkey, kindly fill in the following information</string>
 	<string name="vsla_code">VSLA Code</string>
 	<string name="contact_person">Contact Person</string>
 	<string name="number_of_members">Number Of Members</string>
@@ -542,12 +542,11 @@
     <string name="currently_not_in_traininng_mode">You are currently NOT in Training Mode.  Any cycle or meeting information you record will affect the data for your group members.  Training Mode is a way to safely practice and explore Ledger Link without affecting your group\'s data.  Tap to switch to Training Mode to use practice data without affecting your group\'s data.</string>
     <string name="training_mode_using_practice_data">You are in Training Mode using practice data.  Any data you enter will not affect your group\'s data</string>
     <string name="no_active_cycles_to_modify">There are no active cycles to modify</string>
-    <string name="select_next_to_modify_cycle">Please select cycle to modify</string>
+    <string name="select_next_to_modify_cycle">Select next to modify the cycle</string>
     <string name="more_than_one_cycle_currently_running">There is more than one cycle currently running. Select the cycle to edit.</string>
     <string name="select_next_to_end_the_cycle">Select next to end the cycle</string>
     <string name="more_than_one_unfinished_cycle">There is more than one unfinished cycle. Select the cycle to end.</string>
     <string name="select_cycle_to_modify">Please select the cycle you wish to modify</string>
-    <string name="select_cycle_to_edit">Select cycle to modify</string>
     <string name="end_cycle_main">END CYCLE</string>
     <string name="retrieving_vsla_profile">Retrieving VSLA Profile</string>
     <string name="internal_error">Internal Error</string>
@@ -902,17 +901,15 @@
     <string name="no_of_complete_cycle">No. of Complete Cycle</string>
     <string name="no_of_complete_cycle_required">No. of Completed Cycle Required</string>
     <string name="end_cycle">End Cycle</string>
-    <string name="activate_cycle">Activate Cycle</string>
     <string name="type_of_interest">Type Of Interest</string>
     <string name="add_type_of_interest_prompt">Type Of Interest</string>
-    <string name="current_cycle">Current Cycle</string>
-    <string name="modify_cycle_instruction">Please tap on the cycle to modify</string>
-    <string name="past_cycle">Past Cycles</string>
-    <string name="past_cycle_instruction">You can not modify past cycles but you may review activities</string>
-    <string name="last_star_value">Stare (Share) value:</string>
-    <string name="maximum_number_of_stars">Maximum  No. of Stars:</string>
-    <string name="date_cycle_began">Cycle Began:</string>
-    <string name="date_cycle_ended">Cycle Ended:</string>
-    <string name="cycle_loan_interest">Loan Interest:</string>
+    <string name="action_passkey">PassKey Recovery</string>
+    <string name="action_reset_passkey">This action will completely reset the PassKey</string>
+    <string name="enter_new_passkey">Enter New PassKey</string>
+    <string name="comfirm_new_passkey">Confirm New PassKey</string>
+    <string name="error_details_donot_match">Details do not match!</string>
+    <string name="reset_passkey">Reset PassKey</string>
+    <string name="total_share_out_amount">Total Share Out Amount:</string>
+    <string name="please_confirm_passkey">Please Confirm PassKey</string>
 
 </resources>

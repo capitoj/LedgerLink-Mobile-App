@@ -274,7 +274,7 @@ public class ChangeMeetingDateActivity extends ActionBarActivity{
             //check that meeting is with the boundaries of the current cycle
             if(meeting.getMeetingDate().before(meeting.getVslaCycle().getStartDate()) || meeting.getMeetingDate().after(meeting.getVslaCycle().getEndDate())) {
                 Utils.createAlertDialogOk(ChangeMeetingDateActivity.this,getString(R.string.change_meeting_date),
-                        String.format(getString(R.string.meeting_date_within_current_cycle)+" i.e. %s" + getString(R.string.and) + "%s",Utils.formatDate(meeting.getVslaCycle().getStartDate()), Utils.formatDate(meeting.getVslaCycle().getEndDate())),
+                        String.format(getString(R.string.meeting_date_within_current_cycle)+" i.e. %s" + " " + getString(R.string.and) + " " + "%s",Utils.formatDate(meeting.getVslaCycle().getStartDate()), Utils.formatDate(meeting.getVslaCycle().getEndDate())),
                         Utils.MSGBOX_ICON_EXCLAMATION).show();
                 return false;
             }

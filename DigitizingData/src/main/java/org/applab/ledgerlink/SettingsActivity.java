@@ -10,13 +10,10 @@ import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBarActivity;
 
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.DbBackupRestore;
-
-import static org.applab.ledgerlink.service.UpdateChatService.getActivity;
 
 public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static final String PREF_KEY_SERVER_URL = "prefServerUrl";
@@ -43,10 +40,12 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         super.onCreate(savedInstanceState);
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        //actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-        //assert actionBar != null;
-        //actionBar.setDisplayHomeAsUpEnabled(true);
-        //actionBar.setHomeButtonEnabled(true);
+//        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//        assert actionBar != null;
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
+
+
 
 
         addPreferencesFromResource(R.xml.preferences);
@@ -71,21 +70,28 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             //runInTrainingModePref.setSummary("You are currently working on Actual VSLA Data. Switch to Training Data to learn how to use the application without destroying members' records.");
             runInTrainingModePref.setSummary(getString(R.string.currently_not_in_traininng_mode));
         } else {
+            //SampleDataBuilderRepo.insertTrainingData(getApplicationContext());
             runInTrainingModePref.setTitle(TITLE_EXECUTION_MODE_TRAINING);
             runInTrainingModePref.setSummary(getString(R.string.training_mode_using_practice_data));
         }
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        //  actionBar.setHomeButtonEnabled(true);
+//        actionBar = ((ActionBarActivity)getActivity()).getSupportActionBar();
+//        assert actionBar != null;
+//        actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
+
+//        if (Utils.isExecutingInTrainingMode()) {
+//            SampleDataBuilderRepo.insertTrainingData(getApplicationContext());
+//        }
+
 
         refreshView();
         if (key.equals(PREF_KEY_REFRESH_TRAINING_DATA)) {
             //If the user is in Training Mode then Refresh the data immediately if value is TRUE
         } else if (key.equals(PREF_KEY_EXECUTION_MODE)) {
+
             restartApplication();
 
         }
@@ -120,6 +126,7 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }
+
     }
 
 }

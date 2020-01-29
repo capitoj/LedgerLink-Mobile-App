@@ -25,6 +25,7 @@ public class VslaCycle {
     private String interestAtSetupCorrectionComment;
     private String finesAtSetupCorrectionComment;
     private int typeOfInterest;
+    protected int noOfCycles;
 
     public VslaCycle() {
 
@@ -213,6 +214,14 @@ public class VslaCycle {
 
     public int getTypeOfInterest(){
         return this.typeOfInterest;
+    }
+
+    public void setNoOfCycles(int noOfCycles){
+        this.noOfCycles = noOfCycles;
+    }
+
+    public int getNoOfCycles(){
+        return this.noOfCycles;
     }
 
 }

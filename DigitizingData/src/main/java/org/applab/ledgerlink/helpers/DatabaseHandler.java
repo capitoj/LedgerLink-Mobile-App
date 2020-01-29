@@ -33,6 +33,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 65;
     private static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
     private static final String DATA_FOLDER = "LedgerLink";
+    private  SQLiteDatabase llDatabase;
 
     public static Context databaseContext = null;
 
@@ -46,7 +47,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public static String pathToDatabaseFolder(Context context) {
-        String absoluteFilePath = DATABASE_NAME;
+        String absoluteFilePath = Utils.isExecutingInTrainingMode() ? TRAINING_DATABASE_NAME : DATABASE_NAME;
         if(DatabaseHandler.isSDCardMounted()){
             File[] fileList = new File("/storage/").listFiles();
             int cursor = 0;
@@ -74,7 +75,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if(! databaseStorageDir.exists()) {
             databaseStorageDir.mkdir();
         }
-        return databaseStorageDir.getAbsolutePath() + File.separator + DATABASE_NAME;
+        String databaseName = Utils.isExecutingInTrainingMode() ? TRAINING_DATABASE_NAME : DATABASE_NAME;
+        return databaseStorageDir.getAbsolutePath() + File.separator + databaseName;
     }
 
     public void onCreate(SQLiteDatabase db) {
@@ -145,6 +147,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         sqlQuery = MessageChannelsSchema.getCreateTableScript();
         db.execSQL(sqlQuery);
+
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -222,6 +225,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }
         }
         return  false;
+
     }
 
     protected boolean hasTableColumn(SQLiteDatabase db, String tableName, String columnName){
@@ -258,6 +262,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("insert into " + FinancialInstitutionSchema.getTableName() + " (Name, Code, IpAddress) values (?, ?, ?)", new String[]{"Rural Finance Initiative", "RURAL_FINANCE_INITIATIVE", "217.160.25.83:9007"});
         Log.e("DatabaseHandler", "Preloaded Financial Institutions");
     }
+
 
     public static DatabaseHandler getInstance(Context context) {
         return new DatabaseHandler(context);
