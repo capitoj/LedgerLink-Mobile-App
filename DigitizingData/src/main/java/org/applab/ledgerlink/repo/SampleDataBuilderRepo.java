@@ -242,6 +242,7 @@ public class SampleDataBuilderRepo {
             MeetingSavingRepo savingRepo = new MeetingSavingRepo(appContext);
             MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(appContext);
             MeetingLoanRepaymentRepo repaymentRepo = new MeetingLoanRepaymentRepo(appContext);
+            MeetingWelfareRepo welfareRepo = new MeetingWelfareRepo(appContext);
 
             String savingsComment = "";
 
@@ -279,6 +280,20 @@ public class SampleDataBuilderRepo {
 
                             //Issue the Loan
                             loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, balance, calDateDue.getTime(), comment, isUpdate);
+                        }
+
+                        //Issue loans to every 4th member
+                        if(memb.getMemberNo() % 4 == 0) {
+                            //Get Loan Amount
+                            double WelfareAmount = savingRepo.getMemberTotalSavingsInCycle(cycle.getCycleId(), memb.getMemberId()) * 0.5;
+                            //Get Date Due for welfare issued today
+                            Calendar calDateDue = Calendar.getInstance();
+                            calDateDue.setTime(meeting.getMeetingDate());
+                            //calDateDue.add(Calendar.MONTH, 1);
+                            calDateDue.add(Calendar.WEEK_OF_YEAR, 4);
+
+                            //Issue the Welfare
+                             welfareRepo.saveMemberWelfare(meeting.getMeetingId(),memb.getMemberId(), WelfareAmount , comment);
                         }
                     }
                 }
@@ -386,6 +401,20 @@ public class SampleDataBuilderRepo {
 
                             //Issue the Loan
                             loanIssuedRepo.saveMemberLoanIssue(meeting.getMeetingId(),memb.getMemberId(),loanNumber++, loanAmount , interestAmount, balance, calDateDue.getTime(), comment, isUpdate);
+                        }
+
+                        //Issue loans to every 4th member
+                        if(memb.getMemberNo() % 6 == 0) {
+                            //Get Loan Amount
+                            double WelfareAmount = savingRepo.getMemberTotalSavingsInCycle(cycle.getCycleId(), memb.getMemberId()) * 0.5;
+                            //Get Date Due for loans issued today
+                            Calendar calDateDue = Calendar.getInstance();
+                            calDateDue.setTime(meeting.getMeetingDate());
+                            //calDateDue.add(Calendar.MONTH, 1); //since it is on monthly interest.
+                            calDateDue.add(Calendar.WEEK_OF_YEAR, 4);
+
+                            //Issue the Welfare
+                            welfareRepo.saveMemberWelfare(meeting.getMeetingId(),memb.getMemberId(), WelfareAmount , comment);
                         }
                     }
                 }
