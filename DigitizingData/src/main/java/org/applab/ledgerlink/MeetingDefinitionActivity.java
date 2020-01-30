@@ -440,7 +440,7 @@ public class MeetingDefinitionActivity extends ActionBarActivity{
             //check that meeting is with the boundaries of the current cycle
             if(meeting.getMeetingDate().before(selectedCycle.getStartDate()) || meeting.getMeetingDate().after(selectedCycle.getEndDate())) {
                 Utils.createAlertDialogOk(MeetingDefinitionActivity.this,getString(R.string.being_meeting),
-                        String.format(getString(R.string.meeting_date_within_current_cycle)+" i.e. %s"+ getString(R.string.and)+"%s",Utils.formatDate(selectedCycle.getStartDate()), Utils.formatDate(selectedCycle.getEndDate())),
+                        String.format(getString(R.string.meeting_date_within_current_cycle)+" i.e. %s"+ " " + getString(R.string.and)+ " " + "%s",Utils.formatDate(selectedCycle.getStartDate()), Utils.formatDate(selectedCycle.getEndDate())),
                         Utils.MSGBOX_ICON_EXCLAMATION).show();
                 //txtMeetingDate.requestFocus();
                 return false;

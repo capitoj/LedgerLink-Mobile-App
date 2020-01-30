@@ -44,6 +44,7 @@ import org.applab.ledgerlink.helpers.Network;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
 import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
+import org.applab.ledgerlink.repo.SampleDataBuilderRepo;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONException;
@@ -106,7 +107,7 @@ public class ActivationActivity extends AppCompatActivity {
             }
         });
 
-        /** Change lanugage spinner**/
+        /** Change lanugage spinner **/
 
         Spinner spinnerLang = (Spinner) findViewById(R.id.spinner_lang);
 
@@ -158,6 +159,15 @@ public class ActivationActivity extends AppCompatActivity {
             }
         });
 
+        if (Utils.isExecutingInTrainingMode()) {
+            //Load Sample Trainng Data: Testing
+                SampleDataBuilderRepo.insertTrainingData(getApplicationContext());
+                Intent i = new Intent(getBaseContext(), LoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+
+        }
     }
 
     /** Android request permission  **/
@@ -195,7 +205,7 @@ public class ActivationActivity extends AppCompatActivity {
         Configuration conf = res.getConfiguration();
         conf.locale = locale;
         res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, LoginActivity.class);
+        Intent refresh = new Intent(this, ActivationActivity.class);
         startActivity(refresh);
         finish();
     }
@@ -627,6 +637,7 @@ public class ActivationActivity extends AppCompatActivity {
             }
         }
 
+
         //Dismisses the currently showing progress dialog
 //        private void dismissProgressDialog() {
 //            if (progressDialog != null) {
@@ -635,6 +646,7 @@ public class ActivationActivity extends AppCompatActivity {
 //                progressDialog = null;
 //            }
 //        }
+        
     }
 
 }

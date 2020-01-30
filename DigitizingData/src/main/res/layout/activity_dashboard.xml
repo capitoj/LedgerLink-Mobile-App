@@ -128,21 +128,21 @@
                             android:orientation="vertical">
 
 
-                            <ImageView
-                                android:id="@+id/newCycle"
-                                android:layout_width="64dp"
-                                android:layout_height="64dp"
-                                android:background="@drawable/cerclebackgroundpurple"
-                                android:padding="10dp"
-                                android:src="@drawable/add_cycle" />
+                            <!--<ImageView-->
+                                <!--android:id="@+id/newCycle"-->
+                                <!--android:layout_width="64dp"-->
+                                <!--android:layout_height="64dp"-->
+                                <!--android:background="@drawable/cerclebackgroundpurple"-->
+                                <!--android:padding="10dp"-->
+                                <!--android:src="@drawable/add_cycle" />-->
 
-                            <TextView
-                                android:id="@+id/txtNewCycle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:text="@string/new_cycle"
-                                android:textStyle="bold" />
+                            <!--<TextView-->
+                                <!--android:id="@+id/txtNewCycle"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginTop="10dp"-->
+                                <!--android:text="@string/new_cycle"-->
+                                <!--android:textStyle="bold" />-->
                         </LinearLayout>
 
                         <LinearLayout
@@ -166,7 +166,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:text="@string/edit_cycle"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -178,21 +177,21 @@
                             android:orientation="vertical">
 
 
-                            <ImageView
-                                android:id="@+id/endCycle"
-                                android:layout_width="64dp"
-                                android:layout_height="64dp"
-                                android:background="@drawable/cerclebackgroundyello"
-                                android:padding="10dp"
-                                android:src="@drawable/end_cycle" />
+                            <!--<ImageView-->
+                                <!--android:id="@+id/endCycle"-->
+                                <!--android:layout_width="64dp"-->
+                                <!--android:layout_height="64dp"-->
+                                <!--android:background="@drawable/cerclebackgroundyello"-->
+                                <!--android:padding="10dp"-->
+                                <!--android:src="@drawable/end_cycle" />-->
 
-                            <TextView
-                                android:id="@+id/txtEndCycle"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:text="@string/end_cycle"
-                                android:textStyle="bold" />
+                            <!--<TextView-->
+                                <!--android:id="@+id/txtEndCycle"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_marginTop="10dp"-->
+                                <!--android:text="@string/end_cycle"-->
+                                <!--android:textStyle="bold" />-->
                         </LinearLayout>
                     </LinearLayout>
 

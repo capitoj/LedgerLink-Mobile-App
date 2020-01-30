@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/ledger_link_dark_blue"
+        android:contentDescription="ShareOut Amount"
+        android:scaleType="fitStart"
+        android:src="@drawable/ic_action_about"
+        android:text="ShareOut Amount"
+        android:textAlignment="center" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceTextView
+        android:id="@+id/dialogShareOutInst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginBottom="6dp"
+        android:textSize="20dp"
+        android:hint="@string/you_about_to_change_shareout_amount" />
+
+    <org.applab.ledgerlink.fontutils.TypefaceEditText
+        android:id="@+id/enterShareOutAmount"
+        style="@style/CustomEditText"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="sans-serif"
+        android:hint="@string/enter_share_out_amount"/>
+
+</LinearLayout>

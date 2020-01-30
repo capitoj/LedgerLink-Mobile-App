@@ -202,8 +202,13 @@ public class LoginActivity extends AppCompatActivity {
             txtVslaName.setText(vslaName);
             //activationLoginMsg.setVisibility(View.GONE);
         } else {
+//            if (Utils.isExecutingInTrainingMode()) {
+//                vslaName = "Training Mode";
+//                txtVslaName.setText(vslaName);
+//            }
             txtVslaName.setVisibility(View.INVISIBLE);
-            DialogMessageBox.show(this, getString(R.string.activation_message), getString(R.string.unable_to_send_reg_network_problems));
+            Toast.makeText(this.getBaseContext(), R.string.unable_to_send_reg_network_problems, Toast.LENGTH_LONG).show();
+            //DialogMessageBox.show(this, getString(R.string.activation_message), getString(R.string.unable_to_send_reg_network_problems));
             //activationLoginMsg.setText(notActivatedStatusMessage);
             lblPasskey.setVisibility(View.INVISIBLE);
         }
@@ -229,8 +234,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        /** Change lanugage spinner**/
-
+        /** Change lanugage spinner **/
         Spinner spinnerLang = (Spinner) findViewById(R.id.spinner_lang);
 
         //spinnerLang.setOnItemSelectedListener(this);
@@ -250,7 +254,6 @@ public class LoginActivity extends AppCompatActivity {
         //Make the spinner selectable
         spinnerLang.setFocusable(true);
         spinnerLang.setClickable(true);
-
 
         spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -286,7 +289,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        /** Forgot Passkey OnClick**/
+        /** Forgot Passkey OnClick **/
         ForgotPassKeyText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -339,7 +342,6 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(refresh);
         finish();
     }
-
 
     protected void loadBackgroundService(){
         /*
@@ -401,6 +403,11 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.action_training_modules:
                 //Launch the training modules
                 i = new Intent(this, TrainingModuleActivity.class);
+                startActivity(i);
+                break;
+            case R.id.testing:
+                //Launch the testing
+                i = new Intent(this, TestingActivity.class);
                 startActivity(i);
                 break;
         }

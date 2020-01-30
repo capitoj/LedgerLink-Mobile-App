@@ -30,4 +30,11 @@
         app:showAsAction="never"
         android:title="Training Modules"
         />
+
+    <item
+        android:id="@+id/testing"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="Testing"
+        />
 </menu>

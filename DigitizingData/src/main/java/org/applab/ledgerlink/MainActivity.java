@@ -141,15 +141,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView newCycle = (ImageView) findViewById(R.id.newCycle);
-        newCycle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-            }
-        });
+//        ImageView newCycle = (ImageView) findViewById(R.id.newCycle);
+//        newCycle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+//                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(i);
+//            }
+//        });
 
         ImageView editCycle = (ImageView) findViewById(R.id.editCycle);
         editCycle.setOnClickListener(new View.OnClickListener() {
@@ -162,16 +162,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView endCycle = (ImageView) findViewById(R.id.endCycle);
-        endCycle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i.putExtra("_isEndCycleAction", true);
-                startActivity(i);
-            }
-        });
+//        ImageView endCycle = (ImageView) findViewById(R.id.endCycle);
+//        endCycle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+//                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                i.putExtra("_isEndCycleAction", true);
+//                startActivity(i);
+//            }
+//        });
 
     }
 

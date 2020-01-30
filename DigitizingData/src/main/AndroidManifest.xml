@@ -80,6 +80,18 @@
                 android:value="org.applab.ledgerlink.BeginMeetingActivity" />
         </activity>
         <activity
+            android:name=".CycleSummaryActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="Meeting"
+            android:parentActivityName=".CycleSummaryActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:screenOrientation="portrait"
+                android:value="org.applab.ledgerlink.CycleSummaryActivity" />
+        </activity>
+        <activity
             android:name=".EndCycleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_end_cycle"
@@ -173,7 +185,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_shareout_list"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:noHistory="true">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.applab.ledgerlink.MainActivity" />
@@ -368,6 +381,7 @@
         <activity android:name=".BorrowWelfareMeetingActivity" />
         <activity android:name=".AddBorrowFromWelfareMeetingActivity" />
         <activity android:name=".MemberOutstandingWelfareHistoryActivity" />
+        <activity android:name=".TestingActivity" />
 
     </application>
 
