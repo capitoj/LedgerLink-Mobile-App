@@ -2,7 +2,6 @@ package org.applab.ledgerlink;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.widget.EditText;
 
 import org.applab.ledgerlink.domain.model.DataRecovery;
 import org.applab.ledgerlink.domain.model.VslaInfo;
@@ -23,14 +22,14 @@ public class VslaCodeDialog extends Dialog {
         this.dataRecovery = new DataRecovery();
         ledgerLinkApplication = (LedgerLinkApplication) getContext();
 
-        EditText txtVslaCode = (EditText)findViewById(R.id.enterVslaCodeAmount);
+        //EditText txtVslaCode = (EditText)findViewById(R.id.enterVslaCodeAmount);
         VslaInfo vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
         //String vslaName = vslaInfo.getVslaName();
         String vslaCode = vslaInfo.getVslaCode();
 
         //VslaInfoRepo vslaInfoRepo = new VslaInfoRepo();
         //VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
-        txtVslaCode.setText(vslaCode);
+        //txtVslaCode.setText(vslaCode);
         //dataRecovery.setVslaCode(txtVslaCode.getText().toString().trim());
 
     }

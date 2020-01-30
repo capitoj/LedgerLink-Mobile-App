@@ -11,35 +11,36 @@
     android:background="@color/gery_background">
 
 
-    <org.applab.ledgerlink.fontutils.TypefaceTextView
-    android:id="@+id/idVslaName"
-    style="@style/RegularTextInstruction"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="Vsla Name"/>
+    <TextView android:text="@string/to_edit_your_vslacode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/lblDRTitle"
+        android:textSize="16dp"/>
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
-    android:id="@+id/idNoMeeting"
-    android:layout_below="@+id/idVslaName"
-    style="@style/RegularTextInstruction"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="No. of meetings"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:id="@+id/lblDRPassKey"
+        android:layout_below="@+id/lblDRTitle"
+        android:text="@string/enter_new_vslacode"/>
 
-    <org.applab.ledgerlink.fontutils.TypefaceTextView
-    android:id="@+id/idNoMembers"
-    android:layout_below="@+id/idNoMeeting"
-    style="@style/RegularTextInstruction"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="No. of Members"/>
+    <EditText
+        android:id="@+id/txtDREditVslaCode"
+        style="@style/CustomEditText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lblDRPassKey"
+        android:paddingTop="20dp"
+        android:text="@string/vsla_code"/>
 
-    <org.applab.ledgerlink.fontutils.TypefaceTextView
-    android:id="@+id/idNoCycle"
-    android:layout_below="@+id/idNoMembers"
-    style="@style/RegularTextInstruction"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="No. of Cycles"/>
+    <org.applab.ledgerlink.fontutils.TypefaceButton
+        android:id="@+id/btnLogin"
+        style="@style/LoginButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/edit_vslacode"
+        android:layout_below="@+id/txtDREditVslaCode"/>
 
 </RelativeLayout>

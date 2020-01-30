@@ -925,5 +925,11 @@
     <string name="you_about_to_change_shareout_amount">You are about to change ShareOut Amount, Please enter the new amount below.</string>
     <string name="enter_share_out_amount">Enter ShareOut Amount</string>
     <string name="amount_paid_required">Amount paid required</string>
+    <string name="action_edit_vslacole">Edit Vsla Code</string>
+    <string name="enter_new_vslacode">Enter Vsla Code</string>
+    <string name="to_edit_your_vslacode">Please note you can not edit the Vsla Code once activated .</string>
+    <string name="edit_vslacode">Edit Vsla Code</string>
+    <string name="action_vsla_code">Edit Vsla Code</string>
+    <string name="edit_failed_try_again_later">Update failed, try again!</string>
 
 </resources>
