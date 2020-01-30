@@ -214,7 +214,7 @@ public class EndCycleActivity extends ActionBarActivity{
                         Intent i;
                         Log.d("EndCycle", String.valueOf(multipleCyclesIndicator));
                         if (multipleCyclesIndicator) {
-                            i = new Intent(getApplicationContext(), SelectCycle.class);
+                            i = new Intent(getApplicationContext(), SelectCycleActivity.class);
                         } else {
                             i = new Intent(getApplicationContext(), MainActivity.class);
                         }

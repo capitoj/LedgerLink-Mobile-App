@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         editCycle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), SelectCycle.class);
+                Intent i = new Intent(getApplicationContext(), SelectCycleActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.putExtra("_isEndCycleAction", false);
                 startActivity(i);
