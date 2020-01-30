@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -11,8 +12,10 @@ import android.widget.TextView;
 
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.PassKeyReset;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.helpers.Utils;
+import org.applab.ledgerlink.repo.VslaCycleRepo;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 
 
@@ -25,7 +28,8 @@ public class PassKeyResetActivity extends AppCompatActivity {
     protected PassKeyReset forgotPassKey;
     LedgerLinkApplication ledgerLinkApplication;
     Meeting meeting;
-    Context context;
+    private boolean authenticated = false;
+//    Context context;
 
 
     @Override
@@ -61,121 +65,73 @@ public class PassKeyResetActivity extends AppCompatActivity {
     }
 
     protected void switchLayoutView(){
-
-//        //int vslacycle = ledgerLinkApplication.getVslaCycleRepo().getCyclesCount();
-
-
-        //ArrayList<Meeting> meetings = ledgerLinkApplication.getMeetingRepo().getAllMeetingsOfCycle();
-//        VslaCycle recentCycle = new VslaCycleRepo(context).getMostRecentCycle();
-//        int noOfMeetings = meetingRepo.getAllMeetings(recentCycle.getCycleId()).size();
-        //ArrayList<Meeting> meetingsInCycle = ledgerLinkApplication.getMeetingRepo().getAllMeetingsOfCycle(meeting.getVslaCycle().getCycleId(), MeetingRepo.MeetingOrderByEnum.ORDER_BY_MEETING_DATE);
-       // int meetingsInCycle = ledgerLinkApplication.getMeetingRepo().getAllMeetingsOfCycle(meeting.getVslaCycle().getCycleId(), MeetingRepo.MeetingOrderByEnum.ORDER_BY_MEETING_DATE).size();
-
-
-        try {
-            // Get Vsla Name
-            if (clickIndex == 0) {
-                EditText txtDRVslaName = (EditText)findViewById(R.id.txtDRVslaName);
-                if (txtDRVslaName.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, getString(R.string.action_passkey), getString(R.string.vsla_name_required));
-                    txtDRVslaName.requestFocus();
-                    return;
-                }
-                forgotPassKey.setVslaName(txtDRVslaName.getText().toString().trim());
-                setContentView(R.layout.activity_forgot_passkey_number_of_meeting);
-                EditText txtDRNoOfMeetings = (EditText)findViewById(R.id.txtDRNoOfMeetings);
-                txtDRNoOfMeetings.setText(forgotPassKey.getNoOfMeetings());
-                clickIndex++;
+        if(clickIndex == 0){
+            EditText txtDRVslaName = (EditText)findViewById(R.id.txtDRVslaName);
+            if (txtDRVslaName.getText().toString().trim().length() < 1) {
+                DialogMessageBox.show(this, getString(R.string.action_passkey), getString(R.string.vsla_name_required));
+                txtDRVslaName.requestFocus();
+                return;
             }
-            // Get No. of Meetings
-            else if (clickIndex == 1) {
-                EditText txtDRNoOfMeetings = (EditText)findViewById(R.id.txtDRNoOfMeetings);
-                if (txtDRNoOfMeetings.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, getString(R.string.action_passkey), getString(R.string.no_of_meeting_required));
-                    txtDRNoOfMeetings.requestFocus();
-                    return;
-                }
-                forgotPassKey.setNoOfMeetings(txtDRNoOfMeetings.getText().toString().trim());
-                setContentView(R.layout.activity_forgot_passkey_no_of_members);
-                EditText txtDRNoOfMembers = (EditText)findViewById(R.id.txtDRNoOfMembers);
-                txtDRNoOfMembers.setText(forgotPassKey.getNoOfMembers());
-                clickIndex++;
+            forgotPassKey.setVslaName(txtDRVslaName.getText().toString().trim());
+            setContentView(R.layout.activity_forgot_passkey_number_of_meeting);
+            EditText txtDRNoOfMeetings = (EditText)findViewById(R.id.txtDRNoOfMeetings);
+//            txtDRNoOfMeetings.setText(forgotPassKey.getNoOfMeetings());
+            clickIndex++;
+        }
+        // Get No. of Meetings
+        else if (clickIndex == 1) {
+            EditText txtDRNoOfMeetings = (EditText)findViewById(R.id.txtDRNoOfMeetings);
+            if (txtDRNoOfMeetings.getText().toString().trim().length() < 1) {
+                DialogMessageBox.show(this, getString(R.string.action_passkey), getString(R.string.no_of_meeting_required));
+                txtDRNoOfMeetings.requestFocus();
+                return;
             }
-            // Get No. of Members in Vsla Group
-            else if (clickIndex == 2) {
-                EditText txtDRNoOfMembers = (EditText)findViewById(R.id.txtDRNoOfMembers);
-                if (txtDRNoOfMembers.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, getString(R.string.action_passkey), getString(R.string.no_of_member_in_vsla_group_required));
-                    txtDRNoOfMembers.requestFocus();
-                    return;
-                }
-                forgotPassKey.setNoOfMembers(txtDRNoOfMembers.getText().toString().trim());
-                setContentView(R.layout.activity_forgot_passkey_no_of_cycle);
-                EditText txtDRNoOfCycle = (EditText)findViewById(R.id.txtDRNoOfCycle);
-                txtDRNoOfCycle.setText(forgotPassKey.getNoOfCyclesCompleted());
-                clickIndex++;
+            forgotPassKey.setNoOfMeetings(Integer.valueOf(txtDRNoOfMeetings.getText().toString().trim()));
+            setContentView(R.layout.activity_forgot_passkey_no_of_members);
+            EditText txtDRNoOfMembers = (EditText)findViewById(R.id.txtDRNoOfMembers);
+//            txtDRNoOfMembers.setText(forgotPassKey.getNoOfMembers());
+            clickIndex++;
+        }
+        // Get No. of Members in Vsla Group
+        else if (clickIndex == 2) {
+            EditText txtDRNoOfMembers = (EditText)findViewById(R.id.txtDRNoOfMembers);
+            if (txtDRNoOfMembers.getText().toString().trim().length() < 1) {
+                DialogMessageBox.show(this, getString(R.string.action_passkey), getString(R.string.no_of_member_in_vsla_group_required));
+                txtDRNoOfMembers.requestFocus();
+                return;
             }
-            // Get No. of Cycle Completed
-            else if (clickIndex == 3) {
-                EditText txtDRNoOfCycle = (EditText)findViewById(R.id.txtDRNoOfCycle);
-                if (txtDRNoOfCycle.getText().toString().trim().length() < 1) {
-                    DialogMessageBox.show(this, getString(R.string.action_passkey), getString(R.string.no_of_complete_cycle_required));
-                    txtDRNoOfCycle.requestFocus();
-                    return;
-                }
+            forgotPassKey.setNoOfMembers(Integer.valueOf(txtDRNoOfMembers.getText().toString().trim()));
+            setContentView(R.layout.activity_forgot_passkey_no_of_cycle);
+            EditText txtDRNoOfCycle = (EditText)findViewById(R.id.txtDRNoOfCycle);
+//            txtDRNoOfCycle.setText(forgotPassKey.getNoOfCyclesCompleted());
+            clickIndex++;
+        } else if(clickIndex == 3){
+            EditText txtDRNoOfCycle = (EditText)findViewById(R.id.txtDRNoOfCycle);
+            if (txtDRNoOfCycle.getText().toString().trim().length() < 1) {
+                DialogMessageBox.show(this, getString(R.string.action_passkey), getString(R.string.no_of_complete_cycle_required));
+                txtDRNoOfCycle.requestFocus();
+                return;
+            }
+            this.forgotPassKey.setNoOfCyclesCompleted(Integer.valueOf(txtDRNoOfCycle.getText().toString().trim()));
+            // Check if the input details match the Vsla Info
 
-                // Check if the input details match the Vsla Info
+            VslaInfo vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
+            VslaCycle recentCycle = new VslaCycleRepo(getApplicationContext()).getMostRecentCycle();
+            String vslaName = vslaInfo.getVslaName(); // Get Vsla Name
+            int noOfMeetings = ledgerLinkApplication.getMeetingRepo().getAllMeetings(recentCycle.getCycleId()).size(); // Get No. of Meetings
+            int noOfMembers = ledgerLinkApplication.getMemberRepo().getAllMembers().size(); // Get No. of Members
+            int noOfCyclesCompleted = ledgerLinkApplication.getVslaCycleRepo().getCompletedCycles().size(); // Get No. of Completed Cycles
 
-                VslaInfo vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
-                //VslaCycle recentCycle = new VslaCycleRepo(context).getMostRecentCycle();
-                String vslaName = vslaInfo.getVslaName(); // Get Vsla Name
-                //int noOfMeetings = ledgerLinkApplication.getMeetingRepo().getAllMeetings(recentCycle.getCycleId()).size(); // Get No. of Meetings
-                int noOfMeetings = TestingActivity.getNoOfMeeting();
-                int noOfMembers = ledgerLinkApplication.getMemberRepo().getAllMembers().size(); // Get No. of Members
-                int noOfCyclesCompleted = ledgerLinkApplication.getVslaCycleRepo().getCompletedCycles().size(); // Get No. of Completed Cycles
-
-                if(!vslaName.equalsIgnoreCase(forgotPassKey.getVslaName()) ){
-                    Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    return;
-                }
-
-                int resetNoMeeting = Integer.parseInt(forgotPassKey.getNoOfMeetings());
-                if(noOfMeetings != resetNoMeeting){
-                    Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    return;
-                }
-
-                int resetNoMembers = Integer.parseInt(forgotPassKey.getNoOfMembers());
-                if(noOfMembers != resetNoMembers){
-                    Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    return;
-                }
-
-                int resetNoCycleCompleted = Integer.parseInt(forgotPassKey.getNoOfCyclesCompleted());
-                if(noOfCyclesCompleted != resetNoCycleCompleted){
-                    Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    return;
-                }
-
-                // Check if the input details match the Vsla Info
-//                if ( !txtVslaName.equalsIgnoreCase(vslaName) && !(txtNoMeeting == noOfMeetings) && !(txtNoMembers == noOfMembers) && !(txtNoCycleCompleted == noOfCyclesCompleted)) {
-//                    Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
-////                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-////                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////                    startActivity(intent);
-//                    return;
-//                }
-
-                forgotPassKey.setNoOfCyclesCompleted(txtDRNoOfCycle.getText().toString().trim());
+            if(noOfCyclesCompleted == this.forgotPassKey.getNoOfCyclesCompleted() && noOfMembers == this.forgotPassKey.getNoOfMembers() && noOfMeetings == this.forgotPassKey.getNoOfMeetings() && vslaName.toLowerCase().equals(this.forgotPassKey.getVslaName().toLowerCase())){
                 setContentView(R.layout.activity_forgot_passkey_passkey);
-                EditText txtDRPassKey = (EditText)findViewById(R.id.txtDRPassKey);
-                txtDRPassKey.setText(forgotPassKey.getPassKey());
                 clickIndex++;
-
+                this.authenticated = true;
+            }else{
+                Utils.createAlertDialogOk(PassKeyResetActivity.this, getString(R.string.action_passkey), getString(R.string.error_details_donot_match), Utils.MSGBOX_ICON_EXCLAMATION).show();
+                return;
             }
-            // Reset Passkey
-            else if (clickIndex == 4) {
-
+        } else if(clickIndex == 4){
+            if(this.authenticated){
                 TextView txtPassKey = (TextView) findViewById(R.id.txtDRPassKey);
                 TextView txtConfirmPassKey = (TextView) findViewById(R.id.txtDRComfirmPassKey);
 
@@ -204,8 +160,7 @@ public class PassKeyResetActivity extends AppCompatActivity {
                     txtPassKey.requestFocus();
                     return;
                 }
-
-
+                
                 Runnable runnable = new Runnable() {
                     @Override
                     public void run() {
@@ -219,19 +174,7 @@ public class PassKeyResetActivity extends AppCompatActivity {
                 };
                 String warning = getString(R.string.action_reset_passkey);
                 DialogMessageBox.show(this, getString(R.string.warning), warning, runnable);
-
             }
-
-            // ---Button view---
-//            Button btnReset = (Button) findViewById(R.id.btnReset);
-//            btnReset.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View v) {
-//
-//                }
-//            });
-
-        }catch (Exception e){
-            e.printStackTrace();
         }
     }
 
@@ -246,10 +189,9 @@ public class PassKeyResetActivity extends AppCompatActivity {
 
     protected  void showPreviousWindow(){
         if(clickIndex == 0){
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            startActivity(new Intent(this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
        }
 
     }
+
 }

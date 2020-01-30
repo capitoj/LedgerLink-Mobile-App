@@ -7,9 +7,9 @@ public class PassKeyReset {
 
     protected String vslaName;
     protected String passKey;
-    protected String noOfMembers;
-    private String noOfMeetings;
-    private String noOfCyclesCompleted;
+    protected int noOfMembers;
+    private int noOfMeetings;
+    private int noOfCyclesCompleted;
 
     public void setVslaName(String vslaName){
         this.vslaName = vslaName;
@@ -27,27 +27,27 @@ public class PassKeyReset {
         this.passKey = passKey;
     }
 
-    public void setNoOfMembers(String noOfMembers){
+    public void setNoOfMembers(int noOfMembers){
         this.noOfMembers = noOfMembers;
     }
 
-    public String getNoOfMembers(){
+    public int getNoOfMembers(){
         return this.noOfMembers;
     }
 
-    public void setNoOfMeetings(String noOfMeetings){
+    public void setNoOfMeetings(int noOfMeetings){
         this.noOfMeetings = noOfMeetings;
     }
 
-    public String getNoOfMeetings(){
+    public int getNoOfMeetings(){
         return this.noOfMeetings;
     }
 
-    public void setNoOfCyclesCompleted(String noOfCyclesCompleted){
+    public void setNoOfCyclesCompleted(int noOfCyclesCompleted){
         this.noOfCyclesCompleted = noOfCyclesCompleted;
     }
 
-    public String getNoOfCyclesCompleted(){
+    public int getNoOfCyclesCompleted(){
         return this.noOfCyclesCompleted;
     }
 }

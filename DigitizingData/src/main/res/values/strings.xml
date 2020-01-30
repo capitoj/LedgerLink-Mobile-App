@@ -32,7 +32,7 @@
     <string name="image_content_desc">icon</string>
     <string name="title_activity_delete_meeting">DeleteMeetingActivity</string>
     <string name="about_legal">All rights reserved. Not liable for any damage incurred from use of this software.</string>
-    <string name="about_version">Version 2020011401</string>
+    <string name="about_version">v.2020013001</string>
     <string name="action_about">About</string>
     <string name="action_recovery">Data Recovery</string>
     <string name="register">REGISTER</string>
