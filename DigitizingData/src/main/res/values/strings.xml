@@ -82,7 +82,7 @@
     <string name="name_default">0. FULL NAME</string>
     <string name="outstanding_loan_default">Outstanding: 60,000UGX</string>
     <string name="loan_balance_default">Loan Balance: 60,000UGX</string>
-    <string name="date_due_default">Date Due: 01-Jan-2013</string>
+    <string name="date_due_default">Date Due: None</string>
     <string name="today_saving_default">Today: 5,000UGX</string>
     <string name="total_savings_default">Total Savings: 60,000UGX</string>
     <string name="total_welfare_default">Total Welfare: 10,000UGX</string>
@@ -925,5 +925,6 @@
     <string name="you_about_to_change_shareout_amount">You are about to change ShareOut Amount, Please enter the new amount below.</string>
     <string name="enter_share_out_amount">Enter ShareOut Amount</string>
     <string name="amount_paid_required">Amount paid required</string>
+    <string name="outstanding_balance_default">Outstanding Welfare: 0 UGX</string>
 
 </resources>
