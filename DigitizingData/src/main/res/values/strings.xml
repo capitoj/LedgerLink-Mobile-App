@@ -32,7 +32,7 @@
     <string name="image_content_desc">icon</string>
     <string name="title_activity_delete_meeting">DeleteMeetingActivity</string>
     <string name="about_legal">All rights reserved. Not liable for any damage incurred from use of this software.</string>
-    <string name="about_version">Version 2020011401</string>
+    <string name="about_version">v.2020013001</string>
     <string name="action_about">About</string>
     <string name="action_recovery">Data Recovery</string>
     <string name="register">REGISTER</string>
@@ -901,6 +901,7 @@
     <string name="no_of_complete_cycle">No. of Complete Cycle</string>
     <string name="no_of_complete_cycle_required">No. of Completed Cycle Required</string>
     <string name="end_cycle">End Cycle</string>
+    <string name="activate_cycle">Activate Cycle</string>
     <string name="type_of_interest">Type Of Interest</string>
     <string name="add_type_of_interest_prompt">Type Of Interest</string>
     <string name="action_passkey">PassKey Recovery</string>
@@ -911,5 +912,24 @@
     <string name="reset_passkey">Reset PassKey</string>
     <string name="total_share_out_amount">Total Share Out Amount:</string>
     <string name="please_confirm_passkey">Please Confirm PassKey</string>
+
+    <string name="current_cycle">Current Cycle</string>
+    <string name="modify_cycle_instruction">Please tap on the cycle to modify</string>
+    <string name="past_cycle">Past Cycles</string>
+    <string name="past_cycle_instruction">You can not modify past cycles but you may review activities</string>
+    <string name="last_star_value">Stare (Share) value:</string>
+    <string name="maximum_number_of_stars">Maximum  No. of Stars:</string>
+    <string name="date_cycle_began">Cycle Began:</string>
+    <string name="date_cycle_ended">Cycle Ended:</string>
+    <string name="cycle_loan_interest">Loan Interest:</string>
+    <string name="you_about_to_change_shareout_amount">You are about to change ShareOut Amount, Please enter the new amount below.</string>
+    <string name="enter_share_out_amount">Enter ShareOut Amount</string>
+    <string name="amount_paid_required">Amount paid required</string>
+    <string name="action_edit_vslacole">Edit Vsla Code</string>
+    <string name="enter_new_vslacode">Enter Vsla Code</string>
+    <string name="to_edit_your_vslacode">Please note you can not edit the Vsla Code once activated .</string>
+    <string name="edit_vslacode">Edit Vsla Code</string>
+    <string name="action_vsla_code">Edit Vsla Code</string>
+    <string name="edit_failed_try_again_later">Update failed, try again!</string>
 
 </resources>

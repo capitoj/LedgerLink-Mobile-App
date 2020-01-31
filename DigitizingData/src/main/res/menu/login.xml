@@ -2,6 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_edit_vslacole"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:title="@string/action_edit_vslacole" />
+
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never"
@@ -25,10 +31,4 @@
         android:title="Training Modules"
         />
 
-    <item
-        android:id="@+id/testing"
-        android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="Testing"
-        />
 </menu>

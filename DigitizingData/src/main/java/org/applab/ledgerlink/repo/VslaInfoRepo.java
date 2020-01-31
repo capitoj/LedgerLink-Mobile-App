@@ -392,5 +392,52 @@ public class VslaInfoRepo {
         }
     }
 
+    public boolean editVslaCode(String VslaCode) {
+        SQLiteDatabase db = null;
+        boolean performUpdate = false;
+        try {
+            //Check if exists and do an Update
+            if(vslaInfoExists()) {
+                performUpdate = true;
+            }
+
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(VslaInfoSchema.COL_VI_VSLA_CODE, VslaCode);
+
+            // Inserting or UpdatingRow
+            long retVal = -1;
+            if(performUpdate) {
+                // updating row
+                retVal = db.update(VslaInfoSchema.getTableName(), values, null,null);
+            }
+            else {
+                retVal = db.insert(VslaInfoSchema.getTableName(), null, values);
+            }
+
+            if (retVal != -1) {
+                //If executing in trainng mode, set GSW as completed
+                if(Utils.isExecutingInTrainingMode()) {
+                    updateGettingStartedWizardCompleteFlag();
+                }
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch (Exception ex) {
+            Log.e("VslaInfoRepo.editVslaCode", ex.getMessage());
+            return false;
+        }
+        finally {
+            if (db != null) {
+                db.close();
+            }
+        }
+    }
+
+
 
 }
