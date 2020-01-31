@@ -926,5 +926,11 @@
     <string name="enter_share_out_amount">Enter ShareOut Amount</string>
     <string name="amount_paid_required">Amount paid required</string>
     <string name="outstanding_balance_default">Outstanding Welfare: 0 UGX</string>
+    <string name="to_edit_your_vslacode">Please note you an not edit the Vsla Code once activated.</string>
+    <string name="enter_new_vslacode">Enter New Vsla Code</string>
+    <string name="edit_vslacode">Edit Vsla Code</string>
+    <string name="action_edit_vslacode">Edit Vsla Code</string>
+    <string name="action_vsla_code">Vsla Code</string>
+    <string name="edit_failed_try_again_later">Action falied, try again</string>
 
 </resources>
