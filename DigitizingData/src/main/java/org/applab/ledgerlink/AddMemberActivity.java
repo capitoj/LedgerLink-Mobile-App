@@ -225,6 +225,13 @@ public class AddMemberActivity extends AppCompatActivity {
             mMonth = cal.get(Calendar.MONTH);
             mDay = cal.get(Calendar.DAY_OF_MONTH);
 
+            // Check if there is no active cycle, hide middle cycle
+            ArrayList<VslaCycle> activeCycles = ledgerLinkApplication.getVslaCycleRepo().getActiveCycles();
+            if (!(activeCycles.size() > 0)) {
+                LinearLayout middleCycle = (LinearLayout) findViewById(R.id.layoutAMMiddleCycleStartDetails);
+                middleCycle.setVisibility(View.GONE);
+            }
+
 
         }
 
@@ -251,6 +258,7 @@ public class AddMemberActivity extends AppCompatActivity {
         final EditText txtAMPhoneNo = (EditText) findViewById(R.id.txtAMPhoneNo);
         Utils.setAsPhoneNumberInput(txtAMPhoneNo);
     }
+
 
     protected void showMiddleStartCycleValues(Member member) {
         //loads the Middle start cycle values for this member

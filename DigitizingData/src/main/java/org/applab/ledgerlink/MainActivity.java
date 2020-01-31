@@ -24,6 +24,7 @@ import org.applab.ledgerlink.repo.VslaCycleRepo;
 import org.applab.ledgerlink.utils.Connection;
 import org.applab.ledgerlink.utils.DialogMessageBox;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -97,24 +98,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayMainMenu() {
 
+        final ArrayList<VslaCycle> activeCycles = ledgerLinkApplication.getVslaCycleRepo().getActiveCycles();
+
         ImageView meeting = (ImageView) findViewById(R.id.meeting);
         meeting.setImageResource(R.drawable.app_icons_meeting);
         meeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!(activeCycles.size() > 0)) {
+                    DialogMessageBox.show(MainActivity.this, "Create a new cycle", "Please a new cycle to access this function");
+                    return;
+                }
                 Intent i = new Intent(getApplicationContext(), BeginMeetingActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
             }
         });
 
-        ImageView sentdata = (ImageView) findViewById(R.id.sentdata);
-        sentdata.setImageResource(R.drawable.app_icons_sent_date);
-        sentdata.setOnClickListener(new View.OnClickListener() {
+        ImageView cycle = (ImageView) findViewById(R.id.cycle);
+        cycle.setImageResource(R.drawable.app_icons_cycle);
+        cycle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), ViewSentDataActivity.class);
+                Intent i = new Intent(getApplicationContext(), SelectCycleActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.putExtra("_isEndCycleAction", false);
                 startActivity(i);
             }
         });
@@ -135,6 +143,10 @@ public class MainActivity extends AppCompatActivity {
         shareout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!(activeCycles.size() > 0)) {
+                    DialogMessageBox.show(MainActivity.this, "Create a new cycle", "Please a new cycle to access this function");
+                    return;
+                }
                 Intent i = new Intent(getApplicationContext(), ShareOutActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
@@ -151,13 +163,12 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
-        ImageView editCycle = (ImageView) findViewById(R.id.editCycle);
-        editCycle.setOnClickListener(new View.OnClickListener() {
+        ImageView sentData = (ImageView) findViewById(R.id.sent_data);
+        sentData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), SelectCycleActivity.class);
+                Intent i = new Intent(getApplicationContext(), ViewSentDataActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                i.putExtra("_isEndCycleAction", false);
                 startActivity(i);
             }
         });
