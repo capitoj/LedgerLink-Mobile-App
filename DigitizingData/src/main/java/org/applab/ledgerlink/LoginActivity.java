@@ -374,6 +374,17 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem editVslaCode = menu.findItem(R.id.action_edit_vslacole);
+        if (!vslaInfo.isActivated()) {
+            editVslaCode.setVisible(true);
+        }else{
+            editVslaCode.setVisible(false);
+        }
+
+        return true;
+    }
+
     // This method is called once the menu is selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -381,7 +392,7 @@ public class LoginActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_edit_vslacole:
                 // Launch Edit Vsla code
-                i = new Intent(this, TestingActivity.class);
+                i = new Intent(this, EditVslaCode.class);
                 startActivity(i);
                 break;
             case R.id.action_settings:

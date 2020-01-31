@@ -19,7 +19,7 @@ import org.applab.ledgerlink.helpers.Utils;
  * Created by Home on 13/01/2020.
  */
 
-public class TestingActivity extends AppCompatActivity {
+public class EditVslaCode extends AppCompatActivity {
 
     private Context context;
     LedgerLinkApplication ledgerLinkApplication;
@@ -32,7 +32,7 @@ public class TestingActivity extends AppCompatActivity {
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        setContentView(R.layout.activity_testing);
+        setContentView(R.layout.activity_edit_vlsal_code);
 
         this.context = this;
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
@@ -52,7 +52,7 @@ public class TestingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String editVslaCode = txtPassCode.getText().toString().trim();
                 if (editVslaCode.length() <= 0) {
-                    Utils.createAlertDialogOk(TestingActivity.this, getString(R.string.action_vsla_code), getString(R.string.vsla_code_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
+                    Utils.createAlertDialogOk(EditVslaCode.this, getString(R.string.action_vsla_code), getString(R.string.vsla_code_required), Utils.MSGBOX_ICON_EXCLAMATION).show();
                     txtPassCode.requestFocus();
                 }else {
                     try{
