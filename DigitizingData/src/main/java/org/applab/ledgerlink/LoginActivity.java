@@ -374,11 +374,27 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem editVslaCode = menu.findItem(R.id.action_edit_vslacole);
+        if (!vslaInfo.isActivated()) {
+            editVslaCode.setVisible(true);
+        }else{
+            editVslaCode.setVisible(false);
+        }
+
+        return true;
+    }
+
     // This method is called once the menu is selected
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
         switch (item.getItemId()) {
+            case R.id.action_edit_vslacole:
+                // Launch Edit Vsla code
+                i = new Intent(this, EditVslaCode.class);
+                startActivity(i);
+                break;
             case R.id.action_settings:
                 // Launch preferences activity
                 i = new Intent(this, SettingsActivity.class);
@@ -397,11 +413,6 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.action_training_modules:
                 //Launch the training modules
                 i = new Intent(this, TrainingModuleActivity.class);
-                startActivity(i);
-                break;
-            case R.id.testing:
-                //Launch the testing
-                i = new Intent(this, TestingActivity.class);
                 startActivity(i);
                 break;
         }
@@ -693,4 +704,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
 }

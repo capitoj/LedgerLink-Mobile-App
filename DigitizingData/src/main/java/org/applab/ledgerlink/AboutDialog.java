@@ -31,7 +31,7 @@ public class AboutDialog extends Dialog {
         tv = (TextView)findViewById(R.id.info_text);
         tv.setText(Html.fromHtml("<h3>LedgerLink</h3>" + getContext().getResources().getString(R.string.about_version) + "<br>" +
                 "Copyright 2014<br><b>www.applab.org</b><br><br>"));
-        tv.setLinkTextColor(Color.WHITE);
+        tv.setLinkTextColor(Color.BLUE);
         Linkify.addLinks(tv, Linkify.ALL);
 
 

@@ -1,10 +1,8 @@
 package org.applab.ledgerlink;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -74,8 +72,6 @@ public class PassKeyResetActivity extends AppCompatActivity {
             }
             forgotPassKey.setVslaName(txtDRVslaName.getText().toString().trim());
             setContentView(R.layout.activity_forgot_passkey_number_of_meeting);
-            EditText txtDRNoOfMeetings = (EditText)findViewById(R.id.txtDRNoOfMeetings);
-//            txtDRNoOfMeetings.setText(forgotPassKey.getNoOfMeetings());
             clickIndex++;
         }
         // Get No. of Meetings
@@ -88,8 +84,6 @@ public class PassKeyResetActivity extends AppCompatActivity {
             }
             forgotPassKey.setNoOfMeetings(Integer.valueOf(txtDRNoOfMeetings.getText().toString().trim()));
             setContentView(R.layout.activity_forgot_passkey_no_of_members);
-            EditText txtDRNoOfMembers = (EditText)findViewById(R.id.txtDRNoOfMembers);
-//            txtDRNoOfMembers.setText(forgotPassKey.getNoOfMembers());
             clickIndex++;
         }
         // Get No. of Members in Vsla Group
@@ -102,8 +96,6 @@ public class PassKeyResetActivity extends AppCompatActivity {
             }
             forgotPassKey.setNoOfMembers(Integer.valueOf(txtDRNoOfMembers.getText().toString().trim()));
             setContentView(R.layout.activity_forgot_passkey_no_of_cycle);
-            EditText txtDRNoOfCycle = (EditText)findViewById(R.id.txtDRNoOfCycle);
-//            txtDRNoOfCycle.setText(forgotPassKey.getNoOfCyclesCompleted());
             clickIndex++;
         } else if(clickIndex == 3){
             EditText txtDRNoOfCycle = (EditText)findViewById(R.id.txtDRNoOfCycle);
