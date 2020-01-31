@@ -6,6 +6,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 /**
  * Created by Moses on 7/4/13.
  */
-public class SelectCycle extends AppCompatActivity {
+public class SelectCycleActivity extends AppCompatActivity {
 
     private VslaCycle selectedCycle = null;
     private RadioGroup grpCycleDates;
@@ -61,76 +62,79 @@ public class SelectCycle extends AppCompatActivity {
         TextView txtInstructions = (TextView) findViewById(R.id.lblMDMultipleCycles);
 
         ArrayList<VslaCycle> activeCycles = ledgerLinkApplication.getVslaCycleRepo().getActiveCycles();
-        if (activeCycles != null && activeCycles.size() == 0) {
+
+        if (activeCycles.size() > 0) {
+            txtInstructions.setText("");
+            final VslaCyclesArrayAdapter adapter = new VslaCyclesArrayAdapter(getBaseContext(), activeCycles);
+            cyclesListView.setAdapter(adapter);
+            cyclesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    selectedCycle = adapter.getItem(position);
+
+                    multipleCycles = true;
+                    if (isEndCycleAction) {
+
+                        Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+                        i.putExtra("_multipleCycles", multipleCycles);
+                        i.putExtra("_cycleId", selectedCycle.getCycleId());
+                        startActivity(i);
+                        finish();
+                    } else {
+                        Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
+                        i.putExtra("_isUpdateCycleAction", true);
+                        i.putExtra("_multipleCycles", multipleCycles);
+                        i.putExtra("_cycleId", selectedCycle.getCycleId());
+                        startActivity(i);
+                        finish();
+                    }
+                }
+            });
+        }else{
             // no cycles
             cyclesListView.setVisibility(View.GONE);
             txtInstructions.setText(R.string.no_active_cycles_to_modify);
-            return;
+            TextView lblBMInstructionCurrent = (TextView)findViewById(R.id.lblBMInstructionCurrent);
+            lblBMInstructionCurrent.setText("Please add a new cycle");
         }
 
         ArrayList<VslaCycle> inActiveCycles = ledgerLinkApplication.getVslaCycleRepo().getInActiveCycles();
-        if (inActiveCycles != null && inActiveCycles.size() == 0) {
+        if (inActiveCycles.size() > 0) {
+            final VslaCyclesArrayAdapter inactive = new VslaCyclesArrayAdapter(getApplicationContext(), inActiveCycles);
+            inactiveCyclesListView.setAdapter(inactive);
+            inactiveCyclesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    selectedCycle = inactive.getItem(position);
+
+                    inactiveCycles = true;
+                    if (isEndCycleAction) {
+
+                        Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
+                        i.putExtra("_inactiveCycles", inactiveCycles);
+                        i.putExtra("_cycleId", selectedCycle.getCycleId());
+                        startActivity(i);
+                        finish();
+                    } else {
+                        Intent i = new Intent(getApplicationContext(), CycleSummaryActivity.class);
+                        i.putExtra("_isUpdateCycleAction", true);
+                        i.putExtra("_inactiveCycles", inactiveCycles);
+                        i.putExtra("_cycleId", selectedCycle.getCycleId());
+                        startActivity(i);
+                        finish();
+                    }
+                }
+            });
+        }else{
             // no cycles
             inactiveCyclesListView.setVisibility(View.GONE);
-            txtInstructions.setText(R.string.no_active_cycles_to_modify);
-            return;
         }
 
 
-        final VslaCyclesArrayAdapter inactive = new VslaCyclesArrayAdapter(getBaseContext(), inActiveCycles);
-        inactiveCyclesListView.setAdapter(inactive);
-        inactiveCyclesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                selectedCycle = inactive.getItem(position);
-
-                inactiveCycles = true;
-                if (isEndCycleAction) {
-
-                    Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
-                    i.putExtra("_inactiveCycles", inactiveCycles);
-                    i.putExtra("_cycleId", selectedCycle.getCycleId());
-                    startActivity(i);
-                    finish();
-                } else {
-                    Intent i = new Intent(getApplicationContext(), CycleSummaryActivity.class);
-                    i.putExtra("_isUpdateCycleAction", true);
-                    i.putExtra("_inactiveCycles", inactiveCycles);
-                    i.putExtra("_cycleId", selectedCycle.getCycleId());
-                    startActivity(i);
-                    finish();
-                }
-            }
-        });
 
 
-        final VslaCyclesArrayAdapter adapter = new VslaCyclesArrayAdapter(getBaseContext(), activeCycles);
-        cyclesListView.setAdapter(adapter);
-        cyclesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                selectedCycle = adapter.getItem(position);
-
-                multipleCycles = true;
-                if (isEndCycleAction) {
-
-                    Intent i = new Intent(getApplicationContext(), EndCycleActivity.class);
-                    i.putExtra("_multipleCycles", multipleCycles);
-                    i.putExtra("_cycleId", selectedCycle.getCycleId());
-                    startActivity(i);
-                    finish();
-                } else {
-                    Intent i = new Intent(getApplicationContext(), NewCycleActivity.class);
-                    i.putExtra("_isUpdateCycleAction", true);
-                    i.putExtra("_multipleCycles", multipleCycles);
-                    i.putExtra("_cycleId", selectedCycle.getCycleId());
-                    startActivity(i);
-                    finish();
-                }
-            }
-        });
 //        grpCycleDates.addView(cyclesListView);
         Utils.setListViewHeightBasedOnChildren(cyclesListView);
 
@@ -201,19 +205,6 @@ public class SelectCycle extends AppCompatActivity {
 //                }
 //        });
 
-        String instructions = "";
-        if (!isEndCycleAction) {
-            instructions = getString(R.string.select_next_to_modify_cycle);
-            if ((activeCycles != null ? activeCycles.size() : 0) > 1) {
-                instructions = getString(R.string.more_than_one_cycle_currently_running);
-            }
-        } else {
-            instructions = getString(R.string.select_next_to_end_the_cycle);
-            if ((activeCycles != null ? activeCycles.size() : 0) > 1) {
-                instructions = getString(R.string.more_than_one_unfinished_cycle);
-            }
-        }
-        txtInstructions.setText(instructions);
 
 
     }

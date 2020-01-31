@@ -33,7 +33,7 @@
     <string name="image_content_desc">أيقونة</string>
     <string name="title_activity_delete_meeting">حذف نشاط الاجتماع</string>
     <string name="about_legal">كل الحقوق محفوظة. غير مسؤول عن أي ضرر ناتج عن استخدام هذا البرنامج.</string>
-    <string name="about_version">الإصدار 2016112501</string>
+    <string name="about_version">v.2020013001</string>
     <string name="action_about">حول</string>
     <string name="action_recovery">استعادة البيانات</string>
     <string name="register">تسجيل</string>
@@ -78,7 +78,7 @@
     <string name="name_default">0. الاسم الكامل</string>
     <string name="outstanding_loan_default">المعلقة: 60،000UGX</string>
     <string name="loan_balance_default">رصيد القرض: 60،000UGX</string>
-    <string name="date_due_default">تاريخ الاستحقاق: 01 يناير 2013</string>
+    <string name="date_due_default">تاريخ الاستحقاق: لا يوجد</string>
     <string name="today_saving_default">اليوم: 5000UGX</string>
     <string name="total_savings_default">إجمالي التوفير: 60،000UGX</string>
     <string name="total_welfare_default">إجمالي الرعاية الاجتماعية: 10،000UGX</string>
@@ -880,6 +880,7 @@
     <string name="no_of_complete_cycle_required">عدد الدورات المكتملة المطلوبة</string>
     <string name="no_of_meeting_required">عدد الاجتماعات المطلوبة</string>
     <string name="no_of_meetings">عدد الاجتماعات</string>
+    <string name="outstanding_balance_default">Outstanding Welfare: 0 UGX</string>
 
 
 </resources>

@@ -2,8 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/frmMAH_top_control_bar"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/gery_background">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -63,8 +64,8 @@
                         android:layout_marginBottom="10dip"
                         android:choiceMode="singleChoice"
                         android:dividerHeight="2dip"
-                        android:layout_marginLeft="20dip"
-                        android:layout_marginRight="20dip"
+                        android:layout_marginLeft="10dip"
+                        android:layout_marginRight="10dip"
                         android:elevation="2dp">
 
                     </ListView>
@@ -89,10 +90,8 @@
 
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:orientation="vertical"
-                    android:paddingBottom="10dp">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
                     <org.applab.ledgerlink.fontutils.TypefaceTextView
                         android:id="@+id/lblBMPastCycle"
@@ -112,7 +111,7 @@
 
                     <ListView
                         android:id="@+id/lstInactiveCycles"
-                        style="@style/RegularTextDateListItems"
+                        style="@style/RegularTextListItems"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dip"
@@ -123,7 +122,6 @@
                         android:elevation="2dp">
 
                     </ListView>
-
 
                 </LinearLayout>
             </android.support.v7.widget.CardView>

@@ -18,7 +18,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRMLRepayFullName"
-        android:text="@string/loan_balance_default" />
+        android:text="@string/outstanding_balance_default" />
 
     <org.applab.ledgerlink.fontutils.TypefaceTextView
         android:id="@+id/txtRMLRepayDateDue"

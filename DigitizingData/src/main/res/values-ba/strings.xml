@@ -77,7 +77,7 @@
     <string name="name_default">0. KARIN KUNOK LING</string>
     <string name="outstanding_loan_default">pitono: 60,000UGX</string>
     <string name="loan_balance_default">pitono ti kurjo (gurut): 60,000UGX</string>
-    <string name="date_due_default">Perok tutunge: 01 Yapa to\'geleng 2013</string>
+    <string name="date_due_default">Perok tutunge: None</string>
     <string name="today_saving_default">Indikini: 5,000UGX</string>
     <string name="total_savings_default">momoret na \'de\'ya: 60,000UGX</string>
     <string name="total_welfare_default">momoret na gwilinget: 10,000UGX</string>
@@ -867,5 +867,6 @@
     <string name="total_saving">momoret na \'de\'ya:</string>
     <string name="welfare_o">Gwilinget 0 UGX</string>
     <string name="shareout">ngare kango</string>
+    <string name="outstanding_balance_default">Outstanding Welfare: 0 UGX</string>
 
 </resources>

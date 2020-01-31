@@ -259,7 +259,7 @@
             android:label="Confirmation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SelectCycle"
+            android:name=".SelectCycleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Select Cycle"
             android:screenOrientation="portrait" />
