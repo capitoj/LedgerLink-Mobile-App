@@ -320,7 +320,7 @@ public class NewCycleActivity extends AppCompatActivity{
                     public void onClick(View v) {
                         Intent i;
                         if (multipleCyclesIndicator) {
-                            i = new Intent(getApplicationContext(), SelectCycle.class);
+                            i = new Intent(getApplicationContext(), SelectCycleActivity.class);
                         } else {
                             i = new Intent(getApplicationContext(), MainActivity.class);
                         }
