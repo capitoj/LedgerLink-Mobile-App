@@ -137,16 +137,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL(sqlQuery);
 
         //Create Table: TrainingModule
-        sqlQuery = TrainingModuleSchema.getCreateTableScript();
-        db.execSQL(sqlQuery);
-        preLoadTrainingModule(db);
+//        sqlQuery = TrainingModuleSchema.getCreateTableScript();
+//        db.execSQL(sqlQuery);
+//        preLoadTrainingModule(db);
 
         //Create Table: TrainingModuleResponse
-        sqlQuery = TrainingModuleResponseSchema.getCreateTableScript();
-        db.execSQL(sqlQuery);
-
-        sqlQuery = MessageChannelsSchema.getCreateTableScript();
-        db.execSQL(sqlQuery);
+//        sqlQuery = TrainingModuleResponseSchema.getCreateTableScript();
+//        db.execSQL(sqlQuery);
+//
+//        sqlQuery = MessageChannelsSchema.getCreateTableScript();
+//        db.execSQL(sqlQuery);
 
     }
 
