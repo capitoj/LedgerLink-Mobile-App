@@ -376,10 +376,12 @@ public class LoginActivity extends AppCompatActivity {
 
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem editVslaCode = menu.findItem(R.id.action_edit_vslacole);
-        if (!vslaInfo.isActivated()) {
-            editVslaCode.setVisible(true);
-        }else{
-            editVslaCode.setVisible(false);
+        if(vslaInfo != null) {
+            if (!vslaInfo.isActivated()) {
+                editVslaCode.setVisible(true);
+            }else{
+                editVslaCode.setVisible(false);
+            }
         }
 
         return true;
