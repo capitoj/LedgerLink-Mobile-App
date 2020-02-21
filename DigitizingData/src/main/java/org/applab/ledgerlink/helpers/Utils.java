@@ -24,6 +24,7 @@ import org.applab.ledgerlink.GettingStartedWizardAddMemberActivity;
 import org.applab.ledgerlink.GettingStartedWizardNewCycleActivity;
 import org.applab.ledgerlink.GettingStartedWizardPageOne;
 import org.applab.ledgerlink.GettingStartedWizardReviewMembersActivity;
+import org.applab.ledgerlink.LedgerLinkApplication;
 import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.SettingsActivity;
 
@@ -235,9 +236,10 @@ public class Utils {
     }
 
     public static String getPhoneImei() {
+        LedgerLinkApplication ledgerLinkApplication = new LedgerLinkApplication();
         try {
             if (phoneImei == null || phoneImei.length() < 1) {
-                TelephonyManager tm = (TelephonyManager) DatabaseHandler.databaseContext.getSystemService(Context.TELEPHONY_SERVICE);
+                TelephonyManager tm = (TelephonyManager) ledgerLinkApplication.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
                 phoneImei = tm.getDeviceId();
             }
             return phoneImei;
