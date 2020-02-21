@@ -163,16 +163,17 @@ public class MeetingSummaryFrag extends Fragment {
 
 
         //Force view to be of current meeting if in Data Review mode
-        if (Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
-            previousMeeting = currentMeeting;
-
-            //Also Rename the Section Marker
-            lblSectionLastMeeting.setText(R.string.current_meeting_summary);
-        }
+//        if (Utils._meetingDataViewMode == Utils.MeetingDataViewMode.VIEW_MODE_REVIEW) {
+//            previousMeeting = currentMeeting;
+//
+//            //Also Rename the Section Marker
+//            lblSectionLastMeeting.setText(R.string.current_meeting_summary);
+//        }
 
 
         if (null != previousMeeting) {
-            lblSectionLastMeeting.setText(String.format(getString(R.string.past_meeting_allcaps)+" %s", Utils.formatDate(previousMeeting.getMeetingDate())));
+
+            lblSectionLastMeeting.setText(String.format(getString(R.string.past_meeting_allcaps) + " %s", previousMeeting.getMeetingDate() == null ? "None" : Utils.formatDate(previousMeeting.getMeetingDate())));
 
             txtAttendedCount.setText(String.format(getString(R.string.attended)+" %d", parentActivity.ledgerLinkApplication.getMeetingAttendanceRepo().getAttendanceCountByMeetingId(previousMeeting.getMeetingId())));
 
@@ -220,7 +221,8 @@ public class MeetingSummaryFrag extends Fragment {
 
 
             totalMeetingCollections = totalMeetingSavings + totalLoansRepaidInMeeting;
-            lblMSFCollections.setText(String.format(getString(R.string.total_collections)+" %,.0f UGX", VslaMeeting.getTotalCashInBox(getActivity().getApplicationContext(), previousMeeting.getMeetingId())));
+//            Log.e("PreviousMeetingIdX", String.valueOf(prevVslaMeeting.getTotalCashInBox(getActivity().getApplicationContext(), previousMeeting.getMeetingId())));
+            lblMSFCollections.setText(String.format(getString(R.string.total_collections)+" %,.0f UGX", prevVslaMeeting.getTotalCashInBox(getActivity().getApplicationContext(), previousMeeting.getMeetingId())));
 
 
         } else {
