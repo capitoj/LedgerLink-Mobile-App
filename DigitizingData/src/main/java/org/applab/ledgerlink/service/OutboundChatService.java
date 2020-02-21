@@ -35,14 +35,14 @@ public class OutboundChatService extends Service {
     public void onCreate(){
         this.isRunning = false;
         this.context = this;
-        this.backgroundThread = new Thread(runnable);
+//        this.backgroundThread = new Thread(runnable);
     }
 
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            sendChat();
-            stopSelf();
+//            sendChat();
+//            stopSelf();
         }
     };
 
@@ -87,15 +87,15 @@ public class OutboundChatService extends Service {
 
     @Override
     public void onDestroy(){
-        this.isRunning = false;
+//        this.isRunning = false;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-        if(!this.isRunning){
-            this.isRunning = true;
-            this.backgroundThread.start();
-        }
+//        if(!this.isRunning){
+//            this.isRunning = true;
+//            this.backgroundThread.start();
+//        }
         return START_STICKY;
     }
 }

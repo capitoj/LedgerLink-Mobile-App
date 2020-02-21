@@ -34,8 +34,8 @@ public class InboundChatService extends Service {
     protected Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            getInboundChats();
-            stopSelf();
+//            getInboundChats();
+//            stopSelf();
         }
     };
 
@@ -82,7 +82,7 @@ public class InboundChatService extends Service {
     public void onCreate(){
         this.isRunning = false;
         this.context = this;
-        this.backgroundThread = new Thread(runnable);
+//        this.backgroundThread = new Thread(runnable);
     }
 
     @Override
@@ -92,10 +92,10 @@ public class InboundChatService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-        if(!this.isRunning){
-            this.isRunning = true;
-            this.backgroundThread.start();
-        }
+//        if(!this.isRunning){
+//            this.isRunning = true;
+//            this.backgroundThread.start();
+//        }
         return START_STICKY;
     }
 }

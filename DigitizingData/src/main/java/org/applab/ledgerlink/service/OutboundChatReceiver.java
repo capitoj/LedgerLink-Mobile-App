@@ -12,6 +12,6 @@ public class OutboundChatReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent){
         Intent background = new Intent(context, OutboundChatService.class);
-        context.startService(background);
+//        context.startService(background);
     }
 }

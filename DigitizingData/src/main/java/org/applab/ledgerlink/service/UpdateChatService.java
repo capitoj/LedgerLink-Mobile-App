@@ -41,8 +41,8 @@ public class UpdateChatService extends Service {
     protected Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            updateChatHistory();
-            stopSelf();
+//            updateChatHistory();
+//            stopSelf();
         }
     };
 
@@ -86,23 +86,23 @@ public class UpdateChatService extends Service {
 
     @Override
     public void onCreate(){
-        this.isRunning = false;
-        this.context = this;
-        this.backgroundThread = new Thread(runnable);
+//        this.isRunning = false;
+//        this.context = this;
+//        this.backgroundThread = new Thread(runnable);
     }
 
     @Override
     public void onDestroy(){
-        super.onDestroy();
-        this.isRunning = false;
+//        super.onDestroy();
+//        this.isRunning = false;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-        if(!this.isRunning){
-            this.isRunning = true;
-            this.backgroundThread.start();
-        }
+//        if(!this.isRunning){
+//            this.isRunning = true;
+//            this.backgroundThread.start();
+//        }
         return START_STICKY;
     }
 }
