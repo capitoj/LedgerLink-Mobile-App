@@ -173,7 +173,7 @@ public class MeetingSummaryFrag extends Fragment {
 
         if (null != previousMeeting) {
 
-            lblSectionLastMeeting.setText(String.format(getString(R.string.past_meeting_allcaps) + " %s", previousMeeting.getMeetingDate() == null ? "None" : Utils.formatDate(previousMeeting.getMeetingDate())));
+            lblSectionLastMeeting.setText(String.format(getString(R.string.past_meeting_allcaps) + " %s", previousMeeting.getMeetingDate() == null ? "0.0 UGX" : Utils.formatDate(previousMeeting.getMeetingDate())));
 
             txtAttendedCount.setText(String.format(getString(R.string.attended)+" %d", parentActivity.ledgerLinkApplication.getMeetingAttendanceRepo().getAttendanceCountByMeetingId(previousMeeting.getMeetingId())));
 
