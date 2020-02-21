@@ -734,7 +734,7 @@ public class MeetingLoanRepaymentRepo {
             //Reverse the Repayment: First Retrieve the Loan then
             //1. Add the repayment amount to the loan balance
             int targetLoanId = repaymentRecord.getLoanId();
-            MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(DatabaseHandler.databaseContext);
+            MeetingLoanIssuedRepo loanIssuedRepo = new MeetingLoanIssuedRepo(context);
             MeetingLoanIssued targetLoan = loanIssuedRepo.getLoanIssuedByLoanId(targetLoanId);
 
             if(null == targetLoan) {
