@@ -36,6 +36,7 @@ public class AddBorrowFromWelfareMeetingActivity extends ActionBarActivity{
     private MeetingOutstandingWelfare meetingOutstandingWelfare;
     private boolean selectedFinishButton = false;
     private Meeting meeting = null;
+    private String dateString;
 
     private TextView txtOutstandingWelfareDueDate;
 
@@ -45,7 +46,7 @@ public class AddBorrowFromWelfareMeetingActivity extends ActionBarActivity{
 
     protected TextView viewClicked;
 
-    protected final DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+    private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             mYear = year;
             mMonth = monthOfYear;
@@ -54,9 +55,16 @@ public class AddBorrowFromWelfareMeetingActivity extends ActionBarActivity{
         }
     };
 
-    protected void updateDisplay() {
+    private void updateDisplay() {
         if (viewClicked != null) {
-            viewClicked.setText(String.format("%02d", mDay) + "-" + Utils.getMonthNameAbbrev(mMonth) + "-" + mYear);
+            dateString = (new StringBuilder()
+                    // Month is 0 based so add 1
+                    .append(mDay)
+                    .append("-")
+                    .append(Utils.getMonthNameAbbrev(mMonth + 1))
+                    .append("-")
+                    .append(mYear)).toString();
+            viewClicked.setText(dateString);
         }
     }
 
