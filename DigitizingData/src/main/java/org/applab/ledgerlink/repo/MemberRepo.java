@@ -707,7 +707,7 @@ public class MemberRepo {
     public ArrayList<String> getListOfAvailableMemberNumbers() {
         ArrayList<String> memberNumbers = new ArrayList<String>();
 
-        for (int i = 1; memberNumbers.size() < 30; i++) {
+        for (int i = 1; memberNumbers.size() < 100; i++) {
             if (isMemberNoAvailable(i, 0)) {
                 memberNumbers.add(i + "");
             }
