@@ -115,22 +115,24 @@ public class MeetingOutstandingWelfareRepo {
     }
 
     public MeetingOutstandingWelfare getMemberOutstandingWelfare(int meetingId, int memberId) {
-
+        Log.e("MeetingIDXX", String.valueOf(meetingId));
         SQLiteDatabase db = null;
         Cursor cursor = null;
         try {
             db = DatabaseHandler.getInstance(context).getWritableDatabase();
-            String sql = String.format("SELECT * FROM %s WHERE %s=%d AND %s=%d AND %s=%d",
+            String sql = String.format("SELECT * FROM %s WHERE %s=%d AND %s=%d AND %s=%d order by _id desc limit 1",
                     OutstandingWelfareSchema.TBL_OUTSTANDING_WELFARE,
                     OutstandingWelfareSchema.COL_OW_MEETING_ID, meetingId,
                     OutstandingWelfareSchema.COL_OW_MEMBER_ID, memberId,
                     OutstandingWelfareSchema.COL_OW_IS_CLEARED, 0);
             cursor = db.rawQuery(sql, null);
             if (cursor != null) {
-                if (cursor.moveToNext()) {
+                if (cursor.moveToFirst()) {
                     this.meetingOutstandingWelfare = new MeetingOutstandingWelfare();
                     this.meetingOutstandingWelfare.setOutstandingWelfareId(cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_ID)));
-//                    this.meetingOutstandingWelfare.setExpectedDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE))));
+                    if(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE)) != null) {
+                        this.meetingOutstandingWelfare.setExpectedDate(Utils.getDateFromSqlite(cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE))));
+                    }
                     this.meetingOutstandingWelfare.setAmount(cursor.getDouble(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_AMOUNT)));
                     this.meetingOutstandingWelfare.setIsCleared(cursor.getInt(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_IS_CLEARED)));
                     if (cursor.getString(cursor.getColumnIndex(OutstandingWelfareSchema.COL_OW_DATE_CLEARED)) != null) {
@@ -328,6 +330,15 @@ public class MeetingOutstandingWelfareRepo {
                         null,
                         String.valueOf(0),
                         meetingOutstandingWelfare.getComment()});
+            }else {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(OutstandingWelfareSchema.COL_OW_MEETING_ID, meetingOutstandingWelfare.getMeeting().getMeetingId());
+                contentValues.put(OutstandingWelfareSchema.COL_OW_MEMBER_ID, meetingOutstandingWelfare.getMember().getMemberId());
+                contentValues.put(OutstandingWelfareSchema.COL_OW_AMOUNT , meetingOutstandingWelfare.getAmount());
+                contentValues.put(OutstandingWelfareSchema.COL_OW_EXPECTED_DATE, Utils.formatDateToSqlite(meetingOutstandingWelfare.getExpectedDate()));
+                contentValues.put(OutstandingWelfareSchema.COL_OW_IS_CLEARED, 0);
+
+                int result = db.update(OutstandingWelfareSchema.TBL_OUTSTANDING_WELFARE, contentValues, OutstandingWelfareSchema.COL_OW_ID + " = ?", new String[]{String.valueOf(outstandingWelfareId)});
             }
 
         }catch (Exception e) {

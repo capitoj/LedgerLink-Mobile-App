@@ -325,7 +325,7 @@ public class CycleSummaryActivity extends AppCompatActivity {
     public void sendMeetingData(int meetingId) {
         //If no network, hide send meeting button
         if (!Utils.isNetworkConnected(getApplicationContext())) {
-            Toast.makeText(DatabaseHandler.databaseContext, R.string.can_not_send_info_bse_mobile_data_or_internet_disabled, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.can_not_send_info_bse_mobile_data_or_internet_disabled, Toast.LENGTH_LONG).show();
             return;
         }
         //TODO: Confirm this later. Does not support multiple cycles

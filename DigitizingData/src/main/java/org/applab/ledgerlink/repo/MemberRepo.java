@@ -11,6 +11,7 @@ import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
 import org.applab.ledgerlink.domain.model.MeetingSaving;
 import org.applab.ledgerlink.domain.model.MeetingWelfare;
+import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.domain.schema.MemberSchema;
@@ -143,7 +144,6 @@ public class MemberRepo {
 
 
     public boolean updateMemberLoanOnSetup(Member member) {
-        Log.d(context.getPackageName(), "Method entry updateMemberLoanOnSetup");
         boolean isGSW = true;
         MeetingRepo meetingRepo = new MeetingRepo(context);
 
@@ -193,8 +193,9 @@ public class MemberRepo {
             // Update loan balances
             Log.d(context.getPackageName(), "updateMemberLoanOnSetup : loan issued record found, update it");
             meetingLoanIssuedRepo = new MeetingLoanIssuedRepo(context);
-            meetingLoanIssuedRepo.updateMemberLoanNumber(loanIssuedToMemberInMeeting.getLoanId(), member.getOutstandingLoanNumberOnSetup());
-            return meetingLoanIssuedRepo.updateMemberLoanBalancesAndComment(loanIssuedToMemberInMeeting.getLoanId(), member.getOutstandingLoanOnSetup(), member.getDateOfFirstRepayment(), comment);
+            return meetingLoanIssuedRepo.updateMemberLoanIssued(loanIssuedToMemberInMeeting.getLoanId(), member.getOutstandingLoanNumberOnSetup(), member.getOutstandingLoanOnSetup(), member.getDateOfFirstRepayment());
+//            meetingLoanIssuedRepo.updateMemberLoanNumber(loanIssuedToMemberInMeeting.getLoanId(), member.getOutstandingLoanNumberOnSetup());
+//            return meetingLoanIssuedRepo.updateMemberLoanBalancesAndComment(loanIssuedToMemberInMeeting.getLoanId(), member.getOutstandingLoanOnSetup(), member.getDateOfFirstRepayment(), comment);
         }
     }
 
@@ -222,7 +223,6 @@ public class MemberRepo {
             }
             values.put(MemberSchema.COL_M_DATE_JOINED, Utils.formatDateToSqlite(member.getDateOfAdmission()));
 
-
             // updating row
             int retVal = db.update(MemberSchema.getTableName(), values, MemberSchema.COL_M_MEMBER_ID + " = ?",
                     new String[]{String.valueOf(member.getMemberId())});
@@ -246,7 +246,9 @@ public class MemberRepo {
         MeetingOutstandingWelfareRepo meetingOutstandingWelfareRepo = new MeetingOutstandingWelfareRepo(context);
         MeetingRepo meetingRepo = new MeetingRepo(context);
         String comment = "";
-        Meeting dummyGettingStartedWizardMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
+        VslaCycle vslaCycle = new VslaCycleRepo(context).getCurrentCycle();
+        int meetingID = meetingRepo.getFirstCycleMeetingID(vslaCycle.getCycleId());
+        Meeting dummyGettingStartedWizardMeeting = new MeetingRepo(context).getMeetingById(meetingID);
         if (dummyGettingStartedWizardMeeting == null) {
             // No GSW wizard meeting? probably training mode... either way, be optimistic and return now
             return true;

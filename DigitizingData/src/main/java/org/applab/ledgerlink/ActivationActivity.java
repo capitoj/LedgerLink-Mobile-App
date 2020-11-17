@@ -69,134 +69,122 @@ public class ActivationActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Spinner dropdownFinancialInstitution;
     private FinancialInstitution targetFinancialInstitution;
+    private String readExternalStorage = Manifest.permission.READ_EXTERNAL_STORAGE;
+    private String writeExternalStorage = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+    private String readPhoneStage = Manifest.permission.READ_PHONE_STATE;
+
+    protected boolean hasPermission(String permission){
+        return  ActivityCompat.checkSelfPermission(getApplicationContext(), permission) == PackageManager.PERMISSION_GRANTED;
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
-        setContentView(R.layout.activity_activation);
 
-        activationSuccessful = false;
+        if(!hasPermission(writeExternalStorage) || !hasPermission(readExternalStorage)){
+            Intent i = new Intent(getBaseContext(), PermissionActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        }else {
 
-        progressDialog = null;
+            ledgerLinkApplication = (LedgerLinkApplication) getApplication();
+            TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
+            setContentView(R.layout.activity_activation);
 
-        // Android request permission modal
-        ActivityCompat.requestPermissions(ActivationActivity.this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                1);
+            activationSuccessful = false;
 
-        //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
-        //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
+            progressDialog = null;
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-        //actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
+            // Android request permission modal
 
-        this.buildFinancialInstitutionSpinner();
+            //requestForMultiplePermissions();
 
-        ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
-        imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
-        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.reg_width), (int) this.getResources().getDimension(R.dimen.reg_height)));
+            //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
+            //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
 
-        Button btnActivate = (Button) findViewById(R.id.btnVAActivate);
-        btnActivate.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                saveActivatedVslaInfo();
-            }
-        });
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.hide();
+            //actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
-        /** Change lanugage spinner **/
+            this.buildFinancialInstitutionSpinner();
 
-        Spinner spinnerLang = (Spinner) findViewById(R.id.spinner_lang);
+            ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
+            imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
+            imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.reg_width), (int) this.getResources().getDimension(R.dimen.reg_height)));
 
-        //spinnerLang.setOnItemSelectedListener(this);
-
-        // Lanugage list
-        List<String> languages = new ArrayList<String>();
-        languages.add("Select Language");
-        languages.add("English");
-        languages.add("Acholi");
-        languages.add("Arabic");
-        languages.add("Bari");
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, languages);
-        // attaching data adapter to spinner
-        spinnerLang.setAdapter(dataAdapter);
-
-        spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                if (pos == 1) {
-                    Toast.makeText(parent.getContext(),
-                            "You have selected English", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("en");
-                } else if (pos == 2) {
-                    Toast.makeText(parent.getContext(),
-                            "You have selected Acholi", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("ac");
-                } else if (pos == 3) {
-                    Toast.makeText(parent.getContext(),
-                            "You have selected Arabic", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("ar");
+            Button btnActivate = (Button) findViewById(R.id.btnVAActivate);
+            btnActivate.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    saveActivatedVslaInfo();
                 }
-                else if (pos == 4) {
-                    Toast.makeText(parent.getContext(),
-                            "You have selected Bari", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("ba");
+            });
+
+            /** Change lanugage spinner **/
+
+            Spinner spinnerLang = (Spinner) findViewById(R.id.spinner_lang);
+
+            //spinnerLang.setOnItemSelectedListener(this);
+
+            // Lanugage list
+            List<String> languages = new ArrayList<String>();
+            languages.add("Select Language");
+            languages.add("English");
+            languages.add("Acholi");
+            languages.add("Arabic");
+            languages.add("Bari");
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, languages);
+            // attaching data adapter to spinner
+            spinnerLang.setAdapter(dataAdapter);
+
+            spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                    if (pos == 1) {
+                        Toast.makeText(parent.getContext(),
+                                "You have selected English", Toast.LENGTH_SHORT)
+                                .show();
+                        setLocale("en");
+                    } else if (pos == 2) {
+                        Toast.makeText(parent.getContext(),
+                                "You have selected Acholi", Toast.LENGTH_SHORT)
+                                .show();
+                        setLocale("ac");
+                    } else if (pos == 3) {
+                        Toast.makeText(parent.getContext(),
+                                "You have selected Arabic", Toast.LENGTH_SHORT)
+                                .show();
+                        setLocale("ar");
+                    } else if (pos == 4) {
+                        Toast.makeText(parent.getContext(),
+                                "You have selected Bari", Toast.LENGTH_SHORT)
+                                .show();
+                        setLocale("ba");
+                    }
                 }
-            }
 
-            public void onNothingSelected(AdapterView<?> arg0) {
+                public void onNothingSelected(AdapterView<?> arg0) {
 
-                // TODO Auto-generated method stub
+                    // TODO Auto-generated method stub
 
-            }
-        });
+                }
+            });
 
-        if (Utils.isExecutingInTrainingMode()) {
-            //Load Sample Trainng Data: Testing
-                SampleDataBuilderRepo.insertTrainingData(getApplicationContext());
-                Intent i = new Intent(getBaseContext(), LoginActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                finish();
+//            if (Utils.isExecutingInTrainingMode()) {
+                //Load Sample Trainng Data: Testing
+//                SampleDataBuilderRepo.insertTrainingData(getApplicationContext());
+//                Intent i = new Intent(getBaseContext(), LoginActivity.class);
+//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(i);
+//                finish();
 
+//            }
         }
     }
 
     /** Android request permission  **/
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(ActivationActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
 
     public void setLocale(String lang) {
         Locale locale = new Locale(lang);
@@ -482,6 +470,7 @@ public class ActivationActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
             }else{
                 String baseUrl = "http://" + targetFinancialInstitution.getIpAddress();
                 String uri = String.format("%s/%s/%s", baseUrl, getString(R.string.digitizingdata), getString(R.string.activate));
@@ -540,7 +529,6 @@ public class ActivationActivity extends AppCompatActivity {
 
                         // write the response byte array to a string buffer
                         out.append(new String(b, 0, b.length));
-                        Log.e("OutputX", out.toString());
                         return out.toString();
                     }
                 };
@@ -580,7 +568,6 @@ public class ActivationActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(JSONObject result) {
-            Log.e("ResultX", String.valueOf(result));
             String vslaName = null;
             String passKey = null;
             super.onPostExecute(result);

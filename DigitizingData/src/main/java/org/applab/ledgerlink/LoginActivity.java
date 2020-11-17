@@ -89,10 +89,10 @@ public class LoginActivity extends AppCompatActivity {
 
         this.loadBackgroundService();
         
-        // Android request permission modal
-        ActivityCompat.requestPermissions(LoginActivity.this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                1);
+//        // Android request permission modal
+//        ActivityCompat.requestPermissions(LoginActivity.this,
+//                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+//                1);
 
         //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
         //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
@@ -470,14 +470,11 @@ public class LoginActivity extends AppCompatActivity {
         VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
         FinancialInstitutionRepo financialInstitutionRepo = new FinancialInstitutionRepo(getApplicationContext(), vslaInfo.getFiID());
         FinancialInstitution financialInstitution = financialInstitutionRepo.getFinancialInstitution();
-//            String baseUrl = "http://127.0.0.1:82";
         String baseUrl = "http://" + financialInstitution.getIpAddress();
         String uri = String.format("%s/%s/%s", baseUrl, "DigitizingData", "activate");
         Log.e("ActivationX", uri);
 //        String uri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", "activate");
         new PostTask(this).execute(uri, request);
-
-        //Do the other stuff in the Async Task
     }
 
     private void activateVslaAndSignIn() {

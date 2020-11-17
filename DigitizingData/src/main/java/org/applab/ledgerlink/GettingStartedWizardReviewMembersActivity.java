@@ -62,6 +62,7 @@ public class GettingStartedWizardReviewMembersActivity extends MembersListActivi
                 Intent i = new Intent(getApplicationContext(), GettingStartedWizardNewCycleActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
+                finish();
 
             }
         });

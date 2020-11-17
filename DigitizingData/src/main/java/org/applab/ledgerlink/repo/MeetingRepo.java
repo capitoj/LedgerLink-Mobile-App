@@ -1108,6 +1108,34 @@ public class MeetingRepo {
         }
     }
 
+    public int getFirstCycleMeetingID(int cycleID){
+        SQLiteDatabase db = null;
+        int meetingID = 0;
+        Cursor cursor = null;
+        try{
+            db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = "select _id from Meetings where CycleId = ? order by _id asc limit 1";
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(cycleID)});
+            if(cursor != null){
+                if(cursor.moveToNext()){
+                    if(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)) != null){
+                        meetingID = Integer.parseInt(cursor.getString(cursor.getColumnIndex(MeetingSchema.COL_MT_MEETING_ID)));
+                    }
+                }
+            }
+            cursor.close();
+            db.close();
+
+        }catch (Exception e){
+            Log.e("GetFirstCycleMeeting", e.getMessage());
+        }finally {
+            cursor.close();
+            db.close();
+        }
+
+        return meetingID;
+    }
+
     //Returns the Getting started wizard dummy meeting
     public Meeting getDummyGettingStartedWizardMeeting() {
         SQLiteDatabase db = null;

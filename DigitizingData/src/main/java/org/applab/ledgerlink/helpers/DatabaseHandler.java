@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 
+import org.applab.ledgerlink.SettingsActivity;
 import org.applab.ledgerlink.domain.schema.AttendanceSchema;
 import org.applab.ledgerlink.domain.schema.FinancialInstitutionSchema;
 import org.applab.ledgerlink.domain.schema.FineSchema;
@@ -29,16 +30,17 @@ import java.io.File;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final String INTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
+    private static final String EXTERNAL_STORAGE_LOCATION = Environment.getExternalStorageDirectory().getAbsolutePath();
     public static final String DATABASE_NAME = "ledgerlinkdb";
     private static final int DATABASE_VERSION = 65;
     private static final String TRAINING_DATABASE_NAME = "ledgerlinktraindb";
     private static final String DATA_FOLDER = "LedgerLink";
-    private  SQLiteDatabase llDatabase;
 
     public static Context databaseContext = null;
 
     private DatabaseHandler(Context context) {
-        super(context, pathToDatabaseFolder(context), null, DATABASE_VERSION);
+        super(context, __createDatabaseFolder() + ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_RUN_IN_TRAINING_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING)) ? DATABASE_NAME : TRAINING_DATABASE_NAME), null, DATABASE_VERSION);
+        Log.e("DatabaseHandler", String.valueOf(Utils.isExecutingInTrainingMode()));
         databaseContext = context;
     }
 
@@ -47,27 +49,43 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public static String pathToDatabaseFolder(Context context) {
-        String absoluteFilePath = Utils.isExecutingInTrainingMode() ? TRAINING_DATABASE_NAME : DATABASE_NAME;
-        if(DatabaseHandler.isSDCardMounted()){
-            File[] fileList = new File("/storage/").listFiles();
-            int cursor = 0;
-            for(File file: fileList){
-                String externalStorageLocation = file.getAbsolutePath();
-                if(externalStorageLocation.contains("sdcard")){
-                    cursor++;
-                    if(cursor == 1){
-                        absoluteFilePath = DatabaseHandler.__createFolderPath(externalStorageLocation);
-                        break;
-                    }
-                }
+//        String absoluteFilePath = Utils.isExecutingInTrainingMode() ? TRAINING_DATABASE_NAME : DATABASE_NAME;
+//        if(DatabaseHandler.isSDCardMounted()){
+//            File[] fileList = new File("/storage/").listFiles();
+//            int cursor = 0;
+//            for(File file: fileList){
+//                String externalStorageLocation = file.getAbsolutePath();
+//                if(externalStorageLocation.contains("sdcard")){
+//                    cursor++;
+//                    if(cursor == 1){
+//                        absoluteFilePath = DatabaseHandler.__createFolderPath(externalStorageLocation);
+//                        break;
+//                    }
+//                }
+//            }
+//            Log.e("Cursor", String.valueOf(cursor));
+//            if(cursor == 0){
+//                absoluteFilePath = DatabaseHandler.__createFolderPath(INTERNAL_STORAGE_LOCATION);
+//            }
+//        }else{
+//            absoluteFilePath = DatabaseHandler.__createFolderPath(INTERNAL_STORAGE_LOCATION);
+//        }
+//        return absoluteFilePath;
+        return DatabaseHandler.__createFolderPath(INTERNAL_STORAGE_LOCATION);
+    }
+
+    protected static String __createDatabaseFolder(){
+        File databaseStorageDir = new File(EXTERNAL_STORAGE_LOCATION + File.separator + DATA_FOLDER);
+        if(! databaseStorageDir.exists()) {
+            boolean mkdir = databaseStorageDir.mkdir();
+            if(mkdir) {
+                Log.d("DatabaseHandler.createDatabaseFolder", "Data folder "+databaseStorageDir.getAbsolutePath() +" has been created");
             }
-            if(cursor == 0){
-                absoluteFilePath = DatabaseHandler.__createFolderPath(INTERNAL_STORAGE_LOCATION);
+            else {
+                Log.d("DatabaseHandler.createDatabaseFolder", "Data folder "+databaseStorageDir.getAbsolutePath() +" failed to be created");
             }
-        }else{
-            absoluteFilePath = DatabaseHandler.__createFolderPath(INTERNAL_STORAGE_LOCATION);
         }
-        return absoluteFilePath;
+        return databaseStorageDir.getAbsolutePath() + File.separator;
     }
 
     protected static String __createFolderPath(String absolutePath){

@@ -14,6 +14,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.SendMeetingDataActivity;
@@ -25,8 +26,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Calendar;
 
 /**
@@ -63,27 +72,52 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONArray> {
         try{
             if(Connection.isNetworkConnected(this.context)){
                 this.isConnected = true;
-                final DefaultHttpClient httpClient = new DefaultHttpClient();
-                final HttpPost httpPost = new HttpPost(uri);
-                StringEntity se = new StringEntity(params[1]);
-                httpPost.setEntity(se);
-                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-                ResponseHandler<String> rh = new ResponseHandler<String>() {
-                    @Override
-                    public String handleResponse(HttpResponse httpResponse) throws ClientProtocolException, IOException {
-                        HttpEntity httpEntity = httpResponse.getEntity();
-                        httpStatusCode = httpResponse.getStatusLine().getStatusCode();
-                        StringBuffer out = new StringBuffer();
-                        byte[] b = EntityUtils.toByteArray(httpEntity);
-                        out.append(new String(b, 0, b.length));
-                        return out.toString();
-                    }
-                };
-                String response = httpClient.execute(httpPost, rh);
-                httpClient.getConnectionManager().shutdown();
-                if (httpStatusCode == 200) {
-                    result = new JSONArray(response);
+
+                URL url = new URL(uri);
+                HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(params[1].getBytes("UTF-8"));
+                outputStream.close();
+
+                InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("utf-8")), 8);
+
+                String line;
+                String jsonString = "";
+
+                while((line = bufferedReader.readLine()) != null){
+                    jsonString += line;
                 }
+                inputStream.close();
+                result = new JSONArray(jsonString);
+                httpURLConnection.disconnect();
+
+//
+//                final DefaultHttpClient httpClient = new DefaultHttpClient();
+//                final HttpPost httpPost = new HttpPost(uri);
+//                StringEntity se = new StringEntity(params[1]);
+//                httpPost.setEntity(se);
+//                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
+//                ResponseHandler<String> rh = new ResponseHandler<String>() {
+//                    @Override
+//                    public String handleResponse(HttpResponse httpResponse) throws ClientProtocolException, IOException {
+//                        HttpEntity httpEntity = httpResponse.getEntity();
+//                        httpStatusCode = httpResponse.getStatusLine().getStatusCode();
+//                        StringBuffer out = new StringBuffer();
+//                        byte[] b = EntityUtils.toByteArray(httpEntity);
+//                        out.append(new String(b, 0, b.length));
+//                        return out.toString();
+//                    }
+//                };
+//                String response = httpClient.execute(httpPost, rh);
+//                httpClient.getConnectionManager().shutdown();
+//                if (httpStatusCode == 200) {
+//                    result = new JSONArray(response);
+//                }
             }
             return result;
         }catch (Exception e){

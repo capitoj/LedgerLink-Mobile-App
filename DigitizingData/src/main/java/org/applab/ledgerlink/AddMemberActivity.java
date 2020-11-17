@@ -27,7 +27,9 @@ import android.widget.Toast;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.MeetingLoanIssued;
 import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
+import org.applab.ledgerlink.domain.model.MeetingSaving;
 import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.domain.model.VslaCycle;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
@@ -116,8 +118,8 @@ public class AddMemberActivity extends AppCompatActivity {
             this.isEditAction = getIntent().getBooleanExtra("_isEditAction", false);
         }
 
-        MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
-        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
+//        MeetingRepo meetingRepo = new MeetingRepo(getApplicationContext());
+//        Meeting targetMeeting = meetingRepo.getMeetingById(meetingId);
         inflateCustomActionBar();
         // END_INCLUDE (inflate_set_custom_view)
         //if in getting started wizard.. use the getting started layout
@@ -272,52 +274,57 @@ public class AddMemberActivity extends AppCompatActivity {
         TextView lblAMMiddleCycleWelfare = (TextView) findViewById(R.id.lblAMMiddleCycleWelfare);
         TextView lblAMMiddleCycleOutstandingWelfare = (TextView) findViewById(R.id.lblAMMiddleCycleOutstandingWelfare);
 
-        txtAMMLoanNumber.setText(String.valueOf(member.getOutstandingLoanNumberOnSetup()));
-
-        lblAMMiddleCycleSavings.setText(String.format("%,.0f %s", member.getSavingsOnSetup(), getResources().getString(R.string.operating_currency)));
-        lblAMMiddleCycleLoans.setText(String.format("%,.0f %s", member.getOutstandingLoanOnSetup(), getResources().getString(R.string.operating_currency)));
-        lblAMMiddleCycleWelfare.setText(String.format("%,.0f %s", member.getWelfareOnSetup(), getResources().getString(R.string.operating_currency)));
-
-
-        targetMeeting = meetingRepo.getMeetingById(meetingId);
-        if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
-            MeetingOutstandingWelfare meetingOutstandingWelfare = meetingOutstandingWelfareRepo.getOutstandingMemberWelfare(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
-            if(meetingOutstandingWelfare.getOutstandingWelfareId() > 1){
-                lblAMMiddleCycleOutstandingWelfare.setText(String.format("%,.0f %s", meetingOutstandingWelfare.getAmount(), getResources().getString(R.string.operating_currency)));
-                txtOutstandingWelfareDueDate.setText(Utils.formatDate(meetingOutstandingWelfare.getExpectedDate(), Utils.OTHER_DATE_FIELD_FORMAT));
-             }else{
-                lblAMMiddleCycleOutstandingWelfare.setText(String.format("%,.0f %s", "0", getResources().getString(R.string.operating_currency)));
-                txtOutstandingWelfareDueDate.setText("Due Date: None");
-            }
+        VslaCycle vslaCycle = ledgerLinkApplication.getVslaCycleRepo().getCurrentCycle();
+        int meetingID = ledgerLinkApplication.getMeetingRepo().getFirstCycleMeetingID(vslaCycle.getCycleId());
+        Meeting targetMeeting = ledgerLinkApplication.getMeetingRepo().getMeetingById(meetingID);
+        MeetingOutstandingWelfare meetingOutstandingWelfare = null;
+        if(targetMeeting != null){
+            meetingOutstandingWelfare = ledgerLinkApplication.getMeetingOutstandingWelfareRepo().getMemberOutstandingWelfare(targetMeeting.getMeetingId(), selectedMember.getMemberId());
         }
-//        if(member.getOutstandingWelfareDueDateOnSetup() != null){
-//
-//            txtOutstandingWelfareDueDate.setText(Utils.formatDate(member.getOutstandingWelfareDueDateOnSetup(), "dd-MM-yyyy"));
-//        }else{
-//            txtOutstandingWelfareDueDate.setText(R.string.none_main);
-//            txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
-//        }
 
-        // populate the next repayment date
-        if (member.getDateOfFirstRepayment() != null) {
-            txtAMMLoanNextRepaymentDate.setText(Utils.formatDate(member.getDateOfFirstRepayment(), "dd-MM-yyyy"));
+        MeetingLoanIssued meetingLoanIssued = (ledgerLinkApplication.getMeetingLoanIssuedRepo().getLoanIssuedToMemberInMeeting(meetingID, member.getMemberId()));
+        txtAMMLoanNumber.setText(String.valueOf(meetingLoanIssued.getLoanNo()));
+
+        MeetingSaving meetingSaving = ledgerLinkApplication.getMeetingSavingRepo().getMemberSavingAndComment(meetingID, member.getMemberId());
+
+        lblAMMiddleCycleSavings.setText(String.format("%,.0f %s", meetingSaving.getAmount(), getResources().getString(R.string.operating_currency)));
+        member.setSavingsOnSetup(meetingSaving.getAmount());
+
+        lblAMMiddleCycleLoans.setText(String.format("%,.0f %s", meetingLoanIssued.getLoanBalance(), getResources().getString(R.string.operating_currency)));
+        member.setOutstandingLoanOnSetup(meetingLoanIssued.getLoanBalance());
+
+        double meetingWelfare = ledgerLinkApplication.getMeetingWelfareRepo().getMemberWelfare(meetingID, member.getMemberId());
+        lblAMMiddleCycleWelfare.setText(String.format("%,.0f %s", meetingWelfare, getResources().getString(R.string.operating_currency)));
+        member.setWelfareOnSetup(meetingWelfare);
+
+        lblAMMiddleCycleOutstandingWelfare.setText(String.format("%,.0f %s", meetingOutstandingWelfare.getAmount(), getResources().getString(R.string.operating_currency)));
+
+        if(meetingOutstandingWelfare.getExpectedDate() != null){
+            txtOutstandingWelfareDueDate.setText(Utils.formatDate(meetingOutstandingWelfare.getExpectedDate(), Utils.DATE_FIELD_FORMAT));
+            member.setOutstandingWelfareDueDateOnSetup(meetingOutstandingWelfare.getExpectedDate());
+        }
+
+        if(meetingLoanIssued.getDateDue() != null){
+            txtAMMLoanNextRepaymentDate.setText(Utils.formatDate(meetingLoanIssued.getDateDue(), Utils.DATE_FIELD_FORMAT));
+            member.setDateOfFirstRepayment(meetingLoanIssued.getDateDue());
         } else {
             txtAMMLoanNextRepaymentDate.setText(R.string.none_main);
-            txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
         }
+        txtAMMLoanNextRepaymentDate.setTextColor(getResources().getColor(R.color.ledger_link_light_blue));
+
 
         // Process comments if any
         EditText txtAMMiddleCycleSavingsComment = (EditText) findViewById(R.id.txtAMMiddleCycleSavingsCorrectionComment);
-        if (null != member.getSavingsOnSetupCorrectionComment()) {
-            if (!"".equals(member.getSavingsOnSetupCorrectionComment())) {
-                txtAMMiddleCycleSavingsComment.setText(member.getSavingsOnSetupCorrectionComment());
+        if (null != meetingSaving.getComment()) {
+            if (!"".equals(meetingSaving.getComment())) {
+                txtAMMiddleCycleSavingsComment.setText(meetingSaving.getComment());
             }
         }
 
         EditText txtAMMiddleCycleLoansComment = (EditText) findViewById(R.id.txtAMMiddleCycleLoansCorrectionComment);
-        if (null != member.getOutstandingLoanOnSetupCorrectionComment()) {
-            if (!"".equals(member.getOutstandingLoanOnSetupCorrectionComment())) {
-                txtAMMiddleCycleLoansComment.setText(member.getOutstandingLoanOnSetupCorrectionComment());
+        if (null != meetingLoanIssued.getComment()) {
+            if (!"".equals(meetingLoanIssued.getComment())) {
+                txtAMMiddleCycleLoansComment.setText(meetingLoanIssued.getComment());
             }
         }
 
@@ -326,7 +333,7 @@ public class AddMemberActivity extends AppCompatActivity {
         MeetingRepo meetingRepo = new MeetingRepo(getBaseContext());
 
         String pronoun = member.getGender().startsWith("F") || member.getGender().startsWith("f") ? getString(R.string.her) : getString(R.string.his);
-        lblAMMiddleCycleInformationHeading.setText(getString(R.string.member_info_added_after_cycle_started) + pronoun + getString(R.string.total_saving_and_outstanding_loans_that_day));
+        lblAMMiddleCycleInformationHeading.setText(getString(R.string.member_info_added_after_cycle_started) + pronoun + " " + getString(R.string.total_saving_and_outstanding_loans_that_day));
 
         Meeting dummyGSWMeeting = meetingRepo.getDummyGettingStartedWizardMeeting();
         if (dummyGSWMeeting != null) {
@@ -858,21 +865,17 @@ public class AddMemberActivity extends AppCompatActivity {
 
         EditText txtOutstandingWelfareAmount = (EditText) findViewById(R.id.txtAMMOutstandingWelfareCorrection);
         String outstandingWelfareAmount = txtOutstandingWelfareAmount.getText().toString().trim();
-        if(outstandingWelfareAmount.length() < 1){
-            member.setOutstandingWelfareOnSetup(0);
-        }else{
+        if(outstandingWelfareAmount.length() > 0){
             double totalOutstandingWelfare = Double.parseDouble(outstandingWelfareAmount);
             if(totalOutstandingWelfare < 0.00){
                 Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.total_amount_member_outstanding_welfare_be_zeor_and_above), Utils.MSGBOX_ICON_EXCLAMATION);
                 txtOutstandingWelfareAmount.requestFocus();
                 return false;
             }else{
-                member.setOutstandingWelfareOnSetup(totalOutstandingWelfare);
-                if(totalOutstandingWelfare > 0 && txtOutstandingWelfareDueDate.getText().length() == 0){
-                    Utils.createAlertDialogOk(this, dlgTitle, getString(R.string.outstanding_welfare_due_date_required), Utils.MSGBOX_ICON_EXCLAMATION);
-                    return false;
-                }else{
-                    member.setOutstandingWelfareDueDateOnSetup(Utils.getDateFromString(txtOutstandingWelfareDueDate.getText().toString(), "dd-MM-yyyy"));
+
+                if(totalOutstandingWelfare > 0){
+                    member.setOutstandingWelfareOnSetup(totalOutstandingWelfare);
+                    member.setOutstandingWelfareDueDateOnSetup(Utils.convertStringToDate(txtOutstandingWelfareDueDate.getText().toString()));
                 }
             }
         }
@@ -1001,7 +1004,6 @@ public class AddMemberActivity extends AppCompatActivity {
             }
 
             if (!txtAMMiddleCycleLoansCorrectionComment.getText().toString().isEmpty()) {
-                Log.d("AMA", txtAMMiddleCycleLoansCorrectionComment.getText().toString());
                 member.setOutstandingLoanOnSetupCorrectionComment(txtAMMiddleCycleLoansCorrectionComment.getText().toString());
             }
 

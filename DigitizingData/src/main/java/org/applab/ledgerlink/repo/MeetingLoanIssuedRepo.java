@@ -203,6 +203,8 @@ public class MeetingLoanIssuedRepo {
                     loan.setDateCleared(dateCleared);
                 }
                 loan.setCleared((cursor.getInt(cursor.getColumnIndex("IsCleared")) == 1));
+//                MeetingRepo meetingRepo = new MeetingRepo(context, cursor.getInt(cursor.getColumnIndex("MeetingId")));
+//                loan.setMeeting(meetingRepo.getMeeting());
             }
         } catch (Exception ex) {
             Log.e("MeetingLoanIssuedRepo.getTotalOutstandingLoansByMemberInCycle", ex.getMessage());
@@ -485,6 +487,7 @@ public class MeetingLoanIssuedRepo {
     }
 
     public boolean saveMemberLoanIssue(int meetingId, int memberId, int loanNo, double amount, double interest, double balance, Date dateDue, String comment, boolean isUpdate) {
+        Log.e("DueDateX", dateDue.toString());
         SQLiteDatabase db = null;
         boolean performUpdate = false;
         int loanId = 0;
@@ -1255,6 +1258,18 @@ public class MeetingLoanIssuedRepo {
                 db.close();
             }
         }
+    }
+
+    public boolean updateMemberLoanIssued(int loanID, int loanNumber, double amountDue, Date dueDate){
+        SQLiteDatabase db = DatabaseHandler.getInstance(this.context).getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(LoanIssueSchema.COL_LI_LOAN_NO, loanNumber);
+        values.put(LoanIssueSchema.COL_LI_BALANCE, amountDue);
+        values.put(LoanIssueSchema.COL_LI_DATE_DUE, Utils.formatDateToSqlite(dueDate));
+        Log.e("DueDateX", Utils.formatDateToSqlite(dueDate));
+        int result = db.update(LoanIssueSchema.getTableName(),values, LoanIssueSchema.COL_LI_LOAN_ID + " = ?", new String[]{String.valueOf(loanID)});
+        db.close();
+        return result == -1 ? false : true;
     }
 
     public boolean updateMemberLoanNumber(int loanID, int loanNumber){

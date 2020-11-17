@@ -139,6 +139,25 @@ public class MeetingLoanRepaymentRepo {
         }
     }
 
+    public boolean hasLoanRepayments(int loanId){
+        boolean hasLoanRepayments = false;
+        try{
+            SQLiteDatabase db = DatabaseHandler.getInstance(context).getWritableDatabase();
+            String sql = "select count(LoanId) Total from LoanRepayments where LoanId = ?";
+            Cursor cursor = db.rawQuery(sql, new String[loanId]);
+            if(cursor != null && cursor.moveToFirst()){
+                if(cursor.getInt(cursor.getColumnIndex("Total")) > 0){
+                    hasLoanRepayments = true;
+                }
+                cursor.close();
+                db.close();
+            }
+        }catch(Exception e){
+            Log.e("hasLoanRepayments", e.getMessage());
+        }
+        return hasLoanRepayments;
+    }
+
     public String getMemberRepaymentCommentByLoanId(int loanId) {
         SQLiteDatabase db = null;
         Cursor cursor = null;

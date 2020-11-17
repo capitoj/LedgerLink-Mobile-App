@@ -7,19 +7,12 @@
         android:minSdkVersion="19"
         android:targetSdkVersion="28" />
 
-    <!-- to allow for checking Connectivity Status -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- to allow Activation over the internet -->
     <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- to allow access to telephony -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
-    <!-- to allow access to external storage -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <supports-screens
         android:largeScreens="true"
@@ -29,10 +22,6 @@
         android:xlargeScreens="true"
         tools:ignore="UnusedAttribute" />
 
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="24" />
-
     <!-- android:theme="@style/AppTheme" -->
     <application
         android:name=".LedgerLinkApplication"
@@ -40,7 +29,10 @@
         android:configChanges="locale|orientation"
         android:icon="@drawable/ic_ledgerlink_icona"
         android:label="@string/app_name"
-        android:theme="@style/CustomActionBarTheme">
+        android:theme="@style/CustomActionBarTheme"
+        android:usesCleartextTraffic="true">
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
         <!-- android:debuggable="false"> -->
         <activity
@@ -184,9 +176,9 @@
             android:name=".ShareOutActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_shareout_list"
+            android:noHistory="true"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"
-            android:noHistory="true">
+            android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.applab.ledgerlink.MainActivity" />
@@ -365,9 +357,9 @@
             android:name=".GeneralSupportActivity"
             android:label="@string/title_activity_general_support"
             android:screenOrientation="portrait" />
-        activity
-        android:name=".MeetingMemberLoansIssueFrag"
-        android:label="@string/title_activity_meeting_member_loans_issue_frag" />
+        <!--<activity-->
+        <!--android:name=".MeetingMemberLoansIssueFrag"-->
+        <!--android:label="@string/title_activity_meeting_member_loans_issue_frag" />-->
         <activity
             android:name=".MeetingMemberLoansIssueActivity"
             android:label="@string/title_activity_meeting_member_loans_issue" />
@@ -382,7 +374,11 @@
         <activity android:name=".AddBorrowFromWelfareMeetingActivity" />
         <activity android:name=".MemberOutstandingWelfareHistoryActivity" />
         <activity android:name=".TestingActivity" />
-
+        <activity
+            android:name=".PermissionActivity"
+            android:label="LedgerLink Permissions"
+            android:screenOrientation="portrait"
+            />
     </application>
 
 </manifest>

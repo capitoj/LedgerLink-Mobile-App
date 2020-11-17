@@ -18,6 +18,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import org.apache.commons.lang3.StringUtils;
 import org.applab.ledgerlink.GettingStartedWizardPageTwo;
 import org.applab.ledgerlink.GettingStartedConfirmationPage;
 import org.applab.ledgerlink.GettingStartedWizardAddMemberActivity;
@@ -28,10 +29,12 @@ import org.applab.ledgerlink.LedgerLinkApplication;
 import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.SettingsActivity;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
@@ -252,6 +255,37 @@ public class Utils {
         phoneImei = thePhoneImei;
     }
 
+    public static int getMonthNumber(String month){
+        switch (month){
+            case "Jan":
+                return 1;
+            case "Feb":
+                return 2;
+            case "Mar":
+                return 3;
+            case "Apr":
+                return 4;
+            case "May":
+                return 5;
+            case "Jun":
+                return 6;
+            case "Jul":
+                return 7;
+            case "Aug":
+                return 8;
+            case "Sep":
+                return 9;
+            case "Oct":
+                return 10;
+            case "Nov":
+                return 11;
+            case "Dec":
+                return 12;
+            default:
+                return 1;
+        }
+    }
+
     public static String getMonthNameAbbrev(int month) {
         switch (month) {
             case 1:
@@ -282,6 +316,21 @@ public class Utils {
                 return "Jan";
 
         }
+    }
+
+    public static Date convertStringToDate(String strDate){
+        strDate = strDate.replaceAll("-", "/");
+        String[] split = strDate.split("/");
+        split[1] = String.valueOf(getMonthNumber(split[1]));
+        strDate = StringUtils.join(split, "/");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = null;
+        try {
+            date = dateFormat.parse(strDate);
+        }catch(Exception e){
+            Log.e("ConvertStringToDateX", e.getMessage());
+        }
+        return date;
     }
 
     public static Date getDateFromString(String date, String format) {

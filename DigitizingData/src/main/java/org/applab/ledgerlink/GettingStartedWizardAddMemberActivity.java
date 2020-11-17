@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import org.applab.ledgerlink.domain.model.Meeting;
+import org.applab.ledgerlink.domain.model.MeetingOutstandingWelfare;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.fontutils.TypefaceTextView;
@@ -151,7 +153,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.MONTH, 1);
 
-        txtOutstandingWelfareDueDate.setText(Utils.formatDate(cal.getTime(), "dd-MM-yyyy"));
+        txtOutstandingWelfareDueDate.setText(Utils.formatDate(cal.getTime(), "dd-MMM-yyyy"));
 
         mYear = cal.get(Calendar.YEAR);
         mMonth = cal.get(Calendar.MONTH);
@@ -160,7 +162,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
         txtOutstandingWelfareDueDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date nextOutstandingWelfareDueDate = Utils.stringToDate(txtOutstandingWelfareDueDate.getText().toString(), "dd-MM-yyyy");
+                Date nextOutstandingWelfareDueDate = Utils.stringToDate(txtOutstandingWelfareDueDate.getText().toString(), "dd-MMM-yyyy");
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(nextOutstandingWelfareDueDate);
                 mYear = cal.get(Calendar.YEAR);
@@ -187,7 +189,7 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
             public void onClick(View view) {
 
                 // The Event Handler to handle both startDate and endDate
-                Date nextRepaymentDate = Utils.stringToDate(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MM-yyyy");
+                Date nextRepaymentDate = Utils.stringToDate(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MMM-yyyy");
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(nextRepaymentDate);
                 mYear = cal.get(Calendar.YEAR);
@@ -541,10 +543,9 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                         displayMessageBox(dlgTitle, getString(R.string.outstanding_welfare_due_date_required));
                         return false;
                     }
-                    member.setOutstandingWelfareDueDateOnSetup(Utils.getDateFromString(txtOutstandingWelfareDueDate.getText().toString(), "dd-MM-yyyy"));
+                    member.setOutstandingWelfareDueDateOnSetup(Utils.convertStringToDate(txtOutstandingWelfareDueDate.getText().toString()));
                 }
             }
-
 
             //Validate Amount of Loan outstanding for this member
             EditText txtLoanAmount = (EditText) findViewById(R.id.txtMDVOutstandingLoanAmount);
@@ -571,9 +572,8 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
                         return false;
 
                     }
-                    else {
-                        member.setDateOfFirstRepayment(Utils.getDateFromString(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MM-yyyy"));
-                    }
+//                    member.setDateOfFirstRepayment(Utils.getDateFromString(txtNCGSWLoanNextRepaymentDate.getText().toString(), "dd-MM-yyyy"));
+                    member.setDateOfFirstRepayment(Utils.convertStringToDate(txtNCGSWLoanNextRepaymentDate.getText().toString()));
 
                     //set the loan number
                     if(outstandingLoan > 0.00 && txtNCGSWLoanNumber.getText().length()==0)
@@ -656,9 +656,12 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
     @Override
     protected void populateDataFields(Member member) {
-
         super.populateDataFields(member);
-
+        Meeting dummyMeeting = ledgerLinkApplication.getMeetingRepo().getDummyGettingStartedWizardMeeting();
+        if(dummyMeeting != null){
+            MeetingOutstandingWelfare meetingOutstandingWelfare = ledgerLinkApplication.getMeetingOutstandingWelfareRepo().getMemberOutstandingWelfare(dummyMeeting.getMeetingId(), member.getMemberId());
+            member.setOutstandingWelfareDueDateOnSetup(meetingOutstandingWelfare.getExpectedDate());
+        }
         TextView txtSavingsSoFar = (TextView) findViewById(R.id.txtMDVAmountSavedInCurrentCycle);
         txtSavingsSoFar.setText(String.format("%.0f", member.getSavingsOnSetup()));
         TextView txtLoanAmount = (TextView) findViewById(R.id.txtMDVOutstandingLoanAmount);
@@ -671,6 +674,12 @@ public class GettingStartedWizardAddMemberActivity extends AddMemberActivity {
 
         EditText txtOutstandingWelfareAmount = (EditText) findViewById(R.id.txtAMMOutstandingWelfareCorrection);
         txtOutstandingWelfareAmount.setText(String.format("%.0f", member.getOutstandingWelfareOnSetup()));
+
+        if(member.getOutstandingWelfareDueDateOnSetup() != null){
+            txtOutstandingWelfareDueDate.setText(Utils.formatDate(member.getOutstandingWelfareDueDateOnSetup(), "dd-MMM-yyyy"));
+        }else{
+            txtOutstandingWelfareDueDate.setText(getString(R.string.none_main));
+        }
 
 
         //populate the next repayment date
