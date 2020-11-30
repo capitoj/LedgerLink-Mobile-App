@@ -176,14 +176,9 @@ public class SampleDataBuilderRepo {
             //Retrieve the new Cycle. Need to declare an add method in the repo that returns an object
             cycle = vslaCycleRepo.getMostRecentCycle();
 
-            // Add vsla info
-            VslaInfo vslainfo = new VslaInfo();
-            vslainfo.setVslaName("Training");
-            vslainfo.setVslaCode("123456");
-            vslainfo.setPassKey("123456");
 
             VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(appContext);
-            vslaInfoRepo.saveVslaInfo("Training", "123456", "123456", 1);
+            vslaInfoRepo.saveVslaInfo("GRAMEEN20201127", "Training Mode", "123456", 1);
 
             //Add Members
             addMember(1,"Bwire","Justine","Male",33,"Farmer",1);

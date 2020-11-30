@@ -34,7 +34,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
@@ -218,7 +217,7 @@ public class Utils {
 
         //Otherwise if all is ok continue
         VSLA_SERVER_BASE_URL = preferences.getString(SettingsActivity.PREF_KEY_SERVER_URL, "http://vsla.com/notset");
-        EXECUTING_IN_TRAINING_MODE = Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE, "1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING);
+        EXECUTING_IN_TRAINING_MODE = Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE, "2").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_PROD) ? false : true;
         setRefreshDataFlag(Utils.getDefaultSharedPreferences(context).getBoolean(SettingsActivity.PREF_KEY_REFRESH_TRAINING_DATA, false));
     }
 

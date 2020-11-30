@@ -39,39 +39,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static Context databaseContext = null;
 
     private DatabaseHandler(Context context) {
-        super(context, __createDatabaseFolder() + ((Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_RUN_IN_TRAINING_MODE,"1").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_TRAINING)) ? DATABASE_NAME : TRAINING_DATABASE_NAME), null, DATABASE_VERSION);
-        Log.e("DatabaseHandler", String.valueOf(Utils.isExecutingInTrainingMode()));
+        super(context, __createDatabaseFolder() + getDatabaseFileName(context), null, DATABASE_VERSION);
         databaseContext = context;
     }
 
-    protected static boolean isSDCardMounted(){
-        return android.os.Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
-    }
-
-    public static String pathToDatabaseFolder(Context context) {
-//        String absoluteFilePath = Utils.isExecutingInTrainingMode() ? TRAINING_DATABASE_NAME : DATABASE_NAME;
-//        if(DatabaseHandler.isSDCardMounted()){
-//            File[] fileList = new File("/storage/").listFiles();
-//            int cursor = 0;
-//            for(File file: fileList){
-//                String externalStorageLocation = file.getAbsolutePath();
-//                if(externalStorageLocation.contains("sdcard")){
-//                    cursor++;
-//                    if(cursor == 1){
-//                        absoluteFilePath = DatabaseHandler.__createFolderPath(externalStorageLocation);
-//                        break;
-//                    }
-//                }
-//            }
-//            Log.e("Cursor", String.valueOf(cursor));
-//            if(cursor == 0){
-//                absoluteFilePath = DatabaseHandler.__createFolderPath(INTERNAL_STORAGE_LOCATION);
-//            }
-//        }else{
-//            absoluteFilePath = DatabaseHandler.__createFolderPath(INTERNAL_STORAGE_LOCATION);
-//        }
-//        return absoluteFilePath;
-        return DatabaseHandler.__createFolderPath(INTERNAL_STORAGE_LOCATION);
+    protected static String getDatabaseFileName(Context context){
+        if(Utils.isExecutingInTrainingMode()){
+            return TRAINING_DATABASE_NAME;
+        }
+        return Utils.getDefaultSharedPreferences(context).getString(SettingsActivity.PREF_KEY_EXECUTION_MODE,"2").equalsIgnoreCase(SettingsActivity.PREF_VALUE_EXECUTION_MODE_PROD) ? DATABASE_NAME : TRAINING_DATABASE_NAME;
     }
 
     protected static String __createDatabaseFolder(){
@@ -86,15 +62,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }
         }
         return databaseStorageDir.getAbsolutePath() + File.separator;
-    }
-
-    protected static String __createFolderPath(String absolutePath){
-        File databaseStorageDir = new File(absolutePath + File.separator + DATA_FOLDER);
-        if(! databaseStorageDir.exists()) {
-            databaseStorageDir.mkdir();
-        }
-        String databaseName = Utils.isExecutingInTrainingMode() ? TRAINING_DATABASE_NAME : DATABASE_NAME;
-        return databaseStorageDir.getAbsolutePath() + File.separator + databaseName;
     }
 
     public void onCreate(SQLiteDatabase db) {

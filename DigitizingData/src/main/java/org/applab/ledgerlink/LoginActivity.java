@@ -120,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         //Load this as long running task
-        LongTaskRunner.runLongTask(dataLoader, getString(R.string.please_wait), getString(R.string.ledgerlink_refreshes_test_training_data), LoginActivity.this);
+//        LongTaskRunner.runLongTask(dataLoader, getString(R.string.please_wait), getString(R.string.ledgerlink_refreshes_test_training_data), LoginActivity.this);
 
 
         //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblSISwitchMode);
@@ -180,11 +180,17 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             //if VSLAInfo is NULL, force Activation
             //If it is not Activated and is not in Offline Mode, force activation
+            if(Utils.isExecutingInTrainingMode()){
+                Utils.setRefreshDataFlag(true);
+                LongTaskRunner.runLongTask(dataLoader, getString(R.string.please_wait), getString(R.string.ledgerlink_refreshes_test_training_data), LoginActivity.this);
+                vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
+            }else {
+                Intent i = new Intent(LoginActivity.this, ActivationActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                finish();
+            }
 
-            Intent i = new Intent(LoginActivity.this, ActivationActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(i);
-            finish();
         }
 
         // Pass key Label
@@ -352,11 +358,12 @@ public class LoginActivity extends AppCompatActivity {
         this.startBackgroundService(this.context, alarm, 15000);
         */
 
-        alarm = new Intent(context, OutboundChatReceiver.class);
-        this.startBackgroundService(context, alarm, 2000);
+//        alarm = new Intent(context, OutboundChatReceiver.class);
+//        this.startBackgroundService(context, alarm, 2000);
 
-        alarm = new Intent(context, InboundChatReceiver.class);
-        this.startBackgroundService(context, alarm, 2000);    }
+//        alarm = new Intent(context, InboundChatReceiver.class);
+//        this.startBackgroundService(context, alarm, 2000);
+    }
 
     protected void startBackgroundService(Context context, Intent alarm, int interval){
         boolean alarmRunning = (PendingIntent.getBroadcast(context, 0, alarm, PendingIntent.FLAG_NO_CREATE) != null);

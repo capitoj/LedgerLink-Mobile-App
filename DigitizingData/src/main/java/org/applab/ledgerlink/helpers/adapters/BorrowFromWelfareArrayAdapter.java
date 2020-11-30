@@ -78,9 +78,13 @@ public class BorrowFromWelfareArrayAdapter extends ArrayAdapter<Member> {
             double outstandingWelfare = 0.0;
             if (null != targetMeeting && null != targetMeeting.getVslaCycle()) {
                 MeetingOutstandingWelfare meetingOutstandingWelfare = meetingOutstandingWelfareRepo.getOutstandingMemberWelfare(targetMeeting.getVslaCycle().getCycleId(), member.getMemberId());
-                if(meetingOutstandingWelfare.getOutstandingWelfareId() > 1){
-                    outstandingWelfare = meetingOutstandingWelfare.getAmount();
-                    txtDueDate.setText(String.format(context.getResources().getString(R.string.date_due)+" %s", Utils.formatDate(meetingOutstandingWelfare.getExpectedDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                if(meetingOutstandingWelfare != null) {
+                    if (meetingOutstandingWelfare.getOutstandingWelfareId() > 1) {
+                        outstandingWelfare = meetingOutstandingWelfare.getAmount();
+                        txtDueDate.setText(String.format(context.getResources().getString(R.string.date_due) + " %s", Utils.formatDate(meetingOutstandingWelfare.getExpectedDate(), Utils.OTHER_DATE_FIELD_FORMAT)));
+                    } else {
+                        txtDueDate.setText("Due Date: None");
+                    }
                 }else{
                     txtDueDate.setText("Due Date: None");
                 }

@@ -26,13 +26,13 @@
         android:title="Select Mode" />
 
     <!-- Default to TRAINING MODE -->
-    <!-- <ListPreference
-        android:key="prefExecutionMode"
-        android:entries="@array/executionMode"
-        android:summary="You are currently working on Training Data. Be sure to switch back to Actual VSLA Data to continue capturing meeting data."
-        android:entryValues="@array/executionModeValues"
-        android:defaultValue="2"
-        android:title="Switch to Actual VSLA Data" />-->
+    <!--<ListPreference-->
+        <!--android:key="prefRunInTrainingMode"-->
+        <!--android:entries="@array/executionMode"-->
+        <!--android:summary="You are currently working on Training Data. Be sure to switch back to Actual VSLA Data to continue capturing meeting data."-->
+        <!--android:entryValues="@array/executionModeValues"-->
+        <!--android:defaultValue="2"-->
+        <!--android:title="Switch to Actual VSLA Data" />-->
 
     <!-- opens another nested subscreen for Training Mode Options -->
     <PreferenceScreen
