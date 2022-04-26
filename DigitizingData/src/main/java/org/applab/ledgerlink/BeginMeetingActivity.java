@@ -1,11 +1,14 @@
 package org.applab.ledgerlink;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,8 +21,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.applab.ledgerlink.domain.model.FinancialInstitution;
 import org.applab.ledgerlink.domain.model.Meeting;
 import org.applab.ledgerlink.domain.model.VslaCycle;
+import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.ConcurrentMeetingsArrayAdapter;
@@ -27,10 +32,15 @@ import org.applab.ledgerlink.helpers.DataFactory;
 import org.applab.ledgerlink.helpers.DatabaseHandler;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.tasks.SubmitDataAsync;
+import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
 import org.applab.ledgerlink.repo.MeetingRepo;
+import org.applab.ledgerlink.repo.VslaInfoRepo;
+import org.applab.ledgerlink.utils.DialogMessageBox;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,12 +55,14 @@ public class BeginMeetingActivity extends AppCompatActivity {
     private static int numberOfSentMeetings = 0;
     private ArrayList<Meeting> currentMeetings;
     private boolean noPriorMeetings = false;
+    private Context context;
 
     LedgerLinkApplication ledgerLinkApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.context = this;
         ledgerLinkApplication = (LedgerLinkApplication) getApplication();
         TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
         setContentView(R.layout.activity_begin_meeting);
@@ -270,6 +282,49 @@ public class BeginMeetingActivity extends AppCompatActivity {
         return true;
     }
 
+    protected void __showProgressDialog(ProgressDialog progressDialog, String title, String message){
+        progressDialog.setTitle(title);
+        progressDialog.setMessage(message);
+        progressDialog.setProgress(1);
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+    }
+
+    protected void __fetchMeetingRecords(VslaCycle vslaCycle, JSONArray meetingRecords){
+        MeetingRepo meetingRepo = new MeetingRepo(context);
+        List<Meeting> pastMeetings = meetingRepo.getPastMeetings(vslaCycle.getCycleId());
+        try {
+            for (Meeting meeting : pastMeetings) {
+                String meetingDataToBeSent = DataFactory.getJSONOutput(context, meeting.getMeetingId());
+                meetingRecords.put(new JSONObject(meetingDataToBeSent));
+            }
+        }catch(Exception e){
+            Log.e("FetchMeetingRecords", e.getMessage());
+        }
+    }
+
+    protected void __sendMeetingRecords(JSONObject jsonObject){
+
+        try {
+            serverUri = String.format("%s/%s/%s", __getBaseUrl(), getString(R.string.digitizingdata), getString(R.string.submitdata));
+            if(jsonObject != null) {
+                new SubmitDataAsync(context).execute(serverUri, String.valueOf(jsonObject));
+            }
+        }catch (Exception e){
+            Log.e("sendMeetingRecords", e.getMessage());
+        }
+    }
+
+    protected String __getBaseUrl(){
+        VslaInfoRepo vslaInfoRepo = new VslaInfoRepo(getApplicationContext());
+        VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
+        FinancialInstitutionRepo financialInstitutionRepo = new FinancialInstitutionRepo(getApplicationContext(), vslaInfo.getFiID());
+        FinancialInstitution financialInstitution = financialInstitutionRepo.getFinancialInstitution();
+        return "http://" + financialInstitution.getIpAddress();
+
+    }
+
 
     private void inflateCustomBar() {
         // BEGIN_INCLUDE (inflate_set_custom_view)
@@ -282,43 +337,24 @@ public class BeginMeetingActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MeetingRepo meetingRepo = new MeetingRepo(BeginMeetingActivity.this);
-                        serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", getString(R.string.submitdata));
-                        VslaCycle recentCycle = ledgerLinkApplication.getVslaCycleRepo().getMostRecentCycle();
-                        List<Meeting> pastMeetings = meetingRepo.getPastMeetings(recentCycle.getCycleId());
-                        JSONArray jsonArray = new JSONArray();
-                        for(Meeting meeting : pastMeetings){
-                            String meetingDataToBeSent = DataFactory.getJSONOutput(BeginMeetingActivity.this, meeting.getMeetingId());
-                            try {
-                                JSONObject jsonItem = new JSONObject(meetingDataToBeSent);
-                                jsonArray.put(jsonItem);
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
-                        JSONObject jsonObject = new JSONObject();
-                        try {
-                            jsonObject.put("FileSubmission", jsonArray);
-                            serverUri = String.format("%s/%s/%s", Utils.VSLA_SERVER_BASE_URL, "vslas", getString(R.string.submitdata));
-                            new SubmitDataAsync(BeginMeetingActivity.this).execute(serverUri, String.valueOf(jsonObject));
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                        /*
-                        //send all meeting data
-                        numberOfSentMeetings = 0;
-                        for (Meeting thisMeeting : pastMeetings) {
-                            sendMeetingData(thisMeeting.getMeetingId());
+                        new FetchMeetingRecordsAsync().execute();
+//                        List<VslaCycle> vslaCycles = ledgerLinkApplication.getVslaCycleRepo().getAllCycles();
+//                        ArrayList<JSONObject> vslaCycleRecords = new ArrayList<>();
+//                        JSONArray meetingRecords = new JSONArray();
+//                        for(VslaCycle vslaCycle : vslaCycles){
+//                            __fetchMeetingRecords(vslaCycle, meetingRecords);
+//                        }
+//
+//                        if(meetingRecords.length() > 0) {
+//                            JSONObject jsonObject = new JSONObject();
+//                            try {
+//                                jsonObject.put("FileSubmission", meetingRecords);
+//                                __sendMeetingRecords(jsonObject);
+//                            }catch(Exception e){
+//                                Log.e("SendAllMeetingRecords", e.getMessage());
+//                            }
+//                        }
 
-                            //If sending of previous meeting failed, stop this loop
-                            if (!actionSucceeded) {
-                                break;
-                            }
-                        }
-                        if (numberOfSentMeetings > 0) {
-                            //If atleast a meeting was sent succesfully, refresh the view to reflect sent meetings
-                            refreshActivityView();
-                        }*/
                     }
                 }
         );
@@ -327,7 +363,7 @@ public class BeginMeetingActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i = new Intent(getApplicationContext(), MeetingDefinitionActivity.class);
+                        Intent i = new Intent(context, MeetingDefinitionActivity.class);
                         startActivity(i);
                         finish();
                     }
@@ -413,6 +449,45 @@ public class BeginMeetingActivity extends AppCompatActivity {
 
         new SendDataPostAsyncTask(this).execute(serverUri, request);
         */
+    }
+
+    class FetchMeetingRecordsAsync extends AsyncTask<Void, Void, JSONArray>{
+
+        protected ProgressDialog customProgressDialog;
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            customProgressDialog = new ProgressDialog(context);
+            __showProgressDialog(customProgressDialog, "Fetching meeting records", "Please wait...");
+        }
+
+        @Override
+        protected JSONArray doInBackground(Void... voids) {
+
+            List<VslaCycle> vslaCycles = ledgerLinkApplication.getVslaCycleRepo().getAllCycles();
+            JSONArray meetingRecords = new JSONArray();
+            for(VslaCycle vslaCycle : vslaCycles){
+                __fetchMeetingRecords(vslaCycle, meetingRecords);
+            }
+            return meetingRecords;
+        }
+
+
+        @Override
+        protected void onPostExecute(JSONArray meetingRecords){
+            customProgressDialog.dismiss();
+            if(meetingRecords.length() > 0) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("FileSubmission", meetingRecords);
+                    __sendMeetingRecords(jsonObject);
+                }catch(Exception e){
+                    Log.e("SendAllMeetingRecords", e.getMessage());
+                }
+            }
+        }
+
     }
 
 }

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.applab.ledgerlink.datatransformation.FinesDataTransferRecord;
 import org.applab.ledgerlink.domain.schema.FineSchema;
 import org.applab.ledgerlink.domain.schema.MeetingSchema;
@@ -464,8 +465,8 @@ public class MeetingFineRepo {
                 fine.setFineTypeId(cursor.getInt(3));
                 fine.setAmount(cursor.getDouble(4));
                 fine.setCleared(cursor.getInt(5) == 0 ? false : true);
-                fine.setDateCleared(Utils.getDateFromSqlite(cursor.getString(6)));
-                fine.setPaidInMeeting(cursor.getInt(7));
+                fine.setDateCleared(cursor.getString(6) == null ? null : Utils.getDateFromSqlite(cursor.getString(6)));
+                fine.setPaidInMeeting(cursor.getString(7) != null ? cursor.getInt(7) : 0);
                 fines.add(fine);
             }
             return fines;

@@ -31,13 +31,13 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '28.0.3'
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 29
-        versionCode 18
-        versionName '2020112501'
+        targetSdkVersion 30
+        versionCode 23
+        versionName '2022040101'
     }
     lintOptions {
         abortOnError false

@@ -2,6 +2,7 @@ package org.applab.ledgerlink.helpers;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import org.applab.ledgerlink.R;
 import org.applab.ledgerlink.datatransformation.AttendanceDataTransferRecord;
@@ -15,6 +16,7 @@ import org.applab.ledgerlink.domain.model.Member;
 import org.applab.ledgerlink.repo.MemberRepo;
 import org.applab.ledgerlink.repo.SendDataRepo;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.JSONStringer;
 
 /**
@@ -45,6 +47,7 @@ public class DataFactory extends SendDataRepo {
                     .endObject();
         }catch (Exception e){
             e.printStackTrace();
+            Log.e("SendRecordsHeader", e.getMessage());
         }
         return js;
     }
@@ -63,6 +66,7 @@ public class DataFactory extends SendDataRepo {
                     .endObject();
         }catch (Exception e){
             e.printStackTrace();
+            Log.e("SendRecordsCycle", e.getMessage());
         }
         return js;
     }
@@ -88,6 +92,7 @@ public class DataFactory extends SendDataRepo {
             js.endArray();
         }catch (Exception e){
             e.printStackTrace();
+            Log.e("SendRecordsMembers", e.getMessage());
         }
         return js;
     }
@@ -119,6 +124,7 @@ public class DataFactory extends SendDataRepo {
                     .endObject();
         }catch (Exception e){
             e.printStackTrace();
+            Log.e("SendRecordsMeeting", e.getMessage());
         }
         return js;
     }
@@ -137,6 +143,7 @@ public class DataFactory extends SendDataRepo {
             js.endArray();
         }catch (Exception e){
             e.printStackTrace();
+            Log.e("SendRecordsAttendance", e.getMessage());
         }
         return js;
     }
@@ -298,5 +305,28 @@ public class DataFactory extends SendDataRepo {
             e.printStackTrace();
         }
         return js.toString();
+    }
+
+    public static JSONStringer getJSONStringer(Context context, JSONStringer js, int meetingId){
+        DataFactory dataFactory = new DataFactory(context, meetingId);
+        try {
+            js.object();
+            js = dataFactory.getHeaderInfo(js);
+            js = dataFactory.getCycleInfo(js);
+            js = dataFactory.getMembersInfo(js);
+            js = dataFactory.getMeetingInfo(js);
+            js = dataFactory.getAttendance(js);
+            js = dataFactory.getSaving(js);
+            js = dataFactory.getFines(js);
+            js = dataFactory.getLoanRepayments(js);
+            js = dataFactory.getLoanIssues(js);
+            js = dataFactory.getWelfare(js);
+            js = dataFactory.getOutstandingWelfare(js);
+            js.endObject();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return js;
     }
 }

@@ -418,14 +418,18 @@ public class MeetingActivity extends ActionBarActivity implements ActionBar.TabL
         sendDataUsingPostAsync(meeting.getMeetingId(), meetingData);
     }
 
+    protected void __sendMeetingRecords(JSONArray meetingRecords){
+
+    }
+
     //Brought this method back from SendDataRepo
     private void sendDataUsingPostAsync(int meetingId, HashMap<String, String> dataFromPhone) {
         //Store the MeetingId as it will be used later after the Async process
+
         String meetingDataToBeSent = DataFactory.getJSONOutput(this, meetingId);
         try {
-            JSONObject jsonItem = new JSONObject(meetingDataToBeSent);
             JSONArray jsonArray = new JSONArray();
-            jsonArray.put(jsonItem);
+            jsonArray.put(new JSONObject(meetingDataToBeSent));
 
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("FileSubmission", jsonArray);
@@ -434,7 +438,6 @@ public class MeetingActivity extends ActionBarActivity implements ActionBar.TabL
             VslaInfo vslaInfo = vslaInfoRepo.getVslaInfo();
             FinancialInstitutionRepo financialInstitutionRepo = new FinancialInstitutionRepo(getApplicationContext(), vslaInfo.getFiID());
             FinancialInstitution financialInstitution = financialInstitutionRepo.getFinancialInstitution();
-//            String baseUrl = "http://127.0.0.1:82";
             String baseUrl = "http://" + financialInstitution.getIpAddress();
 
             serverUri = String.format("%s/%s/%s", baseUrl, getString(R.string.digitizingdata), getString(R.string.submitdata));

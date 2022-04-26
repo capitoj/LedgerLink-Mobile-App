@@ -386,53 +386,54 @@ public class ActivationActivity extends AppCompatActivity {
             String simOperatorName = null;
             String msisdn = null;
 
+
             TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-            imei = tm.getDeviceId();
+//            imei = tm.getDeviceId();
 
             //if there is a SIM Card then get details
-            if (tm.getSimState() == TelephonyManager.SIM_STATE_READY) {
-                imsi = tm.getSubscriberId();
-                simSerialNo = tm.getSimSerialNumber();
-                simOperatorName = tm.getSimOperatorName();
-                networkOperatorName = tm.getNetworkOperatorName();
-                networkOperator = tm.getNetworkOperator();
-                msisdn = tm.getLine1Number();
 
-                if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE) {
-                    networkType = "EDGE";
-                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_GPRS) {
-                    networkType = "GPRS";
-                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA) {
-                    networkType = "HSDPA";
-                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA) {
-                    networkType = "HSPA";
-                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPAP) {
-                    networkType = "HSPAP";
-                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA) {
-                    networkType = "HSUPA";
-                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS) {
-                    networkType = "UMTS";
-                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE) {
-                    networkType = "LTE";
-                } else {
-                    networkType = getString(R.string.unknown);
-                }
-            }
-
+//            if (tm.getSimState() == TelephonyManager.SIM_STATE_READY) {
+//                imsi = tm.getSubscriberId();
+//                simSerialNo = tm.getSimSerialNumber();
+//                simOperatorName = tm.getSimOperatorName();
+//                networkOperatorName = tm.getNetworkOperatorName();
+//                networkOperator = tm.getNetworkOperator();
+//                msisdn = tm.getLine1Number();
+//
+//                if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE) {
+//                    networkType = "EDGE";
+//                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_GPRS) {
+//                    networkType = "GPRS";
+//                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA) {
+//                    networkType = "HSDPA";
+//                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA) {
+//                    networkType = "HSPA";
+//                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPAP) {
+//                    networkType = "HSPAP";
+//                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA) {
+//                    networkType = "HSUPA";
+//                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS) {
+//                    networkType = "UMTS";
+//                } else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE) {
+//                    networkType = "LTE";
+//                } else {
+//                    networkType = getString(R.string.unknown);
+//                }
+//            }
             //Build JSON input string
             JSONStringer js = new JSONStringer();
             String jsonRequest = js
                     .object()
-                    .key(getString(R.string.phone_imei)).value(imei)
-                    .key(getString(R.string.sim_imsi)).value(imsi)
-                    .key(getString(R.string.sim_serial_no)).value(simSerialNo)
+                    .key(getString(R.string.phone_imei)).value("NONE")
+                    .key(getString(R.string.sim_imsi)).value("NONE")
+                    .key(getString(R.string.sim_serial_no)).value("NONE")
                     //.key("simOperatorName").value(simOperatorName)
-                    .key(getString(R.string.network_operator_name)).value(networkOperatorName)
+                    .key(getString(R.string.network_operator_name)).value("NONE")
                     //.key("networkOperator").value(networkOperator)
-                    .key(getString(R.string.network_type)).value(networkType)
+                    .key(getString(R.string.network_type)).value("NONE")
                     //.key("msisdn").value(msisdn)
-                    .key(getString(R.string.vsla_code_main)).value(vslaCode)
-                    .key(getString(R.string.passkey_main)).value(passKey)
+                    .key(getString(R.string.vsla_code_main)).value(targetVslaCode)
+                    .key(getString(R.string.passkey_main)).value(securityPasskey)
                     .endObject()
                     .toString();
 
@@ -447,7 +448,7 @@ public class ActivationActivity extends AppCompatActivity {
 
 //            activateVlsaUsingPostAsync(jsonRequest);
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Log.e("activation_error", ex.getMessage());
         }
     }
 

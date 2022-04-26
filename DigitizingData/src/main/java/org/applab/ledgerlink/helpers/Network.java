@@ -46,7 +46,8 @@ public class Network {
         try {
             if(phoneImei == null || phoneImei.length()<1){
                 TelephonyManager tm = (TelephonyManager)this.context.getSystemService(Context.TELEPHONY_SERVICE);
-                phoneImei = tm.getDeviceId();
+//                phoneImei = tm.getDeviceId();
+                phoneImei = "NONE";
             }
             return phoneImei;
         }
@@ -66,37 +67,38 @@ public class Network {
     public String getOperator() {
         try {
             if(networkOperator == null || networkOperator.length()<1){
-                TelephonyManager tm = (TelephonyManager)this.context.getSystemService(Context.TELEPHONY_SERVICE);
-                if(tm.getSimState() == TelephonyManager.SIM_STATE_READY) {
-                    networkOperator = tm.getNetworkOperatorName();
-                    if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE){
-                        this.setNetworkType("EDGE");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_GPRS){
-                        this.setNetworkType("GPRS");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA){
-                        this.setNetworkType("HSDPA");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA){
-                        this.setNetworkType("HSPA");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPAP){
-                        this.setNetworkType("HSPAP");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA){
-                        this.setNetworkType("HSUPA");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS){
-                        this.setNetworkType("UMTS");
-                    }
-                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE){
-                        this.setNetworkType("LTE");
-                    }
-                    else {
-                        this.setNetworkType("UNKNOWN");
-                    }
-                }
+                this.setNetworkType("NONE");
+//                TelephonyManager tm = (TelephonyManager)this.context.getSystemService(Context.TELEPHONY_SERVICE);
+//                if(tm.getSimState() == TelephonyManager.SIM_STATE_READY) {
+//                    networkOperator = tm.getNetworkOperatorName();
+//                    if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_EDGE){
+//                        this.setNetworkType("EDGE");
+//                    }
+//                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_GPRS){
+//                        this.setNetworkType("GPRS");
+//                    }
+//                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSDPA){
+//                        this.setNetworkType("HSDPA");
+//                    }
+//                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPA){
+//                        this.setNetworkType("HSPA");
+//                    }
+//                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSPAP){
+//                        this.setNetworkType("HSPAP");
+//                    }
+//                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_HSUPA){
+//                        this.setNetworkType("HSUPA");
+//                    }
+//                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_UMTS){
+//                        this.setNetworkType("UMTS");
+//                    }
+//                    else if (tm.getNetworkType() == TelephonyManager.NETWORK_TYPE_LTE){
+//                        this.setNetworkType("LTE");
+//                    }
+//                    else {
+//                        this.setNetworkType("UNKNOWN");
+//                    }
+//                }
             }
             return networkOperator;
         }
@@ -113,9 +115,9 @@ public class Network {
             .object()
             .key("VslaCode").value(vslaInfo.getVslaCode())
             .key("PassKey").value(vslaInfo.getPassKey())
-            .key("PhoneImei").value(network.getPhoneImei())
-            .key("NetworkOperator").value(network.getOperator())
-            .key("NetworkType").value(network.getNetworkType())
+            .key("PhoneImei").value("NONE")
+            .key("NetworkOperator").value("NONE")
+            .key("NetworkType").value("NONE")
             .endObject();
         }catch (Exception e){
             e.printStackTrace();

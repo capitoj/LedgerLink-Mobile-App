@@ -59,6 +59,10 @@ public class BorrowFromWelfareArrayAdapter extends ArrayAdapter<Member> {
                 meetingRepo = new MeetingRepo(getContext());
             }
 
+
+
+
+
             //Get the Widgets
             final TextView txtFullName = (TextView) rowView.findViewById(R.id.txtRMLRepayFullName);
             final TextView txtTotalFines = (TextView) rowView.findViewById(R.id.txtRMLRepayBalance);

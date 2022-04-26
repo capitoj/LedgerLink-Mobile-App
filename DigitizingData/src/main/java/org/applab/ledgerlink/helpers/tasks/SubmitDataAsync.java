@@ -95,29 +95,6 @@ public class SubmitDataAsync extends AsyncTask<String, String, JSONArray> {
                 inputStream.close();
                 result = new JSONArray(jsonString);
                 httpURLConnection.disconnect();
-
-//
-//                final DefaultHttpClient httpClient = new DefaultHttpClient();
-//                final HttpPost httpPost = new HttpPost(uri);
-//                StringEntity se = new StringEntity(params[1]);
-//                httpPost.setEntity(se);
-//                httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded");
-//                ResponseHandler<String> rh = new ResponseHandler<String>() {
-//                    @Override
-//                    public String handleResponse(HttpResponse httpResponse) throws ClientProtocolException, IOException {
-//                        HttpEntity httpEntity = httpResponse.getEntity();
-//                        httpStatusCode = httpResponse.getStatusLine().getStatusCode();
-//                        StringBuffer out = new StringBuffer();
-//                        byte[] b = EntityUtils.toByteArray(httpEntity);
-//                        out.append(new String(b, 0, b.length));
-//                        return out.toString();
-//                    }
-//                };
-//                String response = httpClient.execute(httpPost, rh);
-//                httpClient.getConnectionManager().shutdown();
-//                if (httpStatusCode == 200) {
-//                    result = new JSONArray(response);
-//                }
             }
             return result;
         }catch (Exception e){

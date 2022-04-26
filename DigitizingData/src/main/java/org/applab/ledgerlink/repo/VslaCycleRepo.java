@@ -70,7 +70,7 @@ public class VslaCycleRepo {
         }
     }
 
-    ArrayList<VslaCycle> getAllCycles() {
+    public ArrayList<VslaCycle> getAllCycles() {
 
         ArrayList<VslaCycle> cycles = null;
         SQLiteDatabase db = null;
