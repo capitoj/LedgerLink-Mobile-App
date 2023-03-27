@@ -41,6 +41,7 @@ import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
 import org.applab.ledgerlink.helpers.Network;
+import org.applab.ledgerlink.helpers.PermissionHelper;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.helpers.adapters.DropDownAdapter;
 import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
@@ -69,20 +70,14 @@ public class ActivationActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private Spinner dropdownFinancialInstitution;
     private FinancialInstitution targetFinancialInstitution;
-    private String readExternalStorage = Manifest.permission.READ_EXTERNAL_STORAGE;
-    private String writeExternalStorage = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-    private String readPhoneStage = Manifest.permission.READ_PHONE_STATE;
 
-    protected boolean hasPermission(String permission){
-        return  ActivityCompat.checkSelfPermission(getApplicationContext(), permission) == PackageManager.PERMISSION_GRANTED;
-    }
-
+    PermissionHelper ph = new PermissionHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(!hasPermission(writeExternalStorage) || !hasPermission(readExternalStorage)){
+        if(!PermissionHelper.requestForMultiplePermissions(this)){
             Intent i = new Intent(getBaseContext(), PermissionActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
@@ -172,15 +167,6 @@ public class ActivationActivity extends AppCompatActivity {
                 }
             });
 
-//            if (Utils.isExecutingInTrainingMode()) {
-                //Load Sample Trainng Data: Testing
-//                SampleDataBuilderRepo.insertTrainingData(getApplicationContext());
-//                Intent i = new Intent(getBaseContext(), LoginActivity.class);
-//                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(i);
-//                finish();
-
-//            }
         }
     }
 
@@ -267,6 +253,7 @@ public class ActivationActivity extends AppCompatActivity {
     }
 
     protected void buildFinancialInstitutionSpinner(){
+
         this.dropdownFinancialInstitution = (Spinner)findViewById(R.id.listVAFinanicalInstitution);
         List<FinancialInstitution> listFinancialInstutions = FinancialInstitutionRepo.getFinancialInstitutions(this);
         String[] financialInstitutions = new String[listFinancialInstutions.size()];
@@ -290,6 +277,7 @@ public class ActivationActivity extends AppCompatActivity {
     }
 
     private boolean saveOfflineVslaInfo() {
+
         this.getSelectedFinancialInstitution();
 
         try {

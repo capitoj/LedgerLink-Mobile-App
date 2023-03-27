@@ -3,19 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.applab.ledgerlink">
 
-    <!--<uses-sdk-->
-        <!--android:minSdkVersion="19"-->
-        <!--android:targetSdkVersion="28" />-->
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="31" />
 
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="31" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="31" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--<uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" android:maxSdkVersion="31" />-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" android:maxSdkVersion="31" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.PHONE_STATE_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!--<uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" tools:ignore="ProtectedPermissions" />-->
 
     <supports-screens
         android:largeScreens="true"

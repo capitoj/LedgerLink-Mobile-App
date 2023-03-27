@@ -45,6 +45,7 @@ import org.applab.ledgerlink.domain.model.VslaInfo;
 import org.applab.ledgerlink.fontutils.RobotoTextStyleExtractor;
 import org.applab.ledgerlink.fontutils.TypefaceManager;
 import org.applab.ledgerlink.helpers.LongTaskRunner;
+import org.applab.ledgerlink.helpers.PermissionHelper;
 import org.applab.ledgerlink.helpers.Utils;
 import org.applab.ledgerlink.repo.FinancialInstitutionRepo;
 import org.applab.ledgerlink.repo.SampleDataBuilderRepo;
@@ -80,230 +81,239 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ledgerLinkApplication = (LedgerLinkApplication) getApplication();
-        TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        setContentView(R.layout.activity_login);
+        if(!PermissionHelper.requestForMultiplePermissions(this)){
+            Intent i = new Intent(getBaseContext(), PermissionActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+            finish();
+        }else {
 
-        this.context = this;
+            ledgerLinkApplication = (LedgerLinkApplication) getApplication();
+            TypefaceManager.addTextStyleExtractor(RobotoTextStyleExtractor.getInstance());
 
-        this.loadBackgroundService();
-        
+            setContentView(R.layout.activity_login);
+
+            this.context = this;
+
+            this.loadBackgroundService();
+
 //        // Android request permission modal
 //        ActivityCompat.requestPermissions(LoginActivity.this,
 //                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
 //                1);
 
-        //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
-        //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
-        //
-        TextView ForgotPassKeyText = (TextView) findViewById(R.id.txtForgetPassKey);
-        ForgotPassKeyText.setText(getApplicationContext().getResources().getString(R.string.forgot_passkey));
+            //TextView versionText = (TextView) findViewById(R.id.txtVersionInfo);
+            //versionText.setText(getApplicationContext().getResources().getString(R.string.about_version));
+            //
+            TextView ForgotPassKeyText = (TextView) findViewById(R.id.txtForgetPassKey);
+            ForgotPassKeyText.setText(getApplicationContext().getResources().getString(R.string.forgot_passkey));
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setHomeAsUpIndicator(R.drawable.app_icon_back);
 
-        //TODO: Setting of Preferences is done in the first Activity that is launched.
-        //Load the default Shared Preferences
-        PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preferences, false);
+            //TODO: Setting of Preferences is done in the first Activity that is launched.
+            //Load the default Shared Preferences
+            PreferenceManager.setDefaultValues(getApplicationContext(), R.xml.preferences, false);
 
-        //Read some settings like Server URL
-        Utils.configureDefaultApplicationPreferences(getApplicationContext());
+            //Read some settings like Server URL
+            Utils.configureDefaultApplicationPreferences(getApplicationContext());
 
-        //Load Sample Trainng Data: Testing
-        Runnable dataLoader = new Runnable() {
-            @Override
-            public void run() {
-                if (Utils.isExecutingInTrainingMode()) {
-                    SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+            //Load Sample Trainng Data: Testing
+            Runnable dataLoader = new Runnable() {
+                @Override
+                public void run() {
+                    if (Utils.isExecutingInTrainingMode()) {
+                        SampleDataBuilderRepo.refreshTrainingData(getApplicationContext());
+                    }
                 }
-            }
-        };
-        //Load this as long running task
+            };
+            //Load this as long running task
 //        LongTaskRunner.runLongTask(dataLoader, getString(R.string.please_wait), getString(R.string.ledgerlink_refreshes_test_training_data), LoginActivity.this);
 
 
-        //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblSISwitchMode);
+            //  TextView tvSwitchMode = (TextView)findViewById(R.id.lblSISwitchMode);
 
-        ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
-        imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
-        imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.login_logo_width), (int) this.getResources().getDimension(R.dimen.login_logo_height)));
-
-
-        //If we are in training mode then show it using a custom View with distinguishable background
-        //Assumed that the preferences have been set by now
-        if (Utils.isExecutingInTrainingMode()) {
-            actionBar.setTitle(R.string.training_mode);
-            actionBar.setCustomView(R.layout.activity_main_training_mode);
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(false);
-            TextView txtVslaName = (TextView) findViewById(R.id.lbl_vsla_name);
-            txtVslaName.setVisibility(View.GONE);
-
-            //Set the label of the link
-            //         tvSwitchMode.setText("Switch To Actual VSLA Data");
-            //       tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
-        } else {
-            actionBar.hide();
-            //Set the label of the link
-            //     tvSwitchMode.setText("Switch To Training Mode");
-            //   tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
-        }
-
-        //Check whether the VSLA has been Activated
-        vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
+            ImageView imgVALogo = (ImageView) findViewById(R.id.imgVALogo);
+            imgVALogo.setImageResource(R.drawable.ic_ledger_link_logo_original);
+            imgVALogo.setLayoutParams(new RelativeLayout.LayoutParams((int) this.getResources().getDimension(R.dimen.login_logo_width), (int) this.getResources().getDimension(R.dimen.login_logo_height)));
 
 
-        boolean wasCalledFromActivation = getIntent().getBooleanExtra("_wasCalledFromActivation", false);
+            //If we are in training mode then show it using a custom View with distinguishable background
+            //Assumed that the preferences have been set by now
+            if (Utils.isExecutingInTrainingMode()) {
+                actionBar.setTitle(R.string.training_mode);
+                actionBar.setCustomView(R.layout.activity_main_training_mode);
+                actionBar.setDisplayShowCustomEnabled(true);
+                actionBar.setDisplayShowHomeEnabled(false);
+                TextView txtVslaName = (TextView) findViewById(R.id.lbl_vsla_name);
+                txtVslaName.setVisibility(View.GONE);
 
-        //Determine whether to show the not-activated status
-        String notActivatedStatusMessage = "";
+                //Set the label of the link
+                //         tvSwitchMode.setText("Switch To Actual VSLA Data");
+                //       tvSwitchMode.setTag("1"); //The Mode to switch to {1 Actual | 2 Training}
+            } else {
+                actionBar.hide();
+                //Set the label of the link
+                //     tvSwitchMode.setText("Switch To Training Mode");
+                //   tvSwitchMode.setTag("2"); //The Mode to switch to {1 Actual | 2 Training}
+            }
 
-        if (vslaInfo != null) {
-            if (!vslaInfo.isActivated()) {
-                if (vslaInfo.isOffline()) {
-                    if (wasCalledFromActivation) {
-                        notActivatedStatusMessage = getString(R.string.unable_to_send_reg_network_problems);
+            //Check whether the VSLA has been Activated
+            vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
+
+
+            boolean wasCalledFromActivation = getIntent().getBooleanExtra("_wasCalledFromActivation", false);
+
+            //Determine whether to show the not-activated status
+            String notActivatedStatusMessage = "";
+
+            if (vslaInfo != null) {
+                if (!vslaInfo.isActivated()) {
+                    if (vslaInfo.isOffline()) {
+                        if (wasCalledFromActivation) {
+                            notActivatedStatusMessage = getString(R.string.unable_to_send_reg_network_problems);
+                        } else {
+                            notActivatedStatusMessage = getString(R.string.unable_to_send_reg_network_problems_last_time);
+                        }
                     } else {
-                        notActivatedStatusMessage = getString(R.string.unable_to_send_reg_network_problems_last_time);
+                        //If it is not Activated and is not in Offline Mode, force activation
+                        Intent i = new Intent(LoginActivity.this, ActivationActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+                        finish();
                     }
                 } else {
-                    //If it is not Activated and is not in Offline Mode, force activation
+                    //If VSLA is Activated proceed with normal process
+                }
+            } else {
+                //if VSLAInfo is NULL, force Activation
+                //If it is not Activated and is not in Offline Mode, force activation
+                if (Utils.isExecutingInTrainingMode()) {
+                    Utils.setRefreshDataFlag(true);
+                    LongTaskRunner.runLongTask(dataLoader, getString(R.string.please_wait), getString(R.string.ledgerlink_refreshes_test_training_data), LoginActivity.this);
+                    vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
+                } else {
                     Intent i = new Intent(LoginActivity.this, ActivationActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                     finish();
                 }
+
+            }
+
+            // Pass key Label
+            TextView lblPasskey = (TextView) findViewById(R.id.lblPassKeyPrompt);
+
+            // VSLA name placeholder
+            TextView txtVslaName = (TextView) findViewById(R.id.lbl_vsla_name);
+            String vslaName = "";
+
+            // Activation Information placeholder
+            //TextView activationLoginMsg = (TextView) findViewById(R.id.lblActivationLoginMsg);
+
+            if (vslaInfo != null && vslaInfo.isActivated()) {
+                vslaName = vslaInfo.getVslaName();
+                txtVslaName.setText(vslaName);
+                //activationLoginMsg.setVisibility(View.GONE);
             } else {
-                //If VSLA is Activated proceed with normal process
-            }
-        } else {
-            //if VSLAInfo is NULL, force Activation
-            //If it is not Activated and is not in Offline Mode, force activation
-            if(Utils.isExecutingInTrainingMode()){
-                Utils.setRefreshDataFlag(true);
-                LongTaskRunner.runLongTask(dataLoader, getString(R.string.please_wait), getString(R.string.ledgerlink_refreshes_test_training_data), LoginActivity.this);
-                vslaInfo = ledgerLinkApplication.getVslaInfoRepo().getVslaInfo();
-            }else {
-                Intent i = new Intent(LoginActivity.this, ActivationActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-                finish();
-            }
-
-        }
-
-        // Pass key Label
-        TextView lblPasskey = (TextView) findViewById(R.id.lblPassKeyPrompt);
-
-        // VSLA name placeholder
-        TextView txtVslaName = (TextView) findViewById(R.id.lbl_vsla_name);
-        String vslaName = "";
-
-        // Activation Information placeholder
-        //TextView activationLoginMsg = (TextView) findViewById(R.id.lblActivationLoginMsg);
-
-        if (vslaInfo != null && vslaInfo.isActivated()) {
-            vslaName = vslaInfo.getVslaName();
-            txtVslaName.setText(vslaName);
-            //activationLoginMsg.setVisibility(View.GONE);
-        } else {
 //            if (Utils.isExecutingInTrainingMode()) {
 //                vslaName = "Training Mode";
 //                txtVslaName.setText(vslaName);
 //            }
-            txtVslaName.setVisibility(View.INVISIBLE);
-            Toast.makeText(this.getBaseContext(), R.string.unable_to_send_reg_network_problems, Toast.LENGTH_LONG).show();
-            //DialogMessageBox.show(this, getString(R.string.activation_message), getString(R.string.unable_to_send_reg_network_problems));
-            //activationLoginMsg.setText(notActivatedStatusMessage);
-            lblPasskey.setVisibility(View.INVISIBLE);
-        }
+                txtVslaName.setVisibility(View.INVISIBLE);
+                Toast.makeText(this.getBaseContext(), R.string.unable_to_send_reg_network_problems, Toast.LENGTH_LONG).show();
+                //DialogMessageBox.show(this, getString(R.string.activation_message), getString(R.string.unable_to_send_reg_network_problems));
+                //activationLoginMsg.setText(notActivatedStatusMessage);
+                lblPasskey.setVisibility(View.INVISIBLE);
+            }
 
-        // ---Button view---
-        Button btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                TextView txtPassKey = (TextView) findViewById(R.id.edt_passkey);
-                String passKey = txtPassKey.getText().toString().trim();
+            // ---Button view---
+            Button btnLogin = (Button) findViewById(R.id.btnLogin);
+            btnLogin.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    TextView txtPassKey = (TextView) findViewById(R.id.edt_passkey);
+                    String passKey = txtPassKey.getText().toString().trim();
 
-                if (passKey.equalsIgnoreCase(vslaInfo.getPassKey())) {
-                    if (vslaInfo.isActivated()) {
-                        startMainMenuActivity();
+                    if (passKey.equalsIgnoreCase(vslaInfo.getPassKey())) {
+                        if (vslaInfo.isActivated()) {
+                            startMainMenuActivity();
+                        } else {
+                            activateVslaAndSignIn();
+                        }
                     } else {
-                        activateVslaAndSignIn();
+                        Utils.createAlertDialogOk(LoginActivity.this, getString(R.string.security), getString(R.string.passkey_invalid), Utils.MSGBOX_ICON_EXCLAMATION).show();
+                        txtPassKey.requestFocus();
                     }
-                } else {
-                    Utils.createAlertDialogOk(LoginActivity.this, getString(R.string.security), getString(R.string.passkey_invalid), Utils.MSGBOX_ICON_EXCLAMATION).show();
-                    txtPassKey.requestFocus();
                 }
-            }
-        });
+            });
 
 
-        /** Change lanugage spinner **/
-        Spinner spinnerLang = (Spinner) findViewById(R.id.spinner_lang);
+            /** Change lanugage spinner **/
+            Spinner spinnerLang = (Spinner) findViewById(R.id.spinner_lang);
 
-        //spinnerLang.setOnItemSelectedListener(this);
+            //spinnerLang.setOnItemSelectedListener(this);
 
-        // Lanugage list
-        List<String> languages = new ArrayList<String>();languages.add("Select Language");
+            // Lanugage list
+            List<String> languages = new ArrayList<String>();
+            languages.add("Select Language");
 
-        languages.add("English");
-        languages.add("Acholi");
-        languages.add("Arabic");
-        languages.add("Bari");
+            languages.add("English");
+            languages.add("Acholi");
+            languages.add("Arabic");
+            languages.add("Bari");
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, languages);
-        // attaching data adapter to spinner
-        spinnerLang.setAdapter(dataAdapter);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, languages);
+            // attaching data adapter to spinner
+            spinnerLang.setAdapter(dataAdapter);
 
-        //Make the spinner selectable
-        spinnerLang.setFocusable(true);
-        spinnerLang.setClickable(true);
+            //Make the spinner selectable
+            spinnerLang.setFocusable(true);
+            spinnerLang.setClickable(true);
 
-        spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                if (pos == 1) {
-                    Toast.makeText(parent.getContext(),
-                            "You have selected English", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("en");
-                }else if (pos == 2) {
-                    Toast.makeText(parent.getContext(),
-                            "You have selected Acholi", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("ac");
-                } else if (pos == 3) {
-                    Toast.makeText(parent.getContext(),
-                            "You have selected Arabic", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("ar");
+                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                    if (pos == 1) {
+                        Toast.makeText(parent.getContext(),
+                                "You have selected English", Toast.LENGTH_SHORT)
+                                .show();
+                        setLocale("en");
+                    } else if (pos == 2) {
+                        Toast.makeText(parent.getContext(),
+                                "You have selected Acholi", Toast.LENGTH_SHORT)
+                                .show();
+                        setLocale("ac");
+                    } else if (pos == 3) {
+                        Toast.makeText(parent.getContext(),
+                                "You have selected Arabic", Toast.LENGTH_SHORT)
+                                .show();
+                        setLocale("ar");
+                    } else if (pos == 4) {
+                        Toast.makeText(parent.getContext(),
+                                "You have selected Bari", Toast.LENGTH_SHORT)
+                                .show();
+                        setLocale("ba");
+                    }
                 }
-                else if (pos == 4) {
-                    Toast.makeText(parent.getContext(),
-                            "You have selected Bari", Toast.LENGTH_SHORT)
-                            .show();
-                    setLocale("ba");
+
+                public void onNothingSelected(AdapterView<?> arg0) {
+
+                    // TODO Auto-generated method stub
+
                 }
-            }
+            });
 
-            public void onNothingSelected(AdapterView<?> arg0) {
-
-                // TODO Auto-generated method stub
-
-            }
-        });
-
-        /** Forgot Passkey OnClick **/
-        ForgotPassKeyText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), PassKeyResetActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
-            }
-        });
+            /** Forgot Passkey OnClick **/
+            ForgotPassKeyText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(getApplicationContext(), PassKeyResetActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }
+            });
+        }
     }
 
 

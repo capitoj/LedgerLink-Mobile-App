@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import org.applab.ledgerlink.SettingsActivity;
@@ -27,6 +28,8 @@ import org.applab.ledgerlink.domain.schema.VslaInfoSchema;
 import org.applab.ledgerlink.domain.schema.WelfareSchema;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -54,7 +57,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     protected static String __createDatabaseFolder(){
 
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            dbStorageDir = new File(Environment.getExternalStorageDirectory() + File.separator + DATA_FOLDER);
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.Q){
+                dbStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS) + File.separator + DATA_FOLDER);
+            }else{
+                dbStorageDir = new File(Environment.getExternalStorageDirectory() + File.separator + DATA_FOLDER);
+            }
         }else{
             dbStorageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + DATA_FOLDER);
         }
@@ -67,19 +74,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return dbStorageDir.getPath() + File.separator;
         }
         return dbStorageDir.getAbsolutePath() + File.separator;
-
-
-//        File databaseStorageDir = new File(EXTERNAL_STORAGE_LOCATION + File.separator + DATA_FOLDER);
-//        if(! databaseStorageDir.exists()) {
-//            boolean mkdir = databaseStorageDir.mkdir();
-//            if(mkdir) {
-//                Log.d("DatabaseHandler.createDatabaseFolder", "Data folder "+databaseStorageDir.getAbsolutePath() +" has been created");
-//            }
-//            else {
-//                Log.d("DatabaseHandler.createDatabaseFolder", "Data folder "+databaseStorageDir.getAbsolutePath() +" failed to be created");
-//            }
-//        }
-//        return databaseStorageDir.getAbsolutePath() + File.separator;
     }
 
     public void onCreate(SQLiteDatabase db) {
